@@ -1,2 +1,3 @@
 add_subdirectory(common)
-add_subdirectory("Big Clock")
+
+add_subdirectory(BigClock)

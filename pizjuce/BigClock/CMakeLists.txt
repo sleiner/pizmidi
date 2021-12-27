@@ -12,11 +12,11 @@ juce_add_plugin(
 target_sources(
   pizmidi_BigClock
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/BigClock.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/BigClockEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/BigClock.h"
+          "${CMAKE_CURRENT_LIST_DIR}/BigClockEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/BigClockEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/BigClock.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/BigClockEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/BigClock.cpp")
 
 target_link_libraries(
   pizmidi_BigClock PUBLIC juce::juce_events juce::juce_gui_basics
