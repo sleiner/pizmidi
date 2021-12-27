@@ -5,5 +5,6 @@ project(
   VERSION 1.5.0
   LANGUAGES C CXX)
 
-add_subdirectory(dependencies)
+include(cmake/dependencies.cmake)
+
 add_subdirectory(pizjuce)
