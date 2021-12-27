@@ -1,6 +1,9 @@
 #ifndef BIGCLOCKPLUGINEDITOR_H
 #define BIGCLOCKPLUGINEDITOR_H
 
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
+
 #include "BigClock.h"
 
 class TimeDisplay  : public Button
@@ -30,8 +33,8 @@ private:
 
 //==============================================================================
 class BigClockEditor   : public AudioProcessorEditor,
-                              public ButtonListener,
-                              public TextEditorListener,
+                              public Button::Listener,
+                              public TextEditor::Listener,
                               public ChangeListener,
 							  public Timer
 {

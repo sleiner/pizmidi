@@ -34,7 +34,7 @@ BigClockFilter::BigClockFilter()
 
     sampleRate = getSampleRate();
 
-    bgcolor = Colour (0xffb8bcc0); 
+    bgcolor = Colour (0xffb8bcc0);
 
     zeromem (&lastPosInfo, sizeof (lastPosInfo));
     lastPosInfo.timeSigNumerator = 4;
@@ -178,7 +178,7 @@ const String BigClockFilter::getParameterName (int index)
     if (index == 7) return L"subframes";
     if (index == 8) return L"clockmode";
     if (index == 9) return L"runwatch";
-    else return String::empty;
+    else return String();
 }
 
 const String BigClockFilter::getParameterText (int index)
@@ -225,7 +225,7 @@ const String BigClockFilter::getParameterText (int index)
         else if (frames<1.0) return String(L"100");
         else return String(L"120");
     }
-    else return String::empty;
+    else return String();
 }
 
 const String BigClockFilter::getInputChannelName (const int channelIndex) const
@@ -256,7 +256,7 @@ void BigClockFilter::prepareToPlay (double sampleRate, int samplesPerBlock)
 }
 
 void BigClockFilter::releaseResources()
-{	
+{
     // when playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
@@ -319,32 +319,32 @@ AudioProcessorEditor* BigClockFilter::createEditor()
 //==============================================================================
 void BigClockFilter::getStateInformation (MemoryBlock& destData)
 {
-    XmlElement xmlState (L"MYPLUGINSETTINGS");
+    XmlElement xmlState ("MYPLUGINSETTINGS");
 
-    xmlState.setAttribute (L"pluginVersion", 1);
-    xmlState.setAttribute (L"barsbeats", barsbeats);
-    xmlState.setAttribute (L"contrast", look);
-    xmlState.setAttribute (L"showms", showms);
-    xmlState.setAttribute (L"showhrs", showhrs);
-    xmlState.setAttribute (L"showsubfr", showsubfr);
-    xmlState.setAttribute (L"ticks", ticks);
-    xmlState.setAttribute (L"frames", frames);
-    xmlState.setAttribute (L"samples", samples);
-    xmlState.setAttribute (L"showcues", showcues);
-    xmlState.setAttribute (L"uiWidth", lastUIWidth);
-    xmlState.setAttribute (L"uiHeight", lastUIHeight);
-    xmlState.setAttribute (L"bgcolor", (int)(bgcolor.getARGB()));
-	xmlState.setAttribute (L"clockmode", mode);
-	xmlState.setAttribute (L"rectime", rectime);
-	xmlState.setAttribute (L"plugintime", (int)plugintime);
-	xmlState.setAttribute (L"watchtime", (int)watchtime);
+    xmlState.setAttribute ("pluginVersion", 1);
+    xmlState.setAttribute ("barsbeats", barsbeats);
+    xmlState.setAttribute ("contrast", look);
+    xmlState.setAttribute ("showms", showms);
+    xmlState.setAttribute ("showhrs", showhrs);
+    xmlState.setAttribute ("showsubfr", showsubfr);
+    xmlState.setAttribute ("ticks", ticks);
+    xmlState.setAttribute ("frames", frames);
+    xmlState.setAttribute ("samples", samples);
+    xmlState.setAttribute ("showcues", showcues);
+    xmlState.setAttribute ("uiWidth", lastUIWidth);
+    xmlState.setAttribute ("uiHeight", lastUIHeight);
+    xmlState.setAttribute ("bgcolor", (int)(bgcolor.getARGB()));
+	xmlState.setAttribute ("clockmode", mode);
+	xmlState.setAttribute ("rectime", rectime);
+	xmlState.setAttribute ("plugintime", (int)plugintime);
+	xmlState.setAttribute ("watchtime", (int)watchtime);
 
     for (int i=0;i<cues.size();i++) {
-        XmlElement* xmlCue = new XmlElement(L"Cue");
-        xmlCue->setAttribute (L"time", cues[i]->time);
-        xmlCue->setAttribute (L"ppq", cues[i]->ppq);
-        xmlCue->setAttribute (L"text", cues[i]->text);
-        xmlCue->setAttribute (L"enabled", cues[i]->enabled);
+        XmlElement* xmlCue = new XmlElement("Cue");
+        xmlCue->setAttribute ("time", cues[i]->time);
+        xmlCue->setAttribute ("ppq", cues[i]->ppq);
+        xmlCue->setAttribute ("text", cues[i]->text);
+        xmlCue->setAttribute ("enabled", cues[i]->enabled);
         xmlState.addChildElement(xmlCue);
     }
 
@@ -355,40 +355,40 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
 {
     cues.clear();
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName (L"MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            barsbeats = (float) xmlState->getDoubleAttribute (L"gainLevel", barsbeats);
-            barsbeats = (float) xmlState->getDoubleAttribute (L"barsbeats", barsbeats);
-            look = (float) xmlState->getDoubleAttribute (L"contrast", look);
-            showms = (float) xmlState->getDoubleAttribute (L"showms", showms);
-            showhrs = (float) xmlState->getDoubleAttribute (L"showhrs", showhrs);
-            showsubfr = (float) xmlState->getDoubleAttribute (L"showsubfr", showsubfr);
-            ticks = (float) xmlState->getDoubleAttribute (L"ticks", ticks);
-            frames = (float) xmlState->getDoubleAttribute (L"frames", frames);
-            samples = (float) xmlState->getDoubleAttribute (L"samples", samples);
-            showcues = xmlState->getBoolAttribute(L"showcues",showcues);
-			mode = xmlState->getIntAttribute (L"clockmode", mode);
-			rectime = xmlState->getDoubleAttribute (L"rectime", rectime);
-			plugintime = xmlState->getIntAttribute (L"plugintime", plugintime);
-			watchtime = xmlState->getIntAttribute (L"watchtime", watchtime);
+            barsbeats = (float) xmlState->getDoubleAttribute ("gainLeve", barsbeats);
+            barsbeats = (float) xmlState->getDoubleAttribute ("barsbeats", barsbeats);
+            look = (float) xmlState->getDoubleAttribute ("contrast", look);
+            showms = (float) xmlState->getDoubleAttribute ("showms", showms);
+            showhrs = (float) xmlState->getDoubleAttribute ("showhrs", showhrs);
+            showsubfr = (float) xmlState->getDoubleAttribute ("showsubfr", showsubfr);
+            ticks = (float) xmlState->getDoubleAttribute ("ticks", ticks);
+            frames = (float) xmlState->getDoubleAttribute ("frames", frames);
+            samples = (float) xmlState->getDoubleAttribute ("samples", samples);
+            showcues = xmlState->getBoolAttribute("showcues",showcues);
+			mode = xmlState->getIntAttribute ("clockmode", mode);
+			rectime = xmlState->getDoubleAttribute ("rectime", rectime);
+			plugintime = xmlState->getIntAttribute ("plugintime", plugintime);
+			watchtime = xmlState->getIntAttribute ("watchtime", watchtime);
 
-            lastUIWidth = xmlState->getIntAttribute (L"uiWidth", lastUIWidth);
-            lastUIHeight = xmlState->getIntAttribute (L"uiHeight", lastUIHeight);
-            bgcolor = Colour(xmlState->getIntAttribute (L"bgcolor", bgcolor.getARGB()));
+            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
+            bgcolor = Colour(xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
 
             forEachXmlChildElement (*xmlState, e) {
-                if (e->hasTagName(L"Cue")) {
+                if (e->hasTagName("Cue")) {
                     cue* newcue = new cue();
-                    newcue->ppq = e->getDoubleAttribute(L"ppq");
-                    newcue->time = e->getDoubleAttribute(L"time");
-                    newcue->text = e->getStringAttribute(L"text");
-                    newcue->enabled = e->getBoolAttribute(L"enabled");
+                    newcue->ppq = e->getDoubleAttribute("ppq");
+                    newcue->time = e->getDoubleAttribute("time");
+                    newcue->text = e->getStringAttribute("text");
+                    newcue->enabled = e->getBoolAttribute("enabled");
                     cues.addSorted(c,newcue);
                 }
             }
@@ -396,14 +396,12 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
 
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
 }
 
 
 void BigClockFilter::saveCues(File cuefile) {
-    XmlElement xmlState (L"BigClockCues");
+    XmlElement xmlState ("BigClockCues");
 
     double fps;
     if      (getParameter(kFrames)==0.0) fps=1000.0;
@@ -419,22 +417,22 @@ void BigClockFilter::saveCues(File cuefile) {
     else if (getParameter(kFrames)<1.0) fps=100.0;
     else fps=120.0;
     for (int i=0;i<cues.size();i++) {
-        XmlElement* xmlCue = new XmlElement(L"Cue");
-        if (getParameter(kBarsBeats)<0.5f) xmlCue->setAttribute (L"time", secondsToSmpteString(cues[i]->time,fps));
-        else xmlCue->setAttribute (L"barsbeats", ppqToBarsbeatsString(cues[i]->ppq,lastPosInfo.timeSigNumerator,lastPosInfo.timeSigDenominator));
-        xmlCue->setAttribute (L"text", cues[i]->text);
-        xmlCue->setAttribute (L"enabled", cues[i]->enabled);
+        XmlElement* xmlCue = new XmlElement("Cue");
+        if (getParameter(kBarsBeats)<0.5f) xmlCue->setAttribute ("time", secondsToSmpteString(cues[i]->time,fps));
+        else xmlCue->setAttribute ("barsbeats", ppqToBarsbeatsString(cues[i]->ppq,lastPosInfo.timeSigNumerator,lastPosInfo.timeSigDenominator));
+        xmlCue->setAttribute ("text", cues[i]->text);
+        xmlCue->setAttribute ("enabled", cues[i]->enabled);
         xmlState.addChildElement(xmlCue);
     }
     if (getParameter(kBarsBeats)<0.5f) {
-        XmlElement* fr = new XmlElement(L"FrameRate");
-        fr->setAttribute (L"rate", fps);
+        XmlElement* fr = new XmlElement("FrameRate");
+        fr->setAttribute ("rate", fps);
         xmlState.addChildElement(fr);
     }
     else {
-        XmlElement* ts = new XmlElement(L"TimeSig");
-        ts->setAttribute (L"numerator", lastPosInfo.timeSigNumerator);
-        ts->setAttribute (L"denominator", lastPosInfo.timeSigDenominator);
+        XmlElement* ts = new XmlElement("TimeSig");
+        ts->setAttribute ("numerator", lastPosInfo.timeSigNumerator);
+        ts->setAttribute ("denominator", lastPosInfo.timeSigDenominator);
         xmlState.addChildElement(ts);
 
         double tpb;
@@ -451,8 +449,8 @@ void BigClockFilter::saveCues(File cuefile) {
         else if (getParameter(kTicks)<0.9) tpb=16.0;
         else if (getParameter(kTicks)<1.0) tpb=4.0;
         else tpb=0.0;
-        XmlElement* ticks = new XmlElement(L"TicksPerBeat");
-        ticks->setAttribute(L"value",tpb);
+        XmlElement* ticks = new XmlElement("TicksPerBeat");
+        ticks->setAttribute("value",tpb);
         xmlState.addChildElement(ticks);
     }
 
@@ -462,38 +460,38 @@ void BigClockFilter::saveCues(File cuefile) {
 void BigClockFilter::loadCues(File cuefile) {
     String xml = cuefile.loadFileAsString();
     XmlDocument xmldoc(xml);
-    XmlElement* const xmlState = xmldoc.getDocumentElement();
+    auto const xmlState = xmldoc.getDocumentElement();
     if (xmlState != 0)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName (L"BigClockCues"))
+        if (xmlState->hasTagName ("BigClockCues"))
         {
             forEachXmlChildElement (*xmlState, e) {
                 double fps=24.0;
                 double tpb=960.0;
                 int n=4;
                 int d=4;
-                if (e->hasTagName(L"FrameRate")) {
-                    fps = e->getDoubleAttribute(L"rate");
+                if (e->hasTagName("FrameRate")) {
+                    fps = e->getDoubleAttribute("rate");
                     if      (fps==1000.0) setParameter(kFrames,0.0f);
                     else if (fps==10.0) setParameter(kFrames,0.09f);
                     else if (fps==15.0) setParameter(kFrames,0.19f);
                     else if (fps==24.0) setParameter(kFrames,0.29f);
                     else if (fps==25.0) setParameter(kFrames,0.39f);
-                    else if (fps==29.97) setParameter(kFrames,0.49f); 
+                    else if (fps==29.97) setParameter(kFrames,0.49f);
                     else if (fps==30.0) setParameter(kFrames,0.59f);
                     else if (fps==50.0) setParameter(kFrames,0.69f);
                     else if (fps==60.0) setParameter(kFrames,0.79f);
                     else if (fps==75.0) setParameter(kFrames,0.89f);
-                    else if (fps==100.0) setParameter(kFrames,0.99f); 
-                    else setParameter(kFrames,1.0f); 
+                    else if (fps==100.0) setParameter(kFrames,0.99f);
+                    else setParameter(kFrames,1.0f);
                 }
-                if (e->hasTagName(L"TimeSig")) {
-                    n = e->getIntAttribute(L"numerator",4);
-                    d = e->getIntAttribute(L"denominator",4);
+                if (e->hasTagName("TimeSig")) {
+                    n = e->getIntAttribute("numerator",4);
+                    d = e->getIntAttribute("denominator",4);
                 }
-                if (e->hasTagName(L"TicksPerBeat")) {
-                    double tpb = e->getDoubleAttribute(L"value");
+                if (e->hasTagName("TicksPerBeat")) {
+                    double tpb = e->getDoubleAttribute("value");
                     if      (tpb==960.0)setParameter(kTicks,0.0f) ;
                     else if (tpb==768.0)setParameter(kTicks,0.09f) ;
                     else if (tpb==480.0)setParameter(kTicks,0.19f) ;
@@ -508,18 +506,17 @@ void BigClockFilter::loadCues(File cuefile) {
                     else if (tpb==4.0)  setParameter(kTicks,0.99f) ;
                     else setParameter(kTicks,1.0f);
                 }
-                else if (e->hasTagName(L"Cue")) {
+                else if (e->hasTagName("Cue")) {
                     cue* newcue = new cue();
-                    newcue->ppq = barsbeatsStringToPpq(e->getStringAttribute(L"barsbeats",ppqToBarsbeatsString(smpteStringToSeconds(e->getStringAttribute(L"time"),fps)*lastPosInfo.bpm/60.0)));
-                    newcue->time = smpteStringToSeconds(e->getStringAttribute(L"time",secondsToSmpteString(newcue->ppq*60.0/lastPosInfo.bpm,fps)),fps);
-                    newcue->text = e->getStringAttribute(L"text");
-                    newcue->enabled = e->getBoolAttribute(L"enabled",true);
+                    newcue->ppq = barsbeatsStringToPpq(e->getStringAttribute("barsbeats",ppqToBarsbeatsString(smpteStringToSeconds(e->getStringAttribute("time"),fps)*lastPosInfo.bpm/60.0)));
+                    newcue->time = smpteStringToSeconds(e->getStringAttribute("time",secondsToSmpteString(newcue->ppq*60.0/lastPosInfo.bpm,fps)),fps);
+                    newcue->text = e->getStringAttribute("text");
+                    newcue->enabled = e->getBoolAttribute("enabled",true);
                     cues.addSorted(c,newcue);
                 }
             }
             sendChangeMessage ();
         }
-        delete xmlState;
     }
 }
 
@@ -540,7 +537,7 @@ String BigClockFilter::getCue(double ppq, bool barsbeats) {
             if (cues[i]->time<=(ppq*60.0/lastPosInfo.bpm)
                 && cues[i]->text.isNotEmpty()
                 && cues[i]->enabled
-                ) 
+                )
             {
                 return ppqToString(cues[i]->time*lastPosInfo.bpm/60.0,
                     lastPosInfo.timeSigNumerator,
@@ -549,10 +546,10 @@ String BigClockFilter::getCue(double ppq, bool barsbeats) {
             }
         }
         else {
-            if (cues[i]->ppq<=ppq 
+            if (cues[i]->ppq<=ppq
                 && cues[i]->text.isNotEmpty()
                 && cues[i]->enabled
-                ) 
+                )
             {
                 return ppqToString(cues[i]->ppq,
                     lastPosInfo.timeSigNumerator,
@@ -561,7 +558,7 @@ String BigClockFilter::getCue(double ppq, bool barsbeats) {
             }
         }
     }
-    return String::empty;
+    return String();
 }
 
 const double BigClockFilter::secondsToPpq(const double seconds, const double bpm)
@@ -572,8 +569,8 @@ const double BigClockFilter::secondsToPpq(const double seconds, const double bpm
 //==============================================================================
 const String BigClockFilter::ppqToString (const double sppq,
                                           const int numerator,
-                                          const int denominator, 
-                                          const double bpm, 
+                                          const int denominator,
+                                          const double bpm,
                                           const bool mode)
 {
     if (numerator == 0 || denominator == 0)
@@ -683,7 +680,7 @@ const String BigClockFilter::ppqToString (const double sppq,
                 s1 = String::formatted (L"%s%02d:%02d:%02d:%03d",
                                           sign, hours, mins, secs,
                                           int64(absSecs*fps) % (int)fps);
-            if (showsubfr>=0.5f) 
+            if (showsubfr>=0.5f)
                 s1+=String(L"::") + String::formatted (L"%02d", (int64(absSecs*fps*100.0) % 100));
         }
         else {
@@ -722,7 +719,7 @@ const String BigClockFilter::ppqToString (const double sppq,
                 s1 = String::formatted (L"%s%d:%02d:%03d",
                                           sign, mins, secs,
                                           int64(absSecs*fps) % (int)fps);
-            if (showsubfr>=0.5f) 
+            if (showsubfr>=0.5f)
                 s1+=String(L"::") + String::formatted (L"%02d", (int64(absSecs*fps*100.0) % 100));
         }
         else {
@@ -732,7 +729,7 @@ const String BigClockFilter::ppqToString (const double sppq,
     }
 
 
-    String padding = String::empty;
+    String padding = String();
     if      (ticks<10 && tpb>100.0) padding = L"00";
     else if (ticks<100 && tpb>100.0) padding = L"0";
     else if (ticks<10 && tpb>=10.0) padding = L"0";
@@ -748,7 +745,7 @@ const String BigClockFilter::ppqToString (const double sppq,
 double BigClockFilter::smpteStringToSeconds(String smpte,double fps) {
 
     StringArray smpteArray;
-    smpteArray.addTokens(smpte,L":;",L"");
+    smpteArray.addTokens(smpte,":;","");
     return smpteArray[0].getDoubleValue()*60*60 //hours
         +  smpteArray[1].getDoubleValue()*60    //minutes
         +  smpteArray[2].getDoubleValue()       //seconds
@@ -821,7 +818,7 @@ double BigClockFilter::barsbeatsStringToPpq(String barsbeats, int n, int d) {
     else tpb=0.0;
 
     StringArray smpteArray;
-    smpteArray.addTokens(barsbeats,L":",L"");
+    smpteArray.addTokens(barsbeats,":","");
     const double ppqPerBar = ((double)n * 4.0 / (double)d);
     const double ppqPerBeat = 4.0/(double)d;
     return (smpteArray[0].getIntValue()-1)*ppqPerBar + (smpteArray[1].getIntValue()-1)*ppqPerBeat + smpteArray[2].getDoubleValue()/tpb;
@@ -851,7 +848,7 @@ String BigClockFilter::ppqToBarsbeatsString(double ppq, int n, int d) {
     const int beat      = ((int) beats) + 1;
     const int ticks     = ((int) (fmod (beats, 1.0) * tpb));
 
-    String padding = String::empty;
+    String padding = String();
     if      (ticks<10 && tpb>100.0) padding = L"00";
     else if (ticks<100 && tpb>100.0) padding = L"0";
     else if (ticks<10 && tpb>=10.0) padding = L"0";
@@ -864,7 +861,7 @@ String BigClockFilter::ppqToBarsbeatsString(double ppq, int n, int d) {
 
 void BigClockFilter::timerCallback()
 {
-	if (runwatch) 
+	if (runwatch)
 		watchtime += Time::getMillisecondCounter()-lastTimerTime;
 	lastTimerTime = Time::getMillisecondCounter();
 }

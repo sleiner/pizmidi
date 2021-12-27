@@ -1,5 +1,13 @@
-#include "juce_amalgamated.h"
-#include "juce_StandaloneFilterWindow.h"
+#include <memory>
+
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_audio_devices/juce_audio_devices.h"
+#include "juce_audio_utils/juce_audio_utils.h"
+#include "juce_audio_plugin_client/juce_audio_plugin_client.h"
+#include "juce_audio_plugin_client/Standalone/juce_StandaloneFilterWindow.h"
+#include "juce_data_structures/juce_data_structures.h"
+
+using namespace juce;
 
 //==============================================================================
 /** This is the application object that is started up when Juce starts. It handles
@@ -15,12 +23,13 @@ class StandalonePizPlugin : public JUCEApplication
        This is because the application object gets created before Juce has been properly
        initialised, so any embedded objects would also get constructed too soon.
    */
-    StandaloneFilterWindow* window;
+    std::unique_ptr<ApplicationProperties> appProperties;
+    std::unique_ptr<StandaloneFilterWindow> window;
 
 public:
     //==============================================================================
     StandalonePizPlugin()
-        : window (0)
+        : appProperties(nullptr), window(nullptr)
     {
         // NEVER do anything in here that could involve any Juce function being called
         // - leave all your startup tasks until the initialise() method.
@@ -35,44 +44,57 @@ public:
         // Making any Juce calls in here could be very dangerous...
     }
 
+    PropertiesFile::Options getPropertyStorageOptions() const {
+        PropertiesFile::Options options;
+
+        options.applicationName = String(JucePlugin_Name);
+        options.filenameSuffix = String("xml");
+        options.folderName = File::getSpecialLocation(File::currentExecutableFile)
+                                     .getParentDirectory()
+                                     .getFullPathName();
+        options.osxLibrarySubFolder = String("Application Support/" JucePlugin_Name);
+        options.commonToAllUsers = false;
+        options.ignoreCaseOfKeyNames = true;
+        options.doNotSave = false;
+        options.millisecondsBeforeSaving = 2000;
+        options.storageFormat = PropertiesFile::storeAsXML;
+
+        return options;
+    }
+
     //==============================================================================
     void initialise (const String& commandLine)
     {
         // just create the main window...
-		ApplicationProperties* appProperties = ApplicationProperties::getInstance(); 
+        appProperties = std::make_unique<ApplicationProperties>();
+        appProperties->setStorageParameters(getPropertyStorageOptions());
 
-		appProperties->setStorageParameters (JucePlugin_Name,
-											 "xml",
-											 ((File::getSpecialLocation(File::currentExecutableFile)).getParentDirectory()).getFullPathName(),
-											 2000,
-											 PropertiesFile::ignoreCaseOfKeyNames
-											 | PropertiesFile::storeAsXML);
-
-		window = new StandaloneFilterWindow(JucePlugin_Name,Colours::white);
-
+		window = std::make_unique<StandaloneFilterWindow>(JucePlugin_Name,
+                                                          Colours::white,
+                                                          appProperties->getUserSettings(),
+                                                          false);
 
         window->toFront (true);
         window->setVisible (true);
-
     }
 
     void shutdown()
     {
         // clear up..
 
-        if (window != 0)
-            delete window;
+        window.reset();
+        appProperties.reset();
     }
 
     //==============================================================================
     const String getApplicationName()
     {
-        return T(JucePlugin_Name);
+        return String(JucePlugin_Name);
     }
 
     const String getApplicationVersion()
     {
-        return T(JucePlugin_VersionString);
+        return String(JucePlugin_VersionString);
     }
 
     bool moreThanOneInstanceAllowed()

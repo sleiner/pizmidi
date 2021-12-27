@@ -10,13 +10,16 @@
 #include "reaper_plugin.h"
 #undef min
 #undef max
-#include "JuceHeader.h"
+
+#include "juce_audio_processors/juce_audio_processors.h"
+
+using namespace juce;
 
 class PizAudioProcessor : public AudioProcessor
 {
 public:
-	PizAudioProcessor() : 
-		AudioProcessor(), 
+	PizAudioProcessor() :
+		AudioProcessor(),
 		bottomOctave(-2),
 		reaper(false),
 		currentPath(((File::getSpecialLocation(File::currentApplicationFile)).getParentDirectory()).getFullPathName())
@@ -37,10 +40,10 @@ public:
 		return bottomOctave;
 	}
 
-	bool loadDefaultFxb() 
+	bool loadDefaultFxb()
 	{
 		//look for a default bank
-		String defaultBank  = currentPath + File::separatorString 
+		String defaultBank  = currentPath + File::getSeparatorString()
 			+ File::getSpecialLocation(File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
 		if (File(defaultBank).exists()) {
 			juce::MemoryBlock bank = juce::MemoryBlock(0,true);
@@ -52,7 +55,7 @@ public:
 		return false;
 	}
 
-	bool loadFxbFile(File file) 
+	bool loadFxbFile(File file)
 	{
 		if (file.existsAsFile()) {
 			juce::MemoryBlock bank = juce::MemoryBlock(0,true);
@@ -64,10 +67,10 @@ public:
 		return false;
 	}
 
-	bool loadDefaultFxp() 
+	bool loadDefaultFxp()
 	{
 		//look for a default patch
-		String defaultBank = currentPath + File::separatorString 
+		String defaultBank = currentPath + File::getSeparatorString()
 			+ File::getSpecialLocation(File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
 		if (File(defaultBank).exists()) {
 			juce::MemoryBlock bank = juce::MemoryBlock(0,true);

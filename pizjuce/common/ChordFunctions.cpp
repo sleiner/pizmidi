@@ -11,7 +11,7 @@ void PizChord::setChord(Array<int> newChord)
 	chord.addArray(newChord);
 	makeIntervalPattern();
 }
-int PizChord::getSum() const 
+int PizChord::getSum() const
 {
 	int sum = 0;
 	for (int i=0;i<pattern.size();i++)
@@ -35,7 +35,7 @@ void PizChord::makeIntervalPattern()
 	for (int i=0;i<chord.size()-1;i++)
 	{
 		interval = chord[i+1]-chord[i];
-		while (interval<0) 
+		while (interval<0)
 			interval+=12;
 		pattern.add(interval);
 	}
@@ -82,7 +82,7 @@ String ChordName::getIntervalString(String noteString)
 {
 	String p;
 	StringArray a;
-	a.addTokens(noteString,",",String::empty);
+	a.addTokens(noteString,",",String());
 
 	Array<int> temp;
 	for (int i=0;i<a.size();i++)
@@ -132,7 +132,7 @@ Array<int> getAsStackedChord(Array<int> &chord, bool reduce)
 	else
 		temp.addArray(chord);
 
-	//sort 
+	//sort
 	DefaultElementComparator<int> intsorter;
 	temp.sort(intsorter);
 
@@ -152,7 +152,7 @@ Array<int> getAsStackedChord(Array<int> &chord, bool reduce)
 		PizChord tempChord(temp);
 		//DBG("permutation: " + tempChord.getStringPattern());
 		int S = tempChord.getSum();
-		if (S < Minimum || Minimum == -1) 
+		if (S < Minimum || Minimum == -1)
 		{
 			//new minimum found => discard what we found up to now
 			Minimum = S;
@@ -179,122 +179,122 @@ void fillChordDatabase()
 {
 	if (ChordNames.size()>0)
 		return;
-	ChordNames.add(ChordName(""             , "c,e,g"));     
+	ChordNames.add(ChordName(""             , "c,e,g"));
 	ChordNames.add(ChordName("5"			, "c,g"));
-	ChordNames.add(ChordName("6(no3)"       , "c,g,a"));                 
-	ChordNames.add(ChordName("Maj7"         , "c,e,g,b"));               
-	ChordNames.add(ChordName("Maj7(#11)"    , "c,e,f#,b"));              
-	ChordNames.add(ChordName("add9"         , "c,e,g,d"));               
-	ChordNames.add(ChordName("Maj7(9)"      , "c,d,e,b"));               
-	ChordNames.add(ChordName("6(9)"         , "c,d,e,a"));               
-	ChordNames.add(ChordName("+"            , "c,e,g#"));                
-	ChordNames.add(ChordName("m"            , "c,eb,g"));                
-	ChordNames.add(ChordName("madd9"        , "c,eb,g,d"));              
-	ChordNames.add(ChordName("m7"           , "c,eb,g,bb"));             
-	ChordNames.add(ChordName("m7(9)"        , "c,d,eb,bb"));             
-	ChordNames.add(ChordName("mMaj7"        , "c,eb,g,b"));              
-	ChordNames.add(ChordName("mMaj7(9)"     , "c,d,eb,b"));              
-	ChordNames.add(ChordName("dim"          , "c,eb,f#"));               
-	ChordNames.add(ChordName("dim7"         , "c,eb,f#,a"));             
-	ChordNames.add(ChordName("7"            , "c,e,g,bb"));              
-	ChordNames.add(ChordName("7(no5)"       , "c,e,bb"));                
-	ChordNames.add(ChordName("7sus4"        , "c,f,g,bb"));              
-	ChordNames.add(ChordName("7(b5)"        , "c,e,f#,bb"));             
-	ChordNames.add(ChordName("7(9)"         , "c,d,e,bb"));              
-	ChordNames.add(ChordName("7(13)"        , "c,e,a,bb"));              
-	ChordNames.add(ChordName("7(b9)"        , "c,c#,e,bb"));             
+	ChordNames.add(ChordName("6(no3)"       , "c,g,a"));
+	ChordNames.add(ChordName("Maj7"         , "c,e,g,b"));
+	ChordNames.add(ChordName("Maj7(#11)"    , "c,e,f#,b"));
+	ChordNames.add(ChordName("add9"         , "c,e,g,d"));
+	ChordNames.add(ChordName("Maj7(9)"      , "c,d,e,b"));
+	ChordNames.add(ChordName("6(9)"         , "c,d,e,a"));
+	ChordNames.add(ChordName("+"            , "c,e,g#"));
+	ChordNames.add(ChordName("m"            , "c,eb,g"));
+	ChordNames.add(ChordName("madd9"        , "c,eb,g,d"));
+	ChordNames.add(ChordName("m7"           , "c,eb,g,bb"));
+	ChordNames.add(ChordName("m7(9)"        , "c,d,eb,bb"));
+	ChordNames.add(ChordName("mMaj7"        , "c,eb,g,b"));
+	ChordNames.add(ChordName("mMaj7(9)"     , "c,d,eb,b"));
+	ChordNames.add(ChordName("dim"          , "c,eb,f#"));
+	ChordNames.add(ChordName("dim7"         , "c,eb,f#,a"));
+	ChordNames.add(ChordName("7"            , "c,e,g,bb"));
+	ChordNames.add(ChordName("7(no5)"       , "c,e,bb"));
+	ChordNames.add(ChordName("7sus4"        , "c,f,g,bb"));
+	ChordNames.add(ChordName("7(b5)"        , "c,e,f#,bb"));
+	ChordNames.add(ChordName("7(9)"         , "c,d,e,bb"));
+	ChordNames.add(ChordName("7(13)"        , "c,e,a,bb"));
+	ChordNames.add(ChordName("7(b9)"        , "c,c#,e,bb"));
 	ChordNames.add(ChordName("+7"			, "c,e,g#,bb"));    //7(b13)
-	ChordNames.add(ChordName("7(#9)"        , "c,eb,e,bb"));             
-	ChordNames.add(ChordName("sus4"         , "c,f,g"));                 
-	ChordNames.add(ChordName("6add9"        , "c,e,g,a,d"));             
-	ChordNames.add(ChordName("Maj9"         , "c,e,g,b,d"));             
-	ChordNames.add(ChordName("9"            , "c,e,g,bb,d"));            
-	ChordNames.add(ChordName("13"           , "c,e,g,bb,d,a"));          
-	ChordNames.add(ChordName("13"           , "c,e,g,bb,d,f,a"));          
-	ChordNames.add(ChordName("13"           , "c,e,bb,d,a"));          
-	ChordNames.add(ChordName("m6"           , "c,eb,g,a"));              
-	ChordNames.add(ChordName("m6add9"       , "c,eb,g,a,d"));            
-	ChordNames.add(ChordName("m6/9"			, "c,eb,a,d"));              
-	ChordNames.add(ChordName("m7add13"      , "c,eb,g,a,bb"));           
-	ChordNames.add(ChordName("m9"           , "c,eb,g,bb,d"));           
-	ChordNames.add(ChordName("m11"          , "c,eb,g,bb,d,f"));         
-	ChordNames.add(ChordName("m11"          , "c,eb,bb,d,f"));         
-	ChordNames.add(ChordName("m13"          , "c,eb,g,bb,d,f,a"));       
-	ChordNames.add(ChordName("m9/Maj7"      , "c,eb,g,b,d"));            
-	ChordNames.add(ChordName("m9(b5)"       , "c,eb,gb,bb,d"));          
-	ChordNames.add(ChordName("m11(b5)"      , "c,eb,gb,bb,d,f"));        
-	ChordNames.add(ChordName("Maj7(#5)"     , "c,e,g#,b"));              
-	ChordNames.add(ChordName("Maj7(#11)"    , "c,e,g,b,f#"));            
-	ChordNames.add(ChordName("Maj9(#11)"    , "c,e,g,b,d,f#"));          
-	ChordNames.add(ChordName("7(b9)"        , "c,e,g,bb,db"));           
-	ChordNames.add(ChordName("7(#9)"        , "c,e,g,bb,d#"));           
-	ChordNames.add(ChordName("7(#5)(#9)"    , "c,e,g#,bb,d#"));          
-	ChordNames.add(ChordName("7(#11)"       , "c,e,g,bb,f#"));           
-	ChordNames.add(ChordName("9(#11)"       , "c,e,g,bb,d,f#"));         
-	ChordNames.add(ChordName("7(b9)(#11)"   , "c,e,g,bb,db,f#"));        
-	ChordNames.add(ChordName("13b5"         , "c,e,gb,bb,d,a"));         
-	ChordNames.add(ChordName("13b5"         , "c,e,gb,bb,d,f,a"));         
-	ChordNames.add(ChordName("13b9"         , "c,e,g,bb,db,a"));         
-	ChordNames.add(ChordName("13b9"         , "c,e,g,bb,db,f,a"));         
-	ChordNames.add(ChordName("13#11"        , "c,e,g,bb,d,f#,a"));       
-	ChordNames.add(ChordName("7(no3)"       , "c,g,bb"));                
-	ChordNames.add(ChordName("Maj7(no5)"    , "c,e,b"));      
+	ChordNames.add(ChordName("7(#9)"        , "c,eb,e,bb"));
+	ChordNames.add(ChordName("sus4"         , "c,f,g"));
+	ChordNames.add(ChordName("6add9"        , "c,e,g,a,d"));
+	ChordNames.add(ChordName("Maj9"         , "c,e,g,b,d"));
+	ChordNames.add(ChordName("9"            , "c,e,g,bb,d"));
+	ChordNames.add(ChordName("13"           , "c,e,g,bb,d,a"));
+	ChordNames.add(ChordName("13"           , "c,e,g,bb,d,f,a"));
+	ChordNames.add(ChordName("13"           , "c,e,bb,d,a"));
+	ChordNames.add(ChordName("m6"           , "c,eb,g,a"));
+	ChordNames.add(ChordName("m6add9"       , "c,eb,g,a,d"));
+	ChordNames.add(ChordName("m6/9"			, "c,eb,a,d"));
+	ChordNames.add(ChordName("m7add13"      , "c,eb,g,a,bb"));
+	ChordNames.add(ChordName("m9"           , "c,eb,g,bb,d"));
+	ChordNames.add(ChordName("m11"          , "c,eb,g,bb,d,f"));
+	ChordNames.add(ChordName("m11"          , "c,eb,bb,d,f"));
+	ChordNames.add(ChordName("m13"          , "c,eb,g,bb,d,f,a"));
+	ChordNames.add(ChordName("m9/Maj7"      , "c,eb,g,b,d"));
+	ChordNames.add(ChordName("m9(b5)"       , "c,eb,gb,bb,d"));
+	ChordNames.add(ChordName("m11(b5)"      , "c,eb,gb,bb,d,f"));
+	ChordNames.add(ChordName("Maj7(#5)"     , "c,e,g#,b"));
+	ChordNames.add(ChordName("Maj7(#11)"    , "c,e,g,b,f#"));
+	ChordNames.add(ChordName("Maj9(#11)"    , "c,e,g,b,d,f#"));
+	ChordNames.add(ChordName("7(b9)"        , "c,e,g,bb,db"));
+	ChordNames.add(ChordName("7(#9)"        , "c,e,g,bb,d#"));
+	ChordNames.add(ChordName("7(#5)(#9)"    , "c,e,g#,bb,d#"));
+	ChordNames.add(ChordName("7(#11)"       , "c,e,g,bb,f#"));
+	ChordNames.add(ChordName("9(#11)"       , "c,e,g,bb,d,f#"));
+	ChordNames.add(ChordName("7(b9)(#11)"   , "c,e,g,bb,db,f#"));
+	ChordNames.add(ChordName("13b5"         , "c,e,gb,bb,d,a"));
+	ChordNames.add(ChordName("13b5"         , "c,e,gb,bb,d,f,a"));
+	ChordNames.add(ChordName("13b9"         , "c,e,g,bb,db,a"));
+	ChordNames.add(ChordName("13b9"         , "c,e,g,bb,db,f,a"));
+	ChordNames.add(ChordName("13#11"        , "c,e,g,bb,d,f#,a"));
+	ChordNames.add(ChordName("7(no3)"       , "c,g,bb"));
+	ChordNames.add(ChordName("Maj7(no5)"    , "c,e,b"));
 
 	ChordNames.add(ChordName("13b5b9"		, "c,e,gb,bb,db,a"));
 	ChordNames.add(ChordName("13b5b9"		, "c,e,gb,bb,db,f,a"));
 
-	ChordNames.add(ChordName("7#9#11"		, "c,e,g,bb,d#,f#"));        
-	ChordNames.add(ChordName("add#9"		, "c,e,g,d#"));               
-	ChordNames.add(ChordName("addb9"		, "c,e,g,db"));               
-	ChordNames.add(ChordName("11"			, "c,g,bb,d,f"));   
-	ChordNames.add(ChordName("11"			, "c,e,g,bb,d,f"));   
+	ChordNames.add(ChordName("7#9#11"		, "c,e,g,bb,d#,f#"));
+	ChordNames.add(ChordName("add#9"		, "c,e,g,d#"));
+	ChordNames.add(ChordName("addb9"		, "c,e,g,db"));
+	ChordNames.add(ChordName("11"			, "c,g,bb,d,f"));
+	ChordNames.add(ChordName("11"			, "c,e,g,bb,d,f"));
 	ChordNames.add(ChordName("add11"		, "c,e,g,f"));
-	ChordNames.add(ChordName("Maj11"		, "c,e,g,b,d,f"));   
-	ChordNames.add(ChordName("Maj7add11" 	, "c,e,g,b,f"));   
-	ChordNames.add(ChordName("7add11"		, "c,e,g,bb,f"));  
-	ChordNames.add(ChordName("m7b9"         , "c,eb,g,bb,db")); 
-	ChordNames.add(ChordName("+Maj9"        , "c,e,g#,b,d")); 
+	ChordNames.add(ChordName("Maj11"		, "c,e,g,b,d,f"));
+	ChordNames.add(ChordName("Maj7add11" 	, "c,e,g,b,f"));
+	ChordNames.add(ChordName("7add11"		, "c,e,g,bb,f"));
+	ChordNames.add(ChordName("m7b9"         , "c,eb,g,bb,db"));
+	ChordNames.add(ChordName("+Maj9"        , "c,e,g#,b,d"));
 	ChordNames.add(ChordName("+9"           , "c,e,g#,bb,d"));
-	ChordNames.add(ChordName("mMaj11"       , "c,eb,g,b,d,f")); 
-	ChordNames.add(ChordName("+Maj11"       , "c,e,g#,b,d,f")); 
-	ChordNames.add(ChordName("+13"          , "c,e,g#,bb,d,f,a")); 
-	ChordNames.add(ChordName("+Maj13"       , "c,e,g#,b,d,f,a")); 
-	ChordNames.add(ChordName("Maj7sus4"		, "c,f,g,b"));        
-	ChordNames.add(ChordName("Maj9sus4"		, "c,f,g,b,d")); 
-	ChordNames.add(ChordName("7add13"		, "c,e,g,bb,a")); 
-	ChordNames.add(ChordName("mMaj7add11"	, "c,eb,g,b,f")); 
-	ChordNames.add(ChordName("7add11"		, "c,e,g,bb,f")); 
+	ChordNames.add(ChordName("mMaj11"       , "c,eb,g,b,d,f"));
+	ChordNames.add(ChordName("+Maj11"       , "c,e,g#,b,d,f"));
+	ChordNames.add(ChordName("+13"          , "c,e,g#,bb,d,f,a"));
+	ChordNames.add(ChordName("+Maj13"       , "c,e,g#,b,d,f,a"));
+	ChordNames.add(ChordName("Maj7sus4"		, "c,f,g,b"));
+	ChordNames.add(ChordName("Maj9sus4"		, "c,f,g,b,d"));
+	ChordNames.add(ChordName("7add13"		, "c,e,g,bb,a"));
+	ChordNames.add(ChordName("mMaj7add11"	, "c,eb,g,b,f"));
+	ChordNames.add(ChordName("7add11"		, "c,e,g,bb,f"));
 
-	//ChordNames.add(ChordName("(It+6)"		, "ab,c,f#"));   
-	//ChordNames.add(ChordName("(Fr+6)"		, "ab,c,d,f#"));   
-	//ChordNames.add(ChordName("(Gr+6)"		, "ab,c,eb,f#"));   
+	//ChordNames.add(ChordName("(It+6)"		, "ab,c,f#"));
+	//ChordNames.add(ChordName("(Fr+6)"		, "ab,c,d,f#"));
+	//ChordNames.add(ChordName("(Gr+6)"		, "ab,c,eb,f#"));
 
-	//ChordNames.add(ChordName("Maj7aug"      , "c,e,g#,b"));              
-	//ChordNames.add(ChordName("1+2+5"        , "c,d,g"));                 
-	//ChordNames.add(ChordName("Maj7add(13) " , "c,e,g,a,b"));             
-	//ChordNames.add(ChordName("Maj13"        , "c,e,g,b,d,a"));           
-	//ChordNames.add(ChordName("m7add(11)"    , "c,eb,g,bb,f"));           
-	//ChordNames.add(ChordName("m7(b5)"       , "c,eb,gb,bb"));            
-	//ChordNames.add(ChordName("o7"           , "c,eb,gb,a"));             
-	//ChordNames.add(ChordName("o7add(Maj7) " , "c,eb,gb,a,b"));           
-	//ChordNames.add(ChordName("sus7"         , "c,f,g,bb"));              
-	//ChordNames.add(ChordName("sus9"         , "c,f,g,bb,d"));            
-	//ChordNames.add(ChordName("sus13"        , "c,f,g,bb,d,a"));          
-	//ChordNames.add(ChordName("sus7"         , "c,g,bb"));                
-	//ChordNames.add(ChordName("Maj7(b5)"     , "c,e,gb,b"));              
-	//ChordNames.add(ChordName("Maj13(#11)"   , "c,e,g,b,d,f#,a"));        
-	//ChordNames.add(ChordName("7(#5)"        , "c,e,g#,bb"));             
-	//ChordNames.add(ChordName("9(#5)"        , "c,e,g#,bb,d"));           
-	//ChordNames.add(ChordName("7(b5)(b9)"    , "c,e,gb,bb,db"));          
-	//ChordNames.add(ChordName("7(#5)(b9)"    , "c,e,g#,bb,db"));          
-	//ChordNames.add(ChordName("sus7(b9)"     , "c,f,g,bb,db"));           
-	//ChordNames.add(ChordName("sus13(b9)"    , "c,f,g,bb,db,a"));         
-	//ChordNames.add(ChordName("m7(no5)"      , "c,eb,bb"));               
+	//ChordNames.add(ChordName("Maj7aug"      , "c,e,g#,b"));
+	//ChordNames.add(ChordName("1+2+5"        , "c,d,g"));
+	//ChordNames.add(ChordName("Maj7add(13) " , "c,e,g,a,b"));
+	//ChordNames.add(ChordName("Maj13"        , "c,e,g,b,d,a"));
+	//ChordNames.add(ChordName("m7add(11)"    , "c,eb,g,bb,f"));
+	//ChordNames.add(ChordName("m7(b5)"       , "c,eb,gb,bb"));
+	//ChordNames.add(ChordName("o7"           , "c,eb,gb,a"));
+	//ChordNames.add(ChordName("o7add(Maj7) " , "c,eb,gb,a,b"));
+	//ChordNames.add(ChordName("sus7"         , "c,f,g,bb"));
+	//ChordNames.add(ChordName("sus9"         , "c,f,g,bb,d"));
+	//ChordNames.add(ChordName("sus13"        , "c,f,g,bb,d,a"));
+	//ChordNames.add(ChordName("sus7"         , "c,g,bb"));
+	//ChordNames.add(ChordName("Maj7(b5)"     , "c,e,gb,b"));
+	//ChordNames.add(ChordName("Maj13(#11)"   , "c,e,g,b,d,f#,a"));
+	//ChordNames.add(ChordName("7(#5)"        , "c,e,g#,bb"));
+	//ChordNames.add(ChordName("9(#5)"        , "c,e,g#,bb,d"));
+	//ChordNames.add(ChordName("7(b5)(b9)"    , "c,e,gb,bb,db"));
+	//ChordNames.add(ChordName("7(#5)(b9)"    , "c,e,g#,bb,db"));
+	//ChordNames.add(ChordName("sus7(b9)"     , "c,f,g,bb,db"));
+	//ChordNames.add(ChordName("sus13(b9)"    , "c,f,g,bb,db,a"));
+	//ChordNames.add(ChordName("m7(no5)"      , "c,eb,bb"));
 }
 
 String getIntervalName(int semitones)
 {
-	while (semitones>21) 
+	while (semitones>21)
 		semitones-=12;
 
 	switch(semitones)
@@ -321,7 +321,7 @@ String getIntervalName(int semitones)
 	case 19: return "Perfect 12th";
 	case 20: return "Flat 13th";
 	case 21: return "13th";
-	default: return String::empty;
+	default: return String();
 	}
 }
 
@@ -340,7 +340,7 @@ String getFirstRecognizedChord(Array<int> chord, bool flats)
 		return " ";
 	if (chord.size()==2)
 		return getIntervalName(chord[1]-chord[0]) + " ("+listNoteNames(chord,flats)+")";
-	
+
 	Array<int> temp;
 	for (int i=0;i<chord.size();i++) {
 		temp.addIfNotAlreadyThere(chord[i]%12);
@@ -367,7 +367,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 {
 	bool multichannel = noteString.contains(".");
 	StringArray sa;
-	sa.addTokens(noteString," ,",String::empty);
+	sa.addTokens(noteString," ,",String());
 	bool absolute;
 	int bass = getNoteValue(sa[0].upToFirstOccurrenceOf(".",false,false),bottomOctave,absolute);
 	int last = 0;
@@ -383,7 +383,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 			last = bass-root;
 			if (channel>0)
 				string += String(last) + "." + String(channel);
-			else 
+			else
 				string += String(last);
 			for(int i=1;i<sa.size();i++)
 			{
@@ -396,7 +396,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 					channel = sa[i].fromFirstOccurrenceOf(".",false,false).getIntValue();
 					if (channel>0)
 						string += " " + String(step) + "." + String(channel);
-					else 
+					else
 						string += " "+String(step);
 					last = step;
 				}
@@ -406,7 +406,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 			last = bass-root;
 			if (channel>0)
 				string += String(last) + "." + String(channel);
-			else 
+			else
 				string += String(last);
 			for(int i=1;i<sa.size();i++)
 			{
@@ -419,7 +419,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 					channel = sa[i].fromFirstOccurrenceOf(".",false,false).getIntValue();
 					if (channel>0)
 						string += " " + String(step) + "." + String(channel);
-					else 
+					else
 						string += " "+String(step);
 					last = step;
 				}
@@ -434,7 +434,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 		int channel = multichannel ? sa[0].fromFirstOccurrenceOf(".",false,false).getIntValue() : 0;
 		if (channel>0)
 			string += String(last) + "." + String(channel);
-		else 
+		else
 			string += String(last);
 		for(int i=1;i<sa.size();i++)
 		{
@@ -446,7 +446,7 @@ String getIntervalStringFromNoteNames(int root, String noteString, int bottomOct
 					step+=12;
 				if (channel>0)
 					string += " " + String(step) + "." + String(channel);
-				else 
+				else
 					string += " "+String(step);
 				last = step;
 			}

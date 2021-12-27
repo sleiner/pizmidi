@@ -23,10 +23,10 @@
 #define __JUCER_HEADER_PIZBUTTON_PIZBUTTON_F1585747__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 //[/Headers]
 
-
+using namespace juce;
 
 //==============================================================================
 /**

@@ -1,7 +1,11 @@
 #ifndef Piz_VSTSlider_h
 #define Piz_VSTSlider_h
 
-#include "JuceHeader.h"
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
+using namespace juce;
 
 class VSTSlider : public Slider
 {

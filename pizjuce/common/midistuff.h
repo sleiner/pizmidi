@@ -1,7 +1,8 @@
 #ifndef PIZ_MIDI_STUFF_H
 #define PIZ_MIDI_STUFF_H
 
-#include "JuceHeader.h"
+#include "juce_core/juce_core.h"
+using namespace juce;
 
 #define NOT_PLAYING (-999)
 #define ANY_CHANNEL (0)
@@ -99,7 +100,7 @@ inline int getIntervalValue(String intervalName)
 {
 	int result = NOT_A_NOTE;
 	bool inverted = intervalName.startsWith("-");
-	if (inverted) 
+	if (inverted)
 		intervalName = intervalName.fromFirstOccurrenceOf("-",false,true);
 
 	if (intervalName.equalsIgnoreCase("r") || intervalName.equalsIgnoreCase("root") || intervalName=="1")
@@ -110,7 +111,7 @@ inline int getIntervalValue(String intervalName)
 		result = 2;
 	else if (intervalName=="m3" || intervalName.equalsIgnoreCase("min3") || intervalName=="b3")
 		result = 3;
-	else if (intervalName=="M3" || intervalName.equalsIgnoreCase("maj3") || intervalName=="3" 
+	else if (intervalName=="M3" || intervalName.equalsIgnoreCase("maj3") || intervalName=="3"
 		|| intervalName=="b4" || intervalName=="o4" || intervalName.equalsIgnoreCase("dim4"))
 		result = 4;
 	else if (intervalName.equalsIgnoreCase("p4") || intervalName=="4")
@@ -123,10 +124,10 @@ inline int getIntervalValue(String intervalName)
 	else if (intervalName=="#5" || intervalName.equalsIgnoreCase("aug5") || intervalName=="+5"
 		|| intervalName=="m6" || intervalName.equalsIgnoreCase("min6") || intervalName=="b6")
 		result = 8;
-	else if (intervalName.equalsIgnoreCase("maj6") || intervalName=="M6" || intervalName=="6" 
+	else if (intervalName.equalsIgnoreCase("maj6") || intervalName=="M6" || intervalName=="6"
 		|| intervalName=="o7" || intervalName=="bb7" || intervalName=="dim7")
 		result = 9;
-	else if (intervalName.equalsIgnoreCase("min7") || intervalName=="b7" || intervalName=="m7" 
+	else if (intervalName.equalsIgnoreCase("min7") || intervalName=="b7" || intervalName=="m7"
 		|| intervalName=="+6" || intervalName.equalsIgnoreCase("aug6"))
 		result = 10;
 	else if (intervalName.equalsIgnoreCase("maj7") || intervalName=="M7" || intervalName=="7")
@@ -151,13 +152,13 @@ inline int getIntervalValue(String intervalName)
 		result = 20;
 	else if (intervalName.equalsIgnoreCase("maj13") || intervalName=="13" || intervalName=="M13")
 		result = 21;
-	if (inverted) 
+	if (inverted)
 		result = -result;
 	return result;
 }
 
 inline String getNoteName(int noteNumber, int baseOctave/*=-2*/) {
-    String Note = String::empty;
+    String Note{};
     switch (noteNumber%12) {
         case  0: Note="C" ; break;
         case  1: Note="C#"; break;
@@ -177,8 +178,8 @@ inline String getNoteName(int noteNumber, int baseOctave/*=-2*/) {
 }
 
 inline String getNoteNameWithoutOctave(int noteNumber, bool sharps = true) {
-    String Note = String::empty;
-	if (sharps) 
+    String Note{};
+	if (sharps)
 	{
 		switch (noteNumber%12) {
 			case  0: Note="C" ; break;

@@ -1,8 +1,9 @@
 #ifndef BIGCLOCK_PLUGINFILTER_H
 #define BIGCLOCK_PLUGINFILTER_H
 
+
 #include "../../common/PizAudioProcessor.h"
-#include "JuceHeader.h"
+#include "juce_events/juce_events.h"
 
 enum parameters {
 	kBarsBeats,
@@ -65,8 +66,8 @@ public:
     String text;
     bool enabled;
     cue() {
-        time=0.0; text=String::empty; ppq=0.0; enabled=true;
-    }   
+        time=0.0; text=String(); ppq=0.0; enabled=true;
+    }
     cue(double t, double p, String s, bool e=true) {
         time=t; text=s; ppq=p; enabled=e;
     }
@@ -106,8 +107,8 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
+    double getTailLengthSeconds() const {return 0;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
 #if JucePlugin_WantsMidiInput
@@ -141,7 +142,7 @@ public:
     int getNumPrograms()                                        { return 1; }
     int getCurrentProgram()                                     { return 0; }
     void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return String::empty; }
+    const String getProgramName (int index)                     { return String(); }
     void changeProgramName (int index, const String& newName)   { }
 
     //==============================================================================
@@ -179,8 +180,8 @@ public:
     const double secondsToPpq (const double seconds,const double bpm);
     const String ppqToString (const double sppq,
                                           const int numerator,
-                                          const int denominator, 
-                                          const double bpm, 
+                                          const int denominator,
+                                          const double bpm,
                                           const bool mode);
     void saveCues(File cuefile);
     void loadCues(File cuefile);

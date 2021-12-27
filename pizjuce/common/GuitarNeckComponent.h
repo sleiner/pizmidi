@@ -1,7 +1,8 @@
 #ifndef GUITAR_NECK_COMPONENT_H
 #define GUITAR_NECK_COMPONENT_H
 
-#include "JuceHeader.h"
+#include "juce_audio_basics/juce_audio_basics.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 #include "midistuff.h"
 
 #define maxFrets (32)
@@ -13,7 +14,7 @@ public:
 	FrettedNote() {fret=-1; string=-1;}
 	FrettedNote(int f, int s) {fret=f; string=s;}
 	~FrettedNote() {}
-		
+
 	bool isValid() const {return fret>=0 && string>=0;}
 	void invalidate() {fret = -1; string = -1;}
 
@@ -24,7 +25,7 @@ public:
 	int string;
 };
 
-class GuitarNeckComponent : public Component, 
+class GuitarNeckComponent : public Component,
 							public MidiKeyboardStateListener,
 							public ChangeBroadcaster,
                             private Timer,
@@ -59,7 +60,7 @@ public:
 
     void setLowestVisibleFret (int fretNumber);
     int getLowestVisibleFret() const noexcept                        { return firstFret; }
-	
+
 	void drawNote (int fret, int string,
                                            Graphics& g, int x, int y, int w, int h,
                                            bool isDown, bool isOver,
@@ -93,7 +94,7 @@ public:
         distance, in either direction.
     */
     int getKeyStartPosition (const int midiNoteNumber) const;
-	
+
     /** This sets the octave number which is shown as the octave number for middle C.
 
         This affects only the default implementation of getWhiteNoteText(), which

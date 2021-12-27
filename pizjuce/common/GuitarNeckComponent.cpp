@@ -51,12 +51,12 @@ static const float fretPosition[] = {0.f,0.056126f,0.109101f,0.159104f,0.206299f
 									 0.801575f,0.812712f,0.823223f,0.833145f,0.842510f};
 
 void GuitarNeckComponent::setNumStrings(int n) {
-	numStrings = jmin(n,maxStrings); 
+	numStrings = jmin(n,maxStrings);
 	dotSize = jmax(15.f,jmin(25.f,(float)getFretWidth(numFrets),(float)getHeight()/(float)numStrings));
 	repaint();
 }
 void GuitarNeckComponent::setNumFrets(int n) {
-	numFrets = jmin(n,maxFrets); 
+	numFrets = jmin(n,maxFrets);
 	rangeEnd = n;
 	dotSize = jmax(15.f,jmin(25.f,(float)getFretWidth(numFrets),(float)getHeight()/(float)numStrings));
 	repaint();
@@ -145,7 +145,7 @@ void GuitarNeckComponent::repaintNote (const int fret)
     {
 		int x=0;
 		int w = getFretWidth(fret);
-		if (fret>0) 
+		if (fret>0)
 			x = getFretPos (fret-1);
 		repaint (x-10, 0, w+20, getHeight());
     }
@@ -157,7 +157,7 @@ void GuitarNeckComponent::paint (Graphics& g)
 
     const Colour lineColour (findColour (keySeparatorLineColourId));
     const Colour textColour (findColour (textLabelColourId));
-	
+
 	for (int fret = firstFret; fret <= (numFrets-firstFret); fret++)
 	{
 		if (fret==0) {
@@ -199,7 +199,7 @@ void GuitarNeckComponent::paint (Graphics& g)
 			g.setFont(Font(12.f,Font::bold));
 			g.drawFittedText(
 				getNoteNameWithoutOctave(currentlyFrettedFret[string]+stringNote[string],!showFlats),
-				roundToInt(x-w/2-dotSize/2+3), roundToInt(yStringPos-dotSize/2+3), roundToInt(dotSize)-6, roundToInt(dotSize)-6, 
+				roundToInt(x-w/2-dotSize/2+3), roundToInt(yStringPos-dotSize/2+3), roundToInt(dotSize)-6, roundToInt(dotSize)-6,
 				Justification::centred, 1, 0.4f);
 		}
 		else {
@@ -221,7 +221,7 @@ void GuitarNeckComponent::paint (Graphics& g)
 		g.setFont(Font(12.f,Font::bold));
 		g.drawFittedText(
 			getNoteNameWithoutOctave(noteUnderMouse.fret+stringNote[noteUnderMouse.string],!showFlats),
-			roundToInt(x-w/2-dotSize/2)+3, roundToInt(yStringPos-dotSize/2)+3, roundToInt(dotSize)-6, roundToInt(dotSize)-6, 
+			roundToInt(x-w/2-dotSize/2)+3, roundToInt(yStringPos-dotSize/2)+3, roundToInt(dotSize)-6, roundToInt(dotSize)-6,
 			Justification::centred, 1, 0.4f);
 	}
 }
@@ -277,7 +277,7 @@ const String GuitarNeckComponent::getNoteText (const int fret, const int string)
     //if (keyWidth > 14.0f && midiNoteNumber % 12 == 0)
         return MidiMessage::getMidiNoteName (midiNoteNumber, true, true, octaveNumForMiddleC);
 
-    //return String::empty;
+    //return String();
 }
 
 void GuitarNeckComponent::getFretPos (int fret, int& x, int& w) const
@@ -501,4 +501,3 @@ void GuitarNeckComponent::focusLost (FocusChangeType)
 {
     resetAnyKeysInUse();
 }
-

@@ -1,0 +1,13 @@
+additional_commands:
+    juce_add_plugin:
+        pargs:
+            nargs: 1
+        kwargs:
+            COMPANY_NAME: 1
+            DESCRIPTION: 1
+            FORMATS: "*"
+            IS_SYNTH: 1
+            PLUGIN_CODE: 1
+            PLUGIN_MANUFACTURER_CODE: 1
+            PRODUCT_NAME: 1
+            VERSION: 1

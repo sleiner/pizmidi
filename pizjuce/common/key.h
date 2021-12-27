@@ -8,7 +8,7 @@ static const String encryptXml (const XmlElement* xml,
 
     if (xml != 0)
     {
-        const String s (xml->createDocument (String::empty, true));
+        const String s (xml->createDocument (String(), true));
 		const MemoryBlock mb (s.toUTF8(), s.length());
 
         val.loadFromMemoryBlock (mb);
@@ -41,7 +41,7 @@ static XmlElement* decodeEncryptedXml (const String& hexData,
 #ifdef JUCE_DEBUG
     if (xml != 0)
     {
-        DBG (xml->createDocument (String::empty, true));
+        DBG (xml->createDocument (String(), true));
     }
 #endif
 

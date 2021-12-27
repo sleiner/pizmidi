@@ -1,8 +1,7 @@
 #include "BigClockEditor.h"
-#include "../../common/LookAndFeel.h"
 
 TimeDisplay::TimeDisplay ()
-    : Button (String::empty)
+    : Button (String())
 {
     setSize (600, 400);
     textcolor = Colour(0xff000000);
@@ -33,10 +32,7 @@ BigClockEditor::BigClockEditor (BigClockFilter* const ownerFilter)
     : AudioProcessorEditor (ownerFilter),
     showtextbox(ownerFilter->showcues)
 {
-	static NonShinyLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
-	addChildComponent (modeLabel = new Label("Mode Label",String::empty));
+	addChildComponent (modeLabel = new Label("Mode Label",String()));
 	modeLabel->setMouseClickGrabsKeyboardFocus(false);
 	modeLabel->setFont(Font(12.f,Font::bold));
 	modeLabel->setJustificationType(Justification::topRight);
@@ -57,10 +53,10 @@ BigClockEditor::BigClockEditor (BigClockFilter* const ownerFilter)
     textBox->setScrollbarsShown (false);
     textBox->setCaretVisible (true);
     textBox->setPopupMenuEnabled (true);
-    textBox->setText (String::empty);
+    textBox->setText (String());
     textBox->addListener(this);
 
-    addAndMakeVisible (cueLabel = new Label("Cue Label",String::empty));
+    addAndMakeVisible (cueLabel = new Label("Cue Label",String()));
 
 	addAndMakeVisible (runButton = new TextButton("Run"));
 	runButton->setMouseClickGrabsKeyboardFocus(false);
@@ -129,7 +125,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked) {
         if (mousebutton.isPopupMenu()) {
             bool samplemode = getFilter()->getParameter(kSamples)>=0.5f;
             PopupMenu m, sub1,sub2,sub3,sub4,clockmode;
-            sub1.addCustomItem (-1, colourSelector, 300, 300, false);
+            sub1.addCustomItem (-1, *colourSelector, 300, 300, false);
             m.addSubMenu (L"Color", sub1);
             m.addSeparator();
 			clockmode.addItem(100,"Host Timeline",true,getFilter()->mode == HostTimeMode);
@@ -149,7 +145,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked) {
                     getFilter()->ppqToString(getFilter()->cues[i]->ppq,
                                              getFilter()->lastPosInfo.timeSigNumerator,
                                              getFilter()->lastPosInfo.timeSigDenominator,
-                                             getFilter()->lastPosInfo.bpm,barsbeats) 
+                                             getFilter()->lastPosInfo.bpm,barsbeats)
                     + " - " + getFilter()->cues[i]->text,true,getFilter()->cues[i]->enabled);
             }
             m.addSubMenu (L"Cues", sub4, getFilter()->mode==HostTimeMode);
@@ -300,7 +296,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked) {
                 }
                 else if (result==997) {
                     FileChooser myChooser ("Export cue file...",
-                        File(getFilter()->getCurrentPath() + File::separatorString + "cues.xml"));
+                        File(getFilter()->getCurrentPath() + File::getSeparatorString() + "cues.xml"));
 
                     if (myChooser.browseForFileToSave(true))
                     {
@@ -313,7 +309,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked) {
                 }
                 else if (result==999) {
                     getFilter()->cues.clear();
-                    cueLabel->setText(String::empty,false);
+                    cueLabel->setText(String(), dontSendNotification);
                 }
                 else if (result>=1000) {
                     getFilter()->setCueEnabled(result-1000,!(getFilter()->cues[result-1000]->enabled));
@@ -419,43 +415,43 @@ void BigClockEditor::updateParametersFromFilter()
 	{
 	case HostTimeMode:
 		hosttime=true;
-		modeLabel->setText("Host Timeline",false);
+		modeLabel->setText("Host Timeline", dontSendNotification);
 		infoLabel->time = filter->ppqToString (positionInfo.ppqPosition,
                                     positionInfo.timeSigNumerator,
-                                    positionInfo.timeSigDenominator, 
-                                    positionInfo.bpm, 
+                                    positionInfo.timeSigDenominator,
+                                    positionInfo.bpm,
                                     barsbeats);
 		break;
 	case RecTimeMode:
 		hosttime=false;
-		modeLabel->setText("Recording Time",false);
+		modeLabel->setText("Recording Time", dontSendNotification);
 		infoLabel->time = filter->ppqToString (filter->secondsToPpq(filter->rectime,positionInfo.bpm),
                                     positionInfo.timeSigNumerator,
-                                    positionInfo.timeSigDenominator, 
-                                    positionInfo.bpm, 
+                                    positionInfo.timeSigDenominator,
+                                    positionInfo.bpm,
                                     barsbeats);
 		break;
 	case StopwatchMode:
 		hosttime=false;
-		modeLabel->setText("Stopwatch",false);
+		modeLabel->setText("Stopwatch", dontSendNotification);
 		infoLabel->time = filter->ppqToString (filter->secondsToPpq((double)(filter->watchtime)*0.001,positionInfo.bpm),
                                     positionInfo.timeSigNumerator,
-                                    positionInfo.timeSigDenominator, 
-                                    positionInfo.bpm, 
+                                    positionInfo.timeSigDenominator,
+                                    positionInfo.bpm,
                                     barsbeats);
 		break;
 	case PluginTimeMode:
 		hosttime=false;
-		modeLabel->setText("Plugin Time",false);
+		modeLabel->setText("Plugin Time", dontSendNotification);
 		infoLabel->time = filter->ppqToString (filter->secondsToPpq((double)(Time::getMillisecondCounter() - filter->plugintime)*0.001,positionInfo.bpm),
                                     positionInfo.timeSigNumerator,
-                                    positionInfo.timeSigDenominator, 
-                                    positionInfo.bpm, 
+                                    positionInfo.timeSigDenominator,
+                                    positionInfo.bpm,
                                     barsbeats);
 		break;
 	case ActualTimeMode:
 		hosttime=false;
-		modeLabel->setText("Actual Time",false);
+		modeLabel->setText("Actual Time", dontSendNotification);
 		infoLabel->time = Time::getCurrentTime().toString(false,true);
 		break;
 	default:
@@ -471,7 +467,7 @@ void BigClockEditor::updateParametersFromFilter()
 
     if (showtextbox) {
         cueLabel->setColour(Label::textColourId,infoLabel->textcolor);
-        cueLabel->setText(filter->getCue(positionInfo.ppqPosition,barsbeats),true);
+        cueLabel->setText(filter->getCue(positionInfo.ppqPosition,barsbeats), sendNotification);
     }
 
     setSize (filter->lastUIWidth,
