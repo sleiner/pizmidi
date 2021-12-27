@@ -2,7 +2,7 @@
 #define BIGCLOCK_PLUGINFILTER_H
 
 
-#include "../common/PizAudioProcessor.h"
+#include "../_common/PizAudioProcessor.h"
 #include "juce_events/juce_events.h"
 
 enum parameters {

@@ -1,3 +1,2 @@
-add_subdirectory(common)
-
+add_subdirectory(_common)
 add_subdirectory(BigClock)

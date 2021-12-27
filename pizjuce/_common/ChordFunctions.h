@@ -5,7 +5,7 @@
 // (GPL chord recognizer written in Python)
 
 #include "juce_core/juce_core.h"
-#include "../common/midistuff.h"
+#include "../_common/midistuff.h"
 #include <algorithm>
 
 Array<int> getAsStackedChord(Array<int> &chord, bool reduce=true);
