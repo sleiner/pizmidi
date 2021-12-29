@@ -8,6 +8,7 @@ juce_add_plugin(
   PRODUCT_NAME "Big Clock"
   FORMATS VST3
   VERSION "1.3.0")
+piz_add_to_installer(pizmidi_BigClock)
 
 target_sources(
   pizmidi_BigClock

@@ -1,0 +1,4 @@
+DESCRIPTION
+===========
+
+pizmidi is a collection of cross-platform MIDI processing plugins written in C++.

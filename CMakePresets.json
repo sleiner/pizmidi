@@ -29,6 +29,9 @@
                 "property: release"
             ],
             "generator": "Ninja",
+            "cacheVariables": {
+                "CPACK_GENERATOR": "productbuild"
+            },
             "environment": {
                 "MACOSX_DEPLOYMENT_TARGET": "10.10"
             }
