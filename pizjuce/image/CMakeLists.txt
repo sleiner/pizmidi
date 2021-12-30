@@ -10,15 +10,15 @@ piz_add_plugin(
 target_sources(
   pizmidi_Image
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/imagePlugin.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/imagePluginEditor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/imagePlugin.h"
+          "${CMAKE_CURRENT_LIST_DIR}/imagePluginEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/imagePluginEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/imagePlugin.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/imagePluginEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/imagePlugin.cpp")
 
 target_link_libraries(
   pizmidi_Image PUBLIC juce::juce_audio_processors juce::juce_gui_basics
