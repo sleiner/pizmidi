@@ -79,7 +79,7 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
     urlBar->setCaretVisible (true);
     urlBar->setPopupMenuEnabled (true);
     urlBar->setColour (TextEditor::backgroundColourId, Colour (0xffcccccc));
-    urlBar->setText (String::empty);
+    urlBar->setText (String());
 
     addAndMakeVisible (goButton = new TextButton (L"Go"));
     goButton->addListener (this);
@@ -88,9 +88,6 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
 
 
     //[UserPreSize]
-	static PizLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
 	wb->addChangeListener(this);
     urlBar->addListener(this);
     resizeLimits.setSizeLimits (150, 150, 1600, 1600);
@@ -258,7 +255,7 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="WebBrowserPluginEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public TextEditorListener"
+                 parentClasses="public AudioProcessorEditor, public ChangeListener, public TextEditor::Listener"
                  constructorParams="WebBrowserFilter* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="0" initialWidth="600" initialHeight="400">

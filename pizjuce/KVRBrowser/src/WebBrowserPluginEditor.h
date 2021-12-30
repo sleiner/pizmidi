@@ -22,9 +22,11 @@
 #ifndef __JUCER_HEADER_WEBBROWSERPLUGINEDITOR_WEBBROWSERPLUGINEDITOR_9C8171F9__
 #define __JUCER_HEADER_WEBBROWSERPLUGINEDITOR_WEBBROWSERPLUGINEDITOR_9C8171F9__
 
+#include "juce_events/juce_events.h"
+#include "juce_gui_extra/juce_gui_extra.h"
+
 //[Headers]     -- You can add your own extra header files here --
 #include "WebBrowserFilter.h"
-#include "../../common/piz_LookAndFeel.h"
 
 class MyBrowser : public WebBrowserComponent,
                   public ChangeBroadcaster
@@ -56,8 +58,8 @@ private:
 */
 class WebBrowserPluginEditor  : public AudioProcessorEditor,
                                 public ChangeListener,
-                                public TextEditorListener,
-                                public ButtonListener
+                                public TextEditor::Listener,
+                                public Button::Listener
 {
 public:
     //==============================================================================

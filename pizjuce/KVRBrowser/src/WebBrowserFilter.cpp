@@ -63,7 +63,7 @@ const String WebBrowserFilter::getParameterName (int index)
     if (index == 0)
         return " ";
 
-    return String::empty;
+    return String();
 }
 
 const String WebBrowserFilter::getParameterText (int index)
@@ -71,7 +71,7 @@ const String WebBrowserFilter::getParameterText (int index)
     if (index == 0)
         return String (gain, 2);
 
-    return String::empty;
+    return String();
 }
 
 const String WebBrowserFilter::getInputChannelName (const int channelIndex) const
@@ -138,8 +138,8 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
     }
 
-    float *in1  =  buffer.getSampleData(0);
-    float *in2  =  buffer.getSampleData(1);
+    float *in1  =  buffer.getWritePointer(0);
+    float *in2  =  buffer.getWritePointer(1);
 
     for (int i=0; i<buffer.getNumSamples(); i++) {
         float sampleL = in1[i]*gain*0.01f+denorm;
@@ -206,7 +206,7 @@ void WebBrowserFilter::getStateInformation (MemoryBlock& destData)
 void WebBrowserFilter::setStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
@@ -222,7 +222,5 @@ void WebBrowserFilter::setStateInformation (const void* data, int sizeInBytes)
 
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
 }

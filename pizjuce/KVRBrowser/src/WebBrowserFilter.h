@@ -1,7 +1,7 @@
 #ifndef DEMOJUCEPLUGINFILTER_H
 #define DEMOJUCEPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "../_common/PizAudioProcessor.h"
 
 #define denorm 0.000000000000001f
 
@@ -48,12 +48,13 @@ public:
 
     bool acceptsMidi() const;
     bool producesMidi() const;
+    double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
     int getNumPrograms()                                        { return 0; }
     int getCurrentProgram()                                     { return 0; }
     void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return String::empty; }
+    const String getProgramName (int index)                     { return String(); }
     void changeProgramName (int index, const String& newName)   { }
 
     //==============================================================================
