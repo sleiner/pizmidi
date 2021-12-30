@@ -1,14 +1,17 @@
 #ifndef MidiChordAnalyzerPLUGINFILTER_H
 #define MidiChordAnalyzerPLUGINFILTER_H
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "../../common/PizAudioProcessor.h"
-#include "../../common/midistuff.h"
-#include "../../common/ChordFunctions.h"
-#include "../../common/key.h"
+#include "juce_data_structures/juce_data_structures.h"
+#include "juce_events/juce_events.h"
+
+#include "../_common/PizAudioProcessor.h"
+#include "../_common/midistuff.h"
+#include "../_common/ChordFunctions.h"
+#include "../_common/key.h"
+#include "../_common/BankStorage.h"
 
 enum parameters {
-    kChannel, 
+    kChannel,
 	kFlats,
 
     numParams,
@@ -16,26 +19,14 @@ enum parameters {
 };
 
 
-class MidiChordAnalyzerPrograms : ValueTree {
+class MidiChordAnalyzerPrograms : public BankStorage {
 public:
-	friend class MidiChordAnalyzer;
 	MidiChordAnalyzerPrograms ();
-	~MidiChordAnalyzerPrograms () {};
 
-	void set(int prog, const var::identifier &name, const var &newValue)
-	{
-		this->getChild(prog).setProperty(name,newValue,0);
-	}
+    void loadNoteMatrixFrom(ValueTree const& vt, int program);
 
-	const var get(int prog, const var::identifier &name)
-	{
-		return this->getChild(prog).getProperty(name);
-	}
-
-	MidiChordAnalyzerPrograms(ValueTree& tree)
-	{
-		this->getChild(0).getParent() = tree.createCopy();
-	}
+private:
+    void loadDefaultValues();
 };
 
 //==============================================================================
@@ -81,10 +72,11 @@ public:
     int getNumPrograms()                                        { return numProgs; }
     int getCurrentProgram()                                     { return curProgram; }
     void setCurrentProgram (int index);
-    const String getProgramName (int index)                     { return programs->get(index,"Name"); }
-    void changeProgramName (int index, const String& newName)   { programs->set(index,"Name",newName); }
+    const String getProgramName (int index)                     { return programs->get(0,index,"Name"); }
+    void changeProgramName (int index, const String& newName)   { programs->set(0,index,"Name",newName); }
 	void copySettingsToProgram(int index);
-	
+    double getTailLengthSeconds() const override                { return 0; }
+
     //==============================================================================
     void getStateInformation (MemoryBlock& destData);
     void setStateInformation (const void* data, int sizeInBytes);

@@ -11,67 +11,16 @@ PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new imagePluginFilter();
 }
 
-ImageBank::ImageBank () : values("ImageBank"),
-                          numBanks(128),
-						  numPrograms(128)
+ImageBank::ImageBank () : BankStorage("ImageBank")
 {
-	// initialize value tree
-	for (int b=0;b<numBanks;b++) {
-		ValueTree bank("BankValues");
-		bank.setProperty("bankIndex",b,0);
-
-		for (int p=0;p<numPrograms;p++)
-		{
-			ValueTree pv("ProgValues");
-			bank.addChild(pv,p,0);
-		}
-		values.addChild(bank,b,0);
-	}
-	ValueTree settings("GlobalSettings");
-	values.addChild(settings,128,0);
-
 	loadDefaultValues();
-}
-
-void ImageBank::set(int bank, int program, String name, var value)
-{
-	values.getChild(bank).getChild(program).setProperty(name,value,0);
-}
-
-var ImageBank::get(int bank, int program, String name)
-{
-	return values.getChild(bank).getChild(program).getProperty(name);
-}
-
-void ImageBank::setGlobal(String name, var value) {
-	values.getChildWithName("GlobalSettings").setProperty(name, value, nullptr);
-}
-
-var ImageBank::getGlobal(String name) {
-	return values.getChildWithName("GlobalSettings").getProperty(name);
-}
-
-void ImageBank::loadFrom(ValueTree const& vt) {
-	if (vt.isValid())
-	{
-		values.removeAllChildren(0);
-		for (int i=0;i<vt.getNumChildren();i++)
-		{
-			values.addChild(vt.getChild(i).createCopy(),i,0);
-		}
-	}
-}
-
-void ImageBank::dumpTo(MemoryBlock& destination) {
-	MemoryOutputStream stream(destination, false);
-	values.writeToStream(stream);
 }
 
 void ImageBank::loadDefaultValues()
 {
 	//default values
-	for (int b = 0; b < numBanks; b++) {
-		for (int p = 0; p < numPrograms; p++) {
+	for (int b = 0; b < getNumBanks(); b++) {
+		for (int p = 0; p < getNumPrograms(); p++) {
 			set(b,p,"progIndex",p);
 			set(b,p,"name","Bank " + String(b) + " Image " + String(p+1));
 			set(b,p,"icon",String("Images") + File::getSeparatorString() + "Bank " + String(b) + File::getSeparatorString() + String(p+1) + ".svg");

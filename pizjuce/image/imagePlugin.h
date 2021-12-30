@@ -4,6 +4,7 @@
 #include "juce_data_structures/juce_data_structures.h"
 
 #include "../_common/PizAudioProcessor.h"
+#include "../_common/BankStorage.h"
 
 using namespace juce;
 
@@ -12,25 +13,12 @@ enum parameters {
     kNumParams
 };
 
-class ImageBank {
+class ImageBank : public BankStorage{
 public:
 	ImageBank ();
 
-	void set(int bank, int program, String name, var value);
-	var get(int bank, int program, String name);
-
-    void setGlobal(String name, var value);
-    var getGlobal(String name);
-
-    void loadFrom(ValueTree const& vt);
-    void dumpTo(MemoryBlock& destination);
-
 private:
     void loadDefaultValues();
-
-    ValueTree values;
-    int numBanks;
-    int numPrograms;
 };
 
 //==============================================================================

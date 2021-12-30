@@ -10,6 +10,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   BigClock
 -   Image
 -   KVR Browser
+-   midiChordAnalyzer
 
 ### Serious problems are known
 

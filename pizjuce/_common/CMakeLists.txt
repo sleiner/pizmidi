@@ -2,10 +2,14 @@ add_library(pizjuce_common INTERFACE)
 target_include_directories(pizjuce_common INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 target_sources(
   pizjuce_common
-  INTERFACE "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
+  INTERFACE # Headers
+            "${CMAKE_CURRENT_LIST_DIR}/BankStorage.h"
+            # Sources
+            "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/GuitarNeckComponent.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/Main.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/PizButton.cpp"
+            "${CMAKE_CURRENT_LIST_DIR}/BankStorage.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
 target_link_libraries(
   pizjuce_common

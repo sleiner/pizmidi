@@ -23,12 +23,15 @@
 #define __JUCER_HEADER_MIDICHORDANALYZEREDITOR_MIDICHORDANALYZEREDITOR_8E29B7A9__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "MidiChordAnalyzer.h"
-#include "../../common/ChannelSlider.h"
-#include "../../common/VSTSlider.h"
-#include "../../common/LookAndFeel.h"
+#include "juce_audio_utils/juce_audio_utils.h"
 
-typedef class MidiChordAnalyzerEditor;
+#include "MidiChordAnalyzer.h"
+#include "../_common/ChannelSlider.h"
+#include "../_common/VSTSlider.h"
+
+using namespace juce;
+
+class MidiChordAnalyzerEditor;
 class ChordAnalyzerKeyboardComponent : public MidiKeyboardComponent
 {
 public:
@@ -42,7 +45,7 @@ public:
 		this->setLowestVisibleKey(36);
 	}
 	~ChordAnalyzerKeyboardComponent() {};
-	
+
 	int getNumHeldNotes(int channel)
 	{
 		int num=0;
@@ -70,7 +73,7 @@ private:
 		}
 		else {
 			if (s->isNoteOn(this->getMidiChannel(),midiNoteNumber)) {
-				s->noteOff(this->getMidiChannel(),midiNoteNumber);
+				s->noteOff(this->getMidiChannel(),midiNoteNumber,1.f);
 			}
 			else {
 				s->noteOn(this->getMidiChannel(),midiNoteNumber,1.f);
@@ -82,7 +85,7 @@ private:
 };
 //[/Headers]
 
-#include "../../common/PizButton.h"
+#include "../_common/PizButton.h"
 
 
 //==============================================================================
@@ -96,8 +99,8 @@ private:
 class MidiChordAnalyzerEditor  : public AudioProcessorEditor,
                                  public ChangeListener,
                                  public Timer,
-                                 public ButtonListener,
-                                 public SliderListener
+                                 public Button::Listener,
+                                 public Slider::Listener
 {
 public:
     //==============================================================================

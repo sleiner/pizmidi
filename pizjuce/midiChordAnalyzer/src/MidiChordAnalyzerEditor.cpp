@@ -38,7 +38,7 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
       copyButton (0),
       learnChanSlider (0),
       versionLabel (0),
-      cachedImage_snake_gif (0)
+      cachedImage_snake_gif (nullptr)
 {
     addAndMakeVisible (chordNameLabel = new Label (L"new label",
                                                    L"G#Maj13b5#9"));
@@ -86,7 +86,7 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
 	learnChanSlider->setMouseClickGrabsKeyboardFocus(false);
 	pizButton->setMouseClickGrabsKeyboardFocus(false);
 	chordNameLabel->setMouseClickGrabsKeyboardFocus(false);
-	chordNameLabel->setText(" ", false);
+	chordNameLabel->setText(" ", dontSendNotification);
 	flatsButton->setMouseClickGrabsKeyboardFocus(false);
 	chordKeyboard->setMouseCursor(MouseCursor::PointingHandCursor);
 	numHeldNotes = 0;
@@ -99,16 +99,13 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
 	chordKeyboard->setOctaveForMiddleC(middleC);
 	chordKeyboard->setScrollButtonsVisible(false);
 
-	static NonShinyLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
     //[/UserPreSize]
 
     setSize (600, 180);
 
 
     //[Constructor] You can add your own custom stuff here..
-	versionLabel->setText(JucePlugin_VersionString,false);
+	versionLabel->setText(JucePlugin_VersionString,dontSendNotification);
 	ownerFilter->addChangeListener(this);
 	updateParametersFromFilter();
     //[/Constructor]
@@ -650,13 +647,13 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
 	const bool flats = filter->getParameter(kFlats)>0;
 	const int chordChan = roundToInt(filter->getParameter(kChannel)*16.f);
 
-	learnChanSlider->setValue(chordChan,false);
+	learnChanSlider->setValue(chordChan,dontSendNotification);
 	flatsButton->setToggleState(flats,false);
 	if (chordChan==0) chordKeyboard->setMidiChannelsToDisplay(0xffff);
 	else chordKeyboard->setMidiChannelsToDisplay(1<<(chordChan-1));
 
 	if (numHeldNotes < chordKeyboard->getNumHeldNotes(chordChan)) {
-		chordNameLabel->setText(getCurrentChordName(chordChan), false);
+		chordNameLabel->setText(getCurrentChordName(chordChan), dontSendNotification);
 		Desktop::getInstance().getAnimator().animateComponent(chordNameLabel, chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
 	}
 	else if (getCurrentChordName(chordChan)==" ")
@@ -675,7 +672,7 @@ void MidiChordAnalyzerEditor::timerCallback() {
 		Desktop::getInstance().getAnimator().animateComponent(chordNameLabel, chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
 	}
 	else {
-		chordNameLabel->setText(getCurrentChordName(chordChan), false);
+		chordNameLabel->setText(getCurrentChordName(chordChan), dontSendNotification);
 		Desktop::getInstance().getAnimator().animateComponent(chordNameLabel, chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
 	}
 	stopTimer();
@@ -732,7 +729,7 @@ BEGIN_JUCER_METADATA
                     explicitFocusOrder="0" pos="8 124 16M 47" class="ChordAnalyzerKeyboardComponent"
                     params="ownerFilter-&gt;chordKbState, ownerFilter"/>
   <JUCERCOMP name="" id="bad9b853cca3ec4a" memberName="pizButton" virtualName=""
-             explicitFocusOrder="0" pos="49 9 74 40" sourceFile="../../common/PizButton.cpp"
+             explicitFocusOrder="0" pos="49 9 74 40" sourceFile="../_common/PizButton.cpp"
              constructorParams=""/>
   <TOGGLEBUTTON name="new toggle button" id="fb8f2d76e48f6291" memberName="flatsButton"
                 virtualName="" explicitFocusOrder="0" pos="472 97 48 24" buttonText="flats"

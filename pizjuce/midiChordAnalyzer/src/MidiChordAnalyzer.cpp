@@ -13,22 +13,42 @@ PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 MidiChordAnalyzerPrograms::MidiChordAnalyzerPrograms ()
-: ValueTree("MidiChordAnalyzerValues")
+: BankStorage("MidiChordAnalyzerValues", 1, 128)
 {
-	this->setProperty("lastProgram",0,0);
-	this->setProperty("Version",3,0);
-	for (int p=0;p<numProgs;p++) 
+	for (int p=0;p<numProgs;p++)
 	{
 		ValueTree progv("ProgValues");
-		progv.setProperty("progIndex",p,0);
-
-		progv.setProperty("Channel",0,0);
-		progv.setProperty("Flats",false,0);
-
-		progv.setProperty("Name","Program "+ String(p+1),0);
-		progv.setProperty("lastUIWidth",600,0);
-		progv.setProperty("lastUIHeight",400,0);
 	}
+}
+void MidiChordAnalyzerPrograms::loadDefaultValues()
+{
+	setGlobal("lastProgram", 0);
+	setGlobal("Version", 4);
+
+	for (int b = 0; b < getNumBanks(); b++)
+	{
+		for (int p = 0; p < getNumPrograms(); p++)
+		{
+			set(b, p, "progIndex", p);
+
+			set(b, p, "Channel", 0);
+			set(b, p, "Flats", false);
+
+			set(b, p, "Name", "Program "+ String(p+1));
+			set(b, p, "lastUIWidth", 600);
+			set(b, p, "lastUIHeight", 400);
+		}
+	}
+}
+
+void MidiChordAnalyzerPrograms::loadNoteMatrixFrom(ValueTree const& vt, int program)
+{
+	if (vt.getChildWithName("NoteMatrix_T0").isValid())
+		{
+			values_.removeChild(values_.getChild(program),0);
+			values_.addChild(vt,program,0);
+			values_.getChild(program).setProperty("progIndex",program,0);
+		}
 }
 
 //==============================================================================
@@ -70,18 +90,18 @@ int MidiChordAnalyzer::getNumParameters()
 void MidiChordAnalyzer::setCurrentProgram (int index)
 {
     //save non-parameter info to the old program, except the first time
-    if (!init) 
+    if (!init)
 		copySettingsToProgram(curProgram);
     init = false;
 
     //then set the new program
     curProgram = index;
-	programs->setProperty("lastProgram",index,0);
-	channel = programs->get(index,"Channel");
-	flats = programs->get(index,"Flats");
+	programs->setGlobal("lastProgram", index);
+	channel = programs->get(0, index, "Channel");
+	flats = programs->get(0, index, "Flats");
 
-    lastUIWidth = programs->get(index,"lastUIWidth");
-    lastUIHeight = programs->get(index,"lastUIHeight");
+    lastUIWidth = programs->get(0, index, "lastUIWidth");
+    lastUIHeight = programs->get(0, index, "lastUIHeight");
 }
 
 float MidiChordAnalyzer::getParameter (int index)
@@ -113,7 +133,7 @@ const String MidiChordAnalyzer::getParameterName (int index)
 {
     if (index == kChannel)        return "Channel";
 	if (index == kFlats)		  return "Flats";
-	return String::empty;
+	return String();
 }
 
 const String MidiChordAnalyzer::getParameterText (int index)
@@ -121,8 +141,8 @@ const String MidiChordAnalyzer::getParameterText (int index)
     if (index == kChannel)
 		return channel==0 ? "Any" : String(channel);
     if (index == kFlats)
-        return flats ? "Yes" : "No";  
-	return String::empty;
+        return flats ? "Yes" : "No";
+	return String();
 }
 
 const String MidiChordAnalyzer::getInputChannelName (const int channelIndex) const
@@ -163,7 +183,7 @@ void MidiChordAnalyzer::processBlock (AudioSampleBuffer& buffer,
 	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
 	MidiMessage m(0xf0);
 	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample)) 
+	while(mid_buffer_iter.getNextEvent(m,sample))
 	{
 		if (channel==0 || m.isForChannel(channel))
 		{
@@ -175,7 +195,7 @@ void MidiChordAnalyzer::processBlock (AudioSampleBuffer& buffer,
 			}
 		}
 	}
-	
+
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -193,29 +213,21 @@ AudioProcessorEditor* MidiChordAnalyzer::createEditor()
 void MidiChordAnalyzer::getStateInformation (MemoryBlock& destData)
 {
 	copySettingsToProgram(curProgram);
-	MemoryOutputStream m(destData,false);
-	programs->writeToStream(m);
+	programs->dumpTo(destData);
 }
 
 void MidiChordAnalyzer::getCurrentProgramStateInformation (MemoryBlock& destData)
 {
 	copySettingsToProgram(curProgram);
-	MemoryOutputStream m(destData,false);
-	programs->getChild(curProgram).writeToStream(m);
+	programs->dumpProgramTo(0, curProgram, destData);
 }
 
 void MidiChordAnalyzer::setStateInformation (const void* data, int sizeInBytes)
 {
 	MemoryInputStream m(data,sizeInBytes,false);
 	ValueTree vt = ValueTree::readFromStream(m);
-	if (vt.isValid())
-	{
-			programs->removeAllChildren(0);
-			for (int i=0;i<vt.getNumChildren();i++)
-			{
-				programs->addChild(vt.getChild(i).createCopy(),i,0);
-			}
-	}
+
+	programs->loadFrom(vt);
 	init=true;
 	setCurrentProgram(vt.getProperty("lastProgram",0));
 }
@@ -224,22 +236,17 @@ void MidiChordAnalyzer::setCurrentProgramStateInformation (const void* data, int
 {
 	MemoryInputStream m(data,sizeInBytes,false);
 	ValueTree vt = ValueTree::readFromStream(m);
-	if(vt.getChildWithName("NoteMatrix_T0").isValid())
-	{
-		programs->removeChild(programs->getChild(curProgram),0);
-		programs->addChild(vt,curProgram,0);
-		programs->getChild(curProgram).setProperty("progIndex",curProgram,0);
-	}
+
+	programs->loadNoteMatrixFrom(vt, curProgram);
 	init=true;
 	setCurrentProgram(curProgram);
 }
 
 void MidiChordAnalyzer::copySettingsToProgram(int index)
 {
-	programs->set(index,"Channel",channel);
-    programs->set(index,"Name",getProgramName(index));
-	programs->set(index,"lastUIHeight",lastUIHeight);
-    programs->set(index,"lastUIWidth",lastUIWidth);
-	programs->set(index,"Flats",flats);
+	programs->set(0,index,"Channel",channel);
+    programs->set(0,index,"Name",getProgramName(index));
+	programs->set(0,index,"lastUIHeight",lastUIHeight);
+    programs->set(0,index,"lastUIWidth",lastUIWidth);
+	programs->set(0,index,"Flats",flats);
 }
-

@@ -1,10 +1,15 @@
-#include "JuceHeader.h"
+#pragma once
+
+#include <memory>
+
+#include "juce_core/juce_core.h"
+#include "juce_cryptography/juce_cryptography.h"
 
 #ifndef MRALIASPRO
 static const String encryptXml (const XmlElement* xml,
                                 const String& rsaPrivateKey)
 {
-    BitArray val;
+    BigInteger val;
 
     if (xml != 0)
     {
@@ -21,13 +26,13 @@ static const String encryptXml (const XmlElement* xml,
 }
 #endif
 
-static XmlElement* decodeEncryptedXml (const String& hexData,
-                                       const String& rsaPublicKey)
+static std::unique_ptr<XmlElement> decodeEncryptedXml (const String& hexData,
+                                                       const String& rsaPublicKey)
 {
     if (hexData.isEmpty())
         return 0;
 
-    BitArray val;
+    BigInteger val;
     val.parseString (hexData, 16);
 
     RSAKey key (rsaPublicKey);
@@ -36,10 +41,10 @@ static XmlElement* decodeEncryptedXml (const String& hexData,
     const MemoryBlock mb (val.toMemoryBlock());
     XmlDocument doc (mb.toString());
 
-    XmlElement* const xml = doc.getDocumentElement();
+    auto xml = doc.getDocumentElement();
 
 #ifdef JUCE_DEBUG
-    if (xml != 0)
+    if (xml != nullptr)
     {
         DBG (xml->createDocument (String(), true));
     }
