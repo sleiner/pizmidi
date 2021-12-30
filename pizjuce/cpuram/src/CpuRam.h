@@ -31,16 +31,16 @@ public:
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
@@ -62,7 +62,7 @@ public:
     int getNumPrograms()                                        { return 1; }
     int getCurrentProgram()                                     { return 0; }
     void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return String::empty; }
+    const String getProgramName (int index)                     { return String(); }
     void changeProgramName (int index, const String& newName)   { }
 
     //==============================================================================

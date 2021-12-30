@@ -5,15 +5,15 @@ CpuRamEditor::CpuRamEditor (CpuRam* const ownerFilter)
     : AudioProcessorEditor (ownerFilter)
 {
 	static OldSchoolLookAndFeel* MyLook = 0;
-	if (MyLook == 0) MyLook = new OldSchoolLookAndFeel(); 
+	if (MyLook == 0) MyLook = new OldSchoolLookAndFeel();
 	LookAndFeel::setDefaultLookAndFeel (MyLook);
 	setMouseClickGrabsKeyboardFocus(false);
 
-	addAndMakeVisible (infoLabel = new Label(String("CPU"),String::empty));
+	addAndMakeVisible (infoLabel = new Label(String("CPU"),String()));
 	infoLabel->setMouseClickGrabsKeyboardFocus(false);
 	infoLabel->setInterceptsMouseClicks(false,false);
 
-	addAndMakeVisible (memLabel2 = new Label(String("RAM"),String::empty));
+	addAndMakeVisible (memLabel2 = new Label(String("RAM"),String()));
 	memLabel2->setMouseClickGrabsKeyboardFocus(false);
 	memLabel2->setInterceptsMouseClicks(false,false);
 
@@ -102,7 +102,7 @@ float CpuRamEditor::CPULoad() {
 MEMORYSTATUSEX CpuRamEditor::RAMLoad() {
     MEMORYSTATUSEX statex;
     statex.dwLength = sizeof (statex);
-    
+
     GlobalMemoryStatusEx (&statex);
     return statex;
 }
@@ -156,7 +156,7 @@ void CpuRamEditor::updateParametersFromFilter()
 	graph->addPoint(cpu*0.01f);
 	if (getFilter()->showGraph)
 		infoLabel->setText(String("CPU Load: ") + String(cpu,1)+String("%"),false);
-	else 
+	else
 		infoLabel->setText(String("CPU: ") + String(cpu,1)+String("%"),false);
 
     memLabel2->setText(String("Free RAM: ") + String((int)RAMLoad().ullAvailPhys/1048576)+String("MB"),false);

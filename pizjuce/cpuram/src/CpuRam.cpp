@@ -84,7 +84,7 @@ const String CpuRam::getParameterName (int index)
     if (index == 0) return "interval";
     if (index == 1) return "minimize";
     if (index == 2) return "show graph";
-	else return String::empty;
+	else return String();
 }
 
 const String CpuRam::getParameterText (int index)
@@ -99,7 +99,7 @@ const String CpuRam::getParameterText (int index)
     if (index == 2) {
         return showGraph ? String("yes") : String("no");
     }
-	else return String::empty;
+	else return String();
 }
 const String CpuRam::getInputChannelName (const int channelIndex) const
 {
