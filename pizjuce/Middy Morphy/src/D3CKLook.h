@@ -8,6 +8,9 @@ using namespace juce;
 
 class D3CKLook : public juce::LookAndFeel_V4 {
   public:
+
+    D3CKLook() : juce::LookAndFeel_V4() {}
+
     int getDefaultScrollbarWidth();
 
     //    int  thumbSize,      bool  isMouseOver,      bool  isMouseDown    )
