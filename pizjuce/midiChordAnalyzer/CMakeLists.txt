@@ -11,11 +11,11 @@ piz_add_plugin(
 target_sources(
   piz_midiChordAnalyzer
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiChordAnalyzerEditor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiChordAnalyzer.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiChordAnalyzerEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiChordAnalyzer.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiChordAnalyzerEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiChordAnalyzer.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/MidiChordAnalyzerEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiChordAnalyzer.cpp")
 
 target_link_libraries(
   piz_midiChordAnalyzer PUBLIC juce::juce_audio_utils
