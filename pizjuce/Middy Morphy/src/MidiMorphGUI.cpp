@@ -8,14 +8,14 @@
 #include "MorphPane.h"
 #include "D3CKLook.h"
 
-MidiMorphGUI::MidiMorphGUI(AudioProcessor* const ownerPlugIn) 
+MidiMorphGUI::MidiMorphGUI(AudioProcessor* const ownerPlugIn)
  : AudioProcessorEditor(ownerPlugIn)
 {
   // Bouml preserved body begin 0002E80D
 
 	LookAndFeel::setDefaultLookAndFeel(new D3CKLook());
     this->setMouseClickGrabsKeyboardFocus(false);
-    
+
     this->ownerFilter = ownerPlugIn;
 
 	core = &((MidiMorphPlugInInterface*)ownerPlugIn)->core;
@@ -24,7 +24,7 @@ MidiMorphGUI::MidiMorphGUI(AudioProcessor* const ownerPlugIn)
 	int w = core->guiBounds.getWidth();
 	int h = core->guiBounds.getHeight();
 
-	morphPaneModel = new MorphPaneModel(core); 
+	morphPaneModel = new MorphPaneModel(core);
 
 	addAndMakeVisible(morphPane = new MorphPane(morphPaneModel,core));
 	morphPane->addZoomedComp(new CursorGUI(core->getCursor()));
@@ -33,9 +33,9 @@ MidiMorphGUI::MidiMorphGUI(AudioProcessor* const ownerPlugIn)
 	controllerListModel = new ControllerList(core);
 
 
-	addAndMakeVisible(controllerList = new ListBox(T("controls"),controllerListModel));
+	addAndMakeVisible(controllerList = new ListBox("controls",controllerListModel));
 	controllerList->setRowHeight(24);
-	controllerList->getVerticalScrollBar()->setAutoHide(false);
+	controllerList->getVerticalScrollBar().setAutoHide(false);
     controllerList->setMouseClickGrabsKeyboardFocus(false);
 
 	this->addAndMakeVisible(resizer = new ResizableBorderComponent(this,0));
@@ -68,7 +68,7 @@ MidiMorphGUI::~MidiMorphGUI() {
   // Bouml preserved body end 0003188D
 }
 
-//ApplicationCommandTarget *  getNextCommandTarget 
+//ApplicationCommandTarget *  getNextCommandTarget
 ApplicationCommandTarget* MidiMorphGUI::getNextCommandTarget() {
   // Bouml preserved body begin 0003058D
 	return 0;
@@ -85,27 +85,28 @@ void MidiMorphGUI::resized() {
   // Bouml preserved body end 0002F30D
 }
 
-//void  getAllCommands (Array< CommandID > &commands)=0 
+//void  getAllCommands (Array< CommandID > &commands)=0
 void MidiMorphGUI::getAllCommands(Array<CommandID>& commands) {
   // Bouml preserved body begin 0003060D
   // Bouml preserved body end 0003060D
 }
 
-//void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)= 
+//void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
 void MidiMorphGUI::getCommandInfo(const CommandID commandID, ApplicationCommandInfo& result) {
   // Bouml preserved body begin 0003068D
   // Bouml preserved body end 0003068D
 }
 
-//perform ()=0 
+//perform ()=0
 bool MidiMorphGUI::perform(const InvocationInfo& info) {
   // Bouml preserved body begin 0003070D
 	return true;
   // Bouml preserved body end 0003070D
 }
 
-void MidiMorphGUI::changeListenerCallback(void* objectThatHasChanged) {
+void MidiMorphGUI::changeListenerCallback(ChangeBroadcaster* source) {
   // Bouml preserved body begin 0003350D
+	void* objectThatHasChanged = source;
 	OwnedArray<Scene>* scenes = core->getScenes();
 	if(objectThatHasChanged == core->getSelectedScenes())
 	{
@@ -151,4 +152,3 @@ void MidiMorphGUI::paint(Graphics & g) {
 	g.fillRect(0,0,getWidth(),getHeight());
   // Bouml preserved body end 00040A0D
 }
-

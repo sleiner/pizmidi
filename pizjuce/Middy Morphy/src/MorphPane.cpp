@@ -5,7 +5,7 @@
 //#include "ResizableBorderComponentEx.h"
 #include "Scene.h"
 
-MorphPane::MorphPane(ModulePaneModel * model, MidiMorph * core) 
+MorphPane::MorphPane(ModulePaneModel * model, MidiMorph * core)
  : ModulePane(model)
 {
   // Bouml preserved body begin 00042F8D
@@ -17,7 +17,7 @@ MorphPane::MorphPane(ModulePaneModel * model, MidiMorph * core)
 
 	//addAndMakeVisible(resizer = new ResizableBorderComponentEx(this,limit));
 	//resizer->setActiveBorders(false,true,true,false);
-	
+
   // Bouml preserved body end 00042F8D
 }
 
@@ -48,4 +48,3 @@ void MorphPane::setSelectedScenes(Array<Scene*> * scenes, bool sendChangeMessage
 	}
   // Bouml preserved body end 0004808D
 }
-

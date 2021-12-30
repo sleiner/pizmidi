@@ -13,7 +13,7 @@ Cursor::Cursor(MidiMorph * core) {
 void Cursor::moved() {
   // Bouml preserved body begin 0003588D
 	core->cursorChanged();
-	sendChangeMessage(this);
+	sendChangeMessage();
   // Bouml preserved body end 0003588D
 }
 
@@ -22,4 +22,3 @@ juce::Point<float> Cursor::getCursorPosition() {
 	return Point<float>(Point::getX(),Point::getY());
   // Bouml preserved body end 0003C40D
 }
-

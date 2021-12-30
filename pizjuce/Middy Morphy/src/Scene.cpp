@@ -17,7 +17,7 @@ Scene::Scene(MidiMorph * core) {
     this->colour = Colours::green;
     this->size = 50;
 
-    addAndMakeVisible (textEditor = new TextEditor (T("new text editor")));
+    addAndMakeVisible (textEditor = new TextEditor ("new text editor"));
     textEditor->setMultiLine (false);
     textEditor->setReturnKeyStartsNewLine (false);
     textEditor->setReadOnly (false);
@@ -29,11 +29,11 @@ Scene::Scene(MidiMorph * core) {
     textEditor->setText (this->getName());
 
     colourSelector = new ColourSelector(ColourSelector::showColourAtTop|ColourSelector::showSliders|ColourSelector::showColourspace);
-    colourSelector->setName (T("color"));
+    colourSelector->setName ("color");
     colourSelector->setCurrentColour (this->colour);
     colourSelector->addChangeListener (this);
 
-    addAndMakeVisible (sizeSlider = new Slider (T("size")));
+    addAndMakeVisible (sizeSlider = new Slider ("size"));
     sizeSlider->setRange (10, 100, 1);
     sizeSlider->setSliderStyle (Slider::LinearHorizontal);
     sizeSlider->addListener (this);
@@ -132,7 +132,7 @@ float Scene::getAffectionValue() {
 				sumOtherDis += scene->getDistanceFromCursor();
 				facOtherDis *= scene->getDistanceFromCursor();
 			}
-	 
+
 		}
 		this->affectionValue = sumOtherDis/core->getSumDistances()*facOtherDis;
 		this->affectionValueChanged = false;
@@ -163,11 +163,11 @@ void Scene::mouseUp(const MouseEvent & e) {
 		PopupMenu menu, sub1, sub2, sub3;
 		menu.addItem(1,"delete");
         textEditor->setText (this->getName());
-        sub1.addCustomItem(2,textEditor,64,20,false);
+        sub1.addCustomItem(2,*textEditor,64,20,false,nullptr);
         menu.addSubMenu("name",sub1);
-        sub2.addCustomItem(3,colourSelector,300,300,false);
+        sub2.addCustomItem(3,*colourSelector,300,300,false,nullptr);
         menu.addSubMenu("color",sub2);
-        sub3.addCustomItem(4,sizeSlider,300,20,false);
+        sub3.addCustomItem(4,*sizeSlider,300,20,false,nullptr);
         //menu.addSubMenu("size",sub3);
 
 		int result = menu.show();
@@ -227,7 +227,7 @@ void Scene::textEditorEscapeKeyPressed(TextEditor &editor) {
 void Scene::textEditorFocusLost(TextEditor &editor) {
 }
 
-void Scene::changeListenerCallback (void* source)
+void Scene::changeListenerCallback (ChangeBroadcaster* source)
 {
     ColourSelector* cs = (ColourSelector*) source;
     this->setColour(cs->getCurrentColour());
@@ -237,8 +237,8 @@ void Scene::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     if (sliderThatWasMoved == sizeSlider)
     {
-        this->size=roundToInt(sizeSlider->getValue());
-        this->setSize(roundToInt(sizeSlider->getValue()),roundToInt(sizeSlider->getValue()));
+        this->size=::roundToInt(sizeSlider->getValue());
+        this->setSize(::roundToInt(sizeSlider->getValue()),::roundToInt(sizeSlider->getValue()));
         this->resized();
         core->sendChangeMessage(this);
     }

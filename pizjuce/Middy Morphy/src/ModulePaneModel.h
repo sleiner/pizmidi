@@ -1,11 +1,12 @@
 #pragma once
 
-
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
 class ModuleGUI;
 class ModulePane;
 class Module;
+
+using namespace juce;
 
 class ModulePaneModel {
   public:
@@ -40,10 +41,9 @@ class ModulePaneModel {
 
     virtual void selectionChanged(const Array<ModuleGUI*> & modules) = 0;
 
-    //const InvocationInfo &    
+    //const InvocationInfo &
     bool performCommand(const juce::ApplicationCommandTarget::InvocationInfo & info);
 
     bool deleteModule(const Module * moduleToDelete, int indexOfModule);
 
 };
-

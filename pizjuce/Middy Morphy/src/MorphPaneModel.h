@@ -1,9 +1,9 @@
 #pragma once
 
+#include "juce_gui_basics/juce_gui_basics.h"
 
 #include "ModulePaneModel.h"
 #include "ModuleGUI.h"
-#include "JuceHeader.h"
 #include "Scene.h"
 #include "TextBoxSlider.h"
 
@@ -11,8 +11,10 @@ class Cursor;
 class MidiMorph;
 class Module;
 
+using namespace juce;
+
 class MorphPaneModel : public ModulePaneModel,
-                       public LabelListener,
+                       public Label::Listener,
                        public Component
 {
   private:
@@ -28,7 +30,7 @@ class MorphPaneModel : public ModulePaneModel,
     void mouseDown(const MouseEvent & e);
     void mouseUp(const MouseEvent & e);
     void mouseDrag(const MouseEvent & e);
-    
+
     virtual Module* getModule(int index);
     virtual ModuleGUI* createGUI(int index);
 
@@ -36,4 +38,3 @@ class MorphPaneModel : public ModulePaneModel,
 
     void labelTextChanged(Label * labelThatHasChanged);
 };
-

@@ -1,11 +1,13 @@
 #pragma once
 
+#include "juce_gui_basics/juce_gui_basics.h"
 
 #include "ZoomableShiftableComponent.h"
-#include "JuceHeader.h"
 
 class Module;
 class ModulePane;
+
+using namespace juce;
 
 class ModuleGUI : public ZoomableShiftableComponent {
   public:
@@ -29,15 +31,15 @@ class ModuleGUI : public ZoomableShiftableComponent {
 
     void mouseDown(const MouseEvent & e);
 
-    virtual void setOriginalBounds(const Rectangle<int> bounds);
+    virtual void setOriginalBounds(const juce::Rectangle<int> bounds);
 
-    virtual Rectangle<int> getOriginalBounds();
+    virtual juce::Rectangle<int> getOriginalBounds();
 
     void paint(Graphics & g);
 
     void setPane(ModulePane * pane);
 
-    void startDrag();
+    void startDrag(juce::MouseEvent const& e);
 
     void drag(const MouseEvent & e);
 
@@ -46,4 +48,3 @@ class ModuleGUI : public ZoomableShiftableComponent {
     Module* getModule();
 
 };
-

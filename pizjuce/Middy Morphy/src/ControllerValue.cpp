@@ -1,8 +1,9 @@
-
 #include "ControllerValue.h"
+
+#include "juce_audio_basics/juce_audio_basics.h"
+
 #include "Controller.h"
 #include "Scene.h"
-#include "JuceHeader.h"
 
 ControllerValue::ControllerValue(Controller * controller, Scene * scene) {
   // Bouml preserved body begin 00035A8D
@@ -14,7 +15,7 @@ ControllerValue::ControllerValue(Controller * controller, Scene * scene) {
 //at destruction make shure to deletete reference in controller AND scene!!
 ControllerValue::~ControllerValue() {
   // Bouml preserved body begin 00035B0D
-	scene->controllerValues.removeValue(this);
+	scene->controllerValues.removeAllInstancesOf(this);
 	controller->removeValue(this);
   // Bouml preserved body end 00035B0D
 }
@@ -57,4 +58,3 @@ void ControllerValue::getMidiMessage(juce::MidiBuffer & buffer, int pos) {
 	}
   // Bouml preserved body end 00048E0D
 }
-

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../common/PizAudioProcessor.h"
+#include "../_common/PizAudioProcessor.h"
 #include "MidiMorph.h"
 
-namespace juce { class AudioProcessorEditor; } 
-namespace juce { class MidiBuffer; } 
+namespace juce { class AudioProcessorEditor; }
+namespace juce { class MidiBuffer; }
 class MidiMorphGUI;
 
 class MidiMorphPlugInInterface : public PizAudioProcessor {
@@ -29,20 +29,20 @@ class MidiMorphPlugInInterface : public PizAudioProcessor {
 
     void prepareToPlay(double sampleRate, int estimatedSamplesPerBlock);
 
-    //   
+    //
     const String getInputChannelName(const int channelIndex) const;
 
-    //virtual  AudioProcessor::getOutputChannelName  (       )  const 
+    //virtual  AudioProcessor::getOutputChannelName  (       )  const
     const String getOutputChannelName(const int channelIndex) const;
 
-    //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const  
+    //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
     bool isInputChannelStereoPair(int index) const;
 
-    //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const  
+    //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
     bool isOutputChannelStereoPair(int index) const;
 
-    //virtual AudioProcessorEditor* AudioProcessor::createEditor  (    )  
-    
+    //virtual AudioProcessorEditor* AudioProcessor::createEditor  (    )
+
     AudioProcessorEditor* createEditor();
 
     int getNumParameters();
@@ -51,36 +51,36 @@ class MidiMorphPlugInInterface : public PizAudioProcessor {
 
     float getParameter(int parameterIndex);
 
-    //const String AudioProcessor::getParameterText  (  int  parameterIndex   ) 
+    //const String AudioProcessor::getParameterText  (  int  parameterIndex   )
     const String getParameterText(int parameterIndex);
 
-    //setParameter  (  int  parameterIndex,  
-    //  float  newValue 
-    // ) 
-    
+    //setParameter  (  int  parameterIndex,
+    //  float  newValue
+    // )
+
     void setParameter(int parameterIndex, float newValue);
 
-    //bool AudioProcessor::isParameterAutomatable  (  int  parameterIndex   ) 
+    //bool AudioProcessor::isParameterAutomatable  (  int  parameterIndex   )
     bool isParameterAutomatable(int parameterIndex);
 
     int getNumPrograms();
 
     int getCurrentProgram();
 
-    //  (  int     ) 
+    //  (  int     )
     void setCurrentProgram(int index);
 
-    // AudioProcessor::getProgramName  (  int  index   ) 
+    // AudioProcessor::getProgramName  (  int  index   )
     const String getProgramName(int index);
 
-    //    
+    //
     void changeProgramName(int index, const String& newName);
 
     void setStateInformation(const void * data, int sizeInBytes);
 
     void processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
 
-    //  (       ) 
+    //  (       )
     void getStateInformation(JUCE_NAMESPACE::MemoryBlock & destData);
 
     void releaseResources();
@@ -91,5 +91,7 @@ class MidiMorphPlugInInterface : public PizAudioProcessor {
 
     const String getName() const;
 
-};
+    double getTailLengthSeconds() const override { return 0; }
 
+    bool hasEditor() const override { return true; }
+};

@@ -55,7 +55,7 @@ void ModuleGUI::mouseDown(const MouseEvent & e) {
 		this->toFront(true);
 		for (int i = 0 ; i < pane->selectedModules.getNumSelected() ; i++)
 		{
-			pane->selectedModules.getSelectedItem(i)->startDrag();
+			pane->selectedModules.getSelectedItem(i)->startDrag(e);
 		}
 	}
 	else if(e.mods.isRightButtonDown())
@@ -92,7 +92,7 @@ void ModuleGUI::paint(Graphics & g) {
 	}
 
     g.setColour (Colours::white);
-    g.setFont(s*0.4f,Font::bold);
+    g.setFont(g.getCurrentFont().withHeight(s*0.4f).withStyle(Font::bold));
     g.drawFittedText(module->name,0,0,s,s,Justification::centred,1);
   // Bouml preserved body end 0003DC0D
 }
@@ -103,15 +103,15 @@ void ModuleGUI::setPane(ModulePane * pane) {
   // Bouml preserved body end 0003DD0D
 }
 
-void ModuleGUI::startDrag() {
+void ModuleGUI::startDrag(juce::MouseEvent const& e) {
   // Bouml preserved body begin 0003DE0D
-	this->dragger.startDraggingComponent(this,0);
+	this->dragger.startDraggingComponent(this,e);
   // Bouml preserved body end 0003DE0D
 }
 
 void ModuleGUI::drag(const MouseEvent & e) {
   // Bouml preserved body begin 0003DE8D
-	dragger.dragComponent(this,e);
+	dragger.dragComponent(this,e,nullptr);
 	refreshOriginalBounds();
   // Bouml preserved body end 0003DE8D
 }
@@ -127,4 +127,3 @@ Module* ModuleGUI::getModule() {
 	return module;
   // Bouml preserved body end 0003E88D
 }
-

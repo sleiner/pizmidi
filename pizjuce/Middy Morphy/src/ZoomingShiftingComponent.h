@@ -1,10 +1,13 @@
 #pragma once
 
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
-#include "JuceHeader.h"
 #include "Origin.h"
 
-namespace juce { class XmlElement; } 
+using namespace juce;
+
+namespace juce { class XmlElement; }
 class ZoomableShiftableComponent;
 
 class ZoomingShiftingComponent : public juce::Component {
@@ -15,7 +18,7 @@ class ZoomingShiftingComponent : public juce::Component {
 
     void dragOrigin(const MouseEvent & e);
 
-    void startDragOrigin();
+    void startDragOrigin(const MouseEvent& e);
 
 
   private:
@@ -67,4 +70,3 @@ class ZoomingShiftingComponent : public juce::Component {
     void removeZoomedComp(ZoomableShiftableComponent * comp);
 
 };
-

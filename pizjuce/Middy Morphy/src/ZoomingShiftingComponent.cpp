@@ -1,15 +1,13 @@
-
 #include "ZoomingShiftingComponent.h"
-#include "JuceHeader.h"
 #include "ZoomableShiftableComponent.h"
 
 juce::XmlElement* ZoomingShiftingComponent::getXml(const String tagName) {
   // Bouml preserved body begin 0004198D
 	XmlElement* state = new XmlElement(tagName);
-	state->setAttribute(T("xoff"),this->origin.getX());
-	state->setAttribute(T("yoff"),this->origin.getY());
-	state->setAttribute(T("xzoom"),this->zoomFactorX);
-	state->setAttribute(T("yzoom"),this->zoomFactorX);
+	state->setAttribute("xoff",this->origin.getX());
+	state->setAttribute("yoff",this->origin.getY());
+	state->setAttribute("xzoom",this->zoomFactorX);
+	state->setAttribute("yzoom",this->zoomFactorX);
 	return state;
   // Bouml preserved body end 0004198D
 }
@@ -18,10 +16,10 @@ void ZoomingShiftingComponent::setFromXml(juce::XmlElement * data) {
   // Bouml preserved body begin 00041A0D
 	if(data != 0)
 	{
-	int x = data->getIntAttribute(T("xoff"));
-	int y = data->getIntAttribute(T("yoff"));
-	this->zoomFactorX = (float)data->getDoubleAttribute(T("xzoom"));
-	this->zoomFactorY = (float)data->getDoubleAttribute(T("yzoom"));
+	int x = data->getIntAttribute("xoff");
+	int y = data->getIntAttribute("yoff");
+	this->zoomFactorX = (float)data->getDoubleAttribute("xzoom");
+	this->zoomFactorY = (float)data->getDoubleAttribute("yzoom");
 	origin.setTopLeftPosition(x,y);
 	}
   // Bouml preserved body end 00041A0D
@@ -29,13 +27,13 @@ void ZoomingShiftingComponent::setFromXml(juce::XmlElement * data) {
 
 void ZoomingShiftingComponent::dragOrigin(const MouseEvent & e) {
   // Bouml preserved body begin 0003D58D
-	this->dragger.dragComponent(&origin,e);
+	this->dragger.dragComponent(&origin,e,nullptr);
   // Bouml preserved body end 0003D58D
 }
 
-void ZoomingShiftingComponent::startDragOrigin() {
+void ZoomingShiftingComponent::startDragOrigin(const MouseEvent& e) {
   // Bouml preserved body begin 0003D60D
-	dragger.startDraggingComponent(&origin,0);
+	dragger.startDraggingComponent(&origin,e);
   // Bouml preserved body end 0003D60D
 }
 
@@ -63,7 +61,7 @@ void ZoomingShiftingComponent::zoom(float multX, float multY, float x, float y) 
 		zoomFactorY = newZoomRatioY;
 	}
 
-	origin.setTopLeftPosition(roundToInt((double)origin.getX() + grownLeft), 
+	origin.setTopLeftPosition(roundToInt((double)origin.getX() + grownLeft),
 		                      roundToInt((double)origin.getY() + grownTop));
 
   // Bouml preserved body end 0003AF8D
@@ -152,4 +150,3 @@ void ZoomingShiftingComponent::removeZoomedComp(ZoomableShiftableComponent * com
 	zoomedComponents.remove(zoomedComponents.indexOf(comp),true);
   // Bouml preserved body end 0003F08D
 }
-

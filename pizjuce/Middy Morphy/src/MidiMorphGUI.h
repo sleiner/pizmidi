@@ -1,13 +1,15 @@
 #pragma once
 
-#include "JuceHeader.h"
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
-namespace juce { class AudioProcessor; } 
+namespace juce { class AudioProcessor; }
 class MidiMorph;
-namespace juce { class ListBox; } 
+namespace juce { class ListBox; }
 class ControllerList;
 class MorphPaneModel;
-namespace juce { class ResizableBorderComponent; } 
+namespace juce { class ResizableBorderComponent; }
 class MidiMorphPlugInInterface;
 class CursorGUI;
 class MorphPane;
@@ -27,7 +29,7 @@ class MidiMorphGUI : public juce::ChangeListener,
     MidiMorph* core;
 
     juce::ListBox* controllerList;
-    
+
     AudioProcessor* ownerFilter;
 
 
@@ -42,21 +44,21 @@ class MidiMorphGUI : public juce::ChangeListener,
 
 
   public:
-    //ApplicationCommandTarget *  getNextCommandTarget 
+    //ApplicationCommandTarget *  getNextCommandTarget
     ApplicationCommandTarget* getNextCommandTarget();
 
     void resized();
 
-    //void  getAllCommands (Array< CommandID > &commands)=0 
+    //void  getAllCommands (Array< CommandID > &commands)=0
     void getAllCommands(Array<CommandID>& commands);
 
-    //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)= 
+    //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
     void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
 
-    //perform ()=0 
+    //perform ()=0
     bool perform(const InvocationInfo& info);
 
-    void changeListenerCallback(void* objectThatHasChanged);
+    void changeListenerCallback(ChangeBroadcaster* objectThatHasChanged) override;
 
     void paint(Graphics & g);
 
@@ -65,4 +67,3 @@ juce_UseDebuggingNewOperator
     MorphPane* morphPane;
 
 };
-

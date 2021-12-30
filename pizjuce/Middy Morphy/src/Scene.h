@@ -1,20 +1,22 @@
 #pragma once
 
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
 
 #include "Module.h"
-#include "JuceHeader.h"
 
 class MidiMorph;
 class ControllerValue;
 class Controller;
-namespace juce { class MidiBuffer; } 
+namespace juce { class MidiBuffer; }
 class Cursor;
 
+using namespace juce;
 class Scene : public Module,
               public Component,
               public ChangeListener,
-              public SliderListener,
-              public TextEditorListener
+              public Slider::Listener,
+              public TextEditor::Listener
 {
   public:
     Scene(const Scene & scene);
@@ -28,7 +30,7 @@ class Scene : public Module,
     void textEditorReturnKeyPressed(TextEditor&);
     void textEditorEscapeKeyPressed(TextEditor&);
     void textEditorFocusLost(TextEditor&);
-    void changeListenerCallback (void* source);
+    void changeListenerCallback (ChangeBroadcaster* source);
 
   private:
     //stored for performance reason
@@ -46,7 +48,7 @@ class Scene : public Module,
 
 
     MidiMorph* core;
-    
+
     TextEditor* textEditor;
     ColourSelector* colourSelector;
     Slider* sizeSlider;
@@ -92,4 +94,3 @@ class Scene : public Module,
     int id;
 
 };
-

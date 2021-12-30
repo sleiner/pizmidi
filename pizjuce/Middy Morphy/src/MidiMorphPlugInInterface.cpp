@@ -27,35 +27,35 @@ void MidiMorphPlugInInterface::prepareToPlay(double sampleRate, int estimatedSam
   // Bouml preserved body end 0002D90D
 }
 
-//   
+//
 const String MidiMorphPlugInInterface::getInputChannelName(const int channelIndex) const {
   // Bouml preserved body begin 0002DA0D
-    return T("getInputChannelName("+String(channelIndex)+")");
+    return "getInputChannelName("+String(channelIndex)+")";
   // Bouml preserved body end 0002DA0D
 }
 
-//virtual  AudioProcessor::getOutputChannelName  (       )  const 
+//virtual  AudioProcessor::getOutputChannelName  (       )  const
 const String MidiMorphPlugInInterface::getOutputChannelName(const int channelIndex) const {
   // Bouml preserved body begin 0002DA8D
-    return T("getOutputChannelName("+String(channelIndex)+")");
+    return "getOutputChannelName("+String(channelIndex)+")";
   // Bouml preserved body end 0002DA8D
 }
 
-//virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const  
+//virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
 bool MidiMorphPlugInInterface::isInputChannelStereoPair(int index) const {
   // Bouml preserved body begin 0002DB0D
   return true;
   // Bouml preserved body end 0002DB0D
 }
 
-//virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const  
+//virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
 bool MidiMorphPlugInInterface::isOutputChannelStereoPair(int index) const {
   // Bouml preserved body begin 0002DB8D
 return true;
   // Bouml preserved body end 0002DB8D
 }
 
-//virtual AudioProcessorEditor* AudioProcessor::createEditor  (    )  
+//virtual AudioProcessorEditor* AudioProcessor::createEditor  (    )
 
 AudioProcessorEditor* MidiMorphPlugInInterface::createEditor() {
   // Bouml preserved body begin 0002DC0D
@@ -73,13 +73,13 @@ const String MidiMorphPlugInInterface::getParameterName(int parameterIndex) {
   // Bouml preserved body begin 0002DD0D
 	if(parameterIndex == 0)
 	{
-		   return T("cursor X");
+		   return "cursor X";
 	}
 	else if(parameterIndex ==1)
 	{
-		 return T("cursor Y");
+		 return "cursor Y";
 	}
-	return String::empty;
+	return String();
   // Bouml preserved body end 0002DD0D
 }
 
@@ -118,7 +118,7 @@ void MidiMorphPlugInInterface::setParameter(int parameterIndex, float newValue) 
   // Bouml preserved body end 0002DE8D
 }
 
-//bool AudioProcessor::isParameterAutomatable  (  int  parameterIndex   ) 
+//bool AudioProcessor::isParameterAutomatable  (  int  parameterIndex   )
 bool MidiMorphPlugInInterface::isParameterAutomatable(int parameterIndex) {
   // Bouml preserved body begin 0002DF0D
   return true;
@@ -137,20 +137,20 @@ int MidiMorphPlugInInterface::getCurrentProgram() {
   // Bouml preserved body end 0002E00D
 }
 
-//  (  int     ) 
+//  (  int     )
 void MidiMorphPlugInInterface::setCurrentProgram(int index) {
   // Bouml preserved body begin 0002E08D
   // Bouml preserved body end 0002E08D
 }
 
-// AudioProcessor::getProgramName  (  int  index   ) 
+// AudioProcessor::getProgramName  (  int  index   )
 const String MidiMorphPlugInInterface::getProgramName(int index) {
   // Bouml preserved body begin 0002E10D
-  return T("getProgramName("+String(index)+")");
+  return "getProgramName("+String(index)+")";
   // Bouml preserved body end 0002E10D
 }
 
-//    
+//
 void MidiMorphPlugInInterface::changeProgramName(int index, const String& newName) {
   // Bouml preserved body begin 0002E18D
   // Bouml preserved body end 0002E18D
@@ -158,10 +158,10 @@ void MidiMorphPlugInInterface::changeProgramName(int index, const String& newNam
 
 void MidiMorphPlugInInterface::setStateInformation(const void * data, int sizeInBytes) {
   // Bouml preserved body begin 0002E30D
-		XmlElement* state = AudioProcessor::getXmlFromBinary(data,sizeInBytes);
+		auto state = AudioProcessor::getXmlFromBinary(data,sizeInBytes);
 		if(state != 0)
 		{
-			core.setFromXml(state);
+			core.setFromXml(state.get());
 		}
   // Bouml preserved body end 0002E30D
 }
@@ -194,7 +194,7 @@ void MidiMorphPlugInInterface::processBlock(AudioSampleBuffer& buffer, MidiBuffe
   // Bouml preserved body end 0002EB0D
 }
 
-//  (       ) 
+//  (       )
 void MidiMorphPlugInInterface::getStateInformation(JUCE_NAMESPACE::MemoryBlock & destData) {
   // Bouml preserved body begin 0002EB8D
 	AudioProcessor::copyXmlToBinary(*core.getXml("midimorph"),destData);
@@ -223,4 +223,3 @@ const String MidiMorphPlugInInterface::getName() const {
 	return ("MidiMorph");
   // Bouml preserved body end 0002EE0D
 }
-

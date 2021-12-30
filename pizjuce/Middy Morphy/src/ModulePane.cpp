@@ -44,12 +44,12 @@ void ModulePane::mouseDown(const MouseEvent & e) {
   // Bouml preserved body begin 0003B98D
 
 	model->mouseDown(e);
-	
+
     if(e.mods.isMiddleButtonDown())// || e.mods.isShiftDown())
 	{
 		setMouseCursor(MouseCursor::DraggingHandCursor);
-		startDragOrigin();
-		
+		startDragOrigin(e);
+
 	}
 	else if(e.mods.isLeftButtonDown() && (e.mods.isAltDown() || e.mods.isCtrlDown()))
 	{
@@ -85,7 +85,7 @@ void ModulePane::updateContent() {
 	this->selectedModules.deselectAll();
 	while(modules.size() > 0)
 	{
-		ModuleGUI* oldGUI = modules.remove(0);
+		ModuleGUI* oldGUI = modules.removeAndReturn(0);
 		removeZoomedComp(oldGUI);
 	}
 	 //this->zoomedComponents.clear();
@@ -99,7 +99,7 @@ void ModulePane::updateContent() {
 		 modules.add(gui);
 		 gui->setPane(this);
 		 addZoomedComp(gui);
-		
+
 		 //zoomedComponents.add(gui);
 	 }
 	rePositionChildren();
@@ -120,8 +120,9 @@ void ModulePane::paintOverChildren(Graphics & g) {
   // Bouml preserved body end 0003E38D
 }
 
-void ModulePane::changeListenerCallback(void* objectThatHasChanged) {
+void ModulePane::changeListenerCallback(ChangeBroadcaster* source) {
   // Bouml preserved body begin 0003E48D
+    void* objectThatHasChanged = source;
 	if(objectThatHasChanged == &selectedModules)
 	{
 		repaint();
@@ -130,14 +131,14 @@ void ModulePane::changeListenerCallback(void* objectThatHasChanged) {
   // Bouml preserved body end 0003E48D
 }
 
-//  getLassoSelection 
+//  getLassoSelection
 SelectedItemSet<ModuleGUI*>& ModulePane::getLassoSelection() {
   // Bouml preserved body begin 0003E50D
 	return this->selectedModules;
   // Bouml preserved body end 0003E50D
 }
 
-void ModulePane::findLassoItemsInArea(Array<ModuleGUI*>& itemsFound, int x, int y, int width, int height) {
+void ModulePane::findLassoItemsInArea(Array<ModuleGUI*>& itemsFound, const juce::Rectangle<int>& area) {
   // Bouml preserved body begin 0003E58D
 	for(int i = 0 ; i < this->modules.size() ;i++)
 	{
@@ -160,7 +161,7 @@ void ModulePane::selectModule(int index, bool deselectOthers) {
   // Bouml preserved body end 00047D8D
 }
 
-//perform ()=0 
+//perform ()=0
 bool ModulePane::perform(const InvocationInfo& info) {
   // Bouml preserved body begin 0004910D
 	if(info.commandID == 0)//D3CKStdCommands::del)
@@ -180,25 +181,24 @@ bool ModulePane::perform(const InvocationInfo& info) {
   // Bouml preserved body end 0004910D
 }
 
-//ApplicationCommandTarget *  getNextCommandTarget 
+//ApplicationCommandTarget *  getNextCommandTarget
 ApplicationCommandTarget* ModulePane::getNextCommandTarget() {
   // Bouml preserved body begin 0004918D
 	return 0;
   // Bouml preserved body end 0004918D
 }
 
-//void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)= 
+//void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
 void ModulePane::getCommandInfo(const CommandID commandID, ApplicationCommandInfo& result) {
   // Bouml preserved body begin 0004920D
-	
+
   // Bouml preserved body end 0004920D
 }
 
-//void  getAllCommands (Array< CommandID > &commands)=0 
+//void  getAllCommands (Array< CommandID > &commands)=0
 void ModulePane::getAllCommands(Array<CommandID>& commands) {
   // Bouml preserved body begin 0004928D
 	commands.add(0);//D3CKStdCommands::del);
 	commands.add(1);//D3CKStdCommands::selectAll);
   // Bouml preserved body end 0004928D
 }
-

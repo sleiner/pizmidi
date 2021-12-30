@@ -1,10 +1,12 @@
 #pragma once
 
+#include "juce_events/juce_events.h"
 
 #include "ModuleGUI.h"
-#include "JuceHeader.h"
 
 class Cursor;
+
+using namespace juce;
 
 class CursorGUI : public ModuleGUI, public juce::ChangeListener {
   private:
@@ -22,7 +24,7 @@ class CursorGUI : public ModuleGUI, public juce::ChangeListener {
 
     void mouseUp(const MouseEvent & e);
 
-    virtual void changeListenerCallback(void* objectThatHasChanged);
+    virtual void changeListenerCallback(ChangeBroadcaster* source) override;
 
 
   private:
@@ -33,4 +35,3 @@ class CursorGUI : public ModuleGUI, public juce::ChangeListener {
     ~CursorGUI();
 
 };
-

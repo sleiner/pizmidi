@@ -154,7 +154,7 @@ void Controller::learn() {
 
 void Controller::removeValue(ControllerValue * value) {
   // Bouml preserved body begin 0003FA8D
-	this->values.removeValue(value);
+	this->values.removeAllInstancesOf(value);
   // Bouml preserved body end 0003FA8D
 }
 
@@ -171,7 +171,7 @@ void Controller::getMidiMessage(juce::MidiBuffer & buffer, int pos) {
 	{
 		buffer.addEvent(MidiMessage::controllerEvent(channel, ccNo, getInterpolatedValue() ),pos);
 
-		//lastSentValue = 
+		//lastSentValue =
 		//this->lastSentChannel = channel
 	}
 	/*}*/
@@ -189,7 +189,7 @@ void Controller::remove() {
 
 bool Controller::hasNewMidi() {
   // Bouml preserved body begin 0004218D
-		
+
 	bool result =  newMidi || core->needsRefresh();
 	newMidi = false;
 	return result ;
@@ -246,7 +246,6 @@ void Controller::setValue(int newValue) {
 	{
 		core->addSceneAtCursor();
 	}
-	
+
   // Bouml preserved body end 00047C8D
 }
-

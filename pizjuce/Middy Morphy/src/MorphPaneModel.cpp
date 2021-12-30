@@ -1,5 +1,8 @@
 
 #include "MorphPaneModel.h"
+
+#include "juce_events/juce_events.h"
+
 #include "Cursor.h"
 #include "CursorGUI.h"
 #include "MidiMorph.h"
@@ -15,7 +18,7 @@ MorphPaneModel::MorphPaneModel(MidiMorph * core) {
 	rateBox->setRange(1,5000,1,2);
 	rateBox->addListener(this);
 	rateBox->setColour(rateBox->backgroundColourId,Colours::white);
-	rateBox->setValue(core->refreshRate,false);
+	rateBox->setValue(core->refreshRate,dontSendNotification);
 
 
   // Bouml preserved body end 0003CC0D
@@ -30,7 +33,7 @@ int MorphPaneModel::getNumModules() {
 void MorphPaneModel::mouseDown(const MouseEvent & e) {
   // Bouml preserved body begin 0003D20D
     if(e.mods.isLeftButtonDown() && !e.mods.isCtrlDown() && !e.mods.isAltDown())
-	{	
+	{
         int s=cursor->size/2;
         cursor->setXY((float)(e.x-s),(float)(e.y-s));
     }
@@ -39,7 +42,7 @@ void MorphPaneModel::mouseDown(const MouseEvent & e) {
 
 void MorphPaneModel::mouseDrag(const MouseEvent & e) {
     if(e.mods.isLeftButtonDown() && !e.mods.isCtrlDown() && !e.mods.isAltDown())
-	{	
+	{
         int s=cursor->size/2;
         cursor->setXY((float)(e.x-s),(float)(e.y-s));
     }
@@ -48,12 +51,12 @@ void MorphPaneModel::mouseDrag(const MouseEvent & e) {
 void MorphPaneModel::mouseUp(const MouseEvent & e) {
   // Bouml preserved body begin 0003D28D
 	if(e.mods.isRightButtonDown())
-	{	
+	{
 		PopupMenu menu, sub1;
 		menu.addItem(1,"add scene");
 		menu.addItem(5,"add controller");
 		menu.addSeparator();
-        sub1.addCustomItem(2,rateBox,64,20,false);
+        sub1.addCustomItem(2,*rateBox,64,20,false,nullptr);
         menu.addSubMenu("midi out refresh rate",sub1);
 		//menu.addItem(2,"Midi Out Refresh Rate:" + String(core->refreshRate));
 		menu.addItem(3,"auto-learn controller",true,core->autoLearn);
@@ -142,4 +145,3 @@ void MorphPaneModel::labelTextChanged(Label * labelThatHasChanged) {
 		core->refreshRate = roundToInt(rateBox->getValue());
 	}
 }
-

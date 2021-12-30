@@ -1,13 +1,15 @@
 #pragma once
 
 
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 #include "ZoomingShiftingComponent.h"
 
 class ModulePaneModel;
 class ModuleGUI;
 class Module;
 //class D3CKStdCommands;
+
+using namespace juce;
 
 class ModulePane : public juce::LassoSource<ModuleGUI*>, public juce::ChangeListener, public ZoomingShiftingComponent, public juce::ApplicationCommandTarget {
   public:
@@ -43,26 +45,25 @@ class ModulePane : public juce::LassoSource<ModuleGUI*>, public juce::ChangeList
 
     void paintOverChildren(Graphics & g);
 
-juce_UseDebuggingNewOperator    void changeListenerCallback(void* objectThatHasChanged);
+juce_UseDebuggingNewOperator    void changeListenerCallback(ChangeBroadcaster* source);
 
-    //  getLassoSelection 
+    //  getLassoSelection
     SelectedItemSet<ModuleGUI*>& getLassoSelection();
 
-    void findLassoItemsInArea(Array<ModuleGUI*>& itemsFound, int x, int y, int width, int height);
+    void findLassoItemsInArea(Array<ModuleGUI*>& itemsFound, const juce::Rectangle<int>& area) override;
 
     void selectModule(int index, bool deselectOthers);
 
-    //perform ()=0 
+    //perform ()=0
     bool perform(const InvocationInfo& info);
 
-    //ApplicationCommandTarget *  getNextCommandTarget 
+    //ApplicationCommandTarget *  getNextCommandTarget
     ApplicationCommandTarget* getNextCommandTarget();
 
-    //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)= 
+    //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
     void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
 
-    //void  getAllCommands (Array< CommandID > &commands)=0 
+    //void  getAllCommands (Array< CommandID > &commands)=0
     void getAllCommands(Array<CommandID>& commands);
 
 };
-

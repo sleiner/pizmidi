@@ -2,7 +2,6 @@
 
 
 #include "ModulePane.h"
-#include "JuceHeader.h"
 
 class ModulePaneModel;
 class MidiMorph;
@@ -32,4 +31,3 @@ class MorphPane : public ModulePane {
     void setSelectedScenes(Array<Scene*> * scenes, bool sendChangeMessage);
 
 };
-

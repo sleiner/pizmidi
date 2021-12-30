@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include "JuceHeader.h"
+#include "juce_graphics/juce_graphics.h"
 
 class XYItem : public juce::Point<float> {
   public:
@@ -13,4 +12,3 @@ class XYItem : public juce::Point<float> {
     void setXY(float x, float y);
 
 };
-

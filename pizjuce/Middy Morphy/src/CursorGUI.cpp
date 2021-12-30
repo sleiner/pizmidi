@@ -15,7 +15,7 @@ void CursorGUI::paint(Graphics & g) {
   // Bouml preserved body end 0003550D
 }
 
-CursorGUI::CursorGUI(Cursor * cursor) 
+CursorGUI::CursorGUI(Cursor * cursor)
 :ModuleGUI(cursor)
 {
   // Bouml preserved body begin 0003E20D
@@ -30,7 +30,7 @@ void CursorGUI::mouseDown(const MouseEvent & e) {
   // Bouml preserved body begin 0003F10D
     this->setInterceptsMouseClicks(true,false);
   if (e.mods.isLeftButtonDown() && !e.mods.isAltDown() && !e.mods.isCtrlDown()) {
-	startDrag();
+	startDrag(e);
     }
   // Bouml preserved body end 0003F10D
 }
@@ -54,9 +54,9 @@ void CursorGUI::mouseUp(const MouseEvent & e) {
   // Bouml preserved body end 0003F20D
 }
 
-void CursorGUI::changeListenerCallback(void* objectThatHasChanged) {
+void CursorGUI::changeListenerCallback(ChangeBroadcaster* source) {
   // Bouml preserved body begin 00047B0D
-	if(objectThatHasChanged == cursor)
+	if(source == cursor)
 	{
 		rePosition();
 	}
@@ -68,4 +68,3 @@ CursorGUI::~CursorGUI() {
 	cursor->removeChangeListener(this);
   // Bouml preserved body end 00047B8D
 }
-

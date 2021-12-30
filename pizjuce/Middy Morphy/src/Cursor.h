@@ -1,10 +1,11 @@
 #pragma once
 
+#include "juce_events/juce_events.h"
 
 #include "Module.h"
-#include "JuceHeader.h"
 
 class MidiMorph;
+using namespace juce;
 
 class Cursor : public Module, public juce::ChangeBroadcaster {
   public:
@@ -22,4 +23,3 @@ class Cursor : public Module, public juce::ChangeBroadcaster {
     juce::Point<float> getCursorPosition();
 
 };
-

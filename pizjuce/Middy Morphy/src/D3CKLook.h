@@ -1,29 +1,27 @@
 #pragma once
 
+#include "juce_core/juce_core.h"
+#include "juce_graphics/juce_graphics.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
-#include "JuceHeader.h"
+using namespace juce;
 
-namespace juce { class TextEditor; } 
-namespace juce { class String; } 
-namespace juce { class Colour; } 
-namespace juce { class Component; } 
-
-class D3CKLook : public juce::LookAndFeel {
+class D3CKLook : public juce::LookAndFeel_V4 {
   public:
     int getDefaultScrollbarWidth();
 
-    //    int  thumbSize,      bool  isMouseOver,      bool  isMouseDown    )   
+    //    int  thumbSize,      bool  isMouseOver,      bool  isMouseDown    )
     void drawScrollbar(Graphics & g, ScrollBar & scrollbar, int x, int y, int width, int height, bool isScrollbarVertical, int thumbStartPosition, int thumbSize, bool isMouseOver, bool isMouseDown);
 
     void drawScrollbarButton(Graphics & g, ScrollBar & scrollbar, int width, int height, int buttonDirection, bool isScrollbarVertical, bool isMouseOver, bool isButtonDown);
 
-    //  (   &     ) 
+    //  (   &     )
     int getScrollbarButtonSize(ScrollBar & scrollbar);
 
-    //getMinimumScrollbarThumbSize  (   &     ) 
+    //getMinimumScrollbarThumbSize  (   &     )
     int getMinimumScrollbarThumbSize(ScrollBar & scrollbar);
 
-    //  (   &  g,      int  width,      int  height,      TextEditor &  textEditor    )   
+    //  (   &  g,      int  width,      int  height,      TextEditor &  textEditor    )
     void drawTextEditorOutline(Graphics & g, int width, int height, juce::TextEditor & textEditor);
 
     void drawPopupMenuItem(Graphics & g, int width, int height, bool isSeperator, bool isActive, bool isHightlited, bool isTicked, bool hasSubmenu, const String & text, const String & shortcutText, Image * image, const juce::Colour *const textColour);
@@ -33,4 +31,3 @@ class D3CKLook : public juce::LookAndFeel {
     DropShadower* createDropShadowerForComponent(juce::Component * comp);
 
 };
-

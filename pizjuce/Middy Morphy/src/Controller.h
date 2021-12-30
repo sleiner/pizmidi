@@ -1,13 +1,15 @@
 #pragma once
 
 
-#include "JuceHeader.h"
+#include "juce_core/juce_core.h"
+#include "juce_events/juce_events.h"
 
 class MidiMorph;
 class ControllerValue;
 class Scene;
-namespace juce { class MidiBuffer; } 
-namespace juce { class MidiMessage; } 
+namespace juce { class MidiBuffer; }
+namespace juce { class MidiMessage; }
+using namespace juce;
 
 class Controller : public juce::ChangeBroadcaster {
   public:
@@ -102,4 +104,3 @@ class Controller : public juce::ChangeBroadcaster {
     int lastSentValue;
 
 };
-

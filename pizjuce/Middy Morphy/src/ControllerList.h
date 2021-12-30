@@ -1,12 +1,14 @@
 #pragma once
 
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
-#include "JuceHeader.h"
 
 class MidiMorph;
-namespace juce { class Component; } 
+namespace juce { class Component; }
 class ControllerGUI;
 
+using namespace juce;
 class ControllerList : public juce::ListBoxModel, public juce::ChangeBroadcaster {
   public:
     ControllerList(MidiMorph * core);
@@ -32,4 +34,3 @@ class ControllerList : public juce::ListBoxModel, public juce::ChangeBroadcaster
     void distancesChanged();
 
 };
-

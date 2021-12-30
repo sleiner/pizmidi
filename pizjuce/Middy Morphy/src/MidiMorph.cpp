@@ -143,10 +143,10 @@ int MidiMorph::getControllerValue(int index) {
 }
 
 //if controller != cursor controller
-//if   controller is in list 
+//if   controller is in list
 //	if - scene/s is selected, .> set/add value for selected scenes/s
 //	else if  "autokey" is on, ->add scene at cursor pos, select scene, set/add value for cursor,
-//	
+//
 //else if "autolearn" is on add controller.
 //		if - scene/s is selected, .> set/add value for selected scenes/s
 //		else if no scene is selected && "autokey" is on, ->add scene at cursor pos, select scene, set/add value for cursor
@@ -157,8 +157,8 @@ void MidiMorph::onMidiEvent(juce::MidiMessage & events) {
 	{
 		for(int i = 0 ; i < controllers.size() ; i++)
 		{
-			if(controllers[i]->getCcNo() == events.getControllerNumber() 
-				&& controllers[i]->getChannel() == events.getChannel()) 
+			if(controllers[i]->getCcNo() == events.getControllerNumber()
+				&& controllers[i]->getChannel() == events.getChannel())
 			{
 				controllers[i]->setValue(events.getControllerValue());
 				controllerIsInList = true;
@@ -193,7 +193,7 @@ void MidiMorph::getMidiMessages(int offset, juce::MidiBuffer & buffer) {
 			{
 				controllers[i]->getMidiMessage(buffer,offset);
 			}
-			
+
 		}
 		valueChanged = false;
 		valuesChanged = false;
@@ -212,7 +212,7 @@ float MidiMorph::getSumDistances() {
 		{
 			sumDistances += scenes[i]->getDistanceFromCursor();
 		}
-		
+
 	}
 	return sumDistances;
   // Bouml preserved body end 0003C60D
@@ -331,7 +331,7 @@ juce::XmlElement* MidiMorph::getXml(const juce::String tagname) {
         sceneXml->setAttribute("size",scene->size);
 
 		scenesXml->addChildElement(sceneXml);
-		
+
 	}
 
 	XmlElement* gui = new XmlElement("gui");
@@ -344,10 +344,10 @@ juce::XmlElement* MidiMorph::getXml(const juce::String tagname) {
 	cursorXml->setAttribute("y",cursor->Point::getY());
 
     XmlElement* options = new XmlElement("options");
-    options->setAttribute(T("autokey"),this->autoKey);
-	options->setAttribute(T("autolearn"),this->autoLearn);
-    options->setAttribute(T("auditselscene"),getAuditSelScene());
-    options->setAttribute(T("refreshrate"),this->refreshRate);
+    options->setAttribute("autokey",this->autoKey);
+	options->setAttribute("autolearn",this->autoLearn);
+    options->setAttribute("auditselscene",getAuditSelScene());
+    options->setAttribute("refreshrate",this->refreshRate);
 
     xml->addChildElement(controllersXml);
 	xml->addChildElement(scenesXml);
@@ -365,32 +365,32 @@ void MidiMorph::setFromXml(juce::XmlElement * xmlData) {
 	scenes.clear();
 	controllers.clear();
 
-	XmlElement* scenesXml = xmlData->getChildByName(T("scenes"));
+	XmlElement* scenesXml = xmlData->getChildByName("scenes");
 	for(int i = 0; i < scenesXml->getNumChildElements() ; i++)
 	{
 		XmlElement* sceneXml = scenesXml->getChildElement(i);
 		Scene* scene = new Scene(this);
-		scene->setXY( (float)sceneXml->getIntAttribute(T("x")) , (float)sceneXml->getIntAttribute(T("y")) );
-		scene->setColour(Colour::fromString(sceneXml->getStringAttribute(T("colour"))) );
-        scene->setName(sceneXml->getStringAttribute(T("name")));
-        scene->size=sceneXml->getIntAttribute(T("size"),scene->size);
+		scene->setXY( (float)sceneXml->getIntAttribute("x") , (float)sceneXml->getIntAttribute("y") );
+		scene->setColour(Colour::fromString(sceneXml->getStringAttribute("colour")) );
+        scene->setName(sceneXml->getStringAttribute("name"));
+        scene->size=sceneXml->getIntAttribute("size",scene->size);
 		scenes.add(scene);
 	}
 
-	XmlElement* controllersXml = xmlData->getChildByName(T("controllers"));
+	XmlElement* controllersXml = xmlData->getChildByName("controllers");
 	for(int i = 0; i < controllersXml->getNumChildElements() ; i++)
 	{
 		Controller* controller;
 		XmlElement* controllerXml = controllersXml->getChildElement(i);
 		controller = new Controller(this);
-		controller->setCcNo(controllerXml->getIntAttribute(T("ccno")));
-		controller->setChannel(controllerXml->getIntAttribute(T("channel")));
+		controller->setCcNo(controllerXml->getIntAttribute("ccno"));
+		controller->setChannel(controllerXml->getIntAttribute("channel"));
 
 		for(int j = 0; j < controllerXml->getNumChildElements() ; j++)
 		{
 			XmlElement* valueXml = controllerXml->getChildElement(j);
-			int cValue = valueXml->getIntAttribute(T("value"));
-			int sceneId = valueXml->getIntAttribute(T("scene"));
+			int cValue = valueXml->getIntAttribute("value");
+			int sceneId = valueXml->getIntAttribute("scene");
 			Scene* scene = scenes[sceneId];
 			ControllerValue* value = new ControllerValue(controller,scene);
 			value->setValue(cValue);
@@ -401,28 +401,28 @@ void MidiMorph::setFromXml(juce::XmlElement * xmlData) {
 		controllers.add(controller);
 	}
 
-	XmlElement * cursorXml = xmlData->getChildByName(T("cursor"));
+	XmlElement * cursorXml = xmlData->getChildByName("cursor");
     if (xmlData->containsChildElement(cursorXml)) {
-        cursor->setXY((float)cursorXml->getDoubleAttribute(T("x")),(float)cursorXml->getDoubleAttribute(T("y")));
+        cursor->setXY((float)cursorXml->getDoubleAttribute("x"),(float)cursorXml->getDoubleAttribute("y"));
     }
 
-	this->guiState = xmlData->getChildByName(T("morphpanestate"));
+	this->guiState = xmlData->getChildByName("morphpanestate");
 
-	XmlElement * gui = xmlData->getChildByName(T("gui"));
-	this->guiBounds.setSize(gui->getIntAttribute(T("width")),gui->getIntAttribute(T("height")));
-	this->controllerListWidth = gui->getIntAttribute(T("listwidth"),this->controllerListWidth);
+	XmlElement * gui = xmlData->getChildByName("gui");
+	this->guiBounds.setSize(gui->getIntAttribute("width"),gui->getIntAttribute("height"));
+	this->controllerListWidth = gui->getIntAttribute("listwidth",this->controllerListWidth);
 
 
-    XmlElement * options = xmlData->getChildByName(T("options"));
+    XmlElement * options = xmlData->getChildByName("options");
     if (xmlData->containsChildElement(options)) {
-        this->autoKey = options->getBoolAttribute(T("autokey"),this->autoKey);
-        this->autoLearn = options->getBoolAttribute(T("autolearn"),this->autoLearn);
-        setAuditSelScene(options->getBoolAttribute(T("auditselscene"),this->auditSelScene));
-        this->refreshRate = options->getIntAttribute(T("refreshrate"),this->refreshRate);
+        this->autoKey = options->getBoolAttribute("autokey",this->autoKey);
+        this->autoLearn = options->getBoolAttribute("autolearn",this->autoLearn);
+        setAuditSelScene(options->getBoolAttribute("auditselscene",this->auditSelScene));
+        this->refreshRate = options->getIntAttribute("refreshrate",this->refreshRate);
     }
 
-	this->sendSynchronousChangeMessage(&controllers);
-	this->sendSynchronousChangeMessage(&scenes);
+	this->sendSynchronousChangeMessage();
+	this->sendSynchronousChangeMessage();
 
   // Bouml preserved body end 0004048D
 }
@@ -445,7 +445,7 @@ void MidiMorph::removeController(Controller * controllerToRemove) {
 	controllers.getLock().enter();
 	for(int i = scenes.size() ; --i >= 0;)
 	{
-        scenes[i]->controllerValues.removeValue(controllerToRemove->getValue(scenes[i]));
+        scenes[i]->controllerValues.removeAllInstancesOf(controllerToRemove->getValue(scenes[i]));
     }
     this->controllers.removeObject(controllerToRemove);
 	controllers.getLock().exit();
@@ -516,7 +516,7 @@ void MidiMorph::sendChangeMessage(void * ptr) {
 		MessageManagerLock lock;
 	 	dispatchPendingMessages();
 	}
-	ChangeBroadcaster::sendChangeMessage(ptr);
+	ChangeBroadcaster::sendChangeMessage();
 	this->lastRecipant = ptr;
   // Bouml preserved body end 00048D0D
 }

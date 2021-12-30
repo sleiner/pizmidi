@@ -6,7 +6,7 @@ void TextBoxSlider::mouseDrag(const MouseEvent & e) {
   // Bouml preserved body begin 0004818D
 	double delta = this->step * e.getDistanceFromDragStartY() / pixelStep;
 	double newVal = oldValue - delta;
-	setValue(newVal,true);
+	setValue(newVal,sendNotification);
 
   // Bouml preserved body end 0004818D
 }
@@ -17,12 +17,12 @@ void TextBoxSlider::labelTextChanged(Label * labelThatHasChanged) {
   // Bouml preserved body end 0004820D
 }
 
-TextBoxSlider::TextBoxSlider(double initval) 
-:  Label(T(""),T(""))
+TextBoxSlider::TextBoxSlider(double initval)
+:  Label("","")
 {
   // Bouml preserved body begin 0004830D
 	setRange(0,100,1,10);
-	setValue(initval,false);
+	setValue(initval,dontSendNotification);
 	//addListener(this);
 	setEditable(true,true);
 	this->setJustificationType(Justification::centred);
@@ -61,7 +61,7 @@ juce::TextEditor* TextBoxSlider::createEditorComponent() {
 	TextEditor* te = new NumberBox();
 	te->setSelectAllWhenFocused(true);
 	te->setFont(getFont());
-	te->setInputRestrictions(256,T("0123456789.,-+"));
+	te->setInputRestrictions(256,"0123456789.,-+");
 	te->setColour(te->outlineColourId,Colour(0.f,0,0,0.f));
 	te->setColour(te->backgroundColourId,Colour(0.f,0,0,0.f));
 	te->setColour(te->focusedOutlineColourId,Colour(0.f,0,0,0.f));
@@ -87,22 +87,22 @@ double TextBoxSlider::getValue() {
 }
 
 // (const String& newText,                       const bool broadcastChangeMessage)
-void TextBoxSlider::setText(const String & newText, const bool broadcastChangeMessage) {
+void TextBoxSlider::setText(const String & newText, NotificationType notification) {
   // Bouml preserved body begin 00048B0D
 	String t(newText.trimStart());
 
-	while (t.startsWithChar (T('+')))
+	while (t.startsWithChar ('+'))
 	{
 	t = t.substring (1).trimStart();
 	}
 
-	double newVal = t.initialSectionContainingOnly (T("0123456789.,-")).getDoubleValue();
+	double newVal = t.initialSectionContainingOnly ("0123456789.,-").getDoubleValue();
 
-	setValue(newVal,broadcastChangeMessage);
+	setValue(newVal,notification);
   // Bouml preserved body end 00048B0D
 }
 
-void TextBoxSlider::setValue(double newVal, bool broadcastChange) {
+void TextBoxSlider::setValue(double newVal, NotificationType notification) {
   // Bouml preserved body begin 00048A8D
 		long newValInt = roundDoubleToInt(newVal/step);
 		newVal = newValInt*step;
@@ -110,7 +110,7 @@ void TextBoxSlider::setValue(double newVal, bool broadcastChange) {
 		newVal = jmax(min,newVal);
 
 		value = newVal;
-		Label::setText(String(value),broadcastChange);
+		Label::setText(String(value),notification);
 
   // Bouml preserved body end 00048A8D
 }
@@ -124,7 +124,6 @@ void TextBoxSlider::resized() {
 
 void TextBoxSlider::textWasEdited() {
   // Bouml preserved body begin 0004A70D
-	this->setText(getText(),true);
+	this->setText(getText(),sendNotification);
   // Bouml preserved body end 0004A70D
 }
-

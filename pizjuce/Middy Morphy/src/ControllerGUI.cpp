@@ -32,8 +32,8 @@ ControllerGUI::ControllerGUI(Controller * controller, MidiMorph * core) {
 	name->setInputRestrictions(32);
 	name->addListener(this);
 
-	addAndMakeVisible(labCc = new Label(T(""),T("cc:")));
-	addAndMakeVisible(labCh = new Label(T(""),T("ch:")));
+	addAndMakeVisible(labCc = new Label("","cc:"));
+	addAndMakeVisible(labCh = new Label("","ch:"));
 	labCc->setFont(Font(10));
 	labCh->setFont(Font(10));
 
@@ -136,7 +136,7 @@ void ControllerGUI::setSelected(bool shouldDrawSelected) {
   // Bouml preserved body end 00033E8D
 }
 
-void ControllerGUI::changeListenerCallback(void* objectThatHasChanged) {
+void ControllerGUI::changeListenerCallback(ChangeBroadcaster* source) {
   // Bouml preserved body begin 0003EA8D
 	//if(objectThatHasChanged == controller)
 	//{
@@ -151,7 +151,7 @@ void ControllerGUI::changeListenerCallback(void* objectThatHasChanged) {
 	//else if(objectThatHasChanged == core->getCursor())
 	//{
 		refreshControllerData();
-		
+
 	//}
   // Bouml preserved body end 0003EA8D
 }
@@ -162,19 +162,19 @@ void ControllerGUI::refreshControllerData() {
 	{
 		if(controller->getValue(core->getSelectedScene(0)) != 0)
 		{
-			this->value->setValue(controller->getValue(core->getSelectedScene(0))->getValue(),false);
+			this->value->setValue(controller->getValue(core->getSelectedScene(0))->getValue(),dontSendNotification);
 		}
 		else
 		{
-			this->value->setValue(0,false);
+			this->value->setValue(0,dontSendNotification);
 		}
 	}
 	else
 	{
-		this->value->setValue(controller->getInterpolatedValue(),false);
+		this->value->setValue(controller->getInterpolatedValue(),dontSendNotification);
 	}
-	this->channel->setValue(controller->getChannel(),false);
-	this->ccNo->setValue(controller->getCcNo(),false);
+	this->channel->setValue(controller->getChannel(),dontSendNotification);
+	this->ccNo->setValue(controller->getCcNo(),dontSendNotification);
 	this->name->setText(controller->getName(),false);
 	int state = controller->getState();
 	switch(state)
@@ -204,7 +204,7 @@ void ControllerGUI::textEditorTextChanged(TextEditor& editor) {
   // Bouml preserved body end 0004178D
 }
 
-//  (       ) 
+//  (       )
 void ControllerGUI::textEditorReturnKeyPressed(TextEditor & editor) {
   // Bouml preserved body begin 0004180D
   // Bouml preserved body end 0004180D
@@ -242,4 +242,3 @@ void ControllerGUI::labelTextChanged(Label * labelThatHasChanged) {
 
   // Bouml preserved body end 00048A0D
 }
-

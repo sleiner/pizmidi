@@ -1,15 +1,19 @@
 #pragma once
 
+#include "juce_audio_basics/juce_audio_basics.h"
+#include "juce_core/juce_core.h"
+#include "juce_events/juce_events.h"
 
-#include "JuceHeader.h"
 #include "Controller.h"
 #include "Scene.h"
 
 class Cursor;
-namespace juce { class XmlElement; } 
-namespace juce { class MidiMessage; } 
-namespace juce { class MidiBuffer; } 
+namespace juce { class XmlElement; }
+namespace juce { class MidiMessage; }
+namespace juce { class MidiBuffer; }
 class ControllerValue;
+
+using namespace juce;
 
 class MidiMorph : public juce::ChangeBroadcaster {
   public:
@@ -20,11 +24,11 @@ class MidiMorph : public juce::ChangeBroadcaster {
     Cursor* cursor;
 
     int refreshRate;
-    Rectangle<int> paneSize;
-    Rectangle<int> guiBounds;
+    juce::Rectangle<int> paneSize;
+    juce::Rectangle<int> guiBounds;
     bool autoLearn;
     bool autoKey;
-    
+
     void setCursorXRatio(float x);
     void setCursorYRatio(float y);
     float getCursorXRatio();
@@ -41,7 +45,7 @@ class MidiMorph : public juce::ChangeBroadcaster {
 
     //foreach scene : moved();
     void cursorChanged();
-    
+
     void showControllers(bool show);
     void addController(int ccNo, int Channel);
     void addController();
@@ -96,10 +100,10 @@ class MidiMorph : public juce::ChangeBroadcaster {
 
     juce::XmlElement* getSavedGUIState();
 
-    void setPaneSize(Rectangle<int> size);
+    void setPaneSize(juce::Rectangle<int> size);
 
-    Rectangle<int> getPaneSize();
-    
+    juce::Rectangle<int> getPaneSize();
+
     int controllerListWidth;
 
     void addSceneAtCursor();
@@ -121,7 +125,7 @@ class MidiMorph : public juce::ChangeBroadcaster {
     bool needsRefresh();
 
     bool needsOneRefresh();
-    
+
   private:
     OwnedArray<Controller> controllers;
     Array<Scene*> selectedScenes;
@@ -134,4 +138,3 @@ class MidiMorph : public juce::ChangeBroadcaster {
     void* lastRecipant;
 
 };
-

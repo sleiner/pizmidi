@@ -1,17 +1,17 @@
 #pragma once
 #include "TextBoxSlider.h"
 
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
 class Controller;
 class MidiMorph;
-namespace juce { class TextEditor; } 
-namespace juce { class Slider; } 
+namespace juce { class TextEditor; }
+namespace juce { class Slider; }
 class ControllerValue;
 class TextBoxSlider;
-namespace juce { class Label; } 
+namespace juce { class Label; }
 
-class ControllerGUI : public juce::TextEditorListener, public juce::ChangeListener, public juce::Component, public juce::SliderListener, public juce::LabelListener {
+class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeListener, public juce::Component, public juce::Slider::Listener, public juce::Label::Listener {
   public:
     ControllerGUI(Controller * controller, MidiMorph * core);
 
@@ -42,13 +42,13 @@ class ControllerGUI : public juce::TextEditorListener, public juce::ChangeListen
 
     void setSelected(bool shouldDrawSelected);
 
-    void changeListenerCallback(void* objectThatHasChanged);
+    void changeListenerCallback(ChangeBroadcaster* source) override;
 
     void refreshControllerData();
 
     virtual void textEditorTextChanged(TextEditor& editor);
 
-    //  (       ) 
+    //  (       )
     virtual void textEditorReturnKeyPressed(TextEditor & editor);
 
     virtual void textEditorEscapeKeyPressed(TextEditor & editor);
@@ -78,4 +78,3 @@ class ControllerGUI : public juce::TextEditorListener, public juce::ChangeListen
     juce::Colour lineColour;
 
 };
-

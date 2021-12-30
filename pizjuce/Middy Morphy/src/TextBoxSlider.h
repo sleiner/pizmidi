@@ -1,13 +1,13 @@
 #pragma once
 
+#include "juce_gui_basics/juce_gui_basics.h"
 
-#include "JuceHeader.h"
-
-namespace juce { class TextEditor; } 
+namespace juce { class TextEditor; }
 class NumberBox;
-namespace juce { class String; } 
+namespace juce { class String; }
+using namespace juce;
 
-class TextBoxSlider : public juce::LabelListener, public juce::Label {
+class TextBoxSlider : public juce::Label::Listener, public juce::Label {
   public:
     void mouseDrag(const MouseEvent & e);
 
@@ -47,15 +47,14 @@ class TextBoxSlider : public juce::LabelListener, public juce::Label {
 
   private:
     // (const String& newText,                       const bool broadcastChangeMessage)
-    void setText(const String & newText, const bool broadcastChangeMessage);
+    void setText(const String & newText, NotificationType notification);
 
 
   public:
-    void setValue(double newVal, bool broadcastChange);
+    void setValue(double newVal, NotificationType notification);
 
     void resized();
 
     void textWasEdited();
 
 };
-
