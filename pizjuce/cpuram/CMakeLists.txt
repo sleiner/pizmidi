@@ -1,6 +1,6 @@
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   piz_add_plugin(
-    pizmidi_CpuRam
+    piz_CpuRam
     DESCRIPTION "CPU/RAM meter"
     PLUGIN_CODE "cpur"
     PRODUCT_NAME "CPU and RAM"
@@ -8,7 +8,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     VERSION "1.2.0")
 
   target_sources(
-    pizmidi_CpuRam
+    piz_CpuRam
     PRIVATE # Headers
             "${CMAKE_CURRENT_LIST_DIR}/CpuRam.h"
             "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.h"
@@ -18,7 +18,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
             "${CMAKE_CURRENT_LIST_DIR}/cputime.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/CpuRam.cpp")
 
-  target_link_libraries(pizmidi_CpuRam PUBLIC)
+  target_link_libraries(piz_CpuRam PUBLIC)
 else()
   message(
     NOTICE

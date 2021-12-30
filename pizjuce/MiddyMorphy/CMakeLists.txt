@@ -1,5 +1,5 @@
 piz_add_plugin(
-  pizmidi_MiddyMorphy
+  piz_MiddyMorphy
   PRODUCT_NAME "MiddyMorphy"
   DESCRIPTION "Free & Open Version Of MiddyMorphy"
   PLUGIN_CODE "mmfr"
@@ -10,7 +10,7 @@ piz_add_plugin(
   VERSION "1.2.0")
 
 target_sources(
-  pizmidi_MiddyMorphy
+  piz_MiddyMorphy
   PRIVATE # Headers
           "${CMAKE_CURRENT_LIST_DIR}/Controller.h"
           "${CMAKE_CURRENT_LIST_DIR}/ControllerGUI.h"
@@ -65,6 +65,6 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/ZoomingShiftingComponent.cpp")
 
 target_link_libraries(
-  pizmidi_MiddyMorphy
+  piz_MiddyMorphy
   PUBLIC juce::juce_audio_basics juce::juce_events juce::juce_graphics
          juce::juce_gui_basics juce::juce_gui_extra)

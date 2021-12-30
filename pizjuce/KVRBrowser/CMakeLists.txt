@@ -1,5 +1,5 @@
 piz_add_plugin(
-  pizmidi_KVRBrowser
+  piz_KVRBrowser
   PRODUCT_NAME "KVR Browser"
   DESCRIPTION "Web Browser"
   PLUGIN_CODE "KVRb"
@@ -9,7 +9,7 @@ piz_add_plugin(
   VERSION "1.1.0")
 
 target_sources(
-  pizmidi_KVRBrowser
+  piz_KVRBrowser
   PRIVATE # Headers
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserPluginEditor.h"
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserFilter.h"
@@ -17,5 +17,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserPluginEditor.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserFilter.cpp")
 
-target_link_libraries(pizmidi_KVRBrowser PUBLIC juce::juce_events
-                                                juce::juce_gui_extra)
+target_link_libraries(piz_KVRBrowser PUBLIC juce::juce_events
+                                            juce::juce_gui_extra)

@@ -1,5 +1,5 @@
 piz_add_plugin(
-  pizmidi_BigClock
+  piz_BigClock
   DESCRIPTION "Time Counter"
   IS_SYNTH TRUE
   PLUGIN_CODE "9wMw"
@@ -7,7 +7,7 @@ piz_add_plugin(
   VERSION "1.3.0")
 
 target_sources(
-  pizmidi_BigClock
+  piz_BigClock
   PRIVATE # Headers
           "${CMAKE_CURRENT_LIST_DIR}/BigClock.h"
           "${CMAKE_CURRENT_LIST_DIR}/BigClockEditor.h"
@@ -16,5 +16,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/BigClock.cpp")
 
 target_link_libraries(
-  pizmidi_BigClock PUBLIC juce::juce_events juce::juce_gui_basics
-                          juce::juce_gui_extra)
+  piz_BigClock PUBLIC juce::juce_events juce::juce_gui_basics
+                      juce::juce_gui_extra)
