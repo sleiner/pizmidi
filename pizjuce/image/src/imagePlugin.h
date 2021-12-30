@@ -1,26 +1,36 @@
 #ifndef IMAGEPLUGINFILTER_H
 #define IMAGEPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "juce_data_structures/juce_data_structures.h"
+
+#include "../_common/PizAudioProcessor.h"
+
+using namespace juce;
 
 enum parameters {
     kChannel,
     kNumParams
 };
 
-class ImageBank : public ValueTree {
-friend class imagePluginFilter;
+class ImageBank {
 public:
 	ImageBank ();
-	~ImageBank () {};
-	void set(int bank, int program, String name, var value)
-	{
-		this->getChild(bank).getChild(program).setProperty(name,value,0);
-	}
-	var get(int bank, int program, String name)
-	{
-		return this->getChild(bank).getChild(program).getProperty(name);
-	}
+
+	void set(int bank, int program, String name, var value);
+	var get(int bank, int program, String name);
+
+    void setGlobal(String name, var value);
+    var getGlobal(String name);
+
+    void loadFrom(ValueTree const& vt);
+    void dumpTo(MemoryBlock& destination);
+
+private:
+    void loadDefaultValues();
+
+    ValueTree values;
+    int numBanks;
+    int numPrograms;
 };
 
 //==============================================================================
@@ -48,23 +58,23 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
 	bool hasEditor() const {return true;}
+    double getTailLengthSeconds() const override { return 0; }
 
     int getNumParameters()    { return kNumParams; }
 
@@ -104,18 +114,18 @@ public:
 	void setNoteInput(bool use)
 	{
 		noteInput = use;
-		programs->getChildWithName("GlobalSettings").setProperty("noteInput",use,0);
+		programs->setGlobal("noteInput",use);
 	}
 
 	void setUsePC(bool use)
 	{
 		usePC = use;
-		programs->getChildWithName("GlobalSettings").setProperty("usePC",use,0);
+		programs->setGlobal("usePC",use);
 	}
 
 	bool getUsePC() {return usePC;}
 	bool getNoteInput() {return noteInput;}
-	
+
 	//==============================================================================
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
@@ -145,7 +155,7 @@ private:
     int curProgram;
 	bool noteInput;
 	bool usePC;
-    
+
     bool init;
 
 };

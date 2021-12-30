@@ -1,7 +1,12 @@
 #ifndef imagePluginFilter_DRAWABLEPAD_H
 #define imagePluginFilter_DRAWABLEPAD_H
 
-#include "JuceHeader.h"
+#include <memory>
+
+#include "juce_gui_basics/juce_gui_basics.h"
+
+using namespace juce;
+
 class DrawablePad  : public Button
 {
 public:
@@ -49,7 +54,7 @@ protected:
 
 private:
     //==============================================================================
-    Drawable* normalImage;
+    std::unique_ptr<Drawable> normalImage;
     Colour backgroundOff, backgroundOn;
     DrawablePad (const DrawablePad&);
     const DrawablePad& operator= (const DrawablePad&);

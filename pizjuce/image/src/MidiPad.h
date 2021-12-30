@@ -1,13 +1,17 @@
 #ifndef imagePluginFilter_PAD_H
 #define imagePluginFilter_PAD_H
 
-#include "JuceHeader.h"
+#include <memory>
+
+#include "../_common/PizAudioProcessor.h"
+
+using namespace juce;
 
 class MidiPad  : public Button
 {
 public:
     //==============================================================================
-  	MidiPad ();  
+  	MidiPad ();
     ~MidiPad();
 
     void resized();
@@ -52,12 +56,12 @@ protected:
 private:
 	bool centeredText;
 	int index;
-    Drawable* normalImage;
+    std::unique_ptr<Drawable> normalImage;
     Colour bgColour, textColour;
     void deleteImages();
 	String iconPath;
 	Label* text;
-	
+
 	MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
 };

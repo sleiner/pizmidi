@@ -4,7 +4,7 @@
 
 MidiPad::MidiPad ()
     : Button ("MidiPad"),
-      normalImage (0),
+      normalImage (nullptr),
       index(0),
 	  text (0)
 
@@ -24,16 +24,15 @@ MidiPad::MidiPad ()
     setSize (200, 200);
 }
 
-MidiPad::~MidiPad() 
+MidiPad::~MidiPad()
 {
 	if (text) delete text;
     deleteImages();
 }
 
-void MidiPad::deleteImages() 
+void MidiPad::deleteImages()
 {
-    if (normalImage) 
-		deleteAndZero (normalImage);
+    normalImage.reset();
 }
 
 bool MidiPad::setImageFromFile(File file)
@@ -41,9 +40,9 @@ bool MidiPad::setImageFromFile(File file)
 	if (file.exists())
 	{
 		deleteImages();
-		
+
 		normalImage = Drawable::createFromImageFile(file);
-		if (normalImage!=0) {
+		if (normalImage!=nullptr) {
 			repaint();
 		}
 		else return false;
@@ -55,7 +54,7 @@ bool MidiPad::setImageFromFile(File file)
 void MidiPad::setImages (const Drawable* normal)
 {
     deleteImages();
-	if (normal != 0) {
+	if (normal != nullptr) {
 		normalImage = normal->createCopy();
 	}
     repaint();
@@ -97,7 +96,7 @@ void MidiPad::drawButtonBackground (Graphics& g,
 
 void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
-    Rectangle<float> imageSpace;
+    juce::Rectangle<float> imageSpace;
     const float insetX = getWidth()*(1.f-imageSize)*0.5f;
     const float insetY = getHeight()*(1.f-imageSize)*0.5f;
     imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
@@ -113,7 +112,7 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
     imageToDraw = getCurrentImage();
     if (imageToDraw != 0)
     {
-        imageToDraw->drawWithin (g, 
+        imageToDraw->drawWithin (g,
 								 imageSpace,
                                  RectanglePlacement::centred,
 								 1.f);
@@ -139,17 +138,17 @@ const Drawable* MidiPad::getCurrentImage() const throw()
 
 const Drawable* MidiPad::getNormalImage() const throw()
 {
-    return normalImage;
+    return normalImage.get();
 }
 
 void MidiPad::setText(const String& name)
 {
-	text->setText(name,false);
+	text->setText(name,dontSendNotification);
 }
 
 void MidiPad::setButtonText(const String& newText)
 {
-	text->setText(newText,false);
+	text->setText(newText,dontSendNotification);
 }
 
 String MidiPad::getText()

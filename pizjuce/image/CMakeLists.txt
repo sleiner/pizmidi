@@ -1,0 +1,25 @@
+piz_add_plugin(
+  pizmidi_Image
+  DESCRIPTION "Converts audio amplitude to midi CC messages"
+  PLUGIN_CODE "imag"
+  PRODUCT_NAME "Image"
+  IS_SYNTH TRUE
+  NEEDS_MIDI_INPUT TRUE
+  VERSION "1.6.0")
+
+target_sources(
+  pizmidi_Image
+  PRIVATE # Headers
+          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/src/imagePlugin.h"
+          "${CMAKE_CURRENT_LIST_DIR}/src/imagePluginEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.h"
+          # Sources
+          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/src/imagePluginEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/src/imagePlugin.cpp")
+
+target_link_libraries(
+  pizmidi_Image PUBLIC juce::juce_audio_processors juce::juce_gui_basics
+                       juce::juce_gui_extra)

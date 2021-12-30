@@ -6,46 +6,94 @@
     This function must be implemented to create the actual plugin object that
     you want to use.
 */
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter() 
+PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new imagePluginFilter();
 }
 
-ImageBank::ImageBank () : ValueTree("ImageBank")
+ImageBank::ImageBank () : values("ImageBank"),
+                          numBanks(128),
+						  numPrograms(128)
 {
-	//default values
-	for (int b=0;b<128;b++) {
+	// initialize value tree
+	for (int b=0;b<numBanks;b++) {
 		ValueTree bank("BankValues");
 		bank.setProperty("bankIndex",b,0);
-		for (int p=0;p<128;p++) 
+
+		for (int p=0;p<numPrograms;p++)
 		{
 			ValueTree pv("ProgValues");
-			pv.setProperty("progIndex",p,0);
-			pv.setProperty("name","Bank " + String(b) + " Image " + String(p+1),0);
-			pv.setProperty("icon",String("Images") + File::separator + "Bank " + String(b) + File::separator + String(p+1) + ".svg",0);
-			pv.setProperty("text",String::empty,0);
-			pv.setProperty("bgcolor",Colour(0xFFFFFFFF).toString(),0);
-			pv.setProperty("textcolor",Colour(0xFF000000).toString(),0);
-			pv.setProperty("h",400,0);
-			pv.setProperty("w",400,0);
-
 			bank.addChild(pv,p,0);
 		}
-		this->addChild(bank,b,0);
+		values.addChild(bank,b,0);
 	}
 	ValueTree settings("GlobalSettings");
-	settings.setProperty("lastProgram",0,0);
-	settings.setProperty("lastBank",0,0);
-	settings.setProperty("channel",0,0);
-	settings.setProperty("noteInput",false,0);
-	settings.setProperty("usePC",true,0);
-	this->addChild(settings,128,0);
+	values.addChild(settings,128,0);
+
+	loadDefaultValues();
+}
+
+void ImageBank::set(int bank, int program, String name, var value)
+{
+	values.getChild(bank).getChild(program).setProperty(name,value,0);
+}
+
+var ImageBank::get(int bank, int program, String name)
+{
+	return values.getChild(bank).getChild(program).getProperty(name);
+}
+
+void ImageBank::setGlobal(String name, var value) {
+	values.getChildWithName("GlobalSettings").setProperty(name, value, nullptr);
+}
+
+var ImageBank::getGlobal(String name) {
+	return values.getChildWithName("GlobalSettings").getProperty(name);
+}
+
+void ImageBank::loadFrom(ValueTree const& vt) {
+	if (vt.isValid())
+	{
+		values.removeAllChildren(0);
+		for (int i=0;i<vt.getNumChildren();i++)
+		{
+			values.addChild(vt.getChild(i).createCopy(),i,0);
+		}
+	}
+}
+
+void ImageBank::dumpTo(MemoryBlock& destination) {
+	MemoryOutputStream stream(destination, false);
+	values.writeToStream(stream);
+}
+
+void ImageBank::loadDefaultValues()
+{
+	//default values
+	for (int b = 0; b < numBanks; b++) {
+		for (int p = 0; p < numPrograms; p++) {
+			set(b,p,"progIndex",p);
+			set(b,p,"name","Bank " + String(b) + " Image " + String(p+1));
+			set(b,p,"icon",String("Images") + File::getSeparatorString() + "Bank " + String(b) + File::getSeparatorString() + String(p+1) + ".svg");
+			set(b,p,"text",String());
+			set(b,p,"bgcolor",Colour(0xFFFFFFFF).toString());
+			set(b,p,"textcolor",Colour(0xFF000000).toString());
+			set(b,p,"h",400);
+			set(b,p,"w",400);
+		}
+	}
+
+    setGlobal("lastProgram",0);
+	setGlobal("lastBank",0);
+	setGlobal("channel",0);
+	setGlobal("noteInput",false);
+	setGlobal("usePC",true);
 }
 
 //==============================================================================
-imagePluginFilter::imagePluginFilter() 
+imagePluginFilter::imagePluginFilter()
 {
-	iconPath = getCurrentPath() + File::separator + "images";
+	iconPath = getCurrentPath() + File::getSeparatorString() + "images";
 
     // create built-in programs
     programs = new ImageBank();//new JuceProgram[16384];
@@ -53,7 +101,7 @@ imagePluginFilter::imagePluginFilter()
     {
 		//for(int b=0;b<128;b++)
 		//{
-		//	for(int i=0;i<128;i++){ 
+		//	for(int i=0;i<128;i++){
 		//		programs[b*128+i].icon = String("Images") + File::separator + "Bank " + String(b) + File::separator + String(i+1) + ".svg";
 		//		programs[b*128+i].name = "Bank " + String(b) + " Image " + String(i+1);
 		//	}
@@ -67,25 +115,25 @@ imagePluginFilter::imagePluginFilter()
 	setCurrentBank (0,0);
 }
 
-imagePluginFilter::~imagePluginFilter() 
+imagePluginFilter::~imagePluginFilter()
 {
     if (programs) delete programs;
 }
 
 //==============================================================================
-float imagePluginFilter::getParameter (int index) 
+float imagePluginFilter::getParameter (int index)
 {
     return param[index];
 }
 
-void imagePluginFilter::setParameter (int index, float newValue) 
+void imagePluginFilter::setParameter (int index, float newValue)
 {
 	switch(index)
 	{
 	case kChannel:
 		if (param[index] != newValue) {
 			param[index] = newValue;
-			programs->getChildWithName("GlobalSettings").setProperty("channel",roundFloatToInt(newValue*16.f),0);
+			programs->setGlobal("channel",roundFloatToInt(newValue*16.f));
 			sendChangeMessage ();
 		}
 		break;
@@ -94,19 +142,19 @@ void imagePluginFilter::setParameter (int index, float newValue)
 	}
 }
 
-const String imagePluginFilter::getParameterName (int index) 
+const String imagePluginFilter::getParameterName (int index)
 {
     if (index == kChannel) return "Channel";
-    return String::empty;
+    return String();
 }
 
-const String imagePluginFilter::getParameterText (int index) 
+const String imagePluginFilter::getParameterText (int index)
 {
     if (index==kChannel) {
         if (roundFloatToInt(param[kChannel]*16.0f)==0) return String("Any");
         else return String(roundFloatToInt(param[kChannel]*16.0f));
     }
-    return String::empty;
+    return String();
 }
 
 const String imagePluginFilter::getInputChannelName (const int channelIndex) const
@@ -146,17 +194,17 @@ void imagePluginFilter::setCurrentProgram (int index)
 
     //then set the new program
     curProgram = index;
-	param[kChannel] = (float)programs->getChildWithName("GlobalSettings").getProperty("channel")*0.0625f;
+	param[kChannel] = (float)programs->getGlobal("channel")*0.0625f;
     lastUIHeight = programs->get(curBank,curProgram,"h");
     lastUIWidth = programs->get(curBank,curProgram,"w");
     icon = programs->get(curBank,curProgram,"icon");
     text = programs->get(curBank,curProgram,"text");
-	bgcolor = Colour::fromString(programs->get(curBank,curProgram,"bgcolor"));
-    textcolor = Colour::fromString(programs->get(curBank,curProgram,"textcolor"));
-	noteInput = programs->getChildWithName("GlobalSettings").getProperty("noteInput");
-	usePC = programs->getChildWithName("GlobalSettings").getProperty("usePC");
+	bgcolor = Colour::fromString(programs->get(curBank,curProgram,"bgcolor").toString());
+    textcolor = Colour::fromString(programs->get(curBank,curProgram,"textcolor").toString());
+	noteInput = programs->getGlobal("noteInput");
+	usePC = programs->getGlobal("usePC");
 
-    sendChangeMessage();    
+    sendChangeMessage();
 }
 
 void imagePluginFilter::setCurrentBank(int index, int program)
@@ -172,7 +220,7 @@ void imagePluginFilter::setCurrentBank(int index, int program)
     init = true;
 
 	curBank = index;
-	if (program==-1) 
+	if (program==-1)
 		program = curProgram;
 	updateHostDisplay();
 	setCurrentProgram(program);
@@ -287,18 +335,18 @@ void imagePluginFilter::getStateInformation(MemoryBlock &destData) {
     programs->set(curBank,curProgram,"text",text);
 	programs->set(curBank,curProgram,"bgcolor",bgcolor.toString());
 	programs->set(curBank,curProgram,"textcolor",textcolor.toString());
-	programs->getChildWithName("GlobalSettings").setProperty("lastBank",curBank,0);
-	programs->getChildWithName("GlobalSettings").setProperty("lastProgram",curProgram,0);
-	programs->getChildWithName("GlobalSettings").setProperty("noteInput",noteInput,0);
-	programs->getChildWithName("GlobalSettings").setProperty("usePC",usePC,0);
+	programs->setGlobal("lastBank",curBank);
+	programs->setGlobal("lastProgram",curProgram);
+	programs->setGlobal("noteInput",noteInput);
+	programs->setGlobal("usePC",usePC);
 
-	programs->writeToStream(MemoryOutputStream(destData,false));
+	programs->dumpTo(destData);
 }
 
 void imagePluginFilter::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    ScopedPointer<XmlElement> const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
@@ -318,26 +366,20 @@ void imagePluginFilter::setCurrentProgramStateInformation (const void* data, int
 			textcolor = Colour(xmlState->getIntAttribute ("textcolor", bgcolor.contrasting(0.8f).getARGB()) | 0x00000000);
 			noteInput = xmlState->getBoolAttribute ("noteInput", noteInput);
 			usePC = xmlState->getBoolAttribute ("usePC", usePC);
-            
+
 			sendChangeMessage ();
 		}
     }
 }
 
 void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes) {
-    ScopedPointer<XmlElement> const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState == 0)
 	{
-		ValueTree vt = ValueTree::readFromStream(MemoryInputStream(data,sizeInBytes,false));
-		if (vt.isValid())
-		{
-			programs->removeAllChildren(0);
-			for (int i=0;i<vt.getNumChildren();i++)
-			{
-				programs->addChild(vt.getChild(i).createCopy(),i,0);
-			}
-		}
+		MemoryInputStream input(data,sizeInBytes,false);
+		ValueTree vt = ValueTree::readFromStream(input);
+		programs->loadFrom(vt);
 		init=true;
 		setCurrentBank(vt.getChild(128).getProperty("lastBank",0),vt.getChild(128).getProperty("lastProgram",0));
 	}
@@ -349,27 +391,27 @@ void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes) 
 			{
 				fullscreen = xmlState->getBoolAttribute ("fullscreen", false);
 				for (int p=0;p<getNumPrograms();p++) {
-					String prefix = "P" + String(p) + "."; 
+					String prefix = "P" + String(p) + ".";
 					programs->set(0,p,"channel",(float) xmlState->getDoubleAttribute (prefix+String(0), 0));
 					programs->set(0,p,"w",xmlState->getIntAttribute (prefix+"uiWidth", 400));
 					programs->set(0,p,"h", xmlState->getIntAttribute (prefix+"uiHeight", 400));
-					programs->set(0,p,"icon", xmlState->getStringAttribute (prefix+"icon", String::empty));
-					programs->set(0,p,"text", xmlState->getStringAttribute (prefix+"text", String::empty));
+					programs->set(0,p,"icon", xmlState->getStringAttribute (prefix+"icon", String()));
+					programs->set(0,p,"text", xmlState->getStringAttribute (prefix+"text", String()));
 					programs->set(0,p,"bgcolor", Colour(xmlState->getIntAttribute (prefix+"bgcolor")).toString());
 					programs->set(0,p,"textcolor", Colour(xmlState->getIntAttribute ("textcolor")).toString());
-					programs->set(0,p,"name", xmlState->getStringAttribute (prefix+"progname", String::empty));
+					programs->set(0,p,"name", xmlState->getStringAttribute (prefix+"progname", String()));
 				}
 				init=true;
 				setCurrentBank(0,xmlState->getIntAttribute("program", 0));
 			}
-			else 
+			else
 			{
 				//fullscreen = xmlState->getBoolAttribute ("fullscreen", false);
 				//for (int b=0;b<128;b++) {
 				//	XmlElement* xmlBank = xmlState->getChildByName("Bank"+String(b));
 				//	for (int p=0;p<getNumPrograms();p++) {
 				//		int prog = b*128+p;
-				//		String prefix = "P" + String(p) + "_"; 
+				//		String prefix = "P" + String(p) + "_";
 				//		for (int i=0;i<kNumParams;i++) {
 				//			programs[prog].param[i] = (float) xmlBank->getDoubleAttribute (prefix+String(i), programs[prog].param[i]);
 				//		}
@@ -391,7 +433,7 @@ void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes) 
 
 void imagePluginFilter::setBankColours(Colour colour, Colour text)
 {
-	for (int i=0;i<getNumPrograms();i++) 
+	for (int i=0;i<getNumPrograms();i++)
 	{
 		programs->set(curBank,i,"bgcolor",colour.toString());
 		programs->set(curBank,i,"textcolor",text.toString());

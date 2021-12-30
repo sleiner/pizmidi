@@ -3,7 +3,7 @@
 //==============================================================================
 DrawablePad::DrawablePad (const String& name)
     : Button (name),
-      normalImage (0)
+      normalImage (nullptr)
 {
     setSize (200, 200);
     backgroundOff = Colour (0xffbbbbff);
@@ -16,9 +16,9 @@ DrawablePad::~DrawablePad()
     deleteImages();
 }
 
-void DrawablePad::deleteImages() 
+void DrawablePad::deleteImages()
 {
-    if (normalImage) deleteAndZero (normalImage);
+    normalImage.reset();
 }
 
 void DrawablePad::setImages (File file)
@@ -123,10 +123,7 @@ void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButto
     if (imageToDraw != 0)
     {
         imageToDraw->drawWithin (g,
-                                 imageSpace.getX(),
-                                 imageSpace.getY(),
-                                 imageSpace.getWidth(),
-                                 imageSpace.getHeight(),
+                                 imageSpace.toType<float>(),
                                  RectanglePlacement::centred,
 								 1.f);
     }
@@ -142,19 +139,15 @@ const Drawable* DrawablePad::getCurrentImage() const throw()
 
 const Drawable* DrawablePad::getNormalImage() const throw()
 {
-    return normalImage;
+    return normalImage.get();
 }
 
 const Drawable* DrawablePad::getOverImage() const throw()
 {
-    const Drawable* d = normalImage;
-
-    return d;
+    return normalImage.get();
 }
 
 const Drawable* DrawablePad::getDownImage() const throw()
 {
-    const Drawable* d = normalImage;
-
-    return d;
+    return normalImage.get();
 }

@@ -8,13 +8,10 @@ imagePluginEditor::imagePluginEditor (imagePluginFilter* const ownerFilter)
 	progSlider(0),
 	textEditor(0)
 {
-    static OldSchoolLookAndFeel Look;
-    LookAndFeel::setDefaultLookAndFeel (&Look);
-
     setMouseClickGrabsKeyboardFocus (false);
 
     addAndMakeVisible (container = new Component());
-	
+
 	container->addAndMakeVisible (imagepad = new MidiPad());
     imagepad->setTriggeredOnMouseDown(true);
     imagepad->addListener(this);
@@ -125,17 +122,17 @@ void imagePluginEditor::resized()
 		container->setBounds (0, 0, proportionOfWidth (1.0f), proportionOfHeight (1.0f));
 		resizer->setVisible(true);
 	}
-	else 
+	else
 	{
-		container->setBounds (Desktop::getInstance().getMonitorAreaContaining(Point<int>(container->getScreenX(),container->getScreenY()),false));
+		container->setBounds (Desktop::getInstance().getDisplays().findDisplayForPoint(Point<int>(container->getScreenX(),container->getScreenY()),false).userArea);
 		resizer->setVisible(false);
 	}
 
 	imagepad->setBounds (container->getBounds());
     imagepad->repaint();
 
-	label->setBounds (roundToInt(container->getWidth()*(0.5000f)) - ((307) / 2), 
-		              roundToInt(container->getHeight()*(0.5000f)) - ((96) / 2), 
+	label->setBounds (roundToInt(container->getWidth()*(0.5000f)) - ((307) / 2),
+		              roundToInt(container->getHeight()*(0.5000f)) - ((96) / 2),
 					  307, 96);
 
     int resizersize = jmin(container->proportionOfWidth(0.05f),container->proportionOfHeight(0.05f));
@@ -151,7 +148,7 @@ void imagePluginEditor::buttonClicked (Button* buttonThatWasClicked) {
 
 bool imagePluginEditor::keyPressed (const KeyPress &key, Component* originatingComponent) {
 	int prog = getFilter()->getCurrentProgram();
-	if (key.isKeyCode(KeyPress::pageUpKey)) 
+	if (key.isKeyCode(KeyPress::pageUpKey))
 	{
 		prog++;
 		if (prog==getFilter()->getNumPrograms()) prog=0;
@@ -177,24 +174,24 @@ void imagePluginEditor::buttonStateChanged (Button* buttonThatWasClicked) {
         if (mousebutton.isPopupMenu()) {
             PopupMenu m, sub1, sub2, sub3, subB, subP, subC;
 			m.addSectionHeader("Text:");
-            m.addCustomItem (1234, textEditor, 200 , 72, false);
+            m.addCustomItem (1234, *textEditor, 200 , 72, false);
             m.addSeparator();
-			
+
 			m.addItem(99999,"Load Image...");
             m.addItem(66,"Clear Image");
-            sub1.addCustomItem (1234, colourSelector, 300, 300, false);
+            sub1.addCustomItem (1234, *colourSelector, 300, 300, false);
             m.addSubMenu ("Background Color", sub1);
-            sub2.addCustomItem (1234, textColourSelector, 300, 300, false);
+            sub2.addCustomItem (1234, *textColourSelector, 300, 300, false);
             m.addSubMenu ("Text Color", sub2);
             m.addSeparator();
-            subB.addCustomItem (-1, bankSlider, 100, 16, false);
+            subB.addCustomItem (-1, *bankSlider, 100, 16, false);
             m.addSubMenu ("Bank", subB);
-            subP.addCustomItem (-1, progSlider, 100, 16, false);
+            subP.addCustomItem (-1, *progSlider, 100, 16, false);
             m.addSubMenu ("Program", subP);
             m.addSeparator();
 			m.addItem (71, "Use PC/Bank Input", true, getFilter()->getUsePC());
 			m.addItem (70, "Use Note Input", true, getFilter()->getNoteInput());
-            subC.addCustomItem (-1, chanSlider, 140, 16, false);
+            subC.addCustomItem (-1, *chanSlider, 140, 16, false);
             m.addSubMenu ("Input Channel", subC);
 			m.addSeparator();
             m.addItem(88,"Clear All Images");
@@ -282,14 +279,14 @@ void imagePluginEditor::mouseDown(const MouseEvent &e)
 void imagePluginEditor::mouseDoubleClick(const MouseEvent &e)
 {
 	if (!fullscreen)
-	{	
+	{
 		container->addToDesktop(0);
 		Desktop::getInstance().setKioskModeComponent(container,false);
 		container->enterModalState(false);
 		fullscreen=true;
 		resized();
 	}
-	else 
+	else
 	{
 		container->exitModalState(0);
 		Desktop::getInstance().setKioskModeComponent(0);
@@ -329,19 +326,19 @@ void imagePluginEditor::textEditorFocusLost(TextEditor &editor) {
 }
 
 bool imagePluginEditor::isInterestedInFileDrag (const StringArray& files) {
-    File file = File(files.joinIntoString(String::empty,0,1));
-    if (file.hasFileExtension("png") || 
-        file.hasFileExtension("gif") || 
-        file.hasFileExtension("jpg") || 
-		file.hasFileExtension("svg") 
+    File file = File(files.joinIntoString(String(),0,1));
+    if (file.hasFileExtension("png") ||
+        file.hasFileExtension("gif") ||
+        file.hasFileExtension("jpg") ||
+		file.hasFileExtension("svg")
 		) return true;
     return false;
 }
 
-void imagePluginEditor::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY) 
+void imagePluginEditor::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY)
 {
     if (isInterestedInFileDrag(filenames)) {
-		String filename = filenames.joinIntoString(String::empty,0,1);
+		String filename = filenames.joinIntoString(String(),0,1);
 		File file = File(filename);
 		if (imagepad->setImageFromFile(file))
 		{
@@ -404,12 +401,12 @@ void imagePluginEditor::updateParametersFromFilter()
 
 	if (icon.isEmpty()) {
 		imagepad->setImages(0);
-		imagepad->setIconPath(String::empty);
+		imagepad->setIconPath(String());
 	}
 	else {
 		String fullpath = icon;
-		if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile()) 
-			fullpath = getFilter()->iconPath + File::separatorString + icon;
+		if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
+			fullpath = getFilter()->iconPath + File::getSeparatorString() + icon;
 		if (!imagepad->setImageFromFile(File::getCurrentWorkingDirectory().getChildFile(fullpath)))
 			imagepad->setImages(0);
 		imagepad->setIconPath(icon);
@@ -421,9 +418,9 @@ void imagePluginEditor::updateParametersFromFilter()
     imagepad->setTextColour(textcolor);
 	colourSelector->setCurrentColour(bgcolor);
 	textColourSelector->setCurrentColour(textcolor);
-	bankSlider->setValue(bank,false);
-	progSlider->setValue(prog,false);
-	chanSlider->setValue(chan*16.0,false,false);
+	bankSlider->setValue(bank,dontSendNotification);
+	progSlider->setValue(prog,dontSendNotification);
+	chanSlider->setValue(chan*16.0,dontSendNotification);
 
     setSize (filter->lastUIWidth,
              filter->lastUIHeight);
