@@ -43,7 +43,7 @@ void VSTSlider::setVSTSlider(float x) {
         double min = this->getMinimum();
         double max = this->getMaximum();
         double value = min + (double)x*(max-min);
-        this->setValue(value,false,false);
+        this->setValue(value, dontSendNotification);
     }
     this->updateText();
 };
@@ -55,7 +55,7 @@ void VSTSlider::setVSTSlider() {
         double min = this->getMinimum();
         double max = this->getMaximum();
         double value = min + (double)x*(max-min);
-        this->setValue(value,false,false);
+        this->setValue(value, dontSendNotification);
     }
     this->updateText();
 };

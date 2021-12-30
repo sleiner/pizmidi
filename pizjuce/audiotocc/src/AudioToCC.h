@@ -32,9 +32,13 @@
 #ifndef AUDIOTOCCPLUGINFILTER_H
 #define AUDIOTOCCPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include <memory>
 
-#define goodXmlChars L"abcdefghijklmnopqrstuvwxyz0123456789"
+#include "../_common/PizAudioProcessor.h"
+
+#include "juce_audio_devices/juce_audio_devices.h"
+
+#define goodXmlChars "abcdefghijklmnopqrstuvwxyz0123456789"
 
 class EnvelopeFollower
 {
@@ -88,7 +92,7 @@ enum {
 
 #define maxGain (32.f)
 
-class JuceProgram {	
+class JuceProgram {
 friend class AudioToCC;
 public:
 	JuceProgram ();
@@ -119,20 +123,19 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
@@ -149,6 +152,7 @@ public:
     const String getOutputChannelName (int channelIndex) const;
     bool isInputChannelStereoPair (int index) const;
     bool isOutputChannelStereoPair (int index) const;
+    double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
     int getNumPrograms()                                        { return 16; }
@@ -160,7 +164,7 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData);
     void setStateInformation (const void* data, int sizeInBytes);
-	
+
 	void setActiveDevice(String name);
 	String getActiveDevice() {return activeDevice;}
     StringArray devices;
@@ -190,7 +194,7 @@ private:
     JuceProgram *programs;
     int curProgram;
 
-    MidiOutput* midiOutput;
+    std::unique_ptr<MidiOutput> midiOutput;
 	String activeDevice;
 
 	float maxAttack,maxRelease;

@@ -512,7 +512,6 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     }
     comboBox->setSelectedId(1);
 
-	LookAndFeel::setDefaultLookAndFeel (&Look);
     //[/UserPreSize]
 
     setSize (528, 312);
@@ -958,10 +957,10 @@ void AudioToCCEditor::timerCallback()
 	const bool gateR = getFilter()->lastGateCCR;
     getFilter()->getCallbackLock().exit();
 
-	s_IndicatorL->setValue(ccL,false);
-	s_IndicatorR->setValue(ccR,false);
-	s_IndicatorLIn->setValue(inL,false);
-	s_IndicatorRIn->setValue(inR,false);
+	s_IndicatorL->setValue(ccL,dontSendNotification);
+	s_IndicatorR->setValue(ccR,dontSendNotification);
+	s_IndicatorLIn->setValue(inL,dontSendNotification);
+	s_IndicatorRIn->setValue(inR,dontSendNotification);
 	++peakcounter;
 	if (peakcounter==2)
 	{
@@ -988,7 +987,7 @@ void AudioToCCEditor::timerCallback()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="AudioToCCEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public ButtonListener, public ComboBoxListener, public SliderListener, public Timer"
+                 parentClasses="public AudioProcessorEditor, public ChangeListener, public Button::Listener, public ComboBoxListener, public SliderListener, public Timer"
                  constructorParams="AudioToCC* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="1" initialWidth="528" initialHeight="312">

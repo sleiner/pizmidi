@@ -1,5 +1,5 @@
 #include "AudioToCC.h"
-#include "../../common/midistuff.h"
+#include "../_common/midistuff.h"
 #include "AudioToCCEditor.h"
 
 EnvelopeFollower::EnvelopeFollower()
@@ -25,7 +25,7 @@ float EnvelopeFollower::process( float v )
 		return 0.f;
 	}
 	return (float)envelope;
-} 
+}
 
 //==============================================================================
 PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
@@ -58,14 +58,14 @@ JuceProgram::JuceProgram ()
     param[kGateCCL] = midiToFloat(3);
     param[kGateCCR] = midiToFloat(4);
     param[kGateOnValueCCL] = midiToFloat(127);
-    param[kGateOnValueCCR] = midiToFloat(127); 
+    param[kGateOnValueCCR] = midiToFloat(127);
     param[kGateOffValueCCL] = midiToFloat(0);
     param[kGateOffValueCCR] = midiToFloat(0);
 
     //default program name
-	name = L"Default";
+	name = "Default";
 
-	device = L"--";
+	device = "--";
 }
 
 //==============================================================================
@@ -111,8 +111,8 @@ AudioToCC::AudioToCC() :
     curProgram=0;
     if (!loadDefaultFxb())
 	{
-	    for(int i=0;i<getNumPrograms();i++){ 
-            programs[i].name = String(L"Program ") + String(i+1);
+	    for(int i=0;i<getNumPrograms();i++){
+            programs[i].name = String("Program ") + String(i+1);
         }
     }
     setCurrentProgram (0);
@@ -122,13 +122,13 @@ AudioToCC::~AudioToCC()
 {
     if (midiOutput) {
 		midiOutput->stopBackgroundThread();
-		delete midiOutput;
+		midiOutput.reset();
 	}
-	if (envL) 
+	if (envL)
 		delete envL;
 	if (envR)
 		delete envR;
-	if (peakenvL) 
+	if (peakenvL)
 		delete peakenvL;
 	if (peakenvR)
 		delete peakenvR;
@@ -140,12 +140,12 @@ int AudioToCC::getNumParameters()
     return numParams;
 }
 
-float AudioToCC::getParameter (int index) 
+float AudioToCC::getParameter (int index)
 {
     return param[index];
 }
 
-void AudioToCC::setParameter (int index, float newValue) 
+void AudioToCC::setParameter (int index, float newValue)
 {
     JuceProgram* ap = &programs[curProgram];
 
@@ -181,7 +181,7 @@ void AudioToCC::setParameter (int index, float newValue)
 
 void AudioToCC::setActiveDevice(String name)
 {
-	activeDevice = programs[curProgram].device = name;	
+	activeDevice = programs[curProgram].device = name;
 	int index = devices.indexOf(name);
 	if (index==-1) {
 		param[kDevice] = programs[curProgram].param[kDevice] = 0.f;
@@ -199,69 +199,69 @@ void AudioToCC::setActiveDevice(String name)
 
 const String AudioToCC::getParameterName (int index)
 {
-    if (index == kGain) return L"RMSGain";
-    else if (index == kPeakGain) return L"PeakGain";
-    else if (index == kDevice) return L"Device";
-    else if (index == kCCL) return L"L CC";
-    else if (index == kCCR) return L"R CC";
-    else if (index == kStereo) return L"Mono/Stereo";
-    else if (index == kRate) return L"Rate";
-    else if (index == kChannel) return L"Channel";
-    else if (index == kSmooth) return L"Inertia";
-    else if (index == kAutomateHost) return L"AutomateHost";
-    else if (index == kMidiToHost) return L"MidiToHost";
-	else if (index == kLOut) return L"EnvelopeL";
-	else if (index == kROut) return L"EnvelopeR";
-	else if (index == kLClip) return L"GateEnvL";
-	else if (index == kRClip) return L"GateEnvR";
-	else if (index == kMode) return L"EnvScale";
-	else if (index == kAttack) return L"Attack";
-	else if (index == kRelease) return L"Release";
-    else if (index == kGateThreshold) return L"Gate Thresh";
-    else if (index == kGateCCL) return L"L Gate CC";
-    else if (index == kGateCCR) return L"R Gate CC";
-    else if (index == kGateOnValueCCL) return L"L On Value";
-    else if (index == kGateOnValueCCR) return L"R On Value";
-    else if (index == kGateOffValueCCL) return L"L Off Value";
-    else if (index == kGateOffValueCCR) return L"R Off Value";
-    else if (index == kGateResetL) return L"L Gate Reset";
-    else if (index == kGateResetR) return L"R Gate Reset";
-    return String::empty;
+    if (index == kGain) return "RMSGain";
+    else if (index == kPeakGain) return "PeakGain";
+    else if (index == kDevice) return "Device";
+    else if (index == kCCL) return "L CC";
+    else if (index == kCCR) return "R CC";
+    else if (index == kStereo) return "Mono/Stereo";
+    else if (index == kRate) return "Rate";
+    else if (index == kChannel) return "Channe";
+    else if (index == kSmooth) return "Inertia";
+    else if (index == kAutomateHost) return "AutomateHost";
+    else if (index == kMidiToHost) return "MidiToHost";
+	else if (index == kLOut) return "Envelope";
+	else if (index == kROut) return "EnvelopeR";
+	else if (index == kLClip) return "GateEnv";
+	else if (index == kRClip) return "GateEnvR";
+	else if (index == kMode) return "EnvScale";
+	else if (index == kAttack) return "Attack";
+	else if (index == kRelease) return "Release";
+    else if (index == kGateThreshold) return "Gate Thresh";
+    else if (index == kGateCCL) return "L Gate CC";
+    else if (index == kGateCCR) return "R Gate CC";
+    else if (index == kGateOnValueCCL) return "L On Value";
+    else if (index == kGateOnValueCCR) return "R On Value";
+    else if (index == kGateOffValueCCL) return "L Off Value";
+    else if (index == kGateOffValueCCR) return "R Off Value";
+    else if (index == kGateResetL) return "L Gate Reset";
+    else if (index == kGateResetR) return "R Gate Reset";
+    return String();
 }
 
 const String AudioToCC::getParameterText (int index)
 {
-    if (index == kGain || index==kPeakGain) 
+    if (index == kGain || index==kPeakGain)
 		return param[index]==0.f ? String("-inf") : String (20.f * log10(param[index]*maxGain),1) + " dB";
-    else if (index == kAttack) 
+    else if (index == kAttack)
 		return String (roundToInt(param[kAttack]*100.f));
-    else if (index == kRelease) 
+    else if (index == kRelease)
 		return String (roundToInt(param[kRelease]*100.f));
     else if (index == kDevice) {
         if (param[kDevice]>0.0) return devices.joinIntoString("",roundDoubleToInt(param[kDevice]*(devices.size()-1)),1);
-        else return String(L"--");
+        else return String("--");
     }
 	else if (index==kCCL || index==kCCR) {
 		const int v = floatToMidi(param[index]);
 		return v<0 ? "Off" : String(floatToMidi(param[index]));
 	}
     else if (index==kStereo) {
-        if (param[kStereo]<0.5f) return String(L"Mono (L+R)");
-        else return String(L"Stereo");
+        if (param[kStereo]<0.5f) return String("Mono (L+R)");
+        else return String("Stereo");
     }
-    else if (index==kChannel) 
+    else if (index==kChannel)
 		return String (roundDoubleToInt(param[index]*15.0)+1);
     else if (index==kAutomateHost) {
-        if (param[kAutomateHost]<0.5f) return String(L"Off");
-        else return String(L"On");
+        if (param[kAutomateHost]<0.5f) return String("Off");
+        else return String("On");
     }
     else if (index==kMode) {
-        if (param[kMode]>=0.5f) return String(L"Logarithmic");
-        else return String(L"Linear");
+        if (param[kMode]>=0.5f) return String("Logarithmic");
+        else return String("Linear");
     }
     else if (index==kMidiToHost) {
-        if (param[kMidiToHost]<0.5f) return String(L"Off");
-        else return String(L"On");
+        if (param[kMidiToHost]<0.5f) return String("Off");
+        else return String("On");
     }
     else if (index==kGateThreshold) {
 		if (param[index]==0.f) return "Off";
@@ -389,8 +389,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 	const bool oldMethod = false;
 	const bool logScale = param[kMode]>=0.5f;
 
-    float *in1  =  buffer.getSampleData(0);
-    float *in2  =  buffer.getSampleData(1);
+    const float *in1  =  buffer.getReadPointer(0);
+    const float *in2  =  buffer.getReadPointer(1);
 
 	float gain = maxGain*param[kGain];
 	float peakgain = maxGain*param[kPeakGain];
@@ -399,9 +399,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 	{
 		if (gateccL>=0 && gateOffValueL>=0) {
 			MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccL,gateOffValueL);
-			if (midiOutput) 
+			if (midiOutput)
 				midiOutput->sendMessageNow(cc);
-			if (param[kMidiToHost]>=0.5f) 
+			if (param[kMidiToHost]>=0.5f)
 				midiMessages.addEvent(cc,0);
 			if (param[kAutomateHost]>=0.5f)
 				setParameterNotifyingHost(kLClip,0.f);
@@ -414,9 +414,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 	{
 		if (gateccR>=0 && gateOffValueR>=0) {
 			MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccR,gateOffValueR);
-			if (midiOutput) 
+			if (midiOutput)
 				midiOutput->sendMessageNow(cc);
-			if (param[kMidiToHost]>=0.5f) 
+			if (param[kMidiToHost]>=0.5f)
 				midiMessages.addEvent(cc,0);
 			if (param[kAutomateHost]>=0.5f)
 				setParameterNotifyingHost(kRClip,0.f);
@@ -431,7 +431,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 		lastInL = peakenvL->process(in1[i] * peakgain);
         //if mono mode, sum the left and right channels:
         if (!stereo) {
-           sample = (sample + (in2[i]*gain) )*0.5f; 
+           sample = (sample + (in2[i]*gain) )*0.5f;
 		   lastInR = peakenvL->process((in1[i] + in2[i])*0.5f*peakgain);
         }
 
@@ -440,9 +440,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 			if (lastInL >= thresh && !lastGateCCL) {
 				if (gateOnValueL >= 0) {
 					MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccL,gateOnValueL);
-					if (midiOutput) 
+					if (midiOutput)
 						midiOutput->sendMessageNow(cc);
-					if (param[kMidiToHost]>=0.5f) 
+					if (param[kMidiToHost]>=0.5f)
 						midiMessages.addEvent(cc,i);
 				}
 				if (param[kAutomateHost]>=0.5f)
@@ -452,9 +452,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 			else if (lastInL < thresh && lastGateCCL) {
 				if (gateOffValueL >= 0) {
 					MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccL,gateOffValueL);
-					if (midiOutput) 
+					if (midiOutput)
 						midiOutput->sendMessageNow(cc);
-					if (param[kMidiToHost]>=0.5f) 
+					if (param[kMidiToHost]>=0.5f)
 						midiMessages.addEvent(cc,i);
 				}
 				if (param[kAutomateHost]>=0.5f)
@@ -463,10 +463,10 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 			}
 		}
 
-	    // RMS is the sum of squared input values, then averaged and square-rooted, 
+	    // RMS is the sum of squared input values, then averaged and square-rooted,
         // so here we square and sum
 		continualRMS[0] += sample*sample;
-		
+
 		samp[0]+=1;
 		rateCounter++;
 
@@ -498,9 +498,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
             if (data2!=oldenv[0]){
 				if (ccL>=0) {
 					MidiMessage cc(0xB0|Ch,ccL,data2);
-					if (midiOutput) 
+					if (midiOutput)
 						midiOutput->sendMessageNow(cc);
-					if (param[kMidiToHost]>=0.5f) 
+					if (param[kMidiToHost]>=0.5f)
 						midiMessages.addEvent(cc,i);
 					if (param[kAutomateHost]>=0.5f)
 						setParameterNotifyingHost(kLOut,midiToFloat(data2,false));
@@ -509,7 +509,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 oldenv[0]=data2;
 				lastCCL = data2;
             }
-        }   
+        }
 	}
 
 	if (stereo) {
@@ -523,9 +523,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 				if (lastInR >= thresh && !lastGateCCR) {
 					if (gateOnValueR >= 0) {
 						MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccR,gateOnValueR);
-						if (midiOutput) 
+						if (midiOutput)
 							midiOutput->sendMessageNow(cc);
-						if (param[kMidiToHost]>=0.5f) 
+						if (param[kMidiToHost]>=0.5f)
 							midiMessages.addEvent(cc,i);
 					}
 					if (param[kAutomateHost]>=0.5f && !lastGateCCR)
@@ -535,9 +535,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 				else if (lastInR < thresh && lastGateCCR) {
 					if (gateOffValueR >= 0) {
 						MidiMessage cc = MidiMessage::controllerEvent(Ch+1,gateccR,gateOffValueR);
-						if (midiOutput) 
+						if (midiOutput)
 							midiOutput->sendMessageNow(cc);
-						if (param[kMidiToHost]>=0.5f) 
+						if (param[kMidiToHost]>=0.5f)
 							midiMessages.addEvent(cc,i);
 					}
 					if (param[kAutomateHost]>=0.5f && lastGateCCR)
@@ -547,7 +547,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 			}
 
 		    continualRMS[1] += sample*sample;
-			
+
 		    samp[1]+=1;
 			int data2 = oldenv[1];
 		    if (samp[1]>=RMSThreshold) {
@@ -578,9 +578,9 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 					if (ccR>=0)
 					{
 						MidiMessage cc(0xB0|Ch,ccR,data2);
-						if (midiOutput) 
+						if (midiOutput)
 							midiOutput->sendMessageNow(cc);
-						if (param[kMidiToHost]>=0.5f) 
+						if (param[kMidiToHost]>=0.5f)
 							midiMessages.addEvent(cc,i);
 						if (param[kAutomateHost]>=0.5f)
 							setParameterNotifyingHost(kROut,midiToFloat(data2,false));
@@ -589,8 +589,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                     oldenv[1]=data2;
 					lastCCR = data2;
                 }
-            }   
-	    }        
+            }
+	    }
 		if (rateCounter>=sampleThreshold)
 			rateCounter=0;
 
@@ -606,18 +606,18 @@ AudioProcessorEditor* AudioToCC::createEditor()
 //==============================================================================
 void AudioToCC::getStateInformation (MemoryBlock& destData)
 {
-    XmlElement xmlState (L"PizAudioToCCSettings");
-    xmlState.setAttribute (L"pluginVersion", 3);
-    xmlState.setAttribute (L"program", getCurrentProgram());
+    XmlElement xmlState ("PizAudioToCCSettings");
+    xmlState.setAttribute ("pluginVersion", 3);
+    xmlState.setAttribute ("program", getCurrentProgram());
     for (int p=0;p<getNumPrograms();p++) {
 		XmlElement *prog = new XmlElement("Program");
-        prog->setAttribute(L"index", p);
+        prog->setAttribute("index", p);
 		JuceProgram* program = &programs[p];
         for (int i=0;i<(numParams-2);i++) {
             prog->setAttribute (getParameterName(i).toLowerCase().retainCharacters(goodXmlChars), program->param[i]);
         }
-        prog->setAttribute (L"progname", program->name);
-		prog->setAttribute (L"device", program->device);
+        prog->setAttribute ("progname", program->name);
+		prog->setAttribute ("device", program->device);
 		xmlState.addChildElement(prog);
     }
     copyXmlToBinary (xmlState, destData);
@@ -625,13 +625,13 @@ void AudioToCC::getStateInformation (MemoryBlock& destData)
 
 void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
 {
-    ScopedPointer<XmlElement> const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
-        if (xmlState->hasTagName (L"PizAudioToCCSettings"))
+        if (xmlState->hasTagName ("PizAudioToCCSettings"))
         {
-            forEachXmlChildElement (*xmlState, e) 
+            forEachXmlChildElement (*xmlState, e)
 			{
 				if (e->hasTagName("Program"))
 				{
@@ -644,12 +644,12 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
 						program->param[kGain] *= 0.25f;
 						program->param[kPeakGain] *= 0.25f;
 					}
-					program->name = e->getStringAttribute (L"progname", program->name);
-					program->device = e->getStringAttribute (L"device", programs->device);
+					program->name = e->getStringAttribute ("progname", program->name);
+					program->device = e->getStringAttribute ("device", programs->device);
 
 				}
             }
-            setCurrentProgram(xmlState->getIntAttribute(L"program", 0));
+            setCurrentProgram(xmlState->getIntAttribute("program", 0));
         }
     }
 }

@@ -1,0 +1,20 @@
+piz_add_plugin(
+  pizmidi_AudioToCC
+  DESCRIPTION "Converts audio amplitude to midi CC messages"
+  PLUGIN_CODE "A2CC"
+  PRODUCT_NAME "Audio To CC"
+  NEEDS_MIDI_OUTPUT TRUE
+  VERSION "1.2.0")
+
+target_sources(
+  pizmidi_AudioToCC
+  PRIVATE # Headers
+          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCC.h"
+          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCCEditor.h"
+          # Sources
+          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCCEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCC.cpp")
+
+target_link_libraries(
+  pizmidi_AudioToCC PUBLIC juce::juce_audio_devices juce::juce_core
+                           juce::juce_gui_basics)

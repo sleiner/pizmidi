@@ -23,9 +23,11 @@
 #define __JUCER_HEADER_AUDIOTOCCEDITOR_AUDIOTOCCEDITOR_14735CEB__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "AudioToCC.h"
-#include "../../common/VSTSlider.h"
-#include "../../common/LookAndFeel.h"
+#include "../_common/VSTSlider.h"
 
 class DecibelMeter : public Slider
 {
@@ -36,7 +38,7 @@ public:
 	}
 	~DecibelMeter() {}
 
-	const String getTextFromValue(double value)
+	String getTextFromValue(double value)
 	{
 		return value==0.0 ? " " : String (20.0 * log10(value),1) + " dB";
 	}
@@ -50,7 +52,7 @@ public:
 	}
 	~DecibelSlider() {}
 
-	const String getTextFromValue(double value)
+	String getTextFromValue(double value)
 	{
 		return value==0.0 ? "-inf" : String (20.0 * log10(value),1) + " dB";
 	}
@@ -76,9 +78,9 @@ public:
 */
 class AudioToCCEditor  : public AudioProcessorEditor,
                          public ChangeListener,
-                         public ButtonListener,
-                         public ComboBoxListener,
-                         public SliderListener,
+                         public Button::Listener,
+                         public ComboBox::Listener,
+                         public Slider::Listener,
                          public Timer
 {
 public:
@@ -105,8 +107,6 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-	NonShinyLookAndFeel Look;
-
 	int peakcounter;
 	void updateParametersFromFilter();
     AudioToCC* getFilter() const throw()       { return (AudioToCC*) getAudioProcessor(); }
