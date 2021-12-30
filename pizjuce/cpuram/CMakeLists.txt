@@ -10,13 +10,13 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   target_sources(
     pizmidi_CpuRam
     PRIVATE # Headers
-            "${CMAKE_CURRENT_LIST_DIR}/src/CpuRam.h"
-            "${CMAKE_CURRENT_LIST_DIR}/src/CpuRamEditor.h"
-            "${CMAKE_CURRENT_LIST_DIR}/src/cputime.h"
+            "${CMAKE_CURRENT_LIST_DIR}/CpuRam.h"
+            "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.h"
+            "${CMAKE_CURRENT_LIST_DIR}/cputime.h"
             # Sources
-            "${CMAKE_CURRENT_LIST_DIR}/src/CpuRamEditor.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/src/cputime.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/src/CpuRam.cpp")
+            "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.cpp"
+            "${CMAKE_CURRENT_LIST_DIR}/cputime.cpp"
+            "${CMAKE_CURRENT_LIST_DIR}/CpuRam.cpp")
 
   target_link_libraries(pizmidi_CpuRam PUBLIC)
 else()
