@@ -9,11 +9,11 @@ piz_add_plugin(
 target_sources(
   pizmidi_AudioToCC
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCC.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCCEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/AudioToCC.h"
+          "${CMAKE_CURRENT_LIST_DIR}/AudioToCCEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCCEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/AudioToCC.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/AudioToCCEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/AudioToCC.cpp")
 
 target_link_libraries(
   pizmidi_AudioToCC PUBLIC juce::juce_audio_devices juce::juce_core
