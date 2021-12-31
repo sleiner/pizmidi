@@ -14,4 +14,5 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 ### Serious problems are known
 
--   Middy Morphy
+-   Middy Morphy: sends nothing, UI looks very weird
+-   midiChords: Chords keyboard is not always updated properly

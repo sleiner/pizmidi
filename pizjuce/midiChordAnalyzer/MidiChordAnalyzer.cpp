@@ -13,9 +13,9 @@ PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 MidiChordAnalyzerPrograms::MidiChordAnalyzerPrograms ()
-: BankStorage("MidiChordAnalyzerValues", 1, 128)
+: BankStorage("MidiChordAnalyzerValues", 1, numProgs)
 {
-	for (int p=0;p<numProgs;p++)
+	for (int p=0;p<getNumPrograms();p++)
 	{
 		ValueTree progv("ProgValues");
 	}
@@ -39,16 +39,6 @@ void MidiChordAnalyzerPrograms::loadDefaultValues()
 			set(b, p, "lastUIHeight", 400);
 		}
 	}
-}
-
-void MidiChordAnalyzerPrograms::loadNoteMatrixFrom(ValueTree const& vt, int program)
-{
-	if (vt.getChildWithName("NoteMatrix_T0").isValid())
-		{
-			values_.removeChild(values_.getChild(program),0);
-			values_.addChild(vt,program,0);
-			values_.getChild(program).setProperty("progIndex",program,0);
-		}
 }
 
 //==============================================================================

@@ -140,7 +140,7 @@ public:
     /** @internal */
     void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity);
     /** @internal */
-    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber);
+    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity);
     /** @internal */
     void handleAsyncUpdate();
     /** @internal */

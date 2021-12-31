@@ -13,75 +13,81 @@ PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 MidiChordsPrograms::MidiChordsPrograms ()
-: ValueTree("midiChordsValues")
+: BankStorage("midiChordsValues", 1, numProgs)
 {
-	this->setProperty("lastProgram",0,0);
-	this->setProperty("Version",3,0);
-	for (int p=0;p<numProgs;p++) 
+	loadDefaults();
+}
+
+void MidiChordsPrograms::loadDefaults ()
+{
+	setGlobal("lastProgram",0);
+	setGlobal("Version",4);
+	for (int b=0;b<getNumBanks();b++)
 	{
-		ValueTree progv("ProgValues");
-		progv.setProperty("progIndex",p,0);
-
-		progv.setProperty("Channel",0,0);
-		progv.setProperty("LearnChannel",0,0);
-		progv.setProperty("OutChannel",0,0);
-		progv.setProperty("FollowInput",true,0);
-		progv.setProperty("Transpose",0,0);
-		progv.setProperty("ChordMode",Normal,0);
-		progv.setProperty("Root",60,0);
-		progv.setProperty("Guess",true,0);
-		progv.setProperty("Flats",false,0);
-		progv.setProperty("UsePC",false,0);
-		progv.setProperty("Velocity",100,0);
-		progv.setProperty("InputTranspose",false,0);
-		progv.setProperty("ToAllChannels",false,0);
-
-		progv.setProperty("Strum",false,0);
-		progv.setProperty("Speed",0.5f,0);
-		progv.setProperty("MaxDelay",0.f,0);
-		progv.setProperty("VelRamp",0.5f,0);
-		progv.setProperty("Accel",0.5f,0);
-
-
-		progv.setProperty("Name","Program "+ String(p+1),0);
-		progv.setProperty("lastUIWidth",600,0);
-		progv.setProperty("lastUIHeight",400,0);
-		progv.setProperty("lastTrigger",60,0);
-
-		progv.setProperty("GuitarView",false,0);
-		progv.setProperty("NumStrings",6,0);
-		progv.setProperty("NumFrets",24,0);
-		progv.setProperty("String0",64,0);
-		progv.setProperty("String1",59,0);
-		progv.setProperty("String2",55,0);
-		progv.setProperty("String3",50,0);
-		progv.setProperty("String4",45,0);
-		progv.setProperty("String5",40,0);
-		progv.setProperty("String6",-1,0);
-		progv.setProperty("String7",-1,0);
-		progv.setProperty("String8",-1,0);
-		progv.setProperty("String9",-1,0);
-		progv.setProperty("String10",-1,0);
-		progv.setProperty("String11",-1,0);
-		progv.setProperty("String12",-1,0);
-		progv.setProperty("String13",-1,0);
-		progv.setProperty("String14",-1,0);
-		progv.setProperty("String15",-1,0);
-
-		for (int t=0;t<128;t++)
+		for (int p=0;p<getNumPrograms();p++)
 		{
-			progv.setProperty("Bypassed"+String(t),false,0);
-			progv.setProperty("StrumUp"+String(t),true,0);
-			ValueTree noteMatrix("NoteMatrix_T"+String(t));
-			//for (int c=0;c<16;c++) {
-			//	noteMatrix.setProperty("Ch"+String(c)+"_0-31", 0, 0);
-			//	noteMatrix.setProperty("Ch"+String(c)+"_32-63", 0, 0);
-			//	noteMatrix.setProperty("Ch"+String(c)+"_64-95", 0, 0);
-			//	noteMatrix.setProperty("Ch"+String(c)+"_96-127", 0, 0);
-			//}
-			progv.addChild(noteMatrix,t,0);
+			set(p,"progIndex",p);
+
+			set(p,"Channel",0);
+			set(p,"LearnChannel",0);
+			set(p,"OutChannel",0);
+			set(p,"FollowInput",true);
+			set(p,"Transpose",0);
+			set(p,"ChordMode",Normal);
+			set(p,"Root",60);
+			set(p,"Guess",true);
+			set(p,"Flats",false);
+			set(p,"UsePC",false);
+			set(p,"Velocity",100);
+			set(p,"InputTranspose",false);
+			set(p,"ToAllChannels",false);
+
+			set(p,"Strum",false);
+			set(p,"Speed",0.5f);
+			set(p,"MaxDelay",0.f);
+			set(p,"VelRamp",0.5f);
+			set(p,"Accel",0.5f);
+
+
+			set(p,"Name","Program "+ String(p+1));
+			set(p,"lastUIWidth",600);
+			set(p,"lastUIHeight",400);
+			set(p,"lastTrigger",60);
+
+			set(p,"GuitarView",false);
+			set(p,"NumStrings",6);
+			set(p,"NumFrets",24);
+			set(p,"String0",64);
+			set(p,"String1",59);
+			set(p,"String2",55);
+			set(p,"String3",50);
+			set(p,"String4",45);
+			set(p,"String5",40);
+			set(p,"String6",-1);
+			set(p,"String7",-1);
+			set(p,"String8",-1);
+			set(p,"String9",-1);
+			set(p,"String10",-1);
+			set(p,"String11",-1);
+			set(p,"String12",-1);
+			set(p,"String13",-1);
+			set(p,"String14",-1);
+			set(p,"String15",-1);
+
+			for (int t=0;t<128;t++)
+			{
+				set(p,"Bypassed"+String(t),false);
+				set(p,"StrumUp"+String(t),true);
+				ValueTree noteMatrix("NoteMatrix_T"+String(t));
+				//for (int c=0;c<16;c++) {
+				//	noteMatrix.setProperty("Ch"+String(c)+"_0-31", 0, 0);
+				//	noteMatrix.setProperty("Ch"+String(c)+"_32-63", 0, 0);
+				//	noteMatrix.setProperty("Ch"+String(c)+"_64-95", 0, 0);
+				//	noteMatrix.setProperty("Ch"+String(c)+"_96-127", 0, 0);
+				//}
+				values_.getChild(b).getChild(p).addChild(noteMatrix,t,0);
+			}
 		}
-		this->addChild(progv,p,0);
 	}
 
 	//DBG(this->createXml()->createDocument(""));
@@ -92,13 +98,13 @@ MidiChords::MidiChords() : programs(0), curProgram(0)
 {
 	DBG("MidiChords()");
 
-	dataPath = getCurrentPath() + File::separatorString + "midiChords"; 
+	dataPath = getCurrentPath() + File::getSeparatorString() + "midiChords";
 	if (!File(dataPath).exists()) {
 		dataPath = File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName()
-			+ File::separatorString + "pizmidi" + File::separatorString + "midiChords";
+			+ File::getSeparatorString() + "pizmidi" + File::getSeparatorString() + "midiChords";
 		if (!File(dataPath).exists()) {
 			dataPath = File::getSpecialLocation(File::commonApplicationDataDirectory).getFullPathName()
-				+ File::separatorString + "pizmidi" + File::separatorString + "midiChords";		
+				+ File::getSeparatorString() + "pizmidi" + File::getSeparatorString() + "midiChords";
 		}
 	}
 
@@ -170,13 +176,13 @@ int MidiChords::getNumParameters()
 void MidiChords::setCurrentProgram (int index)
 {
     //save non-parameter info to the old program, except the first time
-    if (!init) 
+    if (!init)
 		copySettingsToProgram(curProgram);
     init = false;
 
     //then set the new program
     curProgram = index;
-	programs->setProperty("lastProgram",index,0);
+	programs->setGlobal("lastProgram",index);
 	channel = programs->get(index,"Channel");
 	learnchan = programs->get(index,"LearnChannel");
 	outchan = programs->get(index,"OutChannel");
@@ -200,7 +206,7 @@ void MidiChords::setCurrentProgram (int index)
     lastUIWidth = programs->get(index,"lastUIWidth");
     lastUIHeight = programs->get(index,"lastUIHeight");
 	learn = false;
-	
+
 	for (int i=0;i<128;i++) {
 		progKbState[curProgram][i].reset();
 		for (int c=1;c<=16;c++) {
@@ -215,7 +221,7 @@ void MidiChords::setCurrentProgram (int index)
 	selectTrigger(programs->get(index,"lastTrigger"));
 	//if (getGuitarView())
 	//	translateToGuitarChord();
-	//else 
+	//else
 	//	sendChangeMessage();
 }
 
@@ -228,8 +234,8 @@ float MidiChords::getParameter (int index)
     case kOutChannel: return ((float)outchan)/16.f;
     case kVelocity: return ((float)(previewVel-1))/126.f;
 	case kUseProgCh: return usepc ? 1.f : 0.f;
-	case kLearnChord: return learn ? 1.f : 0.f; 
-	case kFollowInput: return follow ? 1.f : 0.f; 
+	case kLearnChord: return learn ? 1.f : 0.f;
+	case kFollowInput: return follow ? 1.f : 0.f;
 	case kTranspose: return ((float)transpose+48)/96.f;
 	case kMode: return (float)mode/(float)(numModes-1);
 	case kRoot: return (float)root/127.f;
@@ -380,7 +386,7 @@ const String MidiChords::getParameterName (int index)
 	if (index == kMaxDelay)		  return "MaxTime";
 	if (index == kVelRamp)		  return "VelRamp";
 	if (index == kAccel)		  return "Accel";
-	return String::empty;
+	return String();
 }
 
 const String MidiChords::getParameterText (int index)
@@ -392,7 +398,7 @@ const String MidiChords::getParameterText (int index)
     if (index == kOutChannel)
 		return outchan==0 ? "Multi" : String(outchan);
     if (index == kUseProgCh)
-        return usepc ? "Yes" : "No";    
+        return usepc ? "Yes" : "No";
 	if (index == kLearnChord)
         return learn ? "Yes" : "No";
 	if (index == kFollowInput)
@@ -409,15 +415,15 @@ const String MidiChords::getParameterText (int index)
 	if (index==kRoot)
 		return String(root);
     if (index == kGuess)
-        return guess ? "Yes" : "No";  
+        return guess ? "Yes" : "No";
     if (index == kFlats)
-        return flats ? "Yes" : "No";  
+        return flats ? "Yes" : "No";
 	if (index == kVelocity)
 		return String(previewVel);
     if (index == kInputTranspose)
-        return inputtranspose ? "Yes" : "No";  
+        return inputtranspose ? "Yes" : "No";
     if (index == kToAllChannels)
-        return ccToAllChannels ? "Yes" : "No";  
+        return ccToAllChannels ? "Yes" : "No";
 	if (index == kStrum)
 		return strum ? "On" : "Off";
 	if (index == kSpeed)
@@ -426,17 +432,17 @@ const String MidiChords::getParameterText (int index)
 		return String(roundToInt(1000.f*(0.1f+2.9f*fMaxDelay))) + " ms";
 	if (index == kVelRamp) {
 		const int ramp = roundToInt(fVelRamp*200.f)-100;
-		if (ramp>0) 
+		if (ramp>0)
 			return "+" + String(ramp);
 		return String(ramp);
 	}
 	if (index == kAccel) {
 		const int accel = roundToInt(fAccel*200.f)-100;
-		if (accel>0) 
+		if (accel>0)
 			return "+" + String(accel);
 		return String(accel);
 	}
-	return String::empty;
+	return String();
 }
 
 const String MidiChords::getInputChannelName (const int channelIndex) const
@@ -513,11 +519,11 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
 	MidiMessage m(0xf0);
 	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample)) 
+	while(mid_buffer_iter.getNextEvent(m,sample))
 	{
 		bool blockOriginalEvent = false;
 		if (m.isProgramChange() && usepc) {// && (m.isForChannel(channel) || channel==0)) {
-			if (m.getProgramChangeNumber()<getNumPrograms()) 
+			if (m.getProgramChangeNumber()<getNumPrograms())
 				setCurrentProgram(m.getProgramChangeNumber());
 		}
 		if (channel==0 || m.isForChannel(channel))
@@ -530,7 +536,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 					playingChord[m.getNoteNumber()].add(ChordNote(m.getChannel(),m.getNoteNumber()));
 					chordNotePlaying[m.getChannel()][m.getNoteNumber()]=true;
 				}
-				else 
+				else
 				{
 					blockOriginalEvent = true;
 					const int ch = m.getChannel()-1;
@@ -570,7 +576,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 										}
 										playingChord[tnote].add(ChordNote(outputChannel,newNote));
 									}
-									else if (newNote < 128 && newNote >= 0) 
+									else if (newNote < 128 && newNote >= 0)
 									{
 										if (!strum) {
 											output.addEvent(MidiMessage::noteOn(outputChannel,newNote,v),sample);
@@ -591,7 +597,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 							float maxmax = (float)getSampleRate()*(0.1f+2.9f*fMaxDelay);
 							float maxdelay = (1.f-fSpeed)*maxmax;
 
-							while(chordpos<heldnotes) 
+							while(chordpos<heldnotes)
 							{
 								int p = upstroke ? chordpos : (heldnotes-1  - chordpos);
 								int delay = 0;
@@ -654,22 +660,22 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 						for (int i = 0; i<numNotes; i++) {
 							const int chordNote = playingChord[note][i].n;
 							const int c = playingChord[note][i].c - 1;
-							
+
 							int delay = noteDelay[c][chordNote];
-							if (!expectingDelayedNotes && strum) 
+							if (!expectingDelayedNotes && strum)
 							{
 								// strum time is shorter than the input note
 								delay = 0;//  (int)(totalSamples - noteOrigPos[c][chordNote])+sample +(int)(getSampleRate()/1000.f);
 							}
 							if ((noteDelay[c][chordNote]+noteOrigPos[c][chordNote])
-								>= (totalSamples+delay - (int)(getSampleRate()/100.f))) 
+								>= (totalSamples+delay - (int)(getSampleRate()/100.f)))
 							{
 								// strum time is longer than input note -> arpeggio
 								delay = noteDelay[c][chordNote] + (int)(getSampleRate()/1000.f);
 							}
-							if (!ignoreNextNoteOff[c].contains(chordNote)) 
+							if (!ignoreNextNoteOff[c].contains(chordNote))
 							{
-								if (delay>0) 
+								if (delay>0)
 								{
 									delayBuffer.addEvent(MidiMessage::noteOff(c+1,chordNote),sample+delay);
 								}
@@ -713,7 +719,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 				const uint8 v = m.getVelocity();
 				if (learn)
 				{
-					if (learning==0) 
+					if (learning==0)
 					{
 						progKbState[curProgram][curTrigger].reset();
 						chordKbState.reset();
@@ -755,7 +761,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 	expectingDelayedNotes=false;
     MidiBuffer newBuffer;
 	MidiBuffer::Iterator mid_buffer_iter2(delayBuffer);
-	while(mid_buffer_iter2.getNextEvent(m,sample)) 
+	while(mid_buffer_iter2.getNextEvent(m,sample))
 	{
 		if (sample < buffer.getNumSamples()) {
             //event is due, send it
@@ -770,7 +776,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 			else if (m.isNoteOff()) {
 				const int c = m.getChannel()-1;
 				const int n = m.getNoteNumber();
-				if (!ignoreNextNoteOff[c].contains(n)) 
+				if (!ignoreNextNoteOff[c].contains(n))
 				{
 					output.addEvent(m,sample);
 					chordNotePlaying[c][n]=false;
@@ -782,11 +788,11 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
         else {
             //not due yet
 			newBuffer.addEvent(m,sample - buffer.getNumSamples());
-			if (m.isNoteOn()) 
+			if (m.isNoteOn())
 				expectingDelayedNotes = true;
 		}
     }
-	if (wasplaying && !pos.isPlaying) 
+	if (wasplaying && !pos.isPlaying)
 	{
         //
     }
@@ -796,7 +802,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 
 	midiMessages.clear();
 	midiMessages = output;
-	
+
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
@@ -813,32 +819,27 @@ AudioProcessorEditor* MidiChords::createEditor()
 void MidiChords::getStateInformation (MemoryBlock& destData)
 {
 	copySettingsToProgram(curProgram);
-	MemoryOutputStream m(destData,false);
-	programs->writeToStream(m);
+	programs->dumpTo(destData);
 }
 
 void MidiChords::getCurrentProgramStateInformation (MemoryBlock& destData)
 {
 	copySettingsToProgram(curProgram);
-	MemoryOutputStream m(destData,false);
-	programs->getChild(curProgram).writeToStream(m);
+	programs->dumpProgramTo(0, curProgram, destData);
 }
 
 void MidiChords::setStateInformation (const void* data, int sizeInBytes)
 {
 	MemoryInputStream m(data,sizeInBytes,false);
 	ValueTree vt = ValueTree::readFromStream(m);
+
+	programs->loadFrom(vt);
 	if (vt.isValid())
 	{
-		if ((int)vt.getProperty("Version",0)>=3)
+		if ((int)vt.getChildWithName("GlobalSettings").getProperty("Version",0)>=4)
 		{
-			programs->removeAllChildren(0);
-			for (int i=0;i<vt.getNumChildren();i++)
-			{
-				if ((int)vt.getChild(i).getProperty("Velocity")==0)
-					vt.getChild(i).setProperty("Velocity",100,0);
-				programs->addChild(vt.getChild(i).createCopy(),i,0);
-			}
+			programs->loadFrom(vt);
+			programs->fixupVelocity();
 		}
 		else {
 			for (int index=0;index<vt.getNumChildren();index++)
@@ -859,7 +860,7 @@ void MidiChords::setStateInformation (const void* data, int sizeInBytes)
 				programs->set(index,"Velocity",100);
 
 				for (int trigger=0;trigger<128;trigger++) {
-					for (int ch=0;ch<16;ch++) {	
+					for (int ch=0;ch<16;ch++) {
 						for (int n=0;n<128;n++) {
 							if (n<32) {
 								int state = vt.getChild(index).getChild(ch).getProperty("T"+String(trigger)+"_0-31",0);
@@ -900,13 +901,9 @@ void MidiChords::setCurrentProgramStateInformation (const void* data, int sizeIn
 	ValueTree vt = ValueTree::readFromStream(m);
 	if ((int)vt.getProperty("Velocity")==0)
 		vt.setProperty("Velocity",100,0);
-	if(vt.getChildWithName("NoteMatrix_T0").isValid())
-	{
-		programs->removeChild(programs->getChild(curProgram),0);
-		programs->addChild(vt,curProgram,0);
-		programs->getChild(curProgram).setProperty("progIndex",curProgram,0);
-	}
-	else {
+
+	bool successfully_loaded = programs->loadNoteMatrixFrom(vt, curProgram);
+	if (!successfully_loaded) {
 		programs->set(curProgram,"Channel",vt.getProperty("Channel"));
 		programs->set(curProgram,"LearnChannel",vt.getProperty("LearnChannel"));
 		programs->set(curProgram,"UsePC",vt.getProperty("UsePC"));
@@ -922,10 +919,10 @@ void MidiChords::setCurrentProgramStateInformation (const void* data, int sizeIn
 		programs->set(curProgram,"Flats",vt.getProperty("Flats"));
 		programs->set(curProgram,"Velocity",100);
 
-		programs->getChild(curProgram).setProperty("progIndex",curProgram,0);
+		programs->set(curProgram, "progIndex", curProgram);
 		for (int trigger=0;trigger<128;trigger++) {
 			programs->clearNoteMatrix(curProgram,trigger);
-			for (int ch=0;ch<16;ch++) {	
+			for (int ch=0;ch<16;ch++) {
 				for (int n=0;n<128;n++) {
 					if (n<32) {
 						int state = vt.getChild(curProgram).getChild(ch).getProperty("T"+String(trigger)+"_0-31",0);
@@ -967,19 +964,19 @@ void MidiChords::selectTrigger(int index)
 	{
 		if (mode==Octave)
 			index = 60 + index%12;
-		triggerKbState.noteOff(1,curTrigger);
+		triggerKbState.noteOff(1,curTrigger,1.f);
 		curTrigger = index;
 		triggerKbState.noteOn(1,index,1.f);
 		chordKbState.reset();
 		for (int c=1;c<=16;c++) {
 			for (int i=0;i<128;i++)
-				if (progKbState[curProgram][index].isNoteOn(c,i)) 
+				if (progKbState[curProgram][index].isNoteOn(c,i))
 					chordKbState.noteOn(c,i,1.f);
 		}
 		programs->set(curProgram,"lastTrigger",index);
 		if (getGuitarView())
 			translateToGuitarChord();
-		else 
+		else
 			sendChangeMessage();
 	}
 }
@@ -995,8 +992,8 @@ void MidiChords::selectChordNote(int index, int note, bool on, int ch)
 			++numChordNotes[curProgram][index];
 		}
 		else {
-			progKbState[curProgram][index].noteOff(ch,note);
-			if (index==curTrigger) chordKbState.noteOff(ch,note);
+			progKbState[curProgram][index].noteOff(ch,note,1.f);
+			if (index==curTrigger) chordKbState.noteOff(ch,note,1.f);
 			--numChordNotes[curProgram][index];
 		}
 		programs->setChordNote(curProgram,index,ch,note,on);
@@ -1032,7 +1029,7 @@ void MidiChords::copySettingsToProgram(int index)
 
 	for (int i=0;i<128;i++) {
 		programs->clearNoteMatrix(index,i);
-		for (int c=1;c<=16;c++) {	
+		for (int c=1;c<=16;c++) {
 			for (int n=0;n<128;n++) {
 				if (progKbState[index][i].isNoteOn(c,n))
 					programs->setChordNote(index,i,c,n,true);
@@ -1052,7 +1049,7 @@ void MidiChords::clearAllChords()
 	sendChangeMessage();
 }
 
-void MidiChords::resetAllChords() 
+void MidiChords::resetAllChords()
 {
 	int ch = jmax(1,learnchan);
 	for (int i=0;i<128;i++) {
@@ -1066,7 +1063,7 @@ void MidiChords::resetAllChords()
 	chordKbState.noteOn(ch,curTrigger,1.f);
 	if (getGuitarView())
 		translateToGuitarChord();
-	else 
+	else
 		sendChangeMessage();
 }
 
@@ -1107,7 +1104,7 @@ void MidiChords::clearChord(int trigger)
 	numChordNotes[curProgram][trigger]=0;
 	progKbState[curProgram][trigger].reset();
 	programs->clearNoteMatrix(curProgram,trigger);
-	if (trigger==curTrigger) 
+	if (trigger==curTrigger)
 	{
 		chordKbState.reset();
 		sendChangeMessage();
@@ -1123,13 +1120,13 @@ void MidiChords::resetChord(int trigger)
 	progKbState[curProgram][trigger].noteOn(ch,trigger,1.f);
 	programs->clearNoteMatrix(curProgram,trigger);
 	programs->setChordNote(curProgram,trigger,ch,trigger,true);
-	if (trigger==curTrigger) 
+	if (trigger==curTrigger)
 	{
 		chordKbState.reset();
 		chordKbState.noteOn(ch,curTrigger,1.f);
 		if (getGuitarView())
 			translateToGuitarChord();
-		else 
+		else
 			sendChangeMessage();
 	}
 }
@@ -1145,28 +1142,28 @@ void MidiChords::transposeAll(bool up)
 				oldState[c][n] = progKbState[curProgram][i].isNoteOn(c+1,n);
 		}
 		progKbState[curProgram][i].reset();
-		for (int c=0;c<16;c++) 
+		for (int c=0;c<16;c++)
 		{
 			for (int n=0;n<128;n++)
 			{
 				if (oldState[c][n]) {
-					if (up) 
+					if (up)
 					{
 						progKbState[curProgram][i].noteOn(c+1,n+1,1.f);
 						programs->setChordNote(curProgram,i,c+1,n+1,true);
-						if (i==curTrigger) 
+						if (i==curTrigger)
 							chordKbState.noteOn(c+1,n+1,1.f);
 
 					}
 					else {
 						progKbState[curProgram][i].noteOn(c+1,n-1,1.f);
 						programs->setChordNote(curProgram,i,c+1,n-1,true);
-						if (i==curTrigger) 
+						if (i==curTrigger)
 							chordKbState.noteOn(c+1,n-1,1.f);
 					}
 				}
 				else {
-					if (up) 
+					if (up)
 						programs->setChordNote(curProgram,i,c+1,n+1,false);
 					else
 						programs->setChordNote(curProgram,i,c+1,n-1,false);
@@ -1188,31 +1185,31 @@ void MidiChords::transposeChord(int trigger, bool up)
 			oldState[c][n] = progKbState[curProgram][trigger].isNoteOn(c+1,n);
 	}
 	progKbState[curProgram][trigger].reset();
-	if (trigger==curTrigger) 
+	if (trigger==curTrigger)
 		chordKbState.reset();
 	for (int c=0;c<16;c++) {
 		for (int n=0;n<128;n++)
 		{
 			if (oldState[c][n]) {
 				int newNote = n;
-				if (up) 
+				if (up)
 				{
 					newNote+=1;
 					progKbState[curProgram][trigger].noteOn(c+1,newNote,1.f);
 					programs->setChordNote(curProgram,trigger,c+1,newNote,true);
-					if (trigger==curTrigger) 
+					if (trigger==curTrigger)
 						chordKbState.noteOn(c+1,newNote,1.f);
 				}
 				else {
 					newNote-=1;
 					progKbState[curProgram][trigger].noteOn(c+1,newNote,1.f);
 					programs->setChordNote(curProgram,trigger,c+1,newNote,true);
-					if (trigger==curTrigger) 
+					if (trigger==curTrigger)
 						chordKbState.noteOn(c+1,newNote,1.f);
 				}
 			}
 			else {
-				if (up) 
+				if (up)
 					programs->setChordNote(curProgram,trigger,c+1,n+1,false);
 				else
 					programs->setChordNote(curProgram,trigger,c+1,n-1,false);
@@ -1241,7 +1238,7 @@ void MidiChords::transposeCurrentChordByOctave(bool up)
 		for (int n=0;n<128;n++)
 		{
 			if (oldState[c][n]) {
-				if (up) 
+				if (up)
 				{
 					progKbState[curProgram][curTrigger].noteOn(c+1,n+12,1.f);
 					programs->setChordNote(curProgram,curTrigger,c+1,n+12,true);
@@ -1254,7 +1251,7 @@ void MidiChords::transposeCurrentChordByOctave(bool up)
 				}
 			}
 			else {
-				if (up) 
+				if (up)
 					programs->setChordNote(curProgram,curTrigger,c+1,n+12,false);
 				else
 					programs->setChordNote(curProgram,curTrigger,c+1,n-12,false);
@@ -1268,7 +1265,7 @@ void MidiChords::transposeCurrentChordByOctave(bool up)
 
 void MidiChords::applyChannelToChord()
 {
-	if (learnchan>0 && !getGuitarView()) 
+	if (learnchan>0 && !getGuitarView())
 	{
 		programs->clearNoteMatrix(curProgram,curTrigger);
 		chordKbState.reset();
@@ -1279,7 +1276,7 @@ void MidiChords::applyChannelToChord()
 				for (int ch=1;ch<=16;ch++)
 				{
 					if (progKbState[curProgram][curTrigger].isNoteOn(ch,n))
-						progKbState[curProgram][curTrigger].noteOff(ch,n);
+						progKbState[curProgram][curTrigger].noteOff(ch,n,1.f);
 				}
 				progKbState[curProgram][curTrigger].noteOn(learnchan,n,1.f);
 				programs->setChordNote(curProgram,curTrigger,learnchan,n,true);
@@ -1297,7 +1294,7 @@ void MidiChords::savePreset(String name)
 	{
 	case Global: contents+="Global\n"; break;
 	case Octave: contents+="Octave\n"; break;
-	case Normal: 
+	case Normal:
 	default:
 		contents+="Full\n"; break;
 	}
@@ -1320,7 +1317,7 @@ void MidiChords::savePreset(String name)
 		if (usingTrigger)
 			contents += "\n";
 	}
-	File chordFile(dataPath+File::separatorString+"mappings"+File::separatorString+name+".chords");
+	File chordFile(dataPath+File::getSeparatorString()+"mappings"+File::getSeparatorString()+name+".chords");
 
 	FileChooser myChooser ("Save preset...",chordFile,"*.chords");
 
@@ -1343,28 +1340,28 @@ bool MidiChords::readKeyFile(File file)
 		copy=true;
 	}
 	else {
-		file = File(dataPath+File::separatorString+"midiChordsKey.txt");
+		file = File(dataPath+File::getSeparatorString()+"midiChordsKey.txt");
 		if (!file.exists())
-			file = File(getCurrentPath()+File::separatorString+"midiChordsKey.txt");
+			file = File(getCurrentPath()+File::getSeparatorString()+"midiChordsKey.txt");
 		//if (!file.exists())
-		//	file = File(folderPath+File::separatorString+"midiChordsKey.txt");
+		//	file = File(folderPath+File::getSeparatorString()+"midiChordsKey.txt");
 	}
 
 	if (file.exists()) {
 		if (file.hasFileExtension("zip"))
 		{
 			if (ZipFile(file).uncompressTo(File(dataPath)))
-				file = File(dataPath+File::separatorString+"midiChordsKey.txt");
+				file = File(dataPath+File::getSeparatorString()+"midiChordsKey.txt");
 		}
-		XmlElement* xmlKey = decodeEncryptedXml(file.loadFileAsString(),"3,5097efd7266b329e878e65129df0c8fe3ffc188abd24625e3709c65b304f5e2bdfa157e6c3cc6de5c29e36138c29f2516b56c55827aa238135bf1e23b6cab4f7");
+		auto xmlKey = decodeEncryptedXml(file.loadFileAsString(),"3,5097efd7266b329e878e65129df0c8fe3ffc188abd24625e3709c65b304f5e2bdfa157e6c3cc6de5c29e36138c29f2516b56c55827aa238135bf1e23b6cab4f7");
 		if ( !xmlKey->getStringAttribute("product").compare("midiChords 1.x")
 			&& xmlKey->getStringAttribute("username").isNotEmpty()
 			&& xmlKey->getStringAttribute("time").isNotEmpty() )
 		{
 			demo=false;
 			//infoString = "Registered to " + xmlKey->getStringAttribute("username");
-			if (copy) 
-				file.copyFileTo(File(dataPath+File::separatorString+"midiChordsKey.txt"));
+			if (copy)
+				file.copyFileTo(File(dataPath+File::getSeparatorString()+"midiChordsKey.txt"));
 			sendChangeMessage();
 		}
 		else
@@ -1372,7 +1369,6 @@ bool MidiChords::readKeyFile(File file)
 			//infoString = "Bad midiChordsKey";
 			sendChangeMessage();
 		}
-		if (xmlKey) deleteAndZero(xmlKey);
 		return true;
 	}
 	return false;
@@ -1381,8 +1377,8 @@ bool MidiChords::readKeyFile(File file)
 void MidiChords::readChorderPreset(File file)
 {
 	XmlDocument xmlDoc(file);
-	ScopedPointer<XmlElement> e (xmlDoc.getDocumentElement());
-	if (e != 0)
+    auto e (xmlDoc.getDocumentElement());
+	if (e != nullptr)
 	{
 		MemoryBlock data;
 		data.loadFromHexString(e->getAllSubText());
@@ -1406,7 +1402,7 @@ void MidiChords::readChorderPreset(File file)
 			uint32 header7;
 			uint8 kbSect7[16];
 		};
-		
+
 		int ch = jmax(learnchan,1);
 		//chordKbState.reset();
 		ChorderMapping map;
@@ -1426,7 +1422,7 @@ void MidiChords::readChorderPreset(File file)
 				}
 			}
 		}
-		int otherSettings[5]; // 0: ?, 1: mode, 2: Layer switch, 3: Thru, 4: Used Layers 
+		int otherSettings[5]; // 0: ?, 1: mode, 2: Layer switch, 3: Thru, 4: Used Layers
 		data.copyTo(&otherSettings,128*sizeof(map),sizeof(otherSettings));
 
 		if (otherSettings[1]==0)
@@ -1551,7 +1547,7 @@ void MidiChords::translateToGuitarChord(bool force)
 void MidiChords::fillGuitarPresetList ()
 {
 	guitarPresets.clearQuick();
-	File chordPath(dataPath+File::separatorString+"guitars");
+	File chordPath(dataPath+File::getSeparatorString()+"guitars");
 	Array<File> files;
 	chordPath.findChildFiles(files,File::findFiles,true);
 	for (int i=0;i<files.size();i++)
@@ -1582,6 +1578,6 @@ void MidiChords::toggleUsePC(bool use)
 {
 	for (int i=0;i<getNumPrograms();i++)
 		programs->set(i,"UsePC",use);
-	
+
 	setParameterNotifyingHost(kUseProgCh, use ? 1.f : 0.f);
 }

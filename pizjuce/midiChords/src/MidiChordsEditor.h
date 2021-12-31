@@ -22,14 +22,15 @@
 #ifndef __JUCER_HEADER_MIDICHORDSEDITOR_MIDICHORDSEDITOR_EF9903BE__
 #define __JUCER_HEADER_MIDICHORDSEDITOR_MIDICHORDSEDITOR_EF9903BE__
 
+#include "juce_audio_utils/juce_audio_utils.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 //[Headers]     -- You can add your own extra header files here --
 #include "MidiChords.h"
-#include "../../common/ChannelSlider.h"
-#include "../../common/NoteSlider.h"
-#include "../../common/VSTSlider.h"
-#include "../../common/GuitarNeckComponent.h"
-#include "../../common/LookAndFeel.h"
-
+#include "../_common/ChannelSlider.h"
+#include "../_common/NoteSlider.h"
+#include "../_common/VSTSlider.h"
+#include "../_common/GuitarNeckComponent.h"
 
 class FretsSlider : public Slider
 {
@@ -438,7 +439,7 @@ private:
 		}
 		return false;
 	}
-	virtual void mouseDraggedToKey (int midiNoteNumber, const MouseEvent& e)
+	bool mouseDraggedToKey (int midiNoteNumber, const MouseEvent& e) override
 	{
 		if (e.mods.isShiftDown() || e.mods.isPopupMenu())
 		{
@@ -451,12 +452,14 @@ private:
 			else
 				owner->selectTrigger(midiNoteNumber);
 		}
+
+		return true;
 	}
 };
 
 //[/Headers]
 
-#include "../../common/PizButton.h"
+#include "../_common/PizButton.h"
 
 
 //==============================================================================
@@ -469,12 +472,12 @@ private:
 */
 class MidiChordsEditor  : public AudioProcessorEditor,
                           public ChangeListener,
-                          public TextEditorListener,
+                          public TextEditor::Listener,
                           public FileDragAndDropTarget,
                           public FileBrowserListener,
-                          public ButtonListener,
-                          public SliderListener,
-                          public LabelListener
+                          public Button::Listener,
+                          public Slider::Listener,
+                          public Label::Listener
 {
 public:
     //==============================================================================

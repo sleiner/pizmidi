@@ -17,6 +17,7 @@ public:
   juce::var getGlobal(juce::String name);
 
   void loadFrom(juce::ValueTree const &vt);
+  bool loadNoteMatrixFrom(juce::ValueTree const& vt, int program);
   void dumpTo(juce::MemoryBlock &destination);
   void dumpProgramTo(int bank, int program, juce::MemoryBlock &destination);
 

@@ -1,14 +1,19 @@
 #ifndef MidiChordsPLUGINFILTER_H
 #define MidiChordsPLUGINFILTER_H
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "../../common/PizAudioProcessor.h"
-#include "../../common/midistuff.h"
-#include "../../common/ChordFunctions.h"
-#include "../../common/key.h"
+#include "juce_core/juce_core.h"
+#include "juce_data_structures/juce_data_structures.h"
+
+#include "../_common/PizAudioProcessor.h"
+#include "../_common/midistuff.h"
+#include "../_common/ChordFunctions.h"
+#include "../_common/key.h"
+#include "../_common/BankStorage.h"
+
+using namespace juce;
 
 enum parameters {
-    kChannel, 
+    kChannel,
 	kLearnChord,
 	kFollowInput,
 	kTranspose,
@@ -60,7 +65,7 @@ class GuitarDefinition {
 public:
 	GuitarDefinition()
 	{
-		guitarName = String::empty;
+		guitarName = String();
 		chordFile = "Chords.txt";
 		numFrets = 0;
 		numStrings = 0;
@@ -83,125 +88,110 @@ public:
 	String chordFile;
 };
 
-class MidiChordsPrograms : ValueTree {
+class MidiChordsPrograms : public BankStorage {
 public:
-	friend class MidiChords;
 	MidiChordsPrograms ();
-	~MidiChordsPrograms () {};
 
-	void set(int prog, const var::identifier &name, const var &newValue)
+	void set(int prog, const Identifier &name, const var &newValue)
 	{
-		this->getChild(prog).setProperty(name,newValue,0);
+		BankStorage::set(0, prog, name.toString(), newValue);
 	}
 
 	void clearNoteMatrix(int prog, int trigger)
 	{
-		if(getChild(prog).getChild(trigger).isValid())
-			getChild(prog).getChild(trigger).removeAllProperties(0);
+		auto noteMatrix = values_.getChild(0).getChild(prog).getChild(trigger);
+		if(noteMatrix.isValid())
+			noteMatrix.removeAllProperties(0);
 	}
 
 	void setChordNote(int prog, int trigger, int channel, int note, const bool &newValue)
 	{
 		channel-=1;
-		if (!getChild(prog).getChild(trigger).isValid())
+		auto triggerProp = values_.getChild(0).getChild(prog).getChild(trigger);
+
+		if (!triggerProp.isValid())
 		{
 			ValueTree noteMatrix("NoteMatrix_T"+String(trigger));
-			getChild(prog).addChild(noteMatrix,trigger,0);
+			values_.getChild(0).getChild(prog).addChild(noteMatrix,trigger,0);
 		}
 		if (note<32) {
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(channel)+"_0-31",0);
-			if (newValue) 
+			int state = triggerProp.getProperty("Ch"+String(channel)+"_0-31",0);
+			if (newValue)
 				state |= 1 << note;
-			else 
+			else
 				state &= ~(1<<note);
-			getChild(prog).getChild(trigger).setProperty("Ch"+String(channel)+"_0-31",state,0);
+			triggerProp.setProperty("Ch"+String(channel)+"_0-31",state,0);
 		}
 		else if (note<64) {
 			note -= 32;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(channel)+"_32-63",0);
+			int state = triggerProp.getProperty("Ch"+String(channel)+"_32-63",0);
 			if (newValue) state |= 1 << note;
 			else state &= ~(1<<note);
-			getChild(prog).getChild(trigger).setProperty("Ch"+String(channel)+"_32-63",state,0);
+			triggerProp.setProperty("Ch"+String(channel)+"_32-63",state,0);
 		}
 		else if (note<96) {
 			note -= 64;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(channel)+"_64-95",0);
+			int state = triggerProp.getProperty("Ch"+String(channel)+"_64-95",0);
 			if (newValue) state |= 1 << note;
 			else state &= ~(1<<note);
-			getChild(prog).getChild(trigger).setProperty("Ch"+String(channel)+"_64-95",state,0);
+			triggerProp.setProperty("Ch"+String(channel)+"_64-95",state,0);
 		}
 		else if (note<128) {
 			note -= 96;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(channel)+"_96-127",0);
+			int state = triggerProp.getProperty("Ch"+String(channel)+"_96-127",0);
 			if (newValue) state |= 1 << note;
 			else state &= ~(1<<note);
-			getChild(prog).getChild(trigger).setProperty("Ch"+String(channel)+"_96-127",state,0);
+			triggerProp.setProperty("Ch"+String(channel)+"_96-127",state,0);
 		}
 	}
 
-	const var get(int prog, const var::identifier &name)
+	const var get(int prog, const Identifier &name)
 	{
-		return this->getChild(prog).getProperty(name);
+		return BankStorage::get(0, prog, name.toString());
 	}
 
 	bool getChordNote(int prog, int trigger, int ch, int note)
 	{
 		ch-=1;
-		if (!getChild(prog).getChild(trigger).isValid())
+		auto triggerProp = values_.getChild(0).getChild(prog).getChild(trigger);
+
+		if (!triggerProp.isValid())
 			return false;
 		if (note<32) {
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(ch)+"_0-31",0);
+			int state = triggerProp.getProperty("Ch"+String(ch)+"_0-31",0);
 			return (state & (1 << note)) != 0;
 		}
 		else if (note<64) {
 			note -= 32;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(ch)+"_32-63",0);
+			int state = triggerProp.getProperty("Ch"+String(ch)+"_32-63",0);
 			return (state & (1 << note)) != 0;
 		}
 		else if (note<96) {
 			note -= 64;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(ch)+"_64-95",0);
+			int state = triggerProp.getProperty("Ch"+String(ch)+"_64-95",0);
 			return (state & (1 << note)) != 0;
 		}
 		else if (note<128) {
 			note -= 96;
-			int state = getChild(prog).getChild(trigger).getProperty("Ch"+String(ch)+"_96-127",0);
+			int state = triggerProp.getProperty("Ch"+String(ch)+"_96-127",0);
 			return (state & (1 << note)) != 0;
 		}
 		return false;
 	}
 
-	bool getChordNote_OLD(int prog, int trigger, int ch, int note)
-	{
-		ch-=1;
-		if (!getChild(prog).getChild(ch).isValid())
-			return false;
-		if (note<32) {
-			int state = getChild(prog).getChild(ch).getProperty("T"+String(trigger)+"_0-31",0);
-			return (state & (1 << note)) != 0;
+	void fixupVelocity() {
+		for (int b = 0; b < values_.getNumChildren(); b++) {
+			auto bank = values_.getChild(b);
+			for (int p = 0; p < bank.getNumChildren(); p++) {
+				if (BankStorage::get(b, p, "Velocity") == var(0)) {
+					BankStorage::set(b, p, "Velocity", 100);
+				}
+			}
 		}
-		else if (note<64) {
-			note -= 32;
-			int state = getChild(prog).getChild(ch).getProperty("T"+String(trigger)+"_32-63",0);
-			return (state & (1 << note)) != 0;
-		}
-		else if (note<96) {
-			note -= 64;
-			int state = getChild(prog).getChild(ch).getProperty("T"+String(trigger)+"_64-95",0);
-			return (state & (1 << note)) != 0;
-		}
-		else if (note<128) {
-			note -= 96;
-			int state = getChild(prog).getChild(ch).getProperty("T"+String(trigger)+"_96-127",0);
-			return (state & (1 << note)) != 0;
-		}
-		return false;
 	}
 
-	MidiChordsPrograms(ValueTree& tree)
-	{
-		this->getChild(0).getParent() = tree.createCopy();
-	}
+private:
+	void loadDefaults();
 };
 
 //==============================================================================
@@ -249,6 +239,7 @@ public:
     void setCurrentProgram (int index);
     const String getProgramName (int index)                     { return programs->get(index,"Name"); }
     void changeProgramName (int index, const String& newName)   { programs->set(index,"Name",newName); }
+	double getTailLengthSeconds() const override                { return 0; }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData);
@@ -275,9 +266,9 @@ public:
 	{
 		programs->set(curProgram,"Bypassed"+String(note),bypass);
 	}
-	bool isNoteBypassed(int note) 
+	bool isNoteBypassed(int note)
 	{
-		return programs->getChild(curProgram).getProperty("Bypassed"+String(note),false);
+		return programs->get(curProgram, "Bypassed"+String(note));
 	}
 	void clearAllChords();
 	void resetAllChords();
@@ -290,7 +281,7 @@ public:
 	void applyChannelToChord();
 	String getCurrentChordName();
 	void savePreset(String name);
-	void playCurrentChord(bool on) 
+	void playCurrentChord(bool on)
 	{
 		if (on) playFromGUI = true;
 		else stopPlayingFromGUI = true;
@@ -358,12 +349,12 @@ public:
 		return programs->get(curProgram,"StrumUp"+String(curTrigger));
 	}
 	void readChorderPreset(File file);
-	bool readKeyFile(File file=File::nonexistent);
+	bool readKeyFile(File file=File());
 	bool demo;
 
 	Array<GuitarDefinition> guitarPresets;
 	void fillGuitarPresetList ();
-	
+
 	void toggleUsePC(bool use);
 
 	String dataPath;

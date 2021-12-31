@@ -46,6 +46,20 @@ void BankStorage::loadFrom(juce::ValueTree const &vt) {
   }
 }
 
+bool BankStorage::loadNoteMatrixFrom(juce::ValueTree const& vt, int program)
+{
+  if (vt.getChildWithName("NoteMatrix_T0").isValid())
+    {
+      values_.removeChild(values_.getChild(program),0);
+      values_.addChild(vt,program,0);
+      values_.getChild(program).setProperty("progIndex",program,0);
+
+      return true;
+    }
+
+    return false;
+}
+
 void BankStorage::dumpTo(juce::MemoryBlock &destination) {
   juce::MemoryOutputStream stream(destination, false);
   values_.writeToStream(stream);

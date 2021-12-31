@@ -23,8 +23,6 @@ class MidiChordAnalyzerPrograms : public BankStorage {
 public:
 	MidiChordAnalyzerPrograms ();
 
-    void loadNoteMatrixFrom(ValueTree const& vt, int program);
-
 private:
     void loadDefaultValues();
 };

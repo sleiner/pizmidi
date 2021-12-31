@@ -351,7 +351,7 @@ void GuitarNeckComponent::handleNoteOn (MidiKeyboardState*, int /*midiChannel*/,
     triggerAsyncUpdate();
 }
 
-void GuitarNeckComponent::handleNoteOff (MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/)
+void GuitarNeckComponent::handleNoteOff (MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/, float /*velocity*/)
 {
     triggerAsyncUpdate();
 }
