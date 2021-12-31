@@ -1653,7 +1653,7 @@ String const MidiChordsEditor::getCurrentChordName()
 	Array<int> chord;
 	for (int n=0;n<128;n++)
 	{
-		for (int c=0;c<=16;c++)
+		for (int c=1;c<=16;c++)
 		{
 			if (getFilter()->progKbState[getFilter()->getCurrentProgram()][getFilter()->getCurrentTrigger()].isNoteOn(c,n))
 				chord.add(n);
