@@ -137,7 +137,7 @@ class ChordsKeyboardComponent : public MidiKeyboardComponent
 public:
 	ChordsKeyboardComponent(MidiKeyboardState &state, MidiChords* ownerFilter)
 		: MidiKeyboardComponent(state,MidiKeyboardComponent::horizontalKeyboard),
-		owner(0)
+		owner(nullptr)
 	{
 		owner = ownerFilter;
 		s = &state;
@@ -298,6 +298,14 @@ protected:
 		owner->setSavedGuitarVoicing(false);
 		return false;
 	}
+
+    void mouseUpOnKey (int midiNoteNumber, const MouseEvent& e) override {
+		// In any case, a mouse up event leads to the key being switched off.
+		// But if that key was just toggled to "on", we have to send a note on message again.
+		if (owner->getCurrentKbState()->isNoteOn(1, midiNoteNumber)) {
+			owner->chordKbState.noteOn(1, midiNoteNumber, 1.0f);
+		}
+	}
 };
 
 class TriggerKeySelectorKeyboard : public MidiKeyboardComponent
@@ -439,6 +447,15 @@ private:
 		}
 		return false;
 	}
+
+    void mouseUpOnKey (int midiNoteNumber, const MouseEvent& e) override {
+		// In any case, a mouse up event leads to the key being switched off.
+		// But if that key was just toggled to "on", we have to send a note on message again.
+		if (midiNoteNumber == owner->getCurrentTrigger()) {
+			owner->triggerKbState.noteOn(1, midiNoteNumber, 1.0f);
+		}
+	}
+
 	bool mouseDraggedToKey (int midiNoteNumber, const MouseEvent& e) override
 	{
 		if (e.mods.isShiftDown() || e.mods.isPopupMenu())
