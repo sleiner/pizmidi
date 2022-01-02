@@ -11,13 +11,13 @@ piz_add_plugin(
 target_sources(
   piz_midiKeyboard
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboard.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboardComponent.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboardEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboard.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboardComponent.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboardEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboard.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboardComponent.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizKeyboardEditor.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboard.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboardComponent.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PizKeyboardEditor.cpp")
 
 target_link_libraries(
   piz_midiKeyboard
