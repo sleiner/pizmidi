@@ -14,6 +14,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiChords
 -   midiChs
 -   midiCurve: Help text is never shown
+-   midiIn: Channel selector combobox only shows channel when expanded
 
 ### Serious problems are known
 

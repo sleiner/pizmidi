@@ -41,7 +41,7 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
     comboBox->setTooltip (L"Output Device");
     comboBox->setEditableText (false);
     comboBox->setJustificationType (Justification::centredLeft);
-    comboBox->setTextWhenNothingSelected (String::empty);
+    comboBox->setTextWhenNothingSelected (String());
     comboBox->setTextWhenNoChoicesAvailable (L"(no choices)");
     comboBox->addListener (this);
 
@@ -88,9 +88,6 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
 
 
     //[UserPreSize]
-    static OldSchoolLookAndFeel* MyLook = 0;
-    if (MyLook == 0) MyLook = new OldSchoolLookAndFeel();
-    OldSchoolLookAndFeel::setDefaultLookAndFeel (MyLook);
     setMouseClickGrabsKeyboardFocus(false);
     StringArray devices = ownerFilter->devices;
 
@@ -104,7 +101,7 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
     imagepad->setTriggeredOnMouseDown(true);
     imagepad->addButtonListener(this);
     imagepad->drawableButton->Label = "";
-	imagepad->setButtonText(String::empty);
+	imagepad->setButtonText(String());
 
     hostButton->setMouseClickGrabsKeyboardFocus(false);
     //[/UserPreSize]
@@ -261,13 +258,13 @@ void MidiInEditor::updateParametersFromFilter()
     String fullpath = icon;
     if (!File(fullpath).existsAsFile())
         fullpath = ((File::getSpecialLocation(File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                   + File::separatorString + icon;
-    Drawable* image = Drawable::createFromImageFile(File(fullpath));
-	if (image)
+                   + File::getSeparatorString() + icon;
+    auto image = Drawable::createFromImageFile(File(fullpath));
+	if (image != nullptr)
 	{
-		imagepad->drawableButton->setImages(image);
+		imagepad->drawableButton->setImages(image.get());
 		imagepad->drawableButton->setName(icon);
-		imagepad->setButtonText(String::empty);
+		imagepad->setButtonText(String());
 	}
 	else imagepad->setButtonText("IPH\nmidiIn\n1.2");
 }
@@ -283,7 +280,7 @@ void MidiInEditor::updateParametersFromFilter()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MidiInEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public ButtonListener, public ComboBoxListener"
+                 parentClasses="public AudioProcessorEditor, public ChangeListener, public Button::Listener, public ComboBoxListener"
                  constructorParams="MidiInFilter* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="1" initialWidth="275" initialHeight="50">

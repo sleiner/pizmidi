@@ -4,37 +4,32 @@
 DrawablePad::DrawablePad (const String& name)
     : Button (name),
       //buttonState(buttonNormal),
-      normalImage (0),
-      overImage (0),
-      downImage (0),
-      disabledImage (0),
-      normalImageOn (0),
-      overImageOn (0),
-      downImageOn (0),
-      disabledImageOn (0)
+      normalImage (nullptr),
+      overImage (nullptr),
+      downImage (nullptr),
+      disabledImage (nullptr),
+      normalImageOn (nullptr),
+      overImageOn (nullptr),
+      downImageOn (nullptr),
+      disabledImageOn (nullptr)
 {
     setSize (200, 200);
     backgroundOff = Colour (0xffbbbbff);
     backgroundOn = Colour (0xff3333ff);
-    Label = T("Pad");
+    Label = "Pad";
     setMouseClickGrabsKeyboardFocus (false);
 }
 
-DrawablePad::~DrawablePad()
+void DrawablePad::deleteImages()
 {
-    deleteImages();
-}
-
-void DrawablePad::deleteImages() 
-{
-    if (normalImage) deleteAndZero (normalImage);
-    deleteAndZero (overImage);
-    deleteAndZero (downImage);
-    deleteAndZero (disabledImage);
-    deleteAndZero (normalImageOn);
-    deleteAndZero (overImageOn);
-    deleteAndZero (downImageOn);
-    deleteAndZero (disabledImageOn);
+    normalImage.reset();
+    overImage.reset();
+    downImage.reset();
+    disabledImage.reset();
+    normalImageOn.reset();
+    overImageOn.reset();
+    downImageOn.reset();
+    disabledImageOn.reset();
 }
 
 void DrawablePad::setImages (const Drawable* normal,
@@ -48,16 +43,16 @@ void DrawablePad::setImages (const Drawable* normal,
 {
     deleteImages();
 
-    jassert (normal != 0); // you really need to give it at least a normal image..
+    jassert (normal != nullptr); // you really need to give it at least a normal image..
 
-    if (normal != 0) normalImage = normal->createCopy();
-    if (over != 0) overImage = over->createCopy();
-    if (down != 0) downImage = down->createCopy();
-    if (disabled != 0) disabledImage = disabled->createCopy();
-    if (normalOn != 0) normalImageOn = normalOn->createCopy();
-    if (overOn != 0) overImageOn = overOn->createCopy();
-    if (downOn != 0) downImageOn = downOn->createCopy();
-    if (disabledOn != 0) disabledImageOn = disabledOn->createCopy();
+    if (normal != nullptr) normalImage = normal->createCopy();
+    if (over != nullptr) overImage = over->createCopy();
+    if (down != nullptr) downImage = down->createCopy();
+    if (disabled != nullptr) disabledImage = disabled->createCopy();
+    if (normalOn != nullptr) normalImageOn = normalOn->createCopy();
+    if (overOn != nullptr) overImageOn = overOn->createCopy();
+    if (downOn != nullptr) downImageOn = downOn->createCopy();
+    if (disabledOn != nullptr) disabledImageOn = disabledOn->createCopy();
 
     repaint();
 }
@@ -99,7 +94,7 @@ void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButto
     g.setImageResamplingQuality (Graphics::highResamplingQuality);
     g.setOpacity (1.0f);
 
-    const Drawable* imageToDraw = 0;
+    const Drawable* imageToDraw = nullptr;
 
     if (isEnabled())
     {
@@ -107,28 +102,25 @@ void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButto
     }
     else
     {
-        imageToDraw = getToggleState() ? disabledImageOn
-                                       : disabledImage;
+        imageToDraw = getToggleState() ? disabledImageOn.get()
+                                       : disabledImage.get();
 
-        if (imageToDraw == 0)
+        if (imageToDraw == nullptr)
         {
             g.setOpacity (0.4f);
             imageToDraw = getNormalImage();
         }
     }
 
-    if (imageToDraw != 0)
+    if (imageToDraw != nullptr)
     {
 		g.fillAll(Colours::transparentBlack);
         imageToDraw->drawWithin (g,
-                                 imageSpace.getX(),
-                                 imageSpace.getY(),
-                                 imageSpace.getWidth(),
-                                 imageSpace.getHeight(),
+                                 imageSpace.toFloat(),
                                  RectanglePlacement::centred,
 								 1.f);
     }
-	else 
+	else
 	{
 		g.fillAll(getBackgroundColour());
 	//	g.setColour (getBackgroundColour().contrasting(0.8f));
@@ -154,27 +146,27 @@ const Drawable* DrawablePad::getCurrentImage() const throw()
 
 const Drawable* DrawablePad::getNormalImage() const throw()
 {
-    return (getToggleState() && normalImageOn != 0) ? normalImageOn
-                                                    : normalImage;
+    return (getToggleState() && normalImageOn != nullptr) ? normalImageOn.get()
+                                                          : normalImage.get();
 }
 
 const Drawable* DrawablePad::getOverImage() const throw()
 {
-    const Drawable* d = normalImage;
+    const Drawable* d = normalImage.get();
 
     if (getToggleState())
     {
-        if (overImageOn != 0)
-            d = overImageOn;
-        else if (normalImageOn != 0)
-            d = normalImageOn;
-        else if (overImage != 0)
-            d = overImage;
+        if (overImageOn != nullptr)
+            d = overImageOn.get();
+        else if (normalImageOn != nullptr)
+            d = normalImageOn.get();
+        else if (overImage != nullptr)
+            d = overImage.get();
     }
     else
     {
-        if (overImage != 0)
-            d = overImage;
+        if (overImage != nullptr)
+            d = overImage.get();
     }
 
     return d;
@@ -182,19 +174,19 @@ const Drawable* DrawablePad::getOverImage() const throw()
 
 const Drawable* DrawablePad::getDownImage() const throw()
 {
-    const Drawable* d = normalImage;
+    const Drawable* d = normalImage.get();
 
     if (getToggleState())
     {
-        if (downImageOn != 0) d = downImageOn;
-        else if (overImageOn != 0) d = overImageOn;
-        else if (normalImageOn != 0) d = normalImageOn;
-        else if (downImage != 0) d = downImage;
+        if (downImageOn != nullptr) d = downImageOn.get();
+        else if (overImageOn != nullptr) d = overImageOn.get();
+        else if (normalImageOn != nullptr) d = normalImageOn.get();
+        else if (downImage != nullptr) d = downImage.get();
         else d = getOverImage();
     }
     else
     {
-        if (downImage != 0) d = downImage;
+        if (downImage != nullptr) d = downImage.get();
         else d = getOverImage();
     }
 

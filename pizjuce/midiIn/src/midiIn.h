@@ -1,7 +1,14 @@
 #ifndef MIDIINPLUGINFILTER_H
 #define MIDIINPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include <memory>
+
+#include "juce_audio_devices/juce_audio_devices.h"
+#include "juce_events/juce_events.h"
+
+#include "../_common/PizAudioProcessor.h"
+
+using namespace juce;
 
 enum {
     kPower,
@@ -29,7 +36,6 @@ class MidiInFilter  : public PizAudioProcessor,
 public:
     //==============================================================================
     MidiInFilter();
-    ~MidiInFilter();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock);
@@ -42,11 +48,11 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {return true;}
     bool producesMidi() const {return true;}
+    double getTailLengthSeconds() const override { return 0; }
 
     int getNumParameters();
 
@@ -96,7 +102,7 @@ private:
     JuceProgram *programs;
     int curProgram;
     bool init;
-    MidiInput* midiInput;
+    std::unique_ptr<MidiInput> midiInput;
 	MidiMessageCollector collector;
 
     bool wasPlaying;

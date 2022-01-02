@@ -1,13 +1,17 @@
 #ifndef MIDIPADS_DRAWABLEPAD_H
 #define MIDIPADS_DRAWABLEPAD_H
 
-#include "juce_amalgamated.h"
+#include <memory>
+
+#include "juce_gui_basics/juce_gui_basics.h"
+
+using namespace juce;
+
 class DrawablePad  : public Button
 {
 public:
     //==============================================================================
     DrawablePad (const String& buttonName);
-    ~DrawablePad();
 
     //==============================================================================
     void setImages (const Drawable* normalImage,
@@ -58,14 +62,14 @@ protected:
 
 private:
     //==============================================================================
-    Drawable* normalImage;
-    Drawable* overImage;
-    Drawable* downImage;
-    Drawable* disabledImage;
-    Drawable* normalImageOn;
-    Drawable* overImageOn;
-    Drawable* downImageOn;
-    Drawable* disabledImageOn;
+    std::unique_ptr<Drawable> normalImage;
+    std::unique_ptr<Drawable> overImage;
+    std::unique_ptr<Drawable> downImage;
+    std::unique_ptr<Drawable> disabledImage;
+    std::unique_ptr<Drawable> normalImageOn;
+    std::unique_ptr<Drawable> overImageOn;
+    std::unique_ptr<Drawable> downImageOn;
+    std::unique_ptr<Drawable> disabledImageOn;
     Colour backgroundOff, backgroundOn;
     void deleteImages();
     DrawablePad (const DrawablePad&);
@@ -73,4 +77,3 @@ private:
 };
 
 #endif
-

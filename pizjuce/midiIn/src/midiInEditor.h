@@ -39,8 +39,8 @@
 */
 class MidiInEditor  : public AudioProcessorEditor,
                       public ChangeListener,
-                      public ButtonListener,
-                      public ComboBoxListener
+                      public Button::Listener,
+                      public ComboBox::Listener
 {
 public:
     //==============================================================================

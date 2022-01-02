@@ -1,16 +1,17 @@
 #ifndef imagePluginFilter_PAD_H
 #define imagePluginFilter_PAD_H
 
-#include "juce_amalgamated.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "DrawablePad.h"
 
 class MidiPad  : public Component,
-                 public ButtonListener,
+                 public Button::Listener,
                  public FileDragAndDropTarget
 {
 public:
     //==============================================================================
-	MidiPad ();  
+	MidiPad ();
     ~MidiPad();
 
     void paint (Graphics&);
@@ -22,7 +23,7 @@ public:
     void setTooltip (String text);
     void setColour(const Colour&);
     void setTriggeredOnMouseDown(const bool);
-    void addButtonListener (ButtonListener *const);
+    void addButtonListener (Button::Listener *const);
 	void clearIcon();
 
     DrawablePad* drawableButton;

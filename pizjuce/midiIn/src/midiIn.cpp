@@ -39,11 +39,6 @@ MidiInFilter::MidiInFilter()
     zeromem (&lastPosInfo, sizeof (lastPosInfo));
 }
 
-MidiInFilter::~MidiInFilter()
-{
-    if (midiInput) delete midiInput;
-}
-
 //==============================================================================
 int MidiInFilter::getNumParameters()
 {
@@ -76,7 +71,7 @@ void MidiInFilter::setParameter (int index, float newValue)
 
 void MidiInFilter::setActiveDevice(String name)
 {
-	activeDevice = programs[curProgram].device = name;	
+	activeDevice = programs[curProgram].device = name;
 	int index = devices.indexOf(name);
 	if (index==-1) {
 		if (midiInput) midiInput->stop();
@@ -93,7 +88,7 @@ const String MidiInFilter::getParameterName (int index)
 {
     if (index == kPower) return "Power";
     if (index == kHostIn) return "HostIn";
-    return String::empty;
+    return String();
 }
 
 const String MidiInFilter::getParameterText (int index)
@@ -106,7 +101,7 @@ const String MidiInFilter::getParameterText (int index)
         if (param[kHostIn]>=0.5) return String("On");
         else return String("Off");
     }
-    return String::empty;
+    return String();
 }
 
 const String MidiInFilter::getInputChannelName (const int channelIndex) const
@@ -254,7 +249,7 @@ void MidiInFilter::getStateInformation(MemoryBlock &destData) {
 void MidiInFilter::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    ScopedPointer<XmlElement> const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
@@ -275,7 +270,7 @@ void MidiInFilter::setCurrentProgramStateInformation (const void* data, int size
 }
 
 void MidiInFilter::setStateInformation (const void* data, int sizeInBytes) {
-    ScopedPointer<XmlElement> const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {

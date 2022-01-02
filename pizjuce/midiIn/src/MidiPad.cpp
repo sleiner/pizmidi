@@ -3,9 +3,9 @@
 MidiPad::MidiPad ()
 : drawableButton (0)
 {
-    addAndMakeVisible (drawableButton = new DrawablePad(T("MidiPad")));
-    drawableButton->addButtonListener (this);
-	addAndMakeVisible (label = new Label("Label",String::empty));
+    addAndMakeVisible (drawableButton = new DrawablePad("MidiPad"));
+    drawableButton->addListener (this);
+	addAndMakeVisible (label = new Label("Label",String()));
     label->setFont (Font (9.0000f, Font::plain));
 	label->setJustificationType(Justification::centred);
     setMouseClickGrabsKeyboardFocus (false);
@@ -38,44 +38,44 @@ void MidiPad::buttonClicked(Button* buttonThatWasClicked) {
 }
 
 bool MidiPad::isInterestedInFileDrag (const StringArray& files) {
-    File file = File(files.joinIntoString(String::empty,0,1));
-    if (file.hasFileExtension("png") || 
-        file.hasFileExtension("gif") || 
-        file.hasFileExtension("jpg") || 
+    File file = File(files.joinIntoString(String(),0,1));
+    if (file.hasFileExtension("png") ||
+        file.hasFileExtension("gif") ||
+        file.hasFileExtension("jpg") ||
         file.hasFileExtension("svg") )
         return true;
     else return false;
 }
 
-void MidiPad::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY) 
+void MidiPad::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY)
 {
     if (isInterestedInFileDrag(filenames)) {
-        String filename = filenames.joinIntoString(String::empty,0,1);
+        String filename = filenames.joinIntoString(String(),0,1);
         File file = File(filename);
-        Drawable* image = Drawable::createFromImageFile(file);
-        drawableButton->setImages(image);
+        auto image = Drawable::createFromImageFile(file);
+        drawableButton->setImages(image.get());
         //save the relative path
         drawableButton->setName(file.getRelativePathFrom(File::getSpecialLocation(File::currentExecutableFile)));
         drawableButton->setState(Button::buttonNormal);
-		label->setText(String::empty,false);
+		label->setText(String(),dontSendNotification);
     }
 }
 
 void MidiPad::setButtonText (const String &newText) {
-    label->setText(newText,false);
+    label->setText(newText,dontSendNotification);
 }
 
 void MidiPad::setTriggeredOnMouseDown(const bool isTriggeredOnMouseDown) {
     drawableButton->setTriggeredOnMouseDown(isTriggeredOnMouseDown);
 }
 
-void MidiPad::addButtonListener (ButtonListener *const newListener) {
-    drawableButton->addButtonListener(newListener);
+void MidiPad::addButtonListener (Button::Listener *const newListener) {
+    drawableButton->addListener(newListener);
 }
 
 void MidiPad::clearIcon()
 {
     drawableButton->setImages(0);
-    drawableButton->setName(T(""));
-	label->setText("Drag\nIcon",false);
+    drawableButton->setName("");
+	label->setText("Drag\nIcon",dontSendNotification);
 }
