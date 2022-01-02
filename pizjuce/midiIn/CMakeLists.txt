@@ -11,15 +11,15 @@ piz_add_plugin(
 target_sources(
   piz_midiIn
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiIn.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiInEditor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiIn.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiInEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/DrawablePad.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiIn.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiInEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/midiIn.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/midiInEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp")
 
 target_link_libraries(piz_midiIn PUBLIC juce::juce_audio_devices
                                         juce::juce_events)
