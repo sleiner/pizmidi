@@ -11,11 +11,11 @@ piz_add_plugin(
 target_sources(
   piz_midiMonitor
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiMonitor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiMonitorEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiMonitor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiMonitorEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiMonitor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiMonitorEditor.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/MidiMonitor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiMonitorEditor.cpp")
 
 target_link_libraries(
   piz_midiMonitor PUBLIC juce::juce_audio_devices juce::juce_events
