@@ -20,6 +20,7 @@ additional_commands:
         kwargs:
             DESCRIPTION: 1
             EDITOR_WANTS_KEYBOARD_FOCUS: 1
+            IS_MIDI_EFFECT: 1
             IS_SYNTH: 1
             PLUGIN_CODE: 1
             PRODUCT_NAME: 1

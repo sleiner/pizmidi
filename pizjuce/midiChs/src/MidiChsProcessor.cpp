@@ -39,10 +39,10 @@ MidiChsProcessor::MidiChsProcessor()
 		fReset     = 0.0;
 		fClear     = 0.0;
 
-		bghue      = 0.0; 
-		bgsat      = 0.0; 
-		bgbri      = 0.0; 
-		contrast   = 1.0; 
+		bghue      = 0.0;
+		bgsat      = 0.0;
+		bgbri      = 0.0;
+		contrast   = 1.0;
 	}
 
 }
@@ -145,7 +145,7 @@ const String MidiChsProcessor::getParameterName (int index)
         case 20: return String("Brightness"); break;
         case 21: return String("Contrast"); break;
 
-        default: return String::empty; break;
+        default: return String(); break;
     }
 }
 
@@ -175,9 +175,9 @@ const String MidiChsProcessor::getParameterText (int index)
         case 20: return String(bgbri); break;
         case 21: return String(contrast); break;
 
-        default: return String::empty; break;
+        default: return String(); break;
     }
-    
+
 }
 const String MidiChsProcessor::getInputChannelName (const int channelIndex) const
 {
@@ -244,11 +244,11 @@ void MidiChsProcessor::processBlock (AudioSampleBuffer& buffer,
 	    ch[13] = (short int)(fChannel14*16);
 	    ch[14] = (short int)(fChannel15*16);
 	    ch[15] = (short int)(fChannel16*16);
-    	
+
         if (midi_message.getChannel()>0) {
             for (int i=0;i<16;i++) {
                 if (midi_message.isForChannel(i+1)) {
-                    if (ch[i] > 0) out_message.setChannel(ch[i]); 
+                    if (ch[i] > 0) out_message.setChannel(ch[i]);
                     else discard=true;
                 }
             }
@@ -311,7 +311,7 @@ void MidiChsProcessor::getStateInformation (MemoryBlock& destData)
 void MidiChsProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
@@ -345,7 +345,5 @@ void MidiChsProcessor::setStateInformation (const void* data, int sizeInBytes)
 
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
 }

@@ -1,6 +1,8 @@
 #ifndef MIDICHSPLUGINEDITOR_H
 #define MIDICHSPLUGINEDITOR_H
 
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "MidiChsProcessor.h"
 
 
@@ -19,8 +21,8 @@
 */
 class MidiChsEditor   : public AudioProcessorEditor,
                               public ChangeListener,
-                              public SliderListener,
-                              public ButtonListener
+                              public Slider::Listener,
+                              public Button::Listener
 {
 public:
     /** Constructor.

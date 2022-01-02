@@ -1,7 +1,9 @@
 #ifndef MIDICHSPLUGINFILTER_H
 #define MIDICHSPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "juce_events/juce_events.h"
+
+#include "../_common/PizAudioProcessor.h"
 
 
 //==============================================================================
@@ -24,20 +26,19 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
@@ -59,8 +60,9 @@ public:
     int getNumPrograms()                                        { return 0; }
     int getCurrentProgram()                                     { return 0; }
     void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return String::empty; }
+    const String getProgramName (int index)                     { return String(); }
     void changeProgramName (int index, const String& newName)   { }
+    double getTailLengthSeconds() const override                { return 0; }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData);

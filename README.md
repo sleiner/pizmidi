@@ -12,6 +12,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   KVR Browser
 -   midiChordAnalyzer
 -   midiChords
+-   midiChs
 
 ### Serious problems are known
 

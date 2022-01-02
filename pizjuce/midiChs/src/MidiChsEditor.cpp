@@ -6,9 +6,6 @@ MidiChsEditor::MidiChsEditor (MidiChsProcessor* const ownerFilter)
     : AudioProcessorEditor (ownerFilter)
 {
 
-    static OldSchoolLookAndFeel* MyLook = 0;
-    if (MyLook == 0) MyLook = new OldSchoolLookAndFeel(); 
-    OldSchoolLookAndFeel::setDefaultLookAndFeel (MyLook);
     setMouseClickGrabsKeyboardFocus(false);
 
     bgcolor=Colour(getFilter()->getParameter(18),getFilter()->getParameter(19),getFilter()->getParameter(20),1.0f);
@@ -66,7 +63,7 @@ MidiChsEditor::MidiChsEditor (MidiChsProcessor* const ownerFilter)
 MidiChsEditor::~MidiChsEditor()
 {
     getFilter()->removeChangeListener (this);
-    
+
     deleteAllChildren();
 }
 
@@ -154,7 +151,7 @@ void MidiChsEditor::updateParametersFromFilter()
 
 
     for (int i=0;i<16;i++) {
-        slider[i]->setValue((float)((int)(ch[i]*16.0)),false);
+        slider[i]->setValue((float)((int)(ch[i]*16.0)),dontSendNotification);
         slider[i]->setColour (Slider::textBoxTextColourId, fgcolor);
         label[i]->setColour (Label::textColourId, fgcolor);
     }
