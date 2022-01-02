@@ -1,8 +1,7 @@
 #ifndef PIZ_MIDI_LOOP_HEADER
 #define PIZ_MIDI_LOOP_HEADER
 
-#include "JuceHeader.h"
-#include "../../common/midistuff.h"
+#include "../_common/midistuff.h"
 #include "piz_MidiMessageSequence.h"
 #define polyphony 4
 
@@ -19,9 +18,9 @@ enum hoveringNoteStates
 };
 
 struct LoopNote {
-	LoopNote() 
+	LoopNote()
 	{
-		note=0;
+		note=nullptr;
 		lastOutputNoteNumber=NOT_PLAYING;
 		lastOutputChannel=NOT_PLAYING;
 		noteOffSample=-1;
@@ -100,7 +99,7 @@ private:
 	double length;
 	int transpose;
 	int octave;
-	int triggerNote;  
+	int triggerNote;
 	//int playingNote[128][16][4]; // notes playing from the loop, value is how much they're transposed
 	//int channelOfNote[128][16][4];
 };

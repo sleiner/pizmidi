@@ -1,7 +1,9 @@
 #ifndef CLICKABLELABEL_H
 #define CLICKABLELABEL_H
 
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
+using namespace juce;
 
 class ClickableLabel;
 class ClickableLabelListener
@@ -60,11 +62,11 @@ public:
 		addAndMakeVisible(ed);
 		ed->addListener(this);
 		ed->runModalLoop();
-		setText(ed->getText(),true);
+		setText(ed->getText(),dontSendNotification);
 		deleteAndZero(ed);
 	}
 
-private:   
+private:
 	int id;
 	ClickableLabelListener *listener;
 

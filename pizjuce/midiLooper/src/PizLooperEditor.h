@@ -23,11 +23,14 @@
 #define __JUCER_HEADER_PIZLOOPEREDITOR_PIZLOOPEREDITOR_D53500E8__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_utils/juce_audio_utils.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
+#include "../_common/ClickableLabel.h"
+#include "../_common/VSTSlider.h"
+
 #include "PizLooper.h"
-#include "../../common/ClickableLabel.h"
 #include "PianoRoll.h"
-#include "VSTSlider.h"
-#include "../../common/LookAndFeel.h"
 
 class KeySelector : public MidiKeyboardComponent
 {
@@ -43,7 +46,7 @@ private:
     bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
 	{
         if (s->isNoteOn(this->getMidiChannel(),midiNoteNumber)) {
-            s->noteOff(this->getMidiChannel(),midiNoteNumber);
+            s->noteOff(this->getMidiChannel(),midiNoteNumber,1.f);
         }
         else {
             s->noteOn(this->getMidiChannel(),midiNoteNumber,1.f);
@@ -73,10 +76,10 @@ class PizLooperEditor  : public AudioProcessorEditor,
                          public ClickableLabelListener,
                          public Timer,
                          public MidiKeyboardStateListener,
-                         public ButtonListener,
-                         public ComboBoxListener,
-                         public SliderListener,
-                         public LabelListener
+                         public Button::Listener,
+                         public ComboBox::Listener,
+                         public Slider::Listener,
+                         public Label::Listener
 {
 public:
     //==============================================================================
@@ -98,7 +101,7 @@ public:
 	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) {}
 	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) {if (label==nameLabel) label->edit();}
 	void handleNoteOn(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity);
-	void handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber);
+	void handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity) override;
     //[/UserMethods]
 
     void paint (Graphics& g);

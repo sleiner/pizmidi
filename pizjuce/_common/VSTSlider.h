@@ -19,6 +19,7 @@ public:
 
     void setVSTSlider();
 	void setVSTParam();
+    void setIndex(int index);
 private:
     AudioProcessor* ownerPlugin;
     int vstIndex;

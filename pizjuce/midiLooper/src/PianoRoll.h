@@ -1,26 +1,33 @@
 #ifndef PIZ_PIANO_ROLL_HEADER
 #define PIZ_PIANO_ROLL_HEADER
 
-#include "JuceHeader.h"
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "MidiLoop.h"
+
+using namespace juce;
+
+class PianoRoll;
 
 struct PizNote
 {
-	PizNote() 
+	PizNote()
 	{
-		object=0;
+		object=nullptr;
 		length=-1;
 	}
 	PizNote(PizMidiMessageSequence::mehPtr _object)
 	{
 		object = _object;
-		jassert(_object->noteOffObject!=0);
-		length = _object->noteOffObject!=0 ? _object->noteOffObject->message.getTimeStamp() - _object->message.getTimeStamp() : 0;
+		jassert(_object->noteOffObject!=nullptr);
+		length = _object->noteOffObject!=nullptr ? _object->noteOffObject->message.getTimeStamp() - _object->message.getTimeStamp() : 0;
 	}
 	void updateLength() {
 		if (object->message.isNoteOn()) {
-			jassert(object->noteOffObject!=0);
-			length = object->noteOffObject!=0 ? object->noteOffObject->message.getTimeStamp() - object->message.getTimeStamp() : 0;
+			jassert(object->noteOffObject!=nullptr);
+			length = object->noteOffObject!=nullptr ? object->noteOffObject->message.getTimeStamp() - object->message.getTimeStamp() : 0;
 		}
 	}
 
@@ -64,12 +71,12 @@ public:
 	void setTimeline(Timeline* t) {timeline=t;}
 	void setPlayline(Component* p) {playline=p;}
 	void setKeyboard(Viewport* kb) {keyboard=kb;}
-	void mouseWheelMove (const MouseEvent &e, float wheelIncrementX, float wheelIncrementY)
+	void mouseWheelMove (const MouseEvent &e, const MouseWheelDetails& wheel) override
 	{
-		this->getParentComponent()->mouseWheelMove(e,wheelIncrementX,wheelIncrementY);
+		this->getParentComponent()->mouseWheelMove(e,wheel);
 	}
 
-	void visibleAreaChanged(const Rectangle<int>& newVisibleArea)
+	void visibleAreaChanged(const juce::Rectangle<int>& newVisibleArea)
 	{
 		timeline->scrollOffset=newVisibleArea.getX();
 		timeline->repaint();
@@ -79,7 +86,7 @@ public:
 	}
 private:
 	Timeline* timeline;
-	Component* playline;	
+	Component* playline;
 	Viewport* keyboard;
 };
 
@@ -145,11 +152,11 @@ public:
 	}
 	void setTimeSig(int n, int d);
 	void setPlaying(bool isPlaying) {
-		playing = isPlaying; 
+		playing = isPlaying;
 		playline->repaint();
 	}
 	void setRecording(bool isRecording) {
-		recording = isRecording; 
+		recording = isRecording;
 		playline->repaint();
 	}
 	double getPpqPerBar() {
@@ -166,13 +173,13 @@ public:
 	void repaintBG() {bg->repaint();}
 
 private:
-	Rectangle<int> lasso;
+	juce::Rectangle<int> lasso;
 	Array<PizMidiMessageSequence::mehPtr> selectedNotes;
 	Array<PizNote> selectedNoteLengths;
 	void addToSelection(PizMidiMessageSequence::mehPtr note)
 	{
 		if (note->message.isNoteOn()) {
-			if (note->noteOffObject==0) 
+			if (note->noteOffObject==nullptr)
 				sequence->updateMatchedPairs();
 			selectedNotes.addIfNotAlreadyThere(note);
 			selectedNoteLengths.add(PizNote(note));
@@ -242,13 +249,13 @@ private:
 			float x = roll->gridSize;
 			while (x<getWidth()) {
 				//draw grid
-				if (!(fmod(x,roll->barSize)<0.0001) && !(fmod(x,roll->beatSize)<0.0001)) 
+				if (!(fmod(x,roll->barSize)<0.0001) && !(fmod(x,roll->beatSize)<0.0001))
 				{
 					g.setColour(Colours::lightgrey);
 					g.drawLine(x,0.f,x,(float)getHeight());
 				}
 				x+=roll->gridSize;
-			}		
+			}
 			x = roll->beatSize;
 			while (x<getWidth()) {
 				//draw beats
@@ -293,7 +300,7 @@ private:
 							//if (i==sequence->indexOfLastNoteOn
 							//	|| abs(sequence->getEventTime(i)-sequence->getEventTime(sequence->indexOfLastNoteOn))<sequence->chordTolerance)
 							//	g.setColour(Colours::blue);
-							//else 
+							//else
 							if (roll->selectedNotes.contains(roll->sequence->getEventPointer(i))) {
 								//outline of original note position
 								g.setColour(Colours::blue);

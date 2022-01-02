@@ -5,6 +5,8 @@
 #include "juce_core/juce_core.h"
 #include "juce_cryptography/juce_cryptography.h"
 
+using namespace juce;
+
 #ifndef MRALIASPRO
 static const String encryptXml (const XmlElement* xml,
                                 const String& rsaPrivateKey)

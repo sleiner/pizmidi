@@ -259,7 +259,7 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
       b_Monitor (0),
       s_TransposeChannel (0),
       label28 (0),
-      cachedImage_piznew40_png (0)
+      cachedImage_piznew40_png (nullptr)
 {
     addAndMakeVisible (label = new Label (L"new label",
                                           L"Zoom"));
@@ -915,7 +915,7 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
 
     addAndMakeVisible (aboutButton = new ImageButton (L"new button"));
     aboutButton->setTooltip (L"Insert Piz Here-> midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper");
-    aboutButton->setButtonText (String::empty);
+    aboutButton->setButtonText (String());
     aboutButton->addListener (this);
 
     aboutButton->setImages (false, true, true,
@@ -1943,7 +1943,7 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
     }
     midiOutDeviceBox->setSelectedId(1);
 
-    loopinfoLabel2->setText("Stopped",false);
+    loopinfoLabel2->setText("Stopped",dontSendNotification);
 
 	resizeLimits.setSizeLimits (385, 248, 1600, 900);
     ownerFilter->addChangeListener (this);
@@ -1972,12 +1972,9 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
 	keySelector->addChangeListener(this);
 	ownerFilter->keySelectorState.addListener(this);
 	demo = ownerFilter->demo?1:0;
-	loopinfoLabel3->setText(demo?"DEMO VERSION":String::empty,false);
+	loopinfoLabel3->setText(demo?"DEMO VERSION":String(),dontSendNotification);
 	counter=0;
 	startTimer(75);
-
-	static NonShinyLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
 
 #if 0
     //[/UserPreSize]
@@ -2725,7 +2722,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         }
 		else {
 			FileChooser myChooser ("Save MIDI File...",
-				File(getFilter()->loopDir + File::separatorString + nameLabel->getText()),"*.mid");
+				File(getFilter()->loopDir + File::getSeparatorString() + nameLabel->getText()),"*.mid");
 
 			if (myChooser.browseForFileToSave(true))
 			{
@@ -2994,7 +2991,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_b_RemoveBar] -- add your button handler code here..
 		pianoRoll->removeBar();
-		LengthLabel->setText(String(pianoRoll->getDisplayLength()),false);
+		LengthLabel->setText(String(pianoRoll->getDisplayLength()),dontSendNotification);
 		getFilter()->setPRSetting("bars",pianoRoll->getDisplayLength(),false);
         getFilter()->setPRSetting("width",pianoRoll->getWidth(),false);
         //[/UserButtonCode_b_RemoveBar]
@@ -3003,7 +3000,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_b_AddBar] -- add your button handler code here..
 		pianoRoll->addBar();
-		LengthLabel->setText(String(pianoRoll->getDisplayLength()),false);
+		LengthLabel->setText(String(pianoRoll->getDisplayLength()),dontSendNotification);
 		getFilter()->setPRSetting("bars",pianoRoll->getDisplayLength(),false);
 		getFilter()->setPRSetting("width",pianoRoll->getWidth(),false);
         //[/UserButtonCode_b_AddBar]
@@ -3508,7 +3505,7 @@ void PizLooperEditor::labelTextChanged (Label* labelThatHasChanged)
 			getFilter()->setTimeSig(lastActiveLoop,x,pianoRoll->timeSigD);
 			pianoRoll->repaintBG();
 		}
-		else numerator->setText(String(getFilter()->getNumerator(lastActiveLoop)),false);
+		else numerator->setText(String(getFilter()->getNumerator(lastActiveLoop)),dontSendNotification);
         //[/UserLabelCode_numerator]
     }
     else if (labelThatHasChanged == denominator)
@@ -3520,7 +3517,7 @@ void PizLooperEditor::labelTextChanged (Label* labelThatHasChanged)
 			getFilter()->setTimeSig(lastActiveLoop,pianoRoll->timeSigN,x);
 			pianoRoll->repaintBG();
 		}
-		else denominator->setText(String(getFilter()->getDenominator(lastActiveLoop)),false);
+		else denominator->setText(String(getFilter()->getDenominator(lastActiveLoop)),dontSendNotification);
         //[/UserLabelCode_denominator]
     }
     else if (labelThatHasChanged == LengthLabel)
@@ -3603,26 +3600,28 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
 		Slider* slider = ((Slider*)p);
 		if (e.mods.isMiddleButtonDown()) {
             //middle-click midi learn
-            slider->setValue(-1,true);
+            slider->setValue(-1,sendNotification);
         }
 		else if (e.mods.isPopupMenu()) {
-			bool hasDefaultValue=false;
-			double value = slider->getDoubleClickReturnValue(hasDefaultValue);
-			if (hasDefaultValue)
-				slider->setValue(value,true);
+			if (slider->isDoubleClickReturnEnabled())
+            {
+                double value = slider->getDoubleClickReturnValue();
+				slider->setValue(value,sendNotification);
+            }
 		}
 	}
 	else if (p==s_PlayCC || p==s_RecCC) {
 		Slider* slider = ((Slider*)p);
 		if (e.mods.isMiddleButtonDown()) {
             //middle-click midi learn
-            slider->setValue(-2,true);
+            slider->setValue(-2,sendNotification);
         }
 		else if (e.mods.isPopupMenu()) {
-			bool hasDefaultValue=false;
-			double value = slider->getDoubleClickReturnValue(hasDefaultValue);
-			if (hasDefaultValue)
-				slider->setValue(value,true);
+			if (slider->isDoubleClickReturnEnabled())
+            {
+                double value = slider->getDoubleClickReturnValue();
+				slider->setValue(value,sendNotification);
+            }
 		}
     }
 	else if (p==s_Stretch || p==s_Transpose || p==s_Octave || p==s_Start || p==s_End
@@ -3631,10 +3630,11 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
 	{
 		if (e.mods.isPopupMenu()) {
 			Slider* slider = ((Slider*)p);
-			bool hasDefaultValue=false;
-			double value = slider->getDoubleClickReturnValue(hasDefaultValue);
-			if (hasDefaultValue)
-				slider->setValue(value,true);
+			if (slider->isDoubleClickReturnEnabled())
+            {
+                double value = slider->getDoubleClickReturnValue();
+				slider->setValue(value,sendNotification);
+            }
 		}
 	}
 }
@@ -3677,7 +3677,7 @@ void PizLooperEditor::handleNoteOn(MidiKeyboardState *source, int midiChannel, i
 	}
 }
 
-void PizLooperEditor::handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber)
+void PizLooperEditor::handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity)
 {
 	if (source==&(getFilter()->keySelectorState)) {
 		getFilter()->notifyHostForActiveSlot(kNote0+midiNoteNumber,0.f);
@@ -3693,7 +3693,7 @@ void PizLooperEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
 	else if (source==getFilter()->info)
 	{
-		loopinfoLabel2->setText(getFilter()->info->s,true);
+		loopinfoLabel2->setText(getFilter()->info->s,sendNotification);
 	}
 	else if (source==keySelector)
 	{
@@ -3707,7 +3707,7 @@ void PizLooperEditor::changeListenerCallback (ChangeBroadcaster* source)
 		getFilter()->setLoopStart(lastActiveLoop, timeline->getStart());
 		getFilter()->updateLoopInfo();
 		if (getFilter()->currentNumEvents==0) {
-			loopinfoLabel->setText("No Loop",false);
+			loopinfoLabel->setText("No Loop",dontSendNotification);
 			getButtonForSlot(lastActiveLoop)->setColour(TextButton::textColourOffId,Colour(0xff979797));
 			getButtonForSlot(lastActiveLoop)->setColour(TextButton::textColourOnId,Colour(0xff555555));
 		}
@@ -3716,7 +3716,7 @@ void PizLooperEditor::changeListenerCallback (ChangeBroadcaster* source)
 			if (getFilter()->currentLength==1.0) loopinfo << "1 Beat (";
 			else loopinfo << getFilter()->currentLength << " Beats (";
 			loopinfo << getFilter()->currentNumEvents << " Events)";
-			loopinfoLabel->setText(loopinfo,false);
+			loopinfoLabel->setText(loopinfo,dontSendNotification);
 			getButtonForSlot(lastActiveLoop)->setColour(TextButton::textColourOffId,Colours::black);
 			getButtonForSlot(lastActiveLoop)->setColour(TextButton::textColourOnId,Colours::black);
 		}
@@ -3988,8 +3988,8 @@ void PizLooperEditor::updateParametersFromFilter()
 								  filter->getPRSetting("y"));
 	}
 	pianoRoll->setTimeSig(n,d);
-	numerator->setText(String(n),false);
-	denominator->setText(String(d),false);
+	numerator->setText(String(n),dontSendNotification);
+	denominator->setText(String(d),dontSendNotification);
 
     midiOutDeviceBox->setSelectedItemIndex(newDevice+1,true);
 
@@ -4020,29 +4020,29 @@ void PizLooperEditor::updateParametersFromFilter()
 	}
 	getButtonForSlot(lastActiveLoop)->setToggleState(true,false);
 
-    nameLabel->setText(filter->getProgramName(lastActiveLoop),false);
+    nameLabel->setText(filter->getProgramName(lastActiveLoop),dontSendNotification);
 
 	if (filter->currentNumEvents==0)
-		loopinfoLabel->setText("No Loop",false);
+		loopinfoLabel->setText("No Loop",dontSendNotification);
 	else {
 		String loopinfo = "Loop length: ";
 		if (filter->currentLength==1.0) loopinfo << "1 Beat (";
 		else loopinfo << filter->currentLength << " Beats (";
 		loopinfo << filter->currentNumEvents << " Events)";
-		loopinfoLabel->setText(loopinfo,false);
+		loopinfoLabel->setText(loopinfo,dontSendNotification);
 	}
 	noSnap=true;
 	timeline->setLoop(filter->getLoopStart(lastActiveLoop),filter->getLoopLength(lastActiveLoop));
 	noSnap=false;
 
-    loopinfoLabel2->setText(filter->info->s,false);
+    loopinfoLabel2->setText(filter->info->s,dontSendNotification);
 
 	if (newloop)
 	{
 		pianoRoll->setSequence(filter->getActiveLoop());
 		filter->newLoop=false;
 	}
-	LengthLabel->setText(String(pianoRoll->getDisplayLength()),false);
+	LengthLabel->setText(String(pianoRoll->getDisplayLength()),dontSendNotification);
     setSize (w, h);
 }
 

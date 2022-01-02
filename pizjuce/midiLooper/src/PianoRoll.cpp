@@ -1,9 +1,11 @@
 #include "PianoRoll.h"
 
+#include <utility>
+
 PianoRoll::PianoRoll(AudioProcessor* _plugin, AudioProcessorEditor* _owner, Timeline* _timeline)
 	: sequence(0),
 	hoveringNoteIndex(-1),
-	hoveringNote(0),
+	hoveringNote(nullptr),
 	timebase(960.0),
 	numEvents(0),
 	snapToGrid(true),
@@ -14,7 +16,7 @@ PianoRoll::PianoRoll(AudioProcessor* _plugin, AudioProcessorEditor* _owner, Time
 	beatSize(0),
 	barSize(0),
 	gridSize(0),
-	timeline(0),
+	timeline(nullptr),
 	draggingNoteTransposition(0),
 	draggingNoteTimeDelta(0)
 
@@ -79,7 +81,7 @@ void PianoRoll::mouseDown (const MouseEvent& e)
 		if (!selectedNotes.contains(hoveringNote)) {
 			clearSelection();
 			addToSelection(hoveringNote);
-			jassert(hoveringNote->noteOffObject!=0);
+			jassert(hoveringNote->noteOffObject!=nullptr);
 			DBG("n=" + String(n) + "v=" + String(draggingNoteVelocity));
 		}
 		hoveringNoteIndex -= Dragging_A_Note;
@@ -108,7 +110,7 @@ void PianoRoll::mouseDown (const MouseEvent& e)
 		addToSelection(hoveringNote);
 		sendChangeMessage();
 	}
-	else 
+	else
 		clearSelection();
 	noteLayer->repaint();
 }
@@ -147,7 +149,7 @@ void PianoRoll::mouseDrag (const MouseEvent& e)
 				if (selectedNotes.getUnchecked(i)->noteOffObject) {
 					//set length and velocity when Alt is down
 					double minWidth = snap ? stepLengthInPpq : 1.0;
-					//if (lengthDelta!=0) 
+					//if (lengthDelta!=0)
 						selectedNotes.getUnchecked(i)->noteOffObject->message.setTimeStamp(jmax(selectedNotes.getUnchecked(i)->message.getTimeStamp()+minWidth,selectedNotes.getUnchecked(i)->message.getTimeStamp()+selectedNoteLengths.getUnchecked(i).length+lengthDelta));
 					selectedNotes.getUnchecked(i)->message.setVelocity((jlimit(1,127,selectedNotes.getUnchecked(i)->message.getVelocity()+velocityDelta))*midiScaler);
 				}
@@ -170,21 +172,21 @@ void PianoRoll::mouseDrag (const MouseEvent& e)
 void PianoRoll::mouseUp (const MouseEvent& e)
 {
 	int highnote,lownote;
-	if (lasso.getWidth()>0) 
+	if (lasso.getWidth()>0)
 	{
 		lownote = (int)((float)(getHeight()-lasso.getY())*128.f/(float)getHeight());
 		highnote = (int)((float)(getHeight()-(lasso.getY()+lasso.getHeight()))*128.f/(float)getHeight());
-		if (lownote>highnote) swapVariables(lownote,highnote);
+		if (lownote>highnote) std::swap(lownote,highnote);
 		for (int index=0;index<(sequence->getNumEvents());index++) {
 			MidiMessage m = sequence->getEventPointer(index)->message;
 			DBG("eventtime=" + String(sequence->getEventTime(index)));
 			if (m.isNoteOn()) {DBG("note=" + String(m.getNoteNumber()));}
 			DBG("lassostart=" + String(pixelsToPpq((float)lasso.getX(),false)));
 			DBG("lassoend=" + String(pixelsToPpq((float)(lasso.getX()+lasso.getWidth()),false)));
-			if (m.isNoteOn() 
-				&& sequence->getEventTime(index)>=pixelsToPpq((float)lasso.getX(),false) 
+			if (m.isNoteOn()
+				&& sequence->getEventTime(index)>=pixelsToPpq((float)lasso.getX(),false)
 				&& sequence->getEventTime(index)<=pixelsToPpq((float)(lasso.getX()+lasso.getWidth()),false)
-				&& m.getNoteNumber()>=lownote 
+				&& m.getNoteNumber()>=lownote
 				&& m.getNoteNumber()<=highnote)
 			{
 				addToSelection(sequence->getEventPointer(index));
@@ -201,7 +203,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
 			//right click, delete notes
 			plugin->getCallbackLock().enter();
 			for (int i=selectedNotes.size();--i>=0;)
-				sequence->deleteEvent(sequence->getIndexOf(selectedNotes.getUnchecked(i)),true);			
+				sequence->deleteEvent(sequence->getIndexOf(selectedNotes.getUnchecked(i)),true);
 			sequence->updateMatchedPairs();
 			plugin->getCallbackLock().exit();
 			clearSelection();
@@ -232,7 +234,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
 				wasResizing=false;
 				for (int i=selectedNoteLengths.size();--i>=0;)
 				{
-					if (selectedNotes.getUnchecked(i)!=0 && selectedNotes.getUnchecked(i)->noteOffObject!=0) {
+					if (selectedNotes.getUnchecked(i)!=nullptr && selectedNotes.getUnchecked(i)->noteOffObject!=nullptr) {
 						selectedNoteLengths.getReference(i).updateLength();
 					}
 					else {
@@ -246,7 +248,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
 			}
 		}
 		hoveringNoteIndex = No_Note;
-		hoveringNote=0;
+		hoveringNote=nullptr;
 		sendChangeMessage();
 		noteLayer->repaint();
 	}

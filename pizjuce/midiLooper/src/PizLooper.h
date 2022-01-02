@@ -1,11 +1,14 @@
 #ifndef PIZLOOPERPLUGINFILTER_H
 #define PIZLOOPERPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
-#include "JuceHeader.h"
-#include "JucePluginCharacteristics.h"
+#include <memory>
+
+#include "juce_audio_devices/juce_audio_devices.h"
+#include "juce_data_structures/juce_data_structures.h"
+
+#include "../_common/key.h"
+#include "../_common/PizAudioProcessor.h"
 #include "MidiLoop.h"
-#include "../../common/key.h"
 
 
 //==============================================================================
@@ -50,7 +53,7 @@ enum parameters {
 	kWaitForBar, //play/stop on next bar
 	kNumLoops,  //number of times to play slot, 0=>loop forever
 	kNextSlot,  //slot to play after this one
-	kPlayGroup, 
+	kPlayGroup,
 	kMuteGroup,
 	kForceToKey, //on/off
 	kScaleChannel, //midi channel for force to scale
@@ -82,23 +85,66 @@ enum ForceToKeyModes
     numForceToKeyModes
 };
 
-class PianoRollSettings : public ValueTree {
+class PianoRollSettings {
 public:
-	PianoRollSettings() : ValueTree("PRSettingsContainer")
+	PianoRollSettings(PianoRollSettings* fallback_settings = nullptr) : values_("PRSettingsContainer"),
+	                                                                    undo_manager_(nullptr),
+															            fallback_settings_(fallback_settings)
 	{
 		ValueTree tree("PRSettings");
-		tree.setProperty("slot",0,0);
-		tree.setProperty("snap",true,0);
-		tree.setProperty("dotted",false,0);
-		tree.setProperty("triplet",false,0);
-		tree.setProperty("stepsize",0.5f,0);
-		tree.setProperty("width",500,0);
-		tree.setProperty("height",1200,0);
-		tree.setProperty("x",0,0);
-		tree.setProperty("y",500,0);
-		tree.setProperty("bars",4,0);
-		addChild(tree,0,0);
+		values_.addChild(tree, 0, undo_manager_);
 	}
+
+    ValueTree& set(const Identifier& name, const var& newValue)
+	{
+		return values_.getChild(0).setProperty(name, newValue, undo_manager_);
+	}
+
+	var get(const Identifier& name)
+	{
+		if (values_.getChild(0).hasProperty(name) && fallback_settings_ != nullptr)
+		{
+			return fallback_settings_->get(name);
+		}
+		else
+		{
+			return values_.getChild(0).getProperty(name);
+		}
+	}
+
+	std::unique_ptr<XmlElement> createXml() const
+	{
+		return values_.getChild(0).createXml();
+	}
+
+	void loadXml(XmlElement const& xmlProgram)
+	{
+		values_.removeChild(0, undo_manager_);
+		auto tree = xmlProgram.getChildByName("PRSettings");
+		if (tree != nullptr)
+		{
+			values_.addChild(ValueTree::fromXml(*tree), 0, undo_manager_);
+		}
+	}
+
+private:
+	void loadDefaults()
+	{
+		set("slot",0);
+		set("snap",true);
+		set("dotted",false);
+		set("triplet",false);
+		set("stepsize",0.5f);
+		set("width",500);
+		set("height",1200);
+		set("x",0);
+		set("y",500);
+		set("bars",4);
+	}
+
+	ValueTree values_;
+	UndoManager* undo_manager_;
+	PianoRollSettings* fallback_settings_;
 };
 
 //==============================================================================
@@ -137,18 +183,18 @@ public:
 
     //==============================================================================
     AudioProcessorEditor* createEditor();
-	bool hasEditor(void) const {return JucePlugin_NoEditor==0;}
+	bool hasEditor(void) const {return true;}
     //==============================================================================
     const String getName() const;
 
     int getNumParameters() { return numParams; }
-	inline float getParameterForSlot(int parameter, int slot) 
+	inline float getParameterForSlot(int parameter, int slot)
 	{
 		if (parameter<numGlobalParams)
 			return getParameter(parameter);
 		return getParameter(parameter + slot*numParamsPerSlot);
 	}
-	inline float getParamForActiveSlot(int parameter) 
+	inline float getParamForActiveSlot(int parameter)
 	{
 		if (parameter<numGlobalParams)
 			return getParameter(parameter);
@@ -176,7 +222,7 @@ public:
 	{
 		if (getParameter(kParamsToHost)>=0.5f)
 			AudioProcessor::setParameterNotifyingHost(parameterIndex,newValue);
-		else 
+		else
 			setParameter(parameterIndex,newValue);
 	}
 
@@ -198,13 +244,13 @@ public:
 	{
 		if (parameter<numGlobalParams)
 			setParameterNotifyingHost(parameter,value);
-		else 
+		else
 			setParameterNotifyingHost(parameter + curProgram*numParamsPerSlot,value);
 	}
 	const String getParameterName (int index);
     const String getParameterText (int index);
 	const String getCurrentSlotParameterText(int parameter)
-	{		
+	{
 		if (parameter<numGlobalParams)
 			return getParameterText(parameter);
 		return getParameterText(parameter + curProgram*numParamsPerSlot);
@@ -217,6 +263,7 @@ public:
 
     bool acceptsMidi() const {return true;}
     bool producesMidi() const {return true;}
+	double getTailLengthSeconds() const override {return 0;}
 
     //==============================================================================
     int getNumPrograms()      { return numPrograms; }
@@ -262,7 +309,7 @@ public:
 	{
 		setParameterForSlot(kNote0+midiNoteNumber%12,curProgram,1.f);
 	}
-	void handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber)
+	void handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity) override
 	{
 		setParameterForSlot(kNote0+midiNoteNumber%12,curProgram,0.f);
 	}
@@ -281,7 +328,7 @@ public:
     Info* info;
     void killNotes(int slot);
 	bool newLoop;
-	bool readKeyFile(File file=File::nonexistent);
+	bool readKeyFile(File file=File());
 	bool demo;
 
     void loadMidiFile(File file);
@@ -289,7 +336,7 @@ public:
 	void updateLoopInfo();
 	void setLoopLength(int slot, double newLength) {
 		programs[slot].looplength = newLength;
-		if (slot==curProgram) 
+		if (slot==curProgram)
 			currentLength = newLength;
 	}
 	double getLoopLength(int slot) {
@@ -325,16 +372,16 @@ public:
 	void setActiveDevice(String name);
 	String getActiveDevice() {return activeDevice;}
 
-	void setPRSetting(const var::identifier &name, const var &value, bool updateEditor=true)
+	void setPRSetting(const Identifier &name, const var &value, bool updateEditor=true)
 	{
-		programs[curProgram].PRSettings.getChild(0).setProperty(name,value,0);
-		if (updateEditor) 
+		programs[curProgram].PRSettings.set(name, value);
+		if (updateEditor)
 			sendChangeMessage();
 	}
 
-	const var getPRSetting(const var::identifier &name)
+	const var getPRSetting(const Identifier &name)
 	{
-		return programs[curProgram].PRSettings.getChild(0).getProperty(name,defaultPRSettings.getChild(0).getProperty(name));
+		return programs[curProgram].PRSettings.get(name);
 	}
 
 	double getPlayPosition(bool &playing, bool &recording)
@@ -347,7 +394,7 @@ public:
 
 	String loopDir;
 	bool writeMidiFile(int index, File file, bool IncrementFilename=false);
-    bool readMidiFile(int index, String progname, File mid=File::nonexistent);
+    bool readMidiFile(int index, String progname, File mid=File());
 
 	//==============================================================================
     juce_UseDebuggingNewOperator
@@ -389,24 +436,24 @@ private:
     int currentPoly[numPrograms];       // number of playing instances of current pattern
 
 	void endHangingNotesInLoop(MidiBuffer& buffer, int samplePos, int slot, int voice=-1, bool kill=false);
-	class TransposeRules 
+	class TransposeRules
 	{
 	public:
 		TransposeRules(PizLooper* _plugin, int _slot) : plugin(0), slot(_slot)
 		{
 			plugin = _plugin;
-			for (int i=0;i<polyphony;i++) 
+			for (int i=0;i<polyphony;i++)
 				trignote[i] = -1;
 			update(true);
 		}
-		~TransposeRules() {}		
-		
+		~TransposeRules() {}
+
 		int trignote[polyphony];
 		float velscale[polyphony];
 		struct Rules {
 			int semitones;
 			int octaves;
-			bool forceToScale; 
+			bool forceToScale;
 			bool noteswitch[12];
 			bool transposedTrigger;
 			int root;
@@ -451,8 +498,8 @@ private:
 			rules.noteswitch[10] = plugin->getParameterForSlot(kNote10,slot)>=0.5f;
 			rules.noteswitch[11] = plugin->getParameterForSlot(kNote11,slot)>=0.5f;
 			rules.root = floatToMidi(plugin->getParameterForSlot(kRoot,slot));
-			rules.transposedTrigger = plugin->getParameterForSlot(kNoteTrig,slot)>0.0 
-				&& plugin->getParameterForSlot(kNoteTrig,slot)<0.2f 
+			rules.transposedTrigger = plugin->getParameterForSlot(kNoteTrig,slot)>0.0
+				&& plugin->getParameterForSlot(kNoteTrig,slot)<0.2f
 				&& rules.root>-1;
 			rules.masterTranspose = roundToInt(plugin->getParameter(kMasterTranspose)*24.f)-12;
 			rules.mode = roundToInt(plugin->getParameterForSlot(kForceToScaleMode,slot)*(float)(numForceToKeyModes-1));
@@ -677,8 +724,8 @@ private:
 	{
 		for (int i=0;i<noteOffBuffer[slot].size();i++)
 		{
-			if ((noteOffBuffer[slot].getUnchecked(i).note->noteOffObject == n
-				|| noteOffBuffer[slot].getUnchecked(i).note == n)
+			if ((noteOffBuffer[slot].getUnchecked(i).note->noteOffObject.get() == n
+				|| noteOffBuffer[slot].getUnchecked(i).note.get() == n)
 				&& noteOffBuffer[slot].getUnchecked(i).voice == v)
 				return i;
 		}
@@ -690,7 +737,7 @@ private:
 	int samplesInLastBuffer;
 
 	String activeDevice;
-    MidiOutput* midiOutput;
+    std::unique_ptr<MidiOutput> midiOutput;
 
 	PianoRollSettings defaultPRSettings;
 

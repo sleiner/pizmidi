@@ -73,11 +73,11 @@ double PizMidiMessageSequence::getTimeOfMatchingKeyUp (const int index) const
 {
     const mehPtr meh = list [index];
 
-	if (meh != 0 && meh->noteOffObject != 0) {
+	if (meh != nullptr && meh->noteOffObject != nullptr) {
 		jassert(meh->noteOffObject->message.getTimeStamp() >= meh->message.getTimeStamp());
         return meh->noteOffObject->message.getTimeStamp();
 	}
-    else if (meh!=0 && meh->message.isNoteOn()) 
+    else if (meh!= nullptr && meh->message.isNoteOn())
 		return meh->message.getTimeStamp()+1;
 	return 0.0;
 }
@@ -86,7 +86,7 @@ int PizMidiMessageSequence::getIndexOfMatchingKeyUp (const int index) const
 {
     const mehPtr meh = list [index];
 
-    return (meh != 0) ? list.indexOf (meh->noteOffObject) : -1;
+    return (meh != nullptr) ? list.indexOf (meh->noteOffObject) : -1;
 }
 
 int PizMidiMessageSequence::getIndexOf (mehPtr const event) const
@@ -284,7 +284,7 @@ void PizMidiMessageSequence::updateMatchedPairs(bool sortEvents)
 
         if (m1.isNoteOn())
         {
-            list.getUnchecked(i)->noteOffObject = 0;
+            list.getUnchecked(i)->noteOffObject = nullptr;
             const int note = m1.getNoteNumber();
             const int chan = m1.getChannel();
             const int len = list.size();
@@ -413,11 +413,10 @@ void PizMidiMessageSequence::createControllerUpdatesForTime (const int channelNu
 //==============================================================================
 PizMidiMessageSequence::MidiEventHolder::MidiEventHolder (const MidiMessage& message_)
    : message (message_),
-     noteOffObject (0)
+     noteOffObject (nullptr)
 {
 }
 
 PizMidiMessageSequence::MidiEventHolder::~MidiEventHolder()
 {
 }
-

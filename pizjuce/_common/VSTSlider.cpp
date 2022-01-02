@@ -59,3 +59,8 @@ void VSTSlider::setVSTSlider() {
     }
     this->updateText();
 };
+
+void VSTSlider::setIndex(int index)
+{
+	this->vstIndex=index;
+}
