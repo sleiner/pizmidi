@@ -77,7 +77,7 @@ int MidiMonitorPlugin::getNumParameters()
 
 float MidiMonitorPlugin::getParameter (int index)
 {
-    switch (index) 
+    switch (index)
 	{
     case kBgHue:	return bghue; break;
     case kBgSat:	return bgsat; break;
@@ -134,7 +134,7 @@ const String MidiMonitorPlugin::getParameterName (int index)
 		case kTicks:	return String("TicksPerBeat"); break;
 		case kTimeMode:	return String("TimeMode"); break;
 		case kFrames:	return String("FramesPerSec"); break;
-        default: return String::empty; break;
+        default: return String(); break;
     }
 }
 
@@ -153,9 +153,9 @@ const String MidiMonitorPlugin::getParameterText (int index)
 		case kTicks:	return String(ticks); break;
 		case kTimeMode:	return String(mode); break;
 		case kFrames:	return String(frames); break;
-		default: return String::empty; break;
+		default: return String(); break;
     }
-    
+
 }
 const String MidiMonitorPlugin::getInputChannelName (const int channelIndex) const
 {
@@ -218,7 +218,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
         //}
         const double ppqPerSample = lastPosInfo.bpm/(60.0*getSampleRate());
         //const bool playing = lastPosInfo.isPlaying || lastPosInfo.isRecording;
-		
+
 		n = lastPosInfo.timeSigNumerator;
 		d = lastPosInfo.timeSigDenominator;
         int samplePos = 0;
@@ -234,8 +234,8 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
                 || (message.isPitchWheel() && usePB)
                 || (message.isProgramChange() && usePC)
                 || (message.isAftertouch() && usePA)
-                || (message.isChannelPressure() && useCP) 
-                || (message.isMidiClock() && useClock) 
+                || (message.isChannelPressure() && useCP)
+                || (message.isMidiClock() && useClock)
                 || (message.isSysEx() && useSysEx)
                 || ( (message.isActiveSense()
                     || message.isMetaEvent()
@@ -245,7 +245,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
                     || message.isMidiMachineControlMessage()
                     || message.isQuarterFrame()
                     || message.isSongPositionPointer()
-                    ) && useOther ) 
+                    ) && useOther )
                 ) {
                     if (waitingForFirstMessage) {
                         samples=0;
@@ -259,7 +259,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
 					{
 						if (getParameter(kTimeMode)==1.f)
 							messages->addEvent(message,(double)iter + (double)samplePos*0.000001);
-						else 
+						else
 							messages->addEvent(message,lastPosInfo.ppqPosition + ((double)samplePos)*ppqPerSample);
 					}
 					loop->addEvent(message,roundDoubleToInt((samples+(double)samplePos)*ppqPerSample*960.0));
@@ -329,9 +329,9 @@ void MidiMonitorPlugin::getStateInformation (MemoryBlock& destData)
 void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
@@ -366,8 +366,6 @@ void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
 
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
     this->dispatchPendingMessages();
 }

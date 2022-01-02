@@ -96,7 +96,7 @@ MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
     midiOutputEditor->setScrollbarsShown (true);
     midiOutputEditor->setCaretVisible (false);
     midiOutputEditor->setPopupMenuEnabled (true);
-    midiOutputEditor->setText (String::empty);
+    midiOutputEditor->setText (String());
 
     addAndMakeVisible (wrapButton = new ToggleButton (L"wrap"));
     wrapButton->addListener (this);
@@ -127,8 +127,6 @@ MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
     maxLinesEditor->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     maxLinesEditor->addListener (this);
     maxLinesEditor->setSkewFactor (0.2);
-
-	LookAndFeel::setDefaultLookAndFeel (&MyLook);
 
     setMouseClickGrabsKeyboardFocus (false);
     clearButton->setMouseClickGrabsKeyboardFocus (false);
@@ -332,7 +330,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
         m.addSeparator();
 
 		m.addSectionHeader("Max Lines:");
-		m.addCustomItem(-1,maxLinesEditor,200,16,false);
+		m.addCustomItem(-1,*maxLinesEditor,200,16,false);
         m.addSeparator();
 
 		m.addSectionHeader("Filter Events:");
@@ -437,9 +435,9 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_colorButton] -- add your button handler code here..
         PopupMenu m;
-		m.addCustomItem(-1,hueSlider,100,16,false);
-		m.addCustomItem(-1,saturationSlider,100,16,false);
-		m.addCustomItem(-1,lightnessSlider,100,16,false);
+		m.addCustomItem(-1,*hueSlider,100,16,false);
+		m.addCustomItem(-1,*saturationSlider,100,16,false);
+		m.addCustomItem(-1,*lightnessSlider,100,16,false);
         //int result =
 			m.showAt(colorButton);
 		//switch (result) {
@@ -513,7 +511,7 @@ void MidiMonitorEditor::timerCallback ()
 
 	for (int i=0;i<messages.getNumEvents();i++)
 	{
-        String midiLine = String::empty;
+        String midiLine = String();
 		MidiMessage msg = messages.getEventPointer(i)->message;
 		{
             bool ignore=true;
@@ -715,19 +713,19 @@ void MidiMonitorEditor::timerCallback ()
 					--numLines;
 				}
 				++numLines;
-					
+
                 midiOutputEditor->setCaretPosition(midiOutputEditor->getText().length());
 
                 if (showbytes) {
                     Font defaultFont = midiOutputEditor->getFont();
-					String bytesString = numLines>1 ? "\n" : String::empty;
+					String bytesString = numLines>1 ? "\n" : String();
 					bytesString += String::toHexString(msg.getRawData(),msg.getRawDataSize()).toUpperCase() + "  ";
                     midiOutputEditor->setFont(Font("Courier New",midiOutputEditor->getFont().getHeight(),Font::plain));
                     midiOutputEditor->insertTextAtCaret (bytesString);
                     midiOutputEditor->setFont(defaultFont);
                 }
 				if (showtime) {
-					String timeString = (numLines>1 && !showbytes) ? "\n" : String::empty;
+					String timeString = (numLines>1 && !showbytes) ? "\n" : String();
 					timeString += ppqToString(msg.getTimeStamp(),getFilter()->getTimeSigNumerator(),getFilter()->getTimeSigDenominator(),getFilter()->lastPosInfo.bpm) + "  ";
 					Font defaultFont = midiOutputEditor->getFont();
 					midiOutputEditor->setFont(Font("Courier New",midiOutputEditor->getFont().getHeight(),Font::bold));
@@ -776,11 +774,11 @@ void MidiMonitorEditor::updateParametersFromFilter()
 	else timemode=2;
 
     //set sliders
-    hueSlider->setValue(hue,true,false);
-    saturationSlider->setValue(sat,true,false);
-    lightnessSlider->setValue(bri,true,false);
-    //slider4->setValue(contrast,true,false);
-	maxLinesEditor->setValue(maxLines,false,false);
+    hueSlider->setValue(hue,sendNotification);
+    saturationSlider->setValue(sat,sendNotification);
+    lightnessSlider->setValue(bri,sendNotification);
+    //slider4->setValue(contrast,sendNotification);
+	maxLinesEditor->setValue(maxLines,dontSendNotification);
 
     //set button states
     if (power>=0.5f) {
@@ -883,7 +881,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
 			ticks=(int)tpb-ticks-1;
 		}
 
-		String padding = String::empty;
+		String padding = String();
 		if      (ticks<10 && tpb>100.0) padding = L"00";
 		else if (ticks<100 && tpb>100.0) padding = L"0";
 		else if (ticks<10 && tpb>=10.0) padding = L"0";

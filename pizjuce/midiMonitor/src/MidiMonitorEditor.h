@@ -23,11 +23,14 @@
 #define __JUCER_HEADER_MIDIMONITOREDITOR_MIDIMONITOREDITOR_B4642E5D__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "MidiMonitor.h"
-#include "VSTSlider.h"
 //[/Headers]
 
-
+using namespace juce;
 
 //==============================================================================
 /**
@@ -40,8 +43,8 @@
 class MidiMonitorEditor  : public AudioProcessorEditor,
                            public ChangeListener,
                            public Timer,
-                           public ButtonListener,
-                           public SliderListener
+                           public Button::Listener,
+                           public Slider::Listener
 {
 public:
     //==============================================================================
@@ -76,7 +79,6 @@ private:
 	int timemode;
 	int numLines;
 	int maxLines;
-    OldSchoolLookAndFeel MyLook;
 
     void updateParametersFromFilter();
     MidiMonitorPlugin* getFilter() const throw()

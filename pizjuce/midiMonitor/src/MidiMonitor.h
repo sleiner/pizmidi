@@ -1,7 +1,11 @@
 #ifndef MIDIMONITORPLUGINFILTER_H
 #define MIDIMONITORPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "juce_audio_devices/juce_audio_devices.h"
+
+#include "../_common/PizAudioProcessor.h"
+
+using namespace juce;
 
 enum parameters {
 	kBgHue,
@@ -64,6 +68,7 @@ public:
     void setCurrentProgram (int index)                          { }
     const String getProgramName (int index)                     { return programName; }
     void changeProgramName (int index, const String& newName)   { programName = newName;}
+    double getTailLengthSeconds() const override                { return 0; }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData);

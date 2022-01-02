@@ -16,6 +16,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiCurve: Help text is never shown
 -   midiIn: Channel selector combobox only shows channel when expanded
 -   midiKeyboard: Toggle mode is not working
+-   midiMonitor: text of checkboxes is truncated
 
 ### Serious problems are known
 
