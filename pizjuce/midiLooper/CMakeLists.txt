@@ -11,19 +11,19 @@ piz_add_plugin(
 target_sources(
   piz_midiLooper
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiLoop.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PianoRoll.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/piz_MidiMessageSequence.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizLooper.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizLooperEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiLoop.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PianoRoll.h"
+          "${CMAKE_CURRENT_LIST_DIR}/piz_MidiMessageSequence.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PizLooper.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PizLooperEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiLoop.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PianoRoll.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/piz_MidiMessageSequence.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizLooper.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizLooperEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PizLooperProcessing.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/Timeline.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/MidiLoop.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PianoRoll.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/piz_MidiMessageSequence.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PizLooper.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PizLooperEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PizLooperProcessing.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/Timeline.cpp")
 
 target_link_libraries(
   piz_midiLooper
