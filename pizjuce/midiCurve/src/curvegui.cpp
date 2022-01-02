@@ -142,9 +142,6 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
 
 
     //[UserPreSize]
-	static PizLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
 	resizeLimits.setSizeLimits (50, 50, 1600, 1600);
 	instructionsLabel->setVisible(false);
 #if 0
@@ -307,8 +304,8 @@ void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
 		const int lastin = getFilter()->lastMsg.lastCCIn;
 		const int lastout = getFilter()->lastMsg.lastCCOut;
 		getFilter()->getCallbackLock().exit();
-		if (lastin!=-1) label->setText("In: " + String(lastin),false);
-		if (lastout!=-1) label2->setText("Out: " + String(lastout),false);
+		if (lastin!=-1) label->setText("In: " + String(lastin),dontSendNotification);
+		if (lastout!=-1) label2->setText("Out: " + String(lastout),dontSendNotification);
 		curve->repaintIndicator(lastin,lastout);
 	}
 }
@@ -332,13 +329,13 @@ void CurveEditor::updateParameters ()
 	filter->getCallbackLock().exit();
 
 
-	slider->setValue(p_ccnumber*slider->getMaximum(),false);
-	channelSlider->setValue(p_channel*channelSlider->getMaximum(),false);
+	slider->setValue(p_ccnumber*slider->getMaximum(),dontSendNotification);
+	channelSlider->setValue(p_channel*channelSlider->getMaximum(),dontSendNotification);
 
-	velocityButton->setToggleState(p_velocity>=0.5f,false);
-	ccButton->setToggleState(p_cc>=0.5f,false);
-	aftertouchButton->setToggleState(p_aftertouch>=0.5f,false);
-	channelPressureButton->setToggleState(p_channelpressure>=0.5f,false);
+	velocityButton->setToggleState(p_velocity>=0.5f,dontSendNotification);
+	ccButton->setToggleState(p_cc>=0.5f,dontSendNotification);
+	aftertouchButton->setToggleState(p_aftertouch>=0.5f,dontSendNotification);
+	channelPressureButton->setToggleState(p_channelpressure>=0.5f,dontSendNotification);
 
 	curve->updateParameters(true);
 

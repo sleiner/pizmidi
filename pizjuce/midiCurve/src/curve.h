@@ -1,7 +1,8 @@
 #ifndef MidiCurvePLUGINFILTER_H
 #define MidiCurvePLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "../_common/BankStorage.h"
+#include "../_common/PizAudioProcessor.h"
 
 #define MAX_ENVELOPE_POINTS    (32)
 #define MAX_ENVELOPE_LENGTH    (127.0f)
@@ -24,22 +25,23 @@ enum parameters {
 	kNumPrograms = 128
 };
 
-class MidiCurvePrograms : ValueTree {	
-friend class MidiCurve;
+class MidiCurvePrograms : public BankStorage {
 public:
 	MidiCurvePrograms ();
-	~MidiCurvePrograms () {};
-	void set(int prog, const var::identifier &name, const var &newValue)
+
+	void set(int prog, const Identifier &name, const var &newValue)
 	{
-		this->getChild(prog).setProperty(name,newValue,0);
+		BankStorage::set(0, prog, name.toString(), newValue);
 	}
-	const var get(int prog, const var::identifier &name)
+	const var get(int prog, const Identifier &name)
 	{
-		return this->getChild(prog).getProperty(name);
+		return BankStorage::get(0, prog, name.toString());
 	}
-	MidiCurvePrograms(ValueTree& tree)
-	{
-		this->getChild(0).getParent() = tree.createCopy();
+
+	void loadProgram(int prog, InputStream& stream) {
+		values_.removeChild(values_.getChild(prog),0);
+		values_.addChild(ValueTree::readFromStream(stream),prog,0);
+		values_.getChild(prog).setProperty("progIndex",prog,0);
 	}
 };
 
@@ -62,20 +64,19 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
@@ -92,6 +93,7 @@ public:
     const String getOutputChannelName (int channelIndex) const;
     bool isInputChannelStereoPair (int index) const;
     bool isOutputChannelStereoPair (int index) const;
+	double getTailLengthSeconds() const override { return 0; }
 
 
     //==============================================================================
@@ -142,7 +144,7 @@ private:
 			isControl=control;
 			isActive=active;
 		}
-		midiPoint() 
+		midiPoint()
 		{
 			p.setXY(0.f,0.f);
 			isControl=false;
@@ -164,7 +166,7 @@ private:
 
     MidiCurvePrograms *programs;
     int curProgram;
-    
+
     bool init;
 
 	void copySettingsToProgram(int index);

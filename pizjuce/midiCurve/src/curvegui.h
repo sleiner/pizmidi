@@ -23,10 +23,11 @@
 #define __JUCER_HEADER_CURVEEDITOR_CURVEGUI_303E085F__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "curve.h"
 #include "MidiEnvelope.h"
-#include "../../common/ChannelSlider.h"
-#include "../../common/piz_LookAndFeel.h"
+#include "../_common/ChannelSlider.h"
 //[/Headers]
 
 
@@ -41,8 +42,8 @@
 */
 class CurveEditor  : public AudioProcessorEditor,
                      public ChangeListener,
-                     public ButtonListener,
-                     public SliderListener
+                     public Button::Listener,
+                     public Slider::Listener
 {
 public:
     //==============================================================================

@@ -13,6 +13,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiChordAnalyzer
 -   midiChords
 -   midiChs
+-   midiCurve: Help text is never shown
 
 ### Serious problems are known
 
