@@ -168,8 +168,6 @@ midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
 	midiKeyboard->setOctaveForMiddleC(ownerFilter->bottomOctave+5);
 
 	resizeLimits.setSizeLimits (50, 20, 1600, 500);
-	static NonShinyLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
 #if 0
     //[/UserPreSize]
 
@@ -436,7 +434,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
 	if (qwerty) midiKeyboard->grabKeyboardFocus();
     midiKeyboard->setMidiChannelsToDisplay(1<<ch);
     midiKeyboard->setMidiChannel(ch+1);
-    chSlider->setValue(ch+1,false);
+    chSlider->setValue(ch+1,dontSendNotification);
     yButton->setToggleState(useY,false);
     velocitySlider->setValue(velocity);
     inputToggleButton->setToggleState(toggle,false);
@@ -447,7 +445,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
 	midiKeyboard->setLowestVisibleKey(keyPos);
     midiKeyboard->setKeyWidth(jmax((float)getWidth()/76.f,keywidth*150.0f+5.0f));
 	midiKeyboard->setScrollButtonsVisible(keywidth>0.f);
-    keyWidthSlider->setValue(keywidth*100.f,false);
+    keyWidthSlider->setValue(keywidth*100.f,dontSendNotification);
 
 	keyWidthSlider->setVisible(!hide);
 	chSlider->setVisible(!hide);

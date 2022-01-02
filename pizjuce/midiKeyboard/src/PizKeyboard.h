@@ -1,12 +1,12 @@
 #ifndef PizKeyboardPLUGINFILTER_H
 #define PizKeyboardPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include "../_common/PizAudioProcessor.h"
 
 enum parameters {
-    kWidth, 
-    kChannel, 
-    kVelocity, 
+    kWidth,
+    kChannel,
+    kVelocity,
     kUseY,
 	kToggleInput,
 	kHidePanel,
@@ -66,10 +66,11 @@ public:
     //==============================================================================
     int getNumPrograms()                                        { return 128; }
     int getCurrentProgram()                                     { return curProgram; }
-    void setCurrentProgram (int index)                          
-	{ 
-		lastProgram=curProgram; 
-		curProgram=index; 
+    double getTailLengthSeconds() const override                { return 0; }
+    void setCurrentProgram (int index)
+	{
+		lastProgram=curProgram;
+		curProgram=index;
 	}
     const String getProgramName (int index)                     { return "State " + String(index+1); }
     void changeProgramName (int index, const String& newName)   { }

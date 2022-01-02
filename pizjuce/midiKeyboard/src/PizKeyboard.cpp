@@ -3,6 +3,7 @@
 
 bool PizKeyboard::isCapsLockOn()
 {
+	// TODO: WTF?
 #if JUCE_WIN32
 	return (GetKeyState(VK_CAPITAL) & 0x0001)!=0;
 #elif JUCE_MAC
@@ -53,7 +54,7 @@ PizKeyboard::PizKeyboard()
 	ccqwertyState[1] = KeyPress::isKeyCurrentlyDown(KeyPress::createFromDescription("`").getKeyCode());
 	ccState[0] = false;
 	ccState[1] = false;
-	for (int i = keymapLength; --i >= 0;) 
+	for (int i = keymapLength; --i >= 0;)
 		qwertyState[i] = KeyPress::isKeyCurrentlyDown(keymap[i]);
 }
 
@@ -184,7 +185,7 @@ const String PizKeyboard::getParameterName (int index)
 		return "Reset";
 	if (index == kShowNumbers)
 		return "ShowNumbers";
-	return String::empty;
+	return String();
 }
 
 const String PizKeyboard::getParameterText (int index)
@@ -213,7 +214,7 @@ const String PizKeyboard::getParameterText (int index)
 		return "--->";
     if (index == kShowNumbers)
         return showNumbers ? "Yes" : "No";
-	return String::empty;
+	return String();
 }
 
 const String PizKeyboard::getInputChannelName (const int channelIndex) const
@@ -264,16 +265,16 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 	MidiBuffer output;
 	if (lastProgram!=curProgram)
 	{
-		for (int ch=1;ch<=16;ch++) 
+		for (int ch=1;ch<=16;ch++)
 		{
 			for (int n=0;n<128;n++)
 			{
 				if (progKbState[lastProgram].isNoteOn(ch,n)) {
-					editorKbState.noteOff(ch,n);
+					editorKbState.noteOff(ch,n, 1.f);
 				}
 			}
 		}
-		for (int ch=1;ch<=16;ch++) 
+		for (int ch=1;ch<=16;ch++)
 		{
 			for (int n=0;n<128;n++)
 			{
@@ -288,7 +289,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 	if (clearHeldNotes)
 	{
 		clearHeldNotes=false;
-		for (int ch=1;ch<=16;ch++) 
+		for (int ch=1;ch<=16;ch++)
 		{
 			for (int n=0;n<128;n++)
 			{
@@ -329,12 +330,12 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 						editorKbState.noteOn(channel+1,note,ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
 					}
 					else if (!toggle) {
-						editorKbState.noteOff(channel+1,note);
+						editorKbState.noteOff(channel+1,note,1.f);
 					}
 				}
 				else if (toggle && KeyPress::isKeyCurrentlyDown(keymap[i]) && progKbState[curProgram].isNoteOn(channel+1,note))
 				{
-					editorKbState.noteOff(channel+1,note);
+					editorKbState.noteOff(channel+1,note,1.f);
 				}
 				qwertyState[i] = KeyPress::isKeyCurrentlyDown(keymap[i]);
 			}
@@ -354,7 +355,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 					skip = true;
 					if (progKbState[curProgram].isNoteOn(m.getChannel(),m.getNoteNumber()))
 						output.addEvent(MidiMessage::noteOff(m.getChannel(),m.getNoteNumber()),sample);
-					else 
+					else
 						output.addEvent(m,sample);
 				}
 				else if (m.isNoteOff()) {
@@ -366,16 +367,16 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 				setCurrentProgram(m.getProgramChangeNumber());
 				if (lastProgram!=curProgram)
 				{
-					for (int ch=1;ch<=16;ch++) 
+					for (int ch=1;ch<=16;ch++)
 					{
 						for (int n=0;n<128;n++)
 						{
-							if (progKbState[lastProgram].isNoteOn(ch,n)) 
+							if (progKbState[lastProgram].isNoteOn(ch,n))
 								output.addEvent(MidiMessage::noteOff(ch,n),sample);
 						}
 					}
 					editorKbState.reset();
-					for (int ch=1;ch<=16;ch++) 
+					for (int ch=1;ch<=16;ch++)
 					{
 						for (int n=0;n<128;n++)
 						{
@@ -390,16 +391,16 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 				}
 			}
 		}
-		if (!skip) 
+		if (!skip)
 			output.addEvent(m,sample);
 	}
-	//if (!toggle) 
+	//if (!toggle)
 	//	output = midiMessages;
 
 	if (sendHeldNotes)
 	{
 		sendHeldNotes=false;
-		for (int ch=1;ch<=16;ch++) 
+		for (int ch=1;ch<=16;ch++)
 		{
 			for (int n=0;n<128;n++)
 			{
@@ -465,7 +466,7 @@ void PizKeyboard::getStateInformation (MemoryBlock& destData)
 void PizKeyboard::setStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    ScopedPointer<XmlElement> xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {

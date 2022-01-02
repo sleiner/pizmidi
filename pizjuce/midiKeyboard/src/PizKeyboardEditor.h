@@ -23,9 +23,12 @@
 #define __JUCER_HEADER_MIDIKEYBOARDEDITOR_PIZKEYBOARDEDITOR_B0E33023__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "PizKeyboard.h"
 #include "PizKeyboardComponent.h"
-#include "../../common/LookAndFeel.h"
 //[/Headers]
 
 
@@ -41,8 +44,8 @@
 class midiKeyboardEditor  : public AudioProcessorEditor,
                             public ChangeListener,
                             public KeyListener,
-                            public SliderListener,
-                            public ButtonListener
+                            public Slider::Listener,
+                            public Button::Listener
 {
 public:
     //==============================================================================

@@ -30,8 +30,8 @@ bool PizKeyboardComponent::keyStateChanged(bool isKeyDown)
 					midiKeyboardEditor* editor = ((midiKeyboardEditor*)(this->getParentComponent()));
 					if(s->isNoteOn(getMidiChannel(),note))
 					{
-						
-						s->noteOff (getMidiChannel(), note);
+
+						s->noteOff (getMidiChannel(), note,1.f);
 						keyPressUsed = true;
 					}
 					else {
@@ -78,7 +78,7 @@ bool PizKeyboardComponent::mouseDownOnKey(int midiNoteNumber, const MouseEvent &
 	}
 	else if (e.mods.isPopupMenu()!=toggle) {
 		if (s->isNoteOn(this->getMidiChannel(),midiNoteNumber)) {
-			s->noteOff(this->getMidiChannel(),midiNoteNumber);
+			s->noteOff(this->getMidiChannel(),midiNoteNumber,1.f);
 		}
 		else {
 			s->noteOn(this->getMidiChannel(),midiNoteNumber,velocity);
@@ -92,7 +92,7 @@ bool PizKeyboardComponent::mouseDownOnKey(int midiNoteNumber, const MouseEvent &
 			return true;
 		}
 		else {
-			s->noteOff(this->getMidiChannel(),midiNoteNumber);
+			s->noteOff(this->getMidiChannel(),midiNoteNumber,1.f);
 			return false;
 		}
 	}

@@ -1,8 +1,12 @@
 #ifndef PIZMIDIKEYBOARDCOMPONENT_H
 #define PIZMIDIKEYBOARDCOMPONENT_H
 
-#include "JuceHeader.h"
+#include "juce_audio_utils/juce_audio_utils.h"
+#include "juce_graphics/juce_graphics.h"
+
 #include "PizKeyboard.h"
+
+using namespace juce;
 
 class PizKeyboardComponent : public MidiKeyboardComponent
 {
@@ -24,9 +28,10 @@ public:
 	}
 	int getKeyPressBaseOctave() {return baseOctave;}
 	bool toggle;
-	void drawBlackNote(int midiNoteNumber, Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const Colour& textColour)
+	void drawBlackNote(int midiNoteNumber, Graphics& g, juce::Rectangle<float> area, bool isDown, bool isOver, const Colour& textColour)
 	{
-		MidiKeyboardComponent::drawBlackNote(midiNoteNumber,g,x,y,w,h,isDown,isOver,textColour);
+		auto x = area.getX(), y = area.getY(), w = area.getWidth(), h = area.getHeight();
+		MidiKeyboardComponent::drawBlackNote(midiNoteNumber,g,area,isDown,isOver,textColour);
 		if (hasKeyboardFocus(false) || drawQwerty)
 		{
 			if (midiNoteNumber >= baseOctave*12 && midiNoteNumber < 32+baseOctave*12) {
@@ -36,7 +41,7 @@ public:
 				if (midiNoteNumber/12 == baseOctave && midiNoteNumber%12==0) {
 					g.drawEllipse((float)(x+w/4),(float)(y+h-w),(float)(w/2),(float)(w/2),2.f);
 				}
-				g.setFont((float)(w/2),Font::bold);
+				g.setFont(Font((float)(w/2),Font::bold));
 				g.drawText(key,x+w/4,y+h-w,w/2,w/2,Justification::centred,false);
 			}
 		}
@@ -48,9 +53,10 @@ public:
 			g.drawFittedText (String(midiNoteNumber), x + 2, y + 2, w - 4, h - 4, Justification::centredBottom, 1);
 		}
 	}
-	void drawWhiteNote(int midiNoteNumber, Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const Colour& lineColour, const Colour& textColour)
+	void drawWhiteNote(int midiNoteNumber, Graphics& g, juce::Rectangle<float> area, bool isDown, bool isOver, const Colour& lineColour, const Colour& textColour)
 	{
-		MidiKeyboardComponent::drawWhiteNote(midiNoteNumber,g,x,y,w,h,isDown,isOver,lineColour,drawNoteNumber ? Colours::transparentWhite : textColour);
+		auto x = area.getX(), y = area.getY(), w = area.getWidth(), h = area.getHeight();
+		MidiKeyboardComponent::drawWhiteNote(midiNoteNumber,g,area,isDown,isOver,lineColour,drawNoteNumber ? Colours::transparentWhite : textColour);
 		if (hasKeyboardFocus(false) || drawQwerty)
 		{
 			if (midiNoteNumber >= baseOctave*12 && midiNoteNumber < 32+baseOctave*12) {
@@ -60,7 +66,7 @@ public:
 				if (midiNoteNumber/12 == baseOctave && midiNoteNumber%12==0) {
 					g.drawEllipse((float)(x+w/4),(float)(y+h-3*w/4),(float)(w/2),(float)(w/2),2.f);
 				}
-				g.setFont((float)(w/2),Font::bold);
+				g.setFont(Font((float)(w/2),Font::bold));
 				g.drawText(key,x+w/4,y+h-3*w/4,w/2,w/2,Justification::centred,false);
 			}
 		}
