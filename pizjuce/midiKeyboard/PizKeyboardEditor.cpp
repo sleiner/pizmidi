@@ -54,6 +54,7 @@ midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
     keyWidthSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     keyWidthSlider->setColour (Slider::backgroundColourId, Colour (0x5dffffff));
     keyWidthSlider->setColour (Slider::thumbColourId, Colour (0x5d000000));
+    keyWidthSlider->setColour (Slider::trackColourId, Colours::white.withAlpha((uint8)0x96));
     keyWidthSlider->setColour (Slider::textBoxTextColourId, Colour (0x0));
     keyWidthSlider->addListener (this);
 
@@ -77,6 +78,7 @@ midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
     velocitySlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     velocitySlider->setColour (Slider::backgroundColourId, Colour (0x5dffffff));
     velocitySlider->setColour (Slider::thumbColourId, Colour (0x5d000000));
+    velocitySlider->setColour (Slider::trackColourId, Colours::white.withAlpha((uint8)0x96));
     velocitySlider->setColour (Slider::textBoxTextColourId, Colours::black);
     velocitySlider->addListener (this);
 
