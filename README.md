@@ -18,6 +18,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiKeyboard: Toggle mode is not working
 -   midiMonitor: text of checkboxes is truncated
 -   midiOut: Channel selector combobox only shows channel when expanded
+-   midiPads
 
 ### Serious problems are known
 

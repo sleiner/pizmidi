@@ -69,7 +69,7 @@ PadEditor::PadEditor ()
       label7 (0),
       label8 (0)
 {
-    addAndMakeVisible (textEditor = new TextEditor (T("new text editor")));
+    addAndMakeVisible (textEditor = new TextEditor ("new text editor"));
     textEditor->setMultiLine (false);
     textEditor->setReturnKeyStartsNewLine (false);
     textEditor->setReadOnly (false);
@@ -77,203 +77,203 @@ PadEditor::PadEditor ()
     textEditor->setCaretVisible (true);
     textEditor->setPopupMenuEnabled (true);
     textEditor->setColour (TextEditor::outlineColourId, Colours::black);
-    textEditor->setText (String::empty);
+    textEditor->setText (String());
 
-    addAndMakeVisible (textButton = new TextButton (T("new button")));
-    textButton->setButtonText (T("Clear Icon"));
-    textButton->addButtonListener (this);
+    addAndMakeVisible (textButton = new TextButton ("new button"));
+    textButton->setButtonText ("Clear Icon");
+    textButton->addListener (this);
 
-    addAndMakeVisible (textButton2 = new TextButton (T("new button")));
-    textButton2->setButtonText (T("Choose Icon"));
-    textButton2->addButtonListener (this);
+    addAndMakeVisible (textButton2 = new TextButton ("new button"));
+    textButton2->setButtonText ("Choose Icon");
+    textButton2->addListener (this);
 
     addAndMakeVisible (component = new ColourSelector());
-    component->setName (T("new component"));
+    component->setName ("new component");
 
-    addAndMakeVisible (toggleButton = new ToggleButton (T("new toggle button")));
-    toggleButton->setButtonText (T("Show Dot"));
-    toggleButton->addButtonListener (this);
+    addAndMakeVisible (toggleButton = new ToggleButton ("new toggle button"));
+    toggleButton->setButtonText ("Show Dot");
+    toggleButton->addListener (this);
 
-    addAndMakeVisible (toggleButton2 = new ToggleButton (T("new toggle button")));
-    toggleButton2->setButtonText (T("Show Values"));
-    toggleButton2->addButtonListener (this);
+    addAndMakeVisible (toggleButton2 = new ToggleButton ("new toggle button"));
+    toggleButton2->setButtonText ("Show Values");
+    toggleButton2->addListener (this);
 
-    addAndMakeVisible (toggleButton3 = new ToggleButton (T("new toggle button")));
-    toggleButton3->setButtonText (T("Centered Text"));
-    toggleButton3->addButtonListener (this);
+    addAndMakeVisible (toggleButton3 = new ToggleButton ("new toggle button"));
+    toggleButton3->setButtonText ("Centered Text");
+    toggleButton3->addListener (this);
 
-    addAndMakeVisible (slider = new Slider (T("new slider")));
+    addAndMakeVisible (slider = new Slider ("new slider"));
     slider->setRange (0, 10, 0);
     slider->setSliderStyle (Slider::LinearBar);
     slider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider->setColour (Slider::textBoxTextColourId, Colour (0x0));
     slider->addListener (this);
 
-    addAndMakeVisible (slider2 = new Slider (T("new slider")));
+    addAndMakeVisible (slider2 = new Slider ("new slider"));
     slider2->setRange (0, 10, 0);
     slider2->setSliderStyle (Slider::LinearBar);
     slider2->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider2->setColour (Slider::textBoxTextColourId, Colour (0x0));
     slider2->addListener (this);
 
-    addAndMakeVisible (toggleButton4 = new ToggleButton (T("new toggle button")));
-    toggleButton4->setButtonText (T("Note"));
+    addAndMakeVisible (toggleButton4 = new ToggleButton ("new toggle button"));
+    toggleButton4->setButtonText ("Note");
     toggleButton4->setRadioGroupId (1);
-    toggleButton4->addButtonListener (this);
+    toggleButton4->addListener (this);
 
-    addAndMakeVisible (toggleButton5 = new ToggleButton (T("new toggle button")));
-    toggleButton5->setButtonText (T("CC"));
+    addAndMakeVisible (toggleButton5 = new ToggleButton ("new toggle button"));
+    toggleButton5->setButtonText ("CC");
     toggleButton5->setRadioGroupId (1);
-    toggleButton5->addButtonListener (this);
+    toggleButton5->addListener (this);
 
-    addAndMakeVisible (toggleButton6 = new ToggleButton (T("new toggle button")));
-    toggleButton6->setButtonText (T("Use Y-Position"));
-    toggleButton6->addButtonListener (this);
+    addAndMakeVisible (toggleButton6 = new ToggleButton ("new toggle button"));
+    toggleButton6->setButtonText ("Use Y-Position");
+    toggleButton6->addListener (this);
 
-    addAndMakeVisible (toggleButton7 = new ToggleButton (T("new toggle button")));
-    toggleButton7->setButtonText (T("Use X-Position"));
-    toggleButton7->addButtonListener (this);
+    addAndMakeVisible (toggleButton7 = new ToggleButton ("new toggle button"));
+    toggleButton7->setButtonText ("Use X-Position");
+    toggleButton7->addListener (this);
 
-    addAndMakeVisible (toggleButton8 = new ToggleButton (T("new toggle button")));
-    toggleButton8->setButtonText (T("X is Pitch Bend"));
-    toggleButton8->addButtonListener (this);
+    addAndMakeVisible (toggleButton8 = new ToggleButton ("new toggle button"));
+    toggleButton8->setButtonText ("X is Pitch Bend");
+    toggleButton8->addListener (this);
 
-    addAndMakeVisible (toggleButton9 = new ToggleButton (T("new toggle button")));
-    toggleButton9->setButtonText (T("Send Off Values"));
-    toggleButton9->addButtonListener (this);
+    addAndMakeVisible (toggleButton9 = new ToggleButton ("new toggle button"));
+    toggleButton9->setButtonText ("Send Off Values");
+    toggleButton9->addListener (this);
 
-    addAndMakeVisible (toggleButton10 = new ToggleButton (T("new toggle button")));
-    toggleButton10->setButtonText (T("Toggle Mode"));
-    toggleButton10->addButtonListener (this);
+    addAndMakeVisible (toggleButton10 = new ToggleButton ("new toggle button"));
+    toggleButton10->setButtonText ("Toggle Mode");
+    toggleButton10->addListener (this);
 
-    addAndMakeVisible (slider3 = new Slider (T("new slider")));
+    addAndMakeVisible (slider3 = new Slider ("new slider"));
     slider3->setRange (0, 127, 1);
     slider3->setSliderStyle (Slider::LinearBar);
     slider3->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider3->addListener (this);
 
-    addAndMakeVisible (slider4 = new Slider (T("new slider")));
+    addAndMakeVisible (slider4 = new Slider ("new slider"));
     slider4->setRange (0, 127, 1);
     slider4->setSliderStyle (Slider::LinearBar);
     slider4->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider4->addListener (this);
 
-    addAndMakeVisible (slider5 = new Slider (T("new slider")));
+    addAndMakeVisible (slider5 = new Slider ("new slider"));
     slider5->setRange (0, 127, 1);
     slider5->setSliderStyle (Slider::LinearBar);
     slider5->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider5->addListener (this);
 
-    addAndMakeVisible (slider6 = new Slider (T("new slider")));
+    addAndMakeVisible (slider6 = new Slider ("new slider"));
     slider6->setRange (0, 127, 1);
     slider6->setSliderStyle (Slider::LinearBar);
     slider6->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider6->addListener (this);
 
-    addAndMakeVisible (slider7 = new Slider (T("new slider")));
+    addAndMakeVisible (slider7 = new Slider ("new slider"));
     slider7->setRange (0, 127, 1);
     slider7->setSliderStyle (Slider::LinearBar);
     slider7->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider7->addListener (this);
 
-    addAndMakeVisible (slider8 = new Slider (T("new slider")));
+    addAndMakeVisible (slider8 = new Slider ("new slider"));
     slider8->setRange (0, 127, 1);
     slider8->setSliderStyle (Slider::LinearBar);
     slider8->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider8->addListener (this);
 
-    addAndMakeVisible (slider9 = new Slider (T("new slider")));
+    addAndMakeVisible (slider9 = new Slider ("new slider"));
     slider9->setRange (0, 127, 1);
     slider9->setSliderStyle (Slider::LinearBar);
     slider9->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slider9->addListener (this);
 
-    addAndMakeVisible (textButton3 = new TextButton (T("new button")));
-    textButton3->setButtonText (T("Learn"));
-    textButton3->addButtonListener (this);
+    addAndMakeVisible (textButton3 = new TextButton ("new button"));
+    textButton3->setButtonText ("Learn");
+    textButton3->addListener (this);
 
-    addAndMakeVisible (textButton4 = new TextButton (T("new button")));
-    textButton4->setButtonText (T("Learn"));
-    textButton4->addButtonListener (this);
+    addAndMakeVisible (textButton4 = new TextButton ("new button"));
+    textButton4->setButtonText ("Learn");
+    textButton4->addListener (this);
 
-    addAndMakeVisible (textButton5 = new TextButton (T("new button")));
-    textButton5->setButtonText (T("Learn"));
-    textButton5->addButtonListener (this);
+    addAndMakeVisible (textButton5 = new TextButton ("new button"));
+    textButton5->setButtonText ("Learn");
+    textButton5->addListener (this);
 
-    addAndMakeVisible (textButton6 = new TextButton (T("new button")));
-    textButton6->setButtonText (T("Learn"));
-    textButton6->addButtonListener (this);
+    addAndMakeVisible (textButton6 = new TextButton ("new button"));
+    textButton6->setButtonText ("Learn");
+    textButton6->addListener (this);
 
-    addAndMakeVisible (textButton7 = new TextButton (T("new button")));
-    textButton7->setButtonText (T("Learn"));
-    textButton7->addButtonListener (this);
+    addAndMakeVisible (textButton7 = new TextButton ("new button"));
+    textButton7->setButtonText ("Learn");
+    textButton7->addListener (this);
 
-    addAndMakeVisible (textButton8 = new TextButton (T("new button")));
-    textButton8->setButtonText (T("Learn"));
-    textButton8->addButtonListener (this);
+    addAndMakeVisible (textButton8 = new TextButton ("new button"));
+    textButton8->setButtonText ("Learn");
+    textButton8->addListener (this);
 
-    addAndMakeVisible (textButton9 = new TextButton (T("new button")));
-    textButton9->setButtonText (T("Learn"));
-    textButton9->addButtonListener (this);
+    addAndMakeVisible (textButton9 = new TextButton ("new button"));
+    textButton9->setButtonText ("Learn");
+    textButton9->addListener (this);
 
-    addAndMakeVisible (label = new Label (T("new label"),
-                                          T("Trigger Note")));
+    addAndMakeVisible (label = new Label ("new label",
+                                          "Trigger Note"));
     label->setFont (Font (12.0000f, Font::plain));
     label->setJustificationType (Justification::centredLeft);
     label->setEditable (false, false, false);
     label->setColour (TextEditor::textColourId, Colours::black);
     label->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label2 = new Label (T("new label"),
-                                           T("X-CC Off Value")));
+    addAndMakeVisible (label2 = new Label ("new label",
+                                           "X-CC Off Value"));
     label2->setFont (Font (12.0000f, Font::plain));
     label2->setJustificationType (Justification::centredLeft);
     label2->setEditable (false, false, false);
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label3 = new Label (T("new label"),
-                                           T("X-CC #")));
+    addAndMakeVisible (label3 = new Label ("new label",
+                                           "X-CC #"));
     label3->setFont (Font (12.0000f, Font::plain));
     label3->setJustificationType (Justification::centredLeft);
     label3->setEditable (false, false, false);
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label4 = new Label (T("new label"),
-                                           T("Velocity/Y-CC Off Value")));
+    addAndMakeVisible (label4 = new Label ("new label",
+                                           "Velocity/Y-CC Off Value"));
     label4->setFont (Font (12.0000f, Font::plain));
     label4->setJustificationType (Justification::centredLeft);
     label4->setEditable (false, false, false);
     label4->setColour (TextEditor::textColourId, Colours::black);
     label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label5 = new Label (T("new label"),
-                                           T("Velocity/Y-CC On Value")));
+    addAndMakeVisible (label5 = new Label ("new label",
+                                           "Velocity/Y-CC On Value"));
     label5->setFont (Font (12.0000f, Font::plain));
     label5->setJustificationType (Justification::centredLeft);
     label5->setEditable (false, false, false);
     label5->setColour (TextEditor::textColourId, Colours::black);
     label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label6 = new Label (T("new label"),
-                                           T("Y-CC #")));
+    addAndMakeVisible (label6 = new Label ("new label",
+                                           "Y-CC #"));
     label6->setFont (Font (12.0000f, Font::plain));
     label6->setJustificationType (Justification::centredLeft);
     label6->setEditable (false, false, false);
     label6->setColour (TextEditor::textColourId, Colours::black);
     label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label7 = new Label (T("new label"),
-                                           T("Note")));
+    addAndMakeVisible (label7 = new Label ("new label",
+                                           "Note"));
     label7->setFont (Font (12.0000f, Font::plain));
     label7->setJustificationType (Justification::centredLeft);
     label7->setEditable (false, false, false);
     label7->setColour (TextEditor::textColourId, Colours::black);
     label7->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label8 = new Label (T("new label"),
-                                           T("Roundness")));
+    addAndMakeVisible (label8 = new Label ("new label",
+                                           "Roundness"));
     label8->setFont (Font (12.0000f, Font::plain));
     label8->setJustificationType (Justification::centredLeft);
     label8->setEditable (false, false, false);
@@ -348,7 +348,7 @@ void PadEditor::paint (Graphics& g)
 
     g.setColour (Colours::black);
     g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (T("Icon Size"),
+    g.drawText ("Icon Size",
                 147, 131, 85, 13,
                 Justification::centredLeft, true);
 

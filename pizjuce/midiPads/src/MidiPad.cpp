@@ -2,9 +2,9 @@
 
 MidiPad::MidiPad (int _index)
     : Button ("MidiPad"),
-      normalImage (0),
+      normalImage (nullptr),
       index(_index),
-	  text (0)
+	  text (nullptr)
 
 {
     backgroundOff = Colour (0xffbbbbff);
@@ -33,16 +33,15 @@ MidiPad::MidiPad (int _index)
     setSize (200, 200);
 }
 
-MidiPad::~MidiPad() 
+MidiPad::~MidiPad()
 {
 	if (text) delete text;
     deleteImages();
 }
 
-void MidiPad::deleteImages() 
+void MidiPad::deleteImages()
 {
-    if (normalImage) 
-		deleteAndZero (normalImage);
+    normalImage.reset();
 }
 
 bool MidiPad::setImageFromFile(File file)
@@ -50,7 +49,7 @@ bool MidiPad::setImageFromFile(File file)
 	if (file.exists())
 	{
 		deleteImages();
-		
+
 		normalImage = Drawable::createFromImageFile(file);
 		if (normalImage!=0) {
 			repaint();
@@ -175,7 +174,7 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
 
     if (imageToDraw != 0)
     {
-        imageToDraw->drawWithin (g, 
+        imageToDraw->drawWithin (g,
 								 imageSpace,
                                  RectanglePlacement::centred,
 								 1.f);
@@ -185,7 +184,7 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
 		float fontsize = jmax(0.5f,jmin((float)(proportionOfWidth(0.2f)),(float)(proportionOfHeight(0.15f))));
         g.setFont (Font (fontsize*0.9f, Font::plain));
 		g.setColour (getBackgroundColour().contrasting(0.8f));
-        String xy = String::empty;
+        String xy = String();
         if (showx && showy) xy="x:"+String((int)(x*127.1))+" y:"+String((int)(y*127.1));
         else if (showx) xy="x:"+String((int)(x*127.1));
         else if (showy) xy="y:"+String((int)(y*127.1));
@@ -199,21 +198,21 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
         float diameter = jlimit(10.f,jmax(10.f,jmin(getHeight(),getWidth())*0.4f),
 			jmax((float)(proportionOfHeight(0.125f)),(float)(proportionOfWidth(0.125f))));
         g.setColour (Colour (0x88faa52a));
-        g.fillEllipse ( (float)(proportionOfWidth(x)) - diameter*0.5f, 
-                        (float)(proportionOfHeight(1.0f-y)) - diameter*0.5f, 
-                        diameter, 
+        g.fillEllipse ( (float)(proportionOfWidth(x)) - diameter*0.5f,
+                        (float)(proportionOfHeight(1.0f-y)) - diameter*0.5f,
+                        diameter,
                         diameter );
         g.setColour (Colour (0x99a52a88));
-        g.drawEllipse ((float)(proportionOfWidth(x)) - diameter*0.5f, 
-                       (float)(proportionOfHeight(1.0f-y)) - diameter*0.5f, 
-                       diameter, 
-                       diameter, 
+        g.drawEllipse ((float)(proportionOfWidth(x)) - diameter*0.5f,
+                       (float)(proportionOfHeight(1.0f-y)) - diameter*0.5f,
+                       diameter,
+                       diameter,
                        diameter*0.1f );
     }
 
 }
 
-void MidiPad::setColour(const juce::Colour &colour) 
+void MidiPad::setColour(const juce::Colour &colour)
 {
     setBackgroundColours(colour,colour);
 	text->setColour (Label::textColourId, colour.contrasting(0.8f));
@@ -259,9 +258,9 @@ const Drawable* MidiPad::getCurrentImage() const throw()
 
 const Drawable* MidiPad::getNormalImage() const throw()
 {
-    return 
-		//(getToggleState() && normalImageOn != 0) ? normalImageOn : 
-													normalImage;
+    return
+		//(getToggleState() && normalImageOn != 0) ? normalImageOn :
+													normalImage.get();
 }
 
 bool MidiPad::isHex() {
@@ -289,7 +288,7 @@ bool MidiPad::hitTest(int x, int y) {
 
 void MidiPad::setText(const String& name)
 {
-	text->setText(name,false);
+	text->setText(name,dontSendNotification);
 }
 
 String MidiPad::getText()

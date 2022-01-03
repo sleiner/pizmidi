@@ -23,10 +23,11 @@
 #define __JUCER_HEADER_PADEDITOR_PADEDITOR_44E60834__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
 //[/Headers]
 
-
+using namespace juce;
 
 //==============================================================================
 /**
@@ -37,8 +38,8 @@
                                                                     //[/Comments]
 */
 class PadEditor  : public Component,
-                   public ButtonListener,
-                   public SliderListener
+                   public Button::Listener,
+                   public Slider::Listener
 {
 public:
     //==============================================================================

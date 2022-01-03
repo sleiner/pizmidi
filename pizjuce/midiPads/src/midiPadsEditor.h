@@ -1,6 +1,10 @@
 #ifndef MIDIPADSPLUGINEDITOR_H
 #define MIDIPADSPLUGINEDITOR_H
 
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
+
 #include "midiPads.h"
 #include "MidiPad.h"
 
@@ -16,10 +20,10 @@ private:
 
 class midiPadsEditor   : public AudioProcessorEditor,
                          public ChangeListener,
-                         public ButtonListener,
-                         public SliderListener,
-                         public TextEditorListener,
-						 public FileDragAndDropTarget                              
+                         public Button::Listener,
+                         public Slider::Listener,
+                         public TextEditor::Listener,
+						 public FileDragAndDropTarget
 {
 public:
     midiPadsEditor (midiPads* const ownerFilter);

@@ -8,9 +8,6 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
 : AudioProcessorEditor (ownerFilter),
   lastTouchedPad(0)
 {
-	static OldSchoolLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
 	setMouseClickGrabsKeyboardFocus (false);
 
 	addAndMakeVisible (container = new fullScreenContainer());
@@ -32,11 +29,11 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
 		usex[i] = getFilter()->UseX[i];
 		usey[i] = getFilter()->UseY[i];
 		container->addAndMakeVisible (midiPad[i] = new MidiPad(i));
-		midiPad[i]->setButtonText (String::empty);
+		midiPad[i]->setButtonText (String());
 		midiPad[i]->setTriggeredOnMouseDown(false);
 		midiPad[i]->addListener (this);
 		midiPad[i]->addMouseListener (this, true);
-		midiPad[i]->setToggleState(getFilter()->togglestate[i],false); 
+		midiPad[i]->setToggleState(getFilter()->togglestate[i],false);
 		sending[i] = false;
 
 		midiPad[i]->showdot=getFilter()->toggle[i];
@@ -51,7 +48,7 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
 		if (getFilter()->SendOff[i]) {
 			midiPad[i]->setYInt(getFilter()->Ydata2[i]);
 		}
-		else 
+		else
 			midiPad[i]->setYFloat(getFilter()->getParameter(i+ypos));
 
 		midiPad[i]->setHex(getFilter()->hex);
@@ -272,7 +269,7 @@ midiPadsEditor::~midiPadsEditor()
 void midiPadsEditor::paint (Graphics& g)
 {
 	g.fillAll (color);
-	for (int i=0;i<numPads;i++) 
+	for (int i=0;i<numPads;i++)
 		midiPad[i]->setColour(getFilter()->padcolor[i].withAlpha(getFilter()->contrast));
 }
 
@@ -281,7 +278,7 @@ void midiPadsEditor::resized()
 	getFilter()->lastUIWidth = getWidth();
 	getFilter()->lastUIHeight = getHeight();
 
-	for (int i=0;i<numPads;i++) 
+	for (int i=0;i<numPads;i++)
 	{
 		midiPad[i]->setHex(getFilter()->hex);
 		midiPad[i]->setVisible(getFilter()->isPadVisible(i));
@@ -296,12 +293,12 @@ void midiPadsEditor::resized()
 		resizer->setBounds (container->getWidth() - resizersize, container->getHeight() - resizersize, resizersize, resizersize);
 		resizer->setVisible(true);
 	}
-	else 
+	else
 	{
 		float xscale = (float)container->getWidth()/(float)getWidth();
 		float yscale = (float)container->getHeight()/(float)getHeight();
-		container->setBounds (Desktop::getInstance().getMonitorAreaContaining(container->getScreenPosition(),false));
-		for (int i=0;i<numPads;i++) 
+		container->setBounds (Desktop::getInstance().getDisplays().findDisplayForPoint(container->getScreenPosition(),false).userArea);
+		for (int i=0;i<numPads;i++)
 		{
 			midiPad[i]->setBounds(roundToInt((float)midiPad[i]->getPosition().getX()*xscale),
 								  roundToInt((float)midiPad[i]->getPosition().getY()*yscale),
@@ -320,9 +317,9 @@ void midiPadsEditor::resized()
 }
 
 //-------------------------------------------------------------------------------
-void midiPadsEditor::mouseDrag(const MouseEvent &e) 
+void midiPadsEditor::mouseDrag(const MouseEvent &e)
 {
-	if (e.eventComponent->getName().compare("MidiPad")) 
+	if (e.eventComponent->getName().compare("MidiPad"))
 		return;
 	if (e.mods.isAltDown() && !e.mods.isCommandDown() && getFilter()->editmode && !fullscreen)
 	{
@@ -337,9 +334,9 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 				{
 					dragstart = e.getEventRelativeTo(container).getMouseDownPosition() - e.getMouseDownPosition();
 				}
-			}			
+			}
 		}
-		else 
+		else
 		{
 			if (!dragging)
 			{
@@ -365,7 +362,7 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 				jmax(20,e.getEventRelativeTo(container).y - e.eventComponent->getY()));
         }
 	}
-	else 
+	else
 	{
 		for (int i=0;i<numPads;i++) {
 			if (midiPad[i]->isMouseButtonDown()) {
@@ -374,13 +371,13 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 				bool useaft = getFilter()->getParameter(kSendAft)>=0.5;
 				ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
 				//this->setWantsKeyboardFocus(false);
-				if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown()) { 
+				if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown()) {
 					//ignore
 				}
 				else if (mousebutton.isPopupMenu()) {
 					//ignore
 				}
-				else { 
+				else {
 					if (usex || usey || useaft) {
 						Point<int> xy = midiPad[i]->getMouseXYRelative();
 						//measure y from the bottom, make into range 0..1
@@ -400,8 +397,8 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 						//move the dot
 						if (usex) {
 							midiPad[i]->setXFloat(fx);
-							if (automateHost) getFilter()->setParameterNotifyingHost(i+xpos,fx); 
-							else getFilter()->setParameter(i+xpos,fx); 
+							if (automateHost) getFilter()->setParameterNotifyingHost(i+xpos,fx);
+							else getFilter()->setParameter(i+xpos,fx);
 						}
 						else {
 							midiPad[i]->setXFloat(0.5f);
@@ -423,9 +420,9 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 								midiPad[i]->setYFloat(0.5f);
 								//if (automateHost) getFilter()->setParameterNotifyingHost(i+ypos,fy);
 								//else getFilter()->setParameter(i+ypos,fy);
-							}							
+							}
 						}
-						if (showdots[i] || showvalues[i]) 
+						if (showdots[i] || showvalues[i])
 							midiPad[i]->repaint();
 						if (usex && lastx[i]!=newx) {
 							getFilter()->buttondown[i] = true;
@@ -468,7 +465,7 @@ void midiPadsEditor::mouseDoubleClick(const MouseEvent& e) {
 							                midiPad[lastTouchedPad]->getHeight());
 						getFilter()->copyPadSettings(lastTouchedPad,i);
 					}
-					if (midiPad[i]->getWidth()<1 || midiPad[i]->getHeight()<1) 
+					if (midiPad[i]->getWidth()<1 || midiPad[i]->getHeight()<1)
 						midiPad[i]->setBounds(e.x,e.y,getWidth()/8,getHeight()/8);
 					midiPad[i]->setVisible(true);
 					midiPad[i]->setTopLeftPosition(
@@ -489,9 +486,9 @@ void midiPadsEditor::mouseDoubleClick(const MouseEvent& e) {
 		}
 	}
 }
-	
-void midiPadsEditor::mouseUp(const MouseEvent& e) { 
-	if (e.eventComponent->getName().compare("MidiPad")) 
+
+void midiPadsEditor::mouseUp(const MouseEvent& e) {
+	if (e.eventComponent->getName().compare("MidiPad"))
 		return;
 	if (dragging)
 	{
@@ -507,7 +504,7 @@ void midiPadsEditor::mouseUp(const MouseEvent& e) {
 			(float)e.eventComponent->getWidth()/(float)getWidth(),
 			(float)e.eventComponent->getHeight()/(float)getHeight());
 	}
-	else if (e.mods.isRightButtonDown() && e.mods.isAltDown() && !e.mods.isCommandDown() 
+	else if (e.mods.isRightButtonDown() && e.mods.isAltDown() && !e.mods.isCommandDown()
 		     && getFilter()->editmode && !fullscreen)
 	{
 		MidiPad* pad = ((MidiPad*)e.eventComponent);
@@ -519,7 +516,7 @@ void midiPadsEditor::mouseUp(const MouseEvent& e) {
 			getFilter()->setPadVisible(i,false);
 		}
 	}
-	else 
+	else
 	{
 	    //for mouseup outside the original button
 		if (getFilter()->usemouseup && !dontsend) {
@@ -535,7 +532,7 @@ void midiPadsEditor::mouseUp(const MouseEvent& e) {
 
 void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedown
 {
-	if (buttonThatWasClicked->getName().compare("MidiPad")) 
+	if (buttonThatWasClicked->getName().compare("MidiPad"))
 		return;
 	MidiPad* pad = (MidiPad*)buttonThatWasClicked;
 	if (pad->isDown()) {
@@ -548,33 +545,33 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 		bool toggle = getFilter()->toggle[i];
 		//middle/ctrl click midi learn
 		ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
-		if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown()) { 
-			if (mousebutton.isAltDown() && mousebutton.isShiftDown()) 
+		if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown()) {
+			if (mousebutton.isAltDown() && mousebutton.isShiftDown())
 				getFilter()->midilisten[i] = 0.5f; //learn x trigger (not implemented!)
-			else if (mousebutton.isShiftDown()) 
+			else if (mousebutton.isShiftDown())
 				getFilter()->midilisten[i] = 0.6f; //learn y trigger
-			else if (mousebutton.isAltDown()) 
+			else if (mousebutton.isAltDown())
 				getFilter()->midilisten[i] = 0.8f; //learn x
 			else getFilter()->midilisten[i] = 1.0f;
 		}
 		//pad menu
 		else if (mousebutton.isPopupMenu() && !mousebutton.isAltDown()) {
-			if (!getFilter()->editmode) 
+			if (!getFilter()->editmode)
 				dontsend=true;
 			else {
 				lastPadMenu=i;
 				bool iscc = getFilter()->Ytype[i]==1;
 				colourSelector1->setCurrentColour (getFilter()->padcolor[i]);
 				textEditor->setText(getFilter()->text[i],false);
-				vSlider->setValue(getFilter()->Ydata2[i],false);
-				oSlider->setValue(getFilter()->Yoff[i],false);
-				nSlider->setValue(getFilter()->Ydata1[i],false);
-				ySlider->setValue(getFilter()->Ycc[i],false);
-				xSlider->setValue(getFilter()->Xcc[i],false);
-				xoSlider->setValue(getFilter()->Xoff[i],false);
-				triggerSlider->setValue(getFilter()->trigger[i],false);
-				roundnessSlider->setValue(getFilter()->roundness[i],false);
-				iconSizeSlider->setValue(getFilter()->iconsize[i],false);
+				vSlider->setValue(getFilter()->Ydata2[i],dontSendNotification);
+				oSlider->setValue(getFilter()->Yoff[i],dontSendNotification);
+				nSlider->setValue(getFilter()->Ydata1[i],dontSendNotification);
+				ySlider->setValue(getFilter()->Ycc[i],dontSendNotification);
+				xSlider->setValue(getFilter()->Xcc[i],dontSendNotification);
+				xoSlider->setValue(getFilter()->Xoff[i],dontSendNotification);
+				triggerSlider->setValue(getFilter()->trigger[i],dontSendNotification);
+				roundnessSlider->setValue(getFilter()->roundness[i],dontSendNotification);
+				iconSizeSlider->setValue(getFilter()->iconsize[i],dontSendNotification);
 				bool centered = getFilter()->centeredText[i];
 
 				m.clear();
@@ -590,7 +587,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 					if (it.getFile().hasFileExtension("svg")
 						|| it.getFile().hasFileExtension("png")
 						|| it.getFile().hasFileExtension("jpg")
-						|| it.getFile().hasFileExtension("gif")) 
+						|| it.getFile().hasFileExtension("gif"))
 					{
 						iconFiles.add(it.getFile());
 						icons.addItem(100000+j,it.getFile().getRelativePathFrom(getFilter()->iconPath));
@@ -599,19 +596,19 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 				}
 
 				m.addSectionHeader("Pad Text:");
-				m.addCustomItem (1, textEditor, 200 , 72, false);
+				m.addCustomItem (1, *textEditor, 200 , 72, false);
 				m.addSeparator();
 				m.addItem(66,"Clear Icon");
 				m.addSubMenu("Icon",icons);
-				sub1.addCustomItem (1234, colourSelector1, 300, 300, false);
+				sub1.addCustomItem (1234, *colourSelector1, 300, 300, false);
 				m.addSubMenu ("Color", sub1);
 				m.addItem (10, "Show Dot", true, showdots[i]);
 				m.addItem (11, "Show Values", true, showvalues[i]);
 				m.addItem (12, "Centered Text", true, centered);
 				m.addItem (-1,"Pad Roundness:",false);
-				m.addCustomItem (-1, roundnessSlider, 64, 16, false);
+				m.addCustomItem (-1, *roundnessSlider, 64, 16, false);
 				m.addItem (-1,"Icon Size:",false);
-				m.addCustomItem (-1, iconSizeSlider, 64, 16, false);
+				m.addCustomItem (-1, *iconSizeSlider, 64, 16, false);
 				m.addSeparator();
 
 				m.addItem (2,String("Note"),true,!iscc);
@@ -623,19 +620,19 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 				m.addItem (6, String("Send Off Values"), true, useoff);
 				m.addItem (9, String("Toggle Mode"), true, toggle);
 				sub2.addItem (-1,"Note #:",false);
-				sub2.addCustomItem (-1, nSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *nSlider, 64, 16, false);
 				sub2.addItem (-1,"Y-CC #:",false);
-				sub2.addCustomItem (-1, ySlider, 64, 16, false);
+				sub2.addCustomItem (-1, *ySlider, 64, 16, false);
 				sub2.addItem (-1,"On Value:",false);
-				sub2.addCustomItem (-1, vSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *vSlider, 64, 16, false);
 				sub2.addItem (-1,"Off Value:",false);
-				sub2.addCustomItem (-1, oSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *oSlider, 64, 16, false);
 				sub2.addItem (-1,"X-CC #:",false);
-				sub2.addCustomItem (-1, xSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *xSlider, 64, 16, false);
 				sub2.addItem (-1,"X-CC Off Value:",false);
-				sub2.addCustomItem (-1, xoSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *xoSlider, 64, 16, false);
 				sub2.addItem (-1,"Trigger Note #:",false);
-				sub2.addCustomItem (-1, triggerSlider, 64, 16, false);
+				sub2.addCustomItem (-1, *triggerSlider, 64, 16, false);
 				m.addSubMenu("Values", sub2);
 				sub3.addItem (88, "Learn Note/Y-CC");
 				sub3.addItem (89, "Learn Y-Off");
@@ -683,7 +680,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 							getFilter()->Ytype[i]=1;
 							if (getFilter()->SendOff[i]) midiPad[i]->setYInt(getFilter()->Yoff[i]);
 							else midiPad[i]->setYInt(getFilter()->Ydata2[i]);
-							midiPad[i]->setButtonText(MidiMessage::getMidiNoteName(getFilter()->Ydata1[i],true,true,3)); 
+							midiPad[i]->setButtonText(MidiMessage::getMidiNoteName(getFilter()->Ydata1[i],true,true,3));
 						}
 					}
 					else if (result==4) {
@@ -773,9 +770,9 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 						pad->repaint();
 					}
 					else if (result==66) {
-						getFilter()->icon[i] = String::empty;
+						getFilter()->icon[i] = String();
 						pad->setImages(0);
-						pad->setIconPath(String::empty);
+						pad->setIconPath(String());
 					}
 					else if (result==88) getFilter()->midilisten[i] = 1.0f;
 					else if (result==89) getFilter()->midilisten[i] = 0.9f;
@@ -793,11 +790,11 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 				getFilter()->lastyccvalue[i]=-1;
 				sendMidi(i, true);
 			}
-			else { 
+			else {
 				getFilter()->lastxccvalue[i]=-1;
 				getFilter()->lastyccvalue[i]=-1;
-				if (!(getFilter()->getParameter(kNoteOnTrig)>=0.5f 
-					&& getFilter()->getParameter(kUseTrigger)>=0.5f)) 
+				if (!(getFilter()->getParameter(kNoteOnTrig)>=0.5f
+					&& getFilter()->getParameter(kUseTrigger)>=0.5f))
 					sendMidi(i);
 			}
 		}
@@ -925,9 +922,9 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 		m.addItem (33333, "Centered Text", true, centeredNames);
 
 		m.addItem (-1,"Pad Roundness:",false);
-		m.addCustomItem (-1, globalRoundnessSlider, 64, 16, false);
+		m.addCustomItem (-1, *globalRoundnessSlider, 64, 16, false);
 		m.addItem (-1,"Icon Size:",false);
-		m.addCustomItem (-1, globalIconSizeSlider, 64, 16, false);
+		m.addCustomItem (-1, *globalIconSizeSlider, 64, 16, false);
 		m.addSeparator();
 
 		m.addItem (1, String("Send off values"), true, sendoffvalue);
@@ -942,9 +939,9 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 		m.addItem (50, String("Midi Thru"), true, thru);
 		m.addSeparator();
 		m.addItem (-1,"In Channel:",false);
-		m.addCustomItem (-1, icSlider, 64, 16, false);
+		m.addCustomItem (-1, *icSlider, 64, 16, false);
 		m.addItem (-1,"Out Channel:",false);
-		m.addCustomItem (-1, cSlider, 64, 16, false);
+		m.addCustomItem (-1, *cSlider, 64, 16, false);
 		m.addSeparator();
 		for (int i=0;i<presetFiles.size();i++)
 			presets.addItem(200000+i,presetFiles[i].getFileNameWithoutExtension());
@@ -984,8 +981,8 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 			}
 			else if (result==9999) {
 				FileChooser myChooser ("Save layout...",
-					File( getFilter()->layoutPath + File::separatorString
-					     + getFilter()->getProgramName(getFilter()->getCurrentProgram()) 
+					File( getFilter()->layoutPath + File::getSeparatorString()
+					     + getFilter()->getProgramName(getFilter()->getCurrentProgram())
 					     + ".mpadl"),"*.mpadl");
 				if (myChooser.browseForFileToSave(true))
 				{
@@ -1009,7 +1006,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 			}
 			else if (result==5473) {
 				FileChooser myChooser ("Save bank...",
-					File(getFilter()->bankPath + File::separatorString + "midiPads.mpadb"),"*.mpadb");
+					File(getFilter()->bankPath + File::getSeparatorString() + "midiPads.mpadb"),"*.mpadb");
 
 				if (myChooser.browseForFileToSave(true))
 				{
@@ -1022,9 +1019,9 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 			}
 			else if (result==54731) {
 				FileChooser myChooser ("Save patch...",
-					File( getFilter()->presetPath 
-					     + File::separatorString
-					     + getFilter()->getProgramName(getFilter()->getCurrentProgram()) 
+					File( getFilter()->presetPath
+					     + File::getSeparatorString()
+					     + getFilter()->getProgramName(getFilter()->getCurrentProgram())
 						 + ".mpads"),
 						 "*.mpads");
 
@@ -1080,13 +1077,13 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 			}
 			else if (result==1001) {
 				if (!fullscreen)
-				{	
+				{
 					container->addToDesktop(0);
 					Desktop::getInstance().setKioskModeComponent(container,false);
 					fullscreen=true;
 					resized();
 				}
-				else 
+				else
 				{
 					Desktop::getInstance().setKioskModeComponent(0);
 					this->addChildComponent(container);
@@ -1312,9 +1309,9 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 			}
 			else if (result==111) {
 				for (int i=0;i<numPads;i++) {
-					getFilter()->icon[i] = String::empty;
+					getFilter()->icon[i] = String();
 					midiPad[i]->setImages(0);
-					midiPad[i]->setIconPath(String::empty);
+					midiPad[i]->setIconPath(String());
 				}
 			}
 			else if (result==33) {
@@ -1342,15 +1339,15 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 	}
 	else if (!ModifierKeys::getCurrentModifiers().isAltDown()){
 		if (!dontsend) {
-			if (buttonThatWasClicked->getName().compare("MidiPad")) 
+			if (buttonThatWasClicked->getName().compare("MidiPad"))
 				return;
 			int i=((MidiPad*)buttonThatWasClicked)->getIndex();
-			if (getFilter()->midilisten[i]<0.5f && !getFilter()->toggle[i]) { 
+			if (getFilter()->midilisten[i]<0.5f && !getFilter()->toggle[i]) {
 				//only send if not learning & not in toggle mode
 				sendMidiOff(i);
 			}
 		}
-		//else dontsend=false; 
+		//else dontsend=false;
 	}
 	else {
 		lastTouchedPad=((MidiPad*)buttonThatWasClicked)->getIndex();
@@ -1358,7 +1355,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
 }
 
 void midiPadsEditor::sendMidiOff(int i) {
-	if (midiPad[i]->isPlaying) { 
+	if (midiPad[i]->isPlaying) {
 		getFilter()->sendoff[i] = 1.0f;
 		midiPad[i]->isPlaying = false;
 		if ((showdots[i] || showvalues[i]) && getFilter()->SendOff[i]) {
@@ -1546,12 +1543,12 @@ void midiPadsEditor::padTriggered() {
 		getFilter()->getCallbackLock().enter();
 		memcpy(triggered,getFilter()->triggered,sizeof(triggered));
 		getFilter()->getCallbackLock().exit();
-		for (int i=0;i<numPads;i++) 
+		for (int i=0;i<numPads;i++)
 			midiPad[i]->setState(triggered[i] ? Button::buttonDown : Button::buttonNormal);
 	}
 	else {
 		for (int i=0;i<numPads;i++) {
-			if (midiPad[i]->isMouseOver()) 
+			if (midiPad[i]->isMouseOver())
 				sendMidi(i);
 		}
 	}
@@ -1573,10 +1570,10 @@ void midiPadsEditor::dotMoved(int pad) {
 }
 
 bool midiPadsEditor::isInterestedInFileDrag (const StringArray& files) {
-    File file = File(files.joinIntoString(String::empty,0,1));
-    if (file.hasFileExtension("png") || 
-        file.hasFileExtension("gif") || 
-        file.hasFileExtension("jpg") || 
+    File file = File(files.joinIntoString(String(),0,1));
+    if (file.hasFileExtension("png") ||
+        file.hasFileExtension("gif") ||
+        file.hasFileExtension("jpg") ||
 		file.hasFileExtension("svg") ||
 		file.hasFileExtension("mpads") ||
 		file.hasFileExtension("mpadb") ||
@@ -1586,10 +1583,10 @@ bool midiPadsEditor::isInterestedInFileDrag (const StringArray& files) {
     return false;
 }
 
-void midiPadsEditor::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY) 
+void midiPadsEditor::filesDropped(const juce::StringArray &filenames, int mouseX, int mouseY)
 {
     if (isInterestedInFileDrag(filenames)) {
-		String filename = filenames.joinIntoString(String::empty,0,1);
+		String filename = filenames.joinIntoString(String(),0,1);
 		File file = File(filename);
 		if (file.hasFileExtension("mpads")) {
 			getFilter()->loadXmlPatch(getFilter()->getCurrentProgram(),file);
@@ -1611,7 +1608,7 @@ void midiPadsEditor::filesDropped(const juce::StringArray &filenames, int mouseX
 			getFilter()->loadFxp(file);
 			resized();
 		}
-		else 
+		else
 		{
 			Component* c = getComponentAt(mouseX,mouseY);
 			if (!c->getName().compare("MidiPad")){
@@ -1703,12 +1700,12 @@ void midiPadsEditor::updateParametersFromFilter()
 		//reconstruct the full path to the icon
 		if (icon[i].isEmpty()) {
 			midiPad[i]->setImages(0);
-			midiPad[i]->setIconPath(String::empty);
+			midiPad[i]->setIconPath(String());
 		}
 		else {
 			String fullpath = icon[i];
-			if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile()) 
-				fullpath = getFilter()->iconPath + File::separatorString + icon[i];
+			if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
+				fullpath = getFilter()->iconPath + File::getSeparatorString() + icon[i];
 			//Drawable* image = Drawable::createFromImageFile(File(fullpath));
 			if (!midiPad[i]->setImageFromFile(File(fullpath)))
 				midiPad[i]->setImages(0);
@@ -1721,7 +1718,7 @@ void midiPadsEditor::updateParametersFromFilter()
 		midiPad[i]->setColour(padcolor[i].withAlpha(contrast));
 		midiPad[i]->roundness = roundness[i];
 		midiPad[i]->imageSize = iconsize[i];
-		midiPad[i]->setToggleState(tstate[i],false);
+		midiPad[i]->setToggleState(tstate[i],dontSendNotification);
 		midiPad[i]->setText(t[i]);
 		midiPad[i]->setCenteredText(centered[i]);
 
@@ -1732,20 +1729,20 @@ void midiPadsEditor::updateParametersFromFilter()
 			}
 			else {
 				midiPad[i]->showx=true;
-				if (useoff[i]) 
+				if (useoff[i])
 					midiPad[i]->setXInt(newXOff[i]);
-				else 
+				else
 					midiPad[i]->setXFloat(newX[i]);
 				lastx[i]=(int)(newX[i]*127.1);
 			}
 			if (!usey[i]) {
 				midiPad[i]->showy=false;
-				if (newMidiType[i]==1 && useoff[i]) 
+				if (newMidiType[i]==1 && useoff[i])
 					midiPad[i]->setYInt(newMidiValue[i]);
 				else {
 					if (usex[i]) //"horizontal slider" mode
 						midiPad[i]->setYFloat(0.5f);
-					else 
+					else
 						midiPad[i]->setYInt(newMidiValue[i]);
 				}
 			}
@@ -1755,9 +1752,9 @@ void midiPadsEditor::updateParametersFromFilter()
 				lasty[i]=(int)(newY[i]*127.1);
 			}
 		}
-		if (newMidiType[i]==1) 
+		if (newMidiType[i]==1)
 			midiPad[i]->setButtonText("CC " + String(newMidiData[i]));
-		else 
+		else
 			midiPad[i]->setButtonText(MidiMessage::getMidiNoteName(newMidiData[i],true,true,3));
 	}
 
@@ -1766,12 +1763,12 @@ void midiPadsEditor::updateParametersFromFilter()
 	container->bgcolor = color;
 	color2=Colour(color.contrasting(contrast));
 
-	hueSlider->setValue(hue,false);
-	saturationSlider->setValue(sat,false);
-	brigtnessSlider->setValue(bri,false);
-	padOpacitySlider->setValue(contrast,false);
-	globalRoundnessSlider->setValue(roundness[0],false);
-	globalIconSizeSlider->setValue(iconsize[0],false);
+	hueSlider->setValue(hue,dontSendNotification);
+	saturationSlider->setValue(sat,dontSendNotification);
+	brigtnessSlider->setValue(bri,dontSendNotification);
+	padOpacitySlider->setValue(contrast,dontSendNotification);
+	globalRoundnessSlider->setValue(roundness[0],dontSendNotification);
+	globalIconSizeSlider->setValue(iconsize[0],dontSendNotification);
 
 	if (!editmode) {
 		getFilter()->editmode=false;
@@ -1788,10 +1785,10 @@ void midiPadsEditor::updateParametersFromFilter()
 		padOpacitySlider->setVisible(true);
 	}
 
-	velocitySlider->setValue(newVelocity*2.0,false);
-	valueSlider->setValue(newCCValue*2.0,false);
-	icSlider->setValue((float)(1+(int)(newInCh*15.1)),false);
-	cSlider->setValue((float)(1+(int)(newOutCh*15.1)),false);
+	velocitySlider->setValue(newVelocity*2.0,dontSendNotification);
+	valueSlider->setValue(newCCValue*2.0,dontSendNotification);
+	icSlider->setValue((float)(1+(int)(newInCh*15.1)),dontSendNotification);
+	cSlider->setValue((float)(1+(int)(newOutCh*15.1)),dontSendNotification);
 
 	if (getWidth()!=filter->lastUIWidth || getHeight()!=filter->lastUIHeight)
 		setSize (filter->lastUIWidth,filter->lastUIHeight);

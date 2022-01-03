@@ -1,14 +1,19 @@
 #ifndef MIDIPADS_PAD_H
 #define MIDIPADS_PAD_H
 
-#include "JuceHeader.h"
+#include <memory>
+
+#include "juce_gui_basics/juce_gui_basics.h"
+
+using namespace juce;
+
 #define midiScaler (0.007874016f)
 
 class MidiPad  : public Button
 {
 public:
     //==============================================================================
-  	MidiPad (int _index);  
+  	MidiPad (int _index);
     ~MidiPad();
 
     void resized();
@@ -70,14 +75,14 @@ private:
     float y;
 	int index;
     bool hitTest(int x, int y);
-    Drawable* normalImage;
+    std::unique_ptr<Drawable> normalImage;
     Colour backgroundOff, backgroundOn;
     Path hexpath;
     bool hex;
     void deleteImages();
 	String iconPath;
 	Label* text;
-	
+
 	MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
 };
