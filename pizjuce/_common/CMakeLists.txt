@@ -4,7 +4,20 @@ target_sources(
   pizjuce_common
   INTERFACE # Headers
             "${CMAKE_CURRENT_LIST_DIR}/BankStorage.h"
+            "${CMAKE_CURRENT_LIST_DIR}/CCSlider.h"
+            "${CMAKE_CURRENT_LIST_DIR}/ChannelSlider.h"
+            "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.h"
+            "${CMAKE_CURRENT_LIST_DIR}/ClickableLabel.h"
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
+            "${CMAKE_CURRENT_LIST_DIR}/GuitarNeckComponent.h"
+            "${CMAKE_CURRENT_LIST_DIR}/MIDI.h"
+            "${CMAKE_CURRENT_LIST_DIR}/NoteSlider.h"
+            "${CMAKE_CURRENT_LIST_DIR}/PizAudioProcessor.h"
+            "${CMAKE_CURRENT_LIST_DIR}/PizButton.h"
+            "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.h"
+            "${CMAKE_CURRENT_LIST_DIR}/key.h"
+            "${CMAKE_CURRENT_LIST_DIR}/log.h"
+            "${CMAKE_CURRENT_LIST_DIR}/midistuff.h"
             # Sources
             "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
