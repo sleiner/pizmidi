@@ -23,6 +23,8 @@
 #define __JUCER_HEADER_MIDIOUTEDITOR_MIDIOUTEDITOR_3F8B31BF__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "midiOut.h"
 #include "MidiPad.h"
 //[/Headers]
@@ -39,8 +41,8 @@
 */
 class MidiOutEditor  : public AudioProcessorEditor,
                        public ChangeListener,
-                       public ButtonListener,
-                       public ComboBoxListener
+                       public Button::Listener,
+                       public ComboBox::Listener
 {
 public:
     //==============================================================================

@@ -1,7 +1,13 @@
 #ifndef MIDIOUTPLUGINFILTER_H
 #define MIDIOUTPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
+#include <memory>
+
+#include "juce_audio_devices/juce_audio_devices.h"
+
+#include "../_common/PizAudioProcessor.h"
+
+using namespace juce;
 
 enum parameters {
     kPower,
@@ -50,7 +56,7 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
+    double getTailLengthSeconds() const override {return 0;}
     const String getName() const {return JucePlugin_Name;}
     bool acceptsMidi() const {return true;}
     bool producesMidi() const {return true;}
@@ -104,7 +110,7 @@ private:
     JuceProgram *programs;
     int curProgram;
     bool init;
-    MidiOutput* midiOutput;
+    std::unique_ptr<MidiOutput> midiOutput;
 
     double startAt;
     double startMTCAt;

@@ -43,7 +43,7 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
     comboBox->setTooltip (L"Output Device");
     comboBox->setEditableText (false);
     comboBox->setJustificationType (Justification::centredLeft);
-    comboBox->setTextWhenNothingSelected (String::empty);
+    comboBox->setTextWhenNothingSelected (String());
     comboBox->setTextWhenNoChoicesAvailable (L"(no choices)");
     comboBox->addListener (this);
 
@@ -100,8 +100,6 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
 
 
     //[UserPreSize]
-	static OldSchoolLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
 	setMouseClickGrabsKeyboardFocus(false);
     StringArray devices = ownerFilter->devices;
 
@@ -299,13 +297,13 @@ void MidiOutEditor::updateParametersFromFilter()
     String fullpath = icon;
     if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
         fullpath = ((File::getSpecialLocation(File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                   + File::separatorString + icon;
-    Drawable* image = Drawable::createFromImageFile(File(fullpath));
+                   + File::getSeparatorString() + icon;
+    auto image = Drawable::createFromImageFile(File(fullpath));
 	if (image)
 	{
-		imagepad->drawableButton->setImages(image);
+		imagepad->drawableButton->setImages(image.get());
 		imagepad->drawableButton->setName(icon);
-		imagepad->setButtonText(String::empty);
+		imagepad->setButtonText(String());
 	}
 	else imagepad->setButtonText("IPH\nmidiOut\n1.3");
 }
@@ -321,7 +319,7 @@ void MidiOutEditor::updateParametersFromFilter()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MidiOutEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public ButtonListener, public ComboBoxListener"
+                 parentClasses="public AudioProcessorEditor, public ChangeListener, public Button::Listener, public ComboBoxListener"
                  constructorParams="MidiOutFilter* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="1" initialWidth="275" initialHeight="50">

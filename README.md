@@ -17,6 +17,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiIn: Channel selector combobox only shows channel when expanded
 -   midiKeyboard: Toggle mode is not working
 -   midiMonitor: text of checkboxes is truncated
+-   midiOut: Channel selector combobox only shows channel when expanded
 
 ### Serious problems are known
 
