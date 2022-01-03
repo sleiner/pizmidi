@@ -11,15 +11,15 @@ piz_add_plugin(
 target_sources(
   piz_midiPads
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiPads.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiPadsEditor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PadEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPads.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPadsEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/PadEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/src/MidiPad.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiPads.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/midiPadsEditor.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/src/PadEditor.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPads.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPadsEditor.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/PadEditor.cpp")
 
 target_link_libraries(
   piz_midiPads
