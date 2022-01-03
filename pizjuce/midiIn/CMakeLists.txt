@@ -11,12 +11,10 @@ piz_add_plugin(
 target_sources(
   piz_midiIn
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
           "${CMAKE_CURRENT_LIST_DIR}/midiIn.h"
           "${CMAKE_CURRENT_LIST_DIR}/midiInEditor.h"
           "${CMAKE_CURRENT_LIST_DIR}/MidiPad.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/midiIn.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/midiInEditor.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp")

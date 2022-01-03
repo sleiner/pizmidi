@@ -3,7 +3,7 @@
 
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "DrawablePad.h"
+#include "../_common/DrawablePad.h"
 
 class MidiPad  : public Component,
                  public Button::Listener,

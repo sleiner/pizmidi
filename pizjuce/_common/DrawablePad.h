@@ -14,6 +14,14 @@ public:
     DrawablePad (const String& buttonName);
 
     //==============================================================================
+    void setImages (File normalImage,
+                    File overImage = File(),
+                    File downImage = File(),
+                    File disabledImage = File(),
+                    File normalImageOn = File(),
+                    File overImageOn = File(),
+                    File downImageOn = File(),
+                    File disabledImageOn = File());
     void setImages (const Drawable* normalImage,
                     const Drawable* overImage = 0,
                     const Drawable* downImage = 0,
@@ -22,6 +30,27 @@ public:
                     const Drawable* overImageOn = 0,
                     const Drawable* downImageOn = 0,
                     const Drawable* disabledImageOn = 0);
+    void setImagesFromUptr (std::unique_ptr<Drawable> normalImage,
+                            std::unique_ptr<Drawable> overImage = nullptr,
+                            std::unique_ptr<Drawable> downImage = nullptr,
+                            std::unique_ptr<Drawable> disabledImage = nullptr,
+                            std::unique_ptr<Drawable> normalImageOn = nullptr,
+                            std::unique_ptr<Drawable> overImageOn = nullptr,
+                            std::unique_ptr<Drawable> downImageOn = nullptr,
+                            std::unique_ptr<Drawable> disabledImageOn = nullptr)
+    {
+        // TODO: Remove the raw-pointer function, then the additional copies
+        //       can easily be eliminated.
+        return setImages(normalImage.get(),
+                         overImage.get(),
+                         downImage.get(),
+                         disabledImage.get(),
+                         normalImageOn.get(),
+                         overImageOn.get(),
+                         downImageOn.get(),
+                         disabledImageOn.get());
+    }
+    void deleteImages();
 
 
     //==============================================================================
@@ -71,7 +100,6 @@ private:
     std::unique_ptr<Drawable> downImageOn;
     std::unique_ptr<Drawable> disabledImageOn;
     Colour backgroundOff, backgroundOn;
-    void deleteImages();
     DrawablePad (const DrawablePad&);
     const DrawablePad& operator= (const DrawablePad&);
 };

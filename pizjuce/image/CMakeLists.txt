@@ -10,12 +10,10 @@ piz_add_plugin(
 target_sources(
   piz_Image
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
           "${CMAKE_CURRENT_LIST_DIR}/imagePlugin.h"
           "${CMAKE_CURRENT_LIST_DIR}/imagePluginEditor.h"
           "${CMAKE_CURRENT_LIST_DIR}/MidiPad.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/imagePluginEditor.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/imagePlugin.cpp")

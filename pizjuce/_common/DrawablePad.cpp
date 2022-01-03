@@ -57,6 +57,35 @@ void DrawablePad::setImages (const Drawable* normal,
     repaint();
 }
 
+static std::unique_ptr<Drawable> drawableFromFile(const File& f)
+{
+    if (f.exists())
+    {
+        return Drawable::createFromImageFile(f);
+    }
+
+    return nullptr;
+}
+
+void DrawablePad::setImages (const File normalImage,
+                             const File overImage,
+                             const File downImage,
+                             const File disabledImage,
+                             const File normalImageOn,
+                             const File overImageOn,
+                             const File downImageOn,
+                             const File disabledImageOn)
+{
+    setImagesFromUptr(drawableFromFile(normalImage),
+                      drawableFromFile(overImage),
+                      drawableFromFile(downImage),
+                      drawableFromFile(disabledImage),
+                      drawableFromFile(normalImageOn),
+                      drawableFromFile(overImageOn),
+                      drawableFromFile(downImageOn),
+                      drawableFromFile(disabledImageOn));
+}
+
 void DrawablePad::setBackgroundColours (const Colour& toggledOffColour,
                                 const Colour& toggledOnColour)
 {
