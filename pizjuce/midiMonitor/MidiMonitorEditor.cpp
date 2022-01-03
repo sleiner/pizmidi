@@ -535,9 +535,13 @@ void MidiMonitorEditor::timerCallback ()
             else if (msg.isController() && getFilter()->useCC) {
                 ignore=false;
                 if (msg.getChannel()>0) midiLine = "Ch." + String(msg.getChannel()) + "  ";
-                midiLine += "CC #" + String(msg.getControllerNumber())
-                    + " (" + msg.getControllerName(msg.getControllerNumber()) + "), Value: "
-                    + String(msg.getControllerValue());
+                midiLine += "CC #" + String(msg.getControllerNumber());
+                auto controllerDescription = msg.getControllerName(msg.getControllerNumber());
+                if (controllerDescription != nullptr)
+                {
+                    midiLine += " (" + String(controllerDescription) + "),";
+                }
+                midiLine += " Value: " + String(msg.getControllerValue());
             }
             else if (msg.isPitchWheel() && getFilter()->usePB) {
                 ignore=false;
