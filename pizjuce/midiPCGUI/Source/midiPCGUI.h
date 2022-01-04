@@ -1,8 +1,10 @@
 #ifndef MIDIOUTPLUGINFILTER_H
 #define MIDIOUTPLUGINFILTER_H
 
-#include "../../common/PizAudioProcessor.h"
-#include "JuceHeader.h"
+#include "juce_core/juce_core.h"
+#include "juce_events/juce_events.h"
+
+#include "../_common/PizAudioProcessor.h"
 
 enum midiPCGUIParameters {
 	kProgram,
@@ -51,7 +53,7 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
+	double getTailLengthSeconds() const override {return 0;}
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {return true;}
@@ -106,7 +108,7 @@ private:
     float param[numParams];
 	struct MidiProgName
 	{
-		MidiProgName() {channel=-1;bank=-1;program=-1;name=String::empty;}
+		MidiProgName() {channel=-1;bank=-1;program=-1;name=String();}
 		MidiProgName(int c, int b, int p, const String& n)
 		{
 			channel=c; bank=b; program=p; name=n;
@@ -118,7 +120,7 @@ private:
 		String name;
 	};
 
-	class ProgNames 
+	class ProgNames
 	{
 	friend class midiPCGUI;
 	public:
@@ -149,7 +151,7 @@ private:
 			return false;
 		}
 
-		void setNameFor(int c, int b, int p, String newName) 
+		void setNameFor(int c, int b, int p, String newName)
 		{
 			for (int i=0;i<names.size();i++) {
 				if (names.getUnchecked(i).bank==b

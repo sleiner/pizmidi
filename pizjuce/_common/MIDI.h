@@ -1,6 +1,5 @@
 #ifndef MIDI_H
 #define MIDI_H
-#include "public.sdk/source/vst/vstaudioeffect.h"
 #include <string>
 
 //
@@ -244,21 +243,6 @@ inline int CombineBytes(unsigned char lsb, unsigned char msb)
 inline int CombineBytes(int lsb, int msb)
 {
 	return ((msb&0x7f)<<7) | (lsb&0x7f);
-}
-
-inline bool isNoteOn(VstMidiEvent e)
-{
-	return ((e.midiData[0]&0xf0) == MIDI_NOTEON && e.midiData[2]>0);
-}
-
-inline bool isNoteOnOrOff(VstMidiEvent e)
-{
-	return ((e.midiData[0]&0xf0)==MIDI_NOTEON || (e.midiData[0]&0xf0)==MIDI_NOTEOFF);
-}
-
-inline bool isNoteOff(VstMidiEvent e)
-{
-	return ((e.midiData[0]&0xf0)==MIDI_NOTEOFF || ((e.midiData[0]&0xf0) == MIDI_NOTEON && e.midiData[2]==0));
 }
 
 //////////////////////////////////////////////////////////////////////////////

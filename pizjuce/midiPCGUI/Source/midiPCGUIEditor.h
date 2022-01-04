@@ -23,10 +23,13 @@
 #define __JUCER_HEADER_MIDIPCGUIEDITOR_MIDIPCGUIEDITOR_A4034B54__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "midiPCGUI.h"
-#include "../../common/VSTSlider.h"
-#include "../../common/ClickableLabel.h"
-#include "../../common/LookAndFeel.h"
+#include "../_common/VSTSlider.h"
+#include "../_common/ClickableLabel.h"
 //[/Headers]
 
 
@@ -42,9 +45,9 @@
 class midiPCGUIEditor  : public AudioProcessorEditor,
                          public ChangeListener,
                          public ClickableLabelListener,
-                         public SliderListener,
-                         public ButtonListener,
-                         public LabelListener
+                         public juce::Slider::Listener,
+                         public juce::Button::Listener,
+                         public juce::Label::Listener
 {
 public:
     //==============================================================================

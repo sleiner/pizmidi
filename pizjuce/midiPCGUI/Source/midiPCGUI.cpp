@@ -1,6 +1,6 @@
 #include "midiPCGUI.h"
 #include "midiPCGUIEditor.h"
-#include "../../common/MIDI.h"
+#include "../_common/MIDI.h"
 
 
 
@@ -22,7 +22,7 @@ midiPCGUIProgram::midiPCGUIProgram ()
 	param[kDec]=0.4f;
 
     //program name
-	name = L"Default";
+	name = "Default";
 }
 
 //==============================================================================
@@ -53,7 +53,7 @@ midiPCGUI::midiPCGUI()
 	sentbank=false;
     for (int i=0;i<numParams;i++) automated[i]=false;
     mode=continuous;
-    
+
 	wait=false;
 	delaytime=(int)(getSampleRate()*0.002f);
 	counter=0;
@@ -84,9 +84,9 @@ float midiPCGUI::getParameter (int index)
 void midiPCGUI::setParameter (int index, float newValue)
 {
     midiPCGUIProgram* ap = &programs[curProgram];
-	switch(index) 
+	switch(index)
 	{
-	case kMode: 
+	case kMode:
 		if (newValue<0.5f) mode=continuous;
 		else mode=triggered;
 		param[index] = ap->param[index] = newValue;
@@ -107,7 +107,7 @@ void midiPCGUI::setParameter (int index, float newValue)
 		}
 		else if (newValue<1.f && senttrig) senttrig=false;
 		break;
-	case kBankTrigger: 
+	case kBankTrigger:
 		param[index]=newValue;
 		if (newValue==1.f){// && !sentbank) {
 			triggerbank=true;
@@ -115,7 +115,7 @@ void midiPCGUI::setParameter (int index, float newValue)
 		}
 		else if (newValue<1.f && sentbank) sentbank=false;
 		break;
-	case kInc: 
+	case kInc:
 		param[index]=newValue;
 		if (newValue==1.f){// && !sentinc) {
 			inc=true;
@@ -123,7 +123,7 @@ void midiPCGUI::setParameter (int index, float newValue)
 		}
 		else if (newValue<1.f && sentinc) sentinc=false;
 		break;
-	case kDec: 
+	case kDec:
 		param[index]=newValue;
 		if (newValue==1.f){// && !sentdec) {
 			dec=true;
@@ -131,17 +131,17 @@ void midiPCGUI::setParameter (int index, float newValue)
 		}
 		else if (newValue<1.f && sentdec) sentdec=false;
 		break;
-	case kProgram: 
+	case kProgram:
 			program=FLOAT_TO_MIDI2(newValue);
 		if (mode==continuous && !automated[index]) trigger=true;
 		param[index] = ap->param[index] = newValue;
 		break;
-	case kBankMSB: 
+	case kBankMSB:
 			bankmsb=FLOAT_TO_MIDI2(newValue);
 		if (mode==continuous) triggerbank=true;
 		param[index] = ap->param[index] = newValue;
 		break;
-	case kBankLSB: 
+	case kBankLSB:
 			banklsb=FLOAT_TO_MIDI2(newValue);
 		if (mode==continuous) triggerbank=true;
 		param[index] = ap->param[index] = newValue;
@@ -161,18 +161,18 @@ void midiPCGUI::setParameter (int index, float newValue)
 const String midiPCGUI::getParameterName (int index)
 {
    switch(index){
-      case kProgram: return L"Program"; break;
-      case kBankMSB: return L"Bank MSB"; break;
-      case kBankLSB: return L"Bank LSB"; break;
-      case kMode: return L"Mode"; break;
-      case kTrigger: return L"PC Trig."; break;
-      case kBankTrigger: return L"Bank Trig."; break;
-      case kInc: return L"PC Incr."; break;
-      case kDec: return L"PC Decr."; break;
-      case kChannel: return L"Channel"; break;
-      case kPCListen: return L"PC Listen"; break;
-      case kThru: return L"Thru"; break;
-	  default: return String::empty; break;
+      case kProgram: return "Program"; break;
+      case kBankMSB: return "Bank MSB"; break;
+      case kBankLSB: return "Bank LSB"; break;
+      case kMode: return "Mode"; break;
+      case kTrigger: return "PC Trig."; break;
+      case kBankTrigger: return "Bank Trig."; break;
+      case kInc: return "PC Incr."; break;
+      case kDec: return "PC Decr."; break;
+      case kChannel: return "Channel"; break;
+      case kPCListen: return "PC Listen"; break;
+      case kThru: return "Thru"; break;
+	  default: return String(); break;
    }
 }
 
@@ -181,8 +181,8 @@ const String midiPCGUI::getParameterText (int index)
 	char* text;
 	text = new char[24];
 	switch(index){
-	  case kMode: 
-		if (mode==continuous) strcpy(text, "Direct"); 
+	  case kMode:
+		if (mode==continuous) strcpy(text, "Direct");
 		else strcpy(text, "Triggered");
 		break;
 	  case kPCListen:
@@ -195,15 +195,15 @@ const String midiPCGUI::getParameterText (int index)
 		break;
 	  case kProgram:
            if (program==0) strcpy(text, "Off");
-           else sprintf(text, "%d", program); 
+           else sprintf(text, "%d", program);
            break;
-	  case kBankMSB: 
+	  case kBankMSB:
            if (bankmsb==0) strcpy(text, "Off");
-           else sprintf(text, "%d", bankmsb); 
+           else sprintf(text, "%d", bankmsb);
            break;
-	  case kBankLSB: 
+	  case kBankLSB:
            if (banklsb==0) strcpy(text, "Off");
-           else sprintf(text, "%d", banklsb); 
+           else sprintf(text, "%d", banklsb);
            break;
 	  case kChannel: sprintf(text, "%d",FLOAT_TO_CHANNEL015(param[index])+1); break;
 	  case kTrigger:
@@ -222,8 +222,8 @@ const String midiPCGUI::getParameterText (int index)
 		  if (param[index]<1.f) strcpy(text, "Trigger-->");
 		  else strcpy(text, "Triggered!");
 		  break;
-	  default: 
-           sprintf(text, "%d", roundToInt(param[index]*100.0f)); 
+	  default:
+           sprintf(text, "%d", roundToInt(param[index]*100.0f));
            break;
    }
    return String(text);
@@ -304,19 +304,19 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
 	MidiBuffer output;
     MidiMessage midi_message(0xf8e);
     int sample_number;
-	
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) 
+
+    while(mid_buffer_iter.getNextEvent(midi_message,sample_number))
 	{
 		bool discard = !thru;
-		uint8* midiData = midi_message.getRawData();
+		const uint8* midiData = midi_message.getRawData();
 		unsigned char status     = midiData[0] & 0xf0;   // scraping  channel
 		char channel    = midiData[0] & 0x0f;   // isolating channel (0-15)
 		char data1      = midiData[1] & 0x7f;
 		char data2	    = midiData[2] & 0x7f;
-          	
+
 		//only look at the selected channel
-		if (channel == listenchannel) 
-		{ 
+		if (channel == listenchannel)
+		{
 			if (status==MIDI_PROGRAMCHANGE) {
 				if (pclisten) {
 					setCurrentProgram(data1);
@@ -341,7 +341,7 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
     	} // if listenchannel==channel
 		if (!discard) output.addEvent(midi_message,sample_number);
      } //for() inputs loop
-	 
+
 	if (triggerbank) {
         if (!(trigger && program!=0)) triggerbank=false;
 		//create GUI triggered message
@@ -420,13 +420,13 @@ void midiPCGUI::getCurrentProgramStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState (L"MIDIPCGUISETTINGS");
+    XmlElement xmlState ("MIDIPCGUISETTINGS");
 
     // add some attributes to it..
-    xmlState.setAttribute (L"pluginVersion", 2);
+    xmlState.setAttribute ("pluginVersion", 2);
 
-    xmlState.setAttribute (L"program", getCurrentProgram());
-    xmlState.setAttribute (L"progname", getProgramName(getCurrentProgram()));
+    xmlState.setAttribute ("program", getCurrentProgram());
+    xmlState.setAttribute ("progname", getProgramName(getCurrentProgram()));
     for (int i=0;i<getNumParameters();i++)
         xmlState.setAttribute (String(i), param[i]);
 
@@ -449,12 +449,12 @@ void midiPCGUI::getCurrentProgramStateInformation (MemoryBlock& destData)
 void midiPCGUI::getStateInformation(MemoryBlock &destData) {
     // make sure the non-parameter settings are copied to the current program
 
-    XmlElement xmlState (L"MIDIPCGUISETTINGS");
-    xmlState.setAttribute (L"pluginVersion", 2);
-    xmlState.setAttribute (L"program", getCurrentProgram());
+    XmlElement xmlState ("MIDIPCGUISETTINGS");
+    xmlState.setAttribute ("pluginVersion", 2);
+    xmlState.setAttribute ("program", getCurrentProgram());
     for (int p=0;p<getNumPrograms();p++) {
-        String prefix = L"P" + String(p) + L"_";
-        xmlState.setAttribute (prefix+L"progname", programs[p].name);
+        String prefix = "P" + String(p) + "_";
+        xmlState.setAttribute (prefix+"progname", programs[p].name);
         for (int i=0;i<getNumParameters();i++) {
             xmlState.setAttribute (prefix+String(i), programs[p].param[i]);
         }
@@ -477,15 +477,15 @@ void midiPCGUI::getStateInformation(MemoryBlock &destData) {
 void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    ScopedPointer<XmlElement> xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName (L"MIDIPCGUISETTINGS"))
+        if (xmlState->hasTagName ("MIDIPCGUISETTINGS"))
         {
             // ok, now pull out our parameters..
-            changeProgramName(getCurrentProgram(),xmlState->getStringAttribute (L"progname", L"Default"));
+            changeProgramName(getCurrentProgram(),xmlState->getStringAttribute ("progname", "Default"));
             for (int i=0;i<getNumParameters();i++) {
                 param[i] = (float) xmlState->getDoubleAttribute (String(i), param[i]);
             }
@@ -504,21 +504,21 @@ void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInB
 }
 
 void midiPCGUI::setStateInformation (const void* data, int sizeInBytes) {
-    ScopedPointer<XmlElement> xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
-        if (xmlState->hasTagName (L"MIDIPCGUISETTINGS"))
+        if (xmlState->hasTagName ("MIDIPCGUISETTINGS"))
         {
             for (int p=0;p<getNumPrograms();p++) {
 				String prefix;
 				if (xmlState->getIntAttribute("pluginVersion")<2)
-					prefix = L"P" + String(p) + L".";
-				else prefix = L"P" + String(p) + L"_";
+					prefix = "P" + String(p) + ".";
+				else prefix = "P" + String(p) + "_";
                 for (int i=0;i<getNumParameters();i++) {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix+String(i), programs[p].param[i]);
                 }
-                programs[p].name = xmlState->getStringAttribute (prefix+L"progname", programs[p].name);
+                programs[p].name = xmlState->getStringAttribute (prefix+"progname", programs[p].name);
             }
 			XmlElement* n = xmlState->getChildByName("names");
 			if (n) {
@@ -530,7 +530,7 @@ void midiPCGUI::setStateInformation (const void* data, int sizeInBytes) {
 				}
 			}
             init=true;
-            setCurrentProgram(xmlState->getIntAttribute(L"program", 0));
+            setCurrentProgram(xmlState->getIntAttribute("program", 0));
         }
     }
 }

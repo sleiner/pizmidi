@@ -20,6 +20,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiOut: Channel selector combobox only shows channel when expanded
 -   midiPads
 -   midiPBCurve: Help text is never shown
+-   midiPCGUI
 
 ### Serious problems are known
 

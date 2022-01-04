@@ -60,82 +60,82 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
       ProgramName (0),
       minimize (0)
 {
-    addAndMakeVisible (groupComponent2 = new GroupComponent (L"new group",
-                                                             L"Program"));
+    addAndMakeVisible (groupComponent2 = new GroupComponent ("new group",
+                                                             "Program"));
     groupComponent2->setTextLabelPosition (Justification::centred);
 
-    addAndMakeVisible (groupComponent = new GroupComponent (L"new group",
-                                                            L"Bank"));
+    addAndMakeVisible (groupComponent = new GroupComponent ("new group",
+                                                            "Bank"));
     groupComponent->setTextLabelPosition (Justification::centred);
 
-    addAndMakeVisible (s_Program = new VSTSlider (L"Program"));
-    s_Program->setTooltip (L"Next Program Change to send");
+    addAndMakeVisible (s_Program = new VSTSlider ("Program"));
+    s_Program->setTooltip ("Next Program Change to send");
     s_Program->setRange (0, 128, 1);
     s_Program->setSliderStyle (Slider::LinearHorizontal);
     s_Program->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
     s_Program->addListener (this);
 
-    addAndMakeVisible (s_BankMSB = new VSTSlider (L"Bank MSB"));
-    s_BankMSB->setTooltip (L"Next Bank Select to send");
+    addAndMakeVisible (s_BankMSB = new VSTSlider ("Bank MSB"));
+    s_BankMSB->setTooltip ("Next Bank Select to send");
     s_BankMSB->setRange (0, 128, 1);
     s_BankMSB->setSliderStyle (Slider::LinearHorizontal);
     s_BankMSB->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
     s_BankMSB->addListener (this);
 
-    addAndMakeVisible (s_BankLSB = new VSTSlider (L"Bank LSB"));
-    s_BankLSB->setTooltip (L"Next Bank LSB to send");
+    addAndMakeVisible (s_BankLSB = new VSTSlider ("Bank LSB"));
+    s_BankLSB->setTooltip ("Next Bank LSB to send");
     s_BankLSB->setRange (0, 128, 1);
     s_BankLSB->setSliderStyle (Slider::LinearHorizontal);
     s_BankLSB->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
     s_BankLSB->addListener (this);
 
-    addAndMakeVisible (b_BankTrig = new TextButton (L"Bank Trig"));
-    b_BankTrig->setTooltip (L"Send selected Bank Select message(s)");
-    b_BankTrig->setButtonText (L"Trigger Bank");
+    addAndMakeVisible (b_BankTrig = new TextButton ("Bank Trig"));
+    b_BankTrig->setTooltip ("Send selected Bank Select message(s)");
+    b_BankTrig->setButtonText ("Trigger Bank");
     b_BankTrig->addListener (this);
     b_BankTrig->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_PCTrig = new TextButton (L"PC Trig"));
-    b_PCTrig->setTooltip (L"Send selected Program Change message");
-    b_PCTrig->setButtonText (L"Trigger Program");
+    addAndMakeVisible (b_PCTrig = new TextButton ("PC Trig"));
+    b_PCTrig->setTooltip ("Send selected Program Change message");
+    b_PCTrig->setButtonText ("Trigger Program");
     b_PCTrig->addListener (this);
     b_PCTrig->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_Inc = new TextButton (L"Inc"));
-    b_Inc->setButtonText (L"+");
+    addAndMakeVisible (b_Inc = new TextButton ("Inc"));
+    b_Inc->setButtonText ("+");
     b_Inc->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
     b_Inc->addListener (this);
     b_Inc->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
     b_Inc->setColour (TextButton::textColourOnId, Colours::black);
 
-    addAndMakeVisible (b_Dec = new TextButton (L"Dec"));
-    b_Dec->setButtonText (L"-");
+    addAndMakeVisible (b_Dec = new TextButton ("Dec"));
+    b_Dec->setButtonText ("-");
     b_Dec->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnTop);
     b_Dec->addListener (this);
     b_Dec->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
     b_Dec->setColour (TextButton::textColourOnId, Colours::black);
 
-    addAndMakeVisible (b_PCListen = new ToggleButton (L"PC Listen"));
-    b_PCListen->setTooltip (L"Use incoming Program Changes to select VST programs");
+    addAndMakeVisible (b_PCListen = new ToggleButton ("PC Listen"));
+    b_PCListen->setTooltip ("Use incoming Program Changes to select VST programs");
     b_PCListen->addListener (this);
 
-    addAndMakeVisible (s_Channel = new VSTSlider (L"Channel"));
-    s_Channel->setTooltip (L"Input/Output MIDI Channel");
+    addAndMakeVisible (s_Channel = new VSTSlider ("Channel"));
+    s_Channel->setTooltip ("Input/Output MIDI Channel");
     s_Channel->setRange (1, 16, 1);
     s_Channel->setSliderStyle (Slider::LinearHorizontal);
     s_Channel->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
     s_Channel->addListener (this);
 
-    addAndMakeVisible (b_Mode = new TextButton (L"Mode"));
-    b_Mode->setTooltip (L"Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved");
-    b_Mode->setButtonText (L"Triggered");
+    addAndMakeVisible (b_Mode = new TextButton ("Mode"));
+    b_Mode->setTooltip ("Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved");
+    b_Mode->setButtonText ("Triggered");
     b_Mode->addListener (this);
     b_Mode->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
     b_Mode->setColour (TextButton::buttonOnColourId, Colours::coral);
 
-    addAndMakeVisible (PCDisplay = new Label (L"PCDisplay",
-                                              L"128"));
-    PCDisplay->setTooltip (L"Last Program Change sent");
+    addAndMakeVisible (PCDisplay = new Label ("PCDisplay",
+                                              "128"));
+    PCDisplay->setTooltip ("Last Program Change sent");
     PCDisplay->setFont (Font (63.3000f, Font::bold));
     PCDisplay->setJustificationType (Justification::centred);
     PCDisplay->setEditable (false, true, false);
@@ -145,51 +145,51 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
     PCDisplay->setColour (TextEditor::backgroundColourId, Colour (0x0));
     PCDisplay->addListener (this);
 
-    addAndMakeVisible (label = new Label (L"new label",
-                                          L"Channel"));
+    addAndMakeVisible (label = new Label ("new label",
+                                          "Channel"));
     label->setFont (Font (15.0000f, Font::plain));
     label->setJustificationType (Justification::centredLeft);
     label->setEditable (false, false, false);
     label->setColour (TextEditor::textColourId, Colours::black);
     label->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label2 = new Label (L"new label",
-                                           L"Mode"));
+    addAndMakeVisible (label2 = new Label ("new label",
+                                           "Mode"));
     label2->setFont (Font (15.0000f, Font::plain));
     label2->setJustificationType (Justification::centredLeft);
     label2->setEditable (false, false, false);
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label3 = new Label (L"new label",
-                                           L"MSB"));
+    addAndMakeVisible (label3 = new Label ("new label",
+                                           "MSB"));
     label3->setFont (Font (12.0000f, Font::plain));
     label3->setJustificationType (Justification::centredLeft);
     label3->setEditable (false, false, false);
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label4 = new Label (L"new label",
-                                           L"LSB"));
+    addAndMakeVisible (label4 = new Label ("new label",
+                                           "LSB"));
     label4->setFont (Font (12.0000f, Font::plain));
     label4->setJustificationType (Justification::centredLeft);
     label4->setEditable (false, false, false);
     label4->setColour (TextEditor::textColourId, Colours::black);
     label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (label5 = new Label (L"new label",
-                                           L"Current Program"));
+    addAndMakeVisible (label5 = new Label ("new label",
+                                           "Current Program"));
     label5->setFont (Font (15.0000f, Font::plain));
     label5->setJustificationType (Justification::centred);
     label5->setEditable (false, false, false);
     label5->setColour (TextEditor::textColourId, Colours::black);
     label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (b_Thru = new ToggleButton (L"Thru"));
+    addAndMakeVisible (b_Thru = new ToggleButton ("Thru"));
     b_Thru->addListener (this);
 
-    addAndMakeVisible (PCDisplay2 = new Label (L"PCDisplay",
-                                               L"128"));
+    addAndMakeVisible (PCDisplay2 = new Label ("PCDisplay",
+                                               "128"));
     PCDisplay2->setFont (Font (18.0000f, Font::bold));
     PCDisplay2->setJustificationType (Justification::centred);
     PCDisplay2->setEditable (false, true, false);
@@ -199,8 +199,8 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
     PCDisplay2->setColour (TextEditor::backgroundColourId, Colour (0x0));
     PCDisplay2->addListener (this);
 
-    addAndMakeVisible (PCDisplay3 = new Label (L"PCDisplay",
-                                               L"128"));
+    addAndMakeVisible (PCDisplay3 = new Label ("PCDisplay",
+                                               "128"));
     PCDisplay3->setFont (Font (18.0000f, Font::bold));
     PCDisplay3->setJustificationType (Justification::centred);
     PCDisplay3->setEditable (false, true, false);
@@ -210,16 +210,16 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
     PCDisplay3->setColour (TextEditor::backgroundColourId, Colour (0x0));
     PCDisplay3->addListener (this);
 
-    addAndMakeVisible (label6 = new Label (L"new label",
-                                           L"Current Bank"));
+    addAndMakeVisible (label6 = new Label ("new label",
+                                           "Current Bank"));
     label6->setFont (Font (15.0000f, Font::plain));
     label6->setJustificationType (Justification::centred);
     label6->setEditable (false, false, false);
     label6->setColour (TextEditor::textColourId, Colours::black);
     label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (ProgramName = new ClickableLabel (L"Program Name",
-                                                         L"Awesome Thing"));
+    addAndMakeVisible (ProgramName = new ClickableLabel ("Program Name",
+                                                         "Awesome Thing"));
     ProgramName->setFont (Font (18.0000f, Font::bold));
     ProgramName->setJustificationType (Justification::centred);
     ProgramName->setEditable (false, true, false);
@@ -229,8 +229,8 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
     ProgramName->setColour (TextEditor::backgroundColourId, Colours::white);
     ProgramName->addListener (this);
 
-    addAndMakeVisible (minimize = new TextButton (L"Minimize"));
-    minimize->setButtonText (L"_");
+    addAndMakeVisible (minimize = new TextButton ("Minimize"));
+    minimize->setButtonText ("_");
     minimize->addListener (this);
 
 
@@ -263,9 +263,6 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
 	label5->setMouseClickGrabsKeyboardFocus(false);
 
 	minimized = ownerFilter->getParameter(kMinimize)>=0.5f;
-
-	static NonShinyLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
     //[/UserPreSize]
 
     setSize (310, 280);
@@ -993,7 +990,7 @@ void midiPCGUIEditor::updateParametersFromFilter()
     // ..and after releasing the lock, we're free to do the time-consuming UI stuff..
 
 	//prog name
-	ProgramName->setText(name,false);
+	ProgramName->setText(name,dontSendNotification);
     //toggle buttons
     b_PCListen->setToggleState(param[kPCListen]>=0.5f,false);
     b_Thru->setToggleState(param[kThru]>=0.5f,false);
@@ -1019,9 +1016,9 @@ void midiPCGUIEditor::updateParametersFromFilter()
     s_BankMSB->setVSTSlider(param[kBankMSB]);
     s_BankLSB->setVSTSlider(param[kBankLSB]);
     s_Channel->setVSTSlider(param[kChannel]);
-	PCDisplay->setText(String(p),false);
-    PCDisplay2->setText(String(msb),false);
-	PCDisplay3->setText(String(lsb),false);
+	PCDisplay->setText(String(p),dontSendNotification);
+    PCDisplay2->setText(String(msb),dontSendNotification);
+	PCDisplay3->setText(String(lsb),dontSendNotification);
 	minimized = param[kMinimize]>=0.5f;
 }
 //[/MiscUserCode]
