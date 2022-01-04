@@ -5,8 +5,7 @@ piz_add_plugin(
   PLUGIN_CODE "mChJ"
   IS_MIDI_EFFECT TRUE
   NEEDS_MIDI_INPUT TRUE
-  NEEDS_MIDI_OUTPUT TRUE
-  VERSION "1.1.0")
+  NEEDS_MIDI_OUTPUT TRUE)
 
 target_sources(
   piz_midiChs

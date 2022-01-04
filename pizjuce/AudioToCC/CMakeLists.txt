@@ -3,8 +3,7 @@ piz_add_plugin(
   DESCRIPTION "Converts audio amplitude to midi CC messages"
   PLUGIN_CODE "A2CC"
   PRODUCT_NAME "Audio To CC"
-  NEEDS_MIDI_OUTPUT TRUE
-  VERSION "1.2.0")
+  NEEDS_MIDI_OUTPUT TRUE)
 
 target_sources(
   piz_AudioToCC

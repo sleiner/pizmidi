@@ -4,8 +4,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     DESCRIPTION "CPU/RAM meter"
     PLUGIN_CODE "cpur"
     PRODUCT_NAME "CPU and RAM"
-    IS_SYNTH TRUE
-    VERSION "1.2.0")
+    IS_SYNTH TRUE)
 
   target_sources(
     piz_CpuRam

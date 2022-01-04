@@ -3,8 +3,7 @@ piz_add_plugin(
   DESCRIPTION "Time Counter"
   IS_SYNTH TRUE
   PLUGIN_CODE "9wMw"
-  PRODUCT_NAME "Big Clock"
-  VERSION "1.3.0")
+  PRODUCT_NAME "Big Clock")
 
 target_sources(
   piz_BigClock

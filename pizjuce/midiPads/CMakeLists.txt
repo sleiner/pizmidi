@@ -5,8 +5,7 @@ piz_add_plugin(
   PLUGIN_CODE "m16p"
   IS_SYNTH TRUE
   NEEDS_MIDI_INPUT TRUE
-  NEEDS_MIDI_OUTPUT TRUE
-  VERSION "1.3")
+  NEEDS_MIDI_OUTPUT TRUE)
 
 target_sources(
   piz_midiPads

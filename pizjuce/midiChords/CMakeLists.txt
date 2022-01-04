@@ -5,8 +5,7 @@ piz_add_plugin(
   PLUGIN_CODE "mCrd"
   IS_SYNTH TRUE
   NEEDS_MIDI_INPUT TRUE
-  NEEDS_MIDI_OUTPUT TRUE
-  VERSION "1.2.5")
+  NEEDS_MIDI_OUTPUT TRUE)
 
 target_sources(
   piz_midiChords

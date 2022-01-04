@@ -4,8 +4,7 @@ piz_add_plugin(
   PLUGIN_CODE "imag"
   PRODUCT_NAME "Image"
   IS_SYNTH TRUE
-  NEEDS_MIDI_INPUT TRUE
-  VERSION "1.6.0")
+  NEEDS_MIDI_INPUT TRUE)
 
 target_sources(
   piz_Image

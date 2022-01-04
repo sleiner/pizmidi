@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(
   pizmidi
-  VERSION 1.5.0
+  VERSION 2.0.0
   HOMEPAGE_URL "https://github.com/sleiner/pizmidi"
   LANGUAGES C CXX)
 
