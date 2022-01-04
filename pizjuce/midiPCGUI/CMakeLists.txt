@@ -11,11 +11,11 @@ piz_add_plugin(
 target_sources(
   piz_midiPCGUI
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/Source/midiPCGUI.h"
-          "${CMAKE_CURRENT_LIST_DIR}/Source/midiPCGUIEditor.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPCGUI.h"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPCGUIEditor.h"
           # Sources
-          "${CMAKE_CURRENT_LIST_DIR}/Source/midiPCGUI.cpp"
-          "${CMAKE_CURRENT_LIST_DIR}/Source/midiPCGUIEditor.cpp")
+          "${CMAKE_CURRENT_LIST_DIR}/midiPCGUI.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/midiPCGUIEditor.cpp")
 
 target_link_libraries(
   piz_midiPCGUI PUBLIC juce::juce_audio_processors juce::juce_core
