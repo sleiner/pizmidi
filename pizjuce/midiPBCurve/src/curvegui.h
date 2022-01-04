@@ -23,14 +23,16 @@
 #define __JUCER_HEADER_CURVEEDITOR_CURVEGUI_2037A6EC__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "curve.h"
-#include "../../common/piz_LookAndFeel.h"
-#include "../../common/ChannelSlider.h"
-#include "MidiEnvelope.h"
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
 
+#include "curve.h"
+#include "../_common/ChannelSlider.h"
+#include "MidiEnvelope.h"
 //[/Headers]
 
-
+using namespace juce;
 
 //==============================================================================
 /**
@@ -42,8 +44,8 @@
 */
 class CurveEditor  : public AudioProcessorEditor,
                      public ChangeListener,
-                     public SliderListener,
-                     public ButtonListener
+                     public Slider::Listener,
+                     public Button::Listener
 {
 public:
     //==============================================================================

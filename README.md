@@ -19,6 +19,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiMonitor: text of checkboxes is truncated
 -   midiOut: Channel selector combobox only shows channel when expanded
 -   midiPads
+-   midiPBCurve: Help text is never shown
 
 ### Serious problems are known
 

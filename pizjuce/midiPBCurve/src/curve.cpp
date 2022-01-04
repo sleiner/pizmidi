@@ -6,7 +6,7 @@
     This function must be implemented to create the actual plugin object that
     you want to use.
 */
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter() 
+PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new MidiCurve();
 }
@@ -39,13 +39,13 @@ JuceProgram::JuceProgram ()
 }
 
 //==============================================================================
-MidiCurve::MidiCurve() 
+MidiCurve::MidiCurve()
 {
     // create built-in programs
     programs = new JuceProgram[getNumPrograms()];
     if (!loadDefaultFxb())
     {
-	    for(int i=0;i<getNumPrograms();i++){ 
+	    for(int i=0;i<getNumPrograms();i++){
             programs[i].name = String("Program ") + String(i+1);
         }
     }
@@ -55,20 +55,20 @@ MidiCurve::MidiCurve()
     setCurrentProgram (0);
 }
 
-MidiCurve::~MidiCurve() 
+MidiCurve::~MidiCurve()
 {
     if (programs) delete [] programs;
 }
 
 //==============================================================================
-float MidiCurve::getParameter (int index) 
+float MidiCurve::getParameter (int index)
 {
 	if (index<getNumParameters())
 		return param[index];
 	return 0.f;
 }
 
-void MidiCurve::setParameter (int index, float newValue) 
+void MidiCurve::setParameter (int index, float newValue)
 {
 	if (index<getNumParameters()) {
 		JuceProgram* ap = &programs[curProgram];
@@ -83,13 +83,13 @@ void MidiCurve::setParameter (int index, float newValue)
 	}
 }
 
-const String MidiCurve::getParameterName (int index) 
+const String MidiCurve::getParameterName (int index)
 {
     if (index == kChannel) return "Channel";
     return "param"+String(index);
 }
 
-const String MidiCurve::getParameterText (int index) 
+const String MidiCurve::getParameterText (int index)
 {
     if (index==kChannel) {
         if (roundFloatToInt(param[kChannel]*16.0f)==0) return String("Any");
@@ -97,21 +97,21 @@ const String MidiCurve::getParameterText (int index)
     }
 	else if (index<getNumParameters())
 		return String(roundFloatToInt(127.f*param[index]));
-	else return String::empty;
+	else return String();
 }
 
 const String MidiCurve::getInputChannelName (const int channelIndex) const
 {
 	if (channelIndex<getNumInputChannels())
 		return String(JucePlugin_Name) + String(" ") + String (channelIndex + 1);
-	return String::empty;
+	return String();
 }
 
 const String MidiCurve::getOutputChannelName (const int channelIndex) const
 {
 	if (channelIndex<getNumOutputChannels())
 	    return String(JucePlugin_Name) + String(" ") + String (channelIndex + 1);
-	return String::empty;
+	return String();
 }
 
 bool MidiCurve::isInputChannelStereoPair (int index) const
@@ -145,7 +145,7 @@ void MidiCurve::setCurrentProgram (int index)
     lastUIHeight = ap->lastUIHeight;
 
 	updatePath();
-    sendChangeMessage();    
+    sendChangeMessage();
 }
 
 void MidiCurve::changeProgramName(int index, const String &newName) {
@@ -156,7 +156,7 @@ void MidiCurve::changeProgramName(int index, const String &newName) {
 const String MidiCurve::getProgramName(int index) {
 	if (index<getNumPrograms())
 	    return programs[index].name;
-	return String::empty;
+	return String();
 }
 
 int MidiCurve::getCurrentProgram() {
@@ -175,19 +175,19 @@ void MidiCurve::releaseResources()
     // spare memory, etc.
 }
 
-float MidiCurve::getPointValue(int n, int y) 
+float MidiCurve::getPointValue(int n, int y)
 {
-	if (n<MAX_ENVELOPE_POINTS) 
+	if (n<MAX_ENVELOPE_POINTS)
 	{
-		if (!y) 
+		if (!y)
 			return points[n].p.getX();
-		else 
+		else
 			return 1.f-points[n].p.getY();
 	}
 	return -1.f;
 }
 
-float MidiCurve::findValue(float input) 
+float MidiCurve::findValue(float input)
 {
 	PathFlatteningIterator it(path,AffineTransform::identity,(float)midiScaler);
 	while (it.next()) {
@@ -219,13 +219,13 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     MidiMessage midi_message(0xFE);
     int sample_number;
     while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
-		if (midi_message.isForChannel(channel) || channel==0) 
+		if (midi_message.isForChannel(channel) || channel==0)
 		{
 			if (midi_message.isPitchWheel()) {
 				if (param[kPitchBend]>=0.5f)
 				{
 					int v = midi_message.getPitchWheelValue();
-					uint8* data = midi_message.getRawData();
+					const uint8* data = midi_message.getRawData();
 					lastCCIn = v;
 					v=roundFloatToInt(16383.f * findValue(v*(float)0.00006103888));
 					lastCCOut = v;
@@ -262,16 +262,16 @@ void MidiCurve::updatePath() {
 		myPath.lineTo (0.f, 1.f);
 	}
 	for (int i = 1; i < MAX_ENVELOPE_POINTS; i++) {
-		if (points[i].isActive && !points[i].isControl) 
+		if (points[i].isActive && !points[i].isControl)
 		{
 			int prev = getPrevActivePoint(i);
 			if (points[prev].isControl) {
 				if (points[getPrevActivePoint(prev)].isControl) {
-					myPath.cubicTo(getPointValue(getPrevActivePoint(prev),0), getPointValue(getPrevActivePoint(prev),1), 
+					myPath.cubicTo(getPointValue(getPrevActivePoint(prev),0), getPointValue(getPrevActivePoint(prev),1),
 								   getPointValue(prev,0), getPointValue(prev,1),
 				      			   getPointValue(i,0),   getPointValue(i,1));
 				}
-				else { 
+				else {
 					myPath.quadraticTo(getPointValue(prev,0), getPointValue(prev,1),
 				      				   getPointValue(i,0),   getPointValue(i,1));
 				}
@@ -315,13 +315,13 @@ void MidiCurve::resetPoints() {
 	sendChangeMessage();
 }
 
-bool MidiCurve::isPointActive(int point) 
+bool MidiCurve::isPointActive(int point)
 {
 	if(point<0) return false;
 	return getParameter(point + kActive) > 0.5f;
 }
 
-bool MidiCurve::isPointControl(int point) 
+bool MidiCurve::isPointControl(int point)
 {
 	if(point<0) return false;
 	return getParameter(point + kActive) > 0.1f && getParameter(point + kActive) < 0.9f;
@@ -386,9 +386,9 @@ void MidiCurve::getStateInformation(MemoryBlock &destData) {
 void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
@@ -400,23 +400,21 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
             }
             lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            
+
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
 }
 
 void MidiCurve::setStateInformation (const void* data, int sizeInBytes) {
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             for (int p=0;p<getNumPrograms();p++) {
-                String prefix = "P" + String(p) + "."; 
+                String prefix = "P" + String(p) + ".";
                 for (int i=0;i<kNumParams;i++) {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix+String(i), programs[p].param[i]);
                 }
@@ -427,6 +425,5 @@ void MidiCurve::setStateInformation (const void* data, int sizeInBytes) {
             init=true;
             setCurrentProgram(xmlState->getIntAttribute("program", 0));
         }
-        delete xmlState;
     }
 }

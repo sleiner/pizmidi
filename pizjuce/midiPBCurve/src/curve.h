@@ -1,6 +1,6 @@
 #ifndef MidiCurvePLUGINFILTER_H
 #define MidiCurvePLUGINFILTER_H
-#include "../../common/PizAudioProcessor.h"
+#include "../_common/PizAudioProcessor.h"
 
 #define MAX_ENVELOPE_POINTS    (32)
 #define MAX_ENVELOPE_LENGTH    (127.0f)
@@ -18,7 +18,7 @@ enum parameters {
     kNumParams
 };
 
-class JuceProgram {	
+class JuceProgram {
 friend class MidiCurve;
 public:
 	JuceProgram ();
@@ -56,20 +56,20 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
+    double getTailLengthSeconds() const override {return 0;}
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {
-#if JucePlugin_WantsMidiInput 
+#if JucePlugin_WantsMidiInput
         return true;
-#else   
+#else
         return false;
 #endif
     }
     bool producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
         return true;
-#else 
+#else
         return false;
 #endif
     }
@@ -136,7 +136,7 @@ private:
 			isControl=control;
 			isActive=active;
 		}
-		midiPoint() 
+		midiPoint()
 		{
 			p.setXY(0.f,0.f);
 			isControl=false;
@@ -158,7 +158,7 @@ private:
 
     JuceProgram *programs;
     int curProgram;
-    
+
     bool init;
 
 	float findValue(float input);

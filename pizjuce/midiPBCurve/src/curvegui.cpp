@@ -125,7 +125,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
     addAndMakeVisible (label6 = new Label (L"new label",
-                                           String::empty));
+                                           String()));
     label6->setFont (Font (15.0000f, Font::plain));
     label6->setJustificationType (Justification::centredLeft);
     label6->setEditable (false, false, false);
@@ -133,7 +133,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
     addAndMakeVisible (label7 = new Label (L"new label",
-                                           String::empty));
+                                           String()));
     label7->setFont (Font (15.0000f, Font::plain));
     label7->setJustificationType (Justification::centredLeft);
     label7->setEditable (false, false, false);
@@ -157,9 +157,6 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
 
 
     //[UserPreSize]
-	static PizLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
 	resizeLimits.setSizeLimits (50, 50, 1600, 1600);
 	instructionsLabel->setVisible(false);
     //[/UserPreSize]
@@ -303,21 +300,21 @@ void CurveEditor::updateParameters ()
 	const float pbrange = getFilter()->getParameter(kPBRange)*48.f;
 	const float pbrange2 = getFilter()->getParameter(kPBRange2)*48.f;
 	if (lastin!=-1) {
-		label->setText("In: " + String(lastin),true);
-		if (lastin==8192) label6->setText("(center)",true);
-		else if (lastin>8192) label6->setText("(+"+String(pbrange*((float)lastin/16383.f-0.5f),2) + ")",true);
-		else if (lastin<8192) label6->setText("("+String(pbrange2*((float)lastin/16383.f-0.5f),2) + ")",true);
+		label->setText("In: " + String(lastin),sendNotification);
+		if (lastin==8192) label6->setText("(center)",sendNotification);
+		else if (lastin>8192) label6->setText("(+"+String(pbrange*((float)lastin/16383.f-0.5f),2) + ")",sendNotification);
+		else if (lastin<8192) label6->setText("("+String(pbrange2*((float)lastin/16383.f-0.5f),2) + ")",sendNotification);
 	}
 	if (lastout!=-1) {
-		label2->setText("Out: " + String(lastout),true);
-		if (lastout==8192) label7->setText("(center)",true);
-		else if (lastout>8192) label7->setText("(+"+String(pbrange*((float)lastout/16383.f-0.5f),2) + ")",true);
-		else if (lastout<8192) label7->setText("("+String(pbrange2*((float)lastout/16383.f-0.5f),2) + ")",true);
+		label2->setText("Out: " + String(lastout),sendNotification);
+		if (lastout==8192) label7->setText("(center)",sendNotification);
+		else if (lastout>8192) label7->setText("(+"+String(pbrange*((float)lastout/16383.f-0.5f),2) + ")",sendNotification);
+		else if (lastout<8192) label7->setText("("+String(pbrange2*((float)lastout/16383.f-0.5f),2) + ")",sendNotification);
 	}
 
-	channelSlider->setValue(getFilter()->getParameter(kChannel)*channelSlider->getMaximum(),false);
-	rangeSlider->setValue(getFilter()->getParameter(kPBRange)*rangeSlider->getMaximum(),false);
-	rangeSlider2->setValue(getFilter()->getParameter(kPBRange2)*rangeSlider2->getMaximum(),false);
+	channelSlider->setValue(getFilter()->getParameter(kChannel)*channelSlider->getMaximum(),dontSendNotification);
+	rangeSlider->setValue(getFilter()->getParameter(kPBRange)*rangeSlider->getMaximum(),dontSendNotification);
+	rangeSlider2->setValue(getFilter()->getParameter(kPBRange2)*rangeSlider2->getMaximum(),dontSendNotification);
 
 	curve->updateParameters(true);
 
