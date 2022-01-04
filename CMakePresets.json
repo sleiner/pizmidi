@@ -46,6 +46,19 @@
             "environment": {
                 "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64"
             }
+        },
+        {
+            "name": "linux-native",
+            "displayName": "Linux - native",
+            "description": "Build for Linux host architecture",
+            "inherits": [
+                "common",
+                "property: release"
+            ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CPACK_GENERATOR": "ZIP"
+            }
         }
     ]
 }
