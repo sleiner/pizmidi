@@ -1,0 +1,51 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "common",
+            "description": "All builds will inherit from this configuration",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "property: release",
+            "description": "All Release builds will inherit from this configuration",
+            "hidden": true,
+            "environment": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "mac-native",
+            "displayName": "macOS - native",
+            "description": "Build for macOS host architecture",
+            "inherits": [
+                "common",
+                "property: release"
+            ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CPACK_GENERATOR": "productbuild"
+            },
+            "environment": {
+                "MACOSX_DEPLOYMENT_TARGET": "10.10"
+            }
+        },
+        {
+            "name": "mac-universal",
+            "displayName": "macOS - universal (arm64 + x86_64)",
+            "description": "Build universal binaries for macOS",
+            "inherits": [
+                "mac-native"
+            ],
+            "environment": {
+                "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64"
+            }
+        }
+    ]
+}

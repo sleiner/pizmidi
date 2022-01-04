@@ -1,0 +1,36 @@
+additional_commands:
+    juce_add_plugin:
+        pargs:
+            nargs: 1
+        kwargs:
+            COMPANY_COPYRIGHT: 1
+            COMPANY_NAME: 1
+            COMPANY_WEBSITE: 1
+            COMPANY_EMAIL: 1
+            DESCRIPTION: 1
+            FORMATS: "*"
+            IS_SYNTH: 1
+            PLUGIN_CODE: 1
+            PLUGIN_MANUFACTURER_CODE: 1
+            PRODUCT_NAME: 1
+            VERSION: 1
+    piz_add_plugin:
+        pargs:
+            nargs: 1
+        kwargs:
+            DESCRIPTION: 1
+            EDITOR_WANTS_KEYBOARD_FOCUS: 1
+            IS_MIDI_EFFECT: 1
+            IS_SYNTH: 1
+            PLUGIN_CODE: 1
+            PRODUCT_NAME: 1
+            VERSION: 1
+            VST_NUM_MIDI_INS: 1
+            VST_NUM_MIDI_OUTS: 1
+            VST2_CATEGORY: 1
+            VST3_CATEGORIES: 1
+            AU_MAIN_TYPE: 1
+            AU_EXPORT_PREFIX: 1
+            AU_SANDBOX_SAFE: 1
+            NEEDS_MIDI_INPUT: 1
+            NEEDS_MIDI_OUTPUT: 1
