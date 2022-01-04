@@ -21,6 +21,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiPads
 -   midiPBCurve: Help text is never shown
 -   midiPCGUI
+-   midiStep
 
 ### Serious problems are known
 

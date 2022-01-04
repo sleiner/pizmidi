@@ -1,7 +1,7 @@
 #ifndef MidiStepPLUGINFILTER_H
 #define MidiStepPLUGINFILTER_H
-#include "../../common/PizAudioProcessor.h"
-#include "../../common/midistuff.h"
+#include "../_common/PizAudioProcessor.h"
+#include "../_common/midistuff.h"
 #include "MidiLoop.h"
 
 #define numLoops (16)
@@ -54,7 +54,7 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
+    double getTailLengthSeconds() const override {return 0;}
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {

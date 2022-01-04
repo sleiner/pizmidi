@@ -193,9 +193,6 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
 
     //[UserPreSize]
-	static PizLookAndFeel Look;
-	LookAndFeel::setDefaultLookAndFeel (&Look);
-
 	resizeLimits.setSizeLimits (510, 360, 1600, 1600);
     //[/UserPreSize]
 
@@ -734,7 +731,7 @@ void StepEditor::buttonClicked (Button* buttonThatWasClicked)
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
         FileChooser myChooser ("Export MIDI...",
-            File(getFilter()->loopDir + File::separatorString + "Untitled.mid"),"*.mid");
+            File(getFilter()->loopDir + File::getSeparatorString() + "Untitled.mid"),"*.mid");
 
         if (myChooser.browseForFileToSave(true))
         {
@@ -866,7 +863,8 @@ bool StepEditor::isInterestedInFileDrag (const StringArray& files){
 
 void StepEditor::filesDropped (const StringArray& filenames, int mouseX, int mouseY)
 {
-	if(getFilter()->readMidiFile(getFilter()->activeLoop,File(filenames[0])))
+    File file(filenames[0]);
+	if(getFilter()->readMidiFile(getFilter()->activeLoop,file))
 		updateParameters(true);
 }
 
@@ -919,15 +917,15 @@ void StepEditor::updateParameters (bool updateLoop)
 
 	for (int i=0;i<numLoops;i++) {
 		getButtonByIndex(i)->setColour(TextButton::textColourOnId,i==activeLoop ? Colours::red : Colours::black);
-		getButtonByIndex(i)->setToggleState(param[kRecArm+i]>=0.5f,false);
+		getButtonByIndex(i)->setToggleState(param[kRecArm+i]>=0.5f,dontSendNotification);
 	}
-	thruButton->setToggleState(param[kThru]>=0.5f,false);
-	toggleButton->setToggleState(param[kRecActive]>=0.5f,false);
-	recordButton->setToggleState(param[kRecord]>=0.5f,false);
-	keySlider->setValue(floatToMidi(param[kTriggerKey+activeLoop],true),false);
-	transposeSlider->setValue(param[kTranspose+activeLoop]*96.f - 48.f,false);
-	recChannelSlider->setValue(floatToChannel(param[kChannel+activeLoop]),false);
-	outChannelSlider->setValue(floatToChannel(param[kOutChannel+activeLoop]),false);
+	thruButton->setToggleState(param[kThru]>=0.5f,dontSendNotification);
+	toggleButton->setToggleState(param[kRecActive]>=0.5f,dontSendNotification);
+	recordButton->setToggleState(param[kRecord]>=0.5f,dontSendNotification);
+	keySlider->setValue(floatToMidi(param[kTriggerKey+activeLoop],true),dontSendNotification);
+	transposeSlider->setValue(param[kTranspose+activeLoop]*96.f - 48.f,dontSendNotification);
+	recChannelSlider->setValue(floatToChannel(param[kChannel+activeLoop]),dontSendNotification);
+	outChannelSlider->setValue(floatToChannel(param[kOutChannel+activeLoop]),dontSendNotification);
 	if (updateLoop || lastActiveLoop!=activeLoop)
 	{
 		lastActiveLoop=activeLoop;

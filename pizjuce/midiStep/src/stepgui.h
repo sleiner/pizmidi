@@ -23,23 +23,25 @@
 #define __JUCER_HEADER_STEPEDITOR_STEPGUI_2085C00C__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "step.h"
 #include "PianoRoll.h"
-#include "../../common/ChannelSlider.h"
-#include "../../common/piz_LookAndFeel.h"
-
+#include "../_common/ChannelSlider.h"
 class PianoPort : public Viewport
 {
 public:
 	PianoPort(String name) : Viewport(name) {};
-	void mouseWheelMove (const MouseEvent &e, float wheelIncrementX, float wheelIncrementY)
+    void mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& d) override
 	{
-		this->getParentComponent()->mouseWheelMove(e,wheelIncrementX,wheelIncrementY);
+		this->getParentComponent()->mouseWheelMove(e,d);
 	}
 };
 //[/Headers]
 
-#include "../../common/PizButton.h"
+#include "../_common/PizButton.h"
 
 
 //==============================================================================
@@ -54,8 +56,8 @@ class StepEditor  : public AudioProcessorEditor,
                     public ChangeListener,
                     public FileDragAndDropTarget,
                     public Timer,
-                    public ButtonListener,
-                    public SliderListener
+                    public Button::Listener,
+                    public Slider::Listener
 {
 public:
     //==============================================================================

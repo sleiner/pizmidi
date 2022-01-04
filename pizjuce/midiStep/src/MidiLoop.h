@@ -1,6 +1,9 @@
 #ifndef PIZ_MIDI_LOOP_HEADER
 #define PIZ_MIDI_LOOP_HEADER
-#include "JuceHeader.h"
+
+#include "juce_audio_basics/juce_audio_basics.h"
+
+using namespace juce;
 
 enum playmodes {
 	playStep, playOneShot, playLooped, playWithHost, playLoopedWithHost, numPlayModes
@@ -9,11 +12,11 @@ enum playmodes {
 class Loop : public MidiMessageSequence
 {
 public:
-	Loop() 
-		: MidiMessageSequence(), 
-		currentIndex(0), 
-		triggerNote(60), 
-		transpose(0), 
+	Loop()
+		: MidiMessageSequence(),
+		currentIndex(0),
+		triggerNote(60),
+		transpose(0),
 		playMode(0),
 		isRecording(false),
 		isRecArmed(false),
@@ -26,10 +29,10 @@ public:
 	{
 		resetNotes();
 	}
-	Loop(MidiMessageSequence sequence, int triggerNote_, int transpose_=0, bool playMode_=0) 
-		: MidiMessageSequence(sequence), 
-		currentIndex(0), 
-		triggerNote(triggerNote_), 
+	Loop(MidiMessageSequence sequence, int triggerNote_, int transpose_=0, bool playMode_=0)
+		: MidiMessageSequence(sequence),
+		currentIndex(0),
+		triggerNote(triggerNote_),
 		transpose(transpose_),
 		playMode(playMode_),
 		isRecording(false),
@@ -57,7 +60,7 @@ public:
 	float velocitySensitivity;
 	double chordTolerance;
 
-	void startRecording() 
+	void startRecording()
 	{
 		clear();
 		recTime = 0;
@@ -67,16 +70,16 @@ public:
 
 	bool findNextNote()
 	{
-		if (currentIndex>=getNumEvents()) 
+		if (currentIndex>=getNumEvents())
 			currentIndex=0;
-		if (this->getEventPointer(currentIndex)->message.isNoteOn()) 
+		if (this->getEventPointer(currentIndex)->message.isNoteOn())
 		{
 			return true;
-		}		
+		}
 		++currentIndex;
 		while (currentIndex<getNumEvents())
 		{
-			if (this->getEventPointer(currentIndex)->message.isNoteOn()) 
+			if (this->getEventPointer(currentIndex)->message.isNoteOn())
 			{
 				return true;
 			}
@@ -85,7 +88,7 @@ public:
 		currentIndex=0;
 		while (currentIndex<getNumEvents())
 		{
-			if (this->getEventPointer(currentIndex)->message.isNoteOn()) 
+			if (this->getEventPointer(currentIndex)->message.isNoteOn())
 			{
 				return true;
 			}
@@ -142,7 +145,7 @@ public:
 	{
 		for (int n=0;n<128;n++) {
 			for (int ch=0;ch<16;ch++) playingNote[n][ch]=NOT_PLAYING;
-		}	
+		}
 	}
 
 	void sendNoteOffMessagesToBuffer(MidiBuffer& buffer, int sample_number)
@@ -161,7 +164,7 @@ public:
 		}
 	}
 
-	MidiMessage getCurrentMessage() 
+	MidiMessage getCurrentMessage()
 	{
 		if (currentIndex>=this->getNumEvents()) currentIndex=0;
 		return this->getEventPointer(currentIndex)->message;
@@ -172,7 +175,7 @@ public:
 		return this->getEventTime(currentIndex);
 	}
 
-	int getIndexOfNote(int noteNumber, double time) 
+	int getIndexOfNote(int noteNumber, double time)
 	{
 		for (int i=0;i<getNumEvents();i++)
 		{
@@ -199,12 +202,12 @@ public:
 		else {
 			/* SMTPE
 			 If it's negative, the upper byte indicates the frames-per-second (but negative), and
-			 the lower byte is the number of ticks per frame - see setSmpteTimeFormat().	
+			 the lower byte is the number of ticks per frame - see setSmpteTimeFormat().
 
 				@param framesPerSecond      must be 24, 25, 29 or 30
 				@param subframeResolution   the sub-second resolution, e.g. 4 (midi time code),
                                     8, 10, 80 (SMPTE bit resolution), or 100. For millisecond
-                                    timing, setSmpteTimeFormat (25, 40) 
+                                    timing, setSmpteTimeFormat (25, 40)
 			*/
 			int framesPerSecond = -(timeBase / 0x100);
 			int subframeResolution = (timeBase & 0x00ff);

@@ -50,8 +50,8 @@ MidiStep::MidiStep()
 		loop.add(new Loop());
 
 	loopDir = ((File::getSpecialLocation(File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                 + File::separator + "midiStep";
-	String defaultBank = loopDir + File::separator + "default.fxb";
+                 + File::getSeparatorString() + "midiStep";
+	String defaultBank = loopDir + File::getSeparatorString() + "default.fxb";
     programs = new JuceProgram[getNumPrograms()];
     if (File(defaultBank).exists()) {
         MemoryBlock bank = MemoryBlock(0,true);
@@ -118,7 +118,7 @@ const String MidiStep::getParameterName (int index)
 		if (index<kOutChannel) return "Transpose" + loopnum;
 		if (index<kNumParams) return "OutChannel" + loopnum;
 	}
-	return String::empty;
+	return String();
 }
 
 const String MidiStep::getParameterText (int index)
@@ -156,21 +156,21 @@ const String MidiStep::getParameterText (int index)
 			else return String(roundFloatToInt(param[index]*16.0f));
 		}
 	}
-	return String::empty;
+	return String();
 }
 
 const String MidiStep::getInputChannelName (const int channelIndex) const
 {
 	if (channelIndex<getNumInputChannels())
 		return String(JucePlugin_Name) + String(" ") + String (channelIndex + 1);
-	return String::empty;
+	return String();
 }
 
 const String MidiStep::getOutputChannelName (const int channelIndex) const
 {
 	if (channelIndex<getNumOutputChannels())
 	    return String(JucePlugin_Name) + String(" ") + String (channelIndex + 1);
-	return String::empty;
+	return String();
 }
 
 bool MidiStep::isInputChannelStereoPair (int index) const
@@ -214,7 +214,7 @@ void MidiStep::changeProgramName(int index, const String &newName) {
 const String MidiStep::getProgramName(int index) {
 	if (index<getNumPrograms())
 	    return programs[index].name;
-	return String::empty;
+	return String();
 }
 
 int MidiStep::getCurrentProgram() {
@@ -424,9 +424,9 @@ void MidiStep::setStateInformation (const void* data, int sizeInBytes) {
 		totalMidiSize+=midiSize;
 	}
 
-	XmlElement* const xmlState = getXmlFromBinary (datab, sizeInBytes-totalMidiSize);
+	auto const xmlState = getXmlFromBinary (datab, sizeInBytes-totalMidiSize);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         if (xmlState->hasTagName ("MYPLUGINSETTINGS") || xmlState->hasTagName ("midiStepSettings"))
         {
@@ -442,7 +442,6 @@ void MidiStep::setStateInformation (const void* data, int sizeInBytes) {
             init=true;
             setCurrentProgram(0);
         }
-        delete xmlState;
     }
 }
 
@@ -461,7 +460,8 @@ bool MidiStep::writeMidiFile(int index, File &file) {
 	if (file.existsAsFile())
 		if (!file.deleteFile()) return false;
 	if (file.create()) {
-        if (midifile.writeTo(FileOutputStream(file)))
+		FileOutputStream fo(file);
+        if (midifile.writeTo(fo))
 			return true;
     }
 	return false;
@@ -470,7 +470,8 @@ bool MidiStep::writeMidiFile(int index, File &file) {
 bool MidiStep::readMidiFile(int index, File &mid) {
     if (mid.exists()) {
         MidiFile midifile;
-		if (midifile.readFrom(FileInputStream(mid))) {
+		FileInputStream fi(mid);
+		if (midifile.readFrom(fi)) {
 			loop[index]->clear();
 			loop[index]->addSequence(*midifile.getTrack(midifile.getNumTracks()-1),0,0,midifile.getLastTimestamp()+1);
 			loop[index]->convertTimeBase(midifile.getTimeFormat());
