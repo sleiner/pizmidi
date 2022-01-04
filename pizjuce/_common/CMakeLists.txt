@@ -47,8 +47,11 @@ target_link_libraries(
             juce::juce_recommended_lto_flags)
 
 target_compile_definitions(
-  pizjuce_common INTERFACE JUCE_MODAL_LOOPS_PERMITTED=1
-                           JUCE_VST3_CAN_REPLACE_VST2=0)
+  pizjuce_common
+  INTERFACE JUCE_MODAL_LOOPS_PERMITTED=1 #
+            JUCER_ENABLE_GPL_MODE=1 #
+            JUCE_DISPLAY_SPLASH_SCREEN=0 #
+            JUCE_VST3_CAN_REPLACE_VST2=0)
 
 function(piz_add_plugin target)
   # Set up the plugin with JUCE
