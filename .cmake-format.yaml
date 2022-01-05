@@ -34,3 +34,4 @@ additional_commands:
             AU_SANDBOX_SAFE: 1
             NEEDS_MIDI_INPUT: 1
             NEEDS_MIDI_OUTPUT: 1
+            NEEDS_WEB_BROWSER: 1
