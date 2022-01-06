@@ -28,8 +28,7 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
 target_link_libraries(
   pizjuce_common
-  INTERFACE reaper_sdk #
-            juce::juce_core
+  INTERFACE juce::juce_core
             juce::juce_audio_basics
             juce::juce_audio_devices
             juce::juce_audio_utils

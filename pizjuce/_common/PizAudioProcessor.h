@@ -5,11 +5,7 @@
  #pragma warning (disable : 4100)
 #endif
 
-
-
-#include "reaper_plugin.h"
-#undef min
-#undef max
+class ReaProject;
 
 #include "juce_audio_processors/juce_audio_processors.h"
 
