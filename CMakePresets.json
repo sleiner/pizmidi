@@ -59,6 +59,15 @@
             "cacheVariables": {
                 "CPACK_GENERATOR": "ZIP"
             }
+        },
+        {
+            "name": "windows-native",
+            "displayName": "Windows - native",
+            "description": "Build for Windows host architecture",
+            "inherits": [
+                "common",
+                "property: release"
+            ]
         }
     ]
 }
