@@ -59,3 +59,24 @@ jobs:
                   path: |
                       build/${{ env.PRESET }}/packages
                       !build/${{ env.PRESET }}/packages/_CPack_Packages
+    build-windows:
+        name: Windows (x86_64)
+        runs-on: windows-2019
+        env:
+            PRESET: windows-native
+        steps:
+            - name: Checkout pizmidi
+              uses: actions/checkout@v2
+            - name: Configure pizmidi
+              run: cmake -S . --preset=$Env:PRESET
+            - name: Build pizmidi plugins
+              run: cmake --build --preset=$Env:PRESET --parallel
+            - name: Build pizmidi packages
+              run: cmake --build --preset=$Env:PRESET --parallel --target package
+            - name: Store packages
+              uses: actions/upload-artifact@v2
+              with:
+                  name: packages
+                  path: |
+                      build/${{ env.PRESET }}/packages
+                      !build/${{ env.PRESET }}/packages/_CPack_Packages
