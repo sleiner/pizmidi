@@ -8,3 +8,6 @@
     -   currently non-functional:
         -   MiddyMorphy
         -   midiLooper
+-   The plugins build under macOS and Linux (tested: Ubuntu 20.04).
+    -   Exceptions:
+        -   CpuRam
