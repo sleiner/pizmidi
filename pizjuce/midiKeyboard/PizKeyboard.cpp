@@ -18,7 +18,7 @@ bool PizKeyboard::isCapsLockOn()
     This function must be implemented to create a new instance of your
     plugin object.
 */
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PizKeyboard();
 }
