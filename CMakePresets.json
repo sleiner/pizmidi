@@ -16,7 +16,7 @@
             "name": "property: release",
             "description": "All Release builds will inherit from this configuration",
             "hidden": true,
-            "environment": {
+            "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },

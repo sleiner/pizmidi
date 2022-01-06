@@ -34,7 +34,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 1. Install **prerequisites**:
     - [Command Line Tools for Xcode](https://developer.apple.com/xcode/resources/), e.g. `xcode-select --install`
-    - [CMake](https://cmake.org) >= 3.22, e.g. `brew install cmake` via [Homebrew](https://brew.sh)
+    - [CMake](https://cmake.org) >= 3.21, e.g. `brew install cmake` via [Homebrew](https://brew.sh)
     - [Ninja](https://ninja-build.org), e.g. `brew install ninja` via [Homebrew](https://brew.sh)
 2. **Clone** this repository:
     ```bash
@@ -64,7 +64,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 1. Install **prerequisites**:
     - A C compiler, e.g. `clang` or `g++`.
-    - [CMake](https://cmake.org) >= 3.22
+    - [CMake](https://cmake.org) >= 3.21
       Note that on Ubuntu 20.04, this is not provided by the stock `apt` repositories.
       Installation instructions are provided on the CMake website.
     - [Ninja](https://ninja-build.org), e.g. `sudo apt install ninja-build`
