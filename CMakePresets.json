@@ -30,7 +30,7 @@
             ],
             "generator": "Ninja",
             "cacheVariables": {
-                "CPACK_GENERATOR": "productbuild"
+                "CPACK_GENERATOR": "productbuild;ZIP"
             },
             "environment": {
                 "MACOSX_DEPLOYMENT_TARGET": "10.10"
