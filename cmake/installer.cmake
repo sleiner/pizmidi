@@ -16,19 +16,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # https://web.archive.org/web/20210415101713/https://helpcenter.steinberg.de/hc/en-us/articles/115000171310
   set(GLOBAL_PLUGIN_INSTALL_PREFIX "/Library/Audio/Plug-Ins")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  # On 64-bit Windows (which is the only version currently supported), we can
-  # install all plugins into "C:\Program Files\Common Files". However, we do not
-  # hardcode this folder, but instead rely on the environment variable
-  # "COMMONPROGRAMFILES", which works even if the system drive is not at drive
-  # letter C.
-  #
-  # Sources:
-  # https://helpcenter.steinberg.de/hc/en-us/articles/115000177084-VST-plug-in-locations-on-Windows
-  # https://docs.microsoft.com/en-us/windows/deployment/usmt/usmt-recognized-environment-variables
-  # Permalink:
-  # https://web.archive.org/web/20211019091119/https://helpcenter.steinberg.de/hc/en-us/articles/115000177084-VST-plug-in-locations-on-Windows
-  # https://web.archive.org/web/20211031002343/https://docs.microsoft.com/en-us/windows/deployment/usmt/usmt-recognized-environment-variables
-  set(GLOBAL_PLUGIN_INSTALL_PREFIX "$ENV{CommonProgramFiles\(x86\)}")
+  # If this is set to something other than an empty string, windows packages
+  # (even plain ZIPs) are just empty.
+  set(GLOBAL_PLUGIN_INSTALL_PREFIX "")
 else() # Linux
   # For Linux, there does not seem to exist a common standard for where to put
   # VST plugins. So, we just pick a default path that suits us.

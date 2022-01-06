@@ -56,7 +56,10 @@
             "description": "Build for Windows host architecture",
             "inherits": [
                 "common"
-            ]
+            ],
+            "cacheVariables": {
+                "CPACK_GENERATOR": "ZIP"
+            }
         }
     ],
     "buildPresets": [
