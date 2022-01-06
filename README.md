@@ -44,7 +44,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
     ```bash
     # From the repository root:
     cmake -S . --preset=mac-native
-    cmake --build ./build/mac-native --parallel
+    cmake --build --preset=mac-native --parallel
     ```
     This will build the plugins for the CPU architecture your own Mac.
     If you want to build a [universal binary](https://developer.apple.com/documentation/apple-silicon/building-a-universal-macos-binary), just swap `mac-native` for `mac-universal`.
@@ -55,7 +55,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
    You can either copy them over manually to `/Library/Audio/Plug-Ins/<Plugin-Format>` or build an installer package which does that for you:
     ```bash
     # From the repository root:
-    cmake --build ./build/mac-native --parallel --target package
+    cmake --build --preset=mac-native --parallel --target package
     ```
     Afterwards, you will find a `.pkg` file under `build/mac-native/packages/`.
     Double-click to execute it and install the plugins on your system.
@@ -86,12 +86,12 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
     ```bash
     # From the repository root:
     cmake -S . --preset=linux-native
-    cmake --build ./build/linux-native --parallel
+    cmake --build --preset=linux-native --parallel
     ```
 4. Optionally, you can build a **ZIP file** containing all of the plugins:
     ```bash
     # From the repository root:
-    cmake --build ./build/linux-native --parallel --target package
+    cmake --build --preset=linux-native --parallel --target package
     ```
     After the previous step, the plugins lie in your `build/` folder.
     There, they will (most likely) not be found by any [DAW](https://en.wikipedia.org/wiki/Digital_audio_workstation) on your system.

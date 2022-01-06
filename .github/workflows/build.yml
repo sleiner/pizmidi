@@ -16,9 +16,9 @@ jobs:
             - name: Configure pizmidi
               run: cmake -S . --preset=$PRESET
             - name: Build pizmidi plugins
-              run: cmake --build build/$PRESET --parallel
+              run: cmake --build --preset=$PRESET --parallel
             - name: Build pizmidi packages
-              run: cmake --build build/$PRESET --parallel --target package
+              run: cmake --build --preset=$PRESET --parallel --target package
             - name: Store packages
               uses: actions/upload-artifact@v2
               with:
@@ -49,9 +49,9 @@ jobs:
             - name: Configure pizmidi
               run: cmake -S . --preset=$PRESET
             - name: Build pizmidi plugins
-              run: cmake --build build/$PRESET --parallel
+              run: cmake --build --preset=$PRESET --parallel
             - name: Build pizmidi packages
-              run: cmake --build build/$PRESET --parallel --target package
+              run: cmake --build --preset=$PRESET --parallel --target package
             - name: Store packages
               uses: actions/upload-artifact@v2
               with:
