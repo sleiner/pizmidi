@@ -8,6 +8,6 @@
     -   currently non-functional:
         -   MiddyMorphy
         -   midiLooper
--   The plugins build under macOS and Linux (tested: Ubuntu 20.04).
+-   The plugins build under macOS, Windows and Linux (tested: Ubuntu 20.04).
     -   Exceptions:
-        -   CpuRam
+        -   "CPU and RAM" is only available for Windows

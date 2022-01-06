@@ -8,6 +8,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 -   AudioToCC
 -   BigClock
+-   CPU and RAM: only available on Windows
 -   Image
 -   KVR Browser
 -   midiChordAnalyzer

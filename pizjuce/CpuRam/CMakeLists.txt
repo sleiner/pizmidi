@@ -17,7 +17,9 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
             "${CMAKE_CURRENT_LIST_DIR}/cputime.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/CpuRam.cpp")
 
-  target_link_libraries(piz_CpuRam PUBLIC)
+  target_link_libraries(
+    piz_CpuRam PUBLIC juce::juce_events juce::juce_gui_basics
+                      juce::juce_gui_extra)
 else()
   message(
     NOTICE
