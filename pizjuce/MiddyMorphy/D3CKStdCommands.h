@@ -1,12 +1,6 @@
 #pragma once
 
-class D3CKStdCommands {
-  public:
-    static enum D3CKCommands {
-      del = 0,
-      selectAll
-
-    };
-
+enum class D3CKStdCommands {
+  del = 0,
+  selectAll,
 };
-
