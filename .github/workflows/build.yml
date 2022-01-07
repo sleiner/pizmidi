@@ -18,8 +18,15 @@ jobs:
                   brew install ninja
             - name: Checkout pizmidi
               uses: actions/checkout@v2
+            - name: Ccache
+              # Builds on the main branch shall always build everything from scratch:
+              if: ${{ github.event_name == 'pull_request' }}
+              uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
+              with:
+                  key: ${{ env.PRESET }}
+                  max-size: 1000M
             - name: Configure pizmidi
-              run: cmake -S . --preset=$PRESET
+              run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             - name: Build pizmidi plugins
               run: cmake --build --preset=$PRESET --parallel
             - name: Build pizmidi packages
@@ -51,8 +58,15 @@ jobs:
                     ninja-build
             - name: Checkout pizmidi
               uses: actions/checkout@v2
+            - name: Ccache
+              # Builds on the main branch shall always build everything from scratch:
+              if: ${{ github.event_name == 'pull_request' }}
+              uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
+              with:
+                  key: ${{ env.PRESET }}
+                  max-size: 1000M
             - name: Configure pizmidi
-              run: cmake -S . --preset=$PRESET
+              run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             - name: Build pizmidi plugins
               run: cmake --build --preset=$PRESET --parallel
             - name: Build pizmidi packages
