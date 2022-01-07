@@ -24,7 +24,7 @@ jobs:
               uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
               with:
                   key: ${{ env.PRESET }}
-                  max-size: 1000M
+                  max-size: 2048M
             - name: Configure pizmidi
               run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             - name: Build pizmidi plugins
@@ -64,7 +64,7 @@ jobs:
               uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
               with:
                   key: ${{ env.PRESET }}
-                  max-size: 1000M
+                  max-size: 2048M
             - name: Configure pizmidi
               run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
             - name: Build pizmidi plugins
