@@ -2,7 +2,7 @@
 #include "MidiMorphPlugInInterface.h"
 #include "MidiMorphGUI.h"
 
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new MidiMorphPlugInInterface();
 }

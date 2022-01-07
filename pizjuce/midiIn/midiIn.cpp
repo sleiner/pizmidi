@@ -4,7 +4,7 @@
 
 
 //==============================================================================
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new MidiInFilter();
 }

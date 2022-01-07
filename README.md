@@ -8,6 +8,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 -   AudioToCC
 -   BigClock
+-   CPU and RAM: only available on Windows
 -   Image
 -   KVR Browser
 -   midiChordAnalyzer
@@ -34,7 +35,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 1. Install **prerequisites**:
     - [Command Line Tools for Xcode](https://developer.apple.com/xcode/resources/), e.g. `xcode-select --install`
-    - [CMake](https://cmake.org) >= 3.22, e.g. `brew install cmake` via [Homebrew](https://brew.sh)
+    - [CMake](https://cmake.org) >= 3.21, e.g. `brew install cmake` via [Homebrew](https://brew.sh)
     - [Ninja](https://ninja-build.org), e.g. `brew install ninja` via [Homebrew](https://brew.sh)
 2. **Clone** this repository:
     ```bash
@@ -44,7 +45,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
     ```bash
     # From the repository root:
     cmake -S . --preset=mac-native
-    cmake --build ./build/mac-native --parallel
+    cmake --build --preset=mac-native --parallel
     ```
     This will build the plugins for the CPU architecture your own Mac.
     If you want to build a [universal binary](https://developer.apple.com/documentation/apple-silicon/building-a-universal-macos-binary), just swap `mac-native` for `mac-universal`.
@@ -55,7 +56,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
    You can either copy them over manually to `/Library/Audio/Plug-Ins/<Plugin-Format>` or build an installer package which does that for you:
     ```bash
     # From the repository root:
-    cmake --build ./build/mac-native --parallel --target package
+    cmake --build --preset=mac-native --parallel --target package
     ```
     Afterwards, you will find a `.pkg` file under `build/mac-native/packages/`.
     Double-click to execute it and install the plugins on your system.
@@ -64,7 +65,7 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 
 1. Install **prerequisites**:
     - A C compiler, e.g. `clang` or `g++`.
-    - [CMake](https://cmake.org) >= 3.22
+    - [CMake](https://cmake.org) >= 3.21
       Note that on Ubuntu 20.04, this is not provided by the stock `apt` repositories.
       Installation instructions are provided on the CMake website.
     - [Ninja](https://ninja-build.org), e.g. `sudo apt install ninja-build`
@@ -86,12 +87,12 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
     ```bash
     # From the repository root:
     cmake -S . --preset=linux-native
-    cmake --build ./build/linux-native --parallel
+    cmake --build --preset=linux-native --parallel
     ```
 4. Optionally, you can build a **ZIP file** containing all of the plugins:
     ```bash
     # From the repository root:
-    cmake --build ./build/linux-native --parallel --target package
+    cmake --build --preset=linux-native --parallel --target package
     ```
     After the previous step, the plugins lie in your `build/` folder.
     There, they will (most likely) not be found by any [DAW](https://en.wikipedia.org/wiki/Digital_audio_workstation) on your system.

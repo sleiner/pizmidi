@@ -13,22 +13,13 @@
             "binaryDir": "${sourceDir}/build/${presetName}"
         },
         {
-            "name": "property: release",
-            "description": "All Release builds will inherit from this configuration",
-            "hidden": true,
-            "environment": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
             "name": "mac-native",
             "displayName": "macOS - native",
             "description": "Build for macOS host architecture",
             "inherits": [
-                "common",
-                "property: release"
+                "common"
             ],
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CPACK_GENERATOR": "productbuild;ZIP"
             },
@@ -52,13 +43,53 @@
             "displayName": "Linux - native",
             "description": "Build for Linux host architecture",
             "inherits": [
-                "common",
-                "property: release"
+                "common"
             ],
-            "generator": "Ninja",
+            "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CPACK_GENERATOR": "ZIP"
             }
+        },
+        {
+            "name": "windows-native",
+            "displayName": "Windows - native",
+            "description": "Build for Windows host architecture",
+            "inherits": [
+                "common"
+            ],
+            "cacheVariables": {
+                "CPACK_GENERATOR": "ZIP"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "mac-native",
+            "displayName": "macOS - native",
+            "description": "Build for macOS host architecture",
+            "configuration": "Release",
+            "configurePreset": "mac-native"
+        },
+        {
+            "name": "mac-universal",
+            "displayName": "macOS - universal (arm64 + x86_64)",
+            "description": "Build universal binaries for macOS",
+            "configuration": "Release",
+            "configurePreset": "mac-universal"
+        },
+        {
+            "name": "linux-native",
+            "displayName": "Linux - native",
+            "description": "Build for Linux host architecture",
+            "configuration": "Release",
+            "configurePreset": "linux-native"
+        },
+        {
+            "name": "windows-native",
+            "displayName": "Windows - native",
+            "description": "Build for Windows host architecture",
+            "configuration": "Release",
+            "configurePreset": "windows-native"
         }
     ]
 }

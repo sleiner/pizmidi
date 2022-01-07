@@ -4,9 +4,6 @@
 CpuRamEditor::CpuRamEditor (CpuRam* const ownerFilter)
     : AudioProcessorEditor (ownerFilter)
 {
-	static OldSchoolLookAndFeel* MyLook = 0;
-	if (MyLook == 0) MyLook = new OldSchoolLookAndFeel();
-	LookAndFeel::setDefaultLookAndFeel (MyLook);
 	setMouseClickGrabsKeyboardFocus(false);
 
 	addAndMakeVisible (infoLabel = new Label(String("CPU"),String()));
@@ -119,9 +116,9 @@ void CpuRamEditor::mouseUp (const MouseEvent& e)
 		colourSelector->setCurrentColour (getFilter()->bgcolor);
 		m.addItem(3,"Show Graph",true,getFilter()->showGraph);
 		m.addSectionHeader("Interval");
-		m.addCustomItem (1, slider, 230, 18, false);
+		m.addCustomItem (1, *slider, 230, 18, false);
 		m.addSectionHeader("Background Color");
-        m.addCustomItem (2, colourSelector, 230, 230, false);
+        m.addCustomItem (2, *colourSelector, 230, 230, false);
 		int result = m.show();
 		if (result==3) {
 			getFilter()->setParameter(2,getFilter()->showGraph ? 0.f : 1.f);
@@ -155,18 +152,18 @@ void CpuRamEditor::updateParametersFromFilter()
 	float cpu = CPULoad();
 	graph->addPoint(cpu*0.01f);
 	if (getFilter()->showGraph)
-		infoLabel->setText(String("CPU Load: ") + String(cpu,1)+String("%"),false);
+		infoLabel->setText(String("CPU Load: ") + String(cpu,1)+String("%"),dontSendNotification);
 	else
-		infoLabel->setText(String("CPU: ") + String(cpu,1)+String("%"),false);
+		infoLabel->setText(String("CPU: ") + String(cpu,1)+String("%"),dontSendNotification);
 
-    memLabel2->setText(String("Free RAM: ") + String((int)RAMLoad().ullAvailPhys/1048576)+String("MB"),false);
+    memLabel2->setText(String("Free RAM: ") + String((int)RAMLoad().ullAvailPhys/1048576)+String("MB"),dontSendNotification);
 
 	infoLabel->setColour(Label::textColourId,filter->bgcolor.contrasting(0.8f));
 	memLabel2->setColour(Label::textColourId,filter->bgcolor.contrasting(0.8f));
 	slider->setColour(Slider::textBoxTextColourId,filter->bgcolor.contrasting(0.8f));
 
 	float interval = filter->getParameter(0)*1700.0f+300.0f;
-    slider->setValue(interval,false);
+    slider->setValue(interval,dontSendNotification);
 	startTimer((int)interval);
 	pu.setInterval((int)interval);
 

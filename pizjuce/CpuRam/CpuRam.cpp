@@ -7,7 +7,7 @@
     This function must be implemented to create the actual plugin object that
     you want to use.
 */
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new CpuRam();
 }
@@ -179,7 +179,7 @@ void CpuRam::getStateInformation (JUCE_NAMESPACE::MemoryBlock& destData)
 void CpuRam::setStateInformation (const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    XmlElement* const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
@@ -194,7 +194,5 @@ void CpuRam::setStateInformation (const void* data, int sizeInBytes)
             bgcolor = Colour(xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
             sendChangeMessage ();
         }
-
-        delete xmlState;
     }
 }

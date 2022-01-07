@@ -16,7 +16,7 @@ http://www.anticore.org/jucetice/
     This function must be implemented to create the actual plugin object that
     you want to use.
 */
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new MidiMonitorPlugin();
 }

@@ -1,6 +1,9 @@
 #ifndef DEMOJUCEPLUGINEDITOR_H
 #define DEMOJUCEPLUGINEDITOR_H
 
+#include "juce_gui_basics/juce_gui_basics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
+
 #include "CpuRam.h"
 #include "cputime.h"
 
@@ -13,7 +16,7 @@ public:
 	}
 	~CpuGraph() {};
 
-	void addPoint(float value) 
+	void addPoint(float value)
 	{
 		for(int i=1;i<numPoints;i++) points[i-1]=points[i];
 		points[numPoints-1]=value;
@@ -26,7 +29,7 @@ private:
 	{
 		g.fillAll(Colours::black);
 		g.setColour(Colours::green);
-		for (int i=0;i<numPoints;i++) 
+		for (int i=0;i<numPoints;i++)
 		{
 			float x = ((float)i / float(numPoints)) * getWidth();
 			g.drawLine(x,(float)getHeight(),x,(float)getHeight()-(float)getHeight()*points[i]);
@@ -50,7 +53,7 @@ private:
 */
 class CpuRamEditor   : public AudioProcessorEditor,
                        public ChangeListener,
-                       public SliderListener,
+                       public Slider::Listener,
 					   public Timer
 {
 public:
@@ -91,7 +94,7 @@ private:
     //TooltipWindow tooltipWindow;
     //ResizableCornerComponent* resizer;
     //ComponentBoundsConstrainer resizeLimits;
-    
+
 	CProcessorUsage pu;
     float CPULoad();
     MEMORYSTATUSEX RAMLoad();

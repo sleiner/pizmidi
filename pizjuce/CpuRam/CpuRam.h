@@ -1,10 +1,10 @@
 #ifndef CPURAMPLUGINFILTER_H
 #define CPURAMPLUGINFILTER_H
 #define _WIN32_WINNT 0x0501
-#include <windows.h>
 
-#include "../../common/PizAudioProcessor.h"
-#include "JuceHeader.h"
+#include "juce_events/juce_events.h"
+
+#include "../_common/PizAudioProcessor.h"
 
 
 //==============================================================================
@@ -27,7 +27,7 @@ public:
     AudioProcessorEditor* createEditor();
 
     //==============================================================================
-#include "JucePluginCharacteristics.h"
+    double getTailLengthSeconds() const override {return 0;}
     const String getName() const {return JucePlugin_Name;}
 	bool hasEditor() const {return true;}
     bool acceptsMidi() const {

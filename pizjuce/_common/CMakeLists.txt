@@ -28,8 +28,7 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
 target_link_libraries(
   pizjuce_common
-  INTERFACE reaper_sdk #
-            juce::juce_core
+  INTERFACE juce::juce_core
             juce::juce_audio_basics
             juce::juce_audio_devices
             juce::juce_audio_utils
@@ -71,6 +70,14 @@ function(piz_add_plugin target)
     FORMATS VST3
     COMPANY_NAME "Pizeo"
     PLUGIN_MANUFACTURER_CODE "Pzeo")
+
+  # Set language standards
+  set_target_properties(
+    "${target}"
+    PROPERTIES CXX_STANDARD 17
+               CXX_EXTENSIONS OFF
+               C_STANDARD 17
+               C_EXTENSIONS OFF)
 
   # Add common code and options
   target_link_libraries(

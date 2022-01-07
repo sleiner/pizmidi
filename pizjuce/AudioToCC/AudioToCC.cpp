@@ -28,7 +28,7 @@ float EnvelopeFollower::process( float v )
 }
 
 //==============================================================================
-PizAudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioToCC();
 }
