@@ -1,15 +1,21 @@
+#if _WIN32
+  #include <Windows.h>
+#endif
+
 #include "PizKeyboard.h"
 #include "PizKeyboardEditor.h"
 
 bool PizKeyboard::isCapsLockOn()
 {
 	// TODO: WTF?
-#if JUCE_WIN32
+#if JUCE_WINDOWS
 	return (GetKeyState(VK_CAPITAL) & 0x0001)!=0;
 #elif JUCE_MAC
 	return true;
 #elif JUCE_LINUX
 	return true;
+#else
+	#error "Unsupported platform!"
 #endif
 }
 
