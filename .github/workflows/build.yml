@@ -1,6 +1,13 @@
 name: Build
 on:
     pull_request:
+        paths:
+            - "CMakeLists.txt"
+            - "CMakePresets.json"
+            - "LICENSE.txt"
+            - ".github/workflows/build.yml"
+            - "packaging/**"
+            - "pizjuce/**"
     push:
         branches:
             # Release branches
