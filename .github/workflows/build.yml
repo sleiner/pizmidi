@@ -3,48 +3,30 @@ on:
     pull_request:
     push:
         branches:
+            # Release branches
             - main
 
 jobs:
-    build-mac-universal:
-        name: macOS (universal)
-        runs-on: macos-11
+    build:
+        name: Build all Plugins
+        runs-on: ${{ matrix.os }}
+        strategy:
+            # If the job fails for one OS, don't abort the jobs for the other OSes
+            fail-fast: false
+            matrix:
+                os: [macos-11, ubuntu-20.04, windows-2019]
         env:
-            PRESET: mac-universal
+            # Unfortunately, Ccache is not available yet for Windows and MSVC
+            CCACHE_AVAILABLE: ${{ matrix.os == 'macos-11' || matrix.os == 'ubuntu-20.04' }}
+            CMAKE_ADDITIONAL_OPTIONS: ""
         steps:
-            - name: Install ninja
+            - name: Install toolchain (macOS)
+              if: runner.os == 'macOS'
               run: |
                   brew update
                   brew install ninja
-            - name: Checkout pizmidi
-              uses: actions/checkout@v2
-            - name: Ccache
-              # Builds on the main branch shall always build everything from scratch:
-              if: ${{ github.event_name == 'pull_request' }}
-              uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
-              with:
-                  key: ${{ env.PRESET }}
-                  max-size: 2048M
-            - name: Configure pizmidi
-              run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-            - name: Build pizmidi plugins
-              run: cmake --build --preset=$PRESET --parallel
-            - name: Build pizmidi packages
-              run: cmake --build --preset=$PRESET --parallel --target package
-            - name: Store packages
-              uses: actions/upload-artifact@v2
-              with:
-                  name: packages
-                  path: |
-                      build/${{ env.PRESET }}/packages
-                      !build/${{ env.PRESET }}/packages/_CPack_Packages
-    build-ubuntu2004-x86_64:
-        name: Ubuntu 20.04 (x86_64)
-        runs-on: ubuntu-20.04
-        env:
-            PRESET: linux-native
-        steps:
-            - name: Install build dependencies
+            - name: Install toolchain (Linux)
+              if: runner.os == 'Linux'
               run: |
                   sudo apt-get update
                   sudo apt-get install -y \
@@ -58,44 +40,42 @@ jobs:
                     ninja-build
             - name: Checkout pizmidi
               uses: actions/checkout@v2
-            - name: Ccache
-              # Builds on the main branch shall always build everything from scratch:
-              if: ${{ github.event_name == 'pull_request' }}
-              uses: hendrikmuhs/ccache-action@5801e95cf1e42288c5778844eff2a1f8e56f24cd
+            - name: "Select CMake preset: mac-universal"
+              if: runner.os == 'macOS'
+              run: echo "CMAKE_PRESET=mac-universal" >> $GITHUB_ENV
+            - name: "Select CMake preset: linux-native"
+              if: runner.os == 'Linux'
+              run: echo "CMAKE_PRESET=linux-native" >> $GITHUB_ENV
+            - name: "Select CMake preset: windows-native"
+              if: runner.os == 'Windows'
+              run: echo "CMAKE_PRESET=windows-native" >> $Env:GITHUB_ENV
+            - name: "Ccache"
+              uses: hendrikmuhs/ccache-action@1ed7eb5b4b2afeceab143d0caa0d7fa87c33047b # v1.0.5
+              if: env.CCACHE_AVAILABLE == 'true'
               with:
-                  key: ${{ env.PRESET }}
-                  max-size: 2048M
-            - name: Configure pizmidi
-              run: cmake -S . --preset=$PRESET -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-            - name: Build pizmidi plugins
-              run: cmake --build --preset=$PRESET --parallel
-            - name: Build pizmidi packages
-              run: cmake --build --preset=$PRESET --parallel --target package
+                  # No need to include the OS, since that is already included in CMAKE_PRESET
+                  key: ${{ env.CMAKE_PRESET }}
+                  max-size: 1536M
+            - name: "Ccache: clear"
+              # We are triggered by the "push" event in the case of release branches.
+              # For these branches, no cache shall be used - but we still use the
+              # Ccache compiler driver in order to build up a cache that pull requests
+              # targeting this branch can use.
+              if: env.CCACHE_AVAILABLE == 'true' && github.event_name == 'push'
+              run: ccache --clear
+            - name: "Ccache: enable compiler driver"
+              if: env.CCACHE_AVAILABLE == 'true'
+              run: echo "CMAKE_ADDITIONAL_OPTIONS=${{ env.CMAKE_ADDITIONAL_OPTIONS }} -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
+            - name: "CMake: Configure"
+              run: cmake -S . --preset=${{ env.CMAKE_PRESET }} ${{ env.CMAKE_ADDITIONAL_OPTIONS }}
+            - name: "CMake: Build plugins"
+              run: cmake --build --preset=${{ env.CMAKE_PRESET }} --parallel
+            - name: "CMake: Build packages"
+              run: cmake --build --preset=${{ env.CMAKE_PRESET }} --parallel --target package
             - name: Store packages
               uses: actions/upload-artifact@v2
               with:
                   name: packages
                   path: |
-                      build/${{ env.PRESET }}/packages
-                      !build/${{ env.PRESET }}/packages/_CPack_Packages
-    build-windows:
-        name: Windows (x86_64)
-        runs-on: windows-2019
-        env:
-            PRESET: windows-native
-        steps:
-            - name: Checkout pizmidi
-              uses: actions/checkout@v2
-            - name: Configure pizmidi
-              run: cmake -S . --preset=$Env:PRESET
-            - name: Build pizmidi plugins
-              run: cmake --build --preset=$Env:PRESET --parallel
-            - name: Build pizmidi packages
-              run: cmake --build --preset=$Env:PRESET --parallel --target package
-            - name: Store packages
-              uses: actions/upload-artifact@v2
-              with:
-                  name: packages
-                  path: |
-                      build/${{ env.PRESET }}/packages
-                      !build/${{ env.PRESET }}/packages/_CPack_Packages
+                      build/${{ env.CMAKE_PRESET }}/packages
+                      !build/${{ env.CMAKE_PRESET }}/packages/_CPack_Packages
