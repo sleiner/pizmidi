@@ -10,10 +10,8 @@ piz_add_plugin(
 target_sources(
   piz_midiChords
   PRIVATE # Headers
-          "${CMAKE_CURRENT_LIST_DIR}/ChordsKeyboardComponent.h"
           "${CMAKE_CURRENT_LIST_DIR}/MidiChords.h"
           "${CMAKE_CURRENT_LIST_DIR}/MidiChordsEditor.h"
-          "${CMAKE_CURRENT_LIST_DIR}/TriggerKeySelectorKeyboard.h"
           # Sources
           "${CMAKE_CURRENT_LIST_DIR}/MidiChords.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/MidiChordsEditor.cpp")
