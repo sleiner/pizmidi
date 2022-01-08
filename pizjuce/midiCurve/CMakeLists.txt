@@ -18,5 +18,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/curvegui.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/MidiEnvelope.cpp")
 
-target_link_libraries(piz_midiCurve PUBLIC juce::juce_events
-                                           juce::juce_gui_basics)
+target_link_libraries(piz_midiCurve PRIVATE juce::juce_events
+                                            juce::juce_gui_basics)

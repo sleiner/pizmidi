@@ -20,5 +20,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/stepgui.cpp")
 
 target_link_libraries(
-  piz_midiStep PUBLIC juce::juce_audio_processors juce::juce_events
-                      juce::juce_gui_basics)
+  piz_midiStep PRIVATE juce::juce_audio_processors juce::juce_events
+                       juce::juce_gui_basics)

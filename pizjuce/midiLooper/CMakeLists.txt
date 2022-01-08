@@ -26,11 +26,11 @@ target_sources(
 
 target_link_libraries(
   piz_midiLooper
-  PUBLIC juce::juce_audio_basics
-         juce::juce_audio_devices
-         juce::juce_audio_processors
-         juce::juce_audio_utils
-         juce::juce_core
-         juce::juce_cryptography
-         juce::juce_events
-         juce::juce_gui_basics)
+  PRIVATE juce::juce_audio_basics
+          juce::juce_audio_devices
+          juce::juce_audio_processors
+          juce::juce_audio_utils
+          juce::juce_core
+          juce::juce_cryptography
+          juce::juce_events
+          juce::juce_gui_basics)

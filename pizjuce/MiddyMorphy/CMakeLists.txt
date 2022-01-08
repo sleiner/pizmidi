@@ -65,5 +65,5 @@ target_sources(
 
 target_link_libraries(
   piz_MiddyMorphy
-  PUBLIC juce::juce_audio_basics juce::juce_events juce::juce_graphics
-         juce::juce_gui_basics juce::juce_gui_extra)
+  PRIVATE juce::juce_audio_basics juce::juce_events juce::juce_graphics
+          juce::juce_gui_basics juce::juce_gui_extra)
