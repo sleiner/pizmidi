@@ -352,7 +352,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 						for (int i=0;i<128;i++) {
 							if (hanging[slot].count[ch][i]>0) {
 								MidiMessage noteon = MidiMessage(0x90 | ch,i,hanging[slot].vel[ch][i],0);
-								loop->addEvent(noteon,roundDoubleToInt((getLoopStart(slot))*960.0)-(int)(programs[slot].measureFromHere*960.0));
+								loop->addEvent(noteon,roundToInt((getLoopStart(slot))*960.0)-(int)(programs[slot].measureFromHere*960.0));
 								loop->updateMatchedPairs();
 							}
 						}
@@ -376,7 +376,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 							if (hanging[slot].count[ch][i]>0 && recNoteOn[slot][ch][i]==-1) {
 								DBG("creating noteon at " + String(getLoopStart(slot) - programs[slot].measureFromHere));
 								MidiMessage noteon = MidiMessage(0x90 | ch,i,hanging[slot].vel[ch][i],0);
-								loop->addEvent(noteon,roundDoubleToInt((recstart[slot])*960.0)-(int)(measureDubFromHere[slot]*960.0));
+								loop->addEvent(noteon,roundToInt((recstart[slot])*960.0)-(int)(measureDubFromHere[slot]*960.0));
 								loop->updateMatchedPairs();
 							}
 						}

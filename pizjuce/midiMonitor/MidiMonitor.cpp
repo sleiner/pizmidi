@@ -262,7 +262,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
 						else
 							messages->addEvent(message,lastPosInfo.ppqPosition + ((double)samplePos)*ppqPerSample);
 					}
-					loop->addEvent(message,roundDoubleToInt((samples+(double)samplePos)*ppqPerSample*960.0));
+					loop->addEvent(message,roundToInt((samples+(double)samplePos)*ppqPerSample*960.0));
                     if (message.isNoteOnOrOff()) {
                         loop->updateMatchedPairs();
                     }

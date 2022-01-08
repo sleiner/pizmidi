@@ -104,7 +104,7 @@ void TextBoxSlider::setText(const String & newText, NotificationType notificatio
 
 void TextBoxSlider::setValue(double newVal, NotificationType notification) {
   // Bouml preserved body begin 00048A8D
-		long newValInt = roundDoubleToInt(newVal/step);
+		long newValInt = roundToInt(newVal/step);
 		newVal = newValInt*step;
 		newVal = jmin(max,newVal);
 		newVal = jmax(min,newVal);

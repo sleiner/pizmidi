@@ -105,8 +105,8 @@ void MidiEnvelope::paint (Graphics& g)
     g.strokePath (myPath, PathStrokeType (2.0f));
 
     g.setColour (Colours::black);
-	g.drawEllipse((float)getWidth()*(float)roundDoubleToInt(16383.0*(mouseDownPoint.getX()/(double)getWidth()))/16383.f-2,
-		(float)getHeight()*(float)roundDoubleToInt(16383.0*(mouseDownPoint.getY()/(double)getHeight()))/16383.f-2,
+	g.drawEllipse((float)getWidth()*(float)roundToInt(16383.0*(mouseDownPoint.getX()/(double)getWidth()))/16383.f-2,
+		(float)getHeight()*(float)roundToInt(16383.0*(mouseDownPoint.getY()/(double)getHeight()))/16383.f-2,
 		4,4,1);
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
@@ -307,7 +307,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 			points[draggingPoint][0] = 0.f;
 		}
 		else if (draggingPoint > 0 && draggingPoint < MAX_ENVELOPE_POINTS - 1) {
-			float snapx = (float)getWidth()*(float)roundDoubleToInt(16383.0*((double)e.x/(double)getWidth()))/16383.f;
+			float snapx = (float)getWidth()*(float)roundToInt(16383.0*((double)e.x/(double)getWidth()))/16383.f;
 			points[draggingPoint][0] = restrict==-1 ? oldpoints[draggingPoint][0] : (jmax (jmin (snapx, (float)getWidth()),0.f))/(float)getWidth();
 		}
 		else {
@@ -316,7 +316,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 		plugin->setParameterNotifyingHost((paramNumber), points[draggingPoint][0]);
 
 		// calculate Y
-		float snapy = (float)getHeight()*(float)roundDoubleToInt(16383.0*((double)e.y/(double)getHeight()))/16383.f;
+		float snapy = (float)getHeight()*(float)roundToInt(16383.0*((double)e.y/(double)getHeight()))/16383.f;
 		if (e.mods.isShiftDown()) {
 			if (e.mods.isCommandDown())
 				points[draggingPoint][1] = 0.5f;
@@ -366,7 +366,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 	else {
 		if(restrict==-1) {
 			for (int i=0;i<MAX_ENVELOPE_POINTS;i++) {
-				float snapy = (float)getHeight()*(float)roundDoubleToInt(16383.0*((double)(oldpoints[i][1]*getHeight()+e.y-mouseDownPoint.getY())/(double)getHeight()))/16383.f;
+				float snapy = (float)getHeight()*(float)roundToInt(16383.0*((double)(oldpoints[i][1]*getHeight()+e.y-mouseDownPoint.getY())/(double)getHeight()))/16383.f;
 				points[i][1] = (jmax (0.f, jmin (snapy, (float)getHeight())))/(float)getHeight();
 				points[i][0] = oldpoints[i][0];
 				plugin->setParameterNotifyingHost((i*2), (points[i][0]));
@@ -375,7 +375,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 		}
 		else if (restrict==1) {
 			for (int i=0;i<MAX_ENVELOPE_POINTS;i++) {
-				float snapx = (float)getWidth()*(float)roundDoubleToInt(16383.0*((double)(oldpoints[i][0]*getWidth()+e.x-mouseDownPoint.getX())/(double)getWidth()))/16383.f;
+				float snapx = (float)getWidth()*(float)roundToInt(16383.0*((double)(oldpoints[i][0]*getWidth()+e.x-mouseDownPoint.getX())/(double)getWidth()))/16383.f;
 				points[i][0] = (jmax (jmin (snapx, (float)getWidth()),0.f))/(float)getWidth();
 				points[i][1] = oldpoints[i][1];
 				plugin->setParameterNotifyingHost((i*2), (points[i][0]));
@@ -493,9 +493,9 @@ int MidiEnvelope::addPoint(float x, float y, bool control)
 	if (newPoint!=-1) {
 		setPointActive(newPoint,true);
 		setPointControl(newPoint,control);
-		float snapx = (float)getWidth()*(float)roundDoubleToInt(16383.0*(x/(double)getWidth()))/16383.f;
+		float snapx = (float)getWidth()*(float)roundToInt(16383.0*(x/(double)getWidth()))/16383.f;
 		points[newPoint][0] = (jmax (jmin (snapx, (float)getWidth()),0.f))/(float)getWidth();
-		float snapy = (float)getHeight()*(float)roundDoubleToInt(16383.0*(y/(double)getHeight()))/16383.f;
+		float snapy = (float)getHeight()*(float)roundToInt(16383.0*(y/(double)getHeight()))/16383.f;
 		points[newPoint][1] = (jmax (0.f, jmin (snapy, (float)getHeight())))/(float)getHeight();
 		plugin->setParameterNotifyingHost((newPoint*2), points[newPoint][0]);
 		plugin->setParameterNotifyingHost((newPoint*2+1), (1.f - points[newPoint][1]));

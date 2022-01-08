@@ -1039,7 +1039,7 @@ bool PizLooper::writeMidiFile(int index, File file, bool IncrementFilename) {
     MidiMessageSequence metadata;
     uint8 ID [] = {0xFF,0x03,9,'l','o','o','p',' ','a','r','e','a'};
     metadata.addEvent(MidiMessage(ID,12,0));
-    int ls=roundDoubleToInt((programs[index].loopstart-programs[index].measureFromHere)*960.0);
+    int ls=roundToInt((programs[index].loopstart-programs[index].measureFromHere)*960.0);
     metadata.addEvent(MidiMessage(0x9f,62,1,0),(double)ls);
     int ll=int((programs[index].looplength)*960.0);
     metadata.addEvent(MidiMessage(0x8f,62,1,0),(double)(ls+ll));
@@ -1131,7 +1131,7 @@ bool PizLooper::readMidiFile(int index, String progname, File mid) {
 								else if (mm.isNoteOff()) {
 									t2 = mm.getTimeStamp();
 									//round length to two decimal places
-									setLoopLength(index,(double)(roundDoubleToInt((t2-t1)/9.6))*0.01);
+									setLoopLength(index,(double)(roundToInt((t2-t1)/9.6))*0.01);
 									programs[index].measureFromHere=0;
 									loopAreaTrack=true;
 									break;

@@ -629,7 +629,7 @@ const String BigClockFilter::ppqToString (const double sppq,
     //else seconds =
 
     const long double absSecs = fabs (seconds);
-    const uint64 samples = roundDoubleToInt(sampleRate*absSecs);
+    const uint64 samples = roundToInt(sampleRate*absSecs);
 
     if (getParameter(kSamples)) return sign+String(samples);
     else {

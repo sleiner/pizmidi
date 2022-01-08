@@ -874,7 +874,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
 	}
 	else if (timemode==3) {
 		//total samples
-		const uint64 samples = roundDoubleToInt(getFilter()->getSampleRate()*absSecs);
+		const uint64 samples = roundToInt(getFilter()->getSampleRate()*absSecs);
 		return sign+String(samples);
 	}
 	else if (timemode==0)
@@ -1131,4 +1131,3 @@ END_JUCER_METADATA
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

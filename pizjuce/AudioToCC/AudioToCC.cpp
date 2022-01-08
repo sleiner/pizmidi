@@ -238,7 +238,7 @@ const String AudioToCC::getParameterText (int index)
     else if (index == kRelease)
 		return String (roundToInt(param[kRelease]*100.f));
     else if (index == kDevice) {
-        if (param[kDevice]>0.0) return devices.joinIntoString("",roundDoubleToInt(param[kDevice]*(devices.size()-1)),1);
+        if (param[kDevice]>0.0) return devices.joinIntoString("",roundToInt(param[kDevice]*(devices.size()-1)),1);
         else return String("--");
     }
 	else if (index==kCCL || index==kCCR) {
@@ -250,7 +250,7 @@ const String AudioToCC::getParameterText (int index)
         else return String("Stereo");
     }
     else if (index==kChannel)
-		return String (roundDoubleToInt(param[index]*15.0)+1);
+		return String (roundToInt(param[index]*15.0)+1);
     else if (index==kAutomateHost) {
         if (param[kAutomateHost]<0.5f) return String("Off");
         else return String("On");
@@ -381,11 +381,11 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
     const int gateOffValueL = floatToMidi(param[kGateOffValueCCL]);
     const int gateOffValueR = floatToMidi(param[kGateOffValueCCR]);
     const float thresh = param[kGateThreshold];
-    const int Ch = roundDoubleToInt(param[kChannel]*15.0);
+    const int Ch = roundToInt(param[kChannel]*15.0);
     const float updateRate = (1.0f-param[kRate])*0.0025f+0.001f; //in seconds
     const bool stereo = param[kStereo]>=0.5f;
-	const unsigned int sampleThreshold = param[kRate]==1.f ? 1 : roundDoubleToInt(getSampleRate()*updateRate);
-    const unsigned int RMSThreshold = roundDoubleToInt(getSampleRate()*0.001f);
+	const unsigned int sampleThreshold = param[kRate]==1.f ? 1 : roundToInt(getSampleRate()*updateRate);
+    const unsigned int RMSThreshold = roundToInt(getSampleRate()*0.001f);
 	const bool oldMethod = false;
 	const bool logScale = param[kMode]>=0.5f;
 
