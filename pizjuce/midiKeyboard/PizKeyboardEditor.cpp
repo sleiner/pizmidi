@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  31 Oct 2011 7:13:02am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,111 +28,133 @@
 
 //==============================================================================
 midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      keyWidthSlider (0),
-      chSlider (0),
-      grabQwertyButton (0),
-      velocitySlider (0),
-      yButton (0),
-      inputToggleButton (0),
-      aboutButton (0),
-      hideButton (0),
-      resizer (0),
-      midiKeyboard (0),
-      aboutBox (0),
-      useProgCh (0),
-      useCapsLock (0),
-      sendState (0),
-      showNumbersButton (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (keyWidthSlider = new Slider (L"keyWidthSlider"));
-    keyWidthSlider->setTooltip (L"Key Width");
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    keyWidthSlider.reset (new juce::Slider ("keyWidthSlider"));
+    addAndMakeVisible (keyWidthSlider.get());
+    keyWidthSlider->setTooltip (TRANS("Key Width"));
     keyWidthSlider->setRange (0, 100, 1);
-    keyWidthSlider->setSliderStyle (Slider::LinearBar);
-    keyWidthSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    keyWidthSlider->setColour (Slider::backgroundColourId, Colour (0x5dffffff));
-    keyWidthSlider->setColour (Slider::thumbColourId, Colour (0x5d000000));
-    keyWidthSlider->setColour (Slider::trackColourId, Colours::white.withAlpha((uint8)0x96));
-    keyWidthSlider->setColour (Slider::textBoxTextColourId, Colour (0x0));
+    keyWidthSlider->setSliderStyle (juce::Slider::LinearBar);
+    keyWidthSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    keyWidthSlider->setColour (juce::Slider::backgroundColourId, juce::Colour (0x5dffffff));
+    keyWidthSlider->setColour (juce::Slider::thumbColourId, juce::Colour (0x5d000000));
+    keyWidthSlider->setColour (juce::Slider::textBoxTextColourId, juce::Colour (0x00000000));
     keyWidthSlider->addListener (this);
 
-    addAndMakeVisible (chSlider = new Slider (L"Channel"));
-    chSlider->setTooltip (L"MIDI Channel");
+    keyWidthSlider->setBounds (4, 1, 100, 14);
+
+    chSlider.reset (new juce::Slider ("Channel"));
+    addAndMakeVisible (chSlider.get());
+    chSlider->setTooltip (TRANS("MIDI Channel"));
     chSlider->setRange (1, 16, 1);
-    chSlider->setSliderStyle (Slider::IncDecButtons);
-    chSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 30, 20);
-    chSlider->setColour (Slider::backgroundColourId, Colour (0x5dffffff));
-    chSlider->setColour (Slider::thumbColourId, Colour (0x5dbbbbff));
+    chSlider->setSliderStyle (juce::Slider::IncDecButtons);
+    chSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 30, 20);
+    chSlider->setColour (juce::Slider::backgroundColourId, juce::Colour (0x5dffffff));
+    chSlider->setColour (juce::Slider::thumbColourId, juce::Colour (0x5dbbbbff));
     chSlider->addListener (this);
 
-    addAndMakeVisible (grabQwertyButton = new TextButton (L"qwerty"));
-    grabQwertyButton->setTooltip (L"Attempt to grab keyboard focus; right-click to allow QWERTY input without keyboard focus");
-    grabQwertyButton->setButtonText (L"Grab QWERTY");
+    chSlider->setBounds (119, 1, 60, 14);
 
-    addAndMakeVisible (velocitySlider = new Slider (L"velocity"));
-    velocitySlider->setTooltip (L"Velocity");
+    grabQwertyButton.reset (new juce::TextButton ("qwerty"));
+    addAndMakeVisible (grabQwertyButton.get());
+    grabQwertyButton->setTooltip (TRANS("Attempt to grab keyboard focus; right-click to allow QWERTY input without keyboard focus"));
+    grabQwertyButton->setButtonText (TRANS("Grab QWERTY"));
+
+    grabQwertyButton->setBounds (189, 1, 87, 14);
+
+    velocitySlider.reset (new juce::Slider ("velocity"));
+    addAndMakeVisible (velocitySlider.get());
+    velocitySlider->setTooltip (TRANS("Velocity"));
     velocitySlider->setRange (0, 127, 1);
-    velocitySlider->setSliderStyle (Slider::LinearBar);
-    velocitySlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    velocitySlider->setColour (Slider::backgroundColourId, Colour (0x5dffffff));
-    velocitySlider->setColour (Slider::thumbColourId, Colour (0x5d000000));
-    velocitySlider->setColour (Slider::trackColourId, Colours::white.withAlpha((uint8)0x96));
-    velocitySlider->setColour (Slider::textBoxTextColourId, Colours::black);
+    velocitySlider->setSliderStyle (juce::Slider::LinearBar);
+    velocitySlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    velocitySlider->setColour (juce::Slider::backgroundColourId, juce::Colour (0x5dffffff));
+    velocitySlider->setColour (juce::Slider::thumbColourId, juce::Colour (0x5d000000));
+    velocitySlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
     velocitySlider->addListener (this);
 
-    addAndMakeVisible (yButton = new ToggleButton (L"Use Y Button"));
-    yButton->setTooltip (L"Use mouse Y-position for velocity");
-    yButton->setButtonText (L"Y");
+    velocitySlider->setBounds (286, 1, 110, 14);
+
+    yButton.reset (new juce::ToggleButton ("Use Y Button"));
+    addAndMakeVisible (yButton.get());
+    yButton->setTooltip (TRANS("Use mouse Y-position for velocity"));
+    yButton->setButtonText (TRANS("Y"));
     yButton->addListener (this);
 
-    addAndMakeVisible (inputToggleButton = new ToggleButton (L"Input Toggle Button"));
-    inputToggleButton->setTooltip (L"Input notes as toggles");
-    inputToggleButton->setButtonText (L"Toggle");
+    yButton->setBounds (401, -1, 32, 18);
+
+    inputToggleButton.reset (new juce::ToggleButton ("Input Toggle Button"));
+    addAndMakeVisible (inputToggleButton.get());
+    inputToggleButton->setTooltip (TRANS("Input notes as toggles"));
+    inputToggleButton->setButtonText (TRANS("Toggle"));
     inputToggleButton->addListener (this);
 
-    addAndMakeVisible (aboutButton = new TextButton (L"About"));
-    aboutButton->setTooltip (L"midiKeyboard instructions");
+    inputToggleButton->setBounds (435, -1, 63, 18);
+
+    aboutButton.reset (new juce::TextButton ("About"));
+    addAndMakeVisible (aboutButton.get());
+    aboutButton->setTooltip (TRANS("midiKeyboard instructions"));
     aboutButton->addListener (this);
 
-    addAndMakeVisible (hideButton = new TextButton (L"Hide"));
-    hideButton->setTooltip (L"Hide editing panel (Alt-click keyboard to show)");
-    hideButton->setButtonText (L"_");
-    hideButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    aboutButton->setBounds (516, 1, 40, 14);
+
+    hideButton.reset (new juce::TextButton ("Hide"));
+    addAndMakeVisible (hideButton.get());
+    hideButton->setTooltip (TRANS("Hide editing panel (Alt-click keyboard to show)"));
+    hideButton->setButtonText (TRANS("_"));
+    hideButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     hideButton->addListener (this);
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this,&resizeLimits));
-    resizer->setName (L"new component");
+    hideButton->setBounds (498, 1, 14, 14);
 
-    addAndMakeVisible (midiKeyboard = new PizKeyboardComponent (ownerFilter->editorKbState, MidiKeyboardComponent::horizontalKeyboard));
+    resizer.reset (new ResizableCornerComponent (this,&resizeLimits));
+    addAndMakeVisible (resizer.get());
+    resizer->setName ("new component");
 
-    addAndMakeVisible (aboutBox = new TextEditor (L"Instructions"));
+    midiKeyboard.reset (new PizKeyboardComponent (ownerFilter->editorKbState, MidiKeyboardComponent::horizontalKeyboard));
+    addAndMakeVisible (midiKeyboard.get());
+
+    aboutBox.reset (new juce::TextEditor ("Instructions"));
+    addAndMakeVisible (aboutBox.get());
     aboutBox->setMultiLine (true);
     aboutBox->setReturnKeyStartsNewLine (false);
     aboutBox->setReadOnly (true);
     aboutBox->setScrollbarsShown (false);
     aboutBox->setCaretVisible (false);
     aboutBox->setPopupMenuEnabled (false);
-    aboutBox->setColour (TextEditor::backgroundColourId, Colour (0xdce9e79b));
-    aboutBox->setText (L"Insert Piz Here-> midiKeyboard 1.4\n- Right-click to hold note\n- Ctrl-click or Middle-click to end all notes\n- Shift-click to set QWERTY octave\n- Alt-click to show/hide editing panel\n- Default settings load from midiKeyboard.fxb");
+    aboutBox->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0xdce9e79b));
+    aboutBox->setText (TRANS("Insert Piz Here-> midiKeyboard 1.4\n"
+    "- Right-click to hold note\n"
+    "- Ctrl-click or Middle-click to end all notes\n"
+    "- Shift-click to set QWERTY octave\n"
+    "- Alt-click to show/hide editing panel\n"
+    "- Default settings load from midiKeyboard.fxb"));
 
-    addAndMakeVisible (useProgCh = new ToggleButton (L"Use ProgCh Button"));
-    useProgCh->setTooltip (L"Use Program Change");
-    useProgCh->setButtonText (L"Use Program Change");
+    useProgCh.reset (new juce::ToggleButton ("Use ProgCh Button"));
+    addAndMakeVisible (useProgCh.get());
+    useProgCh->setTooltip (TRANS("Use Program Change"));
+    useProgCh->setButtonText (TRANS("Use Program Change"));
     useProgCh->addListener (this);
 
-    addAndMakeVisible (useCapsLock = new ToggleButton (L"UseCapsLock Button"));
-    useCapsLock->setTooltip (L"Respond to QWERTY only when Caps Lock is on");
-    useCapsLock->setButtonText (L"Use Caps Lock");
+    useCapsLock.reset (new juce::ToggleButton ("UseCapsLock Button"));
+    addAndMakeVisible (useCapsLock.get());
+    useCapsLock->setTooltip (TRANS("Respond to QWERTY only when Caps Lock is on"));
+    useCapsLock->setButtonText (TRANS("Use Caps Lock"));
     useCapsLock->addListener (this);
 
-    addAndMakeVisible (sendState = new TextButton (L"send state"));
-    sendState->setTooltip (L"Send current keyboard state");
-    sendState->setButtonText (L"Send Current State");
+    sendState.reset (new juce::TextButton ("send state"));
+    addAndMakeVisible (sendState.get());
+    sendState->setTooltip (TRANS("Send current keyboard state"));
+    sendState->setButtonText (TRANS("Send Current State"));
     sendState->addListener (this);
 
-    addAndMakeVisible (showNumbersButton = new ToggleButton (L"ShowNumbers Button"));
-    showNumbersButton->setTooltip (L"Show MIDI note numbers on keys");
-    showNumbersButton->setButtonText (L"Show Note Numbers");
+    showNumbersButton.reset (new juce::ToggleButton ("ShowNumbers Button"));
+    addAndMakeVisible (showNumbersButton.get());
+    showNumbersButton->setTooltip (TRANS("Show MIDI note numbers on keys"));
+    showNumbersButton->setButtonText (TRANS("Show Note Numbers"));
     showNumbersButton->addListener (this);
 
 
@@ -193,21 +213,21 @@ midiKeyboardEditor::~midiKeyboardEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    deleteAndZero (keyWidthSlider);
-    deleteAndZero (chSlider);
-    deleteAndZero (grabQwertyButton);
-    deleteAndZero (velocitySlider);
-    deleteAndZero (yButton);
-    deleteAndZero (inputToggleButton);
-    deleteAndZero (aboutButton);
-    deleteAndZero (hideButton);
-    deleteAndZero (resizer);
-    deleteAndZero (midiKeyboard);
-    deleteAndZero (aboutBox);
-    deleteAndZero (useProgCh);
-    deleteAndZero (useCapsLock);
-    deleteAndZero (sendState);
-    deleteAndZero (showNumbersButton);
+    keyWidthSlider = nullptr;
+    chSlider = nullptr;
+    grabQwertyButton = nullptr;
+    velocitySlider = nullptr;
+    yButton = nullptr;
+    inputToggleButton = nullptr;
+    aboutButton = nullptr;
+    hideButton = nullptr;
+    resizer = nullptr;
+    midiKeyboard = nullptr;
+    aboutBox = nullptr;
+    useProgCh = nullptr;
+    useCapsLock = nullptr;
+    sendState = nullptr;
+    showNumbersButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -215,7 +235,7 @@ midiKeyboardEditor::~midiKeyboardEditor()
 }
 
 //==============================================================================
-void midiKeyboardEditor::paint (Graphics& g)
+void midiKeyboardEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
 	if (getFilter()->getParameter(kHidePanel))
@@ -224,19 +244,31 @@ void midiKeyboardEditor::paint (Graphics& g)
 	{
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff8c8c8c));
+    g.fillAll (juce::Colour (0xff8c8c8c));
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Key Width",
-                6, 1, 100, 14,
-                Justification::centredLeft, true);
+    {
+        int x = 6, y = 1, width = 100, height = 14;
+        juce::String text (TRANS("Key Width"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Velocity",
-                290, 1, 100, 14,
-                Justification::centredLeft, true);
+    {
+        int x = 290, y = 1, width = 100, height = 14;
+        juce::String text (TRANS("Velocity"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
 
     //[UserPaint] Add your own custom painting code here..
 	}
@@ -245,21 +277,16 @@ void midiKeyboardEditor::paint (Graphics& g)
 
 void midiKeyboardEditor::resized()
 {
-    keyWidthSlider->setBounds (4, 1, 100, 14);
-    chSlider->setBounds (119, 1, 60, 14);
-    grabQwertyButton->setBounds (189, 1, 87, 14);
-    velocitySlider->setBounds (286, 1, 110, 14);
-    yButton->setBounds (401, -1, 32, 18);
-    inputToggleButton->setBounds (435, -1, 63, 18);
-    aboutButton->setBounds (516, 1, 40, 14);
-    hideButton->setBounds (498, 1, 14, 14);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     midiKeyboard->setBounds (4, 16, getWidth() - 8, getHeight() - 20);
-    aboutBox->setBounds (proportionOfWidth (0.5000f) - ((450) / 2), proportionOfHeight (0.5000f) - ((92) / 2), 450, 92);
-    useProgCh->setBounds ((proportionOfWidth (0.5000f) - ((450) / 2)) + 288, (proportionOfHeight (0.5000f) - ((92) / 2)) + 7, 147, 18);
-    useCapsLock->setBounds ((proportionOfWidth (0.5000f) - ((450) / 2)) + 288, (proportionOfHeight (0.5000f) - ((92) / 2)) + 26, 147, 18);
-    sendState->setBounds ((proportionOfWidth (0.5000f) - ((450) / 2)) + 291, (proportionOfHeight (0.5000f) - ((92) / 2)) + 65, 140, 21);
-    showNumbersButton->setBounds ((proportionOfWidth (0.5000f) - ((450) / 2)) + 288, (proportionOfHeight (0.5000f) - ((92) / 2)) + 45, 147, 18);
+    aboutBox->setBounds (proportionOfWidth (0.5000f) - (450 / 2), proportionOfHeight (0.5000f) - (92 / 2), 450, 92);
+    useProgCh->setBounds ((proportionOfWidth (0.5000f) - (450 / 2)) + 288, (proportionOfHeight (0.5000f) - (92 / 2)) + 7, 147, 18);
+    useCapsLock->setBounds ((proportionOfWidth (0.5000f) - (450 / 2)) + 288, (proportionOfHeight (0.5000f) - (92 / 2)) + 26, 147, 18);
+    sendState->setBounds ((proportionOfWidth (0.5000f) - (450 / 2)) + 291, (proportionOfHeight (0.5000f) - (92 / 2)) + 65, 140, 21);
+    showNumbersButton->setBounds ((proportionOfWidth (0.5000f) - (450 / 2)) + 288, (proportionOfHeight (0.5000f) - (92 / 2)) + 45, 147, 18);
     //[UserResized] Add your own custom resize handling here..
     //int topbar = jmax(14,getHeight()/20);
 	if (getFilter()->getParameter(kHidePanel)>=0.5f)
@@ -270,24 +297,24 @@ void midiKeyboardEditor::resized()
     //[/UserResized]
 }
 
-void midiKeyboardEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void midiKeyboardEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == keyWidthSlider)
+    if (sliderThatWasMoved == keyWidthSlider.get())
     {
         //[UserSliderCode_keyWidthSlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost (kWidth, (float)(keyWidthSlider->getValue()*0.01));
         //[/UserSliderCode_keyWidthSlider]
     }
-    else if (sliderThatWasMoved == chSlider)
+    else if (sliderThatWasMoved == chSlider.get())
     {
         //[UserSliderCode_chSlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost (kChannel, (float)(chSlider->getValue()-1)/15.f);
         //[/UserSliderCode_chSlider]
     }
-    else if (sliderThatWasMoved == velocitySlider)
+    else if (sliderThatWasMoved == velocitySlider.get())
     {
         //[UserSliderCode_velocitySlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost (kVelocity, (float)(velocitySlider->getValue())/127.f);
@@ -299,24 +326,24 @@ void midiKeyboardEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void midiKeyboardEditor::buttonClicked (Button* buttonThatWasClicked)
+void midiKeyboardEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == yButton)
+    if (buttonThatWasClicked == yButton.get())
     {
         //[UserButtonCode_yButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost (kUseY, buttonThatWasClicked->getToggleState()?1.f:0.f);
         //[/UserButtonCode_yButton]
     }
-    else if (buttonThatWasClicked == inputToggleButton)
+    else if (buttonThatWasClicked == inputToggleButton.get())
     {
         //[UserButtonCode_inputToggleButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost (kToggleInput, buttonThatWasClicked->getToggleState()?1.f:0.f);
         //[/UserButtonCode_inputToggleButton]
     }
-    else if (buttonThatWasClicked == aboutButton)
+    else if (buttonThatWasClicked == aboutButton.get())
     {
         //[UserButtonCode_aboutButton] -- add your button handler code here..
         aboutBox->setVisible(!aboutBox->isVisible());
@@ -326,31 +353,31 @@ void midiKeyboardEditor::buttonClicked (Button* buttonThatWasClicked)
 		showNumbersButton->setVisible(aboutBox->isVisible());
         //[/UserButtonCode_aboutButton]
     }
-    else if (buttonThatWasClicked == hideButton)
+    else if (buttonThatWasClicked == hideButton.get())
     {
         //[UserButtonCode_hideButton] -- add your button handler code here..
 		getFilter()->setParameter(kHidePanel,1.f);
         //[/UserButtonCode_hideButton]
     }
-    else if (buttonThatWasClicked == useProgCh)
+    else if (buttonThatWasClicked == useProgCh.get())
     {
         //[UserButtonCode_useProgCh] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost (kUseProgCh, buttonThatWasClicked->getToggleState()?1.f:0.f);
         //[/UserButtonCode_useProgCh]
     }
-    else if (buttonThatWasClicked == useCapsLock)
+    else if (buttonThatWasClicked == useCapsLock.get())
     {
         //[UserButtonCode_useCapsLock] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost (kCapsLock, buttonThatWasClicked->getToggleState()?1.f:0.f);
         //[/UserButtonCode_useCapsLock]
     }
-    else if (buttonThatWasClicked == sendState)
+    else if (buttonThatWasClicked == sendState.get())
     {
         //[UserButtonCode_sendState] -- add your button handler code here..
 		getFilter()->setParameter(kSendHeldNotes,1.f);
         //[/UserButtonCode_sendState]
     }
-    else if (buttonThatWasClicked == showNumbersButton)
+    else if (buttonThatWasClicked == showNumbersButton.get())
     {
         //[UserButtonCode_showNumbersButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kShowNumbers, buttonThatWasClicked->getToggleState()?1.f:0.f);
@@ -371,7 +398,7 @@ void midiKeyboardEditor::mouseUp(const MouseEvent &e)
 		if (e.mods.isPopupMenu())
 			getFilter()->setParameter(kHidePanel,0.f);
 	}
-	else if (e.eventComponent==aboutBox)
+	else if (e.eventComponent==aboutBox.get())
 	{
 		aboutBox->setVisible(false);
         useProgCh->setVisible(false);
@@ -379,7 +406,7 @@ void midiKeyboardEditor::mouseUp(const MouseEvent &e)
         sendState->setVisible(false);
 		showNumbersButton->setVisible(false);
 	}
-	else if (e.eventComponent==grabQwertyButton)
+	else if (e.eventComponent==grabQwertyButton.get())
 	{
 		if (grabQwertyButton->getToggleState())
 			getFilter()->setParameter(kQwertyAnywhere,0.f);
@@ -395,7 +422,7 @@ void midiKeyboardEditor::mouseUp(const MouseEvent &e)
 
 void midiKeyboardEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-	if (source==midiKeyboard) {
+	if (source==midiKeyboard.get()) {
 		getFilter()->keyPosition = midiKeyboard->getLowestVisibleKey();
 		getFilter()->octave = midiKeyboard->getKeyPressBaseOctave();
 	}
@@ -460,7 +487,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
 
 	if (hide) {
 		midiKeyboard->setBounds (4, 4, w - 8, h - 8);
-		resizer->toBehind(midiKeyboard);
+		resizer->toBehind(midiKeyboard.get());
 	}
 	else {
 		midiKeyboard->setBounds (4, 16, w - 8, h - 20);
@@ -475,33 +502,37 @@ void midiKeyboardEditor::updateParametersFromFilter()
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="midiKeyboardEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public KeyListener"
+                 parentClasses="public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::KeyListener"
                  constructorParams="PizKeyboard* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="560" initialHeight="140">
   <BACKGROUND backgroundColour="ff8c8c8c">
     <TEXT pos="6 1 100 14" fill="solid: ff000000" hasStroke="0" text="Key Width"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
     <TEXT pos="290 1 100 14" fill="solid: ff000000" hasStroke="0" text="Velocity"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="33"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
   </BACKGROUND>
   <SLIDER name="keyWidthSlider" id="2f97df245f379a32" memberName="keyWidthSlider"
           virtualName="" explicitFocusOrder="0" pos="4 1 100 14" tooltip="Key Width"
-          bkgcol="5dffffff" thumbcol="5d000000" textboxtext="0" min="0"
-          max="100" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          bkgcol="5dffffff" thumbcol="5d000000" textboxtext="0" min="0.0"
+          max="100.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="Channel" id="e888f858fbe02f3" memberName="chSlider" virtualName=""
           explicitFocusOrder="0" pos="119 1 60 14" tooltip="MIDI Channel"
-          bkgcol="5dffffff" thumbcol="5dbbbbff" min="1" max="16" int="1"
+          bkgcol="5dffffff" thumbcol="5dbbbbff" min="1.0" max="16.0" int="1.0"
           style="IncDecButtons" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="30" textBoxHeight="20" skewFactor="1"/>
+          textBoxWidth="30" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <TEXTBUTTON name="qwerty" id="4dfa64ca66fa41dc" memberName="grabQwertyButton"
               virtualName="" explicitFocusOrder="0" pos="189 1 87 14" tooltip="Attempt to grab keyboard focus; right-click to allow QWERTY input without keyboard focus"
               buttonText="Grab QWERTY" connectedEdges="0" needsCallback="0"
@@ -509,8 +540,9 @@ BEGIN_JUCER_METADATA
   <SLIDER name="velocity" id="30f1aa1ebc94da9a" memberName="velocitySlider"
           virtualName="" explicitFocusOrder="0" pos="286 1 110 14" tooltip="Velocity"
           bkgcol="5dffffff" thumbcol="5d000000" textboxtext="ff000000"
-          min="0" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <TOGGLEBUTTON name="Use Y Button" id="c356057fe0e10768" memberName="yButton"
                 virtualName="" explicitFocusOrder="0" pos="401 -1 32 18" tooltip="Use mouse Y-position for velocity"
                 buttonText="Y" connectedEdges="0" needsCallback="1" radioGroupId="0"
@@ -561,3 +593,8 @@ BEGIN_JUCER_METADATA
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

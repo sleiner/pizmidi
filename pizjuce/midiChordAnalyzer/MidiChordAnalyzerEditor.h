@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  20 Aug 2012 4:41:36pm
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDICHORDANALYZEREDITOR_MIDICHORDANALYZEREDITOR_8E29B7A9__
-#define __JUCER_HEADER_MIDICHORDANALYZEREDITOR_MIDICHORDANALYZEREDITOR_8E29B7A9__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_utils/juce_audio_utils.h"
@@ -96,16 +93,16 @@ private:
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MidiChordAnalyzerEditor  : public AudioProcessorEditor,
-                                 public ChangeListener,
-                                 public Timer,
-                                 public Button::Listener,
-                                 public Slider::Listener
+class MidiChordAnalyzerEditor  : public juce::AudioProcessorEditor,
+                                 public juce::ChangeListener,
+                                 public juce::Timer,
+                                 public juce::Button::Listener,
+                                 public juce::Slider::Listener
 {
 public:
     //==============================================================================
     MidiChordAnalyzerEditor (MidiChordAnalyzer* const ownerFilter);
-    ~MidiChordAnalyzerEditor();
+    ~MidiChordAnalyzerEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -118,18 +115,15 @@ public:
 	void timerCallback();
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
 
     // Binary resources:
     static const char* snake_gif;
     static const int snake_gifSize;
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -141,23 +135,22 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    Label* chordNameLabel;
-    ChordAnalyzerKeyboardComponent* chordKeyboard;
-    PizButton* pizButton;
-    ToggleButton* flatsButton;
-    TextButton* copyButton;
-    ChannelSlider* learnChanSlider;
-    Label* versionLabel;
-    Image cachedImage_snake_gif;
-    Path internalPath1;
-    Path internalPath2;
+    std::unique_ptr<juce::Label> chordNameLabel;
+    std::unique_ptr<ChordAnalyzerKeyboardComponent> chordKeyboard;
+    std::unique_ptr<PizButton> pizButton;
+    std::unique_ptr<juce::ToggleButton> flatsButton;
+    std::unique_ptr<juce::TextButton> copyButton;
+    std::unique_ptr<ChannelSlider> learnChanSlider;
+    std::unique_ptr<juce::Label> versionLabel;
+    juce::Image cachedImage_snake_gif_1;
+    juce::Path internalPath2;
+    juce::Path internalPath3;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    MidiChordAnalyzerEditor (const MidiChordAnalyzerEditor&);
-    const MidiChordAnalyzerEditor& operator= (const MidiChordAnalyzerEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiChordAnalyzerEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_MIDICHORDANALYZEREDITOR_MIDICHORDANALYZEREDITOR_8E29B7A9__

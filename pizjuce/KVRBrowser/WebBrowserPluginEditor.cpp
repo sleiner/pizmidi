@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:44:22am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -43,48 +41,61 @@ String MyBrowser::getCurrentURL() {
 
 //==============================================================================
 WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      reloadButton (0),
-      wb (0),
-      backButton (0),
-      forwardButton (0),
-      homeButton (0),
-      stopButton (0),
-      urlBar (0),
-      goButton (0),
-      resizer (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (reloadButton = new TextButton (L"Reload"));
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    reloadButton.reset (new juce::TextButton ("Reload"));
+    addAndMakeVisible (reloadButton.get());
     reloadButton->addListener (this);
 
-    addAndMakeVisible (wb = new MyBrowser());
+    reloadButton->setBounds (128, 0, 60, 22);
 
-    addAndMakeVisible (backButton = new TextButton (L"Back"));
+    wb.reset (new MyBrowser());
+    addAndMakeVisible (wb.get());
+
+    backButton.reset (new juce::TextButton ("Back"));
+    addAndMakeVisible (backButton.get());
     backButton->addListener (this);
 
-    addAndMakeVisible (forwardButton = new TextButton (L"Forward"));
+    backButton->setBounds (0, 0, 60, 22);
+
+    forwardButton.reset (new juce::TextButton ("Forward"));
+    addAndMakeVisible (forwardButton.get());
     forwardButton->addListener (this);
 
-    addAndMakeVisible (homeButton = new TextButton (L"Home"));
+    forwardButton->setBounds (64, 0, 60, 22);
+
+    homeButton.reset (new juce::TextButton ("Home"));
+    addAndMakeVisible (homeButton.get());
     homeButton->addListener (this);
 
-    addAndMakeVisible (stopButton = new TextButton (L"Stop"));
+    homeButton->setBounds (256, 0, 60, 22);
+
+    stopButton.reset (new juce::TextButton ("Stop"));
+    addAndMakeVisible (stopButton.get());
     stopButton->addListener (this);
 
-    addAndMakeVisible (urlBar = new TextEditor (L"URL Bar"));
+    stopButton->setBounds (192, 0, 60, 22);
+
+    urlBar.reset (new juce::TextEditor ("URL Bar"));
+    addAndMakeVisible (urlBar.get());
     urlBar->setMultiLine (false);
     urlBar->setReturnKeyStartsNewLine (false);
     urlBar->setReadOnly (false);
     urlBar->setScrollbarsShown (false);
     urlBar->setCaretVisible (true);
     urlBar->setPopupMenuEnabled (true);
-    urlBar->setColour (TextEditor::backgroundColourId, Colour (0xffcccccc));
-    urlBar->setText (String());
+    urlBar->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0xffcccccc));
+    urlBar->setText (juce::String());
 
-    addAndMakeVisible (goButton = new TextButton (L"Go"));
+    goButton.reset (new juce::TextButton ("Go"));
+    addAndMakeVisible (goButton.get());
     goButton->addListener (this);
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer.get());
 
 
     //[UserPreSize]
@@ -111,15 +122,15 @@ WebBrowserPluginEditor::~WebBrowserPluginEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    deleteAndZero (reloadButton);
-    deleteAndZero (wb);
-    deleteAndZero (backButton);
-    deleteAndZero (forwardButton);
-    deleteAndZero (homeButton);
-    deleteAndZero (stopButton);
-    deleteAndZero (urlBar);
-    deleteAndZero (goButton);
-    deleteAndZero (resizer);
+    reloadButton = nullptr;
+    wb = nullptr;
+    backButton = nullptr;
+    forwardButton = nullptr;
+    homeButton = nullptr;
+    stopButton = nullptr;
+    urlBar = nullptr;
+    goButton = nullptr;
+    resizer = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -127,12 +138,12 @@ WebBrowserPluginEditor::~WebBrowserPluginEditor()
 }
 
 //==============================================================================
-void WebBrowserPluginEditor::paint (Graphics& g)
+void WebBrowserPluginEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::black);
+    g.fillAll (juce::Colours::black);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -140,12 +151,10 @@ void WebBrowserPluginEditor::paint (Graphics& g)
 
 void WebBrowserPluginEditor::resized()
 {
-    reloadButton->setBounds (128, 0, 60, 22);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     wb->setBounds (4, 22, getWidth() - 8, getHeight() - 26);
-    backButton->setBounds (0, 0, 60, 22);
-    forwardButton->setBounds (64, 0, 60, 22);
-    homeButton->setBounds (256, 0, 60, 22);
-    stopButton->setBounds (192, 0, 60, 22);
     urlBar->setBounds (320, 2, getWidth() - 370, 18);
     goButton->setBounds (getWidth() - 45, 0, 40, 22);
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
@@ -155,43 +164,43 @@ void WebBrowserPluginEditor::resized()
     //[/UserResized]
 }
 
-void WebBrowserPluginEditor::buttonClicked (Button* buttonThatWasClicked)
+void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == reloadButton)
+    if (buttonThatWasClicked == reloadButton.get())
     {
         //[UserButtonCode_reloadButton] -- add your button handler code here..
         //if (wb->getCurrentURL().isNotEmpty()) wb->goToURL(wb->getCurrentURL());
 		wb->refresh();
         //[/UserButtonCode_reloadButton]
     }
-    else if (buttonThatWasClicked == backButton)
+    else if (buttonThatWasClicked == backButton.get())
     {
         //[UserButtonCode_backButton] -- add your button handler code here..
 		wb->goBack();
         //[/UserButtonCode_backButton]
     }
-    else if (buttonThatWasClicked == forwardButton)
+    else if (buttonThatWasClicked == forwardButton.get())
     {
         //[UserButtonCode_forwardButton] -- add your button handler code here..
         wb->goForward();
         //[/UserButtonCode_forwardButton]
     }
-    else if (buttonThatWasClicked == homeButton)
+    else if (buttonThatWasClicked == homeButton.get())
     {
         //[UserButtonCode_homeButton] -- add your button handler code here..
         wb->goToURL("http://www.kvraudio.com/");
         //[/UserButtonCode_homeButton]
     }
-    else if (buttonThatWasClicked == stopButton)
+    else if (buttonThatWasClicked == stopButton.get())
     {
         //[UserButtonCode_stopButton] -- add your button handler code here..
         wb->stop();
         //[/UserButtonCode_stopButton]
     }
-    else if (buttonThatWasClicked == goButton)
+    else if (buttonThatWasClicked == goButton.get())
     {
         //[UserButtonCode_goButton] -- add your button handler code here..
         wb->goToURL(urlBar->getText());
@@ -211,7 +220,7 @@ void WebBrowserPluginEditor::changeListenerCallback (ChangeBroadcaster* source)
     if (source==getFilter()) {
         updateParametersFromFilter();
     }
-    else if (source==wb) {
+    else if (source==wb.get()) {
         getFilter()->setURL(wb->getCurrentURL());
         urlBar->setText(wb->getCurrentURL());
         getFilter()->initialPageLoaded=true;
@@ -248,16 +257,17 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="WebBrowserPluginEditor" componentName=""
                  parentClasses="public AudioProcessorEditor, public ChangeListener, public TextEditor::Listener"
                  constructorParams="WebBrowserFilter* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff000000"/>
   <TEXTBUTTON name="Reload" id="734905fefba3a33d" memberName="reloadButton"
@@ -293,3 +303,8 @@ BEGIN_JUCER_METADATA
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

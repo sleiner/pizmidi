@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  28 Sep 2011 11:07:39am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,91 +28,138 @@
 
 //==============================================================================
 MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      clearButton (0),
-      powerButton (0),
-      thruButton (0),
-      bytesButton (0),
-      hueSlider (0),
-      saturationSlider (0),
-      lightnessSlider (0),
-      resizer (0),
-      saveButton (0),
-      menuButton (0),
-      midiOutputEditor (0),
-      wrapButton (0),
-      timeButton (0),
-      colorButton (0),
-      aboutBox (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (clearButton = new TextButton (L"clear"));
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    clearButton.reset (new juce::TextButton ("clear"));
+    addAndMakeVisible (clearButton.get());
     clearButton->addListener (this);
 
-    addAndMakeVisible (powerButton = new ToggleButton (L"power"));
-    powerButton->setButtonText (L"on");
+    clearButton->setBounds (8, 0, 40, 16);
+
+    powerButton.reset (new juce::ToggleButton ("power"));
+    addAndMakeVisible (powerButton.get());
+    powerButton->setButtonText (TRANS("on"));
     powerButton->addListener (this);
 
-    addAndMakeVisible (thruButton = new ToggleButton (L"thru"));
+    powerButton->setBounds (48, 0, 30, 16);
+
+    thruButton.reset (new juce::ToggleButton ("thru"));
+    addAndMakeVisible (thruButton.get());
     thruButton->addListener (this);
 
-    addAndMakeVisible (bytesButton = new ToggleButton (L"bytes"));
+    thruButton->setBounds (80, 0, 40, 16);
+
+    bytesButton.reset (new juce::ToggleButton ("bytes"));
+    addAndMakeVisible (bytesButton.get());
     bytesButton->addListener (this);
 
-    addAndMakeVisible (hueSlider = new Slider (L"hue"));
-    hueSlider->setTooltip (L"Hue");
+    bytesButton->setBounds (118, 0, 40, 16);
+
+    hueSlider.reset (new juce::Slider ("hue"));
+    addAndMakeVisible (hueSlider.get());
+    hueSlider->setTooltip (TRANS("Hue"));
     hueSlider->setRange (0, 1, 0.01);
-    hueSlider->setSliderStyle (Slider::LinearBar);
-    hueSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    hueSlider->setSliderStyle (juce::Slider::LinearBar);
+    hueSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     hueSlider->addListener (this);
 
-    addAndMakeVisible (saturationSlider = new Slider (L"saturation"));
-    saturationSlider->setTooltip (L"Saturation");
+    hueSlider->setBounds (192, -16, 40, 12);
+
+    saturationSlider.reset (new juce::Slider ("saturation"));
+    addAndMakeVisible (saturationSlider.get());
+    saturationSlider->setTooltip (TRANS("Saturation"));
     saturationSlider->setRange (0, 1, 0.01);
-    saturationSlider->setSliderStyle (Slider::LinearBar);
-    saturationSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    saturationSlider->setSliderStyle (juce::Slider::LinearBar);
+    saturationSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     saturationSlider->addListener (this);
 
-    addAndMakeVisible (lightnessSlider = new Slider (L"lightness"));
-    lightnessSlider->setTooltip (L"Lightness");
+    saturationSlider->setBounds (240, -16, 40, 12);
+
+    lightnessSlider.reset (new juce::Slider ("lightness"));
+    addAndMakeVisible (lightnessSlider.get());
+    lightnessSlider->setTooltip (TRANS("Lightness"));
     lightnessSlider->setRange (0, 1, 0.01);
-    lightnessSlider->setSliderStyle (Slider::LinearBar);
-    lightnessSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    lightnessSlider->setSliderStyle (juce::Slider::LinearBar);
+    lightnessSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     lightnessSlider->addListener (this);
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    lightnessSlider->setBounds (288, -16, 40, 12);
 
-    addAndMakeVisible (saveButton = new TextButton (L"save"));
+    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer.get());
+
+    saveButton.reset (new juce::TextButton ("save"));
+    addAndMakeVisible (saveButton.get());
     saveButton->addListener (this);
 
-    addAndMakeVisible (menuButton = new TextButton (L"menu"));
+    saveButton->setBounds (344, 0, 40, 16);
+
+    menuButton.reset (new juce::TextButton ("menu"));
+    addAndMakeVisible (menuButton.get());
     menuButton->addListener (this);
 
-    addAndMakeVisible (midiOutputEditor = new TextEditor (L"monitorbox"));
+    menuButton->setBounds (296, 0, 40, 16);
+
+    midiOutputEditor.reset (new juce::TextEditor ("monitorbox"));
+    addAndMakeVisible (midiOutputEditor.get());
     midiOutputEditor->setMultiLine (true);
     midiOutputEditor->setReturnKeyStartsNewLine (false);
     midiOutputEditor->setReadOnly (true);
     midiOutputEditor->setScrollbarsShown (true);
     midiOutputEditor->setCaretVisible (false);
     midiOutputEditor->setPopupMenuEnabled (true);
-    midiOutputEditor->setText (String());
+    midiOutputEditor->setText (juce::String());
 
-    addAndMakeVisible (wrapButton = new ToggleButton (L"wrap"));
+    wrapButton.reset (new juce::ToggleButton ("wrap"));
+    addAndMakeVisible (wrapButton.get());
     wrapButton->addListener (this);
 
-    addAndMakeVisible (timeButton = new ToggleButton (L"time"));
+    wrapButton->setBounds (200, 0, 41, 16);
+
+    timeButton.reset (new juce::ToggleButton ("time"));
+    addAndMakeVisible (timeButton.get());
     timeButton->addListener (this);
 
-    addAndMakeVisible (colorButton = new TextButton (L"color"));
+    timeButton->setBounds (160, 0, 40, 16);
+
+    colorButton.reset (new juce::TextButton ("color"));
+    addAndMakeVisible (colorButton.get());
     colorButton->addListener (this);
 
-    addAndMakeVisible (aboutBox = new TextEditor (L"AboutBox"));
+    colorButton->setBounds (248, 0, 40, 16);
+
+    aboutBox.reset (new juce::TextEditor ("AboutBox"));
+    addAndMakeVisible (aboutBox.get());
     aboutBox->setMultiLine (true);
     aboutBox->setReturnKeyStartsNewLine (false);
     aboutBox->setReadOnly (true);
     aboutBox->setScrollbarsShown (true);
     aboutBox->setCaretVisible (false);
     aboutBox->setPopupMenuEnabled (false);
-    aboutBox->setText (L"Insert Piz Here midiMonitor 1.3\n\nYou can save a \"midiMonitor.fxp\" with your default settings.\n\nControls:\n\"clear\" - Clears the display and recorded MIDI buffer.\n\n\"on\" - The plugin is on when this is checked.\n\"thru\" - When checked, input events are passed to the output.\n\"bytes\" - Displays raw MIDI data in hexadecimal format.\n\"time\" - Displays time of MIDI events.\n\"wrap\" - Toggles word wrapping for the monitor box.\n\n\"color\" - Set background colors by Hue, Saturation, Lightness.\n\n\"menu\" - Options for: \n     - Time format\n     - Maximum number of lines to display\n     - MIDI event types to display\n\n\"save\" - Save monitor log as MIDI file or plain text. Specify .mid or .txt extension, or leave blank to save both. MIDI file contains all events since \"clear\" button was pressed. Text file contains the current contents of the monitor display.");
+    aboutBox->setText (TRANS("Insert Piz Here midiMonitor 1.3\n"
+    "\n"
+    "You can save a \"midiMonitor.fxp\" with your default settings.\n"
+    "\n"
+    "Controls:\n"
+    "\"clear\" - Clears the display and recorded MIDI buffer.\n"
+    "\n"
+    "\"on\" - The plugin is on when this is checked.\n"
+    "\"thru\" - When checked, input events are passed to the output.\n"
+    "\"bytes\" - Displays raw MIDI data in hexadecimal format.\n"
+    "\"time\" - Displays time of MIDI events.\n"
+    "\"wrap\" - Toggles word wrapping for the monitor box.\n"
+    "\n"
+    "\"color\" - Set background colors by Hue, Saturation, Lightness.\n"
+    "\n"
+    "\"menu\" - Options for: \n"
+    "     - Time format\n"
+    "     - Maximum number of lines to display\n"
+    "     - MIDI event types to display\n"
+    "\n"
+    "\"save\" - Save monitor log as MIDI file or plain text. Specify .mid or .txt extension, or leave blank to save both. MIDI file contains all events since \"clear\" button was pressed. Text file contains the current contents of the monitor display."));
 
 
     //[UserPreSize]
@@ -171,21 +216,21 @@ MidiMonitorEditor::~MidiMonitorEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    deleteAndZero (clearButton);
-    deleteAndZero (powerButton);
-    deleteAndZero (thruButton);
-    deleteAndZero (bytesButton);
-    deleteAndZero (hueSlider);
-    deleteAndZero (saturationSlider);
-    deleteAndZero (lightnessSlider);
-    deleteAndZero (resizer);
-    deleteAndZero (saveButton);
-    deleteAndZero (menuButton);
-    deleteAndZero (midiOutputEditor);
-    deleteAndZero (wrapButton);
-    deleteAndZero (timeButton);
-    deleteAndZero (colorButton);
-    deleteAndZero (aboutBox);
+    clearButton = nullptr;
+    powerButton = nullptr;
+    thruButton = nullptr;
+    bytesButton = nullptr;
+    hueSlider = nullptr;
+    saturationSlider = nullptr;
+    lightnessSlider = nullptr;
+    resizer = nullptr;
+    saveButton = nullptr;
+    menuButton = nullptr;
+    midiOutputEditor = nullptr;
+    wrapButton = nullptr;
+    timeButton = nullptr;
+    colorButton = nullptr;
+    aboutBox = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -194,14 +239,14 @@ MidiMonitorEditor::~MidiMonitorEditor()
 }
 
 //==============================================================================
-void MidiMonitorEditor::paint (Graphics& g)
+void MidiMonitorEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
 	g.fillAll (Colour (bgcolor.contrasting(0.2f*(getFilter()->getParameter(3)))));
 #if 0
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffa1a1a1));
+    g.fillAll (juce::Colour (0xffa1a1a1));
 
     //[UserPaint] Add your own custom painting code here..
 #endif
@@ -210,20 +255,11 @@ void MidiMonitorEditor::paint (Graphics& g)
 
 void MidiMonitorEditor::resized()
 {
-    clearButton->setBounds (8, 0, 40, 16);
-    powerButton->setBounds (48, 0, 30, 16);
-    thruButton->setBounds (80, 0, 40, 16);
-    bytesButton->setBounds (118, 0, 40, 16);
-    hueSlider->setBounds (192, -16, 40, 12);
-    saturationSlider->setBounds (240, -16, 40, 12);
-    lightnessSlider->setBounds (288, -16, 40, 12);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
-    saveButton->setBounds (344, 0, 40, 16);
-    menuButton->setBounds (296, 0, 40, 16);
     midiOutputEditor->setBounds (8, 16, getWidth() - 16, getHeight() - 24);
-    wrapButton->setBounds (200, 0, 41, 16);
-    timeButton->setBounds (160, 0, 40, 16);
-    colorButton->setBounds (248, 0, 40, 16);
     aboutBox->setBounds (8, 16, getWidth() - 16, getHeight() - 24);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIWidth = getWidth();
@@ -231,12 +267,12 @@ void MidiMonitorEditor::resized()
     //[/UserResized]
 }
 
-void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
+void MidiMonitorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == clearButton)
+    if (buttonThatWasClicked == clearButton.get())
     {
         //[UserButtonCode_clearButton] -- add your button handler code here..
         midiOutputEditor->clear ();
@@ -244,7 +280,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
 		numLines = 0;
         //[/UserButtonCode_clearButton]
     }
-    else if (buttonThatWasClicked == powerButton)
+    else if (buttonThatWasClicked == powerButton.get())
     {
         //[UserButtonCode_powerButton] -- add your button handler code here..
         if (getFilter()->getParameter(4)>=0.5f)
@@ -253,7 +289,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
             getFilter()->setParameterNotifyingHost(4,1.0f);
         //[/UserButtonCode_powerButton]
     }
-    else if (buttonThatWasClicked == thruButton)
+    else if (buttonThatWasClicked == thruButton.get())
     {
         //[UserButtonCode_thruButton] -- add your button handler code here..
         if (getFilter()->getParameter(5)>=0.5f)
@@ -262,7 +298,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
             getFilter()->setParameterNotifyingHost(5,1.0f);
         //[/UserButtonCode_thruButton]
     }
-    else if (buttonThatWasClicked == bytesButton)
+    else if (buttonThatWasClicked == bytesButton.get())
     {
         //[UserButtonCode_bytesButton] -- add your button handler code here..
         if (getFilter()->getParameter(6)>=0.5f)
@@ -271,7 +307,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
             getFilter()->setParameterNotifyingHost(6,1.0f);
         //[/UserButtonCode_bytesButton]
     }
-    else if (buttonThatWasClicked == saveButton)
+    else if (buttonThatWasClicked == saveButton.get())
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
         FileChooser myChooser ("Save MIDI file/log...",File("midiMonitorLog"),"*.txt; *.mid");
@@ -290,7 +326,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_saveButton]
     }
-    else if (buttonThatWasClicked == menuButton)
+    else if (buttonThatWasClicked == menuButton.get())
     {
         //[UserButtonCode_menuButton] -- add your button handler code here..
         PopupMenu m, sub2, sub3;
@@ -346,7 +382,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
 		m.addSeparator();
 		m.addItem (9999,"About...");
 
-        int result = m.showAt(menuButton);
+        int result = m.showAt(menuButton.get());
         switch (result) {
             case 1:
                 getFilter()->useNotes = !getFilter()->useNotes;
@@ -413,7 +449,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_menuButton]
     }
-    else if (buttonThatWasClicked == wrapButton)
+    else if (buttonThatWasClicked == wrapButton.get())
     {
         //[UserButtonCode_wrapButton] -- add your button handler code here..
         if (getFilter()->getParameter(7)>=0.5f)
@@ -422,7 +458,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
             getFilter()->setParameterNotifyingHost(7,1.0f);
         //[/UserButtonCode_wrapButton]
     }
-    else if (buttonThatWasClicked == timeButton)
+    else if (buttonThatWasClicked == timeButton.get())
     {
         //[UserButtonCode_timeButton] -- add your button handler code here..
         if (getFilter()->getParameter(kTime)>=0.5f)
@@ -431,7 +467,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
             getFilter()->setParameterNotifyingHost(kTime,1.0f);
         //[/UserButtonCode_timeButton]
     }
-    else if (buttonThatWasClicked == colorButton)
+    else if (buttonThatWasClicked == colorButton.get())
     {
         //[UserButtonCode_colorButton] -- add your button handler code here..
         PopupMenu m;
@@ -439,7 +475,7 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
 		m.addCustomItem(-1,*saturationSlider,100,16,false);
 		m.addCustomItem(-1,*lightnessSlider,100,16,false);
         //int result =
-			m.showAt(colorButton);
+			m.showAt(colorButton.get());
 		//switch (result) {
 		//	default: break;
 		//}
@@ -450,26 +486,26 @@ void MidiMonitorEditor::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void MidiMonitorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void MidiMonitorEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == hueSlider)
+    if (sliderThatWasMoved == hueSlider.get())
     {
         //[UserSliderCode_hueSlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(0,(float)hueSlider->getValue());
         repaint();
         //[/UserSliderCode_hueSlider]
     }
-    else if (sliderThatWasMoved == saturationSlider)
+    else if (sliderThatWasMoved == saturationSlider.get())
     {
         //[UserSliderCode_saturationSlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(1,(float)saturationSlider->getValue());
         repaint();
         //[/UserSliderCode_saturationSlider]
     }
-    else if (sliderThatWasMoved == lightnessSlider)
+    else if (sliderThatWasMoved == lightnessSlider.get())
     {
         //[UserSliderCode_lightnessSlider] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(2,(float)lightnessSlider->getValue());
@@ -492,7 +528,7 @@ void MidiMonitorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void MidiMonitorEditor::mouseDown(const MouseEvent &e)
 {
-	if (e.eventComponent == aboutBox)
+	if (e.eventComponent == aboutBox.get())
 	{
 		aboutBox->setVisible(false);
 	}
@@ -1020,16 +1056,17 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MidiMonitorEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public Timer"
+                 parentClasses="public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::Timer"
                  constructorParams="MidiMonitorPlugin* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="392" initialHeight="400">
   <BACKGROUND backgroundColour="ffa1a1a1"/>
   <TEXTBUTTON name="clear" id="f23ecb245471280e" memberName="clearButton" virtualName=""
@@ -1045,17 +1082,20 @@ BEGIN_JUCER_METADATA
                 explicitFocusOrder="0" pos="118 0 40 16" buttonText="bytes" connectedEdges="0"
                 needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="hue" id="dd023d10d928edd1" memberName="hueSlider" virtualName=""
-          explicitFocusOrder="0" pos="192 -16 40 12" tooltip="Hue" min="0"
-          max="1" int="0.01" style="LinearBar" textBoxPos="NoTextBox" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="192 -16 40 12" tooltip="Hue" min="0.0"
+          max="1.0" int="0.01" style="LinearBar" textBoxPos="NoTextBox"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="saturation" id="c426691da7ce7b7c" memberName="saturationSlider"
           virtualName="" explicitFocusOrder="0" pos="240 -16 40 12" tooltip="Saturation"
-          min="0" max="1" int="0.01" style="LinearBar" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="1.0" int="0.01" style="LinearBar" textBoxPos="NoTextBox"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="lightness" id="a671afc03bda74c5" memberName="lightnessSlider"
           virtualName="" explicitFocusOrder="0" pos="288 -16 40 12" tooltip="Lightness"
-          min="0" max="1" int="0.01" style="LinearBar" textBoxPos="NoTextBox"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="1.0" int="0.01" style="LinearBar" textBoxPos="NoTextBox"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <GENERICCOMPONENT name="" id="b1de7dcd8c1d0b56" memberName="resizer" virtualName=""
                     explicitFocusOrder="0" pos="16R 16R 16 16" class="ResizableCornerComponent"
                     params="this, &amp;resizeLimits"/>
@@ -1087,3 +1127,8 @@ BEGIN_JUCER_METADATA
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

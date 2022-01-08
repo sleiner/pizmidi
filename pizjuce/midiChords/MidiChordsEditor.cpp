@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  18 May 2013 11:24:04am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,470 +28,587 @@
 
 //==============================================================================
 MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      toggleButton (0),
-      chordNameLabel (0),
-      chordKeyboard (0),
-      triggerKeyboard (0),
-      chordLearnButton (0),
-      triggerLearnButton (0),
-      channelSlider (0),
-      outputLabel (0),
-      pizButton (0),
-      triggerLabel (0),
-      clearChordButton (0),
-      resetChordButton (0),
-      clearAllButton (0),
-      resetAllButton (0),
-      transposeUpButton (0),
-      transposeDownButton (0),
-      transposeChordUpButton (0),
-      transposeChordDownButton (0),
-      transposeSlider (0),
-      velocitySlider (0),
-      variationSlider (0),
-      normalButton (0),
-      octaveButton (0),
-      globalButton (0),
-      flatsButton (0),
-      transposeChordUpButton2 (0),
-      transposeChordDownButton2 (0),
-      chordMenuButton (0),
-      presetNameLabel (0),
-      presetMenuButton (0),
-      chordSaveEditor (0),
-      copyButton (0),
-      pasteButton (0),
-      previewButton (0),
-      chordEditor (0),
-      pcButton (0),
-      nextButton (0),
-      prevButton (0),
-      triggerNoteLabel (0),
-      learnChanSlider (0),
-      demoLabel (0),
-      guitar (0),
-      versionLabel (0),
-      transposeInputButton (0),
-      toAllChannelsButton (0),
-      infoButton (0),
-      specialMenuButton (0),
-      outputChannelSlider (0),
-      applyChannelButton (0),
-      label (0),
-      label2 (0),
-      viewButton (0),
-      setupButton (0),
-      strumDirectionButton (0),
-      strumButton (0),
-      maxTimeSlider (0),
-      speedSlider (0),
-      accelSlider (0),
-      velRampSlider (0),
-      infoBox (0),
-      tuningSaveEditor (0),
-      cachedImage_midichordsLogo_png (nullptr)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (toggleButton = new ToggleButton (L"new toggle button"));
-    toggleButton->setButtonText (L"Guess chord name");
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    toggleButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (toggleButton.get());
+    toggleButton->setButtonText (TRANS("Guess chord name"));
     toggleButton->addListener (this);
 
-    addAndMakeVisible (chordNameLabel = new Label (L"new label",
-                                                   L"chord name"));
-    chordNameLabel->setFont (Font (15.0000f, Font::bold));
-    chordNameLabel->setJustificationType (Justification::centred);
+    toggleButton->setBounds (372, 50, 150, 24);
+
+    chordNameLabel.reset (new juce::Label ("new label",
+                                           TRANS("chord name")));
+    addAndMakeVisible (chordNameLabel.get());
+    chordNameLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    chordNameLabel->setJustificationType (juce::Justification::centred);
     chordNameLabel->setEditable (false, false, false);
-    chordNameLabel->setColour (Label::backgroundColourId, Colour (0x279a3c3c));
-    chordNameLabel->setColour (Label::outlineColourId, Colour (0xb3000000));
-    chordNameLabel->setColour (TextEditor::textColourId, Colours::black);
-    chordNameLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    chordNameLabel->setColour (juce::Label::backgroundColourId, juce::Colour (0x279a3c3c));
+    chordNameLabel->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
+    chordNameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    chordNameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (chordKeyboard = new ChordsKeyboardComponent (ownerFilter->chordKbState, ownerFilter));
+    chordNameLabel->setBounds (375, 72, 144, 26);
 
-    addAndMakeVisible (triggerKeyboard = new TriggerKeySelectorKeyboard (ownerFilter->triggerKbState, ownerFilter));
+    chordKeyboard.reset (new ChordsKeyboardComponent (ownerFilter->chordKbState, ownerFilter));
+    addAndMakeVisible (chordKeyboard.get());
 
-    addAndMakeVisible (chordLearnButton = new TextButton (L"chordLearn"));
-    chordLearnButton->setTooltip (L"Learn next input chord");
-    chordLearnButton->setButtonText (L"Learn");
-    chordLearnButton->setConnectedEdges (Button::ConnectedOnBottom);
+    triggerKeyboard.reset (new TriggerKeySelectorKeyboard (ownerFilter->triggerKbState, ownerFilter));
+    addAndMakeVisible (triggerKeyboard.get());
+
+    chordLearnButton.reset (new juce::TextButton ("chordLearn"));
+    addAndMakeVisible (chordLearnButton.get());
+    chordLearnButton->setTooltip (TRANS("Learn next input chord"));
+    chordLearnButton->setButtonText (TRANS("Learn"));
+    chordLearnButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
     chordLearnButton->addListener (this);
 
-    addAndMakeVisible (triggerLearnButton = new TextButton (L"triggerLearn"));
-    triggerLearnButton->setTooltip (L"When on, displayed trigger note follows input note");
-    triggerLearnButton->setButtonText (L"Follow Input");
-    triggerLearnButton->setConnectedEdges (Button::ConnectedOnBottom);
+    chordLearnButton->setBounds (6, 76, 45, 21);
+
+    triggerLearnButton.reset (new juce::TextButton ("triggerLearn"));
+    addAndMakeVisible (triggerLearnButton.get());
+    triggerLearnButton->setTooltip (TRANS("When on, displayed trigger note follows input note"));
+    triggerLearnButton->setButtonText (TRANS("Follow Input"));
+    triggerLearnButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
     triggerLearnButton->addListener (this);
 
-    addAndMakeVisible (channelSlider = new ChannelSlider (L"channel"));
-    channelSlider->setTooltip (L"Trigger channel");
+    triggerLearnButton->setBounds (6, 204, 80, 21);
+
+    channelSlider.reset (new ChannelSlider ("channel"));
+    addAndMakeVisible (channelSlider.get());
+    channelSlider->setTooltip (TRANS("Trigger channel"));
     channelSlider->setRange (0, 16, 1);
-    channelSlider->setSliderStyle (Slider::LinearBar);
-    channelSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    channelSlider->setColour (Slider::backgroundColourId, Colours::white);
+    channelSlider->setSliderStyle (juce::Slider::LinearBar);
+    channelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    channelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     channelSlider->addListener (this);
 
-    addAndMakeVisible (outputLabel = new Label (L"new label",
-                                                L"Output"));
-    outputLabel->setFont (Font (15.0000f, Font::plain));
-    outputLabel->setJustificationType (Justification::centredRight);
+    channelSlider->setBounds (123, 323, 66, 16);
+
+    outputLabel.reset (new juce::Label ("new label",
+                                        TRANS("Output")));
+    addAndMakeVisible (outputLabel.get());
+    outputLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    outputLabel->setJustificationType (juce::Justification::centredRight);
     outputLabel->setEditable (false, false, false);
-    outputLabel->setColour (Label::textColourId, Colours::white);
-    outputLabel->setColour (TextEditor::textColourId, Colours::black);
-    outputLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    outputLabel->setColour (juce::Label::textColourId, juce::Colours::white);
+    outputLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    outputLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (pizButton = new PizButton());
-    addAndMakeVisible (triggerLabel = new Label (L"new label",
-                                                 L"Trigger Note:"));
-    triggerLabel->setFont (Font (15.0000f, Font::plain));
-    triggerLabel->setJustificationType (Justification::centredRight);
+    outputLabel->setBounds (573, 76, 54, 24);
+
+    pizButton.reset (new PizButton());
+    addAndMakeVisible (pizButton.get());
+    pizButton->setBounds (38, 3, 74, 40);
+
+    triggerLabel.reset (new juce::Label ("new label",
+                                         TRANS("Trigger Note:")));
+    addAndMakeVisible (triggerLabel.get());
+    triggerLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    triggerLabel->setJustificationType (juce::Justification::centredRight);
     triggerLabel->setEditable (false, false, false);
-    triggerLabel->setColour (Label::textColourId, Colours::white);
-    triggerLabel->setColour (TextEditor::textColourId, Colours::black);
-    triggerLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    triggerLabel->setColour (juce::Label::textColourId, juce::Colours::white);
+    triggerLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    triggerLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (clearChordButton = new TextButton (L"clear"));
-    clearChordButton->setTooltip (L"Clear current chord");
-    clearChordButton->setButtonText (L"Clear");
-    clearChordButton->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    triggerLabel->setBounds (464, 203, 97, 24);
+
+    clearChordButton.reset (new juce::TextButton ("clear"));
+    addAndMakeVisible (clearChordButton.get());
+    clearChordButton->setTooltip (TRANS("Clear current chord"));
+    clearChordButton->setButtonText (TRANS("Clear"));
+    clearChordButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     clearChordButton->addListener (this);
 
-    addAndMakeVisible (resetChordButton = new TextButton (L"reset"));
-    resetChordButton->setTooltip (L"Reset current chord to just the trigger note");
-    resetChordButton->setButtonText (L"Reset");
-    resetChordButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    clearChordButton->setBounds (291, 76, 40, 21);
+
+    resetChordButton.reset (new juce::TextButton ("reset"));
+    addAndMakeVisible (resetChordButton.get());
+    resetChordButton->setTooltip (TRANS("Reset current chord to just the trigger note"));
+    resetChordButton->setButtonText (TRANS("Reset"));
+    resetChordButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     resetChordButton->addListener (this);
 
-    addAndMakeVisible (clearAllButton = new TextButton (L"clear"));
-    clearAllButton->setButtonText (L"Clear All");
-    clearAllButton->setConnectedEdges (Button::ConnectedOnRight);
+    resetChordButton->setBounds (331, 76, 40, 21);
+
+    clearAllButton.reset (new juce::TextButton ("clear"));
+    addAndMakeVisible (clearAllButton.get());
+    clearAllButton->setButtonText (TRANS("Clear All"));
+    clearAllButton->setConnectedEdges (juce::Button::ConnectedOnRight);
     clearAllButton->addListener (this);
 
-    addAndMakeVisible (resetAllButton = new TextButton (L"reset"));
-    resetAllButton->setButtonText (L"Reset All");
-    resetAllButton->setConnectedEdges (Button::ConnectedOnLeft);
+    clearAllButton->setBounds (8, 429, 64, 24);
+
+    resetAllButton.reset (new juce::TextButton ("reset"));
+    addAndMakeVisible (resetAllButton.get());
+    resetAllButton->setButtonText (TRANS("Reset All"));
+    resetAllButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
     resetAllButton->addListener (this);
 
-    addAndMakeVisible (transposeUpButton = new TextButton (L"transpose"));
-    transposeUpButton->setButtonText (L"->");
-    transposeUpButton->setConnectedEdges (Button::ConnectedOnLeft);
+    resetAllButton->setBounds (69, 441, 64, 24);
+
+    transposeUpButton.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeUpButton.get());
+    transposeUpButton->setButtonText (TRANS("->"));
+    transposeUpButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
     transposeUpButton->addListener (this);
 
-    addAndMakeVisible (transposeDownButton = new TextButton (L"transpose"));
-    transposeDownButton->setButtonText (L"<-");
-    transposeDownButton->setConnectedEdges (Button::ConnectedOnRight);
+    transposeUpButton->setBounds (172, 425, 32, 24);
+
+    transposeDownButton.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeDownButton.get());
+    transposeDownButton->setButtonText (TRANS("<-"));
+    transposeDownButton->setConnectedEdges (juce::Button::ConnectedOnRight);
     transposeDownButton->addListener (this);
 
-    addAndMakeVisible (transposeChordUpButton = new TextButton (L"transpose"));
-    transposeChordUpButton->setTooltip (L"Shift chord up one semitone");
-    transposeChordUpButton->setButtonText (L">");
-    transposeChordUpButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    transposeDownButton->setBounds (143, 425, 29, 24);
+
+    transposeChordUpButton.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeChordUpButton.get());
+    transposeChordUpButton->setTooltip (TRANS("Shift chord up one semitone"));
+    transposeChordUpButton->setButtonText (TRANS(">"));
+    transposeChordUpButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     transposeChordUpButton->addListener (this);
 
-    addAndMakeVisible (transposeChordDownButton = new TextButton (L"transpose"));
-    transposeChordDownButton->setTooltip (L"Shift chord down one semitone");
-    transposeChordDownButton->setButtonText (L"<");
-    transposeChordDownButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    transposeChordUpButton->setBounds (159, 76, 23, 21);
+
+    transposeChordDownButton.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeChordDownButton.get());
+    transposeChordDownButton->setTooltip (TRANS("Shift chord down one semitone"));
+    transposeChordDownButton->setButtonText (TRANS("<"));
+    transposeChordDownButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     transposeChordDownButton->addListener (this);
 
-    addAndMakeVisible (transposeSlider = new Slider (L"transpose"));
-    transposeSlider->setTooltip (L"Transpose output by semitones");
+    transposeChordDownButton->setBounds (136, 76, 23, 21);
+
+    transposeSlider.reset (new juce::Slider ("transpose"));
+    addAndMakeVisible (transposeSlider.get());
+    transposeSlider->setTooltip (TRANS("Transpose output by semitones"));
     transposeSlider->setRange (-12, 12, 1);
-    transposeSlider->setSliderStyle (Slider::LinearBar);
-    transposeSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    transposeSlider->setColour (Slider::backgroundColourId, Colours::white);
+    transposeSlider->setSliderStyle (juce::Slider::LinearBar);
+    transposeSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    transposeSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     transposeSlider->addListener (this);
 
-    addAndMakeVisible (velocitySlider = new Slider (L"velocity"));
-    velocitySlider->setTooltip (L"Velocity for \"Play Chord\" button");
+    transposeSlider->setBounds (475, 372, 66, 16);
+
+    velocitySlider.reset (new juce::Slider ("velocity"));
+    addAndMakeVisible (velocitySlider.get());
+    velocitySlider->setTooltip (TRANS("Velocity for \"Play Chord\" button"));
     velocitySlider->setRange (1, 127, 1);
-    velocitySlider->setSliderStyle (Slider::RotaryVerticalDrag);
-    velocitySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-    velocitySlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+    velocitySlider->setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    velocitySlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
+    velocitySlider->setColour (juce::Slider::rotarySliderFillColourId, juce::Colour (0x7f000000));
     velocitySlider->addListener (this);
 
-    addAndMakeVisible (variationSlider = new Slider (L"Variation"));
+    velocitySlider->setBounds (397, 197, 22, 22);
+
+    variationSlider.reset (new juce::Slider ("Variation"));
+    addAndMakeVisible (variationSlider.get());
     variationSlider->setRange (0, 100, 0.1);
-    variationSlider->setSliderStyle (Slider::LinearBar);
-    variationSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    variationSlider->setSliderStyle (juce::Slider::LinearBar);
+    variationSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     variationSlider->addListener (this);
 
-    addAndMakeVisible (normalButton = new TextButton (L"new button"));
-    normalButton->setTooltip (L"Full mode: a separate chord is defined for every input note");
-    normalButton->setButtonText (L"Full");
-    normalButton->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnTop);
+    variationSlider->setBounds (333, 432, 104, 16);
+
+    normalButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (normalButton.get());
+    normalButton->setTooltip (TRANS("Full mode: a separate chord is defined for every input note"));
+    normalButton->setButtonText (TRANS("Full"));
+    normalButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
     normalButton->setRadioGroupId (1);
     normalButton->addListener (this);
 
-    addAndMakeVisible (octaveButton = new TextButton (L"new button"));
-    octaveButton->setTooltip (L"Octave mode: 12 chords are defined which are transposed to every octave");
-    octaveButton->setButtonText (L"Octave");
-    octaveButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnTop);
+    normalButton->setBounds (442, 318, 64, 24);
+
+    octaveButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (octaveButton.get());
+    octaveButton->setTooltip (TRANS("Octave mode: 12 chords are defined which are transposed to every octave"));
+    octaveButton->setButtonText (TRANS("Octave"));
+    octaveButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
     octaveButton->setRadioGroupId (1);
     octaveButton->addListener (this);
 
-    addAndMakeVisible (globalButton = new TextButton (L"new button"));
-    globalButton->setTooltip (L"Global mode: one defined chord is transposed relative to the root note");
-    globalButton->setButtonText (L"Global");
-    globalButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
+    octaveButton->setBounds (506, 318, 64, 24);
+
+    globalButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (globalButton.get());
+    globalButton->setTooltip (TRANS("Global mode: one defined chord is transposed relative to the root note"));
+    globalButton->setButtonText (TRANS("Global"));
+    globalButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
     globalButton->setRadioGroupId (1);
     globalButton->addListener (this);
 
-    addAndMakeVisible (flatsButton = new ToggleButton (L"new toggle button"));
-    flatsButton->setButtonText (L"flats");
+    globalButton->setBounds (570, 318, 64, 24);
+
+    flatsButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (flatsButton.get());
+    flatsButton->setButtonText (TRANS("flats"));
     flatsButton->addListener (this);
 
-    addAndMakeVisible (transposeChordUpButton2 = new TextButton (L"transpose"));
-    transposeChordUpButton2->setTooltip (L"Shift chord up one octave");
-    transposeChordUpButton2->setButtonText (L">>");
-    transposeChordUpButton2->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    flatsButton->setBounds (519, 76, 48, 24);
+
+    transposeChordUpButton2.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeChordUpButton2.get());
+    transposeChordUpButton2->setTooltip (TRANS("Shift chord up one octave"));
+    transposeChordUpButton2->setButtonText (TRANS(">>"));
+    transposeChordUpButton2->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     transposeChordUpButton2->addListener (this);
 
-    addAndMakeVisible (transposeChordDownButton2 = new TextButton (L"transpose"));
-    transposeChordDownButton2->setTooltip (L"Shift chord down one octave");
-    transposeChordDownButton2->setButtonText (L"<<");
-    transposeChordDownButton2->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    transposeChordUpButton2->setBounds (182, 76, 25, 21);
+
+    transposeChordDownButton2.reset (new juce::TextButton ("transpose"));
+    addAndMakeVisible (transposeChordDownButton2.get());
+    transposeChordDownButton2->setTooltip (TRANS("Shift chord down one octave"));
+    transposeChordDownButton2->setButtonText (TRANS("<<"));
+    transposeChordDownButton2->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     transposeChordDownButton2->addListener (this);
 
-    addAndMakeVisible (chordMenuButton = new TextButton (L"chordMenu"));
-    chordMenuButton->setButtonText (L"Menu");
-    chordMenuButton->setConnectedEdges (Button::ConnectedOnBottom);
+    transposeChordDownButton2->setBounds (111, 76, 25, 21);
+
+    chordMenuButton.reset (new juce::TextButton ("chordMenu"));
+    addAndMakeVisible (chordMenuButton.get());
+    chordMenuButton->setButtonText (TRANS("Menu"));
+    chordMenuButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
     chordMenuButton->addListener (this);
 
-    addAndMakeVisible (presetNameLabel = new Label (L"new label",
-                                                    L"preset name"));
-    presetNameLabel->setTooltip (L"Preset Name (double-click to edit)");
-    presetNameLabel->setFont (Font (15.0000f, Font::bold));
-    presetNameLabel->setJustificationType (Justification::centred);
+    chordMenuButton->setBounds (55, 76, 52, 21);
+
+    presetNameLabel.reset (new juce::Label ("new label",
+                                            TRANS("preset name")));
+    addAndMakeVisible (presetNameLabel.get());
+    presetNameLabel->setTooltip (TRANS("Preset Name (double-click to edit)"));
+    presetNameLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    presetNameLabel->setJustificationType (juce::Justification::centred);
     presetNameLabel->setEditable (true, true, false);
-    presetNameLabel->setColour (Label::backgroundColourId, Colour (0x27a1b404));
-    presetNameLabel->setColour (Label::outlineColourId, Colour (0xb3000000));
-    presetNameLabel->setColour (TextEditor::textColourId, Colours::black);
-    presetNameLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    presetNameLabel->setColour (juce::Label::backgroundColourId, juce::Colour (0x27a1b404));
+    presetNameLabel->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
+    presetNameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    presetNameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     presetNameLabel->addListener (this);
 
-    addAndMakeVisible (presetMenuButton = new TextButton (L"presets"));
-    presetMenuButton->setTooltip (L"Preset Menu");
-    presetMenuButton->setButtonText (L">");
-    presetMenuButton->setConnectedEdges (Button::ConnectedOnLeft);
+    presetNameLabel->setBounds (414, 12, 191, 26);
+
+    presetMenuButton.reset (new juce::TextButton ("presets"));
+    addAndMakeVisible (presetMenuButton.get());
+    presetMenuButton->setTooltip (TRANS("Preset Menu"));
+    presetMenuButton->setButtonText (TRANS(">"));
+    presetMenuButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
     presetMenuButton->addListener (this);
 
-    addAndMakeVisible (chordSaveEditor = new TextEditor (L"new text editor"));
+    presetMenuButton->setBounds (605, 12, 25, 26);
+
+    chordSaveEditor.reset (new juce::TextEditor ("new text editor"));
+    addAndMakeVisible (chordSaveEditor.get());
     chordSaveEditor->setMultiLine (false);
     chordSaveEditor->setReturnKeyStartsNewLine (false);
     chordSaveEditor->setReadOnly (false);
     chordSaveEditor->setScrollbarsShown (true);
     chordSaveEditor->setCaretVisible (true);
     chordSaveEditor->setPopupMenuEnabled (true);
-    chordSaveEditor->setColour (TextEditor::outlineColourId, Colours::black);
-    chordSaveEditor->setText (String());
+    chordSaveEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
+    chordSaveEditor->setText (juce::String());
 
-    addAndMakeVisible (copyButton = new TextButton (L"copy"));
-    copyButton->setButtonText (L"Copy");
-    copyButton->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnTop);
+    chordSaveEditor->setBounds (82, -35, 150, 24);
+
+    copyButton.reset (new juce::TextButton ("copy"));
+    addAndMakeVisible (copyButton.get());
+    copyButton->setButtonText (TRANS("Copy"));
+    copyButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
     copyButton->addListener (this);
 
-    addAndMakeVisible (pasteButton = new TextButton (L"paste"));
-    pasteButton->setButtonText (L"Paste");
-    pasteButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
+    copyButton->setBounds (211, 73, 38, 21);
+
+    pasteButton.reset (new juce::TextButton ("paste"));
+    addAndMakeVisible (pasteButton.get());
+    pasteButton->setButtonText (TRANS("Paste"));
+    pasteButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
     pasteButton->addListener (this);
 
-    addAndMakeVisible (previewButton = new TextButton (L"play"));
-    previewButton->setTooltip (L"Plays currently displayed chord");
-    previewButton->setButtonText (L"Play Chord");
-    previewButton->setColour (TextButton::buttonColourId, Colour (0xff7ca17c));
+    pasteButton->setBounds (249, 73, 38, 21);
 
-    addAndMakeVisible (chordEditor = new Label (L"new label",
-                                                L"chord"));
-    chordEditor->setTooltip (L"Double-click to type a chord");
-    chordEditor->setFont (Font (15.0000f, Font::plain));
-    chordEditor->setJustificationType (Justification::centred);
+    previewButton.reset (new juce::TextButton ("play"));
+    addAndMakeVisible (previewButton.get());
+    previewButton->setTooltip (TRANS("Plays currently displayed chord"));
+    previewButton->setButtonText (TRANS("Play Chord"));
+    previewButton->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff7ca17c));
+
+    previewButton->setBounds (251, 196, 143, 24);
+
+    chordEditor.reset (new juce::Label ("new label",
+                                        TRANS("chord")));
+    addAndMakeVisible (chordEditor.get());
+    chordEditor->setTooltip (TRANS("Double-click to type a chord"));
+    chordEditor->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    chordEditor->setJustificationType (juce::Justification::centred);
     chordEditor->setEditable (false, true, false);
-    chordEditor->setColour (Label::backgroundColourId, Colours::white);
-    chordEditor->setColour (Label::outlineColourId, Colour (0xb3000000));
-    chordEditor->setColour (TextEditor::textColourId, Colours::black);
-    chordEditor->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    chordEditor->setColour (juce::Label::backgroundColourId, juce::Colours::white);
+    chordEditor->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
+    chordEditor->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    chordEditor->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     chordEditor->addListener (this);
 
-    addAndMakeVisible (pcButton = new ToggleButton (L"new toggle button"));
-    pcButton->setTooltip (L"Change program when receiving MIDI Program Change");
-    pcButton->setButtonText (L"Use Program Chg");
+    chordEditor->setBounds (178, 54, 144, 20);
+
+    pcButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (pcButton.get());
+    pcButton->setTooltip (TRANS("Change program when receiving MIDI Program Change"));
+    pcButton->setButtonText (TRANS("Use Program Chg"));
     pcButton->addListener (this);
 
-    addAndMakeVisible (nextButton = new TextButton (L"next"));
-    nextButton->setTooltip (L"Select next higher trigger note");
-    nextButton->setButtonText (L">");
-    nextButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    pcButton->setBounds (500, 397, 134, 20);
+
+    nextButton.reset (new juce::TextButton ("next"));
+    addAndMakeVisible (nextButton.get());
+    nextButton->setTooltip (TRANS("Select next higher trigger note"));
+    nextButton->setButtonText (TRANS(">"));
+    nextButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     nextButton->addListener (this);
 
-    addAndMakeVisible (prevButton = new TextButton (L"prev"));
-    prevButton->setTooltip (L"Select previous trigger note");
-    prevButton->setButtonText (L"<");
-    prevButton->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    nextButton->setBounds (113, 204, 23, 21);
+
+    prevButton.reset (new juce::TextButton ("prev"));
+    addAndMakeVisible (prevButton.get());
+    prevButton->setTooltip (TRANS("Select previous trigger note"));
+    prevButton->setButtonText (TRANS("<"));
+    prevButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     prevButton->addListener (this);
 
-    addAndMakeVisible (triggerNoteLabel = new Label (L"new label",
-                                                     L"G8 (127)"));
-    triggerNoteLabel->setTooltip (L"Currently displayed trigger note (double-click to edit)");
-    triggerNoteLabel->setFont (Font (15.0000f, Font::bold));
-    triggerNoteLabel->setJustificationType (Justification::centredLeft);
+    prevButton->setBounds (90, 204, 23, 21);
+
+    triggerNoteLabel.reset (new juce::Label ("new label",
+                                             TRANS("G8 (127)")));
+    addAndMakeVisible (triggerNoteLabel.get());
+    triggerNoteLabel->setTooltip (TRANS("Currently displayed trigger note (double-click to edit)"));
+    triggerNoteLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    triggerNoteLabel->setJustificationType (juce::Justification::centredLeft);
     triggerNoteLabel->setEditable (false, true, false);
-    triggerNoteLabel->setColour (Label::textColourId, Colours::white);
-    triggerNoteLabel->setColour (TextEditor::textColourId, Colours::black);
-    triggerNoteLabel->setColour (TextEditor::backgroundColourId, Colours::white);
+    triggerNoteLabel->setColour (juce::Label::textColourId, juce::Colours::white);
+    triggerNoteLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    triggerNoteLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colours::white);
     triggerNoteLabel->addListener (this);
 
-    addAndMakeVisible (learnChanSlider = new ChannelSlider (L"channel"));
-    learnChanSlider->setTooltip (L"Chord Input Channel, used for Learn and left-click entering notes");
+    triggerNoteLabel->setBounds (558, 203, 73, 24);
+
+    learnChanSlider.reset (new ChannelSlider ("channel"));
+    addAndMakeVisible (learnChanSlider.get());
+    learnChanSlider->setTooltip (TRANS("Chord Input Channel, used for Learn and left-click entering notes"));
     learnChanSlider->setRange (0, 16, 1);
-    learnChanSlider->setSliderStyle (Slider::LinearBar);
-    learnChanSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    learnChanSlider->setColour (Slider::backgroundColourId, Colours::white);
+    learnChanSlider->setSliderStyle (juce::Slider::LinearBar);
+    learnChanSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    learnChanSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     learnChanSlider->addListener (this);
 
-    addAndMakeVisible (demoLabel = new Label (L"new label",
-                                              L"UNREGISTERED\nDEMO VERSION"));
-    demoLabel->setFont (Font (L"OCR A Extended", 10.0000f, Font::plain));
-    demoLabel->setJustificationType (Justification::centred);
+    learnChanSlider->setBounds (6, 56, 38, 16);
+
+    demoLabel.reset (new juce::Label ("new label",
+                                      TRANS("UNREGISTERED\n"
+                                      "DEMO VERSION")));
+    addAndMakeVisible (demoLabel.get());
+    demoLabel->setFont (juce::Font ("OCR A Extended", 10.00f, juce::Font::plain));
+    demoLabel->setJustificationType (juce::Justification::centred);
     demoLabel->setEditable (false, false, false);
-    demoLabel->setColour (TextEditor::textColourId, Colours::black);
-    demoLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    demoLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    demoLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (guitar = new ChordsGuitar (ownerFilter->chordKbState, ownerFilter));
-    guitar->setName (L"new component");
+    demoLabel->setBounds (318, 5, 97, 24);
 
-    addAndMakeVisible (versionLabel = new Label (L"new label",
-                                                 L"99.99.99"));
-    versionLabel->setFont (Font (12.0000f, Font::plain));
-    versionLabel->setJustificationType (Justification::centredLeft);
+    guitar.reset (new ChordsGuitar (ownerFilter->chordKbState, ownerFilter));
+    addAndMakeVisible (guitar.get());
+    guitar->setName ("new component");
+
+    versionLabel.reset (new juce::Label ("new label",
+                                         TRANS("99.99.99")));
+    addAndMakeVisible (versionLabel.get());
+    versionLabel->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    versionLabel->setJustificationType (juce::Justification::centredLeft);
     versionLabel->setEditable (false, false, false);
-    versionLabel->setColour (TextEditor::textColourId, Colours::black);
-    versionLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    versionLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    versionLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (transposeInputButton = new ToggleButton (L"new toggle button"));
-    transposeInputButton->setTooltip (L"When checked, incoming trigger notes are transposed by the opposite of the \"Transpose\" slider.");
-    transposeInputButton->setButtonText (L"Also Transpose Input");
+    versionLabel->setBounds (352, 28, 58, 24);
+
+    transposeInputButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (transposeInputButton.get());
+    transposeInputButton->setTooltip (TRANS("When checked, incoming trigger notes are transposed by the opposite of the \"Transpose\" slider."));
+    transposeInputButton->setButtonText (TRANS("Also Transpose Input"));
     transposeInputButton->addListener (this);
 
-    addAndMakeVisible (toAllChannelsButton = new ToggleButton (L"new toggle button"));
-    toAllChannelsButton->setTooltip (L"When checked, CCs (and other control messages) are sent to all MIDI channels. Otherwise they are passed through on the original channel.");
-    toAllChannelsButton->setButtonText (L"CCs to All Chans");
+    transposeInputButton->setBounds (545, 370, 91, 21);
+
+    toAllChannelsButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (toAllChannelsButton.get());
+    toAllChannelsButton->setTooltip (TRANS("When checked, CCs (and other control messages) are sent to all MIDI channels. Otherwise they are passed through on the original channel."));
+    toAllChannelsButton->setButtonText (TRANS("CCs to All Chans"));
     toAllChannelsButton->addListener (this);
 
-    addAndMakeVisible (infoButton = new TextButton (L"new button"));
-    infoButton->setButtonText (L"?");
-    infoButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
+    toAllChannelsButton->setBounds (364, 397, 129, 20);
+
+    infoButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (infoButton.get());
+    infoButton->setButtonText (TRANS("?"));
+    infoButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
     infoButton->addListener (this);
 
-    addAndMakeVisible (specialMenuButton = new TextButton (L"new button"));
-    specialMenuButton->setButtonText (L"Global Functions...");
+    infoButton->setBounds (-1, -1, 19, 18);
+
+    specialMenuButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (specialMenuButton.get());
+    specialMenuButton->setButtonText (TRANS("Global Functions..."));
     specialMenuButton->addListener (this);
 
-    addAndMakeVisible (outputChannelSlider = new ChannelSlider (L"channel"));
-    outputChannelSlider->setTooltip (L"Output channel (\"Multi\" is as saved, otherwise overrides chord\'s saved channel)");
+    specialMenuButton->setBounds (6, 357, 140, 24);
+
+    outputChannelSlider.reset (new ChannelSlider ("channel"));
+    addAndMakeVisible (outputChannelSlider.get());
+    outputChannelSlider->setTooltip (TRANS("Output channel (\"Multi\" is as saved, otherwise overrides chord\'s saved channel)"));
     outputChannelSlider->setRange (0, 16, 1);
-    outputChannelSlider->setSliderStyle (Slider::LinearBar);
-    outputChannelSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    outputChannelSlider->setColour (Slider::backgroundColourId, Colours::white);
+    outputChannelSlider->setSliderStyle (juce::Slider::LinearBar);
+    outputChannelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    outputChannelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     outputChannelSlider->addListener (this);
 
-    addAndMakeVisible (applyChannelButton = new TextButton (L"new button"));
-    applyChannelButton->setTooltip (L"Applies input channel to selected chord");
-    applyChannelButton->setButtonText (L"Apply");
-    applyChannelButton->setConnectedEdges (Button::ConnectedOnLeft);
+    outputChannelSlider->setBounds (381, 372, 66, 16);
+
+    applyChannelButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (applyChannelButton.get());
+    applyChannelButton->setTooltip (TRANS("Applies input channel to selected chord"));
+    applyChannelButton->setButtonText (TRANS("Apply"));
+    applyChannelButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
     applyChannelButton->addListener (this);
 
-    addAndMakeVisible (label = new Label (L"new label",
-                                          L"Out Channel"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centred);
+    applyChannelButton->setBounds (44, 56, 32, 16);
+
+    label.reset (new juce::Label ("new label",
+                                  TRANS("Out Channel")));
+    addAndMakeVisible (label.get());
+    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label->setJustificationType (juce::Justification::centred);
     label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label2 = new Label (L"new label",
-                                           L"Transpose"));
-    label2->setFont (Font (15.0000f, Font::plain));
-    label2->setJustificationType (Justification::centred);
+    label->setBounds (368, 357, 91, 13);
+
+    label2.reset (new juce::Label ("new label",
+                                   TRANS("Transpose")));
+    addAndMakeVisible (label2.get());
+    label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label2->setJustificationType (juce::Justification::centred);
     label2->setEditable (false, false, false);
-    label2->setColour (TextEditor::textColourId, Colours::black);
-    label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (viewButton = new TextButton (L"view"));
-    viewButton->setTooltip (L"Switch between keyboard & guitar views");
-    viewButton->setButtonText (L"View");
-    viewButton->setConnectedEdges (Button::ConnectedOnTop);
+    label2->setBounds (461, 357, 91, 13);
+
+    viewButton.reset (new juce::TextButton ("view"));
+    addAndMakeVisible (viewButton.get());
+    viewButton->setTooltip (TRANS("Switch between keyboard & guitar views"));
+    viewButton->setButtonText (TRANS("View"));
+    viewButton->setConnectedEdges (juce::Button::ConnectedOnTop);
     viewButton->addListener (this);
 
-    addAndMakeVisible (setupButton = new TextButton (L"new button"));
-    setupButton->setButtonText (L"Setup");
-    setupButton->setConnectedEdges (Button::ConnectedOnTop);
+    viewButton->setBounds (151, 190, 41, 21);
+
+    setupButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (setupButton.get());
+    setupButton->setButtonText (TRANS("Setup"));
+    setupButton->setConnectedEdges (juce::Button::ConnectedOnTop);
     setupButton->addListener (this);
 
-    addAndMakeVisible (strumDirectionButton = new TextButton (L"new button"));
-    strumDirectionButton->setTooltip (L"Strum Direction");
-    strumDirectionButton->setButtonText (L"Down");
+    setupButton->setBounds (195, 190, 45, 21);
+
+    strumDirectionButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (strumDirectionButton.get());
+    strumDirectionButton->setTooltip (TRANS("Strum Direction"));
+    strumDirectionButton->setButtonText (TRANS("Down"));
     strumDirectionButton->addListener (this);
 
-    addAndMakeVisible (strumButton = new TextButton (L"new button"));
-    strumButton->setButtonText (L"Strum");
-    strumButton->setConnectedEdges (Button::ConnectedOnRight);
+    strumDirectionButton->setBounds (267, 327, 48, 19);
+
+    strumButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (strumButton.get());
+    strumButton->setButtonText (TRANS("Strum"));
+    strumButton->setConnectedEdges (juce::Button::ConnectedOnRight);
     strumButton->addListener (this);
 
-    addAndMakeVisible (maxTimeSlider = new VSTSlider (L"maxTime"));
-    maxTimeSlider->setTooltip (L"Max Strum Time");
+    strumButton->setBounds (142, 391, 54, 21);
+
+    maxTimeSlider.reset (new VSTSlider ("maxTime"));
+    addAndMakeVisible (maxTimeSlider.get());
+    maxTimeSlider->setTooltip (TRANS("Max Strum Time"));
     maxTimeSlider->setRange (100, 3000, 1);
-    maxTimeSlider->setSliderStyle (Slider::LinearBar);
-    maxTimeSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    maxTimeSlider->setColour (Slider::backgroundColourId, Colours::white);
+    maxTimeSlider->setSliderStyle (juce::Slider::LinearBar);
+    maxTimeSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    maxTimeSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     maxTimeSlider->addListener (this);
 
-    addAndMakeVisible (speedSlider = new VSTSlider (L"speed"));
-    speedSlider->setTooltip (L"Strum Speed");
+    maxTimeSlider->setBounds (202, 364, 66, 16);
+
+    speedSlider.reset (new VSTSlider ("speed"));
+    addAndMakeVisible (speedSlider.get());
+    speedSlider->setTooltip (TRANS("Strum Speed"));
     speedSlider->setRange (0, 100, 1);
-    speedSlider->setSliderStyle (Slider::LinearBar);
-    speedSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    speedSlider->setColour (Slider::backgroundColourId, Colours::white);
+    speedSlider->setSliderStyle (juce::Slider::LinearBar);
+    speedSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    speedSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     speedSlider->addListener (this);
 
-    addAndMakeVisible (accelSlider = new VSTSlider (L"accel"));
-    accelSlider->setTooltip (L"Strum Acceleration");
+    speedSlider->setBounds (202, 393, 66, 16);
+
+    accelSlider.reset (new VSTSlider ("accel"));
+    addAndMakeVisible (accelSlider.get());
+    accelSlider->setTooltip (TRANS("Strum Acceleration"));
     accelSlider->setRange (-100, 100, 1);
-    accelSlider->setSliderStyle (Slider::LinearBar);
-    accelSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    accelSlider->setColour (Slider::backgroundColourId, Colours::white);
+    accelSlider->setSliderStyle (juce::Slider::LinearBar);
+    accelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    accelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     accelSlider->addListener (this);
 
-    addAndMakeVisible (velRampSlider = new VSTSlider (L"velRamp"));
-    velRampSlider->setTooltip (L"Strum Velocity Ramp");
+    accelSlider->setBounds (275, 393, 66, 16);
+
+    velRampSlider.reset (new VSTSlider ("velRamp"));
+    addAndMakeVisible (velRampSlider.get());
+    velRampSlider->setTooltip (TRANS("Strum Velocity Ramp"));
     velRampSlider->setRange (-100, 100, 1);
-    velRampSlider->setSliderStyle (Slider::LinearBar);
-    velRampSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    velRampSlider->setColour (Slider::backgroundColourId, Colours::white);
+    velRampSlider->setSliderStyle (juce::Slider::LinearBar);
+    velRampSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    velRampSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
     velRampSlider->addListener (this);
 
-    addAndMakeVisible (infoBox = new TextEditor (L"new text editor"));
+    velRampSlider->setBounds (275, 364, 66, 16);
+
+    infoBox.reset (new juce::TextEditor ("new text editor"));
+    addAndMakeVisible (infoBox.get());
     infoBox->setMultiLine (true);
     infoBox->setReturnKeyStartsNewLine (false);
     infoBox->setReadOnly (true);
     infoBox->setScrollbarsShown (true);
     infoBox->setCaretVisible (false);
     infoBox->setPopupMenuEnabled (true);
-    infoBox->setColour (TextEditor::backgroundColourId, Colour (0xf2ffffff));
-    infoBox->setColour (TextEditor::outlineColourId, Colours::black);
-    infoBox->setColour (TextEditor::shadowColourId, Colour (0x38000000));
-    infoBox->setText (String());
+    infoBox->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0xf2ffffff));
+    infoBox->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
+    infoBox->setColour (juce::TextEditor::shadowColourId, juce::Colour (0x38000000));
+    infoBox->setText (juce::String());
 
-    addAndMakeVisible (tuningSaveEditor = new TextEditor (L"new text editor"));
+    tuningSaveEditor.reset (new juce::TextEditor ("new text editor"));
+    addAndMakeVisible (tuningSaveEditor.get());
     tuningSaveEditor->setMultiLine (false);
     tuningSaveEditor->setReturnKeyStartsNewLine (false);
     tuningSaveEditor->setReadOnly (false);
     tuningSaveEditor->setScrollbarsShown (true);
     tuningSaveEditor->setCaretVisible (true);
     tuningSaveEditor->setPopupMenuEnabled (true);
-    tuningSaveEditor->setColour (TextEditor::outlineColourId, Colours::black);
-    tuningSaveEditor->setText (String());
+    tuningSaveEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
+    tuningSaveEditor->setText (juce::String());
 
-    cachedImage_midichordsLogo_png = ImageCache::getFromMemory (midichordsLogo_png, midichordsLogo_pngSize);
+    tuningSaveEditor->setBounds (253, -31, 150, 24);
+
+    cachedImage_midichordsLogo_png_1 = juce::ImageCache::getFromMemory (midichordsLogo_png, midichordsLogo_pngSize);
 
     //[UserPreSize]
 
@@ -636,67 +751,67 @@ MidiChordsEditor::~MidiChordsEditor()
 	deleteAndZero (browser);
     //[/Destructor_pre]
 
-    deleteAndZero (toggleButton);
-    deleteAndZero (chordNameLabel);
-    deleteAndZero (chordKeyboard);
-    deleteAndZero (triggerKeyboard);
-    deleteAndZero (chordLearnButton);
-    deleteAndZero (triggerLearnButton);
-    deleteAndZero (channelSlider);
-    deleteAndZero (outputLabel);
-    deleteAndZero (pizButton);
-    deleteAndZero (triggerLabel);
-    deleteAndZero (clearChordButton);
-    deleteAndZero (resetChordButton);
-    deleteAndZero (clearAllButton);
-    deleteAndZero (resetAllButton);
-    deleteAndZero (transposeUpButton);
-    deleteAndZero (transposeDownButton);
-    deleteAndZero (transposeChordUpButton);
-    deleteAndZero (transposeChordDownButton);
-    deleteAndZero (transposeSlider);
-    deleteAndZero (velocitySlider);
-    deleteAndZero (variationSlider);
-    deleteAndZero (normalButton);
-    deleteAndZero (octaveButton);
-    deleteAndZero (globalButton);
-    deleteAndZero (flatsButton);
-    deleteAndZero (transposeChordUpButton2);
-    deleteAndZero (transposeChordDownButton2);
-    deleteAndZero (chordMenuButton);
-    deleteAndZero (presetNameLabel);
-    deleteAndZero (presetMenuButton);
-    deleteAndZero (chordSaveEditor);
-    deleteAndZero (copyButton);
-    deleteAndZero (pasteButton);
-    deleteAndZero (previewButton);
-    deleteAndZero (chordEditor);
-    deleteAndZero (pcButton);
-    deleteAndZero (nextButton);
-    deleteAndZero (prevButton);
-    deleteAndZero (triggerNoteLabel);
-    deleteAndZero (learnChanSlider);
-    deleteAndZero (demoLabel);
-    deleteAndZero (guitar);
-    deleteAndZero (versionLabel);
-    deleteAndZero (transposeInputButton);
-    deleteAndZero (toAllChannelsButton);
-    deleteAndZero (infoButton);
-    deleteAndZero (specialMenuButton);
-    deleteAndZero (outputChannelSlider);
-    deleteAndZero (applyChannelButton);
-    deleteAndZero (label);
-    deleteAndZero (label2);
-    deleteAndZero (viewButton);
-    deleteAndZero (setupButton);
-    deleteAndZero (strumDirectionButton);
-    deleteAndZero (strumButton);
-    deleteAndZero (maxTimeSlider);
-    deleteAndZero (speedSlider);
-    deleteAndZero (accelSlider);
-    deleteAndZero (velRampSlider);
-    deleteAndZero (infoBox);
-    deleteAndZero (tuningSaveEditor);
+    toggleButton = nullptr;
+    chordNameLabel = nullptr;
+    chordKeyboard = nullptr;
+    triggerKeyboard = nullptr;
+    chordLearnButton = nullptr;
+    triggerLearnButton = nullptr;
+    channelSlider = nullptr;
+    outputLabel = nullptr;
+    pizButton = nullptr;
+    triggerLabel = nullptr;
+    clearChordButton = nullptr;
+    resetChordButton = nullptr;
+    clearAllButton = nullptr;
+    resetAllButton = nullptr;
+    transposeUpButton = nullptr;
+    transposeDownButton = nullptr;
+    transposeChordUpButton = nullptr;
+    transposeChordDownButton = nullptr;
+    transposeSlider = nullptr;
+    velocitySlider = nullptr;
+    variationSlider = nullptr;
+    normalButton = nullptr;
+    octaveButton = nullptr;
+    globalButton = nullptr;
+    flatsButton = nullptr;
+    transposeChordUpButton2 = nullptr;
+    transposeChordDownButton2 = nullptr;
+    chordMenuButton = nullptr;
+    presetNameLabel = nullptr;
+    presetMenuButton = nullptr;
+    chordSaveEditor = nullptr;
+    copyButton = nullptr;
+    pasteButton = nullptr;
+    previewButton = nullptr;
+    chordEditor = nullptr;
+    pcButton = nullptr;
+    nextButton = nullptr;
+    prevButton = nullptr;
+    triggerNoteLabel = nullptr;
+    learnChanSlider = nullptr;
+    demoLabel = nullptr;
+    guitar = nullptr;
+    versionLabel = nullptr;
+    transposeInputButton = nullptr;
+    toAllChannelsButton = nullptr;
+    infoButton = nullptr;
+    specialMenuButton = nullptr;
+    outputChannelSlider = nullptr;
+    applyChannelButton = nullptr;
+    label = nullptr;
+    label2 = nullptr;
+    viewButton = nullptr;
+    setupButton = nullptr;
+    strumDirectionButton = nullptr;
+    strumButton = nullptr;
+    maxTimeSlider = nullptr;
+    speedSlider = nullptr;
+    accelSlider = nullptr;
+    velRampSlider = nullptr;
+    infoBox = nullptr;
+    tuningSaveEditor = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -708,106 +823,216 @@ MidiChordsEditor::~MidiChordsEditor()
 }
 
 //==============================================================================
-void MidiChordsEditor::paint (Graphics& g)
+void MidiChordsEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffd8d8d8));
+    g.fillAll (juce::Colour (0xffd8d8d8));
 
-    g.setGradientFill (ColourGradient (Colours::white,
-                                       61.0f, (float) (-31),
-                                       Colour (0xe7e7e7),
-                                       61.0f, 23.0f,
-                                       false));
-    g.fillRect (0, 0, 640, 100);
+    {
+        int x = 0, y = 0, width = 640, height = 100;
+        juce::Colour fillColour1 = juce::Colours::white, fillColour2 = juce::Colour (0x00e7e7e7);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             61.0f - 0.0f + x,
+                                             static_cast<float> (-31) - 0.0f + y,
+                                             fillColour2,
+                                             61.0f - 0.0f + x,
+                                             23.0f - 0.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colours::black);
-    g.drawImageWithin (cachedImage_midichordsLogo_png,
-                       113, 7, 234, 45,
-                       RectanglePlacement::centred,
-                       false);
+    {
+        int x = 113, y = 7, width = 234, height = 45;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (juce::Colours::black);
+        g.drawImageWithin (cachedImage_midichordsLogo_png_1,
+                           x, y, width, height,
+                           juce::RectanglePlacement::centred,
+                           false);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       0.0f, 331.0f,
-                                       Colour (0xff828282),
-                                       0.0f, 360.0f,
-                                       false));
-    g.fillRect (0, 348, proportionOfWidth (1.0000f), 72);
+    {
+        int x = 0, y = 348, width = proportionOfWidth (1.0000f), height = 72;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff828282);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             0.0f - 0.0f + x,
+                                             331.0f - 348.0f + y,
+                                             fillColour2,
+                                             0.0f - 0.0f + x,
+                                             360.0f - 348.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setGradientFill (ColourGradient (Colour (0xff0000),
-                                       230.0f, 323.0f,
-                                       Colours::black,
-                                       230.0f, 377.0f,
-                                       false));
-    g.drawRect (196, 323, 150, 92, 1);
+    {
+        int x = 196, y = 323, width = 150, height = 92;
+        juce::Colour strokeColour1 = juce::Colour (0x00ff0000), strokeColour2 = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (strokeColour1,
+                                             230.0f - 196.0f + x,
+                                             323.0f - 323.0f + y,
+                                             strokeColour2,
+                                             230.0f - 196.0f + x,
+                                             377.0f - 323.0f + y,
+                                             false));
+        g.drawRect (x, y, width, height, 1);
 
-    g.setColour (Colours::black);
-    g.fillRoundedRectangle (568.0f, 76.0f, 66.0f, 106.0f, 10.0000f);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (15.0000f, Font::plain));
-    g.drawText (L"Trigger Channel:",
-                14, 319, 103, 24,
-                Justification::centred, true);
+    {
+        float x = 568.0f, y = 76.0f, width = 66.0f, height = 106.0f;
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (15.0000f, Font::plain));
-    g.drawText (L"Trigger Mode:",
-                330, 318, 126, 24,
-                Justification::centred, true);
+    {
+        int x = 14, y = 319, width = 103, height = 24;
+        juce::String text (TRANS("Trigger Channel:"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.fillRect (6, 225, getWidth() - 12, 93);
+    {
+        int x = 330, y = 318, width = 126, height = 24;
+        juce::String text (TRANS("Trigger Mode:"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.fillRect (6, 97, getWidth() - 12, 93);
+    {
+        int x = 6, y = 225, width = getWidth() - 12, height = 93;
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colours::black);
-    g.fillRoundedRectangle (462.0f, 202.0f, 172.0f, 36.0f, 10.0000f);
+    {
+        int x = 6, y = 97, width = getWidth() - 12, height = 93;
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setGradientFill (ColourGradient (Colour (0xff666666),
-                                       248.0f, 183.0f,
-                                       Colour (0xffbfbfbf),
-                                       248.0f, 215.0f,
-                                       false));
-    g.fillRoundedRectangle (250.0f, 195.0f, 173.0f, 26.0f, 12.0000f);
+    {
+        float x = 462.0f, y = 202.0f, width = 172.0f, height = 36.0f;
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (10.7000f, Font::plain));
-    g.drawText (L"Input Channel",
-                6, 46, 71, 8,
-                Justification::centred, true);
+    {
+        float x = 250.0f, y = 195.0f, width = 173.0f, height = 26.0f;
+        juce::Colour fillColour1 = juce::Colour (0xff666666), fillColour2 = juce::Colour (0xffbfbfbf);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             248.0f - 250.0f + x,
+                                             183.0f - 195.0f + y,
+                                             fillColour2,
+                                             248.0f - 250.0f + x,
+                                             215.0f - 195.0f + y,
+                                             false));
+        g.fillRoundedRectangle (x, y, width, height, 12.000f);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Strum:",
-                219, 328, 53, 16,
-                Justification::centred, true);
+    {
+        int x = 6, y = 46, width = 71, height = 8;
+        juce::String text (TRANS("Input Channel"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (10.70f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Max Time",
-                204, 351, 62, 16,
-                Justification::centred, true);
+    {
+        int x = 219, y = 328, width = 53, height = 16;
+        juce::String text (TRANS("Strum:"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Vel. Ramp",
-                277, 351, 62, 16,
-                Justification::centred, true);
+    {
+        int x = 204, y = 351, width = 62, height = 16;
+        juce::String text (TRANS("Max Time"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Accel",
-                277, 380, 62, 16,
-                Justification::centred, true);
+    {
+        int x = 277, y = 351, width = 62, height = 16;
+        juce::String text (TRANS("Vel. Ramp"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"Speed",
-                204, 380, 62, 16,
-                Justification::centred, true);
+    {
+        int x = 277, y = 380, width = 62, height = 16;
+        juce::String text (TRANS("Accel"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
+
+    {
+        int x = 204, y = 380, width = 62, height = 16;
+        juce::String text (TRANS("Speed"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -815,83 +1040,29 @@ void MidiChordsEditor::paint (Graphics& g)
 
 void MidiChordsEditor::resized()
 {
-    toggleButton->setBounds (372, 50, 150, 24);
-    chordNameLabel->setBounds (375, 72, 144, 26);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     chordKeyboard->setBounds (8, 99, getWidth() - 16, 89);
     triggerKeyboard->setBounds (8, 227, getWidth() - 16, 89);
-    chordLearnButton->setBounds (6, 76, 45, 21);
-    triggerLearnButton->setBounds (6, 204, 80, 21);
-    channelSlider->setBounds (123, 323, 66, 16);
-    outputLabel->setBounds (573, 76, 54, 24);
-    pizButton->setBounds (38, 3, 74, 40);
-    triggerLabel->setBounds (464, 203, 97, 24);
-    clearChordButton->setBounds (291, 76, 40, 21);
-    resetChordButton->setBounds (331, 76, 40, 21);
-    clearAllButton->setBounds (8, 429, 64, 24);
-    resetAllButton->setBounds (69, 441, 64, 24);
-    transposeUpButton->setBounds (172, 425, 32, 24);
-    transposeDownButton->setBounds (143, 425, 29, 24);
-    transposeChordUpButton->setBounds (159, 76, 23, 21);
-    transposeChordDownButton->setBounds (136, 76, 23, 21);
-    transposeSlider->setBounds (475, 372, 66, 16);
-    velocitySlider->setBounds (397, 197, 22, 22);
-    variationSlider->setBounds (333, 432, 104, 16);
-    normalButton->setBounds (442, 318, 64, 24);
-    octaveButton->setBounds (506, 318, 64, 24);
-    globalButton->setBounds (570, 318, 64, 24);
-    flatsButton->setBounds (519, 76, 48, 24);
-    transposeChordUpButton2->setBounds (182, 76, 25, 21);
-    transposeChordDownButton2->setBounds (111, 76, 25, 21);
-    chordMenuButton->setBounds (55, 76, 52, 21);
-    presetNameLabel->setBounds (414, 12, 191, 26);
-    presetMenuButton->setBounds (605, 12, 25, 26);
-    chordSaveEditor->setBounds (82, -35, 150, 24);
-    copyButton->setBounds (211, 73, 38, 21);
-    pasteButton->setBounds (249, 73, 38, 21);
-    previewButton->setBounds (251, 196, 143, 24);
-    chordEditor->setBounds (178, 54, 144, 20);
-    pcButton->setBounds (500, 397, 134, 20);
-    nextButton->setBounds (113, 204, 23, 21);
-    prevButton->setBounds (90, 204, 23, 21);
-    triggerNoteLabel->setBounds (558, 203, 73, 24);
-    learnChanSlider->setBounds (6, 56, 38, 16);
-    demoLabel->setBounds (318, 5, 97, 24);
     guitar->setBounds (8, 99, getWidth() - 16, 89);
-    versionLabel->setBounds (352, 28, 58, 24);
-    transposeInputButton->setBounds (545, 370, 91, 21);
-    toAllChannelsButton->setBounds (364, 397, 129, 20);
-    infoButton->setBounds (-1, -1, 19, 18);
-    specialMenuButton->setBounds (6, 357, 140, 24);
-    outputChannelSlider->setBounds (381, 372, 66, 16);
-    applyChannelButton->setBounds (44, 56, 32, 16);
-    label->setBounds (368, 357, 91, 13);
-    label2->setBounds (461, 357, 91, 13);
-    viewButton->setBounds (151, 190, 41, 21);
-    setupButton->setBounds (195, 190, 45, 21);
-    strumDirectionButton->setBounds (267, 327, 48, 19);
-    strumButton->setBounds (142, 391, 54, 21);
-    maxTimeSlider->setBounds (202, 364, 66, 16);
-    speedSlider->setBounds (202, 393, 66, 16);
-    accelSlider->setBounds (275, 393, 66, 16);
-    velRampSlider->setBounds (275, 364, 66, 16);
-    infoBox->setBounds (proportionOfWidth (0.5000f) - ((500) / 2), proportionOfHeight (0.5000f) - ((300) / 2), 500, 300);
-    tuningSaveEditor->setBounds (253, -31, 150, 24);
+    infoBox->setBounds (proportionOfWidth (0.5000f) - (500 / 2), proportionOfHeight (0.5000f) - (300 / 2), 500, 300);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
 
-void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
+void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == toggleButton)
+    if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kGuess,toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
-    else if (buttonThatWasClicked == chordLearnButton)
+    else if (buttonThatWasClicked == chordLearnButton.get())
     {
         //[UserButtonCode_chordLearnButton] -- add your button handler code here..
 		if (getFilter()->getParameter(kLearnChord)>0)
@@ -900,7 +1071,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 			getFilter()->setParameterNotifyingHost(kLearnChord,1.f);
         //[/UserButtonCode_chordLearnButton]
     }
-    else if (buttonThatWasClicked == triggerLearnButton)
+    else if (buttonThatWasClicked == triggerLearnButton.get())
     {
         //[UserButtonCode_triggerLearnButton] -- add your button handler code here..
 		if (getFilter()->getParameter(kFollowInput)>0)
@@ -909,91 +1080,91 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 			getFilter()->setParameterNotifyingHost(kFollowInput,1.f);
         //[/UserButtonCode_triggerLearnButton]
     }
-    else if (buttonThatWasClicked == clearChordButton)
+    else if (buttonThatWasClicked == clearChordButton.get())
     {
         //[UserButtonCode_clearChordButton] -- add your button handler code here..
 		getFilter()->clearChord(getFilter()->getCurrentTrigger());
         //[/UserButtonCode_clearChordButton]
     }
-    else if (buttonThatWasClicked == resetChordButton)
+    else if (buttonThatWasClicked == resetChordButton.get())
     {
         //[UserButtonCode_resetChordButton] -- add your button handler code here..
 		getFilter()->resetChord(getFilter()->getCurrentTrigger());
         //[/UserButtonCode_resetChordButton]
     }
-    else if (buttonThatWasClicked == clearAllButton)
+    else if (buttonThatWasClicked == clearAllButton.get())
     {
         //[UserButtonCode_clearAllButton] -- add your button handler code here..
 		getFilter()->clearAllChords();
         //[/UserButtonCode_clearAllButton]
     }
-    else if (buttonThatWasClicked == resetAllButton)
+    else if (buttonThatWasClicked == resetAllButton.get())
     {
         //[UserButtonCode_resetAllButton] -- add your button handler code here..
 		getFilter()->resetAllChords();
         //[/UserButtonCode_resetAllButton]
     }
-    else if (buttonThatWasClicked == transposeUpButton)
+    else if (buttonThatWasClicked == transposeUpButton.get())
     {
         //[UserButtonCode_transposeUpButton] -- add your button handler code here..
 		getFilter()->transposeAll(true);
         //[/UserButtonCode_transposeUpButton]
     }
-    else if (buttonThatWasClicked == transposeDownButton)
+    else if (buttonThatWasClicked == transposeDownButton.get())
     {
         //[UserButtonCode_transposeDownButton] -- add your button handler code here..
 		getFilter()->transposeAll(false);
         //[/UserButtonCode_transposeDownButton]
     }
-    else if (buttonThatWasClicked == transposeChordUpButton)
+    else if (buttonThatWasClicked == transposeChordUpButton.get())
     {
         //[UserButtonCode_transposeChordUpButton] -- add your button handler code here..
 		getFilter()->transposeChord(getFilter()->getCurrentTrigger(),true);
         //[/UserButtonCode_transposeChordUpButton]
     }
-    else if (buttonThatWasClicked == transposeChordDownButton)
+    else if (buttonThatWasClicked == transposeChordDownButton.get())
     {
         //[UserButtonCode_transposeChordDownButton] -- add your button handler code here..
 		getFilter()->transposeChord(getFilter()->getCurrentTrigger(),false);
         //[/UserButtonCode_transposeChordDownButton]
     }
-    else if (buttonThatWasClicked == normalButton)
+    else if (buttonThatWasClicked == normalButton.get())
     {
         //[UserButtonCode_normalButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kMode,((float)Normal)/(float)(numModes-1));
         //[/UserButtonCode_normalButton]
     }
-    else if (buttonThatWasClicked == octaveButton)
+    else if (buttonThatWasClicked == octaveButton.get())
     {
         //[UserButtonCode_octaveButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost(kMode,((float)Octave)/(float)(numModes-1));
         //[/UserButtonCode_octaveButton]
     }
-    else if (buttonThatWasClicked == globalButton)
+    else if (buttonThatWasClicked == globalButton.get())
     {
         //[UserButtonCode_globalButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost(kMode,((float)Global)/(float)(numModes-1));
         //[/UserButtonCode_globalButton]
     }
-    else if (buttonThatWasClicked == flatsButton)
+    else if (buttonThatWasClicked == flatsButton.get())
     {
         //[UserButtonCode_flatsButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kFlats,flatsButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_flatsButton]
     }
-    else if (buttonThatWasClicked == transposeChordUpButton2)
+    else if (buttonThatWasClicked == transposeChordUpButton2.get())
     {
         //[UserButtonCode_transposeChordUpButton2] -- add your button handler code here..
 		getFilter()->transposeCurrentChordByOctave(true);
         //[/UserButtonCode_transposeChordUpButton2]
     }
-    else if (buttonThatWasClicked == transposeChordDownButton2)
+    else if (buttonThatWasClicked == transposeChordDownButton2.get())
     {
         //[UserButtonCode_transposeChordDownButton2] -- add your button handler code here..
 		getFilter()->transposeCurrentChordByOctave(false);
         //[/UserButtonCode_transposeChordDownButton2]
     }
-    else if (buttonThatWasClicked == chordMenuButton)
+    else if (buttonThatWasClicked == chordMenuButton.get())
     {
         //[UserButtonCode_chordMenuButton] -- add your button handler code here..
 		StringArray list;
@@ -1015,7 +1186,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
 		//menu.showMenuAsync (PopupMenu::Options().withTargetComponent (chordMenuButton),
 		//	ModalCallbackFunction::forComponent (chordMenuCallback, this));
-		int result = menu.showAt(chordMenuButton);
+		int result = menu.showAt(chordMenuButton.get());
 
 		if (result!=0)
 		{
@@ -1025,7 +1196,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_chordMenuButton]
     }
-    else if (buttonThatWasClicked == presetMenuButton)
+    else if (buttonThatWasClicked == presetMenuButton.get())
     {
         //[UserButtonCode_presetMenuButton] -- add your button handler code here..
 		//Array<File> list;
@@ -1043,7 +1214,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		//		menu.addItem(i+1,list[i].getFileNameWithoutExtension());
 		//	}
 		//}
-		int result = menu.showAt(presetMenuButton);
+		int result = menu.showAt(presetMenuButton.get());
 		if (result!=0)
 		{
 			//if (result>0)
@@ -1053,7 +1224,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_presetMenuButton]
     }
-    else if (buttonThatWasClicked == copyButton)
+    else if (buttonThatWasClicked == copyButton.get())
     {
         //[UserButtonCode_copyButton] -- add your button handler code here..
 		const int t = getFilter()->getCurrentTrigger();
@@ -1069,55 +1240,55 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		SystemClipboard::copyTextToClipboard(chordString);
         //[/UserButtonCode_copyButton]
     }
-    else if (buttonThatWasClicked == pasteButton)
+    else if (buttonThatWasClicked == pasteButton.get())
     {
         //[UserButtonCode_pasteButton] -- add your button handler code here..
 		chordFromString(SystemClipboard::getTextFromClipboard());
         //[/UserButtonCode_pasteButton]
     }
-    else if (buttonThatWasClicked == pcButton)
+    else if (buttonThatWasClicked == pcButton.get())
     {
         //[UserButtonCode_pcButton] -- add your button handler code here..
 		getFilter()->toggleUsePC(pcButton->getToggleState());
         //[/UserButtonCode_pcButton]
     }
-    else if (buttonThatWasClicked == nextButton)
+    else if (buttonThatWasClicked == nextButton.get())
     {
         //[UserButtonCode_nextButton] -- add your button handler code here..
 		getFilter()->selectTrigger(getFilter()->getCurrentTrigger()+1);
         //[/UserButtonCode_nextButton]
     }
-    else if (buttonThatWasClicked == prevButton)
+    else if (buttonThatWasClicked == prevButton.get())
     {
         //[UserButtonCode_prevButton] -- add your button handler code here..
 		getFilter()->selectTrigger(getFilter()->getCurrentTrigger()-1);
         //[/UserButtonCode_prevButton]
     }
-    else if (buttonThatWasClicked == transposeInputButton)
+    else if (buttonThatWasClicked == transposeInputButton.get())
     {
         //[UserButtonCode_transposeInputButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kInputTranspose,transposeInputButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_transposeInputButton]
     }
-    else if (buttonThatWasClicked == toAllChannelsButton)
+    else if (buttonThatWasClicked == toAllChannelsButton.get())
     {
         //[UserButtonCode_toAllChannelsButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kToAllChannels,toAllChannelsButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toAllChannelsButton]
     }
-    else if (buttonThatWasClicked == infoButton)
+    else if (buttonThatWasClicked == infoButton.get())
     {
         //[UserButtonCode_infoButton] -- add your button handler code here..
 		infoBox->moveCaretToTop(false);
 		if (infoButton->getToggleState())
-			Desktop::getInstance().getAnimator().fadeOut(infoBox,150);
+			Desktop::getInstance().getAnimator().fadeOut(infoBox.get(),150);
 		else
-			Desktop::getInstance().getAnimator().fadeIn(infoBox,100);
+			Desktop::getInstance().getAnimator().fadeIn(infoBox.get(),100);
 		//infoBox->setVisible(!infoBox->isVisible());
 		infoButton->setToggleState(!infoButton->getToggleState(),false);
         //[/UserButtonCode_infoButton]
     }
-    else if (buttonThatWasClicked == specialMenuButton)
+    else if (buttonThatWasClicked == specialMenuButton.get())
     {
         //[UserButtonCode_specialMenuButton] -- add your button handler code here..
 		PopupMenu m;
@@ -1145,13 +1316,13 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_specialMenuButton]
     }
-    else if (buttonThatWasClicked == applyChannelButton)
+    else if (buttonThatWasClicked == applyChannelButton.get())
     {
         //[UserButtonCode_applyChannelButton] -- add your button handler code here..
 		getFilter()->applyChannelToChord();
         //[/UserButtonCode_applyChannelButton]
     }
-    else if (buttonThatWasClicked == viewButton)
+    else if (buttonThatWasClicked == viewButton.get())
     {
         //[UserButtonCode_viewButton] -- add your button handler code here..
 		setupButton->setEnabled(!guitar->isVisible());
@@ -1159,7 +1330,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		getFilter()->setGuitarView(guitar->isVisible());
         //[/UserButtonCode_viewButton]
     }
-    else if (buttonThatWasClicked == setupButton)
+    else if (buttonThatWasClicked == setupButton.get())
     {
         //[UserButtonCode_setupButton] -- add your button handler code here..
 		getFilter()->fillGuitarPresetList();
@@ -1188,7 +1359,7 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 			custom.addCustomItem(-1,*stringSlider[i],150,18,false);
 		m.addSubMenu("Customize",custom);
 
-		int result = m.showAt(setupButton);
+		int result = m.showAt(setupButton.get());
 		if (result>0) {
 			if (result>=10000) {
 				;
@@ -1198,13 +1369,13 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_setupButton]
     }
-    else if (buttonThatWasClicked == strumDirectionButton)
+    else if (buttonThatWasClicked == strumDirectionButton.get())
     {
         //[UserButtonCode_strumDirectionButton] -- add your button handler code here..
 		getFilter()->setStrumDirection(!getFilter()->getStrumDirection());
         //[/UserButtonCode_strumDirectionButton]
     }
-    else if (buttonThatWasClicked == strumButton)
+    else if (buttonThatWasClicked == strumButton.get())
     {
         //[UserButtonCode_strumButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kStrum,strumButton->getToggleState() ? 0.f : 1.f);
@@ -1212,72 +1383,72 @@ void MidiChordsEditor::buttonClicked (Button* buttonThatWasClicked)
     }
 
     //[UserbuttonClicked_Post]
-    else if (buttonThatWasClicked == pizButton)
+    else if (buttonThatWasClicked == pizButton.get())
     {
 		URL("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
 	}
     //[/UserbuttonClicked_Post]
 }
 
-void MidiChordsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void MidiChordsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == channelSlider)
+    if (sliderThatWasMoved == channelSlider.get())
     {
         //[UserSliderCode_channelSlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kChannel,(float)channelSlider->getValue()/16.f);
         //[/UserSliderCode_channelSlider]
     }
-    else if (sliderThatWasMoved == transposeSlider)
+    else if (sliderThatWasMoved == transposeSlider.get())
     {
         //[UserSliderCode_transposeSlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kTranspose,(float)(transposeSlider->getValue()+48)/96.f);
         //[/UserSliderCode_transposeSlider]
     }
-    else if (sliderThatWasMoved == velocitySlider)
+    else if (sliderThatWasMoved == velocitySlider.get())
     {
         //[UserSliderCode_velocitySlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kVelocity,(float)(velocitySlider->getValue()-1)/126.f);
         //[/UserSliderCode_velocitySlider]
     }
-    else if (sliderThatWasMoved == variationSlider)
+    else if (sliderThatWasMoved == variationSlider.get())
     {
         //[UserSliderCode_variationSlider] -- add your slider handling code here..
         //[/UserSliderCode_variationSlider]
     }
-    else if (sliderThatWasMoved == learnChanSlider)
+    else if (sliderThatWasMoved == learnChanSlider.get())
     {
         //[UserSliderCode_learnChanSlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kLearnChannel,(float)learnChanSlider->getValue()/16.f);
         //[/UserSliderCode_learnChanSlider]
     }
-    else if (sliderThatWasMoved == outputChannelSlider)
+    else if (sliderThatWasMoved == outputChannelSlider.get())
     {
         //[UserSliderCode_outputChannelSlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kOutChannel,(float)outputChannelSlider->getValue()/16.f);
         //[/UserSliderCode_outputChannelSlider]
     }
-    else if (sliderThatWasMoved == maxTimeSlider)
+    else if (sliderThatWasMoved == maxTimeSlider.get())
     {
         //[UserSliderCode_maxTimeSlider] -- add your slider handling code here..
 		maxTimeSlider->setVSTParam();
         //[/UserSliderCode_maxTimeSlider]
     }
-    else if (sliderThatWasMoved == speedSlider)
+    else if (sliderThatWasMoved == speedSlider.get())
     {
         //[UserSliderCode_speedSlider] -- add your slider handling code here..
 		speedSlider->setVSTParam();
         //[/UserSliderCode_speedSlider]
     }
-    else if (sliderThatWasMoved == accelSlider)
+    else if (sliderThatWasMoved == accelSlider.get())
     {
         //[UserSliderCode_accelSlider] -- add your slider handling code here..
 		accelSlider->setVSTParam();
         //[/UserSliderCode_accelSlider]
     }
-    else if (sliderThatWasMoved == velRampSlider)
+    else if (sliderThatWasMoved == velRampSlider.get())
     {
         //[UserSliderCode_velRampSlider] -- add your slider handling code here..
 		velRampSlider->setVSTParam();
@@ -1383,25 +1554,25 @@ void MidiChordsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void MidiChordsEditor::labelTextChanged (Label* labelThatHasChanged)
+void MidiChordsEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 {
     //[UserlabelTextChanged_Pre]
     //[/UserlabelTextChanged_Pre]
 
-    if (labelThatHasChanged == presetNameLabel)
+    if (labelThatHasChanged == presetNameLabel.get())
     {
         //[UserLabelCode_presetNameLabel] -- add your label text handling code here..
 		getFilter()->changeProgramName(getFilter()->getCurrentProgram(),presetNameLabel->getText());
 		getFilter()->updateHostDisplay();
         //[/UserLabelCode_presetNameLabel]
     }
-    else if (labelThatHasChanged == chordEditor)
+    else if (labelThatHasChanged == chordEditor.get())
     {
         //[UserLabelCode_chordEditor] -- add your label text handling code here..
 		chordFromString(chordEditor->getText());
         //[/UserLabelCode_chordEditor]
     }
-    else if (labelThatHasChanged == triggerNoteLabel)
+    else if (labelThatHasChanged == triggerNoteLabel.get())
     {
         //[UserLabelCode_triggerNoteLabel] -- add your label text handling code here..
 		getFilter()->selectTrigger(triggerNoteLabel->getText().getIntValue());
@@ -1428,9 +1599,9 @@ void MidiChordsEditor::chordMenuCallback (int result, MidiChordsEditor* editor)
 
 void MidiChordsEditor::mouseDown(const MouseEvent& e)
 {
-	if (e.eventComponent==previewButton && !e.mods.isPopupMenu())
+	if (e.eventComponent==previewButton.get() && !e.mods.isPopupMenu())
 		getFilter()->playCurrentChord(true);
-	if (e.eventComponent!=infoBox && infoBox->isVisible()) {
+	if (e.eventComponent!=infoBox.get() && infoBox->isVisible()) {
 		infoBox->setVisible(false);
 		infoButton->setToggleState(false,false);
 	}
@@ -1438,7 +1609,7 @@ void MidiChordsEditor::mouseDown(const MouseEvent& e)
 
 void MidiChordsEditor::mouseDoubleClick (const MouseEvent& e)
 {
-	if (e.eventComponent==triggerKeyboard && (e.mods.isShiftDown() || e.mods.isPopupMenu()))
+	if (e.eventComponent==triggerKeyboard.get() && (e.mods.isShiftDown() || e.mods.isPopupMenu()))
 	{
 		for (int i=0;i<128;i++)
 			getFilter()->setNoteBypassed(i,false);
@@ -1448,7 +1619,7 @@ void MidiChordsEditor::mouseDoubleClick (const MouseEvent& e)
 
 void MidiChordsEditor::mouseUp (const MouseEvent& e)
 {
-	if (e.eventComponent==previewButton) {
+	if (e.eventComponent==previewButton.get()) {
 		if (e.mods.isPopupMenu())
 		{
 			if (getFilter()->isPreviewChordPlaying()) {
@@ -1802,12 +1973,12 @@ void MidiChordsEditor::textEditorTextChanged(TextEditor &editor) {
 }
 
 void MidiChordsEditor::textEditorReturnKeyPressed(TextEditor &editor) {
-	if (&editor==chordSaveEditor) {
+	if (&editor==chordSaveEditor.get()) {
 		saveChord(chordSaveEditor->getText());
 		PopupMenu::dismissAllActiveMenus();
 		chordSaveEditor->clear();
 	}
-	else if (&editor==tuningSaveEditor)
+	else if (&editor==tuningSaveEditor.get())
 	{
 		String tuningString="\""+tuningSaveEditor->getText()+"\", "
 			+ String("Chords.txt, ")
@@ -1883,48 +2054,59 @@ void MidiChordsEditor::browserRootChanged (const File& newRoot)
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MidiChordsEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public TextEditor::Listener, public FileDragAndDropTarget, public FileBrowserListener"
+                 parentClasses="public juce::AudioProcessorEditor, public juce::ChangeListener, public juce::TextEditor::Listener, public juce::FileDragAndDropTarget, public juce::FileBrowserListener"
                  constructorParams="MidiChords* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="640" initialHeight="420">
   <BACKGROUND backgroundColour="ffd8d8d8">
     <RECT pos="0 0 640 100" fill="linear: 61 -31, 61 23, 0=ffffffff, 1=e7e7e7"
           hasStroke="0"/>
-    <IMAGE pos="113 7 234 45" resource="midichordsLogo_png" opacity="1"
+    <IMAGE pos="113 7 234 45" resource="midichordsLogo_png" opacity="1.0"
            mode="1"/>
     <RECT pos="0 348 100% 72" fill="linear: 0 331, 0 360, 0=ff000000, 1=ff828282"
           hasStroke="0"/>
     <RECT pos="196 323 150 92" fill="solid: a52a85" hasStroke="1" stroke="1, mitered, butt"
           strokeColour="linear: 230 323, 230 377, 0=ff0000, 1=ff000000"/>
-    <ROUNDRECT pos="568 76 66 106" cornerSize="10" fill="solid: ff000000" hasStroke="0"/>
+    <ROUNDRECT pos="568 76 66 106" cornerSize="10.0" fill="solid: ff000000"
+               hasStroke="0"/>
     <TEXT pos="14 319 103 24" fill="solid: ff000000" hasStroke="0" text="Trigger Channel:"
-          fontname="Default font" fontsize="15" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="330 318 126 24" fill="solid: ff000000" hasStroke="0" text="Trigger Mode:"
-          fontname="Default font" fontsize="15" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <RECT pos="6 225 12M 93" fill="solid: ff000000" hasStroke="0"/>
     <RECT pos="6 97 12M 93" fill="solid: ff000000" hasStroke="0"/>
-    <ROUNDRECT pos="462 202 172 36" cornerSize="10" fill="solid: ff000000" hasStroke="0"/>
-    <ROUNDRECT pos="250 195 173 26" cornerSize="12" fill="linear: 248 183, 248 215, 0=ff666666, 1=ffbfbfbf"
+    <ROUNDRECT pos="462 202 172 36" cornerSize="10.0" fill="solid: ff000000"
+               hasStroke="0"/>
+    <ROUNDRECT pos="250 195 173 26" cornerSize="12.0" fill="linear: 248 183, 248 215, 0=ff666666, 1=ffbfbfbf"
                hasStroke="0"/>
     <TEXT pos="6 46 71 8" fill="solid: ff000000" hasStroke="0" text="Input Channel"
-          fontname="Default font" fontsize="10.7" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="10.7" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="219 328 53 16" fill="solid: ff000000" hasStroke="0" text="Strum:"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="204 351 62 16" fill="solid: ff000000" hasStroke="0" text="Max Time"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="277 351 62 16" fill="solid: ff000000" hasStroke="0" text="Vel. Ramp"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="277 380 62 16" fill="solid: ff000000" hasStroke="0" text="Accel"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="204 380 62 16" fill="solid: ff000000" hasStroke="0" text="Speed"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
   </BACKGROUND>
   <TOGGLEBUTTON name="new toggle button" id="58723bf0e9d70b49" memberName="toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="372 50 150 24" buttonText="Guess chord name"
@@ -1933,7 +2115,8 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="375 72 144 26" bkgCol="279a3c3c"
          outlineCol="b3000000" edTextCol="ff000000" edBkgCol="0" labelText="chord name"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="15" bold="1" italic="0" justification="36"/>
+         fontname="Default font" fontsize="15.0" kerning="0.0" bold="1"
+         italic="0" justification="36" typefaceStyle="Bold"/>
   <GENERICCOMPONENT name="" id="8e79ee27297830eb" memberName="chordKeyboard" virtualName=""
                     explicitFocusOrder="0" pos="8 99 16M 89" class="ChordsKeyboardComponent"
                     params="ownerFilter-&gt;chordKbState, ownerFilter"/>
@@ -1949,22 +2132,22 @@ BEGIN_JUCER_METADATA
               radioGroupId="0"/>
   <SLIDER name="channel" id="c08fa2a5fc963392" memberName="channelSlider"
           virtualName="ChannelSlider" explicitFocusOrder="0" pos="123 323 66 16"
-          tooltip="Trigger channel" bkgcol="ffffffff" min="0" max="16"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          tooltip="Trigger channel" bkgcol="ffffffff" min="0.0" max="16.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="new label" id="53b1a84fa5d6099" memberName="outputLabel"
          virtualName="" explicitFocusOrder="0" pos="573 76 54 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Output" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="34"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="34"/>
   <JUCERCOMP name="" id="bad9b853cca3ec4a" memberName="pizButton" virtualName=""
-             explicitFocusOrder="0" pos="38 3 74 40" sourceFile="../../common/PizButton.cpp"
+             explicitFocusOrder="0" pos="38 3 74 40" sourceFile="../_common/PizButton.cpp"
              constructorParams=""/>
   <LABEL name="new label" id="9c19fc858eab3133" memberName="triggerLabel"
          virtualName="" explicitFocusOrder="0" pos="464 203 97 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Trigger Note:" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="34"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="34"/>
   <TEXTBUTTON name="clear" id="729ec8a8b3111b3" memberName="clearChordButton"
               virtualName="" explicitFocusOrder="0" pos="291 76 40 21" tooltip="Clear current chord"
               buttonText="Clear" connectedEdges="10" needsCallback="1" radioGroupId="0"/>
@@ -1991,18 +2174,19 @@ BEGIN_JUCER_METADATA
               buttonText="&lt;" connectedEdges="11" needsCallback="1" radioGroupId="0"/>
   <SLIDER name="transpose" id="e04428ac0ed97dc9" memberName="transposeSlider"
           virtualName="" explicitFocusOrder="0" pos="475 372 66 16" tooltip="Transpose output by semitones"
-          bkgcol="ffffffff" min="-12" max="12" int="1" style="LinearBar"
+          bkgcol="ffffffff" min="-12.0" max="12.0" int="1.0" style="LinearBar"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="velocity" id="d173a9d6025fabc0" memberName="velocitySlider"
           virtualName="" explicitFocusOrder="0" pos="397 197 22 22" tooltip="Velocity for &quot;Play Chord&quot; button"
-          rotarysliderfill="7f000000" min="1" max="127" int="1" style="RotaryVerticalDrag"
+          rotarysliderfill="7f000000" min="1.0" max="127.0" int="1.0" style="RotaryVerticalDrag"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Variation" id="992cbb80661db8e9" memberName="variationSlider"
-          virtualName="" explicitFocusOrder="0" pos="333 432 104 16" min="0"
-          max="100" int="0.1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          virtualName="" explicitFocusOrder="0" pos="333 432 104 16" min="0.0"
+          max="100.0" int="0.1" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <TEXTBUTTON name="new button" id="ea513687ce233abe" memberName="normalButton"
               virtualName="" explicitFocusOrder="0" pos="442 318 64 24" tooltip="Full mode: a separate chord is defined for every input note"
               buttonText="Full" connectedEdges="6" needsCallback="1" radioGroupId="1"/>
@@ -2029,7 +2213,8 @@ BEGIN_JUCER_METADATA
          bkgCol="27a1b404" outlineCol="b3000000" edTextCol="ff000000"
          edBkgCol="0" labelText="preset name" editableSingleClick="1"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="1" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="1" italic="0" justification="36"
+         typefaceStyle="Bold"/>
   <TEXTBUTTON name="presets" id="fdd2c5f83e8c75c9" memberName="presetMenuButton"
               virtualName="" explicitFocusOrder="0" pos="605 12 25 26" tooltip="Preset Menu"
               buttonText="&gt;" connectedEdges="1" needsCallback="1" radioGroupId="0"/>
@@ -2051,8 +2236,8 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="178 54 144 20" tooltip="Double-click to type a chord"
          bkgCol="ffffffff" outlineCol="b3000000" edTextCol="ff000000"
          edBkgCol="0" labelText="chord" editableSingleClick="0" editableDoubleClick="1"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="36"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="36"/>
   <TOGGLEBUTTON name="new toggle button" id="985f12fa947001cc" memberName="pcButton"
                 virtualName="" explicitFocusOrder="0" pos="500 397 134 20" tooltip="Change program when receiving MIDI Program Change"
                 buttonText="Use Program Chg" connectedEdges="0" needsCallback="1"
@@ -2067,26 +2252,27 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="558 203 73 24" tooltip="Currently displayed trigger note (double-click to edit)"
          textCol="ffffffff" edTextCol="ff000000" edBkgCol="ffffffff" labelText="G8 (127)"
          editableSingleClick="0" editableDoubleClick="1" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="15" bold="1" italic="0" justification="33"/>
+         fontname="Default font" fontsize="15.0" kerning="0.0" bold="1"
+         italic="0" justification="33" typefaceStyle="Bold"/>
   <SLIDER name="channel" id="51b00c0c435d1b05" memberName="learnChanSlider"
           virtualName="ChannelSlider" explicitFocusOrder="0" pos="6 56 38 16"
           tooltip="Chord Input Channel, used for Learn and left-click entering notes"
-          bkgcol="ffffffff" min="0" max="16" int="1" style="LinearBar"
+          bkgcol="ffffffff" min="0.0" max="16.0" int="1.0" style="LinearBar"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="new label" id="b13bd78310d4145" memberName="demoLabel"
          virtualName="" explicitFocusOrder="0" pos="318 5 97 24" edTextCol="ff000000"
          edBkgCol="0" labelText="UNREGISTERED&#10;DEMO VERSION" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="OCR A Extended"
-         fontsize="10" bold="0" italic="0" justification="36"/>
+         fontsize="10.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <GENERICCOMPONENT name="new component" id="fe343618ae664d49" memberName="guitar"
                     virtualName="" explicitFocusOrder="0" pos="8 99 16M 89" class="ChordsGuitar"
                     params="ownerFilter-&gt;chordKbState, ownerFilter"/>
   <LABEL name="new label" id="9ec8a16d4577cd67" memberName="versionLabel"
          virtualName="" explicitFocusOrder="0" pos="352 28 58 24" edTextCol="ff000000"
          edBkgCol="0" labelText="99.99.99" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="12"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="12.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <TOGGLEBUTTON name="new toggle button" id="d3b81c8771f45be2" memberName="transposeInputButton"
                 virtualName="" explicitFocusOrder="0" pos="545 370 91 21" tooltip="When checked, incoming trigger notes are transposed by the opposite of the &quot;Transpose&quot; slider."
                 buttonText="Also Transpose Input" connectedEdges="0" needsCallback="1"
@@ -2104,9 +2290,9 @@ BEGIN_JUCER_METADATA
   <SLIDER name="channel" id="4905788d8bca0925" memberName="outputChannelSlider"
           virtualName="ChannelSlider" explicitFocusOrder="0" pos="381 372 66 16"
           tooltip="Output channel (&quot;Multi&quot; is as saved, otherwise overrides chord's saved channel)"
-          bkgcol="ffffffff" min="0" max="16" int="1" style="LinearBar"
+          bkgcol="ffffffff" min="0.0" max="16.0" int="1.0" style="LinearBar"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <TEXTBUTTON name="new button" id="8efd6a9fa5389ff6" memberName="applyChannelButton"
               virtualName="" explicitFocusOrder="0" pos="44 56 32 16" tooltip="Applies input channel to selected chord"
               buttonText="Apply" connectedEdges="1" needsCallback="1" radioGroupId="0"/>
@@ -2114,12 +2300,12 @@ BEGIN_JUCER_METADATA
          explicitFocusOrder="0" pos="368 357 91 13" edTextCol="ff000000"
          edBkgCol="0" labelText="Out Channel" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="new label" id="beb727c502d48577" memberName="label2" virtualName=""
          explicitFocusOrder="0" pos="461 357 91 13" edTextCol="ff000000"
          edBkgCol="0" labelText="Transpose" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="36"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="36"/>
   <TEXTBUTTON name="view" id="d372ec945cfb2f67" memberName="viewButton" virtualName=""
               explicitFocusOrder="0" pos="151 190 41 21" tooltip="Switch between keyboard &amp; guitar views"
               buttonText="View" connectedEdges="4" needsCallback="1" radioGroupId="0"/>
@@ -2134,24 +2320,25 @@ BEGIN_JUCER_METADATA
               connectedEdges="2" needsCallback="1" radioGroupId="0"/>
   <SLIDER name="maxTime" id="f7231d7c45deba2d" memberName="maxTimeSlider"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="202 364 66 16"
-          tooltip="Max Strum Time" bkgcol="ffffffff" min="100" max="3000"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          tooltip="Max Strum Time" bkgcol="ffffffff" min="100.0" max="3000.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="speed" id="a243163cabbb95ac" memberName="speedSlider" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="202 393 66 16" tooltip="Strum Speed"
-          bkgcol="ffffffff" min="0" max="100" int="1" style="LinearBar"
+          bkgcol="ffffffff" min="0.0" max="100.0" int="1.0" style="LinearBar"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="accel" id="5cdb7ff5a14641ba" memberName="accelSlider" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="275 393 66 16" tooltip="Strum Acceleration"
-          bkgcol="ffffffff" min="-100" max="100" int="1" style="LinearBar"
+          bkgcol="ffffffff" min="-100.0" max="100.0" int="1.0" style="LinearBar"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="velRamp" id="5280e3c28d4cfc6a" memberName="velRampSlider"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="275 364 66 16"
-          tooltip="Strum Velocity Ramp" bkgcol="ffffffff" min="-100" max="100"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          tooltip="Strum Velocity Ramp" bkgcol="ffffffff" min="-100.0"
+          max="100.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <TEXTEDITOR name="new text editor" id="2319ccc237bcf9fc" memberName="infoBox"
               virtualName="" explicitFocusOrder="0" pos="50%c 50%c 500 300"
               bkgcol="f2ffffff" outlinecol="ff000000" shadowcol="38000000"
@@ -2424,3 +2611,8 @@ static const unsigned char resource_MidiChordsEditor_midichordsLogo_png[] = { 13
 
 const char* MidiChordsEditor::midichordsLogo_png = (const char*) resource_MidiChordsEditor_midichordsLogo_png;
 const int MidiChordsEditor::midichordsLogo_pngSize = 14039;
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

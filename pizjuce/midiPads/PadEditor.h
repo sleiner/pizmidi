@@ -1,33 +1,30 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  27 Nov 2010 3:48:47pm
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_PADEDITOR_PADEDITOR_44E60834__
-#define __JUCER_HEADER_PADEDITOR_PADEDITOR_44E60834__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "juce_gui_extra/juce_gui_extra.h"
 //[/Headers]
 
-using namespace juce;
+
 
 //==============================================================================
 /**
@@ -37,77 +34,75 @@ using namespace juce;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PadEditor  : public Component,
-                   public Button::Listener,
-                   public Slider::Listener
+class PadEditor  : public juce::Component,
+                   public juce::Button::Listener,
+                   public juce::Slider::Listener
 {
 public:
     //==============================================================================
     PadEditor ();
-    ~PadEditor();
+    ~PadEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
 
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     //[/UserVariables]
 
     //==============================================================================
-    TextEditor* textEditor;
-    TextButton* textButton;
-    TextButton* textButton2;
-    ColourSelector* component;
-    ToggleButton* toggleButton;
-    ToggleButton* toggleButton2;
-    ToggleButton* toggleButton3;
-    Slider* slider;
-    Slider* slider2;
-    ToggleButton* toggleButton4;
-    ToggleButton* toggleButton5;
-    ToggleButton* toggleButton6;
-    ToggleButton* toggleButton7;
-    ToggleButton* toggleButton8;
-    ToggleButton* toggleButton9;
-    ToggleButton* toggleButton10;
-    Slider* slider3;
-    Slider* slider4;
-    Slider* slider5;
-    Slider* slider6;
-    Slider* slider7;
-    Slider* slider8;
-    Slider* slider9;
-    TextButton* textButton3;
-    TextButton* textButton4;
-    TextButton* textButton5;
-    TextButton* textButton6;
-    TextButton* textButton7;
-    TextButton* textButton8;
-    TextButton* textButton9;
-    Label* label;
-    Label* label2;
-    Label* label3;
-    Label* label4;
-    Label* label5;
-    Label* label6;
-    Label* label7;
-    Label* label8;
+    std::unique_ptr<juce::TextEditor> textEditor;
+    std::unique_ptr<juce::TextButton> textButton;
+    std::unique_ptr<juce::TextButton> textButton2;
+    std::unique_ptr<juce::ColourSelector> component;
+    std::unique_ptr<juce::ToggleButton> toggleButton;
+    std::unique_ptr<juce::ToggleButton> toggleButton2;
+    std::unique_ptr<juce::ToggleButton> toggleButton3;
+    std::unique_ptr<juce::Slider> slider;
+    std::unique_ptr<juce::Slider> slider2;
+    std::unique_ptr<juce::ToggleButton> toggleButton4;
+    std::unique_ptr<juce::ToggleButton> toggleButton5;
+    std::unique_ptr<juce::ToggleButton> toggleButton6;
+    std::unique_ptr<juce::ToggleButton> toggleButton7;
+    std::unique_ptr<juce::ToggleButton> toggleButton8;
+    std::unique_ptr<juce::ToggleButton> toggleButton9;
+    std::unique_ptr<juce::ToggleButton> toggleButton10;
+    std::unique_ptr<juce::Slider> slider3;
+    std::unique_ptr<juce::Slider> slider4;
+    std::unique_ptr<juce::Slider> slider5;
+    std::unique_ptr<juce::Slider> slider6;
+    std::unique_ptr<juce::Slider> slider7;
+    std::unique_ptr<juce::Slider> slider8;
+    std::unique_ptr<juce::Slider> slider9;
+    std::unique_ptr<juce::TextButton> textButton3;
+    std::unique_ptr<juce::TextButton> textButton4;
+    std::unique_ptr<juce::TextButton> textButton5;
+    std::unique_ptr<juce::TextButton> textButton6;
+    std::unique_ptr<juce::TextButton> textButton7;
+    std::unique_ptr<juce::TextButton> textButton8;
+    std::unique_ptr<juce::TextButton> textButton9;
+    std::unique_ptr<juce::Label> label;
+    std::unique_ptr<juce::Label> label2;
+    std::unique_ptr<juce::Label> label3;
+    std::unique_ptr<juce::Label> label4;
+    std::unique_ptr<juce::Label> label5;
+    std::unique_ptr<juce::Label> label6;
+    std::unique_ptr<juce::Label> label7;
+    std::unique_ptr<juce::Label> label8;
+
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    PadEditor (const PadEditor&);
-    const PadEditor& operator= (const PadEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PadEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_PADEDITOR_PADEDITOR_44E60834__

@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  4 Feb 2012 7:51:26pm
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,1756 +28,2206 @@
 
 //==============================================================================
 PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      label (0),
-      timeline (0),
-      textButton1 (0),
-      textButton2 (0),
-      textButton3 (0),
-      textButton4 (0),
-      textButton5 (0),
-      textButton6 (0),
-      textButton7 (0),
-      textButton8 (0),
-      textButton9 (0),
-      textButton10 (0),
-      textButton11 (0),
-      textButton12 (0),
-      textButton13 (0),
-      textButton14 (0),
-      textButton15 (0),
-      textButton16 (0),
-      b_Play (0),
-      b_Record (0),
-      b_Overdub (0),
-      b_Thru (0),
-      b_Clear (0),
-      stepsizeBox (0),
-      s_Transpose (0),
-      s_Octave (0),
-      s_Velocity (0),
-      label3 (0),
-      label4 (0),
-      label5 (0),
-      s_Start (0),
-      label6 (0),
-      s_End (0),
-      label7 (0),
-      s_Stretch (0),
-      label8 (0),
-      loopmodeBox (0),
-      notetriggerBox (0),
-      syncmodeBox (0),
-      s_Root (0),
-      label9 (0),
-      s_Low (0),
-      label10 (0),
-      s_High (0),
-      label11 (0),
-      s_TrigChan (0),
-      label12 (0),
-      b_Reload (0),
-      quantizeBox (0),
-      label21 (0),
-      s_Shift (0),
-      label2 (0),
-      label23 (0),
-      nameLabel (0),
-      b_Save (0),
-      label22 (0),
-      label18 (0),
-      loopinfoLabel (0),
-      loopinfoLabel2 (0),
-      label17 (0),
-      s_Channel (0),
-      label19 (0),
-      label20 (0),
-      s_FixedLength (0),
-      b_Filt (0),
-      viewport (0),
-      resizer (0),
-      b_NoteToggle (0),
-      s_PlayGroup (0),
-      label13 (0),
-      s_MuteGroup (0),
-      label14 (0),
-      b_Snap (0),
-      quantizeBox2 (0),
-      b_ForceToKey (0),
-      keySelector (0),
-      b_ShiftUp (0),
-      b_ShiftDown (0),
-      b_SingleLoop (0),
-      s_MasterVelocity (0),
-      label15 (0),
-      aboutButton (0),
-      b_Triplet (0),
-      b_Dotted (0),
-      b_ZoomOut (0),
-      b_ZoomIn (0),
-      numerator (0),
-      denominator (0),
-      loopinfoLabel3 (0),
-      b_UseScaleChannel (0),
-      s_ScaleChannel (0),
-      label25 (0),
-      s_MasterTranspose (0),
-      label26 (0),
-      b_WaitForBar (0),
-      midiOutDeviceBox (0),
-      label27 (0),
-      b_UseTrChannel (0),
-      b_ImmediateTranspose (0),
-      s_NumLoops (0),
-      s_NextSlot (0),
-      label16 (0),
-      forceModeBox (0),
-      kbport (0),
-      b_RemoveBar (0),
-      b_AddBar (0),
-      LengthLabel (0),
-      textButton17 (0),
-      textButton18 (0),
-      textButton19 (0),
-      textButton20 (0),
-      textButton21 (0),
-      textButton22 (0),
-      textButton23 (0),
-      textButton24 (0),
-      textButton25 (0),
-      textButton26 (0),
-      textButton27 (0),
-      textButton28 (0),
-      textButton29 (0),
-      textButton30 (0),
-      textButton31 (0),
-      textButton32 (0),
-      textButton33 (0),
-      textButton34 (0),
-      textButton35 (0),
-      textButton36 (0),
-      textButton37 (0),
-      textButton38 (0),
-      textButton39 (0),
-      textButton40 (0),
-      textButton41 (0),
-      textButton42 (0),
-      textButton43 (0),
-      textButton44 (0),
-      textButton45 (0),
-      textButton46 (0),
-      textButton47 (0),
-      textButton48 (0),
-      textButton49 (0),
-      textButton50 (0),
-      textButton51 (0),
-      textButton52 (0),
-      textButton53 (0),
-      textButton54 (0),
-      textButton55 (0),
-      textButton56 (0),
-      textButton57 (0),
-      textButton58 (0),
-      textButton59 (0),
-      textButton60 (0),
-      textButton61 (0),
-      textButton62 (0),
-      textButton63 (0),
-      textButton64 (0),
-      textButton65 (0),
-      textButton66 (0),
-      textButton67 (0),
-      textButton68 (0),
-      textButton69 (0),
-      textButton70 (0),
-      textButton71 (0),
-      textButton72 (0),
-      textButton73 (0),
-      textButton74 (0),
-      textButton75 (0),
-      textButton76 (0),
-      textButton77 (0),
-      textButton78 (0),
-      textButton79 (0),
-      textButton80 (0),
-      textButton81 (0),
-      textButton82 (0),
-      textButton83 (0),
-      textButton84 (0),
-      textButton85 (0),
-      textButton86 (0),
-      textButton87 (0),
-      textButton88 (0),
-      textButton89 (0),
-      textButton90 (0),
-      textButton91 (0),
-      textButton92 (0),
-      textButton93 (0),
-      textButton94 (0),
-      textButton95 (0),
-      textButton96 (0),
-      textButton97 (0),
-      textButton98 (0),
-      textButton99 (0),
-      textButton100 (0),
-      textButton101 (0),
-      textButton102 (0),
-      textButton103 (0),
-      textButton104 (0),
-      textButton105 (0),
-      textButton106 (0),
-      textButton107 (0),
-      textButton108 (0),
-      textButton109 (0),
-      textButton110 (0),
-      textButton111 (0),
-      textButton112 (0),
-      textButton113 (0),
-      textButton114 (0),
-      textButton115 (0),
-      textButton116 (0),
-      textButton117 (0),
-      textButton118 (0),
-      textButton119 (0),
-      textButton120 (0),
-      textButton121 (0),
-      textButton122 (0),
-      textButton123 (0),
-      textButton124 (0),
-      textButton125 (0),
-      textButton126 (0),
-      textButton127 (0),
-      textButton128 (0),
-      b_Transpose10 (0),
-      b_KeepLength (0),
-      s_RecCC (0),
-      s_PlayCC (0),
-      s_VelocitySens (0),
-      label24 (0),
-      b_Monitor (0),
-      s_TransposeChannel (0),
-      label28 (0),
-      cachedImage_piznew40_png (nullptr)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (label = new Label (L"new label",
-                                          L"Zoom"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centredLeft);
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    label.reset (new juce::Label ("new label",
+                                  TRANS("Zoom")));
+    addAndMakeVisible (label.get());
+    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label->setJustificationType (juce::Justification::centredLeft);
     label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (timeline = new Timeline());
-    timeline->setName (L"timeline");
+    label->setBounds (613, 64, 46, 18);
 
-    addAndMakeVisible (textButton1 = new TextButton (L"new button"));
-    textButton1->setButtonText (L"1");
-    textButton1->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    timeline.reset (new Timeline());
+    addAndMakeVisible (timeline.get());
+    timeline->setName ("timeline");
+
+    textButton1.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton1.get());
+    textButton1->setButtonText (TRANS("1"));
+    textButton1->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton1->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton2 = new TextButton (L"new button"));
-    textButton2->setButtonText (L"2");
-    textButton2->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton2->setRadioGroupId (1);
-    textButton2->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton1->setBounds (0, 61, 25, 24);
 
-    addAndMakeVisible (textButton3 = new TextButton (L"new button"));
-    textButton3->setButtonText (L"3");
-    textButton3->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton2.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton2.get());
+    textButton2->setButtonText (TRANS("2"));
+    textButton2->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton2->setRadioGroupId (1);
+    textButton2->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton2->setBounds (25, 61, 23, 24);
+
+    textButton3.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton3.get());
+    textButton3->setButtonText (TRANS("3"));
+    textButton3->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton3->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton4 = new TextButton (L"new button"));
-    textButton4->setButtonText (L"4");
-    textButton4->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton3->setBounds (48, 61, 23, 24);
+
+    textButton4.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton4.get());
+    textButton4->setButtonText (TRANS("4"));
+    textButton4->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton4->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton5 = new TextButton (L"new button"));
-    textButton5->setButtonText (L"5");
-    textButton5->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton4->setBounds (71, 61, 23, 24);
+
+    textButton5.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton5.get());
+    textButton5->setButtonText (TRANS("5"));
+    textButton5->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton5->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton6 = new TextButton (L"new button"));
-    textButton6->setButtonText (L"6");
-    textButton6->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton5->setBounds (94, 61, 23, 24);
+
+    textButton6.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton6.get());
+    textButton6->setButtonText (TRANS("6"));
+    textButton6->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton6->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton7 = new TextButton (L"new button"));
-    textButton7->setButtonText (L"7");
-    textButton7->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton6->setBounds (117, 61, 23, 24);
+
+    textButton7.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton7.get());
+    textButton7->setButtonText (TRANS("7"));
+    textButton7->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton7->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton8 = new TextButton (L"new button"));
-    textButton8->setButtonText (L"8");
-    textButton8->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton7->setBounds (140, 61, 23, 24);
+
+    textButton8.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton8.get());
+    textButton8->setButtonText (TRANS("8"));
+    textButton8->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton8->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton9 = new TextButton (L"new button"));
-    textButton9->setButtonText (L"9");
-    textButton9->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton8->setBounds (163, 61, 23, 24);
+
+    textButton9.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton9.get());
+    textButton9->setButtonText (TRANS("9"));
+    textButton9->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton9->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton10 = new TextButton (L"new button"));
-    textButton10->setButtonText (L"10");
-    textButton10->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton9->setBounds (186, 61, 23, 24);
+
+    textButton10.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton10.get());
+    textButton10->setButtonText (TRANS("10"));
+    textButton10->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton10->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton11 = new TextButton (L"new button"));
-    textButton11->setButtonText (L"11");
-    textButton11->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton10->setBounds (209, 61, 25, 24);
+
+    textButton11.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton11.get());
+    textButton11->setButtonText (TRANS("11"));
+    textButton11->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton11->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton12 = new TextButton (L"new button"));
-    textButton12->setButtonText (L"12");
-    textButton12->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton11->setBounds (234, 61, 25, 24);
+
+    textButton12.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton12.get());
+    textButton12->setButtonText (TRANS("12"));
+    textButton12->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton12->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton13 = new TextButton (L"new button"));
-    textButton13->setButtonText (L"13");
-    textButton13->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton12->setBounds (259, 61, 25, 24);
+
+    textButton13.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton13.get());
+    textButton13->setButtonText (TRANS("13"));
+    textButton13->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton13->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton14 = new TextButton (L"new button"));
-    textButton14->setButtonText (L"14");
-    textButton14->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton13->setBounds (284, 61, 25, 24);
+
+    textButton14.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton14.get());
+    textButton14->setButtonText (TRANS("14"));
+    textButton14->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton14->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton15 = new TextButton (L"new button"));
-    textButton15->setButtonText (L"15");
-    textButton15->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton14->setBounds (309, 61, 25, 24);
+
+    textButton15.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton15.get());
+    textButton15->setButtonText (TRANS("15"));
+    textButton15->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton15->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton16 = new TextButton (L"new button"));
-    textButton16->setButtonText (L"16");
-    textButton16->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton15->setBounds (334, 61, 25, 24);
+
+    textButton16.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton16.get());
+    textButton16->setButtonText (TRANS("16"));
+    textButton16->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton16->setRadioGroupId (1);
 
-    addAndMakeVisible (b_Play = new TextButton (L"Play"));
-    b_Play->setTooltip (L"Toggle playback of current slot");
-    b_Play->setButtonText (L"PLAY");
-    b_Play->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
-    b_Play->setColour (TextButton::buttonColourId, Colour (0xd213540e));
-    b_Play->setColour (TextButton::buttonOnColourId, Colour (0xff00c400));
-    b_Play->setColour (TextButton::textColourOnId, Colours::black);
-    b_Play->setColour (TextButton::textColourOffId, Colours::white);
+    textButton16->setBounds (359, 61, 28, 24);
 
-    addAndMakeVisible (b_Record = new TextButton (L"Record"));
-    b_Record->setTooltip (L"Toggle recording to current slot");
-    b_Record->setButtonText (L"RECORD ");
-    b_Record->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnTop);
-    b_Record->setColour (TextButton::buttonColourId, Colour (0xd2a90000));
-    b_Record->setColour (TextButton::buttonOnColourId, Colours::red);
-    b_Record->setColour (TextButton::textColourOnId, Colours::white);
-    b_Record->setColour (TextButton::textColourOffId, Colours::white);
+    b_Play.reset (new juce::TextButton ("Play"));
+    addAndMakeVisible (b_Play.get());
+    b_Play->setTooltip (TRANS("Toggle playback of current slot"));
+    b_Play->setButtonText (TRANS("PLAY"));
+    b_Play->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
+    b_Play->setColour (juce::TextButton::buttonColourId, juce::Colour (0xd213540e));
+    b_Play->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xff00c400));
+    b_Play->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
+    b_Play->setColour (juce::TextButton::textColourOnId, juce::Colours::white);
 
-    addAndMakeVisible (b_Overdub = new TextButton (L"Overdub"));
-    b_Overdub->setTooltip (L"Toggle overdub recording");
+    b_Play->setBounds (78, 117, 72, 50);
+
+    b_Record.reset (new juce::TextButton ("Record"));
+    addAndMakeVisible (b_Record.get());
+    b_Record->setTooltip (TRANS("Toggle recording to current slot"));
+    b_Record->setButtonText (TRANS("RECORD "));
+    b_Record->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
+    b_Record->setColour (juce::TextButton::buttonColourId, juce::Colour (0xd2a90000));
+    b_Record->setColour (juce::TextButton::buttonOnColourId, juce::Colours::red);
+    b_Record->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
+    b_Record->setColour (juce::TextButton::textColourOnId, juce::Colours::white);
+
+    b_Record->setBounds (6, 117, 72, 50);
+
+    b_Overdub.reset (new juce::TextButton ("Overdub"));
+    addAndMakeVisible (b_Overdub.get());
+    b_Overdub->setTooltip (TRANS("Toggle overdub recording"));
     b_Overdub->addListener (this);
-    b_Overdub->setColour (TextButton::buttonColourId, Colour (0xff999999));
-    b_Overdub->setColour (TextButton::textColourOnId, Colours::black);
-    b_Overdub->setColour (TextButton::textColourOffId, Colours::black);
+    b_Overdub->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
+    b_Overdub->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
+    b_Overdub->setColour (juce::TextButton::textColourOnId, juce::Colours::black);
 
-    addAndMakeVisible (b_Thru = new TextButton (L"MIDI Thru"));
-    b_Thru->setTooltip (L"Toggle MIDI Thru (Notes selected for Note Triggering and Scale Channel are always blocked)");
-    b_Thru->setButtonText (L"Thru");
+    b_Overdub->setBounds (523, 12, 80, 20);
+
+    b_Thru.reset (new juce::TextButton ("MIDI Thru"));
+    addAndMakeVisible (b_Thru.get());
+    b_Thru->setTooltip (TRANS("Toggle MIDI Thru (Notes selected for Note Triggering and Scale Channel are always blocked)"));
+    b_Thru->setButtonText (TRANS("Thru"));
     b_Thru->addListener (this);
-    b_Thru->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_Thru->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (b_Clear = new TextButton (L"Clear"));
-    b_Clear->setTooltip (L"Erase MIDI data from the current slot");
-    b_Clear->setConnectedEdges (Button::ConnectedOnRight);
+    b_Thru->setBounds (634, 33, 40, 20);
+
+    b_Clear.reset (new juce::TextButton ("Clear"));
+    addAndMakeVisible (b_Clear.get());
+    b_Clear->setTooltip (TRANS("Erase MIDI data from the current slot"));
+    b_Clear->setConnectedEdges (juce::Button::ConnectedOnRight);
     b_Clear->addListener (this);
-    b_Clear->setColour (TextButton::buttonColourId, Colours::black);
-    b_Clear->setColour (TextButton::textColourOnId, Colours::white);
-    b_Clear->setColour (TextButton::textColourOffId, Colours::azure);
+    b_Clear->setColour (juce::TextButton::buttonColourId, juce::Colours::black);
+    b_Clear->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
+    b_Clear->setColour (juce::TextButton::textColourOnId, juce::Colours::azure);
 
-    addAndMakeVisible (stepsizeBox = new ComboBox (L"Loop Step Size"));
-    stepsizeBox->setTooltip (L"Recording length will be quantized to this step size.");
+    b_Clear->setBounds (264, 90, 39, 22);
+
+    stepsizeBox.reset (new juce::ComboBox ("Loop Step Size"));
+    addAndMakeVisible (stepsizeBox.get());
+    stepsizeBox->setTooltip (TRANS("Recording length will be quantized to this step size."));
     stepsizeBox->setEditableText (false);
-    stepsizeBox->setJustificationType (Justification::centredLeft);
-    stepsizeBox->setTextWhenNothingSelected (L"16th Note");
-    stepsizeBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    stepsizeBox->addItem (L"1 Bar", 1);
-    stepsizeBox->addItem (L"3 Beats", 2);
-    stepsizeBox->addItem (L"2 Beats", 3);
-    stepsizeBox->addItem (L"1 Beat", 4);
-    stepsizeBox->addItem (L"16th Note", 5);
-    stepsizeBox->addItem (L"1 Tick", 6);
+    stepsizeBox->setJustificationType (juce::Justification::centredLeft);
+    stepsizeBox->setTextWhenNothingSelected (TRANS("16th Note"));
+    stepsizeBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    stepsizeBox->addItem (TRANS("1 Bar"), 1);
+    stepsizeBox->addItem (TRANS("3 Beats"), 2);
+    stepsizeBox->addItem (TRANS("2 Beats"), 3);
+    stepsizeBox->addItem (TRANS("1 Beat"), 4);
+    stepsizeBox->addItem (TRANS("16th Note"), 5);
+    stepsizeBox->addItem (TRANS("1 Tick"), 6);
     stepsizeBox->addListener (this);
 
-    addAndMakeVisible (s_Transpose = new VSTSlider (L"Transpose"));
-    s_Transpose->setTooltip (L"Transposition applied to the current slot");
+    stepsizeBox->setBounds (264, 15, 77, 16);
+
+    s_Transpose.reset (new VSTSlider ("Transpose"));
+    addAndMakeVisible (s_Transpose.get());
+    s_Transpose->setTooltip (TRANS("Transposition applied to the current slot"));
     s_Transpose->setRange (-12, 12, 1);
-    s_Transpose->setSliderStyle (Slider::LinearBar);
-    s_Transpose->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Transpose->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Transpose->setColour (Slider::thumbColourId, Colours::black);
-    s_Transpose->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Transpose->setSliderStyle (juce::Slider::LinearBar);
+    s_Transpose->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Transpose->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Transpose->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Transpose->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Transpose->addListener (this);
 
-    addAndMakeVisible (s_Octave = new VSTSlider (L"Octave Shift"));
-    s_Octave->setTooltip (L"Transposition by octave for the current slot");
+    s_Transpose->setBounds (146, 283, 72, 20);
+
+    s_Octave.reset (new VSTSlider ("Octave Shift"));
+    addAndMakeVisible (s_Octave.get());
+    s_Octave->setTooltip (TRANS("Transposition by octave for the current slot"));
     s_Octave->setRange (-4, 4, 1);
-    s_Octave->setSliderStyle (Slider::LinearBar);
-    s_Octave->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Octave->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Octave->setColour (Slider::thumbColourId, Colours::black);
-    s_Octave->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Octave->setSliderStyle (juce::Slider::LinearBar);
+    s_Octave->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Octave->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Octave->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Octave->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Octave->addListener (this);
 
-    addAndMakeVisible (s_Velocity = new VSTSlider (L"Velocity Offset"));
-    s_Velocity->setTooltip (L"Velocity adjustment for the current slot");
+    s_Octave->setBounds (226, 283, 72, 20);
+
+    s_Velocity.reset (new VSTSlider ("Velocity Offset"));
+    addAndMakeVisible (s_Velocity.get());
+    s_Velocity->setTooltip (TRANS("Velocity adjustment for the current slot"));
     s_Velocity->setRange (0, 200, 1);
-    s_Velocity->setSliderStyle (Slider::LinearBar);
-    s_Velocity->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Velocity->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Velocity->setColour (Slider::thumbColourId, Colours::black);
-    s_Velocity->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Velocity->setSliderStyle (juce::Slider::LinearBar);
+    s_Velocity->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Velocity->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Velocity->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Velocity->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Velocity->addListener (this);
 
-    addAndMakeVisible (label3 = new Label (L"new label",
-                                           L"Semitones"));
-    label3->setFont (Font (12.0000f, Font::plain));
-    label3->setJustificationType (Justification::centred);
+    s_Velocity->setBounds (306, 283, 72, 20);
+
+    label3.reset (new juce::Label ("new label",
+                                   TRANS("Semitones")));
+    addAndMakeVisible (label3.get());
+    label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label3->setJustificationType (juce::Justification::centred);
     label3->setEditable (false, false, false);
-    label3->setColour (Label::textColourId, Colours::white);
-    label3->setColour (TextEditor::textColourId, Colours::black);
-    label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label3->setColour (juce::Label::textColourId, juce::Colours::white);
+    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label4 = new Label (L"new label",
-                                           L"Octave"));
-    label4->setFont (Font (12.0000f, Font::plain));
-    label4->setJustificationType (Justification::centred);
+    label3->setBounds (146, 267, 72, 16);
+
+    label4.reset (new juce::Label ("new label",
+                                   TRANS("Octave")));
+    addAndMakeVisible (label4.get());
+    label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label4->setJustificationType (juce::Justification::centred);
     label4->setEditable (false, false, false);
-    label4->setColour (Label::textColourId, Colours::white);
-    label4->setColour (TextEditor::textColourId, Colours::black);
-    label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label4->setColour (juce::Label::textColourId, juce::Colours::white);
+    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label5 = new Label (L"new label",
-                                           L"Velocity"));
-    label5->setFont (Font (12.0000f, Font::plain));
-    label5->setJustificationType (Justification::centred);
+    label4->setBounds (226, 267, 72, 16);
+
+    label5.reset (new juce::Label ("new label",
+                                   TRANS("Velocity")));
+    addAndMakeVisible (label5.get());
+    label5->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label5->setJustificationType (juce::Justification::centred);
     label5->setEditable (false, false, false);
-    label5->setColour (Label::textColourId, Colours::white);
-    label5->setColour (TextEditor::textColourId, Colours::black);
-    label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label5->setColour (juce::Label::textColourId, juce::Colours::white);
+    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (s_Start = new VSTSlider (L"Loop Start"));
-    s_Start->setTooltip (L"Offsets the loop start time by this number of beats");
+    label5->setBounds (301, 267, 80, 16);
+
+    s_Start.reset (new VSTSlider ("Loop Start"));
+    addAndMakeVisible (s_Start.get());
+    s_Start->setTooltip (TRANS("Offsets the loop start time by this number of beats"));
     s_Start->setRange (-8, 8, 1);
-    s_Start->setSliderStyle (Slider::LinearBar);
-    s_Start->setTextBoxStyle (Slider::TextBoxLeft, true, 80, 20);
-    s_Start->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Start->setColour (Slider::thumbColourId, Colours::black);
-    s_Start->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Start->setSliderStyle (juce::Slider::LinearBar);
+    s_Start->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
+    s_Start->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Start->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Start->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Start->addListener (this);
 
-    addAndMakeVisible (label6 = new Label (L"new label",
-                                           L"Start Offset"));
-    label6->setFont (Font (12.0000f, Font::plain));
-    label6->setJustificationType (Justification::centred);
-    label6->setEditable (false, false, false);
-    label6->setColour (Label::textColourId, Colours::white);
-    label6->setColour (TextEditor::textColourId, Colours::black);
-    label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_Start->setBounds (66, 367, 72, 20);
 
-    addAndMakeVisible (s_End = new VSTSlider (L"Loop End"));
-    s_End->setTooltip (L"Offsets the loop end time by this number of beats");
+    label6.reset (new juce::Label ("new label",
+                                   TRANS("Start Offset")));
+    addAndMakeVisible (label6.get());
+    label6->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label6->setJustificationType (juce::Justification::centred);
+    label6->setEditable (false, false, false);
+    label6->setColour (juce::Label::textColourId, juce::Colours::white);
+    label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label6->setBounds (66, 351, 72, 16);
+
+    s_End.reset (new VSTSlider ("Loop End"));
+    addAndMakeVisible (s_End.get());
+    s_End->setTooltip (TRANS("Offsets the loop end time by this number of beats"));
     s_End->setRange (-8, 8, 1);
-    s_End->setSliderStyle (Slider::LinearBar);
-    s_End->setTextBoxStyle (Slider::TextBoxLeft, true, 80, 20);
-    s_End->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_End->setColour (Slider::thumbColourId, Colours::black);
-    s_End->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_End->setSliderStyle (juce::Slider::LinearBar);
+    s_End->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
+    s_End->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_End->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_End->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_End->addListener (this);
 
-    addAndMakeVisible (label7 = new Label (L"new label",
-                                           L"End Offset"));
-    label7->setFont (Font (12.0000f, Font::plain));
-    label7->setJustificationType (Justification::centred);
-    label7->setEditable (false, false, false);
-    label7->setColour (Label::textColourId, Colours::white);
-    label7->setColour (TextEditor::textColourId, Colours::black);
-    label7->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_End->setBounds (146, 367, 72, 20);
 
-    addAndMakeVisible (s_Stretch = new VSTSlider (L"Loop Stretch"));
-    s_Stretch->setTooltip (L"Playback speed, relative to host tempo");
+    label7.reset (new juce::Label ("new label",
+                                   TRANS("End Offset")));
+    addAndMakeVisible (label7.get());
+    label7->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label7->setJustificationType (juce::Justification::centred);
+    label7->setEditable (false, false, false);
+    label7->setColour (juce::Label::textColourId, juce::Colours::white);
+    label7->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label7->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label7->setBounds (146, 351, 72, 16);
+
+    s_Stretch.reset (new VSTSlider ("Loop Stretch"));
+    addAndMakeVisible (s_Stretch.get());
+    s_Stretch->setTooltip (TRANS("Playback speed, relative to host tempo"));
     s_Stretch->setRange (-10, 10, 1);
-    s_Stretch->setSliderStyle (Slider::LinearBar);
-    s_Stretch->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Stretch->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Stretch->setColour (Slider::thumbColourId, Colours::black);
-    s_Stretch->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Stretch->setSliderStyle (juce::Slider::LinearBar);
+    s_Stretch->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Stretch->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Stretch->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Stretch->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Stretch->addListener (this);
 
-    addAndMakeVisible (label8 = new Label (L"new label",
-                                           L"Speed"));
-    label8->setFont (Font (12.0000f, Font::plain));
-    label8->setJustificationType (Justification::centred);
-    label8->setEditable (false, false, false);
-    label8->setColour (Label::textColourId, Colours::white);
-    label8->setColour (TextEditor::textColourId, Colours::black);
-    label8->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_Stretch->setBounds (306, 367, 72, 20);
 
-    addAndMakeVisible (loopmodeBox = new ComboBox (L"Loop Mode"));
-    loopmodeBox->setTooltip (L"Playback Mode: \"Sync Loop\" follows the host timeline. \"Loop after rec\" is the same but also plays automatically as soon as recording ends. \"Unsync\" modes play the pattern from the beginning as soon as playback is started.");
+    label8.reset (new juce::Label ("new label",
+                                   TRANS("Speed")));
+    addAndMakeVisible (label8.get());
+    label8->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label8->setJustificationType (juce::Justification::centred);
+    label8->setEditable (false, false, false);
+    label8->setColour (juce::Label::textColourId, juce::Colours::white);
+    label8->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label8->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label8->setBounds (306, 351, 72, 16);
+
+    loopmodeBox.reset (new juce::ComboBox ("Loop Mode"));
+    addAndMakeVisible (loopmodeBox.get());
+    loopmodeBox->setTooltip (TRANS("Playback Mode: \"Sync Loop\" follows the host timeline. \"Loop after rec\" is the same but also plays automatically as soon as recording ends. \"Unsync\" modes play the pattern from the beginning as soon as playback is started."));
     loopmodeBox->setEditableText (false);
-    loopmodeBox->setJustificationType (Justification::centredLeft);
-    loopmodeBox->setTextWhenNothingSelected (L"Unsync 1-shot");
-    loopmodeBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    loopmodeBox->addItem (L"Loop after rec", 1);
-    loopmodeBox->addItem (L"Sync loop", 2);
-    loopmodeBox->addItem (L"Unsync 1-shot", 3);
-    loopmodeBox->addItem (L"Unsync loop", 4);
+    loopmodeBox->setJustificationType (juce::Justification::centredLeft);
+    loopmodeBox->setTextWhenNothingSelected (TRANS("Unsync 1-shot"));
+    loopmodeBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    loopmodeBox->addItem (TRANS("Loop after rec"), 1);
+    loopmodeBox->addItem (TRANS("Sync loop"), 2);
+    loopmodeBox->addItem (TRANS("Unsync 1-shot"), 3);
+    loopmodeBox->addItem (TRANS("Unsync loop"), 4);
     loopmodeBox->addListener (this);
 
-    addAndMakeVisible (notetriggerBox = new ComboBox (L"Note Trigger"));
-    notetriggerBox->setTooltip (L"For \"Transpose\" modes, pattern will be transposed relative to \"Root Note\"");
+    loopmodeBox->setBounds (175, 144, 110, 16);
+
+    notetriggerBox.reset (new juce::ComboBox ("Note Trigger"));
+    addAndMakeVisible (notetriggerBox.get());
+    notetriggerBox->setTooltip (TRANS("For \"Transpose\" modes, pattern will be transposed relative to \"Root Note\""));
     notetriggerBox->setEditableText (false);
-    notetriggerBox->setJustificationType (Justification::centredLeft);
-    notetriggerBox->setTextWhenNothingSelected (L"Mono (Transposed)");
-    notetriggerBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    notetriggerBox->addItem (L"Off", 1);
-    notetriggerBox->addItem (L"Mono (Transpose)", 2);
-    notetriggerBox->addItem (L"Poly (Transpose)", 3);
-    notetriggerBox->addItem (L"Mono (Orig. Key)", 4);
+    notetriggerBox->setJustificationType (juce::Justification::centredLeft);
+    notetriggerBox->setTextWhenNothingSelected (TRANS("Mono (Transposed)"));
+    notetriggerBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    notetriggerBox->addItem (TRANS("Off"), 1);
+    notetriggerBox->addItem (TRANS("Mono (Transpose)"), 2);
+    notetriggerBox->addItem (TRANS("Poly (Transpose)"), 3);
+    notetriggerBox->addItem (TRANS("Mono (Orig. Key)"), 4);
     notetriggerBox->addSeparator();
     notetriggerBox->addListener (this);
 
-    addAndMakeVisible (syncmodeBox = new ComboBox (L"Sync"));
-    syncmodeBox->setTooltip (L"\"PPQ\" modes always follow host timeline, which may not work in all hosts. \"Sample\" mode ignores the host\'s timeline, but the host\'s tempo is still followed.");
+    notetriggerBox->setBounds (146, 402, 106, 16);
+
+    syncmodeBox.reset (new juce::ComboBox ("Sync"));
+    addAndMakeVisible (syncmodeBox.get());
+    syncmodeBox->setTooltip (TRANS("\"PPQ\" modes always follow host timeline, which may not work in all hosts. \"Sample\" mode ignores the host\'s timeline, but the host\'s tempo is still followed."));
     syncmodeBox->setEditableText (false);
-    syncmodeBox->setJustificationType (Justification::centredLeft);
-    syncmodeBox->setTextWhenNothingSelected (L"PPQ (Recstart)");
-    syncmodeBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    syncmodeBox->addItem (L"PPQ (Host 0)", 1);
-    syncmodeBox->addItem (L"PPQ (Recstart)", 2);
-    syncmodeBox->addItem (L"Sample", 3);
+    syncmodeBox->setJustificationType (juce::Justification::centredLeft);
+    syncmodeBox->setTextWhenNothingSelected (TRANS("PPQ (Recstart)"));
+    syncmodeBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    syncmodeBox->addItem (TRANS("PPQ (Host 0)"), 1);
+    syncmodeBox->addItem (TRANS("PPQ (Recstart)"), 2);
+    syncmodeBox->addItem (TRANS("Sample"), 3);
     syncmodeBox->addListener (this);
 
-    addAndMakeVisible (s_Root = new VSTSlider (L"Root Note"));
-    s_Root->setTooltip (L"Transposed note triggering and Scale Channel input will transpose the pattern relative to this note");
+    syncmodeBox->setBounds (159, 15, 99, 16);
+
+    s_Root.reset (new VSTSlider ("Root Note"));
+    addAndMakeVisible (s_Root.get());
+    s_Root->setTooltip (TRANS("Transposed note triggering and Scale Channel input will transpose the pattern relative to this note"));
     s_Root->setRange (-1, 127, 1);
-    s_Root->setSliderStyle (Slider::LinearBar);
-    s_Root->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Root->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Root->setColour (Slider::thumbColourId, Colours::black);
-    s_Root->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Root->setSliderStyle (juce::Slider::LinearBar);
+    s_Root->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Root->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Root->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Root->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Root->addListener (this);
 
-    addAndMakeVisible (label9 = new Label (L"new label",
-                                           L"Root Note:"));
-    label9->setFont (Font (12.0000f, Font::plain));
-    label9->setJustificationType (Justification::centred);
-    label9->setEditable (false, false, false);
-    label9->setColour (Label::textColourId, Colours::white);
-    label9->setColour (TextEditor::textColourId, Colours::black);
-    label9->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_Root->setBounds (76, 174, 64, 20);
 
-    addAndMakeVisible (s_Low = new VSTSlider (L"Low Note"));
-    s_Low->setTooltip (L"Lowest note to use for triggering");
+    label9.reset (new juce::Label ("new label",
+                                   TRANS("Root Note:")));
+    addAndMakeVisible (label9.get());
+    label9->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label9->setJustificationType (juce::Justification::centred);
+    label9->setEditable (false, false, false);
+    label9->setColour (juce::Label::textColourId, juce::Colours::white);
+    label9->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label9->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label9->setBounds (15, 176, 64, 16);
+
+    s_Low.reset (new VSTSlider ("Low Note"));
+    addAndMakeVisible (s_Low.get());
+    s_Low->setTooltip (TRANS("Lowest note to use for triggering"));
     s_Low->setRange (-1, 127, 1);
-    s_Low->setSliderStyle (Slider::LinearBar);
-    s_Low->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Low->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Low->setColour (Slider::thumbColourId, Colours::black);
-    s_Low->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Low->setSliderStyle (juce::Slider::LinearBar);
+    s_Low->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Low->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Low->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Low->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Low->addListener (this);
 
-    addAndMakeVisible (label10 = new Label (L"new label",
-                                            L"Low Note"));
-    label10->setFont (Font (12.0000f, Font::plain));
-    label10->setJustificationType (Justification::centred);
-    label10->setEditable (false, false, false);
-    label10->setColour (Label::textColourId, Colours::white);
-    label10->setColour (TextEditor::textColourId, Colours::black);
-    label10->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_Low->setBounds (18, 440, 64, 20);
 
-    addAndMakeVisible (s_High = new VSTSlider (L"High Note"));
-    s_High->setTooltip (L"Highest note to use for triggering");
+    label10.reset (new juce::Label ("new label",
+                                    TRANS("Low Note")));
+    addAndMakeVisible (label10.get());
+    label10->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label10->setJustificationType (juce::Justification::centred);
+    label10->setEditable (false, false, false);
+    label10->setColour (juce::Label::textColourId, juce::Colours::white);
+    label10->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label10->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label10->setBounds (18, 424, 64, 16);
+
+    s_High.reset (new VSTSlider ("High Note"));
+    addAndMakeVisible (s_High.get());
+    s_High->setTooltip (TRANS("Highest note to use for triggering"));
     s_High->setRange (-1, 127, 1);
-    s_High->setSliderStyle (Slider::LinearBar);
-    s_High->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_High->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_High->setColour (Slider::thumbColourId, Colours::black);
-    s_High->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_High->setSliderStyle (juce::Slider::LinearBar);
+    s_High->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_High->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_High->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_High->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_High->addListener (this);
 
-    addAndMakeVisible (label11 = new Label (L"new label",
-                                            L"High Note"));
-    label11->setFont (Font (12.0000f, Font::plain));
-    label11->setJustificationType (Justification::centred);
-    label11->setEditable (false, false, false);
-    label11->setColour (Label::textColourId, Colours::white);
-    label11->setColour (TextEditor::textColourId, Colours::black);
-    label11->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_High->setBounds (90, 440, 64, 20);
 
-    addAndMakeVisible (s_TrigChan = new VSTSlider (L"TriggerChannel"));
-    s_TrigChan->setTooltip (L"Channel to use for trigger notes");
+    label11.reset (new juce::Label ("new label",
+                                    TRANS("High Note")));
+    addAndMakeVisible (label11.get());
+    label11->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label11->setJustificationType (juce::Justification::centred);
+    label11->setEditable (false, false, false);
+    label11->setColour (juce::Label::textColourId, juce::Colours::white);
+    label11->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label11->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label11->setBounds (90, 424, 64, 16);
+
+    s_TrigChan.reset (new VSTSlider ("TriggerChannel"));
+    addAndMakeVisible (s_TrigChan.get());
+    s_TrigChan->setTooltip (TRANS("Channel to use for trigger notes"));
     s_TrigChan->setRange (1, 16, 1);
-    s_TrigChan->setSliderStyle (Slider::LinearBar);
-    s_TrigChan->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_TrigChan->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_TrigChan->setColour (Slider::thumbColourId, Colours::black);
-    s_TrigChan->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_TrigChan->setSliderStyle (juce::Slider::LinearBar);
+    s_TrigChan->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_TrigChan->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_TrigChan->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_TrigChan->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_TrigChan->addListener (this);
 
-    addAndMakeVisible (label12 = new Label (L"Trigger Channel",
-                                            L"Channel"));
-    label12->setFont (Font (12.0000f, Font::plain));
-    label12->setJustificationType (Justification::centred);
+    s_TrigChan->setBounds (162, 440, 64, 20);
+
+    label12.reset (new juce::Label ("Trigger Channel",
+                                    TRANS("Channel")));
+    addAndMakeVisible (label12.get());
+    label12->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label12->setJustificationType (juce::Justification::centred);
     label12->setEditable (false, false, false);
-    label12->setColour (Label::textColourId, Colours::white);
-    label12->setColour (TextEditor::textColourId, Colours::black);
-    label12->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label12->setColour (juce::Label::textColourId, juce::Colours::white);
+    label12->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label12->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_Reload = new TextButton (L"Load"));
-    b_Reload->setTooltip (L"Load MIDI file (Ctrl-click: load MIDI file with the current pattern name from the \"midiloops\" folder)");
-    b_Reload->setConnectedEdges (Button::ConnectedOnLeft);
+    label12->setBounds (161, 424, 64, 16);
+
+    b_Reload.reset (new juce::TextButton ("Load"));
+    addAndMakeVisible (b_Reload.get());
+    b_Reload->setTooltip (TRANS("Load MIDI file (Ctrl-click: load MIDI file with the current pattern name from the \"midiloops\" folder)"));
+    b_Reload->setConnectedEdges (juce::Button::ConnectedOnLeft);
     b_Reload->addListener (this);
-    b_Reload->setColour (TextButton::buttonColourId, Colours::black);
-    b_Reload->setColour (TextButton::textColourOnId, Colours::white);
-    b_Reload->setColour (TextButton::textColourOffId, Colours::white);
+    b_Reload->setColour (juce::TextButton::buttonColourId, juce::Colours::black);
+    b_Reload->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
+    b_Reload->setColour (juce::TextButton::textColourOnId, juce::Colours::white);
 
-    addAndMakeVisible (quantizeBox = new ComboBox (L"Input Quantize Step"));
-    quantizeBox->setTooltip (L"Recorded events will be quantized to this step size");
+    b_Reload->setBounds (344, 90, 39, 22);
+
+    quantizeBox.reset (new juce::ComboBox ("Input Quantize Step"));
+    addAndMakeVisible (quantizeBox.get());
+    quantizeBox->setTooltip (TRANS("Recorded events will be quantized to this step size"));
     quantizeBox->setEditableText (false);
-    quantizeBox->setJustificationType (Justification::centredLeft);
-    quantizeBox->setTextWhenNothingSelected (L"32nd");
-    quantizeBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    quantizeBox->addItem (L"Off", 1);
-    quantizeBox->addItem (L"8th", 2);
-    quantizeBox->addItem (L"16th", 3);
-    quantizeBox->addItem (L"32nd", 4);
-    quantizeBox->addItem (L"64th", 5);
+    quantizeBox->setJustificationType (juce::Justification::centredLeft);
+    quantizeBox->setTextWhenNothingSelected (TRANS("32nd"));
+    quantizeBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    quantizeBox->addItem (TRANS("Off"), 1);
+    quantizeBox->addItem (TRANS("8th"), 2);
+    quantizeBox->addItem (TRANS("16th"), 3);
+    quantizeBox->addItem (TRANS("32nd"), 4);
+    quantizeBox->addItem (TRANS("64th"), 5);
     quantizeBox->addListener (this);
 
-    addAndMakeVisible (label21 = new Label (L"LoopStepSize",
-                                            L"Loop Step Size"));
-    label21->setFont (Font (12.0000f, Font::plain));
-    label21->setJustificationType (Justification::centred);
-    label21->setEditable (false, false, false);
-    label21->setColour (Label::textColourId, Colours::white);
-    label21->setColour (TextEditor::textColourId, Colours::black);
-    label21->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    quantizeBox->setBounds (439, 15, 77, 16);
 
-    addAndMakeVisible (s_Shift = new VSTSlider (L"Shift"));
-    s_Shift->setTooltip (L"Shifts the pattern by this number of beats, with wraparound");
+    label21.reset (new juce::Label ("LoopStepSize",
+                                    TRANS("Loop Step Size")));
+    addAndMakeVisible (label21.get());
+    label21->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label21->setJustificationType (juce::Justification::centred);
+    label21->setEditable (false, false, false);
+    label21->setColour (juce::Label::textColourId, juce::Colours::white);
+    label21->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label21->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label21->setBounds (261, 0, 84, 16);
+
+    s_Shift.reset (new VSTSlider ("Shift"));
+    addAndMakeVisible (s_Shift.get());
+    s_Shift->setTooltip (TRANS("Shifts the pattern by this number of beats, with wraparound"));
     s_Shift->setRange (-8, 8, 1);
-    s_Shift->setSliderStyle (Slider::LinearBar);
-    s_Shift->setTextBoxStyle (Slider::TextBoxLeft, true, 80, 20);
-    s_Shift->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Shift->setColour (Slider::thumbColourId, Colours::black);
-    s_Shift->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Shift->setSliderStyle (juce::Slider::LinearBar);
+    s_Shift->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
+    s_Shift->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Shift->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Shift->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Shift->addListener (this);
 
-    addAndMakeVisible (label2 = new Label (L"Shift",
-                                           L"Beat Shift"));
-    label2->setFont (Font (12.0000f, Font::plain));
-    label2->setJustificationType (Justification::centred);
+    s_Shift->setBounds (226, 367, 72, 20);
+
+    label2.reset (new juce::Label ("Shift",
+                                   TRANS("Beat Shift")));
+    addAndMakeVisible (label2.get());
+    label2->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label2->setJustificationType (juce::Justification::centred);
     label2->setEditable (false, false, false);
-    label2->setColour (Label::textColourId, Colours::white);
-    label2->setColour (TextEditor::textColourId, Colours::black);
-    label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label2->setColour (juce::Label::textColourId, juce::Colours::white);
+    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label23 = new Label (L"QuantizeLabel",
-                                            L"Quantize Input"));
-    label23->setFont (Font (12.0000f, Font::plain));
-    label23->setJustificationType (Justification::centred);
+    label2->setBounds (226, 351, 72, 16);
+
+    label23.reset (new juce::Label ("QuantizeLabel",
+                                    TRANS("Quantize Input")));
+    addAndMakeVisible (label23.get());
+    label23->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label23->setJustificationType (juce::Justification::centred);
     label23->setEditable (false, false, false);
-    label23->setColour (Label::textColourId, Colours::white);
-    label23->setColour (TextEditor::textColourId, Colours::black);
-    label23->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label23->setColour (juce::Label::textColourId, juce::Colours::white);
+    label23->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label23->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (nameLabel = new ClickableLabel (L"Name",
-                                                       L"Bassline (4 bars)"));
-    nameLabel->setTooltip (L"Current pattern name (double-click to edit)");
-    nameLabel->setFont (Font (26.3000f, Font::bold));
-    nameLabel->setJustificationType (Justification::centredLeft);
+    label23->setBounds (433, 0, 87, 16);
+
+    nameLabel.reset (new ClickableLabel ("Name",
+                                         TRANS("Bassline (4 bars)")));
+    addAndMakeVisible (nameLabel.get());
+    nameLabel->setTooltip (TRANS("Current pattern name (double-click to edit)"));
+    nameLabel->setFont (juce::Font (26.30f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    nameLabel->setJustificationType (juce::Justification::centredLeft);
     nameLabel->setEditable (false, true, false);
-    nameLabel->setColour (TextEditor::textColourId, Colours::black);
-    nameLabel->setColour (TextEditor::backgroundColourId, Colours::white);
+    nameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    nameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colours::white);
     nameLabel->addListener (this);
 
-    addAndMakeVisible (b_Save = new TextButton (L"Save"));
-    b_Save->setTooltip (L"Save a MIDI file of the current pattern (Ctrl-click: save to the \"midiloops\" folder with the current name)");
-    b_Save->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    nameLabel->setBounds (4, 87, 256, 27);
+
+    b_Save.reset (new juce::TextButton ("Save"));
+    addAndMakeVisible (b_Save.get());
+    b_Save->setTooltip (TRANS("Save a MIDI file of the current pattern (Ctrl-click: save to the \"midiloops\" folder with the current name)"));
+    b_Save->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     b_Save->addListener (this);
-    b_Save->setColour (TextButton::buttonColourId, Colours::black);
-    b_Save->setColour (TextButton::textColourOnId, Colours::white);
-    b_Save->setColour (TextButton::textColourOffId, Colours::white);
+    b_Save->setColour (juce::TextButton::buttonColourId, juce::Colours::black);
+    b_Save->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
+    b_Save->setColour (juce::TextButton::textColourOnId, juce::Colours::white);
 
-    addAndMakeVisible (label22 = new Label (L"Sync",
-                                            L"Host Sync Mode"));
-    label22->setFont (Font (12.0000f, Font::plain));
-    label22->setJustificationType (Justification::centred);
+    b_Save->setBounds (304, 90, 39, 22);
+
+    label22.reset (new juce::Label ("Sync",
+                                    TRANS("Host Sync Mode")));
+    addAndMakeVisible (label22.get());
+    label22->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label22->setJustificationType (juce::Justification::centred);
     label22->setEditable (false, false, false);
-    label22->setColour (Label::textColourId, Colours::white);
-    label22->setColour (TextEditor::textColourId, Colours::black);
-    label22->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label22->setColour (juce::Label::textColourId, juce::Colours::white);
+    label22->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label22->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label18 = new Label (L"Sync:",
-                                            L"Note Triggering"));
-    label18->setFont (Font (12.0000f, Font::bold));
-    label18->setJustificationType (Justification::centred);
+    label22->setBounds (162, 0, 95, 16);
+
+    label18.reset (new juce::Label ("Sync:",
+                                    TRANS("Note Triggering")));
+    addAndMakeVisible (label18.get());
+    label18->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    label18->setJustificationType (juce::Justification::centred);
     label18->setEditable (false, false, false);
-    label18->setColour (Label::textColourId, Colour (0xff9f9f9f));
-    label18->setColour (TextEditor::textColourId, Colours::black);
-    label18->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label18->setColour (juce::Label::textColourId, juce::Colour (0xff9f9f9f));
+    label18->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label18->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (loopinfoLabel = new Label (L"Loop Info",
-                                                  L"label text"));
-    loopinfoLabel->setFont (Font (15.0000f, Font::plain));
-    loopinfoLabel->setJustificationType (Justification::centredLeft);
+    label18->setBounds (12, 469, 125, 16);
+
+    loopinfoLabel.reset (new juce::Label ("Loop Info",
+                                          TRANS("label text")));
+    addAndMakeVisible (loopinfoLabel.get());
+    loopinfoLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    loopinfoLabel->setJustificationType (juce::Justification::centredLeft);
     loopinfoLabel->setEditable (false, false, false);
-    loopinfoLabel->setColour (Label::textColourId, Colours::black);
-    loopinfoLabel->setColour (TextEditor::textColourId, Colours::black);
-    loopinfoLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    loopinfoLabel->setColour (juce::Label::textColourId, juce::Colours::black);
+    loopinfoLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    loopinfoLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (loopinfoLabel2 = new Label (L"Loop Info 2",
-                                                   L"label text"));
-    loopinfoLabel2->setFont (Font (15.0000f, Font::plain));
-    loopinfoLabel2->setJustificationType (Justification::centredLeft);
+    loopinfoLabel->setBounds (14, 205, 272, 16);
+
+    loopinfoLabel2.reset (new juce::Label ("Loop Info 2",
+                                           TRANS("label text")));
+    addAndMakeVisible (loopinfoLabel2.get());
+    loopinfoLabel2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    loopinfoLabel2->setJustificationType (juce::Justification::centredLeft);
     loopinfoLabel2->setEditable (false, false, false);
-    loopinfoLabel2->setColour (TextEditor::textColourId, Colours::black);
-    loopinfoLabel2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    loopinfoLabel2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    loopinfoLabel2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label17 = new Label (L"Sync:",
-                                            L"Loop Manipulation"));
-    label17->setFont (Font (12.0000f, Font::bold));
-    label17->setJustificationType (Justification::centred);
+    loopinfoLabel2->setBounds (14, 225, 272, 16);
+
+    label17.reset (new juce::Label ("Sync:",
+                                    TRANS("Loop Manipulation")));
+    addAndMakeVisible (label17.get());
+    label17->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    label17->setJustificationType (juce::Justification::centred);
     label17->setEditable (false, false, false);
-    label17->setColour (Label::textColourId, Colour (0xff9f9f9f));
-    label17->setColour (TextEditor::textColourId, Colours::black);
-    label17->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label17->setColour (juce::Label::textColourId, juce::Colour (0xff9f9f9f));
+    label17->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label17->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (s_Channel = new VSTSlider (L"Channel"));
-    s_Channel->setTooltip (L"Input and output channel for the current slot");
+    label17->setBounds (14, 391, 125, 16);
+
+    s_Channel.reset (new VSTSlider ("Channel"));
+    addAndMakeVisible (s_Channel.get());
+    s_Channel->setTooltip (TRANS("Input and output channel for the current slot"));
     s_Channel->setRange (0, 16, 1);
-    s_Channel->setSliderStyle (Slider::LinearBar);
-    s_Channel->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_Channel->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_Channel->setColour (Slider::thumbColourId, Colours::black);
-    s_Channel->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_Channel->setSliderStyle (juce::Slider::LinearBar);
+    s_Channel->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_Channel->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_Channel->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_Channel->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_Channel->addListener (this);
 
-    addAndMakeVisible (label19 = new Label (L"I/O Channel",
-                                            L"I/O Channel"));
-    label19->setFont (Font (12.0000f, Font::plain));
-    label19->setJustificationType (Justification::centred);
+    s_Channel->setBounds (314, 414, 64, 20);
+
+    label19.reset (new juce::Label ("I/O Channel",
+                                    TRANS("I/O Channel")));
+    addAndMakeVisible (label19.get());
+    label19->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label19->setJustificationType (juce::Justification::centred);
     label19->setEditable (false, false, false);
-    label19->setColour (Label::textColourId, Colours::white);
-    label19->setColour (TextEditor::textColourId, Colours::black);
-    label19->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label19->setColour (juce::Label::textColourId, juce::Colours::white);
+    label19->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label19->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label20 = new Label (L"RecordLengthLabel",
-                                            L"Record Length"));
-    label20->setFont (Font (12.0000f, Font::plain));
-    label20->setJustificationType (Justification::centred);
+    label19->setBounds (309, 398, 74, 16);
+
+    label20.reset (new juce::Label ("RecordLengthLabel",
+                                    TRANS("Record Length")));
+    addAndMakeVisible (label20.get());
+    label20->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label20->setJustificationType (juce::Justification::centred);
     label20->setEditable (false, false, false);
-    label20->setColour (Label::textColourId, Colours::white);
-    label20->setColour (TextEditor::textColourId, Colours::black);
-    label20->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label20->setColour (juce::Label::textColourId, juce::Colours::white);
+    label20->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label20->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (s_FixedLength = new VSTSlider (L"Recording Length"));
-    s_FixedLength->setTooltip (L"If set to \"Manual\", recording will go on as long as the record button is on. Otherwise, length will be limited to this number of steps (based on \"Loop Step Size\" setting).");
+    label20->setBounds (347, 0, 83, 16);
+
+    s_FixedLength.reset (new VSTSlider ("Recording Length"));
+    addAndMakeVisible (s_FixedLength.get());
+    s_FixedLength->setTooltip (TRANS("If set to \"Manual\", recording will go on as long as the record button is on. Otherwise, length will be limited to this number of steps (based on \"Loop Step Size\" setting)."));
     s_FixedLength->setRange (0, 32, 1);
-    s_FixedLength->setSliderStyle (Slider::LinearBar);
-    s_FixedLength->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_FixedLength->setColour (Slider::backgroundColourId, Colour (0x1e707070));
-    s_FixedLength->setColour (Slider::thumbColourId, Colours::black);
-    s_FixedLength->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_FixedLength->setSliderStyle (juce::Slider::LinearBar);
+    s_FixedLength->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_FixedLength->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e707070));
+    s_FixedLength->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_FixedLength->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_FixedLength->addListener (this);
 
-    addAndMakeVisible (b_Filt = new TextButton (L"Transform/Filter"));
-    b_Filt->setTooltip (L"Transform: all events in the pattern are channelized to the sected channel; Filter: only events with the selected channel will be output");
-    b_Filt->setButtonText (L"Transform");
+    s_FixedLength->setBounds (347, 15, 86, 16);
+
+    b_Filt.reset (new juce::TextButton ("Transform/Filter"));
+    addAndMakeVisible (b_Filt.get());
+    b_Filt->setTooltip (TRANS("Transform: all events in the pattern are channelized to the sected channel; Filter: only events with the selected channel will be output"));
+    b_Filt->setButtonText (TRANS("Transform"));
     b_Filt->addListener (this);
-    b_Filt->setColour (TextButton::buttonColourId, Colour (0xff999999));
-    b_Filt->setColour (TextButton::textColourOnId, Colours::black);
+    b_Filt->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
+    b_Filt->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
 
-    addAndMakeVisible (viewport = new PianoPort (L"Piano Roll View"));
+    b_Filt->setBounds (314, 440, 64, 20);
+
+    viewport.reset (new PianoPort ("Piano Roll View"));
+    addAndMakeVisible (viewport.get());
     viewport->setScrollBarThickness (16);
-    viewport->setViewedComponent (new PianoRoll (this->getFilter(), this, timeline));
+    viewport->setViewedComponent (new PianoRoll (this->getFilter(), this, timeline.get()));
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer.get());
 
-    addAndMakeVisible (b_NoteToggle = new TextButton (L"new button"));
-    b_NoteToggle->setTooltip (L"When enabled, Note On events will toggle playback, ignoring Note Off events; otherwise Note Off will stop playback");
-    b_NoteToggle->setButtonText (L"Toggle");
+    b_NoteToggle.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (b_NoteToggle.get());
+    b_NoteToggle->setTooltip (TRANS("When enabled, Note On events will toggle playback, ignoring Note Off events; otherwise Note Off will stop playback"));
+    b_NoteToggle->setButtonText (TRANS("Toggle"));
     b_NoteToggle->addListener (this);
-    b_NoteToggle->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_NoteToggle->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (s_PlayGroup = new VSTSlider (L"TriggerChannel"));
-    s_PlayGroup->setTooltip (L"Slots with the same Play Group number will all start/stop at the same time");
+    b_NoteToggle->setBounds (257, 402, 40, 16);
+
+    s_PlayGroup.reset (new VSTSlider ("TriggerChannel"));
+    addAndMakeVisible (s_PlayGroup.get());
+    s_PlayGroup->setTooltip (TRANS("Slots with the same Play Group number will all start/stop at the same time"));
     s_PlayGroup->setRange (0, 16, 1);
-    s_PlayGroup->setSliderStyle (Slider::LinearBar);
-    s_PlayGroup->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_PlayGroup->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_PlayGroup->setColour (Slider::thumbColourId, Colours::black);
-    s_PlayGroup->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_PlayGroup->setSliderStyle (juce::Slider::LinearBar);
+    s_PlayGroup->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_PlayGroup->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_PlayGroup->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_PlayGroup->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_PlayGroup->addListener (this);
 
-    addAndMakeVisible (label13 = new Label (L"Trigger Channel",
-                                            L"Play Group"));
-    label13->setFont (Font (12.0000f, Font::plain));
-    label13->setJustificationType (Justification::centred);
-    label13->setEditable (false, false, false);
-    label13->setColour (Label::textColourId, Colours::white);
-    label13->setColour (TextEditor::textColourId, Colours::black);
-    label13->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_PlayGroup->setBounds (312, 136, 64, 20);
 
-    addAndMakeVisible (s_MuteGroup = new VSTSlider (L"TriggerChannel"));
-    s_MuteGroup->setTooltip (L"Only one slot with the same Mute Group number can be played at the same time");
+    label13.reset (new juce::Label ("Trigger Channel",
+                                    TRANS("Play Group")));
+    addAndMakeVisible (label13.get());
+    label13->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label13->setJustificationType (juce::Justification::centred);
+    label13->setEditable (false, false, false);
+    label13->setColour (juce::Label::textColourId, juce::Colours::white);
+    label13->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label13->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label13->setBounds (313, 119, 64, 16);
+
+    s_MuteGroup.reset (new VSTSlider ("TriggerChannel"));
+    addAndMakeVisible (s_MuteGroup.get());
+    s_MuteGroup->setTooltip (TRANS("Only one slot with the same Mute Group number can be played at the same time"));
     s_MuteGroup->setRange (0, 16, 1);
-    s_MuteGroup->setSliderStyle (Slider::LinearBar);
-    s_MuteGroup->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_MuteGroup->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_MuteGroup->setColour (Slider::thumbColourId, Colours::black);
-    s_MuteGroup->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_MuteGroup->setSliderStyle (juce::Slider::LinearBar);
+    s_MuteGroup->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_MuteGroup->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_MuteGroup->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_MuteGroup->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_MuteGroup->addListener (this);
 
-    addAndMakeVisible (label14 = new Label (L"Trigger Channel",
-                                            L"Mute Group"));
-    label14->setFont (Font (12.0000f, Font::plain));
-    label14->setJustificationType (Justification::centred);
-    label14->setEditable (false, false, false);
-    label14->setColour (Label::textColourId, Colours::white);
-    label14->setColour (TextEditor::textColourId, Colours::black);
-    label14->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_MuteGroup->setBounds (312, 174, 64, 20);
 
-    addAndMakeVisible (b_Snap = new ToggleButton (L"new toggle button"));
-    b_Snap->setTooltip (L"Toggle Snap to Grid");
-    b_Snap->setButtonText (L"Snap");
+    label14.reset (new juce::Label ("Trigger Channel",
+                                    TRANS("Mute Group")));
+    addAndMakeVisible (label14.get());
+    label14->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label14->setJustificationType (juce::Justification::centred);
+    label14->setEditable (false, false, false);
+    label14->setColour (juce::Label::textColourId, juce::Colours::white);
+    label14->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label14->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label14->setBounds (307, 157, 74, 16);
+
+    b_Snap.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (b_Snap.get());
+    b_Snap->setTooltip (TRANS("Toggle Snap to Grid"));
+    b_Snap->setButtonText (TRANS("Snap"));
     b_Snap->addListener (this);
 
-    addAndMakeVisible (quantizeBox2 = new ComboBox (L"PR Quantize Step"));
-    quantizeBox2->setTooltip (L"Grid Size");
+    b_Snap->setBounds (392, 61, 59, 24);
+
+    quantizeBox2.reset (new juce::ComboBox ("PR Quantize Step"));
+    addAndMakeVisible (quantizeBox2.get());
+    quantizeBox2->setTooltip (TRANS("Grid Size"));
     quantizeBox2->setEditableText (false);
-    quantizeBox2->setJustificationType (Justification::centredLeft);
-    quantizeBox2->setTextWhenNothingSelected (L"32nd");
-    quantizeBox2->setTextWhenNoChoicesAvailable (L"(no choices)");
-    quantizeBox2->addItem (L"4th", 1);
-    quantizeBox2->addItem (L"8th", 2);
-    quantizeBox2->addItem (L"16th", 3);
-    quantizeBox2->addItem (L"32nd", 4);
-    quantizeBox2->addItem (L"64th", 5);
+    quantizeBox2->setJustificationType (juce::Justification::centredLeft);
+    quantizeBox2->setTextWhenNothingSelected (TRANS("32nd"));
+    quantizeBox2->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    quantizeBox2->addItem (TRANS("4th"), 1);
+    quantizeBox2->addItem (TRANS("8th"), 2);
+    quantizeBox2->addItem (TRANS("16th"), 3);
+    quantizeBox2->addItem (TRANS("32nd"), 4);
+    quantizeBox2->addItem (TRANS("64th"), 5);
     quantizeBox2->addListener (this);
 
-    addAndMakeVisible (b_ForceToKey = new ToggleButton (L"new toggle button"));
-    b_ForceToKey->setTooltip (L"When checked, played notes will be fitted to the defined scale");
-    b_ForceToKey->setButtonText (L"Force to Scale");
+    quantizeBox2->setBounds (453, 64, 50, 18);
+
+    b_ForceToKey.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (b_ForceToKey.get());
+    b_ForceToKey->setTooltip (TRANS("When checked, played notes will be fitted to the defined scale"));
+    b_ForceToKey->setButtonText (TRANS("Force to Scale"));
     b_ForceToKey->addListener (this);
-    b_ForceToKey->setColour (ToggleButton::textColourId, Colours::white);
+    b_ForceToKey->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (keySelector = new KeySelector (ownerFilter->keySelectorState));
-    keySelector->setName (L"new component");
+    b_ForceToKey->setBounds (11, 312, 99, 17);
 
-    addAndMakeVisible (b_ShiftUp = new TextButton (L"new button"));
-    b_ShiftUp->setTooltip (L"Shift selected notes one semitone up");
-    b_ShiftUp->setButtonText (L">");
-    b_ShiftUp->setConnectedEdges (Button::ConnectedOnLeft);
+    keySelector.reset (new KeySelector (ownerFilter->keySelectorState));
+    addAndMakeVisible (keySelector.get());
+    keySelector->setName ("new component");
+
+    keySelector->setBounds (199, 315, 154, 28);
+
+    b_ShiftUp.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (b_ShiftUp.get());
+    b_ShiftUp->setTooltip (TRANS("Shift selected notes one semitone up"));
+    b_ShiftUp->setButtonText (TRANS(">"));
+    b_ShiftUp->setConnectedEdges (juce::Button::ConnectedOnLeft);
     b_ShiftUp->addListener (this);
-    b_ShiftUp->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_ShiftUp->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (b_ShiftDown = new TextButton (L"new button"));
-    b_ShiftDown->setTooltip (L"Shift selected notes one semitone down");
-    b_ShiftDown->setButtonText (L"<");
-    b_ShiftDown->setConnectedEdges (Button::ConnectedOnRight);
+    b_ShiftUp->setBounds (353, 314, 21, 30);
+
+    b_ShiftDown.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (b_ShiftDown.get());
+    b_ShiftDown->setTooltip (TRANS("Shift selected notes one semitone down"));
+    b_ShiftDown->setButtonText (TRANS("<"));
+    b_ShiftDown->setConnectedEdges (juce::Button::ConnectedOnRight);
     b_ShiftDown->addListener (this);
-    b_ShiftDown->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_ShiftDown->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (b_SingleLoop = new ToggleButton (L"Single Loop"));
-    b_SingleLoop->setTooltip (L"When checked, switching from a playing slot to another slot will automatically play the new slot and stop the previous one");
-    b_SingleLoop->setButtonText (L"Play active slot only");
+    b_ShiftDown->setBounds (178, 314, 21, 30);
+
+    b_SingleLoop.reset (new juce::ToggleButton ("Single Loop"));
+    addAndMakeVisible (b_SingleLoop.get());
+    b_SingleLoop->setTooltip (TRANS("When checked, switching from a playing slot to another slot will automatically play the new slot and stop the previous one"));
+    b_SingleLoop->setButtonText (TRANS("Play active slot only"));
     b_SingleLoop->addListener (this);
-    b_SingleLoop->setColour (ToggleButton::textColourId, Colours::white);
+    b_SingleLoop->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (s_MasterVelocity = new VSTSlider (L"VMasterVelocity"));
-    s_MasterVelocity->setTooltip (L"Global velocity adjustment applied to all played notes");
+    b_SingleLoop->setBounds (155, 36, 122, 16);
+
+    s_MasterVelocity.reset (new VSTSlider ("VMasterVelocity"));
+    addAndMakeVisible (s_MasterVelocity.get());
+    s_MasterVelocity->setTooltip (TRANS("Global velocity adjustment applied to all played notes"));
     s_MasterVelocity->setRange (0, 200, 1);
-    s_MasterVelocity->setSliderStyle (Slider::LinearBar);
-    s_MasterVelocity->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_MasterVelocity->setColour (Slider::backgroundColourId, Colour (0x1e707070));
-    s_MasterVelocity->setColour (Slider::thumbColourId, Colours::black);
-    s_MasterVelocity->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_MasterVelocity->setSliderStyle (juce::Slider::LinearBar);
+    s_MasterVelocity->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_MasterVelocity->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e707070));
+    s_MasterVelocity->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_MasterVelocity->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_MasterVelocity->addListener (this);
 
-    addAndMakeVisible (label15 = new Label (L"new label",
-                                            L"Master Velocity:"));
-    label15->setFont (Font (12.0000f, Font::plain));
-    label15->setJustificationType (Justification::centredRight);
-    label15->setEditable (false, false, false);
-    label15->setColour (Label::textColourId, Colours::white);
-    label15->setColour (TextEditor::textColourId, Colours::black);
-    label15->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_MasterVelocity->setBounds (371, 36, 72, 16);
 
-    addAndMakeVisible (aboutButton = new ImageButton (L"new button"));
-    aboutButton->setTooltip (L"Insert Piz Here-> midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper");
-    aboutButton->setButtonText (String());
+    label15.reset (new juce::Label ("new label",
+                                    TRANS("Master Velocity:")));
+    addAndMakeVisible (label15.get());
+    label15->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label15->setJustificationType (juce::Justification::centredRight);
+    label15->setEditable (false, false, false);
+    label15->setColour (juce::Label::textColourId, juce::Colours::white);
+    label15->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label15->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label15->setBounds (283, 36, 88, 16);
+
+    aboutButton.reset (new juce::ImageButton ("new button"));
+    addAndMakeVisible (aboutButton.get());
+    aboutButton->setTooltip (TRANS("Insert Piz Here-> midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper"));
+    aboutButton->setButtonText (juce::String());
     aboutButton->addListener (this);
 
     aboutButton->setImages (false, true, true,
-                            Image(), 1.0000f, Colour (0x0),
-                            Image(), 1.0000f, Colour (0x0),
-                            Image(), 1.0000f, Colour (0x0));
-    addAndMakeVisible (b_Triplet = new TextButton (L"Triplet"));
-    b_Triplet->setTooltip (L"Toggle Triplet Note Grid");
-    b_Triplet->setButtonText (L"3");
-    b_Triplet->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+                            juce::Image(), 1.000f, juce::Colour (0x00000000),
+                            juce::Image(), 1.000f, juce::Colour (0x00000000),
+                            juce::Image(), 1.000f, juce::Colour (0x00000000));
+    aboutButton->setBounds (9, 1, 136, 47);
+
+    b_Triplet.reset (new juce::TextButton ("Triplet"));
+    addAndMakeVisible (b_Triplet.get());
+    b_Triplet->setTooltip (TRANS("Toggle Triplet Note Grid"));
+    b_Triplet->setButtonText (TRANS("3"));
+    b_Triplet->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     b_Triplet->setRadioGroupId (2);
     b_Triplet->addListener (this);
-    b_Triplet->setColour (TextButton::buttonColourId, Colour (0xff8d8d8d));
+    b_Triplet->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff8d8d8d));
 
-    addAndMakeVisible (b_Dotted = new TextButton (L"Dotted"));
-    b_Dotted->setTooltip (L"Toggle Dotted Note Grid");
-    b_Dotted->setButtonText (L".");
-    b_Dotted->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    b_Triplet->setBounds (506, 64, 18, 18);
+
+    b_Dotted.reset (new juce::TextButton ("Dotted"));
+    addAndMakeVisible (b_Dotted.get());
+    b_Dotted->setTooltip (TRANS("Toggle Dotted Note Grid"));
+    b_Dotted->setButtonText (TRANS("."));
+    b_Dotted->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     b_Dotted->setRadioGroupId (2);
     b_Dotted->addListener (this);
-    b_Dotted->setColour (TextButton::buttonColourId, Colour (0xff8d8d8d));
+    b_Dotted->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff8d8d8d));
 
-    addAndMakeVisible (b_ZoomOut = new TextButton (L"ZoomOut"));
-    b_ZoomOut->setTooltip (L"Zoom Out (Ctrl-click for vertical)");
-    b_ZoomOut->setButtonText (L"-");
-    b_ZoomOut->setConnectedEdges (Button::ConnectedOnRight);
+    b_Dotted->setBounds (528, 64, 18, 18);
+
+    b_ZoomOut.reset (new juce::TextButton ("ZoomOut"));
+    addAndMakeVisible (b_ZoomOut.get());
+    b_ZoomOut->setTooltip (TRANS("Zoom Out (Ctrl-click for vertical)"));
+    b_ZoomOut->setButtonText (TRANS("-"));
+    b_ZoomOut->setConnectedEdges (juce::Button::ConnectedOnRight);
     b_ZoomOut->addListener (this);
-    b_ZoomOut->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_ZoomOut->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_ZoomIn = new TextButton (L"ZoomIn"));
-    b_ZoomIn->setTooltip (L"Zoom In (Ctrl-click for vertical)");
-    b_ZoomIn->setButtonText (L"+");
-    b_ZoomIn->setConnectedEdges (Button::ConnectedOnLeft);
+    b_ZoomOut->setBounds (656, 64, 18, 18);
+
+    b_ZoomIn.reset (new juce::TextButton ("ZoomIn"));
+    addAndMakeVisible (b_ZoomIn.get());
+    b_ZoomIn->setTooltip (TRANS("Zoom In (Ctrl-click for vertical)"));
+    b_ZoomIn->setButtonText (TRANS("+"));
+    b_ZoomIn->setConnectedEdges (juce::Button::ConnectedOnLeft);
     b_ZoomIn->setRadioGroupId (2);
     b_ZoomIn->addListener (this);
-    b_ZoomIn->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_ZoomIn->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (numerator = new Label (L"new label",
-                                              L"4"));
-    numerator->setTooltip (L"Time Sig Numerator");
-    numerator->setFont (Font (15.0000f, Font::plain));
-    numerator->setJustificationType (Justification::centredRight);
+    b_ZoomIn->setBounds (674, 64, 18, 18);
+
+    numerator.reset (new juce::Label ("new label",
+                                      TRANS("4")));
+    addAndMakeVisible (numerator.get());
+    numerator->setTooltip (TRANS("Time Sig Numerator"));
+    numerator->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    numerator->setJustificationType (juce::Justification::centredRight);
     numerator->setEditable (true, true, false);
-    numerator->setColour (TextEditor::textColourId, Colours::black);
-    numerator->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    numerator->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    numerator->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     numerator->addListener (this);
 
-    addAndMakeVisible (denominator = new Label (L"new label",
-                                                L"4"));
-    denominator->setTooltip (L"Time Sig Denominator");
-    denominator->setFont (Font (15.0000f, Font::plain));
-    denominator->setJustificationType (Justification::centredLeft);
+    numerator->setBounds (555, 64, 27, 18);
+
+    denominator.reset (new juce::Label ("new label",
+                                        TRANS("4")));
+    addAndMakeVisible (denominator.get());
+    denominator->setTooltip (TRANS("Time Sig Denominator"));
+    denominator->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    denominator->setJustificationType (juce::Justification::centredLeft);
     denominator->setEditable (true, true, false);
-    denominator->setColour (TextEditor::textColourId, Colours::black);
-    denominator->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    denominator->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    denominator->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     denominator->addListener (this);
 
-    addAndMakeVisible (loopinfoLabel3 = new Label (L"Loop Info 2",
-                                                   L"DEMO VERSION"));
-    loopinfoLabel3->setFont (Font (15.0000f, Font::bold));
-    loopinfoLabel3->setJustificationType (Justification::centred);
+    denominator->setBounds (584, 64, 29, 18);
+
+    loopinfoLabel3.reset (new juce::Label ("Loop Info 2",
+                                           TRANS("DEMO VERSION")));
+    addAndMakeVisible (loopinfoLabel3.get());
+    loopinfoLabel3->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    loopinfoLabel3->setJustificationType (juce::Justification::centred);
     loopinfoLabel3->setEditable (false, false, false);
-    loopinfoLabel3->setColour (Label::textColourId, Colour (0xffdfdfdf));
-    loopinfoLabel3->setColour (TextEditor::textColourId, Colours::black);
-    loopinfoLabel3->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    loopinfoLabel3->setColour (juce::Label::textColourId, juce::Colour (0xffdfdfdf));
+    loopinfoLabel3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    loopinfoLabel3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_UseScaleChannel = new ToggleButton (L"new toggle button"));
-    b_UseScaleChannel->setTooltip (L"When checked, input notes on \"Scale Ch\" will be used to define the scale");
-    b_UseScaleChannel->setButtonText (L"Use Scale Channel");
+    loopinfoLabel3->setBounds (5, 47, 141, 16);
+
+    b_UseScaleChannel.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (b_UseScaleChannel.get());
+    b_UseScaleChannel->setTooltip (TRANS("When checked, input notes on \"Scale Ch\" will be used to define the scale"));
+    b_UseScaleChannel->setButtonText (TRANS("Use Scale Channel"));
     b_UseScaleChannel->addListener (this);
-    b_UseScaleChannel->setColour (ToggleButton::textColourId, Colours::white);
+    b_UseScaleChannel->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (s_ScaleChannel = new VSTSlider (L"ScaleChannel"));
-    s_ScaleChannel->setTooltip (L"Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where \"Use Scale Ch\" is enabled");
+    b_UseScaleChannel->setBounds (11, 329, 129, 17);
+
+    s_ScaleChannel.reset (new VSTSlider ("ScaleChannel"));
+    addAndMakeVisible (s_ScaleChannel.get());
+    s_ScaleChannel->setTooltip (TRANS("Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where \"Use Scale Ch\" is enabled"));
     s_ScaleChannel->setRange (1, 16, 1);
-    s_ScaleChannel->setSliderStyle (Slider::LinearBar);
-    s_ScaleChannel->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_ScaleChannel->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_ScaleChannel->setColour (Slider::thumbColourId, Colours::black);
-    s_ScaleChannel->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_ScaleChannel->setSliderStyle (juce::Slider::LinearBar);
+    s_ScaleChannel->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_ScaleChannel->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_ScaleChannel->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_ScaleChannel->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_ScaleChannel->addListener (this);
 
-    addAndMakeVisible (label25 = new Label (L"scale ch",
-                                            L"Scale Ch"));
-    label25->setFont (Font (12.0000f, Font::plain));
-    label25->setJustificationType (Justification::centred);
-    label25->setEditable (false, false, false);
-    label25->setColour (Label::textColourId, Colours::white);
-    label25->setColour (TextEditor::textColourId, Colours::black);
-    label25->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_ScaleChannel->setBounds (10, 283, 60, 20);
 
-    addAndMakeVisible (s_MasterTranspose = new VSTSlider (L"MasterTranspose"));
-    s_MasterTranspose->setTooltip (L"Global transposition applied to all played notes (after Force to Scale)");
+    label25.reset (new juce::Label ("scale ch",
+                                    TRANS("Scale Ch")));
+    addAndMakeVisible (label25.get());
+    label25->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label25->setJustificationType (juce::Justification::centred);
+    label25->setEditable (false, false, false);
+    label25->setColour (juce::Label::textColourId, juce::Colours::white);
+    label25->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label25->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label25->setBounds (13, 267, 54, 16);
+
+    s_MasterTranspose.reset (new VSTSlider ("MasterTranspose"));
+    addAndMakeVisible (s_MasterTranspose.get());
+    s_MasterTranspose->setTooltip (TRANS("Global transposition applied to all played notes (after Force to Scale)"));
     s_MasterTranspose->setRange (-12, 12, 1);
-    s_MasterTranspose->setSliderStyle (Slider::LinearBar);
-    s_MasterTranspose->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_MasterTranspose->setColour (Slider::backgroundColourId, Colour (0x1e707070));
-    s_MasterTranspose->setColour (Slider::thumbColourId, Colours::black);
-    s_MasterTranspose->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_MasterTranspose->setSliderStyle (juce::Slider::LinearBar);
+    s_MasterTranspose->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_MasterTranspose->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e707070));
+    s_MasterTranspose->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_MasterTranspose->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_MasterTranspose->addListener (this);
 
-    addAndMakeVisible (label26 = new Label (L"new label",
-                                            L"Master Transpose:"));
-    label26->setFont (Font (12.0000f, Font::plain));
-    label26->setJustificationType (Justification::centredRight);
+    s_MasterTranspose->setBounds (554, 36, 72, 16);
+
+    label26.reset (new juce::Label ("new label",
+                                    TRANS("Master Transpose:")));
+    addAndMakeVisible (label26.get());
+    label26->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label26->setJustificationType (juce::Justification::centredRight);
     label26->setEditable (false, false, false);
-    label26->setColour (Label::textColourId, Colours::white);
-    label26->setColour (TextEditor::textColourId, Colours::black);
-    label26->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label26->setColour (juce::Label::textColourId, juce::Colours::white);
+    label26->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label26->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_WaitForBar = new ToggleButton (L"WaitForBar"));
-    b_WaitForBar->setTooltip (L"When checked, play/stop of this slot will happen at the start of the bar after");
-    b_WaitForBar->setButtonText (L"Wait for Next Bar");
+    label26->setBounds (452, 36, 102, 16);
+
+    b_WaitForBar.reset (new juce::ToggleButton ("WaitForBar"));
+    addAndMakeVisible (b_WaitForBar.get());
+    b_WaitForBar->setTooltip (TRANS("When checked, play/stop of this slot will happen at the start of the bar after"));
+    b_WaitForBar->setButtonText (TRANS("Wait for Next Bar"));
     b_WaitForBar->addListener (this);
-    b_WaitForBar->setColour (ToggleButton::textColourId, Colours::white);
+    b_WaitForBar->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (midiOutDeviceBox = new ComboBox (L"midiOutDevice"));
-    midiOutDeviceBox->setTooltip (L"Send ouput to selected MIDI port in addition to VST host output");
+    b_WaitForBar->setBounds (175, 123, 107, 16);
+
+    midiOutDeviceBox.reset (new juce::ComboBox ("midiOutDevice"));
+    addAndMakeVisible (midiOutDeviceBox.get());
+    midiOutDeviceBox->setTooltip (TRANS("Send ouput to selected MIDI port in addition to VST host output"));
     midiOutDeviceBox->setEditableText (false);
-    midiOutDeviceBox->setJustificationType (Justification::centredLeft);
-    midiOutDeviceBox->setTextWhenNothingSelected (L"--");
-    midiOutDeviceBox->setTextWhenNoChoicesAvailable (L"(no choices)");
+    midiOutDeviceBox->setJustificationType (juce::Justification::centredLeft);
+    midiOutDeviceBox->setTextWhenNothingSelected (TRANS("--"));
+    midiOutDeviceBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
     midiOutDeviceBox->addListener (this);
 
-    addAndMakeVisible (label27 = new Label (L"QuantizeLabel",
-                                            L"MIDI Output Device"));
-    label27->setFont (Font (12.0000f, Font::plain));
-    label27->setJustificationType (Justification::centred);
+    midiOutDeviceBox->setBounds (633, 15, 158, 16);
+
+    label27.reset (new juce::Label ("QuantizeLabel",
+                                    TRANS("MIDI Output Device")));
+    addAndMakeVisible (label27.get());
+    label27->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label27->setJustificationType (juce::Justification::centred);
     label27->setEditable (false, false, false);
-    label27->setColour (Label::textColourId, Colours::white);
-    label27->setColour (TextEditor::textColourId, Colours::black);
-    label27->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label27->setColour (juce::Label::textColourId, juce::Colours::white);
+    label27->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label27->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_UseTrChannel = new ToggleButton (L"new toggle button"));
-    b_UseTrChannel->setTooltip (L"When checked, notes on selected \"Transpose Ch\" will apply to \"Semitones\" and \"Octave\" settings, relative to \"Root Note\"");
-    b_UseTrChannel->setButtonText (L"Use Transp Ch");
+    label27->setBounds (627, 0, 117, 16);
+
+    b_UseTrChannel.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (b_UseTrChannel.get());
+    b_UseTrChannel->setTooltip (TRANS("When checked, notes on selected \"Transpose Ch\" will apply to \"Semitones\" and \"Octave\" settings, relative to \"Root Note\""));
+    b_UseTrChannel->setButtonText (TRANS("Use Transp Ch"));
     b_UseTrChannel->addListener (this);
-    b_UseTrChannel->setColour (ToggleButton::textColourId, Colours::white);
+    b_UseTrChannel->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (b_ImmediateTranspose = new ToggleButton (L"new toggle button"));
-    b_ImmediateTranspose->setTooltip (L"When checked, playing notes will be split and transposed immediately on changes to Semitones / Octave / Force to Scale / Master Transpose settings");
-    b_ImmediateTranspose->setButtonText (L"Split");
+    b_UseTrChannel->setBounds (148, 252, 130, 17);
+
+    b_ImmediateTranspose.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (b_ImmediateTranspose.get());
+    b_ImmediateTranspose->setTooltip (TRANS("When checked, playing notes will be split and transposed immediately on changes to Semitones / Octave / Force to Scale / Master Transpose settings"));
+    b_ImmediateTranspose->setButtonText (TRANS("Split"));
     b_ImmediateTranspose->addListener (this);
-    b_ImmediateTranspose->setColour (ToggleButton::textColourId, Colours::white);
+    b_ImmediateTranspose->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (s_NumLoops = new VSTSlider (L"NumLoops"));
-    s_NumLoops->setTooltip (L"Number of times to loop playback");
+    b_ImmediateTranspose->setBounds (247, 252, 48, 17);
+
+    s_NumLoops.reset (new VSTSlider ("NumLoops"));
+    addAndMakeVisible (s_NumLoops.get());
+    s_NumLoops->setTooltip (TRANS("Number of times to loop playback"));
     s_NumLoops->setRange (0, 64, 1);
-    s_NumLoops->setSliderStyle (Slider::LinearBar);
-    s_NumLoops->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_NumLoops->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_NumLoops->setColour (Slider::thumbColourId, Colours::black);
-    s_NumLoops->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_NumLoops->setSliderStyle (juce::Slider::LinearBar);
+    s_NumLoops->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_NumLoops->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_NumLoops->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_NumLoops->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_NumLoops->addListener (this);
 
-    addAndMakeVisible (s_NextSlot = new VSTSlider (L"NextSlot"));
-    s_NextSlot->setTooltip (L"What to do after the selected number of loops have played");
+    s_NumLoops->setBounds (155, 174, 64, 20);
+
+    s_NextSlot.reset (new VSTSlider ("NextSlot"));
+    addAndMakeVisible (s_NextSlot.get());
+    s_NextSlot->setTooltip (TRANS("What to do after the selected number of loops have played"));
     s_NextSlot->setRange (0, 16, 1);
-    s_NextSlot->setSliderStyle (Slider::LinearBar);
-    s_NextSlot->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_NextSlot->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_NextSlot->setColour (Slider::thumbColourId, Colours::black);
-    s_NextSlot->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_NextSlot->setSliderStyle (juce::Slider::LinearBar);
+    s_NextSlot->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_NextSlot->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_NextSlot->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_NextSlot->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_NextSlot->addListener (this);
 
-    addAndMakeVisible (label16 = new Label (L"Sync:",
-                                            L"Loop Settings"));
-    label16->setFont (Font (12.0000f, Font::bold));
-    label16->setJustificationType (Justification::centred);
-    label16->setEditable (false, false, false);
-    label16->setColour (Label::textColourId, Colour (0xff9f9f9f));
-    label16->setColour (TextEditor::textColourId, Colours::black);
-    label16->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_NextSlot->setBounds (234, 174, 64, 20);
 
-    addAndMakeVisible (forceModeBox = new ComboBox (L"Force To Scale Mode"));
+    label16.reset (new juce::Label ("Sync:",
+                                    TRANS("Loop Settings")));
+    addAndMakeVisible (label16.get());
+    label16->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    label16->setJustificationType (juce::Justification::centred);
+    label16->setEditable (false, false, false);
+    label16->setColour (juce::Label::textColourId, juce::Colour (0xff9f9f9f));
+    label16->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label16->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label16->setBounds (12, 247, 125, 16);
+
+    forceModeBox.reset (new juce::ComboBox ("Force To Scale Mode"));
+    addAndMakeVisible (forceModeBox.get());
     forceModeBox->setEditableText (false);
-    forceModeBox->setJustificationType (Justification::centredLeft);
-    forceModeBox->setTextWhenNothingSelected (L"Nearest");
-    forceModeBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    forceModeBox->addItem (L"Nearest", 1);
-    forceModeBox->addItem (L"Up", 2);
-    forceModeBox->addItem (L"Down", 3);
-    forceModeBox->addItem (L"Block", 4);
+    forceModeBox->setJustificationType (juce::Justification::centredLeft);
+    forceModeBox->setTextWhenNothingSelected (TRANS("Nearest"));
+    forceModeBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    forceModeBox->addItem (TRANS("Nearest"), 1);
+    forceModeBox->addItem (TRANS("Up"), 2);
+    forceModeBox->addItem (TRANS("Down"), 3);
+    forceModeBox->addItem (TRANS("Block"), 4);
     forceModeBox->addListener (this);
 
-    addAndMakeVisible (kbport = new Viewport (L"Keyboard View"));
+    forceModeBox->setBounds (110, 313, 61, 16);
+
+    kbport.reset (new juce::Viewport ("Keyboard View"));
+    addAndMakeVisible (kbport.get());
     kbport->setScrollBarsShown (false, false);
     kbport->setScrollBarThickness (16);
     kbport->setViewedComponent (new MidiKeyboardComponent (ownerFilter->kbstate,MidiKeyboardComponent::verticalKeyboardFacingRight));
 
-    addAndMakeVisible (b_RemoveBar = new TextButton (L"RemoveBar"));
-    b_RemoveBar->setTooltip (L"Remove bar");
-    b_RemoveBar->setButtonText (L"-");
-    b_RemoveBar->setConnectedEdges (Button::ConnectedOnRight);
+    b_RemoveBar.reset (new juce::TextButton ("RemoveBar"));
+    addAndMakeVisible (b_RemoveBar.get());
+    b_RemoveBar->setTooltip (TRANS("Remove bar"));
+    b_RemoveBar->setButtonText (TRANS("-"));
+    b_RemoveBar->setConnectedEdges (juce::Button::ConnectedOnRight);
     b_RemoveBar->addListener (this);
-    b_RemoveBar->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_RemoveBar->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_AddBar = new TextButton (L"AddBar"));
-    b_AddBar->setTooltip (L"Add bar");
-    b_AddBar->setButtonText (L"+");
-    b_AddBar->setConnectedEdges (Button::ConnectedOnLeft);
+    b_RemoveBar->setBounds (706, 64, 18, 18);
+
+    b_AddBar.reset (new juce::TextButton ("AddBar"));
+    addAndMakeVisible (b_AddBar.get());
+    b_AddBar->setTooltip (TRANS("Add bar"));
+    b_AddBar->setButtonText (TRANS("+"));
+    b_AddBar->setConnectedEdges (juce::Button::ConnectedOnLeft);
     b_AddBar->setRadioGroupId (2);
     b_AddBar->addListener (this);
-    b_AddBar->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_AddBar->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (LengthLabel = new Label (L"Length",
-                                                L"4"));
-    LengthLabel->setTooltip (L"Pattern length in bars");
-    LengthLabel->setFont (Font (15.0000f, Font::plain));
-    LengthLabel->setJustificationType (Justification::centred);
+    b_AddBar->setBounds (773, 64, 18, 18);
+
+    LengthLabel.reset (new juce::Label ("Length",
+                                        TRANS("4")));
+    addAndMakeVisible (LengthLabel.get());
+    LengthLabel->setTooltip (TRANS("Pattern length in bars"));
+    LengthLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    LengthLabel->setJustificationType (juce::Justification::centred);
     LengthLabel->setEditable (true, true, false);
-    LengthLabel->setColour (TextEditor::textColourId, Colours::black);
-    LengthLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    LengthLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    LengthLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     LengthLabel->addListener (this);
 
-    addAndMakeVisible (textButton17 = new TextButton (L"new button"));
-    textButton17->setButtonText (L"1");
-    textButton17->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    LengthLabel->setBounds (724, 65, 49, 16);
+
+    textButton17.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton17.get());
+    textButton17->setButtonText (TRANS("1"));
+    textButton17->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton17->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton18 = new TextButton (L"new button"));
-    textButton18->setButtonText (L"2");
-    textButton18->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton18->setRadioGroupId (1);
-    textButton18->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton17->setBounds (4, -97, 25, 24);
 
-    addAndMakeVisible (textButton19 = new TextButton (L"new button"));
-    textButton19->setButtonText (L"3");
-    textButton19->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton18.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton18.get());
+    textButton18->setButtonText (TRANS("2"));
+    textButton18->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton18->setRadioGroupId (1);
+    textButton18->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton18->setBounds (29, -97, 23, 24);
+
+    textButton19.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton19.get());
+    textButton19->setButtonText (TRANS("3"));
+    textButton19->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton19->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton20 = new TextButton (L"new button"));
-    textButton20->setButtonText (L"4");
-    textButton20->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton19->setBounds (52, -97, 23, 24);
+
+    textButton20.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton20.get());
+    textButton20->setButtonText (TRANS("4"));
+    textButton20->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton20->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton21 = new TextButton (L"new button"));
-    textButton21->setButtonText (L"5");
-    textButton21->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton20->setBounds (75, -97, 23, 24);
+
+    textButton21.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton21.get());
+    textButton21->setButtonText (TRANS("5"));
+    textButton21->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton21->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton22 = new TextButton (L"new button"));
-    textButton22->setButtonText (L"6");
-    textButton22->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton21->setBounds (98, -97, 23, 24);
+
+    textButton22.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton22.get());
+    textButton22->setButtonText (TRANS("6"));
+    textButton22->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton22->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton23 = new TextButton (L"new button"));
-    textButton23->setButtonText (L"7");
-    textButton23->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton22->setBounds (121, -97, 23, 24);
+
+    textButton23.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton23.get());
+    textButton23->setButtonText (TRANS("7"));
+    textButton23->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton23->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton24 = new TextButton (L"new button"));
-    textButton24->setButtonText (L"8");
-    textButton24->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton23->setBounds (144, -97, 23, 24);
+
+    textButton24.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton24.get());
+    textButton24->setButtonText (TRANS("8"));
+    textButton24->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton24->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton25 = new TextButton (L"new button"));
-    textButton25->setButtonText (L"9");
-    textButton25->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton24->setBounds (167, -97, 23, 24);
+
+    textButton25.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton25.get());
+    textButton25->setButtonText (TRANS("9"));
+    textButton25->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton25->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton26 = new TextButton (L"new button"));
-    textButton26->setButtonText (L"10");
-    textButton26->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton25->setBounds (190, -97, 23, 24);
+
+    textButton26.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton26.get());
+    textButton26->setButtonText (TRANS("10"));
+    textButton26->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton26->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton27 = new TextButton (L"new button"));
-    textButton27->setButtonText (L"11");
-    textButton27->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton26->setBounds (213, -97, 25, 24);
+
+    textButton27.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton27.get());
+    textButton27->setButtonText (TRANS("11"));
+    textButton27->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton27->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton28 = new TextButton (L"new button"));
-    textButton28->setButtonText (L"12");
-    textButton28->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton27->setBounds (238, -97, 25, 24);
+
+    textButton28.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton28.get());
+    textButton28->setButtonText (TRANS("12"));
+    textButton28->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton28->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton29 = new TextButton (L"new button"));
-    textButton29->setButtonText (L"13");
-    textButton29->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton28->setBounds (263, -97, 25, 24);
+
+    textButton29.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton29.get());
+    textButton29->setButtonText (TRANS("13"));
+    textButton29->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton29->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton30 = new TextButton (L"new button"));
-    textButton30->setButtonText (L"14");
-    textButton30->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton29->setBounds (288, -97, 25, 24);
+
+    textButton30.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton30.get());
+    textButton30->setButtonText (TRANS("14"));
+    textButton30->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton30->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton31 = new TextButton (L"new button"));
-    textButton31->setButtonText (L"15");
-    textButton31->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton30->setBounds (313, -97, 25, 24);
+
+    textButton31.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton31.get());
+    textButton31->setButtonText (TRANS("15"));
+    textButton31->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton31->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton32 = new TextButton (L"new button"));
-    textButton32->setButtonText (L"16");
-    textButton32->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton31->setBounds (338, -97, 25, 24);
+
+    textButton32.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton32.get());
+    textButton32->setButtonText (TRANS("16"));
+    textButton32->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton32->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton33 = new TextButton (L"new button"));
-    textButton33->setButtonText (L"1");
-    textButton33->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton32->setBounds (363, -97, 28, 24);
+
+    textButton33.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton33.get());
+    textButton33->setButtonText (TRANS("1"));
+    textButton33->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton33->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton34 = new TextButton (L"new button"));
-    textButton34->setButtonText (L"2");
-    textButton34->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton34->setRadioGroupId (1);
-    textButton34->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton33->setBounds (1, -73, 25, 24);
 
-    addAndMakeVisible (textButton35 = new TextButton (L"new button"));
-    textButton35->setButtonText (L"3");
-    textButton35->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton34.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton34.get());
+    textButton34->setButtonText (TRANS("2"));
+    textButton34->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton34->setRadioGroupId (1);
+    textButton34->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton34->setBounds (26, -73, 23, 24);
+
+    textButton35.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton35.get());
+    textButton35->setButtonText (TRANS("3"));
+    textButton35->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton35->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton36 = new TextButton (L"new button"));
-    textButton36->setButtonText (L"4");
-    textButton36->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton35->setBounds (49, -73, 23, 24);
+
+    textButton36.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton36.get());
+    textButton36->setButtonText (TRANS("4"));
+    textButton36->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton36->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton37 = new TextButton (L"new button"));
-    textButton37->setButtonText (L"5");
-    textButton37->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton36->setBounds (72, -73, 23, 24);
+
+    textButton37.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton37.get());
+    textButton37->setButtonText (TRANS("5"));
+    textButton37->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton37->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton38 = new TextButton (L"new button"));
-    textButton38->setButtonText (L"6");
-    textButton38->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton37->setBounds (95, -73, 23, 24);
+
+    textButton38.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton38.get());
+    textButton38->setButtonText (TRANS("6"));
+    textButton38->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton38->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton39 = new TextButton (L"new button"));
-    textButton39->setButtonText (L"7");
-    textButton39->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton38->setBounds (118, -73, 23, 24);
+
+    textButton39.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton39.get());
+    textButton39->setButtonText (TRANS("7"));
+    textButton39->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton39->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton40 = new TextButton (L"new button"));
-    textButton40->setButtonText (L"8");
-    textButton40->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton39->setBounds (141, -73, 23, 24);
+
+    textButton40.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton40.get());
+    textButton40->setButtonText (TRANS("8"));
+    textButton40->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton40->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton41 = new TextButton (L"new button"));
-    textButton41->setButtonText (L"9");
-    textButton41->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton40->setBounds (164, -73, 23, 24);
+
+    textButton41.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton41.get());
+    textButton41->setButtonText (TRANS("9"));
+    textButton41->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton41->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton42 = new TextButton (L"new button"));
-    textButton42->setButtonText (L"10");
-    textButton42->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton41->setBounds (187, -73, 23, 24);
+
+    textButton42.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton42.get());
+    textButton42->setButtonText (TRANS("10"));
+    textButton42->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton42->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton43 = new TextButton (L"new button"));
-    textButton43->setButtonText (L"11");
-    textButton43->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton42->setBounds (210, -73, 25, 24);
+
+    textButton43.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton43.get());
+    textButton43->setButtonText (TRANS("11"));
+    textButton43->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton43->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton44 = new TextButton (L"new button"));
-    textButton44->setButtonText (L"12");
-    textButton44->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton43->setBounds (235, -73, 25, 24);
+
+    textButton44.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton44.get());
+    textButton44->setButtonText (TRANS("12"));
+    textButton44->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton44->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton45 = new TextButton (L"new button"));
-    textButton45->setButtonText (L"13");
-    textButton45->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton44->setBounds (260, -73, 25, 24);
+
+    textButton45.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton45.get());
+    textButton45->setButtonText (TRANS("13"));
+    textButton45->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton45->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton46 = new TextButton (L"new button"));
-    textButton46->setButtonText (L"14");
-    textButton46->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton45->setBounds (285, -73, 25, 24);
+
+    textButton46.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton46.get());
+    textButton46->setButtonText (TRANS("14"));
+    textButton46->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton46->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton47 = new TextButton (L"new button"));
-    textButton47->setButtonText (L"15");
-    textButton47->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton46->setBounds (310, -73, 25, 24);
+
+    textButton47.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton47.get());
+    textButton47->setButtonText (TRANS("15"));
+    textButton47->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton47->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton48 = new TextButton (L"new button"));
-    textButton48->setButtonText (L"16");
-    textButton48->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton47->setBounds (335, -73, 25, 24);
+
+    textButton48.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton48.get());
+    textButton48->setButtonText (TRANS("16"));
+    textButton48->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton48->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton49 = new TextButton (L"new button"));
-    textButton49->setButtonText (L"1");
-    textButton49->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton48->setBounds (360, -73, 28, 24);
+
+    textButton49.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton49.get());
+    textButton49->setButtonText (TRANS("1"));
+    textButton49->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton49->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton50 = new TextButton (L"new button"));
-    textButton50->setButtonText (L"2");
-    textButton50->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton50->setRadioGroupId (1);
-    textButton50->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton49->setBounds (-2, -40, 25, 24);
 
-    addAndMakeVisible (textButton51 = new TextButton (L"new button"));
-    textButton51->setButtonText (L"3");
-    textButton51->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton50.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton50.get());
+    textButton50->setButtonText (TRANS("2"));
+    textButton50->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton50->setRadioGroupId (1);
+    textButton50->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton50->setBounds (23, -40, 23, 24);
+
+    textButton51.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton51.get());
+    textButton51->setButtonText (TRANS("3"));
+    textButton51->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton51->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton52 = new TextButton (L"new button"));
-    textButton52->setButtonText (L"4");
-    textButton52->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton51->setBounds (46, -40, 23, 24);
+
+    textButton52.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton52.get());
+    textButton52->setButtonText (TRANS("4"));
+    textButton52->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton52->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton53 = new TextButton (L"new button"));
-    textButton53->setButtonText (L"5");
-    textButton53->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton52->setBounds (69, -40, 23, 24);
+
+    textButton53.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton53.get());
+    textButton53->setButtonText (TRANS("5"));
+    textButton53->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton53->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton54 = new TextButton (L"new button"));
-    textButton54->setButtonText (L"6");
-    textButton54->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton53->setBounds (92, -40, 23, 24);
+
+    textButton54.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton54.get());
+    textButton54->setButtonText (TRANS("6"));
+    textButton54->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton54->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton55 = new TextButton (L"new button"));
-    textButton55->setButtonText (L"7");
-    textButton55->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton54->setBounds (115, -40, 23, 24);
+
+    textButton55.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton55.get());
+    textButton55->setButtonText (TRANS("7"));
+    textButton55->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton55->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton56 = new TextButton (L"new button"));
-    textButton56->setButtonText (L"8");
-    textButton56->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton55->setBounds (138, -40, 23, 24);
+
+    textButton56.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton56.get());
+    textButton56->setButtonText (TRANS("8"));
+    textButton56->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton56->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton57 = new TextButton (L"new button"));
-    textButton57->setButtonText (L"9");
-    textButton57->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton56->setBounds (161, -40, 23, 24);
+
+    textButton57.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton57.get());
+    textButton57->setButtonText (TRANS("9"));
+    textButton57->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton57->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton58 = new TextButton (L"new button"));
-    textButton58->setButtonText (L"10");
-    textButton58->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton57->setBounds (184, -40, 23, 24);
+
+    textButton58.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton58.get());
+    textButton58->setButtonText (TRANS("10"));
+    textButton58->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton58->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton59 = new TextButton (L"new button"));
-    textButton59->setButtonText (L"11");
-    textButton59->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton58->setBounds (207, -40, 25, 24);
+
+    textButton59.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton59.get());
+    textButton59->setButtonText (TRANS("11"));
+    textButton59->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton59->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton60 = new TextButton (L"new button"));
-    textButton60->setButtonText (L"12");
-    textButton60->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton59->setBounds (232, -40, 25, 24);
+
+    textButton60.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton60.get());
+    textButton60->setButtonText (TRANS("12"));
+    textButton60->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton60->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton61 = new TextButton (L"new button"));
-    textButton61->setButtonText (L"13");
-    textButton61->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton60->setBounds (257, -40, 25, 24);
+
+    textButton61.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton61.get());
+    textButton61->setButtonText (TRANS("13"));
+    textButton61->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton61->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton62 = new TextButton (L"new button"));
-    textButton62->setButtonText (L"14");
-    textButton62->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton61->setBounds (282, -40, 25, 24);
+
+    textButton62.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton62.get());
+    textButton62->setButtonText (TRANS("14"));
+    textButton62->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton62->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton63 = new TextButton (L"new button"));
-    textButton63->setButtonText (L"15");
-    textButton63->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton62->setBounds (307, -40, 25, 24);
+
+    textButton63.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton63.get());
+    textButton63->setButtonText (TRANS("15"));
+    textButton63->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton63->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton64 = new TextButton (L"new button"));
-    textButton64->setButtonText (L"16");
-    textButton64->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton63->setBounds (332, -40, 25, 24);
+
+    textButton64.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton64.get());
+    textButton64->setButtonText (TRANS("16"));
+    textButton64->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton64->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton65 = new TextButton (L"new button"));
-    textButton65->setButtonText (L"1");
-    textButton65->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton64->setBounds (357, -40, 28, 24);
+
+    textButton65.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton65.get());
+    textButton65->setButtonText (TRANS("1"));
+    textButton65->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton65->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton66 = new TextButton (L"new button"));
-    textButton66->setButtonText (L"2");
-    textButton66->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton66->setRadioGroupId (1);
-    textButton66->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton65->setBounds (383, -93, 25, 24);
 
-    addAndMakeVisible (textButton67 = new TextButton (L"new button"));
-    textButton67->setButtonText (L"3");
-    textButton67->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton66.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton66.get());
+    textButton66->setButtonText (TRANS("2"));
+    textButton66->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton66->setRadioGroupId (1);
+    textButton66->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton66->setBounds (408, -93, 23, 24);
+
+    textButton67.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton67.get());
+    textButton67->setButtonText (TRANS("3"));
+    textButton67->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton67->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton68 = new TextButton (L"new button"));
-    textButton68->setButtonText (L"4");
-    textButton68->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton67->setBounds (431, -93, 23, 24);
+
+    textButton68.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton68.get());
+    textButton68->setButtonText (TRANS("4"));
+    textButton68->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton68->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton69 = new TextButton (L"new button"));
-    textButton69->setButtonText (L"5");
-    textButton69->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton68->setBounds (454, -93, 23, 24);
+
+    textButton69.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton69.get());
+    textButton69->setButtonText (TRANS("5"));
+    textButton69->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton69->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton70 = new TextButton (L"new button"));
-    textButton70->setButtonText (L"6");
-    textButton70->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton69->setBounds (477, -93, 23, 24);
+
+    textButton70.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton70.get());
+    textButton70->setButtonText (TRANS("6"));
+    textButton70->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton70->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton71 = new TextButton (L"new button"));
-    textButton71->setButtonText (L"7");
-    textButton71->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton70->setBounds (500, -93, 23, 24);
+
+    textButton71.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton71.get());
+    textButton71->setButtonText (TRANS("7"));
+    textButton71->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton71->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton72 = new TextButton (L"new button"));
-    textButton72->setButtonText (L"8");
-    textButton72->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton71->setBounds (523, -93, 23, 24);
+
+    textButton72.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton72.get());
+    textButton72->setButtonText (TRANS("8"));
+    textButton72->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton72->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton73 = new TextButton (L"new button"));
-    textButton73->setButtonText (L"9");
-    textButton73->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton72->setBounds (546, -93, 23, 24);
+
+    textButton73.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton73.get());
+    textButton73->setButtonText (TRANS("9"));
+    textButton73->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton73->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton74 = new TextButton (L"new button"));
-    textButton74->setButtonText (L"10");
-    textButton74->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton73->setBounds (569, -93, 23, 24);
+
+    textButton74.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton74.get());
+    textButton74->setButtonText (TRANS("10"));
+    textButton74->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton74->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton75 = new TextButton (L"new button"));
-    textButton75->setButtonText (L"11");
-    textButton75->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton74->setBounds (592, -93, 25, 24);
+
+    textButton75.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton75.get());
+    textButton75->setButtonText (TRANS("11"));
+    textButton75->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton75->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton76 = new TextButton (L"new button"));
-    textButton76->setButtonText (L"12");
-    textButton76->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton75->setBounds (617, -93, 25, 24);
+
+    textButton76.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton76.get());
+    textButton76->setButtonText (TRANS("12"));
+    textButton76->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton76->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton77 = new TextButton (L"new button"));
-    textButton77->setButtonText (L"13");
-    textButton77->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton76->setBounds (642, -93, 25, 24);
+
+    textButton77.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton77.get());
+    textButton77->setButtonText (TRANS("13"));
+    textButton77->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton77->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton78 = new TextButton (L"new button"));
-    textButton78->setButtonText (L"14");
-    textButton78->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton77->setBounds (667, -93, 25, 24);
+
+    textButton78.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton78.get());
+    textButton78->setButtonText (TRANS("14"));
+    textButton78->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton78->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton79 = new TextButton (L"new button"));
-    textButton79->setButtonText (L"15");
-    textButton79->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton78->setBounds (692, -93, 25, 24);
+
+    textButton79.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton79.get());
+    textButton79->setButtonText (TRANS("15"));
+    textButton79->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton79->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton80 = new TextButton (L"new button"));
-    textButton80->setButtonText (L"16");
-    textButton80->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton79->setBounds (717, -93, 25, 24);
+
+    textButton80.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton80.get());
+    textButton80->setButtonText (TRANS("16"));
+    textButton80->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton80->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton81 = new TextButton (L"new button"));
-    textButton81->setButtonText (L"1");
-    textButton81->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton80->setBounds (742, -93, 28, 24);
+
+    textButton81.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton81.get());
+    textButton81->setButtonText (TRANS("1"));
+    textButton81->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton81->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton82 = new TextButton (L"new button"));
-    textButton82->setButtonText (L"2");
-    textButton82->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton82->setRadioGroupId (1);
-    textButton82->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton81->setBounds (371, -76, 25, 24);
 
-    addAndMakeVisible (textButton83 = new TextButton (L"new button"));
-    textButton83->setButtonText (L"3");
-    textButton83->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton82.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton82.get());
+    textButton82->setButtonText (TRANS("2"));
+    textButton82->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton82->setRadioGroupId (1);
+    textButton82->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton82->setBounds (396, -76, 23, 24);
+
+    textButton83.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton83.get());
+    textButton83->setButtonText (TRANS("3"));
+    textButton83->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton83->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton84 = new TextButton (L"new button"));
-    textButton84->setButtonText (L"4");
-    textButton84->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton83->setBounds (419, -76, 23, 24);
+
+    textButton84.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton84.get());
+    textButton84->setButtonText (TRANS("4"));
+    textButton84->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton84->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton85 = new TextButton (L"new button"));
-    textButton85->setButtonText (L"5");
-    textButton85->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton84->setBounds (442, -76, 23, 24);
+
+    textButton85.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton85.get());
+    textButton85->setButtonText (TRANS("5"));
+    textButton85->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton85->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton86 = new TextButton (L"new button"));
-    textButton86->setButtonText (L"6");
-    textButton86->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton85->setBounds (465, -76, 23, 24);
+
+    textButton86.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton86.get());
+    textButton86->setButtonText (TRANS("6"));
+    textButton86->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton86->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton87 = new TextButton (L"new button"));
-    textButton87->setButtonText (L"7");
-    textButton87->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton86->setBounds (488, -76, 23, 24);
+
+    textButton87.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton87.get());
+    textButton87->setButtonText (TRANS("7"));
+    textButton87->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton87->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton88 = new TextButton (L"new button"));
-    textButton88->setButtonText (L"8");
-    textButton88->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton87->setBounds (511, -76, 23, 24);
+
+    textButton88.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton88.get());
+    textButton88->setButtonText (TRANS("8"));
+    textButton88->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton88->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton89 = new TextButton (L"new button"));
-    textButton89->setButtonText (L"9");
-    textButton89->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton88->setBounds (534, -76, 23, 24);
+
+    textButton89.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton89.get());
+    textButton89->setButtonText (TRANS("9"));
+    textButton89->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton89->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton90 = new TextButton (L"new button"));
-    textButton90->setButtonText (L"10");
-    textButton90->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton89->setBounds (557, -76, 23, 24);
+
+    textButton90.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton90.get());
+    textButton90->setButtonText (TRANS("10"));
+    textButton90->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton90->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton91 = new TextButton (L"new button"));
-    textButton91->setButtonText (L"11");
-    textButton91->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton90->setBounds (580, -76, 25, 24);
+
+    textButton91.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton91.get());
+    textButton91->setButtonText (TRANS("11"));
+    textButton91->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton91->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton92 = new TextButton (L"new button"));
-    textButton92->setButtonText (L"12");
-    textButton92->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton91->setBounds (605, -76, 25, 24);
+
+    textButton92.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton92.get());
+    textButton92->setButtonText (TRANS("12"));
+    textButton92->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton92->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton93 = new TextButton (L"new button"));
-    textButton93->setButtonText (L"13");
-    textButton93->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton92->setBounds (630, -76, 25, 24);
+
+    textButton93.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton93.get());
+    textButton93->setButtonText (TRANS("13"));
+    textButton93->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton93->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton94 = new TextButton (L"new button"));
-    textButton94->setButtonText (L"14");
-    textButton94->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton93->setBounds (655, -76, 25, 24);
+
+    textButton94.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton94.get());
+    textButton94->setButtonText (TRANS("14"));
+    textButton94->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton94->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton95 = new TextButton (L"new button"));
-    textButton95->setButtonText (L"15");
-    textButton95->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton94->setBounds (680, -76, 25, 24);
+
+    textButton95.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton95.get());
+    textButton95->setButtonText (TRANS("15"));
+    textButton95->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton95->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton96 = new TextButton (L"new button"));
-    textButton96->setButtonText (L"16");
-    textButton96->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton95->setBounds (705, -76, 25, 24);
+
+    textButton96.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton96.get());
+    textButton96->setButtonText (TRANS("16"));
+    textButton96->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton96->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton97 = new TextButton (L"new button"));
-    textButton97->setButtonText (L"1");
-    textButton97->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton96->setBounds (730, -76, 28, 24);
+
+    textButton97.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton97.get());
+    textButton97->setButtonText (TRANS("1"));
+    textButton97->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton97->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton98 = new TextButton (L"new button"));
-    textButton98->setButtonText (L"2");
-    textButton98->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton98->setRadioGroupId (1);
-    textButton98->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton97->setBounds (413, -59, 25, 24);
 
-    addAndMakeVisible (textButton99 = new TextButton (L"new button"));
-    textButton99->setButtonText (L"3");
-    textButton99->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton98.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton98.get());
+    textButton98->setButtonText (TRANS("2"));
+    textButton98->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton98->setRadioGroupId (1);
+    textButton98->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton98->setBounds (438, -59, 23, 24);
+
+    textButton99.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton99.get());
+    textButton99->setButtonText (TRANS("3"));
+    textButton99->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton99->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton100 = new TextButton (L"new button"));
-    textButton100->setButtonText (L"4");
-    textButton100->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton99->setBounds (461, -59, 23, 24);
+
+    textButton100.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton100.get());
+    textButton100->setButtonText (TRANS("4"));
+    textButton100->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton100->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton101 = new TextButton (L"new button"));
-    textButton101->setButtonText (L"5");
-    textButton101->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton100->setBounds (484, -59, 23, 24);
+
+    textButton101.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton101.get());
+    textButton101->setButtonText (TRANS("5"));
+    textButton101->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton101->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton102 = new TextButton (L"new button"));
-    textButton102->setButtonText (L"6");
-    textButton102->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton101->setBounds (507, -59, 23, 24);
+
+    textButton102.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton102.get());
+    textButton102->setButtonText (TRANS("6"));
+    textButton102->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton102->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton103 = new TextButton (L"new button"));
-    textButton103->setButtonText (L"7");
-    textButton103->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton102->setBounds (530, -59, 23, 24);
+
+    textButton103.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton103.get());
+    textButton103->setButtonText (TRANS("7"));
+    textButton103->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton103->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton104 = new TextButton (L"new button"));
-    textButton104->setButtonText (L"8");
-    textButton104->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton103->setBounds (553, -59, 23, 24);
+
+    textButton104.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton104.get());
+    textButton104->setButtonText (TRANS("8"));
+    textButton104->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton104->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton105 = new TextButton (L"new button"));
-    textButton105->setButtonText (L"9");
-    textButton105->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton104->setBounds (576, -59, 23, 24);
+
+    textButton105.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton105.get());
+    textButton105->setButtonText (TRANS("9"));
+    textButton105->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton105->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton106 = new TextButton (L"new button"));
-    textButton106->setButtonText (L"10");
-    textButton106->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton105->setBounds (599, -59, 23, 24);
+
+    textButton106.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton106.get());
+    textButton106->setButtonText (TRANS("10"));
+    textButton106->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton106->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton107 = new TextButton (L"new button"));
-    textButton107->setButtonText (L"11");
-    textButton107->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton106->setBounds (622, -59, 25, 24);
+
+    textButton107.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton107.get());
+    textButton107->setButtonText (TRANS("11"));
+    textButton107->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton107->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton108 = new TextButton (L"new button"));
-    textButton108->setButtonText (L"12");
-    textButton108->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton107->setBounds (647, -59, 25, 24);
+
+    textButton108.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton108.get());
+    textButton108->setButtonText (TRANS("12"));
+    textButton108->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton108->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton109 = new TextButton (L"new button"));
-    textButton109->setButtonText (L"13");
-    textButton109->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton108->setBounds (672, -59, 25, 24);
+
+    textButton109.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton109.get());
+    textButton109->setButtonText (TRANS("13"));
+    textButton109->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton109->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton110 = new TextButton (L"new button"));
-    textButton110->setButtonText (L"14");
-    textButton110->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton109->setBounds (697, -59, 25, 24);
+
+    textButton110.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton110.get());
+    textButton110->setButtonText (TRANS("14"));
+    textButton110->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton110->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton111 = new TextButton (L"new button"));
-    textButton111->setButtonText (L"15");
-    textButton111->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton110->setBounds (722, -59, 25, 24);
+
+    textButton111.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton111.get());
+    textButton111->setButtonText (TRANS("15"));
+    textButton111->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton111->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton112 = new TextButton (L"new button"));
-    textButton112->setButtonText (L"16");
-    textButton112->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton111->setBounds (747, -59, 25, 24);
+
+    textButton112.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton112.get());
+    textButton112->setButtonText (TRANS("16"));
+    textButton112->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton112->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton113 = new TextButton (L"new button"));
-    textButton113->setButtonText (L"1");
-    textButton113->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton112->setBounds (772, -59, 28, 24);
+
+    textButton113.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton113.get());
+    textButton113->setButtonText (TRANS("1"));
+    textButton113->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton113->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton114 = new TextButton (L"new button"));
-    textButton114->setButtonText (L"2");
-    textButton114->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
-    textButton114->setRadioGroupId (1);
-    textButton114->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    textButton113->setBounds (408, -29, 25, 24);
 
-    addAndMakeVisible (textButton115 = new TextButton (L"new button"));
-    textButton115->setButtonText (L"3");
-    textButton115->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton114.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton114.get());
+    textButton114->setButtonText (TRANS("2"));
+    textButton114->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    textButton114->setRadioGroupId (1);
+    textButton114->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+
+    textButton114->setBounds (433, -29, 23, 24);
+
+    textButton115.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton115.get());
+    textButton115->setButtonText (TRANS("3"));
+    textButton115->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton115->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton116 = new TextButton (L"new button"));
-    textButton116->setButtonText (L"4");
-    textButton116->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton115->setBounds (456, -29, 23, 24);
+
+    textButton116.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton116.get());
+    textButton116->setButtonText (TRANS("4"));
+    textButton116->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton116->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton117 = new TextButton (L"new button"));
-    textButton117->setButtonText (L"5");
-    textButton117->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton116->setBounds (479, -29, 23, 24);
+
+    textButton117.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton117.get());
+    textButton117->setButtonText (TRANS("5"));
+    textButton117->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton117->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton118 = new TextButton (L"new button"));
-    textButton118->setButtonText (L"6");
-    textButton118->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton117->setBounds (502, -29, 23, 24);
+
+    textButton118.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton118.get());
+    textButton118->setButtonText (TRANS("6"));
+    textButton118->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton118->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton119 = new TextButton (L"new button"));
-    textButton119->setButtonText (L"7");
-    textButton119->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton118->setBounds (525, -29, 23, 24);
+
+    textButton119.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton119.get());
+    textButton119->setButtonText (TRANS("7"));
+    textButton119->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton119->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton120 = new TextButton (L"new button"));
-    textButton120->setButtonText (L"8");
-    textButton120->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton119->setBounds (548, -29, 23, 24);
+
+    textButton120.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton120.get());
+    textButton120->setButtonText (TRANS("8"));
+    textButton120->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton120->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton121 = new TextButton (L"new button"));
-    textButton121->setButtonText (L"9");
-    textButton121->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton120->setBounds (571, -29, 23, 24);
+
+    textButton121.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton121.get());
+    textButton121->setButtonText (TRANS("9"));
+    textButton121->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton121->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton122 = new TextButton (L"new button"));
-    textButton122->setButtonText (L"10");
-    textButton122->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton121->setBounds (594, -29, 23, 24);
+
+    textButton122.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton122.get());
+    textButton122->setButtonText (TRANS("10"));
+    textButton122->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton122->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton123 = new TextButton (L"new button"));
-    textButton123->setButtonText (L"11");
-    textButton123->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton122->setBounds (617, -29, 25, 24);
+
+    textButton123.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton123.get());
+    textButton123->setButtonText (TRANS("11"));
+    textButton123->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton123->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton124 = new TextButton (L"new button"));
-    textButton124->setButtonText (L"12");
-    textButton124->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton123->setBounds (642, -29, 25, 24);
+
+    textButton124.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton124.get());
+    textButton124->setButtonText (TRANS("12"));
+    textButton124->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton124->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton125 = new TextButton (L"new button"));
-    textButton125->setButtonText (L"13");
-    textButton125->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton124->setBounds (667, -29, 25, 24);
+
+    textButton125.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton125.get());
+    textButton125->setButtonText (TRANS("13"));
+    textButton125->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton125->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton126 = new TextButton (L"new button"));
-    textButton126->setButtonText (L"14");
-    textButton126->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton125->setBounds (692, -29, 25, 24);
+
+    textButton126.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton126.get());
+    textButton126->setButtonText (TRANS("14"));
+    textButton126->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton126->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton127 = new TextButton (L"new button"));
-    textButton127->setButtonText (L"15");
-    textButton127->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight | Button::ConnectedOnBottom);
+    textButton126->setBounds (717, -29, 25, 24);
+
+    textButton127.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton127.get());
+    textButton127->setButtonText (TRANS("15"));
+    textButton127->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
     textButton127->setRadioGroupId (1);
 
-    addAndMakeVisible (textButton128 = new TextButton (L"new button"));
-    textButton128->setButtonText (L"16");
-    textButton128->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnBottom);
+    textButton127->setBounds (742, -29, 25, 24);
+
+    textButton128.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (textButton128.get());
+    textButton128->setButtonText (TRANS("16"));
+    textButton128->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
     textButton128->setRadioGroupId (1);
 
-    addAndMakeVisible (b_Transpose10 = new TextButton (L"new button"));
-    b_Transpose10->setButtonText (L"transpose channel 10");
+    textButton128->setBounds (767, -29, 28, 24);
+
+    b_Transpose10.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (b_Transpose10.get());
+    b_Transpose10->setButtonText (TRANS("transpose channel 10"));
     b_Transpose10->addListener (this);
-    b_Transpose10->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_Transpose10->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (b_KeepLength = new ToggleButton (L"OverdubMode"));
-    b_KeepLength->setTooltip (L"When checked, overdubbing will loop record into existing loop length");
-    b_KeepLength->setButtonText (L"Keep Length");
+    b_Transpose10->setBounds (306, 252, 72, 13);
+
+    b_KeepLength.reset (new juce::ToggleButton ("OverdubMode"));
+    addAndMakeVisible (b_KeepLength.get());
+    b_KeepLength->setTooltip (TRANS("When checked, overdubbing will loop record into existing loop length"));
+    b_KeepLength->setButtonText (TRANS("Keep Length"));
     b_KeepLength->addListener (this);
-    b_KeepLength->setColour (ToggleButton::textColourId, Colours::white);
+    b_KeepLength->setColour (juce::ToggleButton::textColourId, juce::Colours::white);
 
-    addAndMakeVisible (s_RecCC = new VSTSlider (L"recCC"));
-    s_RecCC->setTooltip (L"CC Number to toggle recoring to active slot");
+    b_KeepLength->setBounds (520, -2, 83, 16);
+
+    s_RecCC.reset (new VSTSlider ("recCC"));
+    addAndMakeVisible (s_RecCC.get());
+    s_RecCC->setTooltip (TRANS("CC Number to toggle recoring to active slot"));
     s_RecCC->setRange (-2, 127, 1);
-    s_RecCC->setSliderStyle (Slider::LinearBar);
-    s_RecCC->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_RecCC->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_RecCC->setColour (Slider::thumbColourId, Colours::black);
-    s_RecCC->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_RecCC->setSliderStyle (juce::Slider::LinearBar);
+    s_RecCC->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_RecCC->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_RecCC->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_RecCC->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_RecCC->addListener (this);
 
-    addAndMakeVisible (s_PlayCC = new VSTSlider (L"playCC"));
-    s_PlayCC->setTooltip (L"CC Number to toggle play for active slot");
+    s_RecCC->setBounds (11, 149, 64, 20);
+
+    s_PlayCC.reset (new VSTSlider ("playCC"));
+    addAndMakeVisible (s_PlayCC.get());
+    s_PlayCC->setTooltip (TRANS("CC Number to toggle play for active slot"));
     s_PlayCC->setRange (-2, 127, 1);
-    s_PlayCC->setSliderStyle (Slider::LinearBar);
-    s_PlayCC->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_PlayCC->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_PlayCC->setColour (Slider::thumbColourId, Colours::black);
-    s_PlayCC->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_PlayCC->setSliderStyle (juce::Slider::LinearBar);
+    s_PlayCC->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_PlayCC->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_PlayCC->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_PlayCC->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_PlayCC->addListener (this);
 
-    addAndMakeVisible (s_VelocitySens = new VSTSlider (L"Velocity Sensitivity"));
-    s_VelocitySens->setTooltip (L"Velocity Sensitivity (Input Velocity -> Output Velocity)");
+    s_PlayCC->setBounds (81, 149, 64, 20);
+
+    s_VelocitySens.reset (new VSTSlider ("Velocity Sensitivity"));
+    addAndMakeVisible (s_VelocitySens.get());
+    s_VelocitySens->setTooltip (TRANS("Velocity Sensitivity (Input Velocity -> Output Velocity)"));
     s_VelocitySens->setRange (0, 200, 1);
-    s_VelocitySens->setSliderStyle (Slider::LinearBar);
-    s_VelocitySens->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_VelocitySens->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_VelocitySens->setColour (Slider::thumbColourId, Colours::black);
-    s_VelocitySens->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_VelocitySens->setSliderStyle (juce::Slider::LinearBar);
+    s_VelocitySens->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_VelocitySens->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_VelocitySens->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_VelocitySens->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_VelocitySens->addListener (this);
 
-    addAndMakeVisible (label24 = new Label (L"new label",
-                                            L"VeloSens"));
-    label24->setFont (Font (12.0000f, Font::plain));
-    label24->setJustificationType (Justification::centred);
+    s_VelocitySens->setBounds (234, 440, 64, 20);
+
+    label24.reset (new juce::Label ("new label",
+                                    TRANS("VeloSens")));
+    addAndMakeVisible (label24.get());
+    label24->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label24->setJustificationType (juce::Justification::centred);
     label24->setEditable (false, false, false);
-    label24->setColour (Label::textColourId, Colours::white);
-    label24->setColour (TextEditor::textColourId, Colours::black);
-    label24->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label24->setColour (juce::Label::textColourId, juce::Colours::white);
+    label24->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label24->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_Monitor = new TextButton (L"MIDI_Monitor"));
-    b_Monitor->setTooltip (L"Monitor input MIDI through active slot\'s settings (Transpose, Scale, I/O Channel)");
-    b_Monitor->setButtonText (L"Monitor");
+    label24->setBounds (225, 424, 80, 16);
+
+    b_Monitor.reset (new juce::TextButton ("MIDI_Monitor"));
+    addAndMakeVisible (b_Monitor.get());
+    b_Monitor->setTooltip (TRANS("Monitor input MIDI through active slot\'s settings (Transpose, Scale, I/O Channel)"));
+    b_Monitor->setButtonText (TRANS("Monitor"));
     b_Monitor->addListener (this);
-    b_Monitor->setColour (TextButton::buttonColourId, Colour (0xff999999));
+    b_Monitor->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff999999));
 
-    addAndMakeVisible (s_TransposeChannel = new VSTSlider (L"TransposeChannel"));
-    s_TransposeChannel->setTooltip (L"Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where \"Use Transp Ch\" is enabled");
+    b_Monitor->setBounds (678, 33, 55, 20);
+
+    s_TransposeChannel.reset (new VSTSlider ("TransposeChannel"));
+    addAndMakeVisible (s_TransposeChannel.get());
+    s_TransposeChannel->setTooltip (TRANS("Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where \"Use Transp Ch\" is enabled"));
     s_TransposeChannel->setRange (1, 16, 1);
-    s_TransposeChannel->setSliderStyle (Slider::LinearBar);
-    s_TransposeChannel->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    s_TransposeChannel->setColour (Slider::backgroundColourId, Colour (0x1e000000));
-    s_TransposeChannel->setColour (Slider::thumbColourId, Colours::black);
-    s_TransposeChannel->setColour (Slider::textBoxTextColourId, Colours::white);
+    s_TransposeChannel->setSliderStyle (juce::Slider::LinearBar);
+    s_TransposeChannel->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    s_TransposeChannel->setColour (juce::Slider::backgroundColourId, juce::Colour (0x1e000000));
+    s_TransposeChannel->setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    s_TransposeChannel->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
     s_TransposeChannel->addListener (this);
 
-    addAndMakeVisible (label28 = new Label (L"tr ch",
-                                            L"Transpose Ch"));
-    label28->setFont (Font (12.0000f, Font::plain));
-    label28->setJustificationType (Justification::centred);
-    label28->setEditable (false, false, false);
-    label28->setColour (Label::textColourId, Colours::white);
-    label28->setColour (TextEditor::textColourId, Colours::black);
-    label28->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    s_TransposeChannel->setBounds (76, 283, 60, 20);
 
-    cachedImage_piznew40_png = ImageCache::getFromMemory (piznew40_png, piznew40_pngSize);
+    label28.reset (new juce::Label ("tr ch",
+                                    TRANS("Transpose Ch")));
+    addAndMakeVisible (label28.get());
+    label28->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label28->setJustificationType (juce::Justification::centred);
+    label28->setEditable (false, false, false);
+    label28->setColour (juce::Label::textColourId, juce::Colours::white);
+    label28->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label28->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label28->setBounds (66, 267, 80, 16);
+
+    cachedImage_piznew40_png_1 = juce::ImageCache::getFromMemory (piznew40_png, piznew40_pngSize);
 
     //[UserPreSize]
 	DBG("PizLooperEditor()");
     aboutButton->setTooltip (L"Insert Piz Here-> midiLooper v" +String(JucePlugin_VersionString)+" http://thepiz.org/plugins/?p=midiLooper");
-	viewport->setTimeline(timeline);
-	viewport->setKeyboard(kbport);
+	viewport->setTimeline(timeline.get());
+	viewport->setKeyboard(kbport.get());
     this->setMouseClickGrabsKeyboardFocus(false);
 	for (int slot=0;slot<numSlots;slot++) {
 		getButtonForSlot(slot)->addListener(this);
@@ -2001,234 +2449,234 @@ PizLooperEditor::~PizLooperEditor()
 	getFilter()->keySelectorState.removeListener(this);
     //[/Destructor_pre]
 
-    deleteAndZero (label);
-    deleteAndZero (timeline);
-    deleteAndZero (textButton1);
-    deleteAndZero (textButton2);
-    deleteAndZero (textButton3);
-    deleteAndZero (textButton4);
-    deleteAndZero (textButton5);
-    deleteAndZero (textButton6);
-    deleteAndZero (textButton7);
-    deleteAndZero (textButton8);
-    deleteAndZero (textButton9);
-    deleteAndZero (textButton10);
-    deleteAndZero (textButton11);
-    deleteAndZero (textButton12);
-    deleteAndZero (textButton13);
-    deleteAndZero (textButton14);
-    deleteAndZero (textButton15);
-    deleteAndZero (textButton16);
-    deleteAndZero (b_Play);
-    deleteAndZero (b_Record);
-    deleteAndZero (b_Overdub);
-    deleteAndZero (b_Thru);
-    deleteAndZero (b_Clear);
-    deleteAndZero (stepsizeBox);
-    deleteAndZero (s_Transpose);
-    deleteAndZero (s_Octave);
-    deleteAndZero (s_Velocity);
-    deleteAndZero (label3);
-    deleteAndZero (label4);
-    deleteAndZero (label5);
-    deleteAndZero (s_Start);
-    deleteAndZero (label6);
-    deleteAndZero (s_End);
-    deleteAndZero (label7);
-    deleteAndZero (s_Stretch);
-    deleteAndZero (label8);
-    deleteAndZero (loopmodeBox);
-    deleteAndZero (notetriggerBox);
-    deleteAndZero (syncmodeBox);
-    deleteAndZero (s_Root);
-    deleteAndZero (label9);
-    deleteAndZero (s_Low);
-    deleteAndZero (label10);
-    deleteAndZero (s_High);
-    deleteAndZero (label11);
-    deleteAndZero (s_TrigChan);
-    deleteAndZero (label12);
-    deleteAndZero (b_Reload);
-    deleteAndZero (quantizeBox);
-    deleteAndZero (label21);
-    deleteAndZero (s_Shift);
-    deleteAndZero (label2);
-    deleteAndZero (label23);
-    deleteAndZero (nameLabel);
-    deleteAndZero (b_Save);
-    deleteAndZero (label22);
-    deleteAndZero (label18);
-    deleteAndZero (loopinfoLabel);
-    deleteAndZero (loopinfoLabel2);
-    deleteAndZero (label17);
-    deleteAndZero (s_Channel);
-    deleteAndZero (label19);
-    deleteAndZero (label20);
-    deleteAndZero (s_FixedLength);
-    deleteAndZero (b_Filt);
-    deleteAndZero (viewport);
-    deleteAndZero (resizer);
-    deleteAndZero (b_NoteToggle);
-    deleteAndZero (s_PlayGroup);
-    deleteAndZero (label13);
-    deleteAndZero (s_MuteGroup);
-    deleteAndZero (label14);
-    deleteAndZero (b_Snap);
-    deleteAndZero (quantizeBox2);
-    deleteAndZero (b_ForceToKey);
-    deleteAndZero (keySelector);
-    deleteAndZero (b_ShiftUp);
-    deleteAndZero (b_ShiftDown);
-    deleteAndZero (b_SingleLoop);
-    deleteAndZero (s_MasterVelocity);
-    deleteAndZero (label15);
-    deleteAndZero (aboutButton);
-    deleteAndZero (b_Triplet);
-    deleteAndZero (b_Dotted);
-    deleteAndZero (b_ZoomOut);
-    deleteAndZero (b_ZoomIn);
-    deleteAndZero (numerator);
-    deleteAndZero (denominator);
-    deleteAndZero (loopinfoLabel3);
-    deleteAndZero (b_UseScaleChannel);
-    deleteAndZero (s_ScaleChannel);
-    deleteAndZero (label25);
-    deleteAndZero (s_MasterTranspose);
-    deleteAndZero (label26);
-    deleteAndZero (b_WaitForBar);
-    deleteAndZero (midiOutDeviceBox);
-    deleteAndZero (label27);
-    deleteAndZero (b_UseTrChannel);
-    deleteAndZero (b_ImmediateTranspose);
-    deleteAndZero (s_NumLoops);
-    deleteAndZero (s_NextSlot);
-    deleteAndZero (label16);
-    deleteAndZero (forceModeBox);
-    deleteAndZero (kbport);
-    deleteAndZero (b_RemoveBar);
-    deleteAndZero (b_AddBar);
-    deleteAndZero (LengthLabel);
-    deleteAndZero (textButton17);
-    deleteAndZero (textButton18);
-    deleteAndZero (textButton19);
-    deleteAndZero (textButton20);
-    deleteAndZero (textButton21);
-    deleteAndZero (textButton22);
-    deleteAndZero (textButton23);
-    deleteAndZero (textButton24);
-    deleteAndZero (textButton25);
-    deleteAndZero (textButton26);
-    deleteAndZero (textButton27);
-    deleteAndZero (textButton28);
-    deleteAndZero (textButton29);
-    deleteAndZero (textButton30);
-    deleteAndZero (textButton31);
-    deleteAndZero (textButton32);
-    deleteAndZero (textButton33);
-    deleteAndZero (textButton34);
-    deleteAndZero (textButton35);
-    deleteAndZero (textButton36);
-    deleteAndZero (textButton37);
-    deleteAndZero (textButton38);
-    deleteAndZero (textButton39);
-    deleteAndZero (textButton40);
-    deleteAndZero (textButton41);
-    deleteAndZero (textButton42);
-    deleteAndZero (textButton43);
-    deleteAndZero (textButton44);
-    deleteAndZero (textButton45);
-    deleteAndZero (textButton46);
-    deleteAndZero (textButton47);
-    deleteAndZero (textButton48);
-    deleteAndZero (textButton49);
-    deleteAndZero (textButton50);
-    deleteAndZero (textButton51);
-    deleteAndZero (textButton52);
-    deleteAndZero (textButton53);
-    deleteAndZero (textButton54);
-    deleteAndZero (textButton55);
-    deleteAndZero (textButton56);
-    deleteAndZero (textButton57);
-    deleteAndZero (textButton58);
-    deleteAndZero (textButton59);
-    deleteAndZero (textButton60);
-    deleteAndZero (textButton61);
-    deleteAndZero (textButton62);
-    deleteAndZero (textButton63);
-    deleteAndZero (textButton64);
-    deleteAndZero (textButton65);
-    deleteAndZero (textButton66);
-    deleteAndZero (textButton67);
-    deleteAndZero (textButton68);
-    deleteAndZero (textButton69);
-    deleteAndZero (textButton70);
-    deleteAndZero (textButton71);
-    deleteAndZero (textButton72);
-    deleteAndZero (textButton73);
-    deleteAndZero (textButton74);
-    deleteAndZero (textButton75);
-    deleteAndZero (textButton76);
-    deleteAndZero (textButton77);
-    deleteAndZero (textButton78);
-    deleteAndZero (textButton79);
-    deleteAndZero (textButton80);
-    deleteAndZero (textButton81);
-    deleteAndZero (textButton82);
-    deleteAndZero (textButton83);
-    deleteAndZero (textButton84);
-    deleteAndZero (textButton85);
-    deleteAndZero (textButton86);
-    deleteAndZero (textButton87);
-    deleteAndZero (textButton88);
-    deleteAndZero (textButton89);
-    deleteAndZero (textButton90);
-    deleteAndZero (textButton91);
-    deleteAndZero (textButton92);
-    deleteAndZero (textButton93);
-    deleteAndZero (textButton94);
-    deleteAndZero (textButton95);
-    deleteAndZero (textButton96);
-    deleteAndZero (textButton97);
-    deleteAndZero (textButton98);
-    deleteAndZero (textButton99);
-    deleteAndZero (textButton100);
-    deleteAndZero (textButton101);
-    deleteAndZero (textButton102);
-    deleteAndZero (textButton103);
-    deleteAndZero (textButton104);
-    deleteAndZero (textButton105);
-    deleteAndZero (textButton106);
-    deleteAndZero (textButton107);
-    deleteAndZero (textButton108);
-    deleteAndZero (textButton109);
-    deleteAndZero (textButton110);
-    deleteAndZero (textButton111);
-    deleteAndZero (textButton112);
-    deleteAndZero (textButton113);
-    deleteAndZero (textButton114);
-    deleteAndZero (textButton115);
-    deleteAndZero (textButton116);
-    deleteAndZero (textButton117);
-    deleteAndZero (textButton118);
-    deleteAndZero (textButton119);
-    deleteAndZero (textButton120);
-    deleteAndZero (textButton121);
-    deleteAndZero (textButton122);
-    deleteAndZero (textButton123);
-    deleteAndZero (textButton124);
-    deleteAndZero (textButton125);
-    deleteAndZero (textButton126);
-    deleteAndZero (textButton127);
-    deleteAndZero (textButton128);
-    deleteAndZero (b_Transpose10);
-    deleteAndZero (b_KeepLength);
-    deleteAndZero (s_RecCC);
-    deleteAndZero (s_PlayCC);
-    deleteAndZero (s_VelocitySens);
-    deleteAndZero (label24);
-    deleteAndZero (b_Monitor);
-    deleteAndZero (s_TransposeChannel);
-    deleteAndZero (label28);
+    label = nullptr;
+    timeline = nullptr;
+    textButton1 = nullptr;
+    textButton2 = nullptr;
+    textButton3 = nullptr;
+    textButton4 = nullptr;
+    textButton5 = nullptr;
+    textButton6 = nullptr;
+    textButton7 = nullptr;
+    textButton8 = nullptr;
+    textButton9 = nullptr;
+    textButton10 = nullptr;
+    textButton11 = nullptr;
+    textButton12 = nullptr;
+    textButton13 = nullptr;
+    textButton14 = nullptr;
+    textButton15 = nullptr;
+    textButton16 = nullptr;
+    b_Play = nullptr;
+    b_Record = nullptr;
+    b_Overdub = nullptr;
+    b_Thru = nullptr;
+    b_Clear = nullptr;
+    stepsizeBox = nullptr;
+    s_Transpose = nullptr;
+    s_Octave = nullptr;
+    s_Velocity = nullptr;
+    label3 = nullptr;
+    label4 = nullptr;
+    label5 = nullptr;
+    s_Start = nullptr;
+    label6 = nullptr;
+    s_End = nullptr;
+    label7 = nullptr;
+    s_Stretch = nullptr;
+    label8 = nullptr;
+    loopmodeBox = nullptr;
+    notetriggerBox = nullptr;
+    syncmodeBox = nullptr;
+    s_Root = nullptr;
+    label9 = nullptr;
+    s_Low = nullptr;
+    label10 = nullptr;
+    s_High = nullptr;
+    label11 = nullptr;
+    s_TrigChan = nullptr;
+    label12 = nullptr;
+    b_Reload = nullptr;
+    quantizeBox = nullptr;
+    label21 = nullptr;
+    s_Shift = nullptr;
+    label2 = nullptr;
+    label23 = nullptr;
+    nameLabel = nullptr;
+    b_Save = nullptr;
+    label22 = nullptr;
+    label18 = nullptr;
+    loopinfoLabel = nullptr;
+    loopinfoLabel2 = nullptr;
+    label17 = nullptr;
+    s_Channel = nullptr;
+    label19 = nullptr;
+    label20 = nullptr;
+    s_FixedLength = nullptr;
+    b_Filt = nullptr;
+    viewport = nullptr;
+    resizer = nullptr;
+    b_NoteToggle = nullptr;
+    s_PlayGroup = nullptr;
+    label13 = nullptr;
+    s_MuteGroup = nullptr;
+    label14 = nullptr;
+    b_Snap = nullptr;
+    quantizeBox2 = nullptr;
+    b_ForceToKey = nullptr;
+    keySelector = nullptr;
+    b_ShiftUp = nullptr;
+    b_ShiftDown = nullptr;
+    b_SingleLoop = nullptr;
+    s_MasterVelocity = nullptr;
+    label15 = nullptr;
+    aboutButton = nullptr;
+    b_Triplet = nullptr;
+    b_Dotted = nullptr;
+    b_ZoomOut = nullptr;
+    b_ZoomIn = nullptr;
+    numerator = nullptr;
+    denominator = nullptr;
+    loopinfoLabel3 = nullptr;
+    b_UseScaleChannel = nullptr;
+    s_ScaleChannel = nullptr;
+    label25 = nullptr;
+    s_MasterTranspose = nullptr;
+    label26 = nullptr;
+    b_WaitForBar = nullptr;
+    midiOutDeviceBox = nullptr;
+    label27 = nullptr;
+    b_UseTrChannel = nullptr;
+    b_ImmediateTranspose = nullptr;
+    s_NumLoops = nullptr;
+    s_NextSlot = nullptr;
+    label16 = nullptr;
+    forceModeBox = nullptr;
+    kbport = nullptr;
+    b_RemoveBar = nullptr;
+    b_AddBar = nullptr;
+    LengthLabel = nullptr;
+    textButton17 = nullptr;
+    textButton18 = nullptr;
+    textButton19 = nullptr;
+    textButton20 = nullptr;
+    textButton21 = nullptr;
+    textButton22 = nullptr;
+    textButton23 = nullptr;
+    textButton24 = nullptr;
+    textButton25 = nullptr;
+    textButton26 = nullptr;
+    textButton27 = nullptr;
+    textButton28 = nullptr;
+    textButton29 = nullptr;
+    textButton30 = nullptr;
+    textButton31 = nullptr;
+    textButton32 = nullptr;
+    textButton33 = nullptr;
+    textButton34 = nullptr;
+    textButton35 = nullptr;
+    textButton36 = nullptr;
+    textButton37 = nullptr;
+    textButton38 = nullptr;
+    textButton39 = nullptr;
+    textButton40 = nullptr;
+    textButton41 = nullptr;
+    textButton42 = nullptr;
+    textButton43 = nullptr;
+    textButton44 = nullptr;
+    textButton45 = nullptr;
+    textButton46 = nullptr;
+    textButton47 = nullptr;
+    textButton48 = nullptr;
+    textButton49 = nullptr;
+    textButton50 = nullptr;
+    textButton51 = nullptr;
+    textButton52 = nullptr;
+    textButton53 = nullptr;
+    textButton54 = nullptr;
+    textButton55 = nullptr;
+    textButton56 = nullptr;
+    textButton57 = nullptr;
+    textButton58 = nullptr;
+    textButton59 = nullptr;
+    textButton60 = nullptr;
+    textButton61 = nullptr;
+    textButton62 = nullptr;
+    textButton63 = nullptr;
+    textButton64 = nullptr;
+    textButton65 = nullptr;
+    textButton66 = nullptr;
+    textButton67 = nullptr;
+    textButton68 = nullptr;
+    textButton69 = nullptr;
+    textButton70 = nullptr;
+    textButton71 = nullptr;
+    textButton72 = nullptr;
+    textButton73 = nullptr;
+    textButton74 = nullptr;
+    textButton75 = nullptr;
+    textButton76 = nullptr;
+    textButton77 = nullptr;
+    textButton78 = nullptr;
+    textButton79 = nullptr;
+    textButton80 = nullptr;
+    textButton81 = nullptr;
+    textButton82 = nullptr;
+    textButton83 = nullptr;
+    textButton84 = nullptr;
+    textButton85 = nullptr;
+    textButton86 = nullptr;
+    textButton87 = nullptr;
+    textButton88 = nullptr;
+    textButton89 = nullptr;
+    textButton90 = nullptr;
+    textButton91 = nullptr;
+    textButton92 = nullptr;
+    textButton93 = nullptr;
+    textButton94 = nullptr;
+    textButton95 = nullptr;
+    textButton96 = nullptr;
+    textButton97 = nullptr;
+    textButton98 = nullptr;
+    textButton99 = nullptr;
+    textButton100 = nullptr;
+    textButton101 = nullptr;
+    textButton102 = nullptr;
+    textButton103 = nullptr;
+    textButton104 = nullptr;
+    textButton105 = nullptr;
+    textButton106 = nullptr;
+    textButton107 = nullptr;
+    textButton108 = nullptr;
+    textButton109 = nullptr;
+    textButton110 = nullptr;
+    textButton111 = nullptr;
+    textButton112 = nullptr;
+    textButton113 = nullptr;
+    textButton114 = nullptr;
+    textButton115 = nullptr;
+    textButton116 = nullptr;
+    textButton117 = nullptr;
+    textButton118 = nullptr;
+    textButton119 = nullptr;
+    textButton120 = nullptr;
+    textButton121 = nullptr;
+    textButton122 = nullptr;
+    textButton123 = nullptr;
+    textButton124 = nullptr;
+    textButton125 = nullptr;
+    textButton126 = nullptr;
+    textButton127 = nullptr;
+    textButton128 = nullptr;
+    b_Transpose10 = nullptr;
+    b_KeepLength = nullptr;
+    s_RecCC = nullptr;
+    s_PlayCC = nullptr;
+    s_VelocitySens = nullptr;
+    label24 = nullptr;
+    b_Monitor = nullptr;
+    s_TransposeChannel = nullptr;
+    label28 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -2237,155 +2685,319 @@ PizLooperEditor::~PizLooperEditor()
 }
 
 //==============================================================================
-void PizLooperEditor::paint (Graphics& g)
+void PizLooperEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff202029));
+    g.fillAll (juce::Colour (0xff202029));
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       176.0f, 352.0f,
-                                       Colour (0xff404049),
-                                       176.0f, 443.0f,
-                                       false));
-    g.fillRect (1, 393, 303, 78);
+    {
+        int x = 1, y = 393, width = 303, height = 78;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             176.0f - 1.0f + x,
+                                             352.0f - 393.0f + y,
+                                             fillColour2,
+                                             176.0f - 1.0f + x,
+                                             443.0f - 393.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       190.0f, 369.0f,
-                                       Colour (0xff162938),
-                                       190.0f, 419.0f,
-                                       false));
-    g.fillRect (305, 393, 81, 78);
+    {
+        int x = 305, y = 393, width = 81, height = 78;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff162938);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             190.0f - 305.0f + x,
+                                             369.0f - 393.0f + y,
+                                             fillColour2,
+                                             190.0f - 305.0f + x,
+                                             419.0f - 393.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colour (0xffa0a0a0));
-    g.fillRoundedRectangle (390.0f, 62.0f, (float) (getWidth() - 391), 40.0f, 10.0000f);
+    {
+        float x = 390.0f, y = 62.0f, width = static_cast<float> (getWidth() - 391), height = 40.0f;
+        juce::Colour fillColour = juce::Colour (0xffa0a0a0);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       160.0f, (float) (-30),
-                                       Colour (0xff404049),
-                                       161.0f, 43.0f,
-                                       false));
-    g.fillRect (152, -1, getWidth() - 151, 56);
+    {
+        int x = 152, y = -1, width = getWidth() - 151, height = 56;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff404049);
+        juce::Colour strokeColour = juce::Colour (0xff46495f);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             160.0f - 152.0f + x,
+                                             static_cast<float> (-30) - static_cast<float> (-1) + y,
+                                             fillColour2,
+                                             161.0f - 152.0f + x,
+                                             43.0f - static_cast<float> (-1) + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+        g.setColour (strokeColour);
+        g.drawRect (x, y, width, height, 1);
 
-    g.setColour (Colour (0xff46495f));
-    g.drawRect (152, -1, getWidth() - 151, 56, 1);
+    }
 
-    g.setColour (Colour (0xff202029));
-    g.fillRect (0, 0, 152, 55);
+    {
+        int x = 0, y = 0, width = 152, height = 55;
+        juce::Colour fillColour = juce::Colour (0xff202029);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colour (0xff404049));
-    g.fillRoundedRectangle (6.0f, 317.0f, 136.0f, 90.0f, 14.5000f);
+    {
+        float x = 6.0f, y = 317.0f, width = 136.0f, height = 90.0f;
+        juce::Colour fillColour = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 14.500f);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       159.0f, 215.0f,
-                                       Colour (0xff404049),
-                                       159.0f, 307.0f,
-                                       false));
-    g.fillRect (1, 246, 385, 147);
+    {
+        int x = 1, y = 246, width = 385, height = 147;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             159.0f - 1.0f + x,
+                                             215.0f - 246.0f + y,
+                                             fillColour2,
+                                             159.0f - 1.0f + x,
+                                             307.0f - 246.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colour (0xff404049));
-    g.fillRoundedRectangle (6.0f, 159.0f, 136.0f, 104.0f, 14.5000f);
+    {
+        float x = 6.0f, y = 159.0f, width = 136.0f, height = 104.0f;
+        juce::Colour fillColour = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 14.500f);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       100.0f, 89.0f,
-                                       Colour (0xff404049),
-                                       100.0f, 165.0f,
-                                       false));
-    g.fillRect (1, 109, 385, 140);
+    {
+        int x = 1, y = 109, width = 385, height = 140;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             100.0f - 1.0f + x,
+                                             89.0f - 109.0f + y,
+                                             fillColour2,
+                                             100.0f - 1.0f + x,
+                                             165.0f - 109.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setGradientFill (ColourGradient (Colour (0xff002700),
-                                       95.0f, (float) (-25),
-                                       Colour (0xba267387),
-                                       95.0f, 107.0f,
-                                       false));
-    g.fillRoundedRectangle (6.0f, (float) (-20), 139.0f, 67.0f, 14.5000f);
+    {
+        float x = 6.0f, y = static_cast<float> (-20), width = 139.0f, height = 67.0f;
+        juce::Colour fillColour1 = juce::Colour (0xff002700), fillColour2 = juce::Colour (0xba267387);
+        juce::Colour strokeColour = juce::Colour (0xffcbcbcb);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             95.0f - 6.0f + x,
+                                             static_cast<float> (-25) - static_cast<float> (-20) + y,
+                                             fillColour2,
+                                             95.0f - 6.0f + x,
+                                             107.0f - static_cast<float> (-20) + y,
+                                             false));
+        g.fillRoundedRectangle (x, y, width, height, 14.500f);
+        g.setColour (strokeColour);
+        g.drawRoundedRectangle (x, y, width, height, 14.500f, 1.000f);
+    }
 
-    g.setColour (Colour (0xffcbcbcb));
-    g.drawRoundedRectangle (6.0f, (float) (-20), 139.0f, 67.0f, 14.5000f, 1.0000f);
+    {
+        int x = 12, y = 12, width = 41, height = 25;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (juce::Colours::black);
+        g.drawImage (cachedImage_piznew40_png_1,
+                     x, y, width, height,
+                     0, 0, cachedImage_piznew40_png_1.getWidth(), cachedImage_piznew40_png_1.getHeight());
+    }
 
-    g.setColour (Colours::black);
-    g.drawImage (cachedImage_piznew40_png,
-                 12, 12, 41, 25,
-                 0, 0, cachedImage_piznew40_png.getWidth(), cachedImage_piznew40_png.getHeight());
+    {
+        int x = 44, y = 23, width = 108, height = 20;
+        juce::String text (TRANS("midiLooper"));
+        juce::Colour fillColour = juce::Colour (0xffcbcbcb);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colour (0xffcbcbcb));
-    g.setFont (Font (15.0000f, Font::bold));
-    g.drawText (L"midiLooper",
-                44, 23, 108, 20,
-                Justification::centred, true);
+    {
+        int x = 46, y = 8, width = 108, height = 20;
+        juce::String text (TRANS("Insert Piz Here->"));
+        juce::Colour fillColour = juce::Colour (0xffbfbfbf);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (10.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colour (0xffbfbfbf));
-    g.setFont (Font (10.0000f, Font::bold));
-    g.drawText (L"Insert Piz Here->",
-                46, 8, 108, 20,
-                Justification::centred, true);
+    {
+        int x = 9, y = 202, width = 369, height = 42;
+        juce::Colour fillColour1 = juce::Colour (0xff433b22), fillColour2 = juce::Colour (0xff8b7a47);
+        juce::Colour strokeColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             100.0f - 9.0f + x,
+                                             194.0f - 202.0f + y,
+                                             fillColour2,
+                                             100.0f - 9.0f + x,
+                                             214.0f - 202.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+        g.setColour (strokeColour);
+        g.drawRect (x, y, width, height, 1);
 
-    g.setGradientFill (ColourGradient (Colour (0xff433b22),
-                                       100.0f, 194.0f,
-                                       Colour (0xff8b7a47),
-                                       100.0f, 214.0f,
-                                       false));
-    g.fillRect (9, 202, 369, 42);
+    }
 
-    g.setColour (Colours::black);
-    g.drawRect (9, 202, 369, 42, 1);
+    {
+        int x = 1, y = 85, width = 385, height = 32;
+        juce::Colour fillColour1 = juce::Colour (0xff979797), fillColour2 = juce::Colour (0xff6f737a);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             100.0f - 1.0f + x,
+                                             85.0f - 85.0f + y,
+                                             fillColour2,
+                                             100.0f - 1.0f + x,
+                                             98.0f - 85.0f + y,
+                                             false));
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setGradientFill (ColourGradient (Colour (0xff979797),
-                                       100.0f, 85.0f,
-                                       Colour (0xff6f737a),
-                                       100.0f, 98.0f,
-                                       false));
-    g.fillRect (1, 85, 385, 32);
+    {
+        int x = 390, y = 85, width = getWidth() - 391, height = 20;
+        juce::Colour fillColour = juce::Colour (0xff8c8c8c);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRect (x, y, width, height);
+    }
 
-    g.setColour (Colour (0xff8c8c8c));
-    g.fillRect (390, 85, getWidth() - 391, 20);
+    {
+        int x = 215, y = 177, width = 24, height = 15;
+        juce::String text (TRANS("->"));
+        juce::Colour fillColour = juce::Colours::white;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::white);
-    g.setFont (Font (12.0000f, Font::plain));
-    g.drawText (L"->",
-                215, 177, 24, 15,
-                Justification::centred, true);
+    {
+        int x = 153, y = 162, width = 24, height = 15;
+        juce::String text (TRANS("PLAY"));
+        juce::Colour fillColour = juce::Colours::white;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (10.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::white);
-    g.setFont (Font (10.0000f, Font::plain));
-    g.drawText (L"PLAY",
-                153, 162, 24, 15,
-                Justification::centred, true);
+    {
+        int x = 230, y = 162, width = 29, height = 15;
+        juce::String text (TRANS("THEN"));
+        juce::Colour fillColour = juce::Colours::white;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (10.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::white);
-    g.setFont (Font (10.0000f, Font::plain));
-    g.drawText (L"THEN",
-                230, 162, 29, 15,
-                Justification::centred, true);
+    {
+        float x = 6.0f, y = 458.0f, width = 136.0f, height = 27.0f;
+        juce::Colour fillColour = juce::Colour (0xff404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 14.500f);
+    }
 
-    g.setColour (Colour (0xff404049));
-    g.fillRoundedRectangle (6.0f, 458.0f, 136.0f, 27.0f, 14.5000f);
+    {
+        int x = 574, y = 67, width = 20, height = 12;
+        juce::String text (TRANS("/"));
+        juce::Colour fillColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centred, true);
+    }
 
-    g.setColour (Colours::black);
-    g.setFont (Font (15.0000f, Font::plain));
-    g.drawText (L"/",
-                574, 67, 20, 12,
-                Justification::centred, true);
+    {
+        float x = 141.0f, y = 254.0f, width = 161.0f, height = 72.0f;
+        juce::Colour fillColour = juce::Colour (0x86404049);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
 
-    g.setColour (Colour (0x86404049));
-    g.fillRoundedRectangle (141.0f, 254.0f, 161.0f, 72.0f, 10.0000f);
+    {
+        float x = 8.0f, y = 311.0f, width = 371.0f, height = 36.0f;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff434450);
+        juce::Colour strokeColour = juce::Colour (0xff111111);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setGradientFill (juce::ColourGradient (fillColour1,
+                                             256.0f - 8.0f + x,
+                                             265.0f - 311.0f + y,
+                                             fillColour2,
+                                             256.0f - 8.0f + x,
+                                             355.0f - 311.0f + y,
+                                             false));
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour (strokeColour);
+        g.drawRoundedRectangle (x, y, width, height, 10.000f, 0.700f);
+    }
 
-    g.setGradientFill (ColourGradient (Colours::black,
-                                       256.0f, 265.0f,
-                                       Colour (0xff434450),
-                                       256.0f, 355.0f,
-                                       false));
-    g.fillRoundedRectangle (8.0f, 311.0f, 371.0f, 36.0f, 10.0000f);
+    {
+        int x = 723, y = 64, width = 51, height = 18;
+        juce::Colour fillColour = juce::Colour (0xffbababa);
+        juce::Colour strokeColour = juce::Colours::black;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRect (x, y, width, height);
+        g.setColour (strokeColour);
+        g.drawRect (x, y, width, height, 1);
 
-    g.setColour (Colour (0xff111111));
-    g.drawRoundedRectangle (8.0f, 311.0f, 371.0f, 36.0f, 10.0000f, 0.7000f);
-
-    g.setColour (Colour (0xffbababa));
-    g.fillRect (723, 64, 51, 18);
-
-    g.setColour (Colours::black);
-    g.drawRect (723, 64, 51, 18, 1);
+    }
 
     //[UserPaint] Add your own custom painting code here..
 	if (getFilter()->getParameterForSlot(kUseTrChannel,getFilter()->getCurrentProgram())>=0.5f)
@@ -2403,234 +3015,13 @@ void PizLooperEditor::paint (Graphics& g)
 
 void PizLooperEditor::resized()
 {
-    label->setBounds (613, 64, 46, 18);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     timeline->setBounds (415, 85, getWidth() - 430, 20);
-    textButton1->setBounds (0, 61, 25, 24);
-    textButton2->setBounds (25, 61, 23, 24);
-    textButton3->setBounds (48, 61, 23, 24);
-    textButton4->setBounds (71, 61, 23, 24);
-    textButton5->setBounds (94, 61, 23, 24);
-    textButton6->setBounds (117, 61, 23, 24);
-    textButton7->setBounds (140, 61, 23, 24);
-    textButton8->setBounds (163, 61, 23, 24);
-    textButton9->setBounds (186, 61, 23, 24);
-    textButton10->setBounds (209, 61, 25, 24);
-    textButton11->setBounds (234, 61, 25, 24);
-    textButton12->setBounds (259, 61, 25, 24);
-    textButton13->setBounds (284, 61, 25, 24);
-    textButton14->setBounds (309, 61, 25, 24);
-    textButton15->setBounds (334, 61, 25, 24);
-    textButton16->setBounds (359, 61, 28, 24);
-    b_Play->setBounds (78, 117, 72, 50);
-    b_Record->setBounds (6, 117, 72, 50);
-    b_Overdub->setBounds (523, 12, 80, 20);
-    b_Thru->setBounds (634, 33, 40, 20);
-    b_Clear->setBounds (264, 90, 39, 22);
-    stepsizeBox->setBounds (264, 15, 77, 16);
-    s_Transpose->setBounds (146, 283, 72, 20);
-    s_Octave->setBounds (226, 283, 72, 20);
-    s_Velocity->setBounds (306, 283, 72, 20);
-    label3->setBounds (146, 267, 72, 16);
-    label4->setBounds (226, 267, 72, 16);
-    label5->setBounds (301, 267, 80, 16);
-    s_Start->setBounds (66, 367, 72, 20);
-    label6->setBounds (66, 351, 72, 16);
-    s_End->setBounds (146, 367, 72, 20);
-    label7->setBounds (146, 351, 72, 16);
-    s_Stretch->setBounds (306, 367, 72, 20);
-    label8->setBounds (306, 351, 72, 16);
-    loopmodeBox->setBounds (175, 144, 110, 16);
-    notetriggerBox->setBounds (146, 402, 106, 16);
-    syncmodeBox->setBounds (159, 15, 99, 16);
-    s_Root->setBounds (76, 174, 64, 20);
-    label9->setBounds (15, 176, 64, 16);
-    s_Low->setBounds (18, 440, 64, 20);
-    label10->setBounds (18, 424, 64, 16);
-    s_High->setBounds (90, 440, 64, 20);
-    label11->setBounds (90, 424, 64, 16);
-    s_TrigChan->setBounds (162, 440, 64, 20);
-    label12->setBounds (161, 424, 64, 16);
-    b_Reload->setBounds (344, 90, 39, 22);
-    quantizeBox->setBounds (439, 15, 77, 16);
-    label21->setBounds (261, 0, 84, 16);
-    s_Shift->setBounds (226, 367, 72, 20);
-    label2->setBounds (226, 351, 72, 16);
-    label23->setBounds (433, 0, 87, 16);
-    nameLabel->setBounds (4, 87, 256, 27);
-    b_Save->setBounds (304, 90, 39, 22);
-    label22->setBounds (162, 0, 95, 16);
-    label18->setBounds (12, 469, 125, 16);
-    loopinfoLabel->setBounds (14, 205, 272, 16);
-    loopinfoLabel2->setBounds (14, 225, 272, 16);
-    label17->setBounds (14, 391, 125, 16);
-    s_Channel->setBounds (314, 414, 64, 20);
-    label19->setBounds (309, 398, 74, 16);
-    label20->setBounds (347, 0, 83, 16);
-    s_FixedLength->setBounds (347, 15, 86, 16);
-    b_Filt->setBounds (314, 440, 64, 20);
     viewport->setBounds (415, 105, getWidth() - 415, getHeight() - 105);
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
-    b_NoteToggle->setBounds (257, 402, 40, 16);
-    s_PlayGroup->setBounds (312, 136, 64, 20);
-    label13->setBounds (313, 119, 64, 16);
-    s_MuteGroup->setBounds (312, 174, 64, 20);
-    label14->setBounds (307, 157, 74, 16);
-    b_Snap->setBounds (392, 61, 59, 24);
-    quantizeBox2->setBounds (453, 64, 50, 18);
-    b_ForceToKey->setBounds (11, 312, 99, 17);
-    keySelector->setBounds (199, 315, 154, 28);
-    b_ShiftUp->setBounds (353, 314, 21, 30);
-    b_ShiftDown->setBounds (178, 314, 21, 30);
-    b_SingleLoop->setBounds (155, 36, 122, 16);
-    s_MasterVelocity->setBounds (371, 36, 72, 16);
-    label15->setBounds (283, 36, 88, 16);
-    aboutButton->setBounds (9, 1, 136, 47);
-    b_Triplet->setBounds (506, 64, 18, 18);
-    b_Dotted->setBounds (528, 64, 18, 18);
-    b_ZoomOut->setBounds (656, 64, 18, 18);
-    b_ZoomIn->setBounds (674, 64, 18, 18);
-    numerator->setBounds (555, 64, 27, 18);
-    denominator->setBounds (584, 64, 29, 18);
-    loopinfoLabel3->setBounds (5, 47, 141, 16);
-    b_UseScaleChannel->setBounds (11, 329, 129, 17);
-    s_ScaleChannel->setBounds (10, 283, 60, 20);
-    label25->setBounds (13, 267, 54, 16);
-    s_MasterTranspose->setBounds (554, 36, 72, 16);
-    label26->setBounds (452, 36, 102, 16);
-    b_WaitForBar->setBounds (175, 123, 107, 16);
-    midiOutDeviceBox->setBounds (633, 15, 158, 16);
-    label27->setBounds (627, 0, 117, 16);
-    b_UseTrChannel->setBounds (148, 252, 130, 17);
-    b_ImmediateTranspose->setBounds (247, 252, 48, 17);
-    s_NumLoops->setBounds (155, 174, 64, 20);
-    s_NextSlot->setBounds (234, 174, 64, 20);
-    label16->setBounds (12, 247, 125, 16);
-    forceModeBox->setBounds (110, 313, 61, 16);
     kbport->setBounds (390, 105, 25, getHeight() - 121);
-    b_RemoveBar->setBounds (706, 64, 18, 18);
-    b_AddBar->setBounds (773, 64, 18, 18);
-    LengthLabel->setBounds (724, 65, 49, 16);
-    textButton17->setBounds (4, -97, 25, 24);
-    textButton18->setBounds (29, -97, 23, 24);
-    textButton19->setBounds (52, -97, 23, 24);
-    textButton20->setBounds (75, -97, 23, 24);
-    textButton21->setBounds (98, -97, 23, 24);
-    textButton22->setBounds (121, -97, 23, 24);
-    textButton23->setBounds (144, -97, 23, 24);
-    textButton24->setBounds (167, -97, 23, 24);
-    textButton25->setBounds (190, -97, 23, 24);
-    textButton26->setBounds (213, -97, 25, 24);
-    textButton27->setBounds (238, -97, 25, 24);
-    textButton28->setBounds (263, -97, 25, 24);
-    textButton29->setBounds (288, -97, 25, 24);
-    textButton30->setBounds (313, -97, 25, 24);
-    textButton31->setBounds (338, -97, 25, 24);
-    textButton32->setBounds (363, -97, 28, 24);
-    textButton33->setBounds (1, -73, 25, 24);
-    textButton34->setBounds (26, -73, 23, 24);
-    textButton35->setBounds (49, -73, 23, 24);
-    textButton36->setBounds (72, -73, 23, 24);
-    textButton37->setBounds (95, -73, 23, 24);
-    textButton38->setBounds (118, -73, 23, 24);
-    textButton39->setBounds (141, -73, 23, 24);
-    textButton40->setBounds (164, -73, 23, 24);
-    textButton41->setBounds (187, -73, 23, 24);
-    textButton42->setBounds (210, -73, 25, 24);
-    textButton43->setBounds (235, -73, 25, 24);
-    textButton44->setBounds (260, -73, 25, 24);
-    textButton45->setBounds (285, -73, 25, 24);
-    textButton46->setBounds (310, -73, 25, 24);
-    textButton47->setBounds (335, -73, 25, 24);
-    textButton48->setBounds (360, -73, 28, 24);
-    textButton49->setBounds (-2, -40, 25, 24);
-    textButton50->setBounds (23, -40, 23, 24);
-    textButton51->setBounds (46, -40, 23, 24);
-    textButton52->setBounds (69, -40, 23, 24);
-    textButton53->setBounds (92, -40, 23, 24);
-    textButton54->setBounds (115, -40, 23, 24);
-    textButton55->setBounds (138, -40, 23, 24);
-    textButton56->setBounds (161, -40, 23, 24);
-    textButton57->setBounds (184, -40, 23, 24);
-    textButton58->setBounds (207, -40, 25, 24);
-    textButton59->setBounds (232, -40, 25, 24);
-    textButton60->setBounds (257, -40, 25, 24);
-    textButton61->setBounds (282, -40, 25, 24);
-    textButton62->setBounds (307, -40, 25, 24);
-    textButton63->setBounds (332, -40, 25, 24);
-    textButton64->setBounds (357, -40, 28, 24);
-    textButton65->setBounds (383, -93, 25, 24);
-    textButton66->setBounds (408, -93, 23, 24);
-    textButton67->setBounds (431, -93, 23, 24);
-    textButton68->setBounds (454, -93, 23, 24);
-    textButton69->setBounds (477, -93, 23, 24);
-    textButton70->setBounds (500, -93, 23, 24);
-    textButton71->setBounds (523, -93, 23, 24);
-    textButton72->setBounds (546, -93, 23, 24);
-    textButton73->setBounds (569, -93, 23, 24);
-    textButton74->setBounds (592, -93, 25, 24);
-    textButton75->setBounds (617, -93, 25, 24);
-    textButton76->setBounds (642, -93, 25, 24);
-    textButton77->setBounds (667, -93, 25, 24);
-    textButton78->setBounds (692, -93, 25, 24);
-    textButton79->setBounds (717, -93, 25, 24);
-    textButton80->setBounds (742, -93, 28, 24);
-    textButton81->setBounds (371, -76, 25, 24);
-    textButton82->setBounds (396, -76, 23, 24);
-    textButton83->setBounds (419, -76, 23, 24);
-    textButton84->setBounds (442, -76, 23, 24);
-    textButton85->setBounds (465, -76, 23, 24);
-    textButton86->setBounds (488, -76, 23, 24);
-    textButton87->setBounds (511, -76, 23, 24);
-    textButton88->setBounds (534, -76, 23, 24);
-    textButton89->setBounds (557, -76, 23, 24);
-    textButton90->setBounds (580, -76, 25, 24);
-    textButton91->setBounds (605, -76, 25, 24);
-    textButton92->setBounds (630, -76, 25, 24);
-    textButton93->setBounds (655, -76, 25, 24);
-    textButton94->setBounds (680, -76, 25, 24);
-    textButton95->setBounds (705, -76, 25, 24);
-    textButton96->setBounds (730, -76, 28, 24);
-    textButton97->setBounds (413, -59, 25, 24);
-    textButton98->setBounds (438, -59, 23, 24);
-    textButton99->setBounds (461, -59, 23, 24);
-    textButton100->setBounds (484, -59, 23, 24);
-    textButton101->setBounds (507, -59, 23, 24);
-    textButton102->setBounds (530, -59, 23, 24);
-    textButton103->setBounds (553, -59, 23, 24);
-    textButton104->setBounds (576, -59, 23, 24);
-    textButton105->setBounds (599, -59, 23, 24);
-    textButton106->setBounds (622, -59, 25, 24);
-    textButton107->setBounds (647, -59, 25, 24);
-    textButton108->setBounds (672, -59, 25, 24);
-    textButton109->setBounds (697, -59, 25, 24);
-    textButton110->setBounds (722, -59, 25, 24);
-    textButton111->setBounds (747, -59, 25, 24);
-    textButton112->setBounds (772, -59, 28, 24);
-    textButton113->setBounds (408, -29, 25, 24);
-    textButton114->setBounds (433, -29, 23, 24);
-    textButton115->setBounds (456, -29, 23, 24);
-    textButton116->setBounds (479, -29, 23, 24);
-    textButton117->setBounds (502, -29, 23, 24);
-    textButton118->setBounds (525, -29, 23, 24);
-    textButton119->setBounds (548, -29, 23, 24);
-    textButton120->setBounds (571, -29, 23, 24);
-    textButton121->setBounds (594, -29, 23, 24);
-    textButton122->setBounds (617, -29, 25, 24);
-    textButton123->setBounds (642, -29, 25, 24);
-    textButton124->setBounds (667, -29, 25, 24);
-    textButton125->setBounds (692, -29, 25, 24);
-    textButton126->setBounds (717, -29, 25, 24);
-    textButton127->setBounds (742, -29, 25, 24);
-    textButton128->setBounds (767, -29, 28, 24);
-    b_Transpose10->setBounds (306, 252, 72, 13);
-    b_KeepLength->setBounds (520, -2, 83, 16);
-    s_RecCC->setBounds (11, 149, 64, 20);
-    s_PlayCC->setBounds (81, 149, 64, 20);
-    s_VelocitySens->setBounds (234, 440, 64, 20);
-    label24->setBounds (225, 424, 80, 16);
-    b_Monitor->setBounds (678, 33, 55, 20);
-    s_TransposeChannel->setBounds (76, 283, 60, 20);
-    label28->setBounds (66, 267, 80, 16);
     //[UserResized] Add your own custom resize handling here..
     internalPath1.clear();
     internalPath1.startNewSubPath (141.0f, 294.0f);
@@ -2645,7 +3036,7 @@ void PizLooperEditor::resized()
     //[/UserResized]
 }
 
-void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
+void PizLooperEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
 	int index=getButtonIndex(buttonThatWasClicked);
@@ -2661,7 +3052,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 	}
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == b_Overdub)
+    if (buttonThatWasClicked == b_Overdub.get())
     {
         //[UserButtonCode_b_Overdub] -- add your button handler code here..
         if (getFilter()->getParamForActiveSlot(kRecMode)>=0.5f) {
@@ -2675,7 +3066,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_Overdub]
     }
-    else if (buttonThatWasClicked == b_Thru)
+    else if (buttonThatWasClicked == b_Thru.get())
     {
         //[UserButtonCode_b_Thru] -- add your button handler code here..
         if (getFilter()->getParamForActiveSlot(kThru)>=0.5f) {
@@ -2686,13 +3077,13 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_Thru]
     }
-    else if (buttonThatWasClicked == b_Clear)
+    else if (buttonThatWasClicked == b_Clear.get())
     {
         //[UserButtonCode_b_Clear] -- add your button handler code here..
         getFilter()->setParameter(kFile,0.0f);
         //[/UserButtonCode_b_Clear]
     }
-    else if (buttonThatWasClicked == b_Reload)
+    else if (buttonThatWasClicked == b_Reload.get())
     {
         //[UserButtonCode_b_Reload] -- add your button handler code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2710,7 +3101,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_Reload]
     }
-    else if (buttonThatWasClicked == b_Save)
+    else if (buttonThatWasClicked == b_Save.get())
     {
         //[UserButtonCode_b_Save] -- add your button handler code here..
         if (ModifierKeys::getCurrentModifiers().isShiftDown()) {
@@ -2734,7 +3125,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_Save]
     }
-    else if (buttonThatWasClicked == b_Filt)
+    else if (buttonThatWasClicked == b_Filt.get())
     {
         //[UserButtonCode_b_Filt] -- add your button handler code here..
         if (getFilter()->getParamForActiveSlot(kFiltChan)>=0.5f) {
@@ -2743,7 +3134,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         else getFilter()->notifyHostForActiveSlot(kFiltChan,1.0f);
         //[/UserButtonCode_b_Filt]
     }
-    else if (buttonThatWasClicked == b_NoteToggle)
+    else if (buttonThatWasClicked == b_NoteToggle.get())
     {
         //[UserButtonCode_b_NoteToggle] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2761,7 +3152,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_NoteToggle]
     }
-    else if (buttonThatWasClicked == b_Snap)
+    else if (buttonThatWasClicked == b_Snap.get())
     {
         //[UserButtonCode_b_Snap] -- add your button handler code here..
 		b_Snap->setToggleState(!getFilter()->getPRSetting("snap"),false);
@@ -2769,7 +3160,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Snap]
     }
-    else if (buttonThatWasClicked == b_ForceToKey)
+    else if (buttonThatWasClicked == b_ForceToKey.get())
     {
         //[UserButtonCode_b_ForceToKey] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2787,7 +3178,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_ForceToKey]
     }
-    else if (buttonThatWasClicked == b_ShiftUp)
+    else if (buttonThatWasClicked == b_ShiftUp.get())
     {
         //[UserButtonCode_b_ShiftUp] -- add your button handler code here..
 		bool lastNotes[12];
@@ -2813,7 +3204,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		//}
         //[/UserButtonCode_b_ShiftUp]
     }
-    else if (buttonThatWasClicked == b_ShiftDown)
+    else if (buttonThatWasClicked == b_ShiftDown.get())
     {
         //[UserButtonCode_b_ShiftDown] -- add your button handler code here..
 		bool lastNotes[12];
@@ -2838,7 +3229,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		//}
         //[/UserButtonCode_b_ShiftDown]
     }
-    else if (buttonThatWasClicked == b_SingleLoop)
+    else if (buttonThatWasClicked == b_SingleLoop.get())
     {
         //[UserButtonCode_b_SingleLoop] -- add your button handler code here..
         if (getFilter()->getParamForActiveSlot(kSingleLoop)>=0.5f) {
@@ -2849,13 +3240,13 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_SingleLoop]
     }
-    else if (buttonThatWasClicked == aboutButton)
+    else if (buttonThatWasClicked == aboutButton.get())
     {
         //[UserButtonCode_aboutButton] -- add your button handler code here..
 		URL("http://thepiz.org/plugins/?p=midiLooper").launchInDefaultBrowser();
         //[/UserButtonCode_aboutButton]
     }
-    else if (buttonThatWasClicked == b_Triplet)
+    else if (buttonThatWasClicked == b_Triplet.get())
     {
         //[UserButtonCode_b_Triplet] -- add your button handler code here..
 		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("triplet"),false);
@@ -2863,7 +3254,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Triplet]
     }
-    else if (buttonThatWasClicked == b_Dotted)
+    else if (buttonThatWasClicked == b_Dotted.get())
     {
         //[UserButtonCode_b_Dotted] -- add your button handler code here..
 		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("dotted"),false);
@@ -2871,7 +3262,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Dotted]
     }
-    else if (buttonThatWasClicked == b_ZoomOut)
+    else if (buttonThatWasClicked == b_ZoomOut.get())
     {
         //[UserButtonCode_b_ZoomOut] -- add your button handler code here..
 		double y = (double)viewport->getViewPositionY()/((double)pianoRoll->getHeight()-viewport->getHeight());
@@ -2892,7 +3283,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_ZoomOut]
     }
-    else if (buttonThatWasClicked == b_ZoomIn)
+    else if (buttonThatWasClicked == b_ZoomIn.get())
     {
         //[UserButtonCode_b_ZoomIn] -- add your button handler code here..
 		double y = (double)viewport->getViewPositionY()/((double)pianoRoll->getHeight()-viewport->getHeight());
@@ -2913,7 +3304,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_ZoomIn]
     }
-    else if (buttonThatWasClicked == b_UseScaleChannel)
+    else if (buttonThatWasClicked == b_UseScaleChannel.get())
     {
         //[UserButtonCode_b_UseScaleChannel] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2932,7 +3323,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		repaint(24,290,22,23);
         //[/UserButtonCode_b_UseScaleChannel]
     }
-    else if (buttonThatWasClicked == b_WaitForBar)
+    else if (buttonThatWasClicked == b_WaitForBar.get())
     {
         //[UserButtonCode_b_WaitForBar] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2950,7 +3341,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_WaitForBar]
     }
-    else if (buttonThatWasClicked == b_UseTrChannel)
+    else if (buttonThatWasClicked == b_UseTrChannel.get())
     {
         //[UserButtonCode_b_UseTrChannel] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2969,7 +3360,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		repaint(112,284,34,20);
         //[/UserButtonCode_b_UseTrChannel]
     }
-    else if (buttonThatWasClicked == b_ImmediateTranspose)
+    else if (buttonThatWasClicked == b_ImmediateTranspose.get())
     {
         //[UserButtonCode_b_ImmediateTranspose] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -2987,7 +3378,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_ImmediateTranspose]
     }
-    else if (buttonThatWasClicked == b_RemoveBar)
+    else if (buttonThatWasClicked == b_RemoveBar.get())
     {
         //[UserButtonCode_b_RemoveBar] -- add your button handler code here..
 		pianoRoll->removeBar();
@@ -2996,7 +3387,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
         getFilter()->setPRSetting("width",pianoRoll->getWidth(),false);
         //[/UserButtonCode_b_RemoveBar]
     }
-    else if (buttonThatWasClicked == b_AddBar)
+    else if (buttonThatWasClicked == b_AddBar.get())
     {
         //[UserButtonCode_b_AddBar] -- add your button handler code here..
 		pianoRoll->addBar();
@@ -3005,7 +3396,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		getFilter()->setPRSetting("width",pianoRoll->getWidth(),false);
         //[/UserButtonCode_b_AddBar]
     }
-    else if (buttonThatWasClicked == b_Transpose10)
+    else if (buttonThatWasClicked == b_Transpose10.get())
     {
         //[UserButtonCode_b_Transpose10] -- add your button handler code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3023,7 +3414,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_Transpose10]
     }
-    else if (buttonThatWasClicked == b_KeepLength)
+    else if (buttonThatWasClicked == b_KeepLength.get())
     {
         //[UserButtonCode_b_KeepLength] -- add your button handler code here..
 		if (getFilter()->getParamForActiveSlot(kRecMode)>=0.8f) {
@@ -3034,7 +3425,7 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
 		}
         //[/UserButtonCode_b_KeepLength]
     }
-    else if (buttonThatWasClicked == b_Monitor)
+    else if (buttonThatWasClicked == b_Monitor.get())
     {
         //[UserButtonCode_b_Monitor] -- add your button handler code here..
         if (getFilter()->getParamForActiveSlot(kMonitor)>=0.5f) {
@@ -3050,13 +3441,13 @@ void PizLooperEditor::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+void PizLooperEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
     const String selection = comboBoxThatHasChanged->getText();
     //[/UsercomboBoxChanged_Pre]
 
-    if (comboBoxThatHasChanged == stepsizeBox)
+    if (comboBoxThatHasChanged == stepsizeBox.get())
     {
         //[UserComboBoxCode_stepsizeBox] -- add your combo box handling code here..
         if      (selection=="1 Bar") getFilter()->notifyHostForActiveSlot(kRecStep,0.f);
@@ -3068,7 +3459,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         else if (selection=="1 Tick") getFilter()->notifyHostForActiveSlot(kRecStep,1.0f);
         //[/UserComboBoxCode_stepsizeBox]
     }
-    else if (comboBoxThatHasChanged == loopmodeBox)
+    else if (comboBoxThatHasChanged == loopmodeBox.get())
     {
         //[UserComboBoxCode_loopmodeBox] -- add your combo box handling code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3089,7 +3480,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		}
         //[/UserComboBoxCode_loopmodeBox]
     }
-    else if (comboBoxThatHasChanged == notetriggerBox)
+    else if (comboBoxThatHasChanged == notetriggerBox.get())
     {
         //[UserComboBoxCode_notetriggerBox] -- add your combo box handling code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3109,7 +3500,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		}
         //[/UserComboBoxCode_notetriggerBox]
     }
-    else if (comboBoxThatHasChanged == syncmodeBox)
+    else if (comboBoxThatHasChanged == syncmodeBox.get())
     {
         //[UserComboBoxCode_syncmodeBox] -- add your combo box handling code here..
         if      (selection=="PPQ (Host 0)") getFilter()->notifyHostForActiveSlot(kSync,0.f);
@@ -3117,7 +3508,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         else if (selection=="Sample") getFilter()->notifyHostForActiveSlot(kSync,1.f);
         //[/UserComboBoxCode_syncmodeBox]
     }
-    else if (comboBoxThatHasChanged == quantizeBox)
+    else if (comboBoxThatHasChanged == quantizeBox.get())
     {
         //[UserComboBoxCode_quantizeBox] -- add your combo box handling code here..
         if      (selection=="Off") getFilter()->notifyHostForActiveSlot(kQuantize,0.f);
@@ -3127,7 +3518,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
         else if (selection=="64th") getFilter()->notifyHostForActiveSlot(kQuantize,1.f);
         //[/UserComboBoxCode_quantizeBox]
     }
-    else if (comboBoxThatHasChanged == quantizeBox2)
+    else if (comboBoxThatHasChanged == quantizeBox2.get())
     {
         //[UserComboBoxCode_quantizeBox2] -- add your combo box handling code here..
         if      (selection=="4th") getFilter()->setPRSetting("stepsize",0.f);
@@ -3138,7 +3529,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		pianoRoll->repaintBG();
         //[/UserComboBoxCode_quantizeBox2]
     }
-    else if (comboBoxThatHasChanged == midiOutDeviceBox)
+    else if (comboBoxThatHasChanged == midiOutDeviceBox.get())
     {
         //[UserComboBoxCode_midiOutDeviceBox] -- add your combo box handling code here..
 		if (midiOutDeviceBox->getSelectedItemIndex()==0) {
@@ -3152,7 +3543,7 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		}
         //[/UserComboBoxCode_midiOutDeviceBox]
     }
-    else if (comboBoxThatHasChanged == forceModeBox)
+    else if (comboBoxThatHasChanged == forceModeBox.get())
     {
         //[UserComboBoxCode_forceModeBox] -- add your combo box handling code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3177,13 +3568,13 @@ void PizLooperEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     //[/UsercomboBoxChanged_Post]
 }
 
-void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void PizLooperEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     VSTSlider* slider = (VSTSlider*)sliderThatWasMoved;
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == s_Transpose)
+    if (sliderThatWasMoved == s_Transpose.get())
     {
         //[UserSliderCode_s_Transpose] -- add your slider handling code here..
 		if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3195,7 +3586,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kTranspose,slider->mapToVSTRange());
         //[/UserSliderCode_s_Transpose]
     }
-    else if (sliderThatWasMoved == s_Octave)
+    else if (sliderThatWasMoved == s_Octave.get())
     {
         //[UserSliderCode_s_Octave] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3207,7 +3598,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kOctave,slider->mapToVSTRange());
         //[/UserSliderCode_s_Octave]
     }
-    else if (sliderThatWasMoved == s_Velocity)
+    else if (sliderThatWasMoved == s_Velocity.get())
     {
         //[UserSliderCode_s_Velocity] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3219,7 +3610,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kVelocity,slider->mapToVSTRange());
         //[/UserSliderCode_s_Velocity]
     }
-    else if (sliderThatWasMoved == s_Start)
+    else if (sliderThatWasMoved == s_Start.get())
     {
         //[UserSliderCode_s_Start] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3231,7 +3622,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kLoopStart,slider->mapToVSTRange());
         //[/UserSliderCode_s_Start]
     }
-    else if (sliderThatWasMoved == s_End)
+    else if (sliderThatWasMoved == s_End.get())
     {
         //[UserSliderCode_s_End] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3243,7 +3634,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kLoopEnd,slider->mapToVSTRange());
         //[/UserSliderCode_s_End]
     }
-    else if (sliderThatWasMoved == s_Stretch)
+    else if (sliderThatWasMoved == s_Stretch.get())
     {
         //[UserSliderCode_s_Stretch] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3255,7 +3646,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kStretch,slider->mapToVSTRange());
         //[/UserSliderCode_s_Stretch]
     }
-    else if (sliderThatWasMoved == s_Root)
+    else if (sliderThatWasMoved == s_Root.get())
     {
         //[UserSliderCode_s_Root] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3267,7 +3658,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kRoot,slider->mapToVSTRange());
         //[/UserSliderCode_s_Root]
     }
-    else if (sliderThatWasMoved == s_Low)
+    else if (sliderThatWasMoved == s_Low.get())
     {
         //[UserSliderCode_s_Low] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3288,7 +3679,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 		}
         //[/UserSliderCode_s_Low]
     }
-    else if (sliderThatWasMoved == s_High)
+    else if (sliderThatWasMoved == s_High.get())
     {
         //[UserSliderCode_s_High] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3308,7 +3699,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kNHigh,slider->mapToVSTRange());
         //[/UserSliderCode_s_High]
     }
-    else if (sliderThatWasMoved == s_TrigChan)
+    else if (sliderThatWasMoved == s_TrigChan.get())
     {
         //[UserSliderCode_s_TrigChan] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3320,7 +3711,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kTrigChan,slider->mapToVSTRange());
         //[/UserSliderCode_s_TrigChan]
     }
-    else if (sliderThatWasMoved == s_Shift)
+    else if (sliderThatWasMoved == s_Shift.get())
     {
         //[UserSliderCode_s_Shift] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3332,7 +3723,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kShift,slider->mapToVSTRange());
         //[/UserSliderCode_s_Shift]
     }
-    else if (sliderThatWasMoved == s_Channel)
+    else if (sliderThatWasMoved == s_Channel.get())
     {
         //[UserSliderCode_s_Channel] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3344,13 +3735,13 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kChannel,slider->mapToVSTRange());
         //[/UserSliderCode_s_Channel]
     }
-    else if (sliderThatWasMoved == s_FixedLength)
+    else if (sliderThatWasMoved == s_FixedLength.get())
     {
         //[UserSliderCode_s_FixedLength] -- add your slider handling code here..
         getFilter()->notifyHostForActiveSlot(kFixedLength,slider->mapToVSTRange());
         //[/UserSliderCode_s_FixedLength]
     }
-    else if (sliderThatWasMoved == s_PlayGroup)
+    else if (sliderThatWasMoved == s_PlayGroup.get())
     {
         //[UserSliderCode_s_PlayGroup] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3362,7 +3753,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kPlayGroup,slider->mapToVSTRange());
         //[/UserSliderCode_s_PlayGroup]
     }
-    else if (sliderThatWasMoved == s_MuteGroup)
+    else if (sliderThatWasMoved == s_MuteGroup.get())
     {
         //[UserSliderCode_s_MuteGroup] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3374,13 +3765,13 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kMuteGroup,slider->mapToVSTRange());
         //[/UserSliderCode_s_MuteGroup]
     }
-    else if (sliderThatWasMoved == s_MasterVelocity)
+    else if (sliderThatWasMoved == s_MasterVelocity.get())
     {
         //[UserSliderCode_s_MasterVelocity] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kMasterVelocity,slider->mapToVSTRange());
         //[/UserSliderCode_s_MasterVelocity]
     }
-    else if (sliderThatWasMoved == s_ScaleChannel)
+    else if (sliderThatWasMoved == s_ScaleChannel.get())
     {
         //[UserSliderCode_s_ScaleChannel] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3403,13 +3794,13 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 		}
         //[/UserSliderCode_s_ScaleChannel]
     }
-    else if (sliderThatWasMoved == s_MasterTranspose)
+    else if (sliderThatWasMoved == s_MasterTranspose.get())
     {
         //[UserSliderCode_s_MasterTranspose] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kMasterTranspose,slider->mapToVSTRange());
         //[/UserSliderCode_s_MasterTranspose]
     }
-    else if (sliderThatWasMoved == s_NumLoops)
+    else if (sliderThatWasMoved == s_NumLoops.get())
     {
         //[UserSliderCode_s_NumLoops] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3421,7 +3812,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kNumLoops,slider->mapToVSTRange());
         //[/UserSliderCode_s_NumLoops]
     }
-    else if (sliderThatWasMoved == s_NextSlot)
+    else if (sliderThatWasMoved == s_NextSlot.get())
     {
         //[UserSliderCode_s_NextSlot] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3433,19 +3824,19 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kNextSlot,slider->mapToVSTRange());
         //[/UserSliderCode_s_NextSlot]
     }
-    else if (sliderThatWasMoved == s_RecCC)
+    else if (sliderThatWasMoved == s_RecCC.get())
     {
         //[UserSliderCode_s_RecCC] -- add your slider handling code here..
 		getFilter()->notifyHostForActiveSlot(kRecCC,slider->mapToVSTRange());
         //[/UserSliderCode_s_RecCC]
     }
-    else if (sliderThatWasMoved == s_PlayCC)
+    else if (sliderThatWasMoved == s_PlayCC.get())
     {
         //[UserSliderCode_s_PlayCC] -- add your slider handling code here..
 		getFilter()->notifyHostForActiveSlot(kPlayCC,slider->mapToVSTRange());
         //[/UserSliderCode_s_PlayCC]
     }
-    else if (sliderThatWasMoved == s_VelocitySens)
+    else if (sliderThatWasMoved == s_VelocitySens.get())
     {
         //[UserSliderCode_s_VelocitySens] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3457,7 +3848,7 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 			getFilter()->notifyHostForActiveSlot(kVeloSens,slider->mapToVSTRange());
         //[/UserSliderCode_s_VelocitySens]
     }
-    else if (sliderThatWasMoved == s_TransposeChannel)
+    else if (sliderThatWasMoved == s_TransposeChannel.get())
     {
         //[UserSliderCode_s_TransposeChannel] -- add your slider handling code here..
         if (ModifierKeys::getCurrentModifiers().isCommandDown())
@@ -3485,18 +3876,18 @@ void PizLooperEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void PizLooperEditor::labelTextChanged (Label* labelThatHasChanged)
+void PizLooperEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 {
     //[UserlabelTextChanged_Pre]
     //[/UserlabelTextChanged_Pre]
 
-    if (labelThatHasChanged == nameLabel)
+    if (labelThatHasChanged == nameLabel.get())
     {
         //[UserLabelCode_nameLabel] -- add your label text handling code here..
         getFilter()->changeProgramName(getFilter()->getCurrentProgram(),nameLabel->getText());
         //[/UserLabelCode_nameLabel]
     }
-    else if (labelThatHasChanged == numerator)
+    else if (labelThatHasChanged == numerator.get())
     {
         //[UserLabelCode_numerator] -- add your label text handling code here..
 		int x = numerator->getText().getIntValue();
@@ -3508,7 +3899,7 @@ void PizLooperEditor::labelTextChanged (Label* labelThatHasChanged)
 		else numerator->setText(String(getFilter()->getNumerator(lastActiveLoop)),dontSendNotification);
         //[/UserLabelCode_numerator]
     }
-    else if (labelThatHasChanged == denominator)
+    else if (labelThatHasChanged == denominator.get())
     {
         //[UserLabelCode_denominator] -- add your label text handling code here..
 		int x = denominator->getText().getIntValue();
@@ -3520,7 +3911,7 @@ void PizLooperEditor::labelTextChanged (Label* labelThatHasChanged)
 		else denominator->setText(String(getFilter()->getDenominator(lastActiveLoop)),dontSendNotification);
         //[/UserLabelCode_denominator]
     }
-    else if (labelThatHasChanged == LengthLabel)
+    else if (labelThatHasChanged == LengthLabel.get())
     {
         //[UserLabelCode_LengthLabel] -- add your label text handling code here..
 		pianoRoll->setDisplayLength(LengthLabel->getText().getIntValue());
@@ -3557,7 +3948,7 @@ void PizLooperEditor::mouseDrag (const MouseEvent& e)
 void PizLooperEditor::mouseUp (const MouseEvent& e)
 {
 	Component* p = e.eventComponent->getParentComponent();
-	if (e.eventComponent==b_Play)
+	if (e.eventComponent==b_Play.get())
 	{
 		if (e.mods.isPopupMenu()) {
 			s_PlayCC->setVisible(!s_PlayCC->isVisible());
@@ -3573,7 +3964,7 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
 		else
 			getFilter()->toggleSlotPlaying(getFilter()->getCurrentProgram());
 	}
-	else if (e.eventComponent==b_Record)
+	else if (e.eventComponent==b_Record.get())
 	{
 		if (e.mods.isPopupMenu()) {
 			s_RecCC->setVisible(!s_RecCC->isVisible());
@@ -3596,7 +3987,7 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
 			}
 		}
 	}
-	else if (p==s_Root || p==s_High || p==s_Low) {
+	else if (p==s_Root.get() || p==s_High.get() || p==s_Low.get()) {
 		Slider* slider = ((Slider*)p);
 		if (e.mods.isMiddleButtonDown()) {
             //middle-click midi learn
@@ -3610,7 +4001,7 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
             }
 		}
 	}
-	else if (p==s_PlayCC || p==s_RecCC) {
+	else if (p==s_PlayCC.get() || p==s_RecCC.get()) {
 		Slider* slider = ((Slider*)p);
 		if (e.mods.isMiddleButtonDown()) {
             //middle-click midi learn
@@ -3624,9 +4015,9 @@ void PizLooperEditor::mouseUp (const MouseEvent& e)
             }
 		}
     }
-	else if (p==s_Stretch || p==s_Transpose || p==s_Octave || p==s_Start || p==s_End
-		|| p==s_Shift || p==s_Velocity || p==s_VelocitySens || p==s_MasterVelocity || p==s_MasterTranspose
-		|| p==s_PlayGroup || p==s_MuteGroup || p==s_Channel || p==s_NumLoops || p==s_NextSlot)
+	else if (p==s_Stretch.get() || p==s_Transpose.get() || p==s_Octave.get() || p==s_Start.get() || p==s_End.get()
+		|| p==s_Shift.get() || p==s_Velocity.get() || p==s_VelocitySens.get() || p==s_MasterVelocity.get() || p==s_MasterTranspose.get()
+		|| p==s_PlayGroup.get() || p==s_MuteGroup.get() || p==s_Channel.get() || p==s_NumLoops.get() || p==s_NextSlot.get())
 	{
 		if (e.mods.isPopupMenu()) {
 			Slider* slider = ((Slider*)p);
@@ -3695,14 +4086,14 @@ void PizLooperEditor::changeListenerCallback (ChangeBroadcaster* source)
 	{
 		loopinfoLabel2->setText(getFilter()->info->s,sendNotification);
 	}
-	else if (source==keySelector)
+	else if (source==keySelector.get())
 	{
 		for (int note=0;note<12;note++) {
 			if (getFilter()->keySelectorState.isNoteOn(1,note) != getFilter()->getParamForActiveSlot(kNote0+note)>=0.5f)
 				getFilter()->notifyHostForActiveSlot(kNote0+note,getFilter()->keySelectorState.isNoteOn(keySelector->getMidiChannel(),note)?1.f:0.f);
 		}
 	}
-	else if (source==timeline || source==pianoRoll) {
+	else if (source==timeline.get() || source==pianoRoll) {
 		getFilter()->setLoopLength(lastActiveLoop, timeline->getLength());
 		getFilter()->setLoopStart(lastActiveLoop, timeline->getStart());
 		getFilter()->updateLoopInfo();
@@ -3721,7 +4112,7 @@ void PizLooperEditor::changeListenerCallback (ChangeBroadcaster* source)
 			getButtonForSlot(lastActiveLoop)->setColour(TextButton::textColourOnId,Colours::black);
 		}
 	}
-	else if (source==viewport)
+	else if (source==viewport.get())
 	{
 		getFilter()->setPRSetting("x",viewport->getViewPositionX(),false);
 		getFilter()->setPRSetting("y",viewport->getViewPositionY(),false);
@@ -4049,268 +4440,268 @@ void PizLooperEditor::updateParametersFromFilter()
 TextButton* PizLooperEditor::getButtonForSlot(int slot)
 {
     switch(slot) {
-        case 0:   return textButton1;
-        case 1:   return textButton2;
-        case 2:   return textButton3;
-        case 3:   return textButton4;
-        case 4:   return textButton5;
-        case 5:   return textButton6;
-        case 6:   return textButton7;
-        case 7:   return textButton8;
-        case 8:   return textButton9;
-        case 9:   return textButton10;
-        case 10:  return textButton11;
-        case 11:  return textButton12;
-        case 12:  return textButton13;
-        case 13:  return textButton14;
-        case 14:  return textButton15;
-        case 15:  return textButton16;
-        case 16:  return textButton17;
-        case 17:  return textButton18;
-        case 18:  return textButton19;
-        case 19:  return textButton20;
-        case 20:  return textButton21;
-        case 21:  return textButton22;
-		case 22:  return textButton23;
-        case 23:  return textButton24;
-        case 24:  return textButton25;
-        case 25:  return textButton26;
-        case 26:  return textButton27;
-        case 27:  return textButton28;
-        case 28:  return textButton29;
-        case 29:  return textButton30;
-        case 30:  return textButton31;
-        case 31:  return textButton32;
-        case 32:  return textButton33;
-        case 33:  return textButton34;
-        case 34:  return textButton35;
-        case 35:  return textButton36;
-        case 36:  return textButton37;
-        case 37:  return textButton38;
-        case 38:  return textButton39;
-        case 39:  return textButton40;
-        case 40:  return textButton41;
-        case 41:  return textButton42;
-        case 42:  return textButton43;
-        case 43:  return textButton44;
-		case 44:  return textButton45;
-        case 45:  return textButton46;
-        case 46:  return textButton47;
-        case 47:  return textButton48;
-        case 48:  return textButton49;
-        case 49:  return textButton50;
-        case 50:  return textButton51;
-        case 51:  return textButton52;
-        case 52:  return textButton53;
-        case 53:  return textButton54;
-		case 54:  return textButton55;
-        case 55:  return textButton56;
-        case 56:  return textButton57;
-        case 57:  return textButton58;
-        case 58:  return textButton59;
-        case 59:  return textButton60;
-        case 60:  return textButton61;
-        case 61:  return textButton62;
-        case 62:  return textButton63;
-        case 63:  return textButton64;
-        case 64:  return textButton65;
-        case 65:  return textButton66;
-        case 66:  return textButton67;
-        case 67:  return textButton68;
-        case 68:  return textButton69;
-        case 69:  return textButton70;
-        case 70:  return textButton71;
-        case 71:  return textButton72;
-        case 72:  return textButton73;
-        case 73:  return textButton74;
-        case 74:  return textButton75;
-        case 75:  return textButton76;
-        case 76:  return textButton77;
-        case 77:  return textButton78;
-        case 78:  return textButton79;
-        case 79:  return textButton80;
-        case 80:  return textButton81;
-        case 81:  return textButton82;
-        case 82:  return textButton83;
-        case 83:  return textButton84;
-        case 84:  return textButton85;
-        case 85:  return textButton86;
-		case 86:  return textButton87;
-        case 87:  return textButton88;
-        case 88:  return textButton89;
-        case 89:  return textButton90;
-        case 90:  return textButton91;
-        case 91:  return textButton92;
-        case 92:  return textButton93;
-        case 93:  return textButton94;
-        case 94:  return textButton95;
-        case 95:  return textButton96;
-        case 96:  return textButton97;
-        case 97:  return textButton98;
-        case 98:  return textButton99;
-        case 99:  return textButton100;
-        case 100: return textButton101;
-        case 101: return textButton102;
-        case 102: return textButton103;
-        case 103: return textButton104;
-        case 104: return textButton105;
-        case 105: return textButton106;
-        case 106: return textButton107;
-        case 107: return textButton108;
-		case 108: return textButton109;
-        case 109: return textButton110;
-        case 110: return textButton111;
-        case 111: return textButton112;
-        case 112: return textButton113;
-        case 113: return textButton114;
-        case 114: return textButton115;
-        case 115: return textButton116;
-        case 116: return textButton117;
-        case 117: return textButton118;
-		case 118: return textButton119;
-        case 119: return textButton120;
-        case 120: return textButton121;
-        case 121: return textButton122;
-        case 122: return textButton123;
-        case 123: return textButton124;
-        case 124: return textButton125;
-        case 125: return textButton126;
-        case 126: return textButton127;
-        case 127: return textButton128;
+        case 0:   return textButton1.get();
+        case 1:   return textButton2.get();
+        case 2:   return textButton3.get();
+        case 3:   return textButton4.get();
+        case 4:   return textButton5.get();
+        case 5:   return textButton6.get();
+        case 6:   return textButton7.get();
+        case 7:   return textButton8.get();
+        case 8:   return textButton9.get();
+        case 9:   return textButton10.get();
+        case 10:  return textButton11.get();
+        case 11:  return textButton12.get();
+        case 12:  return textButton13.get();
+        case 13:  return textButton14.get();
+        case 14:  return textButton15.get();
+        case 15:  return textButton16.get();
+        case 16:  return textButton17.get();
+        case 17:  return textButton18.get();
+        case 18:  return textButton19.get();
+        case 19:  return textButton20.get();
+        case 20:  return textButton21.get();
+        case 21:  return textButton22.get();
+		case 22:  return textButton23.get();
+        case 23:  return textButton24.get();
+        case 24:  return textButton25.get();
+        case 25:  return textButton26.get();
+        case 26:  return textButton27.get();
+        case 27:  return textButton28.get();
+        case 28:  return textButton29.get();
+        case 29:  return textButton30.get();
+        case 30:  return textButton31.get();
+        case 31:  return textButton32.get();
+        case 32:  return textButton33.get();
+        case 33:  return textButton34.get();
+        case 34:  return textButton35.get();
+        case 35:  return textButton36.get();
+        case 36:  return textButton37.get();
+        case 37:  return textButton38.get();
+        case 38:  return textButton39.get();
+        case 39:  return textButton40.get();
+        case 40:  return textButton41.get();
+        case 41:  return textButton42.get();
+        case 42:  return textButton43.get();
+        case 43:  return textButton44.get();
+		case 44:  return textButton45.get();
+        case 45:  return textButton46.get();
+        case 46:  return textButton47.get();
+        case 47:  return textButton48.get();
+        case 48:  return textButton49.get();
+        case 49:  return textButton50.get();
+        case 50:  return textButton51.get();
+        case 51:  return textButton52.get();
+        case 52:  return textButton53.get();
+        case 53:  return textButton54.get();
+		case 54:  return textButton55.get();
+        case 55:  return textButton56.get();
+        case 56:  return textButton57.get();
+        case 57:  return textButton58.get();
+        case 58:  return textButton59.get();
+        case 59:  return textButton60.get();
+        case 60:  return textButton61.get();
+        case 61:  return textButton62.get();
+        case 62:  return textButton63.get();
+        case 63:  return textButton64.get();
+        case 64:  return textButton65.get();
+        case 65:  return textButton66.get();
+        case 66:  return textButton67.get();
+        case 67:  return textButton68.get();
+        case 68:  return textButton69.get();
+        case 69:  return textButton70.get();
+        case 70:  return textButton71.get();
+        case 71:  return textButton72.get();
+        case 72:  return textButton73.get();
+        case 73:  return textButton74.get();
+        case 74:  return textButton75.get();
+        case 75:  return textButton76.get();
+        case 76:  return textButton77.get();
+        case 77:  return textButton78.get();
+        case 78:  return textButton79.get();
+        case 79:  return textButton80.get();
+        case 80:  return textButton81.get();
+        case 81:  return textButton82.get();
+        case 82:  return textButton83.get();
+        case 83:  return textButton84.get();
+        case 84:  return textButton85.get();
+        case 85:  return textButton86.get();
+		case 86:  return textButton87.get();
+        case 87:  return textButton88.get();
+        case 88:  return textButton89.get();
+        case 89:  return textButton90.get();
+        case 90:  return textButton91.get();
+        case 91:  return textButton92.get();
+        case 92:  return textButton93.get();
+        case 93:  return textButton94.get();
+        case 94:  return textButton95.get();
+        case 95:  return textButton96.get();
+        case 96:  return textButton97.get();
+        case 97:  return textButton98.get();
+        case 98:  return textButton99.get();
+        case 99:  return textButton100.get();
+        case 100: return textButton101.get();
+        case 101: return textButton102.get();
+        case 102: return textButton103.get();
+        case 103: return textButton104.get();
+        case 104: return textButton105.get();
+        case 105: return textButton106.get();
+        case 106: return textButton107.get();
+        case 107: return textButton108.get();
+		case 108: return textButton109.get();
+        case 109: return textButton110.get();
+        case 110: return textButton111.get();
+        case 111: return textButton112.get();
+        case 112: return textButton113.get();
+        case 113: return textButton114.get();
+        case 114: return textButton115.get();
+        case 115: return textButton116.get();
+        case 116: return textButton117.get();
+        case 117: return textButton118.get();
+		case 118: return textButton119.get();
+        case 119: return textButton120.get();
+        case 120: return textButton121.get();
+        case 121: return textButton122.get();
+        case 122: return textButton123.get();
+        case 123: return textButton124.get();
+        case 124: return textButton125.get();
+        case 125: return textButton126.get();
+        case 126: return textButton127.get();
+        case 127: return textButton128.get();
 		default:  return 0;
     }
 }
 
 int PizLooperEditor::getButtonIndex(Component *button)
 {
-	if (button== textButton1 )  return 0;
-	if (button== textButton2 )  return 1;
-	if (button== textButton3 )  return 2;
-	if (button== textButton4 )  return 3;
-	if (button== textButton5 )  return 4;
-	if (button== textButton6 )  return 5;
-	if (button== textButton7 )  return 6;
-	if (button== textButton8 )  return 7;
-	if (button== textButton9 )  return 8;
-	if (button==textButton10 )  return 9;
-	if (button==textButton11 )  return 10;
-	if (button==textButton12 )  return 11;
-	if (button==textButton13 )  return 12;
-	if (button==textButton14 )  return 13;
-	if (button==textButton15 )  return 14;
-	if (button==textButton16 )  return 15;
-	if (button==textButton17 )  return 16;
-	if (button==textButton18 )  return 17;
-	if (button==textButton19 )  return 18;
-	if (button==textButton20 )  return 19;
-	if (button==textButton21 )  return 20;
-	if (button==textButton22 )  return 21;
-	if (button==textButton23 )  return 22;
-	if (button==textButton24 )  return 23;
-	if (button==textButton25 )  return 24;
-	if (button==textButton26 )  return 25;
-	if (button==textButton27 )  return 26;
-	if (button==textButton28 )  return 27;
-	if (button==textButton29 )  return 28;
-	if (button==textButton30 )  return 29;
-	if (button==textButton31 )  return 30;
-	if (button==textButton32 )  return 31;
-	if (button==textButton33 )  return 32;
-	if (button==textButton34 )  return 33;
-	if (button==textButton35 )  return 34;
-	if (button==textButton36 )  return 35;
-	if (button==textButton37 )  return 36;
-	if (button==textButton38 )  return 37;
-	if (button==textButton39 )  return 38;
-	if (button==textButton40 )  return 39;
-	if (button==textButton41 )  return 40;
-	if (button==textButton42 )  return 41;
-	if (button==textButton43 )  return 42;
-	if (button==textButton44 )  return 43;
-	if (button==textButton45 )  return 44;
-	if (button==textButton46 )  return 45;
-	if (button==textButton47 )  return 46;
-	if (button==textButton48 )  return 47;
-	if (button==textButton49 )  return 48;
-	if (button==textButton50 )  return 49;
-	if (button==textButton51 )  return 50;
-	if (button==textButton52 )  return 51;
-	if (button==textButton53 )  return 52;
-	if (button==textButton54 )  return 53;
-	if (button==textButton55 )  return 54;
-	if (button==textButton56 )  return 55;
-	if (button==textButton57 )  return 56;
-	if (button==textButton58 )  return 57;
-	if (button==textButton59 )  return 58;
-	if (button==textButton60 )  return 59;
-	if (button==textButton61 )  return 60;
-	if (button==textButton62 )  return 61;
-	if (button==textButton63 )  return 62;
-	if (button==textButton64 )  return 63;
-	if (button==textButton65 )  return 64;
-	if (button==textButton66 )  return 65;
-	if (button==textButton67 )  return 66;
-	if (button==textButton68 )  return 67;
-	if (button==textButton69 )  return 68;
-	if (button==textButton70 )  return 69;
-	if (button==textButton71 )  return 70;
-	if (button==textButton72 )  return 71;
-	if (button==textButton73 )  return 72;
-	if (button==textButton74 )  return 73;
-	if (button==textButton75 )  return 74;
-	if (button==textButton76 )  return 75;
-	if (button==textButton77 )  return 76;
-	if (button==textButton78 )  return 77;
-	if (button==textButton79 )  return 78;
-	if (button==textButton80 )  return 79;
-	if (button==textButton81 )  return 80;
-	if (button==textButton82 )  return 81;
-	if (button==textButton83 )  return 82;
-	if (button==textButton84 )  return 83;
-	if (button==textButton85 )  return 84;
-	if (button==textButton86 )  return 85;
-	if (button==textButton87 )  return 86;
-	if (button==textButton88 )  return 87;
-	if (button==textButton89 )  return 88;
-	if (button==textButton90 )  return 89;
-	if (button==textButton91 )  return 90;
-	if (button==textButton92 )  return 91;
-	if (button==textButton93 )  return 92;
-	if (button==textButton94 )  return 93;
-	if (button==textButton95 )  return 94;
-	if (button==textButton96 )  return 95;
-	if (button==textButton97 )  return 96;
-	if (button==textButton98 )  return 97;
-	if (button==textButton99 )  return 98;
-	if (button==textButton100 ) return 99;
-	if (button==textButton101 ) return 100;
-	if (button==textButton102 ) return 101;
-	if (button==textButton103 ) return 102;
-	if (button==textButton104 ) return 103;
-	if (button==textButton105 ) return 104;
-	if (button==textButton106 ) return 105;
-	if (button==textButton107 ) return 106;
-	if (button==textButton108 ) return 107;
-	if (button==textButton109 ) return 108;
-	if (button==textButton110 ) return 109;
-	if (button==textButton111 ) return 110;
-	if (button==textButton112 ) return 111;
-	if (button==textButton113 ) return 112;
-	if (button==textButton114 ) return 113;
-	if (button==textButton115 ) return 114;
-	if (button==textButton116 ) return 115;
-	if (button==textButton117 ) return 116;
-	if (button==textButton118 ) return 117;
-	if (button==textButton119 ) return 118;
-	if (button==textButton120 ) return 119;
-	if (button==textButton121 ) return 120;
-	if (button==textButton122 ) return 121;
-	if (button==textButton123 ) return 122;
-	if (button==textButton124 ) return 123;
-	if (button==textButton125 ) return 124;
-	if (button==textButton126 ) return 125;
-	if (button==textButton127 ) return 126;
-	if (button==textButton128 ) return 127;
+	if (button== textButton1.get() )  return 0;
+	if (button== textButton2.get() )  return 1;
+	if (button== textButton3.get() )  return 2;
+	if (button== textButton4.get() )  return 3;
+	if (button== textButton5.get() )  return 4;
+	if (button== textButton6.get() )  return 5;
+	if (button== textButton7.get() )  return 6;
+	if (button== textButton8.get() )  return 7;
+	if (button== textButton9.get() )  return 8;
+	if (button==textButton10.get() )  return 9;
+	if (button==textButton11.get() )  return 10;
+	if (button==textButton12.get() )  return 11;
+	if (button==textButton13.get() )  return 12;
+	if (button==textButton14.get() )  return 13;
+	if (button==textButton15.get() )  return 14;
+	if (button==textButton16.get() )  return 15;
+	if (button==textButton17.get() )  return 16;
+	if (button==textButton18.get() )  return 17;
+	if (button==textButton19.get() )  return 18;
+	if (button==textButton20.get() )  return 19;
+	if (button==textButton21.get() )  return 20;
+	if (button==textButton22.get() )  return 21;
+	if (button==textButton23.get() )  return 22;
+	if (button==textButton24.get() )  return 23;
+	if (button==textButton25.get() )  return 24;
+	if (button==textButton26.get() )  return 25;
+	if (button==textButton27.get() )  return 26;
+	if (button==textButton28.get() )  return 27;
+	if (button==textButton29.get() )  return 28;
+	if (button==textButton30.get() )  return 29;
+	if (button==textButton31.get() )  return 30;
+	if (button==textButton32.get() )  return 31;
+	if (button==textButton33.get() )  return 32;
+	if (button==textButton34.get() )  return 33;
+	if (button==textButton35.get() )  return 34;
+	if (button==textButton36.get() )  return 35;
+	if (button==textButton37.get() )  return 36;
+	if (button==textButton38.get() )  return 37;
+	if (button==textButton39.get() )  return 38;
+	if (button==textButton40.get() )  return 39;
+	if (button==textButton41.get() )  return 40;
+	if (button==textButton42.get() )  return 41;
+	if (button==textButton43.get() )  return 42;
+	if (button==textButton44.get() )  return 43;
+	if (button==textButton45.get() )  return 44;
+	if (button==textButton46.get() )  return 45;
+	if (button==textButton47.get() )  return 46;
+	if (button==textButton48.get() )  return 47;
+	if (button==textButton49.get() )  return 48;
+	if (button==textButton50.get() )  return 49;
+	if (button==textButton51.get() )  return 50;
+	if (button==textButton52.get() )  return 51;
+	if (button==textButton53.get() )  return 52;
+	if (button==textButton54.get() )  return 53;
+	if (button==textButton55.get() )  return 54;
+	if (button==textButton56.get() )  return 55;
+	if (button==textButton57.get() )  return 56;
+	if (button==textButton58.get() )  return 57;
+	if (button==textButton59.get() )  return 58;
+	if (button==textButton60.get() )  return 59;
+	if (button==textButton61.get() )  return 60;
+	if (button==textButton62.get() )  return 61;
+	if (button==textButton63.get() )  return 62;
+	if (button==textButton64.get() )  return 63;
+	if (button==textButton65.get() )  return 64;
+	if (button==textButton66.get() )  return 65;
+	if (button==textButton67.get() )  return 66;
+	if (button==textButton68.get() )  return 67;
+	if (button==textButton69.get() )  return 68;
+	if (button==textButton70.get() )  return 69;
+	if (button==textButton71.get() )  return 70;
+	if (button==textButton72.get() )  return 71;
+	if (button==textButton73.get() )  return 72;
+	if (button==textButton74.get() )  return 73;
+	if (button==textButton75.get() )  return 74;
+	if (button==textButton76.get() )  return 75;
+	if (button==textButton77.get() )  return 76;
+	if (button==textButton78.get() )  return 77;
+	if (button==textButton79.get() )  return 78;
+	if (button==textButton80.get() )  return 79;
+	if (button==textButton81.get() )  return 80;
+	if (button==textButton82.get() )  return 81;
+	if (button==textButton83.get() )  return 82;
+	if (button==textButton84.get() )  return 83;
+	if (button==textButton85.get() )  return 84;
+	if (button==textButton86.get() )  return 85;
+	if (button==textButton87.get() )  return 86;
+	if (button==textButton88.get() )  return 87;
+	if (button==textButton89.get() )  return 88;
+	if (button==textButton90.get() )  return 89;
+	if (button==textButton91.get() )  return 90;
+	if (button==textButton92.get() )  return 91;
+	if (button==textButton93.get() )  return 92;
+	if (button==textButton94.get() )  return 93;
+	if (button==textButton95.get() )  return 94;
+	if (button==textButton96.get() )  return 95;
+	if (button==textButton97.get() )  return 96;
+	if (button==textButton98.get() )  return 97;
+	if (button==textButton99.get() )  return 98;
+	if (button==textButton100.get() ) return 99;
+	if (button==textButton101.get() ) return 100;
+	if (button==textButton102.get() ) return 101;
+	if (button==textButton103.get() ) return 102;
+	if (button==textButton104.get() ) return 103;
+	if (button==textButton105.get() ) return 104;
+	if (button==textButton106.get() ) return 105;
+	if (button==textButton107.get() ) return 106;
+	if (button==textButton108.get() ) return 107;
+	if (button==textButton109.get() ) return 108;
+	if (button==textButton110.get() ) return 109;
+	if (button==textButton111.get() ) return 110;
+	if (button==textButton112.get() ) return 111;
+	if (button==textButton113.get() ) return 112;
+	if (button==textButton114.get() ) return 113;
+	if (button==textButton115.get() ) return 114;
+	if (button==textButton116.get() ) return 115;
+	if (button==textButton117.get() ) return 116;
+	if (button==textButton118.get() ) return 117;
+	if (button==textButton119.get() ) return 118;
+	if (button==textButton120.get() ) return 119;
+	if (button==textButton121.get() ) return 120;
+	if (button==textButton122.get() ) return 121;
+	if (button==textButton123.get() ) return 122;
+	if (button==textButton124.get() ) return 123;
+	if (button==textButton125.get() ) return 124;
+	if (button==textButton126.get() ) return 125;
+	if (button==textButton127.get() ) return 126;
+	if (button==textButton128.get() ) return 127;
 	return -1;
 }
 
@@ -4319,23 +4710,25 @@ int PizLooperEditor::getButtonIndex(Component *button)
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="PizLooperEditor" componentName=""
                  parentClasses="public AudioProcessorEditor, public ChangeListener, public FileDragAndDropTarget, public ClickableLabelListener, public Timer, public MidiKeyboardStateListener"
                  constructorParams="PizLooper* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.329999983"
+                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="800" initialHeight="487">
   <BACKGROUND backgroundColour="ff202029">
     <RECT pos="1 393 303 78" fill="linear: 176 352, 176 443, 0=ff000000, 1=ff404049"
           hasStroke="0"/>
     <RECT pos="305 393 81 78" fill="linear: 190 369, 190 419, 0=ff000000, 1=ff162938"
           hasStroke="0"/>
-    <ROUNDRECT pos="390 62 391M 40" cornerSize="10" fill="solid: ffa0a0a0" hasStroke="0"/>
+    <ROUNDRECT pos="390 62 391M 40" cornerSize="10.0" fill="solid: ffa0a0a0"
+               hasStroke="0"/>
     <RECT pos="152 -1 151M 56" fill="linear: 160 -30, 161 43, 0=ff000000, 1=ff404049"
           hasStroke="1" stroke="1, mitered, butt" strokeColour="solid: ff46495f"/>
     <RECT pos="0 0 152 55" fill="solid: ff202029" hasStroke="0"/>
@@ -4348,32 +4741,39 @@ BEGIN_JUCER_METADATA
           hasStroke="0"/>
     <ROUNDRECT pos="6 -20 139 67" cornerSize="14.5" fill="linear: 95 -25, 95 107, 0=ff002700, 1=ba267387"
                hasStroke="1" stroke="1, mitered, butt" strokeColour="solid: ffcbcbcb"/>
-    <IMAGE pos="12 12 41 25" resource="piznew40_png" opacity="1" mode="0"/>
+    <IMAGE pos="12 12 41 25" resource="piznew40_png" opacity="1.0" mode="0"/>
     <TEXT pos="44 23 108 20" fill="solid: ffcbcbcb" hasStroke="0" text="midiLooper"
-          fontname="Default font" fontsize="15" bold="1" italic="0" justification="36"/>
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="1"
+          italic="0" justification="36" typefaceStyle="Bold"/>
     <TEXT pos="46 8 108 20" fill="solid: ffbfbfbf" hasStroke="0" text="Insert Piz Here-&gt;"
-          fontname="Default font" fontsize="10" bold="1" italic="0" justification="36"/>
+          fontname="Default font" fontsize="10.0" kerning="0.0" bold="1"
+          italic="0" justification="36" typefaceStyle="Bold"/>
     <RECT pos="9 202 369 42" fill="linear: 100 194, 100 214, 0=ff433b22, 1=ff8b7a47"
           hasStroke="1" stroke="1, mitered, butt" strokeColour="solid: ff000000"/>
     <RECT pos="1 85 385 32" fill="linear: 100 85, 100 98, 0=ff979797, 1=ff6f737a"
           hasStroke="0"/>
     <RECT pos="390 85 391M 20" fill="solid: ff8c8c8c" hasStroke="0"/>
     <TEXT pos="215 177 24 15" fill="solid: ffffffff" hasStroke="0" text="-&gt;"
-          fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="153 162 24 15" fill="solid: ffffffff" hasStroke="0" text="PLAY"
-          fontname="Default font" fontsize="10" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="10.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <TEXT pos="230 162 29 15" fill="solid: ffffffff" hasStroke="0" text="THEN"
-          fontname="Default font" fontsize="10" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="10.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <ROUNDRECT pos="6 458 136 27" cornerSize="14.5" fill="solid: ff404049" hasStroke="0"/>
     <TEXT pos="574 67 20 12" fill="solid: ff000000" hasStroke="0" text="/"
-          fontname="Default font" fontsize="15" bold="0" italic="0" justification="36"/>
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="36"/>
     <PATH pos="0 0 100 100" fill="solid: 822aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: 5b5b5b" nonZeroWinding="1">s 139 294 l 139 310</PATH>
     <PATH pos="0 0 100 100" fill="solid: 822aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: 5b5b5b" nonZeroWinding="1">s 141 294 l 136 294</PATH>
-    <ROUNDRECT pos="141 254 161 72" cornerSize="10" fill="solid: 86404049" hasStroke="0"/>
-    <ROUNDRECT pos="8 311 371 36" cornerSize="10" fill="linear: 256 265, 256 355, 0=ff000000, 1=ff434450"
-               hasStroke="1" stroke="0.699999988, mitered, butt" strokeColour="solid: ff111111"/>
+    <ROUNDRECT pos="141 254 161 72" cornerSize="10.0" fill="solid: 86404049"
+               hasStroke="0"/>
+    <ROUNDRECT pos="8 311 371 36" cornerSize="10.0" fill="linear: 256 265, 256 355, 0=ff000000, 1=ff434450"
+               hasStroke="1" stroke="0.7, mitered, butt" strokeColour="solid: ff111111"/>
     <PATH pos="0 0 100 100" fill="solid: 822aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: 5b5b5b" nonZeroWinding="1">s 29 310 l 29 301</PATH>
     <RECT pos="723 64 51 18" fill="solid: ffbababa" hasStroke="1" stroke="1, mitered, butt"
@@ -4382,8 +4782,8 @@ BEGIN_JUCER_METADATA
   <LABEL name="new label" id="43a4ad473c82373c" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="613 64 46 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Zoom" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <GENERICCOMPONENT name="timeline" id="a7625d2eb81703f2" memberName="timeline" virtualName="Timeline"
                     explicitFocusOrder="0" pos="415 85 430M 20" class="Component"
                     params=""/>
@@ -4462,68 +4862,70 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Transpose" id="bebd4900b26b7ea8" memberName="s_Transpose"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="146 283 72 20"
           tooltip="Transposition applied to the current slot" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="-12" max="12"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="-12.0" max="12.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Octave Shift" id="d17041cc05fad561" memberName="s_Octave"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="226 283 72 20"
           tooltip="Transposition by octave for the current slot" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="-4" max="4" int="1"
-          style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="-4.0" max="4.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Velocity Offset" id="2c207442dda4efb5" memberName="s_Velocity"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="306 283 72 20"
           tooltip="Velocity adjustment for the current slot" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="0" max="200"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="0.0" max="200.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="new label" id="46c2229e3e67f2f1" memberName="label3" virtualName=""
          explicitFocusOrder="0" pos="146 267 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Semitones" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="new label" id="6f6ca47640c250a9" memberName="label4" virtualName=""
          explicitFocusOrder="0" pos="226 267 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Octave" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="new label" id="93b1b361c9cc0086" memberName="label5" virtualName=""
          explicitFocusOrder="0" pos="301 267 80 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Velocity" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="Loop Start" id="f1ca2a13980568a8" memberName="s_Start"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="66 367 72 20"
           tooltip="Offsets the loop start time by this number of beats"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-8" max="8" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-8.0" max="8.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="2c7022ccbc071339" memberName="label6" virtualName=""
          explicitFocusOrder="0" pos="66 351 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Start Offset" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="Loop End" id="dfaa63118a778aff" memberName="s_End" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="146 367 72 20" tooltip="Offsets the loop end time by this number of beats"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-8" max="8" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-8.0" max="8.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="5015260b61e3b2f3" memberName="label7" virtualName=""
          explicitFocusOrder="0" pos="146 351 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="End Offset" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="Loop Stretch" id="a9f425f1801b9523" memberName="s_Stretch"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="306 367 72 20"
           tooltip="Playback speed, relative to host tempo" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="-10" max="10"
-          int="1" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="-10.0" max="10.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="new label" id="1b0b033f88b7706c" memberName="label8" virtualName=""
          explicitFocusOrder="0" pos="306 351 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Speed" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <COMBOBOX name="Loop Mode" id="c2baafe98c323fba" memberName="loopmodeBox"
             virtualName="" explicitFocusOrder="0" pos="175 144 110 16" tooltip="Playback Mode: &quot;Sync Loop&quot; follows the host timeline. &quot;Loop after rec&quot; is the same but also plays automatically as soon as recording ends. &quot;Unsync&quot; modes play the pattern from the beginning as soon as playback is started."
             editable="0" layout="33" items="Loop after rec&#10;Sync loop&#10;Unsync 1-shot&#10;Unsync loop"
@@ -4539,44 +4941,47 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Root Note" id="2c76ae48d2c4565c" memberName="s_Root" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="76 174 64 20" tooltip="Transposed note triggering and Scale Channel input will transpose the pattern relative to this note"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-1" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-1.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="98b122ff20c1e0ed" memberName="label9" virtualName=""
          explicitFocusOrder="0" pos="15 176 64 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Root Note:" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="Low Note" id="9fc4ae89d34ed5e4" memberName="s_Low" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="18 440 64 20" tooltip="Lowest note to use for triggering"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-1" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-1.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="fe46ab559c888729" memberName="label10" virtualName=""
          explicitFocusOrder="0" pos="18 424 64 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Low Note" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="High Note" id="7d4c7469f530caf5" memberName="s_High" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="90 440 64 20" tooltip="Highest note to use for triggering"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-1" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-1.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="a243134fcde26e0c" memberName="label11" virtualName=""
          explicitFocusOrder="0" pos="90 424 64 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="High Note" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="TriggerChannel" id="dfa469788a1385f7" memberName="s_TrigChan"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="162 440 64 20"
           tooltip="Channel to use for trigger notes" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="1" max="16" int="1"
-          style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="1.0" max="16.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="Trigger Channel" id="fbd851f9f6e023e1" memberName="label12"
          virtualName="" explicitFocusOrder="0" pos="161 424 64 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Channel" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TEXTBUTTON name="Load" id="af7a2e7eac7e3bc3" memberName="b_Reload" virtualName=""
               explicitFocusOrder="0" pos="344 90 39 22" tooltip="Load MIDI file (Ctrl-click: load MIDI file with the current pattern name from the &quot;midiloops&quot; folder)"
               bgColOff="ff000000" textCol="ffffffff" textColOn="ffffffff" buttonText="Load"
@@ -4589,27 +4994,31 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="261 0 84 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Loop Step Size"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+         italic="0" justification="36"/>
   <SLIDER name="Shift" id="128b285d21c35465" memberName="s_Shift" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="226 367 72 20" tooltip="Shifts the pattern by this number of beats, with wraparound"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-8" max="8" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-8.0" max="8.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="0" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="Shift" id="493778df7df64035" memberName="label2" virtualName=""
          explicitFocusOrder="0" pos="226 351 72 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Beat Shift" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="QuantizeLabel" id="9539aa66eb92d49f" memberName="label23"
          virtualName="" explicitFocusOrder="0" pos="433 0 87 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Quantize Input"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+         italic="0" justification="36"/>
   <LABEL name="Name" id="c61a01db7e29e02e" memberName="nameLabel" virtualName="ClickableLabel"
          explicitFocusOrder="0" pos="4 87 256 27" tooltip="Current pattern name (double-click to edit)"
          edTextCol="ff000000" edBkgCol="ffffffff" labelText="Bassline (4 bars)"
          editableSingleClick="0" editableDoubleClick="1" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="26.3" bold="1" italic="0" justification="33"/>
+         fontname="Default font" fontsize="26.3" kerning="0.0" bold="1"
+         italic="0" justification="33" typefaceStyle="Bold"/>
   <TEXTBUTTON name="Save" id="2cda0dd565e6a8a4" memberName="b_Save" virtualName=""
               explicitFocusOrder="0" pos="304 90 39 22" tooltip="Save a MIDI file of the current pattern (Ctrl-click: save to the &quot;midiloops&quot; folder with the current name)"
               bgColOff="ff000000" textCol="ffffffff" textColOn="ffffffff" buttonText="Save"
@@ -4618,48 +5027,52 @@ BEGIN_JUCER_METADATA
          explicitFocusOrder="0" pos="162 0 95 16" textCol="ffffffff" edTextCol="ff000000"
          edBkgCol="0" labelText="Host Sync Mode" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="Sync:" id="8b2914befe90511" memberName="label18" virtualName=""
          explicitFocusOrder="0" pos="12 469 125 16" textCol="ff9f9f9f"
          edTextCol="ff000000" edBkgCol="0" labelText="Note Triggering"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="1" italic="0" justification="36"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="1"
+         italic="0" justification="36" typefaceStyle="Bold"/>
   <LABEL name="Loop Info" id="9e460abf305befb3" memberName="loopinfoLabel"
          virtualName="" explicitFocusOrder="0" pos="14 205 272 16" textCol="ff000000"
          edTextCol="ff000000" edBkgCol="0" labelText="label text" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="Loop Info 2" id="afa6b5a7c7af7805" memberName="loopinfoLabel2"
          virtualName="" explicitFocusOrder="0" pos="14 225 272 16" edTextCol="ff000000"
          edBkgCol="0" labelText="label text" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="Sync:" id="317b90b2dfd6f517" memberName="label17" virtualName=""
          explicitFocusOrder="0" pos="14 391 125 16" textCol="ff9f9f9f"
          edTextCol="ff000000" edBkgCol="0" labelText="Loop Manipulation"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="1" italic="0" justification="36"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="1"
+         italic="0" justification="36" typefaceStyle="Bold"/>
   <SLIDER name="Channel" id="94315107a91d9b27" memberName="s_Channel" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="314 414 64 20" tooltip="Input and output channel for the current slot"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="I/O Channel" id="842d9c7cde349df9" memberName="label19"
          virtualName="" explicitFocusOrder="0" pos="309 398 74 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="I/O Channel" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="RecordLengthLabel" id="63744c8a8acc6491" memberName="label20"
          virtualName="" explicitFocusOrder="0" pos="347 0 83 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Record Length" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="Recording Length" id="e936697207b7e6e8" memberName="s_FixedLength"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="347 15 86 16"
           tooltip="If set to &quot;Manual&quot;, recording will go on as long as the record button is on. Otherwise, length will be limited to this number of steps (based on &quot;Loop Step Size&quot; setting)."
           bkgcol="1e707070" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="32" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="32.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <TEXTBUTTON name="Transform/Filter" id="f37c696b28323e7f" memberName="b_Filt"
               virtualName="" explicitFocusOrder="0" pos="314 440 64 20" tooltip="Transform: all events in the pattern are channelized to the sected channel; Filter: only events with the selected channel will be output"
               bgColOff="ff999999" textCol="ff000000" buttonText="Transform"
@@ -4667,7 +5080,7 @@ BEGIN_JUCER_METADATA
   <VIEWPORT name="Piano Roll View" id="5a31f2945a04ad37" memberName="viewport"
             virtualName="PianoPort" explicitFocusOrder="0" pos="415 105 415M 105M"
             vscroll="1" hscroll="1" scrollbarThickness="16" contentType="2"
-            jucerFile="" contentClass="PianoRoll" constructorParams="this-&gt;getFilter(), this, timeline"/>
+            jucerFile="" contentClass="PianoRoll" constructorParams="this-&gt;getFilter(), this, timeline.get()"/>
   <GENERICCOMPONENT name="" id="12ca6202713b19aa" memberName="resizer" virtualName=""
                     explicitFocusOrder="0" pos="16R 16R 16 16" class="ResizableCornerComponent"
                     params="this, &amp;resizeLimits"/>
@@ -4679,24 +5092,26 @@ BEGIN_JUCER_METADATA
           virtualName="VSTSlider" explicitFocusOrder="0" pos="312 136 64 20"
           tooltip="Slots with the same Play Group number will all start/stop at the same time"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="Trigger Channel" id="57f66cb40cfc50a9" memberName="label13"
          virtualName="" explicitFocusOrder="0" pos="313 119 64 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Play Group" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="TriggerChannel" id="9796e75abea5bd57" memberName="s_MuteGroup"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="312 174 64 20"
           tooltip="Only one slot with the same Mute Group number can be played at the same time"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="Trigger Channel" id="9a98f4a58163bef3" memberName="label14"
          virtualName="" explicitFocusOrder="0" pos="307 157 74 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Mute Group" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TOGGLEBUTTON name="new toggle button" id="561e4cda4f522f3c" memberName="b_Snap"
                 virtualName="" explicitFocusOrder="0" pos="392 61 59 24" tooltip="Toggle Snap to Grid"
                 buttonText="Snap" connectedEdges="0" needsCallback="1" radioGroupId="0"
@@ -4728,19 +5143,21 @@ BEGIN_JUCER_METADATA
           virtualName="VSTSlider" explicitFocusOrder="0" pos="371 36 72 16"
           tooltip="Global velocity adjustment applied to all played notes"
           bkgcol="1e707070" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="200" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="200.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="2a2210fac0e009dd" memberName="label15" virtualName=""
          explicitFocusOrder="0" pos="283 36 88 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Master Velocity:"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="0" italic="0" justification="34"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+         italic="0" justification="34"/>
   <IMAGEBUTTON name="new button" id="5007a7df8a92f35d" memberName="aboutButton"
                virtualName="" explicitFocusOrder="0" pos="9 1 136 47" tooltip="Insert Piz Here-&gt; midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper"
                buttonText="" connectedEdges="0" needsCallback="1" radioGroupId="0"
-               keepProportions="1" resourceNormal="" opacityNormal="1" colourNormal="0"
-               resourceOver="" opacityOver="1" colourOver="0" resourceDown=""
-               opacityDown="1" colourDown="0"/>
+               keepProportions="1" resourceNormal="" opacityNormal="1.0" colourNormal="0"
+               resourceOver="" opacityOver="1.0" colourOver="0" resourceDown=""
+               opacityDown="1.0" colourDown="0"/>
   <TEXTBUTTON name="Triplet" id="7c0cd0b629c71353" memberName="b_Triplet" virtualName=""
               explicitFocusOrder="0" pos="506 64 18 18" tooltip="Toggle Triplet Note Grid"
               bgColOff="ff8d8d8d" buttonText="3" connectedEdges="3" needsCallback="1"
@@ -4761,17 +5178,18 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="555 64 27 18" tooltip="Time Sig Numerator"
          edTextCol="ff000000" edBkgCol="0" labelText="4" editableSingleClick="1"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="34"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="34"/>
   <LABEL name="new label" id="57902df5cc918e78" memberName="denominator"
          virtualName="" explicitFocusOrder="0" pos="584 64 29 18" tooltip="Time Sig Denominator"
          edTextCol="ff000000" edBkgCol="0" labelText="4" editableSingleClick="1"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="Loop Info 2" id="757d30fe4debdfe7" memberName="loopinfoLabel3"
          virtualName="" explicitFocusOrder="0" pos="5 47 141 16" textCol="ffdfdfdf"
          edTextCol="ff000000" edBkgCol="0" labelText="DEMO VERSION" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="1" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="1" italic="0" justification="36"
+         typefaceStyle="Bold"/>
   <TOGGLEBUTTON name="new toggle button" id="5543bd5e8c49a007" memberName="b_UseScaleChannel"
                 virtualName="" explicitFocusOrder="0" pos="11 329 129 17" tooltip="When checked, input notes on &quot;Scale Ch&quot; will be used to define the scale"
                 txtcol="ffffffff" buttonText="Use Scale Channel" connectedEdges="0"
@@ -4780,24 +5198,27 @@ BEGIN_JUCER_METADATA
           virtualName="VSTSlider" explicitFocusOrder="0" pos="10 283 60 20"
           tooltip="Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where &quot;Use Scale Ch&quot; is enabled"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="1" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="1.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="scale ch" id="93cfb6ed66e0a17c" memberName="label25" virtualName=""
          explicitFocusOrder="0" pos="13 267 54 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Scale Ch" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="MasterTranspose" id="d57f221f805d0cab" memberName="s_MasterTranspose"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="554 36 72 16"
           tooltip="Global transposition applied to all played notes (after Force to Scale)"
           bkgcol="1e707070" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-12" max="12" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-12.0" max="12.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="d40dfc76a0032690" memberName="label26" virtualName=""
          explicitFocusOrder="0" pos="452 36 102 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Master Transpose:"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="0" italic="0" justification="34"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+         italic="0" justification="34"/>
   <TOGGLEBUTTON name="WaitForBar" id="9ab8ef37e97d43e0" memberName="b_WaitForBar"
                 virtualName="" explicitFocusOrder="0" pos="175 123 107 16" tooltip="When checked, play/stop of this slot will happen at the start of the bar after"
                 txtcol="ffffffff" buttonText="Wait for Next Bar" connectedEdges="0"
@@ -4809,7 +5230,8 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="627 0 117 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="MIDI Output Device"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="12" bold="0" italic="0" justification="36"/>
+         fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
+         italic="0" justification="36"/>
   <TOGGLEBUTTON name="new toggle button" id="4860c217b9607fce" memberName="b_UseTrChannel"
                 virtualName="" explicitFocusOrder="0" pos="148 252 130 17" tooltip="When checked, notes on selected &quot;Transpose Ch&quot; will apply to &quot;Semitones&quot; and &quot;Octave&quot; settings, relative to &quot;Root Note&quot;"
                 txtcol="ffffffff" buttonText="Use Transp Ch" connectedEdges="0"
@@ -4821,20 +5243,22 @@ BEGIN_JUCER_METADATA
   <SLIDER name="NumLoops" id="6ce62dba23a224a8" memberName="s_NumLoops"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="155 174 64 20"
           tooltip="Number of times to loop playback" bkgcol="1e000000"
-          thumbcol="ff000000" textboxtext="ffffffff" min="0" max="64" int="1"
-          style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          thumbcol="ff000000" textboxtext="ffffffff" min="0.0" max="64.0"
+          int="1.0" style="LinearBar" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="NextSlot" id="89b8c16e6410c4dc" memberName="s_NextSlot"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="234 174 64 20"
           tooltip="What to do after the selected number of loops have played"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="Sync:" id="3505240ec530568f" memberName="label16" virtualName=""
          explicitFocusOrder="0" pos="12 247 125 16" textCol="ff9f9f9f"
          edTextCol="ff000000" edBkgCol="0" labelText="Loop Settings" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="1" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="1" italic="0" justification="36"
+         typefaceStyle="Bold"/>
   <COMBOBOX name="Force To Scale Mode" id="43ff2ca0052c54b0" memberName="forceModeBox"
             virtualName="" explicitFocusOrder="0" pos="110 313 61 16" editable="0"
             layout="33" items="Nearest&#10;Up&#10;Down&#10;Block" textWhenNonSelected="Nearest"
@@ -4854,7 +5278,7 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="724 65 49 16" tooltip="Pattern length in bars"
          edTextCol="ff000000" edBkgCol="0" labelText="4" editableSingleClick="1"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TEXTBUTTON name="new button" id="f82b62c14f5e0654" memberName="textButton17"
               virtualName="" explicitFocusOrder="0" pos="4 -97 25 24" buttonText="1"
               connectedEdges="10" needsCallback="0" radioGroupId="1"/>
@@ -5202,24 +5626,27 @@ BEGIN_JUCER_METADATA
   <SLIDER name="recCC" id="a135262705472738" memberName="s_RecCC" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="11 149 64 20" tooltip="CC Number to toggle recoring to active slot"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-2" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-2.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="playCC" id="742efa24bd3cf708" memberName="s_PlayCC" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="81 149 64 20" tooltip="CC Number to toggle play for active slot"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="-2" max="127" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="-2.0" max="127.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="Velocity Sensitivity" id="56077b1f3eddabf4" memberName="s_VelocitySens"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="234 440 64 20"
           tooltip="Velocity Sensitivity (Input Velocity -&gt; Output Velocity)"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="0" max="200" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="200.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="new label" id="56dd185855bc67b0" memberName="label24" virtualName=""
          explicitFocusOrder="0" pos="225 424 80 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="VeloSens" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TEXTBUTTON name="MIDI_Monitor" id="9b82f84d650b5d48" memberName="b_Monitor"
               virtualName="" explicitFocusOrder="0" pos="678 33 55 20" tooltip="Monitor input MIDI through active slot's settings (Transpose, Scale, I/O Channel)"
               bgColOff="ff999999" buttonText="Monitor" connectedEdges="0" needsCallback="1"
@@ -5228,13 +5655,14 @@ BEGIN_JUCER_METADATA
           virtualName="VSTSlider" explicitFocusOrder="0" pos="76 283 60 20"
           tooltip="Input notes on this channel will affect Semitones, Octave, and/or Force to Scale settings where &quot;Use Transp Ch&quot; is enabled"
           bkgcol="1e000000" thumbcol="ff000000" textboxtext="ffffffff"
-          min="1" max="16" int="1" style="LinearBar" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          min="1.0" max="16.0" int="1.0" style="LinearBar" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <LABEL name="tr ch" id="63fe8f3eb653b053" memberName="label28" virtualName=""
          explicitFocusOrder="0" pos="66 267 80 16" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="Transpose Ch" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="12" bold="0" italic="0" justification="36"/>
+         fontsize="12.0" kerning="0.0" bold="0" italic="0" justification="36"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
@@ -5281,3 +5709,8 @@ static const unsigned char resource_PizLooperEditor_piznew40_png[] = { 137,80,78
 
 const char* PizLooperEditor::piznew40_png = (const char*) resource_PizLooperEditor_piznew40_png;
 const int PizLooperEditor::piznew40_pngSize = 1803;
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+
