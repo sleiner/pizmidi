@@ -75,7 +75,7 @@ function(piz_add_to_installer target)
     install(
       TARGETS "${target}_${format}" #
       BUNDLE
-      LIBRARY DESTINATION "${format}" #
+      LIBRARY DESTINATION "${format}/${CPACK_PACKAGE_VENDOR}" #
               COMPONENT "${target}_${format}")
 
     # The installer structure will contain top-level nodes for each plugin
