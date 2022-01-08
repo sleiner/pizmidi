@@ -22,19 +22,15 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/GuitarNeckComponent.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/Main.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/PizButton.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/BankStorage.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
 target_link_libraries(
   pizjuce_common
-  INTERFACE juce::juce_core
-            juce::juce_audio_basics
-            juce::juce_audio_devices
-            juce::juce_audio_utils
-            juce::juce_audio_plugin_client
-            juce::juce_audio_processors
-            juce::juce_data_structures
+  INTERFACE juce::juce_core #
+            juce::juce_audio_basics #
+            juce::juce_audio_processors #
+            juce::juce_data_structures #
             juce::juce_gui_basics)
 
 add_library(pizjuce_build_options INTERFACE)
