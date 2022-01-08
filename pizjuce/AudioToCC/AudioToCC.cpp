@@ -347,16 +347,16 @@ void AudioToCC::releaseResources()
 
 // wimpy "interpolation" from last 3 data points
 int AudioToCC::smooth(int data, int old, int older, float inertia) {
-    //data=roundFloatToInt((float)(data+old+older)/3.0f);
+    //data=roundToInt((float)(data+old+older)/3.0f);
     //if (data>old) data=old+1;
     //else if (data<old) data=old-1;
 
     //if increasing
-    //if (data>old) data=data-roundFloatToInt((float)(data-old)*inertia*0.9f);
+    //if (data>old) data=data-roundToInt((float)(data-old)*inertia*0.9f);
     float change = (float)(data-old)*(1.0f-inertia*0.95f);
     if (change<1.0f && change>0.0f) change=1.0f;
     else if (change<0.0f && change>-1.0f) change=-1.0f;
-    data=old+roundFloatToInt(change);
+    data=old+roundToInt(change);
     if (data<1) data=0;
     if (data>127) data=127;
     return data;

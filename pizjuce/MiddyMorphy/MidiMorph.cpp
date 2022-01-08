@@ -29,13 +29,13 @@ MidiMorph::~MidiMorph() {
 
 void MidiMorph::setCursorXRatio(float x) {
   // Bouml preserved body begin 00042D8D
-    cursor->setXY((float)roundFloatToInt(x*paneSize.getWidth()) - cursor->size/2,cursor->Point::getY());
+    cursor->setXY((float)roundToInt(x*paneSize.getWidth()) - cursor->size/2,cursor->Point::getY());
   // Bouml preserved body end 00042D8D
 }
 
 void MidiMorph::setCursorYRatio(float y) {
   // Bouml preserved body begin 00042E0D
-    cursor->setXY(cursor->Point::getX(),(float)roundFloatToInt(y*paneSize.getHeight()) - cursor->size/2);
+    cursor->setXY(cursor->Point::getX(),(float)roundToInt(y*paneSize.getHeight()) - cursor->size/2);
   // Bouml preserved body end 00042E0D
 }
 

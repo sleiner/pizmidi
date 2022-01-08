@@ -19,7 +19,7 @@ JuceProgram::JuceProgram ()
 
     //default values
 	for (int i=0;i<MAX_ENVELOPE_POINTS;i++) {
-		param[i*2] = (float)roundFloatToInt(127.f*(float)i/(MAX_ENVELOPE_POINTS-1))*(float)midiScaler;
+		param[i*2] = (float)roundToInt(127.f*(float)i/(MAX_ENVELOPE_POINTS-1))*(float)midiScaler;
 		param[i*2+1] = param[i*2];
 		param[kActive + i] = 0.f;
 	}
@@ -92,11 +92,11 @@ const String MidiCurve::getParameterName (int index)
 const String MidiCurve::getParameterText (int index)
 {
     if (index==kChannel) {
-        if (roundFloatToInt(param[kChannel]*16.0f)==0) return String("Any");
-        else return String(roundFloatToInt(param[kChannel]*16.0f));
+        if (roundToInt(param[kChannel]*16.0f)==0) return String("Any");
+        else return String(roundToInt(param[kChannel]*16.0f));
     }
 	else if (index<getNumParameters())
-		return String(roundFloatToInt(127.f*param[index]));
+		return String(roundToInt(127.f*param[index]));
 	else return String();
 }
 
@@ -213,7 +213,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
-    const int channel = roundFloatToInt(param[kChannel]*16.0f);
+    const int channel = roundToInt(param[kChannel]*16.0f);
 	MidiBuffer output;
     MidiBuffer::Iterator mid_buffer_iter(midiMessages);
     MidiMessage midi_message(0xFE);
@@ -227,7 +227,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
 					int v = midi_message.getPitchWheelValue();
 					const uint8* data = midi_message.getRawData();
 					lastCCIn = v;
-					v=roundFloatToInt(16383.f * findValue(v*(float)0.00006103888));
+					v=roundToInt(16383.f * findValue(v*(float)0.00006103888));
 					lastCCOut = v;
 					MidiMessage out = MidiMessage(data[0], v & 0x007f, (v & 0x3f80)>>7);
 					output.addEvent(out,sample_number);
@@ -303,7 +303,7 @@ int MidiCurve::getNextActivePoint(int currentPoint) {
 
 void MidiCurve::resetPoints() {
 	for (int i=0;i<MAX_ENVELOPE_POINTS;i++) {
-		param[i*2] = (float)roundFloatToInt(127.f*(float)i/(MAX_ENVELOPE_POINTS-1))*(float)midiScaler;
+		param[i*2] = (float)roundToInt(127.f*(float)i/(MAX_ENVELOPE_POINTS-1))*(float)midiScaler;
 		param[i*2+1] = param[i*2];
 		param[kActive + i] = 0.f;
 	}

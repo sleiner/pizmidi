@@ -82,7 +82,7 @@ void imagePluginFilter::setParameter (int index, float newValue)
 	case kChannel:
 		if (param[index] != newValue) {
 			param[index] = newValue;
-			programs->setGlobal("channel",roundFloatToInt(newValue*16.f));
+			programs->setGlobal("channel",roundToInt(newValue*16.f));
 			sendChangeMessage ();
 		}
 		break;
@@ -100,8 +100,8 @@ const String imagePluginFilter::getParameterName (int index)
 const String imagePluginFilter::getParameterText (int index)
 {
     if (index==kChannel) {
-        if (roundFloatToInt(param[kChannel]*16.0f)==0) return String("Any");
-        else return String(roundFloatToInt(param[kChannel]*16.0f));
+        if (roundToInt(param[kChannel]*16.0f)==0) return String("Any");
+        else return String(roundToInt(param[kChannel]*16.0f));
     }
     return String();
 }
@@ -206,7 +206,7 @@ void imagePluginFilter::processBlock (AudioSampleBuffer& buffer,
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
-    const int channel = roundFloatToInt(param[kChannel]*16.0f);
+    const int channel = roundToInt(param[kChannel]*16.0f);
     MidiBuffer::Iterator mid_buffer_iter(midiMessages);
     MidiMessage midi_message(0xFE);
     int sample_number;

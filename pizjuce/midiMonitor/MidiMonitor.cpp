@@ -141,10 +141,10 @@ const String MidiMonitorPlugin::getParameterName (int index)
 const String MidiMonitorPlugin::getParameterText (int index)
 {
     switch (index) {
-        case kBgHue:	return String(roundFloatToInt(100.f*bghue)); break;
-        case kBgSat:	return String(roundFloatToInt(100.f*bgsat)); break;
-        case kBgBri:	return String(roundFloatToInt(100.f*bgbri)); break;
-        case kContrast: return String(roundFloatToInt(100.f*contrast)); break;
+        case kBgHue:	return String(roundToInt(100.f*bghue)); break;
+        case kBgSat:	return String(roundToInt(100.f*bgsat)); break;
+        case kBgBri:	return String(roundToInt(100.f*bgbri)); break;
+        case kContrast: return String(roundToInt(100.f*contrast)); break;
         case kPower:	return String(power); break;
         case kThru:		return String(thru); break;
         case kBytes:	return String(bytes); break;

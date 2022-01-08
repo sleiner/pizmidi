@@ -135,7 +135,7 @@ int Controller::getInterpolatedValue() {
 			tmp += scene->getValue(this) * scene->getAffectionRatio();
 		}
 		valueChanged = false;
-		value = roundFloatToInt(tmp);
+		value = roundToInt(tmp);
 	}
 	return value;
   // Bouml preserved body end 0003518D

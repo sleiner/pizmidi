@@ -178,8 +178,8 @@ void MidiEnvelope::mouseDown (const MouseEvent& e)
 		else {
 			labelX->setColour(Label::textColourId,Colours::red);
 			labelY->setColour(Label::textColourId,Colours::red);
-			labelX->setText("x: "+String(roundFloatToInt(127.f*points[draggingPoint][0])),dontSendNotification);
-			labelY->setText("y: "+String(roundFloatToInt(127.f*(1.f-points[draggingPoint][1]))),dontSendNotification);
+			labelX->setText("x: "+String(roundToInt(127.f*points[draggingPoint][0])),dontSendNotification);
+			labelY->setText("y: "+String(roundToInt(127.f*(1.f-points[draggingPoint][1]))),dontSendNotification);
 		}
     }
 	else {
@@ -234,7 +234,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 {
 	int restrict=0;
 	if(e.mods.isCommandDown()) {
-		if(abs(e.x-roundFloatToInt(mouseDownPoint.getX()))<abs(e.y-roundFloatToInt(mouseDownPoint.getY()))) {
+		if(abs(e.x-roundToInt(mouseDownPoint.getX()))<abs(e.y-roundToInt(mouseDownPoint.getY()))) {
 			restrict=-1;
 		}
 		else restrict=1;
@@ -270,8 +270,8 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 
 		labelX->setColour(Label::textColourId,Colours::red);
 		labelY->setColour(Label::textColourId,Colours::red);
-		labelX->setText("x: "+String(roundFloatToInt(127.f*points[draggingPoint][0])),dontSendNotification);
-		labelY->setText("y: "+String(roundFloatToInt(127.f*(1.f-points[draggingPoint][1]))),dontSendNotification);
+		labelX->setText("x: "+String(roundToInt(127.f*points[draggingPoint][0])),dontSendNotification);
+		labelY->setText("y: "+String(roundToInt(127.f*(1.f-points[draggingPoint][1]))),dontSendNotification);
 
 		repaint ();
     }
@@ -324,16 +324,16 @@ void MidiEnvelope::mouseMove(const MouseEvent& e)
 		//labelY->setTopLeftPosition(x,y+labelX->getHeight());
 		labelX->setColour(Label::textColourId,Colours::green);
 		labelY->setColour(Label::textColourId,Colours::green);
-		labelX->setText("x: "+String(roundFloatToInt(127.f*points[hoveringPoint][0])),dontSendNotification);
-		labelY->setText("y: "+String(roundFloatToInt(127.f*(1.f-points[hoveringPoint][1]))),dontSendNotification);
+		labelX->setText("x: "+String(roundToInt(127.f*points[hoveringPoint][0])),dontSendNotification);
+		labelY->setText("y: "+String(roundToInt(127.f*(1.f-points[hoveringPoint][1]))),dontSendNotification);
 	}
 	else {
 		//labelX->setTopLeftPosition(e.x+16,e.y);
 		//labelY->setTopLeftPosition(e.x+16,e.y+labelX->getHeight());
 		labelX->setColour(Label::textColourId,Colours::black);
 		labelY->setColour(Label::textColourId,Colours::black);
-		labelX->setText("x: "+String(roundFloatToInt(127.f*(float)e.x/(float)getWidth())),dontSendNotification);
-		labelY->setText("y: "+String(roundFloatToInt(127.f*(1.f-(float)e.y/(float)getHeight()))),dontSendNotification);
+		labelX->setText("x: "+String(roundToInt(127.f*(float)e.x/(float)getWidth())),dontSendNotification);
+		labelY->setText("y: "+String(roundToInt(127.f*(1.f-(float)e.y/(float)getHeight()))),dontSendNotification);
 	}
 
     repaint ();

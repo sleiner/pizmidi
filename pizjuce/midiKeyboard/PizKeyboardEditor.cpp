@@ -182,7 +182,7 @@ midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
 	showNumbersButton->setMouseClickGrabsKeyboardFocus(false);
 	resizer->setMouseClickGrabsKeyboardFocus(false);
     midiKeyboard->setMouseClickGrabsKeyboardFocus(false);
-    const int ch = roundFloatToInt(ownerFilter->getParameter(kChannel)*15.f);
+    const int ch = roundToInt(ownerFilter->getParameter(kChannel)*15.f);
     midiKeyboard->setMidiChannel(ch+1);
     midiKeyboard->setMidiChannelsToDisplay(1<<ch);
 	midiKeyboard->setLowestVisibleKey(ownerFilter->keyPosition);
@@ -437,7 +437,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
     PizKeyboard* const filter = getFilter();
 
     filter->getCallbackLock().enter();
-    const int ch = roundFloatToInt(filter->getParameter(kChannel)*15.f);
+    const int ch = roundToInt(filter->getParameter(kChannel)*15.f);
     const float keywidth = filter->getParameter(kWidth);
     const float velocity = filter->getParameter(kVelocity)*127.f;
     const bool useY = filter->getParameter(kUseY)>=0.5f;
@@ -597,4 +597,3 @@ END_JUCER_METADATA
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

@@ -28,7 +28,7 @@ void PianoRoll::setSequence(Loop *sequence_)
 
 int PianoRoll::getTimeInPixels ()
 {
-	return roundFloatToInt((float)sequence->getCurrentTime()*(float)getWidth()/seqLengthInPpq);
+	return roundToInt((float)sequence->getCurrentTime()*(float)getWidth()/seqLengthInPpq);
 }
 
 void PianoRoll::mouseDown (const MouseEvent& e)

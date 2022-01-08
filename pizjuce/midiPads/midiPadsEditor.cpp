@@ -387,7 +387,7 @@ void midiPadsEditor::mouseDrag(const MouseEvent &e)
 						if (newx>127) {newx=127; fx=1.0f;}
 						else if (newx<0) {newx=0; fx=0.0f;}
 						if (getFilter()->UseXPB[i]) {
-							newx=roundFloatToInt(fx*16383.0f);
+							newx=roundToInt(fx*16383.0f);
 							if (newx>0x3fff) {newx=0x3fff; fx=1.0f;}
 							else if (newx<0) {newx=0; fx=0.0f;}
 						}

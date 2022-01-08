@@ -158,7 +158,7 @@ private:
 	};
 
 	struct PointComparator {
-		int compareElements(midiPoint a, midiPoint b) { return roundFloatToInt(a.p.getX()*127.f) - roundFloatToInt(b.p.getX()*127.f); }
+		int compareElements(midiPoint a, midiPoint b) { return roundToInt(a.p.getX()*127.f) - roundToInt(b.p.getX()*127.f); }
 	} pointComparator;
 
 	Array<midiPoint> points;

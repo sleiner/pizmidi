@@ -797,7 +797,7 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_addBarButton] -- add your button handler code here..
 		pianoRoll->blankLength+=960.0*4.0;
-		pianoRoll->setSize(pianoRoll->getWidth()+roundFloatToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
+		pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
 		pianoRoll->sequenceChanged();
         //[/UserButtonCode_addBarButton]
     }
@@ -806,7 +806,7 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //[UserButtonCode_deleteBarButton] -- add your button handler code here..
 		pianoRoll->blankLength-=960.0*4.0;
 		if (pianoRoll->blankLength<960.0*4.0) pianoRoll->blankLength = 960.0*4.0;
-		pianoRoll->setSize(roundFloatToInt(pianoRoll->ppqToPixels(pianoRoll->blankLength)),pianoRoll->getHeight());
+		pianoRoll->setSize(roundToInt(pianoRoll->ppqToPixels(pianoRoll->blankLength)),pianoRoll->getHeight());
 		pianoRoll->sequenceChanged();
         //[/UserButtonCode_deleteBarButton]
     }
@@ -926,12 +926,12 @@ void StepEditor::timerCallback ()
 {
 	if (getFilter()->getActiveLoop()->isRecording)
 	{
-		int x = roundFloatToInt(pianoRoll->ppqToPixels(getFilter()->getActiveLoop()->recTime));
+		int x = roundToInt(pianoRoll->ppqToPixels(getFilter()->getActiveLoop()->recTime));
 		//if (x < viewport->getWidth()-30) x=0;
 		if (x>pianoRoll->getWidth()) {
 			getFilter()->setParameterNotifyingHost(kRecord,0.f);
 			//pianoRoll->blankLength+=960.0*4.0;
-			//pianoRoll->setSize(pianoRoll->getWidth()+roundFloatToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
+			//pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
 			//pianoRoll->sequenceChanged();
 			////pianoRoll->setSize(x,pianoRoll->getHeight());
 			//viewport->setViewPosition(x-pianoRoll->getWidth(),viewport->getViewPositionY());
@@ -983,13 +983,13 @@ void StepEditor::updateParameters (bool updateLoop)
 
 void StepEditor::zoomIn(int centerPixel)
 {
-	pianoRoll->setSize(roundFloatToInt((float)pianoRoll->getWidth()*1.1f),pianoRoll->getHeight());
+	pianoRoll->setSize(roundToInt((float)pianoRoll->getWidth()*1.1f),pianoRoll->getHeight());
 	viewport->setViewPosition(jlimit(0,pianoRoll->getWidth()-viewport->getViewWidth(),centerPixel-viewport->getViewWidth()/2),viewport->getViewPositionY());
 }
 
 void StepEditor::zoomOut(int centerPixel)
 {
-	pianoRoll->setSize(roundFloatToInt((float)pianoRoll->getWidth()*0.9f),pianoRoll->getHeight());
+	pianoRoll->setSize(roundToInt((float)pianoRoll->getWidth()*0.9f),pianoRoll->getHeight());
 	viewport->setViewPosition(jlimit(0,pianoRoll->getWidth()-viewport->getViewWidth(),centerPixel-viewport->getViewWidth()/2),viewport->getViewPositionY());
 }
 //[/MiscUserCode]
@@ -1135,4 +1135,3 @@ END_JUCER_METADATA
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

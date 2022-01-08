@@ -94,7 +94,7 @@ void MidiStep::setParameter (int index, float newValue)
 			switch(index)
 			{
 			case kActiveLoop:
-				activeLoop = roundFloatToInt(newValue*(float)(numLoops-1));
+				activeLoop = roundToInt(newValue*(float)(numLoops-1));
 				break;
 			default: break;
 			}
@@ -130,8 +130,8 @@ const String MidiStep::getParameterText (int index)
         return param[kRecActive]<0.5f ? String("Off") : String("On");
     }
 	if (index==kActiveLoop) {
-        if (roundFloatToInt(param[kActiveLoop]*16.0f)==0) return String("Any");
-        else return String(roundFloatToInt(param[kActiveLoop]*16.0f));
+        if (roundToInt(param[kActiveLoop]*16.0f)==0) return String("Any");
+        else return String(roundToInt(param[kActiveLoop]*16.0f));
     }
 	if (index==kThru) {
         return param[kThru]<0.5f ? String("Off") : String("On");
@@ -141,19 +141,19 @@ const String MidiStep::getParameterText (int index)
             return param[index]<0.5f ? String("Off") : String("On");
         }
 		if (index<kTriggerKey) { //in channel
-            if (roundFloatToInt(param[index]*16.0f)==0) return String("Any");
-            else return String(roundFloatToInt(param[index]*16.0f));
+            if (roundToInt(param[index]*16.0f)==0) return String("Any");
+            else return String(roundToInt(param[index]*16.0f));
         }
         if (index<kTranspose) { //trigger key
 			if (floatToMidi(param[index],true)<0) return String("Learn...");
             return String(floatToMidi(param[index],true));
         }
 		if (index<kOutChannel) { //transpose
-            return String(roundFloatToInt(param[index] * 96.f) - 48);
+            return String(roundToInt(param[index] * 96.f) - 48);
 		}
 		if (index<kNumParams) { //out channel
-			if (roundFloatToInt(param[index]*16.0f)==0) return String("No Change");
-			else return String(roundFloatToInt(param[index]*16.0f));
+			if (roundToInt(param[index]*16.0f)==0) return String("No Change");
+			else return String(roundToInt(param[index]*16.0f));
 		}
 	}
 	return String();
@@ -269,7 +269,7 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
 		loop[i]->outChannel = floatToChannel(param[kOutChannel+i]);
 		loop[i]->isRecArmed = param[kRecArm+i]>=0.5f;
 		loop[i]->setTriggerNote(floatToMidi(param[kTriggerKey+i],true));
-		loop[i]->transpose = roundFloatToInt(param[kTranspose+i] * 96.f) - 48;
+		loop[i]->transpose = roundToInt(param[kTranspose+i] * 96.f) - 48;
 	}
 
     if (param[kRecord]>=0.5f && !wasRecording) { //start recording

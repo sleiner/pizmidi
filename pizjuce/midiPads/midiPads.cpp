@@ -498,7 +498,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
             buttondown[i]=false;
             if (UseX[i]) {
                 if (UseXPB[i]) {
-                    int value = jlimit(0,16383,roundFloatToInt( (param[i+xpos]*16383.0f)*(getParameter(kCCOffset)*2) ));
+                    int value = jlimit(0,16383,roundToInt( (param[i+xpos]*16383.0f)*(getParameter(kCCOffset)*2) ));
                     midiout.addEvent(MidiMessage(0xE0|outch,value & 0x007f,(value & 0x3f80)>>7,0),0);
                 }
                 else {

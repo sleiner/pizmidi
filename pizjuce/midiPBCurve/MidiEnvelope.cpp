@@ -59,8 +59,8 @@ void MidiEnvelope::paint (Graphics& g)
 	for (int grid=1;grid<16383;grid++) {
 		float inc = 1.f/16383.f;
 		float pbrange2 = plugin->getParameter(kPBRange2)*24.f;
-		int pbstep = roundFloatToInt(8192.f/(jmax(1.f,plugin->getParameter(kPBRange)*24.f)));
-		int pbstep2 = pbrange2==0.f ? pbstep : roundFloatToInt(8192.f/(jmax(1.f,pbrange2)));
+		int pbstep = roundToInt(8192.f/(jmax(1.f,plugin->getParameter(kPBRange)*24.f)));
+		int pbstep2 = pbrange2==0.f ? pbstep : roundToInt(8192.f/(jmax(1.f,pbrange2)));
 		if (grid==8192) { //center line
 			g.setColour(Colours::blueviolet);
 			g.drawLine(0.f,((float)(16383-grid)*inc)*getHeight(),(float)getWidth(),((float)(16383-grid)*inc)*getHeight(),1.f);
@@ -161,7 +161,7 @@ void MidiEnvelope::paint (Graphics& g)
 		//}
     }
 	g.setColour(Colours::darkgoldenrod);
-	g.drawVerticalLine(roundFloatToInt((float)plugin->lastCCIn*getWidth()/16383.f),
+	g.drawVerticalLine(roundToInt((float)plugin->lastCCIn*getWidth()/16383.f),
 		               (float)getHeight()-((float)plugin->lastCCOut*(float)getHeight()/16383.f),
 					   (float)getHeight());
 	g.fillEllipse(((float)plugin->lastCCIn*getWidth()/16383.f)-halfDotSize,
@@ -208,27 +208,27 @@ void MidiEnvelope::mouseDown (const MouseEvent& e)
 			if (p.getX()>0.5f)
 			{
 				labelX->setText("x: "
-					+ String(roundFloatToInt(16383.f*p.getX()))
+					+ String(roundToInt(16383.f*p.getX()))
 					+ " (" + String(pbrange*(p.getX()-0.5f),2) + ")",
 					dontSendNotification);
 			}
 			else
 			{
 				labelX->setText("x: "
-					+ String(roundFloatToInt(16383.f*p.getX()))
+					+ String(roundToInt(16383.f*p.getX()))
 					+ " (" + String(pbrange2*(p.getX()-0.5f),2) + ")",
 					dontSendNotification);
 			}
 			if (p.getY()>0.5f)
 			{
 				labelY->setText("y: "
-					+ String(roundFloatToInt(16383.f*p.getY()))
+					+ String(roundToInt(16383.f*p.getY()))
 					+ " (" + String(pbrange*(p.getY()-0.5f),2) + ")",
 					dontSendNotification);
 			}
 			else {
 				labelY->setText("y: "
-					+ String(roundFloatToInt(16383.f*p.getY()))
+					+ String(roundToInt(16383.f*p.getY()))
 					+ " (" + String(pbrange2*(p.getY()-0.5f),2) + ")",
 					dontSendNotification);
 			}
@@ -290,7 +290,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 {
 	int restrict=0;
 	if(e.mods.isCommandDown() && !e.mods.isShiftDown()) {
-		if(abs(e.x-roundFloatToInt(mouseDownPoint.getX()))<abs(e.y-roundFloatToInt(mouseDownPoint.getY()))) {
+		if(abs(e.x-roundToInt(mouseDownPoint.getX()))<abs(e.y-roundToInt(mouseDownPoint.getY()))) {
 			restrict=-1;
 		}
 		else restrict=1;
@@ -336,27 +336,27 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 		if (p.getX()>0.5f)
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange2*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		if (p.getY()>0.5f)
 		{
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else {
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange2*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}
@@ -420,27 +420,27 @@ void MidiEnvelope::mouseMove(const MouseEvent& e)
 		if (p.getX()>0.5f)
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange2*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		if (p.getY()>0.5f)
 		{
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else {
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange2*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}
@@ -458,27 +458,27 @@ void MidiEnvelope::mouseMove(const MouseEvent& e)
 		if (p.getX()>0.5f)
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else
 		{
 			labelX->setText("x: "
-				+ String(roundFloatToInt(16383.f*p.getX()))
+				+ String(roundToInt(16383.f*p.getX()))
 				+ " (" + String(pbrange2*(p.getX()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		if (p.getY()>0.5f)
 		{
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}
 		else {
 			labelY->setText("y: "
-				+ String(roundFloatToInt(16383.f*p.getY()))
+				+ String(roundToInt(16383.f*p.getY()))
 				+ " (" + String(pbrange2*(p.getY()-0.5f),2) + ")",
 				dontSendNotification);
 		}

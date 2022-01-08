@@ -130,7 +130,7 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
     int16 mask1 = URL.hashCode() & 0xffff;
     int16 mask2 = URL.hashCode() / 0x10000;
     float rm = (float)(URL.hashCode() & 0xff)/255.f;
-    int8 mask3 = ~(roundFloatToInt(255.f * buffer.getMagnitude(0,buffer.getNumSamples())*gain*0.1f) & 0xff);
+    int8 mask3 = ~(roundToInt(255.f * buffer.getMagnitude(0,buffer.getNumSamples())*gain*0.1f) & 0xff);
     float integerMax = 32767.f;
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
@@ -144,8 +144,8 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
     for (int i=0; i<buffer.getNumSamples(); i++) {
         float sampleL = in1[i]*gain*0.01f+denorm;
         float sampleR = in2[i]*gain*0.01f+denorm;
-        int16 L16 = roundFloatToInt(sampleL*integerMax);
-        int16 R16 = roundFloatToInt(sampleR*integerMax);
+        int16 L16 = roundToInt(sampleL*integerMax);
+        int16 R16 = roundToInt(sampleR*integerMax);
         L16 = L16 & mask1;
         R16 = R16 & mask2;
         int8 L8 = L16 & mask3;

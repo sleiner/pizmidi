@@ -1040,7 +1040,7 @@ void midiPCGUIEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     for (int i=0;i<numParams;i++) param[i] = filter->getParameter(i);
-	const int channel = roundFloatToInt(param[kChannel] * 15.0f);
+	const int channel = roundToInt(param[kChannel] * 15.0f);
 	const int p = filter->actualProgram[channel];
 	const int msb = filter->actualBankMSB[channel];
 	const int lsb = filter->actualBankLSB[channel];
@@ -1229,4 +1229,3 @@ END_JUCER_METADATA
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-
