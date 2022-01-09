@@ -47,7 +47,7 @@ MidiMessageSequence PizMidiMessageSequence::getAsJuceSequence ()
 
 void PizMidiMessageSequence::swapWith (PizMidiMessageSequence& other) throw()
 {
-    list.swapWithArray (other.list);
+    list.swapWith (other.list);
 }
 
 PizMidiMessageSequence::~PizMidiMessageSequence()

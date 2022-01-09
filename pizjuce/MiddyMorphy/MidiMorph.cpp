@@ -233,7 +233,7 @@ int MidiMorph::getNumSelectedScenes() {
 void MidiMorph::setSelectedScenes(Array<Scene*> & scenes) {
   // Bouml preserved body begin 0003E80D
 
-	this->selectedScenes.swapWithArray(scenes);
+	this->selectedScenes.swapWith(scenes);
 	if(auditSelScene && selectedScenes.size() == 1)
 	{
 		valuesChanged = true;
