@@ -97,3 +97,30 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
     After the previous step, the plugins lie in your `build/` folder.
     There, they will (most likely) not be found by any [DAW](https://en.wikipedia.org/wiki/Digital_audio_workstation) on your system.
     You must copy them to one of the folders where your DAW of choice is looking for plugins.
+
+### Windows
+
+1. Install **prerequisites**:
+   You will need a C++ compiler as well as CMake >= 3.21.
+   Both of these come with [Visual Studio](https://visualstudio.microsoft.com/) 2022 if you install the "Desktop development with C++" workload.
+
+All of the following steps must be executed within the [Developer Power Shell](https://docs.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell).
+Note that you can also perform all of these steps in the Visual Studio GUI if you prefer :-)
+
+2. **Clone** this repository:
+    ```bash
+    git clone https://github.com/sleiner/pizmidi.git
+    ```
+3. Configure and build via **CMake**:
+    ```bash
+    # From the repository root:
+    cmake -S . --preset=windows-native
+    cmake --build --preset=windows-native --parallel
+    ```
+4. Optionally, you can build a **ZIP file** containing all of the plugins:
+    ```bash
+    # From the repository root:
+    cmake --build --preset=windows-native --parallel --target package
+    ```
+    After the previous step, the plugins lie in your `build/` folder.
+    In order for them to be found by [DAWs](https://en.wikipedia.org/wiki/Digital_audio_workstation) on your system, you will have to copy them to the [global plugin search path](https://helpcenter.steinberg.de/hc/en-us/articles/115000177084-VST-plug-in-locations-on-Windows): `C:\Program Files\Common Files\VST3`.
