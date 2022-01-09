@@ -8,7 +8,6 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.h"
             "${CMAKE_CURRENT_LIST_DIR}/ClickableLabel.h"
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
-            "${CMAKE_CURRENT_LIST_DIR}/GuitarNeckComponent.h"
             "${CMAKE_CURRENT_LIST_DIR}/MIDI.h"
             "${CMAKE_CURRENT_LIST_DIR}/NoteSlider.h"
             "${CMAKE_CURRENT_LIST_DIR}/PizAudioProcessor.h"
@@ -19,14 +18,12 @@ target_sources(
             # Sources
             "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/GuitarNeckComponent.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/PizButton.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/BankStorage.cpp"
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
 target_link_libraries(
   pizjuce_common
   INTERFACE juce::juce_core #
-            juce::juce_audio_basics #
             juce::juce_audio_processors #
             juce::juce_data_structures #
             juce::juce_gui_basics)

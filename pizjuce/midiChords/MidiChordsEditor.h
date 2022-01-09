@@ -24,11 +24,12 @@
 #include "juce_core/juce_core.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "MidiChords.h"
 #include "../_common/ChannelSlider.h"
 #include "../_common/NoteSlider.h"
 #include "../_common/VSTSlider.h"
-#include "../_common/GuitarNeckComponent.h"
+
+#include "GuitarNeckComponent.h"
+#include "MidiChords.h"
 
 class FretsSlider : public juce::Slider
 {
@@ -661,4 +662,3 @@ private:
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

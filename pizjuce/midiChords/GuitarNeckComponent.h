@@ -3,7 +3,7 @@
 
 #include "juce_audio_basics/juce_audio_basics.h"
 #include "juce_gui_basics/juce_gui_basics.h"
-#include "midistuff.h"
+#include "../_common/midistuff.h"
 
 #define maxFrets (32)
 #define maxStrings (16)
