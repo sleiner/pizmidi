@@ -9,16 +9,16 @@ using namespace juce;
 
 class TextBoxSlider : public juce::Label::Listener, public juce::Label {
   public:
-    void mouseDrag(const MouseEvent & e);
+    void mouseDrag(const MouseEvent & e) override;
 
-    void labelTextChanged(Label * labelThatHasChanged);
+    void labelTextChanged(Label * labelThatHasChanged) override;
 
     TextBoxSlider(double initval);
 
-    ~TextBoxSlider();
+    ~TextBoxSlider() override;
 
-    void mouseDown(const MouseEvent & e);
-    void mouseUp(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
+    void mouseUp(const MouseEvent & e) override;
 
 
   private:
@@ -38,9 +38,9 @@ class TextBoxSlider : public juce::Label::Listener, public juce::Label {
   public:
     void setRange(double min, double max, double stepsize, int pixelPerStep);
 
-    juce::TextEditor* createEditorComponent();
+    juce::TextEditor* createEditorComponent() override;
 
-    void paintOverChildren(Graphics & g);
+    void paintOverChildren(Graphics & g) override;
 
     double getValue();
 
@@ -53,8 +53,8 @@ class TextBoxSlider : public juce::Label::Listener, public juce::Label {
   public:
     void setValue(double newVal, NotificationType notification);
 
-    void resized();
+    void resized() override;
 
-    void textWasEdited();
+    void textWasEdited() override;
 
 };

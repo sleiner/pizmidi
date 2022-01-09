@@ -53,9 +53,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void changeListenerCallback (ChangeBroadcaster* source);
-	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) {}
-	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) {label->edit();}
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) override {}
+	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) override {label->edit();}
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

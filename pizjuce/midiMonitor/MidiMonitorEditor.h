@@ -50,9 +50,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-	void mouseDown(const MouseEvent &e);
-    void timerCallback ();
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+	void mouseDown(const MouseEvent &e) override;
+    void timerCallback () override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

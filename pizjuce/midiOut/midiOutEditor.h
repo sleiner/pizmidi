@@ -48,8 +48,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-    void buttonStateChanged (Button* buttonThatWasClicked);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void buttonStateChanged (Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

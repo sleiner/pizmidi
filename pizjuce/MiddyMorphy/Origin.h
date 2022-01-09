@@ -8,11 +8,11 @@ using namespace juce;
 
 class Origin : public juce::Component {
   public:
-    void paint(Graphics & g);
+    void paint(Graphics & g) override;
 
     Origin();
 
-    void resized();
+    void resized() override;
 
 
   private:
@@ -20,7 +20,7 @@ class Origin : public juce::Component {
 
 
   public:
-    void moved();
+    void moved() override;
 
 
   private:

@@ -61,7 +61,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-	void changeListenerCallback (ChangeBroadcaster* source);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
 	void updateParameters();
     ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]

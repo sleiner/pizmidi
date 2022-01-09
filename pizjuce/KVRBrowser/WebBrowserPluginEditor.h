@@ -32,8 +32,8 @@ public:
 	MyBrowser()
 		: unloadPageWhenBrowserIsHidden(false)
 	{};
-    ~MyBrowser() {};
-    bool pageAboutToLoad(const String& newURL);
+    ~MyBrowser() override {};
+    bool pageAboutToLoad(const String& newURL) override;
     String getCurrentURL();
     friend class WebBrowserComponent;
     String lastURL;
@@ -65,11 +65,11 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void textEditorReturnKeyPressed(TextEditor& editor);
-    void textEditorEscapeKeyPressed(TextEditor& editor){};
-    void textEditorTextChanged(TextEditor& editor){};
-    void textEditorFocusLost(TextEditor& editor){};
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(TextEditor& editor) override{};
+    void textEditorTextChanged(TextEditor& editor) override{};
+    void textEditorFocusLost(TextEditor& editor) override{};
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

@@ -38,9 +38,9 @@ public:
 		s=&state;
 		this->setColour(MidiKeyboardComponent::textLabelColourId,Colours::transparentBlack);
 	}
-	~KeySelector(){}
+	~KeySelector() override{}
 private:
-    bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
+    bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override
 	{
         if (s->isNoteOn(this->getMidiChannel(),midiNoteNumber)) {
             s->noteOff(this->getMidiChannel(),midiNoteNumber,1.f);
@@ -85,19 +85,19 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-    bool isInterestedInFileDrag (const StringArray& files);
-    void filesDropped (const StringArray& filenames, int mouseX, int mouseY);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
+    void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
 //    void sliderDragStarted (Slider* slider); //slider mousedown
 //    void sliderDragEnded (Slider* slider); //slider mouseup
-	void timerCallback();
-	void buttonStateChanged(Button* button);
-    void mouseDrag (const MouseEvent& e);
-    void mouseDown (const MouseEvent& e);
-    void mouseUp (const MouseEvent& e);
-	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) {}
-	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) {if (label==nameLabel.get()) label->edit();}
-	void handleNoteOn(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity);
+	void timerCallback() override;
+	void buttonStateChanged(Button* button) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseUp (const MouseEvent& e) override;
+	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) override {}
+	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) override {if (label==nameLabel.get()) label->edit();}
+	void handleNoteOn(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity) override;
 	void handleNoteOff(MidiKeyboardState *source, int midiChannel, int midiNoteNumber, float velocity) override;
     //[/UserMethods]
 

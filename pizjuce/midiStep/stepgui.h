@@ -63,9 +63,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    bool isInterestedInFileDrag (const StringArray& files);
-	void filesDropped (const StringArray& filenames, int mouseX, int mouseY);
-	void timerCallback ();
+    bool isInterestedInFileDrag (const StringArray& files) override;
+	void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+	void timerCallback () override;
 	void zoomIn(int centerPixel);
 	void zoomOut(int centerPixel);
 	void mouseWheelMove (const MouseEvent &e, float wheelIncrementX, float wheelIncrementY);
@@ -81,7 +81,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiStep* getFilter() const throw() { return (MidiStep*) getAudioProcessor(); }
-	void changeListenerCallback (ChangeBroadcaster* source);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
 	void updateParameters(bool updateLoop=false);
     ComponentBoundsConstrainer resizeLimits;
     PianoRoll* pianoRoll;

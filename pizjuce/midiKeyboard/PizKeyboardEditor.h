@@ -52,9 +52,9 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 	friend class PizKeyboardComponent;
-	void changeListenerCallback (ChangeBroadcaster* source);
-	void mouseUp(const MouseEvent &e);
-	bool keyPressed(const KeyPress &key, Component* originatingComponent)
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+	void mouseUp(const MouseEvent &e) override;
+	bool keyPressed(const KeyPress &key, Component* originatingComponent) override
 	{
 		DBG(String(key.getKeyCode()) + " " + key.getTextDescription());
 		return false;

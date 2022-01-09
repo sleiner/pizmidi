@@ -110,29 +110,29 @@ class AudioToCC  : public PizAudioProcessor,
 public:
     //==============================================================================
     AudioToCC();
-    ~AudioToCC();
+    ~AudioToCC() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
 	void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages);
+                       MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor();
+    AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const {return JucePlugin_Name;}
-	bool hasEditor() const {return true;}
-    bool acceptsMidi() const {
+    const String getName() const override {return JucePlugin_Name;}
+	bool hasEditor() const override {return true;}
+    bool acceptsMidi() const override {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const {
+    bool producesMidi() const override {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
@@ -140,30 +140,30 @@ public:
 #endif
     }
 
-    int getNumParameters();
+    int getNumParameters() override;
 
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index);
-    const String getParameterText (int index);
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
     double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
-    int getNumPrograms()                                        { return 16; }
-    int getCurrentProgram();
-    void setCurrentProgram (int index);
-    const String getProgramName (int index);
-    void changeProgramName (int index, const String& newName);
+    int getNumPrograms() override                                        { return 16; }
+    int getCurrentProgram() override;
+    void setCurrentProgram (int index) override;
+    const String getProgramName (int index) override;
+    void changeProgramName (int index, const String& newName) override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
 
 	void setActiveDevice(String name);
 	String getActiveDevice() {return activeDevice;}

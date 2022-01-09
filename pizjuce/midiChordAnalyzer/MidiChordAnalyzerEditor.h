@@ -41,7 +41,7 @@ public:
 		this->setMidiChannel(1);
 		this->setLowestVisibleKey(36);
 	}
-	~ChordAnalyzerKeyboardComponent() {};
+	~ChordAnalyzerKeyboardComponent() override {};
 
 	int getNumHeldNotes(int channel)
 	{
@@ -62,7 +62,7 @@ private:
 	MidiChordAnalyzer* owner;
 	MidiKeyboardState* s;
 
-	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) {
+	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override {
 		MidiChordAnalyzerEditor* editor = ((MidiChordAnalyzerEditor*)(this->getParentComponent()));
 		if (e.mods.isPopupMenu()) {
 			s->allNotesOff(this->getMidiChannel());
@@ -107,12 +107,12 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 	friend class ChordAnalyzerKeyboardComponent;
-	void changeListenerCallback (ChangeBroadcaster* source);
-    void mouseDown (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDoubleClick (const MouseEvent& e) override;
+	void mouseUp (const MouseEvent& e) override;
 	String const getCurrentChordName(int channel);
-	void timerCallback();
+	void timerCallback() override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

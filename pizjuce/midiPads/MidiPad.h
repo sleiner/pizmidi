@@ -14,9 +14,9 @@ class MidiPad  : public Button
 public:
     //==============================================================================
   	MidiPad (int _index);
-    ~MidiPad();
+    ~MidiPad() override;
 
-    void resized();
+    void resized() override;
     void buttonClicked (Button*);
     void setColour(const Colour&);
     bool isPlaying;
@@ -66,7 +66,7 @@ protected:
 
     void paintButton (Graphics& g,
                       bool isMouseOverButton,
-                      bool isButtonDown);
+                      bool isButtonDown) override;
 
 
 private:
@@ -74,7 +74,7 @@ private:
     float x;
     float y;
 	int index;
-    bool hitTest(int x, int y);
+    bool hitTest(int x, int y) override;
     std::unique_ptr<Drawable> normalImage;
     Colour backgroundOff, backgroundOn;
     Path hexpath;

@@ -11,7 +11,7 @@ class MidiMorphPlugInInterface : public PizAudioProcessor {
   public:
     MidiMorphPlugInInterface();
 
-    ~MidiMorphPlugInInterface();
+    ~MidiMorphPlugInInterface() override;
 
     int lastGUIw;
 
@@ -27,69 +27,69 @@ class MidiMorphPlugInInterface : public PizAudioProcessor {
   public:
     MidiMorph core;
 
-    void prepareToPlay(double sampleRate, int estimatedSamplesPerBlock);
+    void prepareToPlay(double sampleRate, int estimatedSamplesPerBlock) override;
 
     //
-    const String getInputChannelName(const int channelIndex) const;
+    const String getInputChannelName(const int channelIndex) const override;
 
     //virtual  AudioProcessor::getOutputChannelName  (       )  const
-    const String getOutputChannelName(const int channelIndex) const;
+    const String getOutputChannelName(const int channelIndex) const override;
 
     //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
-    bool isInputChannelStereoPair(int index) const;
+    bool isInputChannelStereoPair(int index) const override;
 
     //virtual bool AudioProcessor::isInputChannelStereoPair  (  int  index   )  const
-    bool isOutputChannelStereoPair(int index) const;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //virtual AudioProcessorEditor* AudioProcessor::createEditor  (    )
 
-    AudioProcessorEditor* createEditor();
+    AudioProcessorEditor* createEditor() override;
 
-    int getNumParameters();
+    int getNumParameters() override;
 
-    const String getParameterName(int parameterIndex);
+    const String getParameterName(int parameterIndex) override;
 
-    float getParameter(int parameterIndex);
+    float getParameter(int parameterIndex) override;
 
     //const String AudioProcessor::getParameterText  (  int  parameterIndex   )
-    const String getParameterText(int parameterIndex);
+    const String getParameterText(int parameterIndex) override;
 
     //setParameter  (  int  parameterIndex,
     //  float  newValue
     // )
 
-    void setParameter(int parameterIndex, float newValue);
+    void setParameter(int parameterIndex, float newValue) override;
 
     //bool AudioProcessor::isParameterAutomatable  (  int  parameterIndex   )
     bool isParameterAutomatable(int parameterIndex);
 
-    int getNumPrograms();
+    int getNumPrograms() override;
 
-    int getCurrentProgram();
+    int getCurrentProgram() override;
 
     //  (  int     )
-    void setCurrentProgram(int index);
+    void setCurrentProgram(int index) override;
 
     // AudioProcessor::getProgramName  (  int  index   )
-    const String getProgramName(int index);
+    const String getProgramName(int index) override;
 
     //
-    void changeProgramName(int index, const String& newName);
+    void changeProgramName(int index, const String& newName) override;
 
-    void setStateInformation(const void * data, int sizeInBytes);
+    void setStateInformation(const void * data, int sizeInBytes) override;
 
-    void processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
+    void processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
 
     //  (       )
-    void getStateInformation(JUCE_NAMESPACE::MemoryBlock & destData);
+    void getStateInformation(JUCE_NAMESPACE::MemoryBlock & destData) override;
 
-    void releaseResources();
+    void releaseResources() override;
 
-    bool acceptsMidi() const;
+    bool acceptsMidi() const override;
 
-    bool producesMidi() const;
+    bool producesMidi() const override;
 
-    const String getName() const;
+    const String getName() const override;
 
     double getTailLengthSeconds() const override { return 0; }
 

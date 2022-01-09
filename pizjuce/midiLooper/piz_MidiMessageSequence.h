@@ -49,7 +49,7 @@ public:
     public:
         //==============================================================================
         /** Destructor. */
-        ~MidiEventHolder();
+        ~MidiEventHolder() override;
 
         /** The message itself, whose timestamp is used to specify the event's time.
         */

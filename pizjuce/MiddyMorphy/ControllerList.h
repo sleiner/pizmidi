@@ -13,7 +13,7 @@ class ControllerList : public juce::ListBoxModel, public juce::ChangeBroadcaster
   public:
     ControllerList(MidiMorph * core);
 
-    ~ControllerList();
+    ~ControllerList() override;
 
 
   private:
@@ -21,11 +21,11 @@ class ControllerList : public juce::ListBoxModel, public juce::ChangeBroadcaster
 
 
   public:
-    Component* refreshComponentForRow(int rowNumber, bool isRowSelected, Component* existingComponentToUpdate);
+    Component* refreshComponentForRow(int rowNumber, bool isRowSelected, Component* existingComponentToUpdate) override;
 
-    void paintListBoxItem(int rowNumber, Graphics& g, int width, int height, bool rowIsSelected);
+    void paintListBoxItem(int rowNumber, Graphics& g, int width, int height, bool rowIsSelected) override;
 
-    int getNumRows();
+    int getNumRows() override;
 
     void addController();
 

@@ -33,46 +33,46 @@ class MidiMonitorPlugin  : public PizAudioProcessor,
 public:
     //==============================================================================
     MidiMonitorPlugin();
-    ~MidiMonitorPlugin();
+    ~MidiMonitorPlugin() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
-
-    //==============================================================================
-    AudioProcessorEditor* createEditor();
+	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    const String getName() const {return JucePlugin_Name;}
-	bool acceptsMidi() const {return JucePlugin_WantsMidiInput!=0;}
-	bool producesMidi() const {return JucePlugin_ProducesMidiOutput!=0;}
-	bool hasEditor() const {return true;}
-
-    int getNumParameters();
-
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
-
-    const String getParameterName (int index);
-    const String getParameterText (int index);
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
+    AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    int getNumPrograms()                                        { return kNumPrograms; }
-    int getCurrentProgram()                                     { return 0; }
-    void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return programName; }
-    void changeProgramName (int index, const String& newName)   { programName = newName;}
+    const String getName() const override {return JucePlugin_Name;}
+	bool acceptsMidi() const override {return JucePlugin_WantsMidiInput!=0;}
+	bool producesMidi() const override {return JucePlugin_ProducesMidiOutput!=0;}
+	bool hasEditor() const override {return true;}
+
+    int getNumParameters() override;
+
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
+
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
+
+    //==============================================================================
+    int getNumPrograms() override                                        { return kNumPrograms; }
+    int getCurrentProgram() override                                     { return 0; }
+    void setCurrentProgram (int index) override                          { }
+    const String getProgramName (int index) override                     { return programName; }
+    void changeProgramName (int index, const String& newName) override   { programName = newName;}
     double getTailLengthSeconds() const override                { return 0; }
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
     int lastUIWidth, lastUIHeight;

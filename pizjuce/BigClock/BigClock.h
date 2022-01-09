@@ -94,30 +94,30 @@ class BigClockFilter  : public PizAudioProcessor,
 public:
     //==============================================================================
     BigClockFilter();
-    ~BigClockFilter();
+    ~BigClockFilter() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
 	void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages);
+                       MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor();
+    AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const {return JucePlugin_Name;}
-    double getTailLengthSeconds() const {return 0;}
-	bool hasEditor() const {return true;}
-    bool acceptsMidi() const {
+    const String getName() const override {return JucePlugin_Name;}
+    double getTailLengthSeconds() const override {return 0;}
+	bool hasEditor() const override {return true;}
+    bool acceptsMidi() const override {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const {
+    bool producesMidi() const override {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
@@ -125,31 +125,31 @@ public:
 #endif
     }
 
-    int getNumParameters();
+    int getNumParameters() override;
 
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index);
-    const String getParameterText (int index);
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
-
-    //==============================================================================
-    int getNumPrograms()                                        { return 1; }
-    int getCurrentProgram()                                     { return 0; }
-    void setCurrentProgram (int index)                          { }
-    const String getProgramName (int index)                     { return String(); }
-    void changeProgramName (int index, const String& newName)   { }
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    int getNumPrograms() override                                        { return 1; }
+    int getCurrentProgram() override                                     { return 0; }
+    void setCurrentProgram (int index) override                          { }
+    const String getProgramName (int index) override                     { return String(); }
+    void changeProgramName (int index, const String& newName) override   { }
 
-	void timerCallback();
+    //==============================================================================
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
+
+	void timerCallback() override;
 
     //==============================================================================
     // These properties are public so that our editor component can access them

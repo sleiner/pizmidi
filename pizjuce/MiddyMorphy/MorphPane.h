@@ -12,7 +12,7 @@ class MorphPane : public ModulePane {
   public:
     MorphPane(ModulePaneModel * model, MidiMorph * core);
 
-    void resized();
+    void resized() override;
 
 
   private:
@@ -20,7 +20,7 @@ class MorphPane : public ModulePane {
 
 
   public:
-    ~MorphPane();
+    ~MorphPane() override;
 
 
   private:

@@ -43,50 +43,50 @@ class MidiOutFilter  : public PizAudioProcessor,
 public:
     //==============================================================================
     MidiOutFilter();
-    ~MidiOutFilter();
+    ~MidiOutFilter() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
 	void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages);
+                       MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor();
+    AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
     double getTailLengthSeconds() const override {return 0;}
-    const String getName() const {return JucePlugin_Name;}
-    bool acceptsMidi() const {return true;}
-    bool producesMidi() const {return true;}
-	bool hasEditor() const {return true;}
+    const String getName() const override {return JucePlugin_Name;}
+    bool acceptsMidi() const override {return true;}
+    bool producesMidi() const override {return true;}
+	bool hasEditor() const override {return true;}
 
-    int getNumParameters();
+    int getNumParameters() override;
 
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index);
-    const String getParameterText (int index);
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
-
-    //==============================================================================
-    int getNumPrograms()                                        { return 1; }
-    int getCurrentProgram();
-    void setCurrentProgram (int index);
-    const String getProgramName (int index);
-    void changeProgramName (int index, const String& newName);
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
-    void getCurrentProgramStateInformation (MemoryBlock& destData);
-    void setCurrentProgramStateInformation (const void* data, int sizeInBytes);
+    int getNumPrograms() override                                        { return 1; }
+    int getCurrentProgram() override;
+    void setCurrentProgram (int index) override;
+    const String getProgramName (int index) override;
+    void changeProgramName (int index, const String& newName) override;
+
+    //==============================================================================
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
     // These properties are public so that our editor component can access them

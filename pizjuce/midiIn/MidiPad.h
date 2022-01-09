@@ -12,13 +12,13 @@ class MidiPad  : public Component,
 public:
     //==============================================================================
 	MidiPad ();
-    ~MidiPad();
+    ~MidiPad() override;
 
-    void paint (Graphics&);
-    void resized();
-    void buttonClicked (Button*);
-    void filesDropped (const StringArray &files, int x, int y);
-    bool isInterestedInFileDrag (const StringArray& files);
+    void paint (Graphics&) override;
+    void resized() override;
+    void buttonClicked (Button*) override;
+    void filesDropped (const StringArray &files, int x, int y) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
     void setButtonText (const String&);
     void setTooltip (String text);
     void setColour(const Colour&);

@@ -34,9 +34,9 @@ class FretsSlider : public juce::Slider
 {
 public:
 	FretsSlider(String name) : juce::Slider(name)	{};
-	~FretsSlider() {};
+	~FretsSlider() override {};
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		const int n = roundToInt(value);
 		return "Frets: "+String(n);
@@ -47,9 +47,9 @@ class StringsSlider : public juce::Slider
 {
 public:
 	StringsSlider(String name) : juce::Slider(name)	{};
-	~StringsSlider() {};
+	~StringsSlider() override {};
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		const int n = roundToInt(value);
 		return "Strings: "+String(n);
@@ -61,14 +61,14 @@ class ChordPresetFileFilter : public juce::FileFilter
 public:
 	ChordPresetFileFilter()
 		: juce::FileFilter("midiChords presets") {}
-	~ChordPresetFileFilter() {}
-	virtual bool isFileSuitable (const File &file) const
+	~ChordPresetFileFilter() override {}
+	bool isFileSuitable (const File &file) const override
 	{
 		return (file.hasFileExtension("chords")
 			|| file.hasFileExtension("fxp")
 			|| file.hasFileExtension("xml"));
 	}
-	virtual bool isDirectorySuitable (const File &file) const
+	bool isDirectorySuitable (const File &file) const override
 	{
 		return true;
 	}
@@ -91,7 +91,7 @@ private:
 	FrettedNote lastDraggedNote;
 	bool erasing;
 
-	void mouseDraggedToKey(int fret, int string, const MouseEvent& e)
+	void mouseDraggedToKey(int fret, int string, const MouseEvent& e) override
 	{
 		FrettedNote n(fret,string);
 		if (n!=lastDraggedNote)
@@ -111,7 +111,7 @@ private:
 		lastDraggedNote = n;
 	}
 
-	bool mouseDownOnKey(int fret, int string, const MouseEvent &e) {
+	bool mouseDownOnKey(int fret, int string, const MouseEvent &e) override {
 		FrettedNote n(fret,string);
 		int midiNoteNumber = getNote(n);
 		int oldNoteOnString = getNote(FrettedNote(getStringFret(string),string));
@@ -239,7 +239,7 @@ protected:
 	MidiChords* owner;
     MidiKeyboardState* s;
 
-	virtual bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
+	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override
 	{
 		if (e.mods.isPopupMenu())
 		{
@@ -429,7 +429,7 @@ private:
 	MidiChords* owner;
 	bool bypassing;
 
-	virtual bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
+	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override
 	{
 		if (e.mods.isShiftDown() || e.mods.isPopupMenu())
 		{
@@ -504,20 +504,20 @@ public:
 	friend class ChordsKeyboardComponent;
 	friend class TriggerKeySelectorKeyboard;
 	static void chordMenuCallback (int result, MidiChordsEditor* editor);
-    void textEditorTextChanged(TextEditor&);
-    void textEditorReturnKeyPressed(TextEditor&);
-    void textEditorEscapeKeyPressed(TextEditor&);
-    void textEditorFocusLost(TextEditor&);
-	void changeListenerCallback (ChangeBroadcaster* source);
-    bool isInterestedInFileDrag (const StringArray& files);
-    void filesDropped (const StringArray& filenames, int mouseX, int mouseY);
-    void mouseDown (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
-	virtual void selectionChanged() {};
-	virtual void fileClicked(const juce::File &file,const juce::MouseEvent &);
-	virtual void fileDoubleClicked (const File &file);
-	virtual void browserRootChanged (const File& newRoot);
+    void textEditorTextChanged(TextEditor&) override;
+    void textEditorReturnKeyPressed(TextEditor&) override;
+    void textEditorEscapeKeyPressed(TextEditor&) override;
+    void textEditorFocusLost(TextEditor&) override;
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
+    void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDoubleClick (const MouseEvent& e) override;
+	void mouseUp (const MouseEvent& e) override;
+	void selectionChanged() override {};
+	void fileClicked(const juce::File &file,const juce::MouseEvent &) override;
+	void fileDoubleClicked (const File &file) override;
+	void browserRootChanged (const File& newRoot) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

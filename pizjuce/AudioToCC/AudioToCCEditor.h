@@ -33,9 +33,9 @@ public:
 		this->setMouseClickGrabsKeyboardFocus(false);
 		this->setInterceptsMouseClicks(false,false);
 	}
-	~DecibelMeter() {}
+	~DecibelMeter() override {}
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		return value==0.0 ? " " : String (20.0 * log10(value),1) + " dB";
 	}
@@ -47,13 +47,13 @@ public:
 	DecibelSlider(const String &name) : Slider(name) {
 		this->setMouseClickGrabsKeyboardFocus(false);
 	}
-	~DecibelSlider() {}
+	~DecibelSlider() override {}
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		return value==0.0 ? "-inf" : String (20.0 * log10(value),1) + " dB";
 	}
-	double getValueFromText(const String &text)
+	double getValueFromText(const String &text) override
 	{
 		if (text.equalsIgnoreCase("-inf"))
 			return 0.0;
@@ -87,8 +87,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-	void timerCallback();
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+	void timerCallback() override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

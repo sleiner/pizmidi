@@ -20,9 +20,9 @@ class MidiMorphGUI : public juce::ChangeListener,
                      public juce::AudioProcessorEditor
 {
   public:
-    MidiMorphGUI(AudioProcessor* const ownerPlugIn);
+    MidiMorphGUI(juce::AudioProcessor* const ownerPlugIn);
 
-    ~MidiMorphGUI();
+    ~MidiMorphGUI() override;
 
 
   private:
@@ -30,7 +30,7 @@ class MidiMorphGUI : public juce::ChangeListener,
 
     juce::ListBox* controllerList;
 
-    AudioProcessor* ownerFilter;
+    juce::AudioProcessor* ownerFilter;
 
 
   public:
@@ -45,22 +45,22 @@ class MidiMorphGUI : public juce::ChangeListener,
 
   public:
     //ApplicationCommandTarget *  getNextCommandTarget
-    ApplicationCommandTarget* getNextCommandTarget();
+    ApplicationCommandTarget* getNextCommandTarget() override;
 
-    void resized();
+    void resized() override;
 
     //void  getAllCommands (Array< CommandID > &commands)=0
-    void getAllCommands(Array<CommandID>& commands);
+    void getAllCommands(juce::Array<juce::CommandID>& commands) override;
 
     //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
-    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+    void getCommandInfo(juce::CommandID commandID, juce::ApplicationCommandInfo& result) override;
 
     //perform ()=0
-    bool perform(const InvocationInfo& info);
+    bool perform(const InvocationInfo& info) override;
 
-    void changeListenerCallback(ChangeBroadcaster* objectThatHasChanged) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* objectThatHasChanged) override;
 
-    void paint(Graphics & g);
+    void paint(juce::Graphics & g) override;
 
 juce_UseDebuggingNewOperator
   private:

@@ -12,7 +12,7 @@ class PizKeyboardComponent : public MidiKeyboardComponent
 {
 public:
     PizKeyboardComponent(MidiKeyboardState &state, const Orientation orientation);
-	bool keyStateChanged(bool isKeyDown);
+	bool keyStateChanged(bool isKeyDown) override;
 	void setKeyPressForNote (const KeyPress& key, const int midiNoteOffsetFromC)
 	{
 		MidiKeyboardComponent::setKeyPressForNote(key,midiNoteOffsetFromC);
@@ -80,7 +80,7 @@ public:
 		}
 	}
 
-	void focusLost(Component::FocusChangeType cause)
+	void focusLost(Component::FocusChangeType cause) override
 	{
 		repaint();
 	}
@@ -102,7 +102,7 @@ private:
     Array<KeyPress> _keyPresses;
 	BigInteger _keysPressed;
     Array <int> _keyPressNotes;
-    bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e);
+    bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override;
     MidiKeyboardState* s;
 	bool drawQwerty;
 	bool drawNoteNumber;

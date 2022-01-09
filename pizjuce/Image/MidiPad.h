@@ -12,9 +12,9 @@ class MidiPad  : public Button
 public:
     //==============================================================================
   	MidiPad ();
-    ~MidiPad();
+    ~MidiPad() override;
 
-    void resized();
+    void resized() override;
     void buttonClicked (Button*);
     void setColour(const Colour&);
     void setTextColour(const Colour&);
@@ -50,7 +50,7 @@ protected:
 
     void paintButton (Graphics& g,
                       bool isMouseOverButton,
-                      bool isButtonDown);
+                      bool isButtonDown) override;
 
 
 private:

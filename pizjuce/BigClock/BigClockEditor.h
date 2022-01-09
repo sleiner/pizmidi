@@ -11,11 +11,11 @@ class TimeDisplay  : public Button
 public:
     //==============================================================================
     TimeDisplay ();
-    ~TimeDisplay();
+    ~TimeDisplay() override;
 
     //==============================================================================
-    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown);
-    void resized();
+    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
+    void resized() override;
     String time;
     Colour textcolor;
 
@@ -40,22 +40,22 @@ class BigClockEditor   : public AudioProcessorEditor,
 {
 public:
     BigClockEditor (BigClockFilter* const ownerFilter);
-    ~BigClockEditor();
+    ~BigClockEditor() override;
 
-	void changeListenerCallback (ChangeBroadcaster* source);
-    void buttonClicked (Button* buttonThatWasClicked);
-    void buttonStateChanged (Button* buttonThatWasClicked);
-    void textEditorReturnKeyPressed(TextEditor& editor);
-    void textEditorEscapeKeyPressed(TextEditor& editor){};
-    void textEditorTextChanged(TextEditor& editor){};
-    void textEditorFocusLost(TextEditor& editor){};
-	void timerCallback();
-	void mouseEnter(const MouseEvent& e);
-	void mouseExit(const MouseEvent& e);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
+    void buttonStateChanged (Button* buttonThatWasClicked) override;
+    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(TextEditor& editor) override{};
+    void textEditorTextChanged(TextEditor& editor) override{};
+    void textEditorFocusLost(TextEditor& editor) override{};
+	void timerCallback() override;
+	void mouseEnter(const MouseEvent& e) override;
+	void mouseExit(const MouseEvent& e) override;
 
     //==============================================================================
-    void paint (Graphics& g);
-    void resized();
+    void paint (Graphics& g) override;
+    void resized() override;
 
 
 private:

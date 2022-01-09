@@ -40,11 +40,11 @@ class Timeline : public Component, public ChangeBroadcaster
 	friend class PianoRoll;
 public:
 	Timeline();
-	~Timeline();
+	~Timeline() override;
 
 	void setPianoRoll(PianoRoll* pr);
 
-	void paint(Graphics& g);
+	void paint(Graphics& g) override;
 	float getStartPixel();
 	float getEndPixel();
 	double getLength();
@@ -52,8 +52,8 @@ public:
 
 	void setLoop(double start, double length);
 
-	void mouseDown(const MouseEvent &e);
-	void mouseDrag(const MouseEvent &e);
+	void mouseDown(const MouseEvent &e) override;
+	void mouseDrag(const MouseEvent &e) override;
 
 	int scrollOffset;
 
@@ -67,7 +67,7 @@ class PianoPort : public Viewport, public ChangeBroadcaster
 {
 public:
 	PianoPort(String name) : Viewport(name) {};
-	~PianoPort() {dispatchPendingMessages();}
+	~PianoPort() override {dispatchPendingMessages();}
 	void setTimeline(Timeline* t) {timeline=t;}
 	void setPlayline(Component* p) {playline=p;}
 	void setKeyboard(Viewport* kb) {keyboard=kb;}
@@ -76,7 +76,7 @@ public:
 		this->getParentComponent()->mouseWheelMove(e,wheel);
 	}
 
-	void visibleAreaChanged(const juce::Rectangle<int>& newVisibleArea)
+	void visibleAreaChanged(const juce::Rectangle<int>& newVisibleArea) override
 	{
 		timeline->scrollOffset=newVisibleArea.getX();
 		timeline->repaint();
@@ -97,7 +97,7 @@ class PianoRoll : public Component,
 	friend class PianoPort;
 public:
 	PianoRoll(AudioProcessor* _plugin, AudioProcessorEditor* _owner, Timeline* _timeline);
-	~PianoRoll();
+	~PianoRoll() override;
 
 	void setSequence(Loop* sequence_);
 	Loop* getSequence() {return sequence;}
@@ -129,14 +129,14 @@ public:
 	}
 	int getDisplayLength() {return (int)(jmax(blankLength,seqLengthInPpq) / getPpqPerBar());}
 
-	void mouseDown (const MouseEvent& e);
-	void mouseDrag (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
+	void mouseDown (const MouseEvent& e) override;
+	void mouseDrag (const MouseEvent& e) override;
+	void mouseUp (const MouseEvent& e) override;
 	//void mouseMove (const MouseEvent& e);
-	void mouseDoubleClick (const MouseEvent& e);
+	void mouseDoubleClick (const MouseEvent& e) override;
 
-	void paintOverChildren (Graphics& g);
-	void resized ();
+	void paintOverChildren (Graphics& g) override;
+	void resized () override;
 
 	bool getSnap() {return snapToGrid;}
 	float getBeatDiv() {return 1.f/noteLength;}
@@ -195,8 +195,8 @@ private:
 	{
 	public:
 		Playbar(PianoRoll *pianoroll) : Component(), roll(pianoroll) {}
-		~Playbar() {}
-		void paint(Graphics& g)
+		~Playbar() override {}
+		void paint(Graphics& g) override
 		{
 			g.fillAll(Colour(0x0));
 			//if (sequence->isRecording) {
@@ -219,8 +219,8 @@ private:
 		{
 			setBufferedToImage(true);
 		}
-		~PianoRollBackground() {}
-		void paint(Graphics &g)
+		~PianoRollBackground() override {}
+		void paint(Graphics &g) override
 		{
 			const PianoRoll* roll = (PianoRoll*)getParentComponent();
 			int n=0;
@@ -284,8 +284,8 @@ private:
 		{
 			setBufferedToImage(true);
 		}
-		~PianoRollNotes() {}
-		void paint(Graphics &g)
+		~PianoRollNotes() override {}
+		void paint(Graphics &g) override
 		{
 			const PianoRoll* roll = (PianoRoll*)getParentComponent();
 			if (roll->barSize>0)

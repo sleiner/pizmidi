@@ -53,7 +53,7 @@ class ZoomingShiftingComponent : public juce::Component {
 
     float getZoomFactorY();
 
-    void childBoundsChanged(juce::Component * component);
+    void childBoundsChanged(juce::Component * component) override;
 
 
   private:
