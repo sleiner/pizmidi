@@ -1,23 +1,28 @@
 #ifndef PIZ_NOTE_SLIDER_HEADER
 #define PIZ_NOTE_SLIDER_HEADER
 
-class NoteSlider : public Slider
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
+#include "../_common/midistuff.h"
+
+class NoteSlider : public juce::Slider
 {
 public:
-	NoteSlider(String name) : Slider(name), allText("Off"), bottomOctave(-2)
+	NoteSlider(juce::String name) : juce::Slider(name), allText("Off"), bottomOctave(-2)
 	{
 		this->setRange(-1,127,1);
 	};
 	~NoteSlider() {};
 
-	String getTextFromValue(double value)
+	juce::String getTextFromValue(double value)
 	{
-		const int n = roundToInt(value);
+		const int n = juce::roundToInt(value);
 		if (n<0) return allText;
-		return getNoteName(n,bottomOctave) + " ("+String((int)value)+")";
+		return getNoteName(n,bottomOctave) + " ("+juce::String((int)value)+")";
 	}
 
-	double getValueFromText(const String &text)
+	double getValueFromText(const juce::String &text)
 	{
 		if (!text.compareIgnoreCase(allText)) return -1;
 		if (text.containsAnyOf("abcdefgABCDEFG")) {
@@ -30,7 +35,7 @@ public:
 		return text.getDoubleValue();
 	}
 
-	void setAllText(String text)
+	void setAllText(juce::String text)
 	{
 		allText = text;
 		updateText();
@@ -41,7 +46,7 @@ public:
 	}
 
 private:
-	String allText;
+	juce::String allText;
 	int bottomOctave;
 };
 
