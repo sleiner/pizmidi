@@ -187,13 +187,12 @@ void MidiInFilter::processBlock (AudioSampleBuffer& buffer,
 	if (channel>0)
 	{
 		MidiBuffer output;
-		MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-		MidiMessage midi_message(0xf8e);
-		int sample_number;
-		while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+        for(auto&& msgMetadata : midiMessages) {
+            auto midi_message = msgMetadata.getMessage();
+
 			if (midi_message.getChannel()==0 || midi_message.getChannel()==channel)
 			{
-				output.addEvent(midi_message,sample_number);
+				output.addEvent(midi_message,msgMetadata.samplePosition);
 			}
 		}
 		midiMessages.clear();

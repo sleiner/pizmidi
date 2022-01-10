@@ -299,15 +299,6 @@ void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
 
 	if (recording)
 		rectime += (double)buffer.getNumSamples()/getSampleRate();
-    //MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    //MidiMessage midi_message(0);
-    //int sample_number;
-    //while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
-    //    if (midi_message.isProgramChange()) {
-    //        lastUIHeight=0;
-    //        sendChangeMessage(this);
-    //    }
-    //}
 }
 
 //==============================================================================

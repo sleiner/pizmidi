@@ -473,11 +473,8 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
 		{
 			if (param[kStamped]>=0.5f)
 			{
-				MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-				MidiMessage midi_message(0xf8e);
-				int sample_number;
-				while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
-					midiOutput->sendMessageNow(midi_message);
+				for(auto&& m : midiMessages) {
+					midiOutput->sendMessageNow(m.getMessage());
 				}
 			}
 			else midiOutput->sendBlockOfMessages(midiMessages,Time::getMillisecondCounterHiRes()+1.0,SR);
@@ -489,13 +486,12 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
 	else
 	{
 		MidiBuffer output;
-		MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-		MidiMessage midi_message(0xf8e);
-		int sample_number;
-		while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+        for(auto&& msgMetadata : midiMessages) {
+            auto midi_message = msgMetadata.getMessage();
+
 			if (midi_message.getChannel()==0 || midi_message.getChannel()==channel)
 			{
-				output.addEvent(midi_message,sample_number);
+				output.addEvent(midi_message,msgMetadata.samplePosition);
 				if (midiOutput && param[kStamped]>=0.5f)
 					midiOutput->sendMessageNow(midi_message);
 			}

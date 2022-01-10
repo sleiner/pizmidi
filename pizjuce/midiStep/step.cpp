@@ -290,10 +290,10 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
     wasRecording=param[kRecord]>=0.5f;
 
 	bool thru = param[kThru]>=0.5f;
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage msg(0xFE);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(msg,sample_number)) {
+	for(auto&& msgMetadata : midiMessages) {
+		auto msg = msgMetadata.getMessage();
+		auto sample_number = msgMetadata.samplePosition;
+
 		if (msg.isController()) {
 			if (msg.isAllNotesOff()) {
 				for (int i=0;i<numLoops;i++)

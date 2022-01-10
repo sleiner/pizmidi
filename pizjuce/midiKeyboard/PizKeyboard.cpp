@@ -349,10 +349,10 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 	}
 
 	bool skip = false;
-	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-	MidiMessage m(0xf0);
-	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample)) {
+	for(auto const&& msgMetadata: midiMessages) {
+		auto m = msgMetadata.getMessage();
+		auto sample = msgMetadata.samplePosition;
+
 		if (m.isForChannel(channel+1))
 		{
 			if (toggle)

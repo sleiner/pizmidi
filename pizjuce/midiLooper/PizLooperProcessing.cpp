@@ -401,16 +401,16 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 		//midi input part
 		if (!midiMessages.isEmpty())
 		{
-			MidiMessage midi_message(0xfe);
-			int sample_number;
 			int message_number=0;
 			const int scalechan = (getParameterForSlot(kUseScaleChannel,slot)>=0.5)
 				? roundToInt(getParameterForSlot(kScaleChannel,slot)*15.0f)+1 : 0;
 			const int trchan = (getParameterForSlot(kUseTrChannel,slot)>=0.5f)
 				? roundToInt(getParameterForSlot(kTransposeChannel,slot)*15.0f)+1 : 0;
-			MidiBuffer::Iterator midi_buffer_iter(midiMessages);
-			while(midi_buffer_iter.getNextEvent(midi_message,sample_number))
+			for(auto&& msgMetadata : midiMessages)
 			{
+				auto midi_message = msgMetadata.getMessage();
+				auto sample_number = msgMetadata.samplePosition;
+
 				bool discard = param[kThru]<0.5f;
 				const bool isForChannel = channel==-1 || midi_message.isForChannel(channel+1);
 				const int notenum = midi_message.getNoteNumber();
@@ -630,11 +630,11 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 		//play/record GUI keyboard through current slot:
 		if (slot==curProgram)
 		{
-			MidiMessage midi_message(0xfe);
-			int sample_number;
-			MidiBuffer::Iterator kbIterator(kbBuffer);
-			while(kbIterator.getNextEvent(midi_message,sample_number))
+			for(auto&& msgMetadata : kbBuffer)
 			{
+				auto midi_message = msgMetadata.getMessage();
+				auto sample_number = msgMetadata.samplePosition;
+
 				bool discard=true;
 				const bool isForChannel = channel==-1 || midi_message.isForChannel(channel+1);
 				const int notenum = midi_message.getNoteNumber();

@@ -207,10 +207,9 @@ void imagePluginFilter::processBlock (AudioSampleBuffer& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
     }
     const int channel = roundToInt(param[kChannel]*16.0f);
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0xFE);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+	for(auto&& msgMetadata : midiMessages) {
+		auto midi_message = msgMetadata.getMessage();
+
 		if (channel==0 || midi_message.isForChannel(channel))
 		{
 			if (midi_message.isController() && midi_message.getControllerNumber()==0 && usePC) {

@@ -253,10 +253,10 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     }
     const int channel = roundToInt(param[kChannel]*16.0f);
 	MidiBuffer output;
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0xFE);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+	for(auto&& msgMetadata : midiMessages) {
+		auto midi_message = msgMetadata.getMessage();
+		auto sample_number = msgMetadata.samplePosition;
+
 		if (midi_message.isProgramChange()) {
 			setCurrentProgram(midi_message.getProgramChangeNumber());
 		}

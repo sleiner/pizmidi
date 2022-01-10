@@ -221,13 +221,13 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
 
 		n = lastPosInfo.timeSigNumerator;
 		d = lastPosInfo.timeSigDenominator;
-        int samplePos = 0;
-        MidiMessage message (0xf4, 0.0);
-        MidiBuffer::Iterator eventIterator (midiMessages);
 
         double counter = Time::getMillisecondCounterHiRes();
-        while (eventIterator.getNextEvent (message, samplePos))
+        for (auto&& msgMetadata : midiMessages)
         {
+            auto message = msgMetadata.getMessage();
+            auto samplePos = msgMetadata.samplePosition;
+
             bool use=false;
             if ((message.isNoteOnOrOff() && useNotes)
                 || (message.isController() && useCC)

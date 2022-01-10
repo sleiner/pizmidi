@@ -321,10 +321,10 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
     MidiBuffer midiout;
     bool discard = param[kThru]<0.5f; // if midi thru is off, discard original message
     int outch = (int)(param[kChOut]*15.1f);
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0xfe);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+    for(auto&& msgMetadata : midiMessages) {
+        auto midi_message = msgMetadata.getMessage();
+        auto sample_number = msgMetadata.samplePosition;
+
         //program change
         if (midi_message.isProgramChange() ) {// && (midi_message.isForChannel(channel) || channel==0)) {
             if (midi_message.getProgramChangeNumber()<getNumPrograms())
