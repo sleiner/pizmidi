@@ -1059,7 +1059,7 @@ void AudioToCCEditor::updateParametersFromFilter()
     s_OffValueR->setVSTSlider(p[kGateOffValueCCR]);
 	s_Thresh->setValue(p[kGateThreshold]);
 
-    comboBox->setSelectedItemIndex(newDevice+1,true);
+    comboBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
     toggleButton->setToggleState(p[kAutomateHost]>=0.5f,dontSendNotification);
     toggleButton2->setToggleState(p[kMidiToHost]>=0.5f,dontSendNotification);
 	b_Stereo->setToggleState(p[kStereo]>=0.5f,dontSendNotification);

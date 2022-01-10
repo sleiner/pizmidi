@@ -257,8 +257,8 @@ void MidiInEditor::updateParametersFromFilter()
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    comboBox->setSelectedItemIndex(newDevice+1,true);
-	channelBox->setSelectedItemIndex(channel,true);
+    comboBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
+	channelBox->setSelectedItemIndex(channel,dontSendNotification);
 
     hostButton->setToggleState(hostin>=0.5f,dontSendNotification);
 

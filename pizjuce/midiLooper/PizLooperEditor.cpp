@@ -4380,7 +4380,7 @@ void PizLooperEditor::updateParametersFromFilter()
 	numerator->setText(String(n),dontSendNotification);
 	denominator->setText(String(d),dontSendNotification);
 
-    midiOutDeviceBox->setSelectedItemIndex(newDevice+1,true);
+    midiOutDeviceBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
 
 	for (int i=0;i<numParamsPerSlot+numGlobalParams;i++)
 		updateControls(i,param[i],true);
