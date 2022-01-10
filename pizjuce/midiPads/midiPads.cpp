@@ -861,14 +861,14 @@ void midiPads::saveXmlPatch(int index, File file)
 {
     copySettingsToProgram(curProgram);
     auto xml(programs->values_.getChild(index).createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 void midiPads::saveXmlBank(File file)
 {
     copySettingsToProgram(curProgram);
     auto xml(programs->values_.createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 bool midiPads::loadXmlPatch(int index, File file)
@@ -940,7 +940,7 @@ bool midiPads::loadFxp(File file)
 void midiPads::saveXmlLayout(File file)
 {
     auto xml(programs->values_.getChild(curProgram).getChildWithName("Layout").createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 void midiPads::loadXmlLayout(File file)
@@ -1667,12 +1667,12 @@ void midiPads::fillLayouts()
 #ifdef _DEBUG
         auto xml(layouts->values_.getChild(i).createXml());
         File file(layoutPath+File::getSeparatorString() + "default" + File::getSeparatorString() + layouts->values_.getChild(i).getProperty("name").toString()+".mpadl");
-        xml->writeToFile(file," ");
+        xml->writeTo(file);
 #endif
     }
 #ifdef _DEBUG
     //ScopedPointer<XmlElement> xml(layouts->createXml());
-    //xml->writeToFile(File("C:\\midiPadsLayouts.xml")," ");
+    //xml->writeTo(File("C:\\midiPadsLayouts.xml"));
 #endif
 }
 

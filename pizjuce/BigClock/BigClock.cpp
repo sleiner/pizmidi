@@ -454,7 +454,7 @@ void BigClockFilter::saveCues(File cuefile) {
         xmlState.addChildElement(ticks);
     }
 
-    xmlState.writeToFile(cuefile," ");
+    xmlState.writeTo(cuefile);
 }
 
 void BigClockFilter::loadCues(File cuefile) {

@@ -883,7 +883,7 @@ void PizLooper::getStateInformation(MemoryBlock &destData) {
 	destData.append(xmlData.getData(),xmlData.getSize());
 #ifdef _DEBUG
 	// TODO: macOS/Linux compatibility
-	xmlState.writeToFile(File("C:\\loopergetState.xml")," ");
+	xmlState.writeTo(File("C:\\loopergetState.xml"));
 #endif
 }
 
@@ -1018,7 +1018,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes) {
             resetCurrentProgram(xmlState->getIntAttribute(String("program"), curProgram));
         }
 #ifdef _DEBUG
-		xmlState->writeToFile(File("C:\\loopersetState.xml")," ");
+		xmlState->writeTo(File("C:\\loopersetState.xml"));
 #endif
     }
 }
