@@ -641,7 +641,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
     {
         if (xmlState->hasTagName ("PizAudioToCCSettings"))
         {
-            forEachXmlChildElement (*xmlState, e)
+			for (auto *e : xmlState->getChildIterator())
 			{
 				if (e->hasTagName("Program"))
 				{

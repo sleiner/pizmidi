@@ -491,7 +491,7 @@ void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInB
             }
 			XmlElement* n = xmlState->getChildByName("names");
 			if (n) {
-				forEachXmlChildElement (*n, e) {
+				for (auto *e : xmlState->getChildIterator()) {
 					progNames.setNameFor(e->getIntAttribute("c"),
 										 e->getIntAttribute("b"),
 										 e->getIntAttribute("p"),
@@ -522,7 +522,7 @@ void midiPCGUI::setStateInformation (const void* data, int sizeInBytes) {
             }
 			XmlElement* n = xmlState->getChildByName("names");
 			if (n) {
-				forEachXmlChildElement (*n, e) {
+				for (auto *e : xmlState->getChildIterator()) {
 					progNames.setNameFor(e->getIntAttribute("c"),
 										 e->getIntAttribute("b"),
 										 e->getIntAttribute("p"),

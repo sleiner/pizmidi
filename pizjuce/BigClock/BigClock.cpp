@@ -382,7 +382,7 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
             bgcolor = Colour(xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
 
-            forEachXmlChildElement (*xmlState, e) {
+            for (auto *e : xmlState->getChildIterator()) {
                 if (e->hasTagName("Cue")) {
                     cue* newcue = new cue();
                     newcue->ppq = e->getDoubleAttribute("ppq");
@@ -466,7 +466,7 @@ void BigClockFilter::loadCues(File cuefile) {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("BigClockCues"))
         {
-            forEachXmlChildElement (*xmlState, e) {
+            for (auto *e : xmlState->getChildIterator()) {
                 double fps=24.0;
                 double tpb=960.0;
                 int n=4;
