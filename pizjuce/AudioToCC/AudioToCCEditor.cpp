@@ -515,7 +515,6 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     //[UserPreSize]
 	setMouseClickGrabsKeyboardFocus(false);
-    StringArray devices = ownerFilter->devices;
 
     s_LCC->setMouseClickGrabsKeyboardFocus(false);
     s_RCC->setMouseClickGrabsKeyboardFocus(false);
@@ -602,8 +601,8 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 	b_Mode->setClickingTogglesState(true);
 
     comboBox->addItem(L"--",1);
-    for (int i=0;i<devices.size();i++) {
-        comboBox->addItem(devices.joinIntoString("",i,1),i+2);
+    for (int i=0;i<ownerFilter->devices.size();i++) {
+        comboBox->addItem(ownerFilter->devices[i].name, i+2);
     }
     comboBox->setSelectedId(1);
 

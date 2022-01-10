@@ -98,12 +98,11 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
 
     //[UserPreSize]
     setMouseClickGrabsKeyboardFocus(false);
-    StringArray devices = ownerFilter->devices;
 
     comboBox->setMouseClickGrabsKeyboardFocus(false);
     comboBox->addItem(String("--"),1);
-    for (int i=0;i<devices.size();i++) {
-        comboBox->addItem(devices.joinIntoString("",i,1),i+2);
+    for (int i=0;i<ownerFilter->devices.size();i++) {
+        comboBox->addItem(ownerFilter->devices[i].name,i+2);
     }
     comboBox->setSelectedId(1);
 

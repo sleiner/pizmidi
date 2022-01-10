@@ -65,7 +65,7 @@ JuceProgram::JuceProgram ()
     //default program name
 	name = "Default";
 
-	device = "--";
+	device.name = "--";
 }
 
 //==============================================================================
@@ -79,7 +79,7 @@ AudioToCC::AudioToCC() :
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiOutput::getDevices();
+    devices = MidiOutput::getAvailableDevices();
     midiOutput = NULL;
     lastCCL=0;
     lastCCR=0;
@@ -181,8 +181,14 @@ void AudioToCC::setParameter (int index, float newValue)
 
 void AudioToCC::setActiveDevice(String name)
 {
-	activeDevice = programs[curProgram].device = name;
-	int index = devices.indexOf(name);
+	setActiveDevice(getDeviceByName(name));
+}
+
+void AudioToCC::setActiveDevice(MidiDeviceInfo const& device)
+{
+	activeDevice = programs[curProgram].device = device;
+	int index = devices.indexOf(device);
+
 	if (index==-1) {
 		param[kDevice] = programs[curProgram].param[kDevice] = 0.f;
 		if (midiOutput) midiOutput->stopBackgroundThread();
@@ -191,11 +197,15 @@ void AudioToCC::setActiveDevice(String name)
 	else {
 		param[kDevice] = programs[curProgram].param[kDevice] = (float)index/(float)(devices.size()-1);
 		if (midiOutput) midiOutput->stopBackgroundThread();
-		midiOutput = MidiOutput::openDevice(index);
+		midiOutput = MidiOutput::openDevice(device.identifier);
 		midiOutput->startBackgroundThread();
 	}
 }
 
+MidiDeviceInfo AudioToCC::getDeviceByName(String name) const
+{
+	return devices.findIf([&](auto const& device) { return name == device.name; });
+}
 
 const String AudioToCC::getParameterName (int index)
 {
@@ -238,7 +248,7 @@ const String AudioToCC::getParameterText (int index)
     else if (index == kRelease)
 		return String (roundToInt(param[kRelease]*100.f));
     else if (index == kDevice) {
-        if (param[kDevice]>0.0) return devices.joinIntoString("",roundToInt(param[kDevice]*(devices.size()-1)),1);
+        if (param[kDevice]>0.0) return devices[roundToInt(param[kDevice]*(devices.size()-1))].name;
         else return String("--");
     }
 	else if (index==kCCL || index==kCCR) {
@@ -617,7 +627,7 @@ void AudioToCC::getStateInformation (MemoryBlock& destData)
             prog->setAttribute (getParameterName(i).toLowerCase().retainCharacters(goodXmlChars), program->param[i]);
         }
         prog->setAttribute ("progname", program->name);
-		prog->setAttribute ("device", program->device);
+		prog->setAttribute ("device", program->device.name);
 		xmlState.addChildElement(prog);
     }
     copyXmlToBinary (xmlState, destData);
@@ -645,8 +655,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
 						program->param[kPeakGain] *= 0.25f;
 					}
 					program->name = e->getStringAttribute ("progname", program->name);
-					program->device = e->getStringAttribute ("device", programs->device);
-
+					program->device = getDeviceByName(e->getStringAttribute ("device", programs->device.name));
 				}
             }
             setCurrentProgram(xmlState->getIntAttribute("program", 0));

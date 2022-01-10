@@ -10,6 +10,7 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
             "${CMAKE_CURRENT_LIST_DIR}/MIDI.h"
             "${CMAKE_CURRENT_LIST_DIR}/NoteSlider.h"
+            "${CMAKE_CURRENT_LIST_DIR}/PizArray.h"
             "${CMAKE_CURRENT_LIST_DIR}/PizAudioProcessor.h"
             "${CMAKE_CURRENT_LIST_DIR}/PizButton.h"
             "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.h"

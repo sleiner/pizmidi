@@ -72,7 +72,7 @@ JuceProgram::JuceProgram ()
     measureFromHere=0;
 
 	numerator=denominator=4;
-	device = String();
+	device = MidiDeviceInfo();
 
     //program name
 	name = "Default";
@@ -104,7 +104,7 @@ PizLooper::PizLooper() : programs(0), slotLimit(numSlots)
 	}
 	lastUIWidth = 800;
 	lastUIHeight = 487;
-    devices = MidiOutput::getDevices();
+    devices = MidiOutput::getAvailableDevices();
 	recCC = playCC = -1;
     midiOutput = NULL;
 	info = new Info();
@@ -408,24 +408,29 @@ void PizLooper::setActiveSlot(int slot)
 
 void PizLooper::setActiveDevice(String name)
 {
-	activeDevice = name;
-	for (int i=0;i<numPrograms;i++)
-		programs[i].device = name;
-	int index = devices.indexOf(name);
-	if (index==-1) {
-		getCallbackLock().enter();
-		if (midiOutput) midiOutput->stopBackgroundThread();
-		midiOutput = 0;
-		getCallbackLock().exit();
-	}
+	setActiveDevice(getDeviceByName(name));
+}
+
+void PizLooper::setActiveDevice(MidiDeviceInfo device)
+{
+	getCallbackLock().enter();
+	if (midiOutput != nullptr) { midiOutput->stopBackgroundThread(); }
+	midiOutput = MidiOutput::openDevice(device.identifier);
+	if (midiOutput != nullptr) { midiOutput->startBackgroundThread(); }
 	else {
-		getCallbackLock().enter();
-		if (midiOutput) midiOutput->stopBackgroundThread();
-		midiOutput = MidiOutput::openDevice(index);
-		if (midiOutput) midiOutput->startBackgroundThread();
-		else setActiveDevice("--");
-		getCallbackLock().exit();
+		device.name = "--";
+		device.identifier = "";
 	}
+	getCallbackLock().exit();
+
+	activeDevice = device;
+	for (int i=0;i<numPrograms;i++)
+		programs[i].device = device;
+}
+
+MidiDeviceInfo PizLooper::getDeviceByName(String name) const
+{
+	return devices.findIf([&](auto const& device) { return name == device.name; });
 }
 
 const String PizLooper::getParameterName (int index) {
@@ -867,7 +872,7 @@ void PizLooper::getStateInformation(MemoryBlock &destData) {
         xmlProgram->setAttribute("measureFromHere", programs[p].measureFromHere);
         xmlProgram->setAttribute("numerator", programs[p].numerator);
         xmlProgram->setAttribute("denominator", programs[p].denominator);
-		xmlProgram->setAttribute("device", programs[p].device);
+		xmlProgram->setAttribute("device", programs[p].device.name);
 
 		xmlProgram->addChildElement(programs[p].PRSettings.createXml().release());
 
@@ -972,7 +977,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes) {
 					programs[p].name = xmlProgram->getStringAttribute (String("name"), programs[p].name);
 					programs[p].loop.setSemitones(roundToInt(param[kTranspose+numParamsPerSlot*p]*24.f)-12);
 					programs[p].loop.setOctaves(roundToInt(param[kOctave+numParamsPerSlot*p]*8.f)-4);
-					programs[p].device = xmlProgram->getStringAttribute ("device", programs[p].device);
+					programs[p].device = getDeviceByName(xmlProgram->getStringAttribute ("device", programs[p].device.name));
 
 					programs[p].PRSettings.loadXml(*xmlProgram);
 
@@ -1005,7 +1010,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes) {
                 programs[p].name = xmlState->getStringAttribute (prefix+String("progname"), programs[p].name);
 				programs[p].loop.setSemitones(roundToInt(param[kTranspose+numParamsPerSlot*p]*24.f)-12);
 				programs[p].loop.setOctaves(roundToInt(param[kOctave+numParamsPerSlot*p]*8.f)-4);
-				programs[p].device = xmlState->getStringAttribute (prefix+"device", programs[p].device);
+				programs[p].device = getDeviceByName(xmlState->getStringAttribute (prefix+"device", programs[p].device.name));
 
                 readMidiFile(p,programs[p].name);
             }

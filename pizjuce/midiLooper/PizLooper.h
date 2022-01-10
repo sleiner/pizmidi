@@ -7,7 +7,9 @@
 #include "juce_data_structures/juce_data_structures.h"
 
 #include "../_common/key.h"
+#include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
+
 #include "MidiLoop.h"
 
 
@@ -162,7 +164,7 @@ private:
     String name;
 	int numerator, denominator;
 	PianoRollSettings PRSettings;
-	String device;
+	MidiDeviceInfo device;
 };
 
 //==============================================================================
@@ -368,9 +370,11 @@ public:
 	}
 
 	//midi out stuff
-    StringArray devices;
+	PizArray<MidiDeviceInfo> devices;
 	void setActiveDevice(String name);
-	String getActiveDevice() {return activeDevice;}
+	void setActiveDevice(MidiDeviceInfo device);
+	MidiDeviceInfo getActiveDevice() {return activeDevice;}
+    MidiDeviceInfo getDeviceByName(String name) const;
 
 	void setPRSetting(const Identifier &name, const var &value, bool updateEditor=true)
 	{
@@ -736,7 +740,7 @@ private:
     uint64 samples;
 	int samplesInLastBuffer;
 
-	String activeDevice;
+	MidiDeviceInfo activeDevice;
     std::unique_ptr<MidiOutput> midiOutput;
 
 	PianoRollSettings defaultPRSettings;

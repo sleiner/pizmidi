@@ -2382,12 +2382,10 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
 	timeline->addChangeListener(this);
 	viewport->addChangeListener(this);
 
-    StringArray devices = ownerFilter->devices;
-
     midiOutDeviceBox->setMouseClickGrabsKeyboardFocus(false);
     midiOutDeviceBox->addItem(String("--"),1);
-    for (int i=0;i<devices.size();i++) {
-        midiOutDeviceBox->addItem(devices.joinIntoString("",i,1),i+2);
+    for (int i=0;i<ownerFilter->devices.size();i++) {
+        midiOutDeviceBox->addItem(ownerFilter->devices[i].name,i+2);
     }
     midiOutDeviceBox->setSelectedId(1);
 

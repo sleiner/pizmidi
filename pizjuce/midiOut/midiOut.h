@@ -5,6 +5,7 @@
 
 #include "juce_audio_devices/juce_audio_devices.h"
 
+#include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
 
 using namespace juce;
@@ -27,7 +28,7 @@ public:
 private:
     float param[numParams];
     String icon;
-	String device;
+	MidiDeviceInfo device;
     String name;
 };
 
@@ -92,11 +93,13 @@ public:
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
 
-    StringArray devices;
+    PizArray<MidiDeviceInfo> devices;
     String icon;
 
-	void setActiveDevice(String name);
-	String getActiveDevice() {return activeDevice;}
+    void setActiveDevice(String name);
+	void setActiveDevice(MidiDeviceInfo device);
+	MidiDeviceInfo getActiveDevice() {return activeDevice;}
+    MidiDeviceInfo getDeviceByName(String name) const;
 
     //==============================================================================
     juce_UseDebuggingNewOperator
@@ -105,7 +108,7 @@ private:
     // this is our gain - the UI and the host can access this by getting/setting
     // parameter 0.
     float param[numParams];
-	String activeDevice;
+	MidiDeviceInfo activeDevice;
 
     JuceProgram *programs;
     int curProgram;

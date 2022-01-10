@@ -27,7 +27,7 @@ MidiInFilter::MidiInFilter()
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiInput::getDevices();
+    devices = MidiInput::getAvailableDevices();
     midiInput = 0;
 	loadDefaultFxb();
     curProgram=0;
@@ -71,17 +71,20 @@ void MidiInFilter::setParameter (int index, float newValue)
 
 void MidiInFilter::setActiveDevice(String name)
 {
-	activeDevice = programs[curProgram].device = name;
-	int index = devices.indexOf(name);
-	if (index==-1) {
-		if (midiInput) midiInput->stop();
-		midiInput = NULL;
-	}
-	else {
-		if (midiInput) midiInput->stop();
-		midiInput = MidiInput::openDevice(index,&collector);
-		midiInput->start();
-	}
+    setActiveDevice(getDeviceByName(name));
+}
+
+void MidiInFilter::setActiveDevice(MidiDeviceInfo device)
+{
+    if (midiInput != nullptr) { midiInput->stop(); }
+	activeDevice = programs[curProgram].device = device;
+    midiInput = MidiInput::openDevice(device.identifier, &collector);
+    if (midiInput != nullptr) { midiInput->start(); }
+}
+
+MidiDeviceInfo MidiInFilter::getDeviceByName(String name) const
+{
+	return devices.findIf([&](auto const& device) { return name == device.name; });
 }
 
 const String MidiInFilter::getParameterName (int index)
@@ -222,7 +225,7 @@ void MidiInFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
     }
 
     xmlState.setAttribute ("icon", icon);
-	xmlState.setAttribute ("device", activeDevice);
+	xmlState.setAttribute ("device", activeDevice.name);
 
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
@@ -241,7 +244,7 @@ void MidiInFilter::getStateInformation(MemoryBlock &destData) {
             xmlState.setAttribute (prefix+String(i), programs[p].param[i]);
         }
         xmlState.setAttribute (prefix+"icon", programs[p].icon);
-		xmlState.setAttribute (prefix+"device", programs[p].device);
+		xmlState.setAttribute (prefix+"device", programs[p].device.name);
     }
     copyXmlToBinary (xmlState, destData);
 }
@@ -262,7 +265,7 @@ void MidiInFilter::setCurrentProgramStateInformation (const void* data, int size
                 param[i] = (float) xmlState->getDoubleAttribute (String(i), param[i]);
             }
             icon = xmlState->getStringAttribute ("icon", icon);
-			setActiveDevice(xmlState->getStringAttribute ("device", activeDevice));
+			setActiveDevice(xmlState->getStringAttribute ("device", activeDevice.name));
 
             sendChangeMessage ();
         }
@@ -282,7 +285,7 @@ void MidiInFilter::setStateInformation (const void* data, int sizeInBytes) {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix+String(i), programs[p].param[i]);
                 }
                 programs[p].icon = xmlState->getStringAttribute (prefix+"icon", programs[p].icon);
-				programs[p].device = xmlState->getStringAttribute (prefix+"device", programs[p].device);
+				programs[p].device = getDeviceByName(xmlState->getStringAttribute (prefix+"device", programs[p].device.name));
                 programs[p].name = xmlState->getStringAttribute (prefix+"progname", programs[p].name);
             }
             init=true;

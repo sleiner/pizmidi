@@ -35,8 +35,10 @@
 #include <memory>
 
 #include "../_common/PizAudioProcessor.h"
+#include "../_common/PizArray.h"
 
 #include "juce_audio_devices/juce_audio_devices.h"
+#include "juce_core/juce_core.h"
 
 #define goodXmlChars "abcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -100,7 +102,7 @@ public:
 private:
     float param[numParams];
     String name;
-	String device;
+	MidiDeviceInfo device;
 };
 
 //==============================================================================
@@ -166,8 +168,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 	void setActiveDevice(String name);
-	String getActiveDevice() {return activeDevice;}
-    StringArray devices;
+	void setActiveDevice(MidiDeviceInfo const &device);
+	MidiDeviceInfo getActiveDevice() {return activeDevice;}
+    MidiDeviceInfo getDeviceByName(String name) const;
+
+    PizArray<MidiDeviceInfo> devices;
     int lastCCL, lastCCR;
     float lastInL, lastInR;
 	bool lastGateCCL, lastGateCCR;
@@ -195,7 +200,7 @@ private:
     int curProgram;
 
     std::unique_ptr<MidiOutput> midiOutput;
-	String activeDevice;
+	MidiDeviceInfo activeDevice;
 
 	float maxAttack,maxRelease;
 
