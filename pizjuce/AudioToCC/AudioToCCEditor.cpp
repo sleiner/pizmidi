@@ -1060,11 +1060,11 @@ void AudioToCCEditor::updateParametersFromFilter()
 	s_Thresh->setValue(p[kGateThreshold]);
 
     comboBox->setSelectedItemIndex(newDevice+1,true);
-    toggleButton->setToggleState(p[kAutomateHost]>=0.5f,false);
-    toggleButton2->setToggleState(p[kMidiToHost]>=0.5f,false);
-	b_Stereo->setToggleState(p[kStereo]>=0.5f,false);
+    toggleButton->setToggleState(p[kAutomateHost]>=0.5f,dontSendNotification);
+    toggleButton2->setToggleState(p[kMidiToHost]>=0.5f,dontSendNotification);
+	b_Stereo->setToggleState(p[kStereo]>=0.5f,dontSendNotification);
 	b_Stereo->setButtonText(p[kStereo]>=0.5f ? "Stereo" : "Mono (L+R)");
-	b_Mode->setToggleState(p[kMode]>=0.5f,false);
+	b_Mode->setToggleState(p[kMode]>=0.5f,dontSendNotification);
 	b_Mode->setButtonText(p[kMode]>=0.5f ? "Logarithmic" : "Linear");
 }
 
@@ -1087,14 +1087,14 @@ void AudioToCCEditor::timerCallback()
 	if (peakcounter==2)
 	{
 		peakcounter=0;
-		clipL->setToggleState(gateL,false);
-		clipR->setToggleState(gateR,false);
+		clipL->setToggleState(gateL,dontSendNotification);
+		clipR->setToggleState(gateR,dontSendNotification);
 	}
 	else {
 		if (gateL)
-			clipL->setToggleState(true,false);
+			clipL->setToggleState(true,dontSendNotification);
 		if (gateR)
-			clipR->setToggleState(true,false);
+			clipR->setToggleState(true,dontSendNotification);
 	}
 }
 //[/MiscUserCode]

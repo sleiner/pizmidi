@@ -1285,7 +1285,7 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 		else
 			Desktop::getInstance().getAnimator().fadeIn(infoBox.get(),100);
 		//infoBox->setVisible(!infoBox->isVisible());
-		infoButton->setToggleState(!infoButton->getToggleState(),false);
+		infoButton->setToggleState(!infoButton->getToggleState(),dontSendNotification);
         //[/UserButtonCode_infoButton]
     }
     else if (buttonThatWasClicked == specialMenuButton.get())
@@ -1603,7 +1603,7 @@ void MidiChordsEditor::mouseDown(const MouseEvent& e)
 		getFilter()->playCurrentChord(true);
 	if (e.eventComponent!=infoBox.get() && infoBox->isVisible()) {
 		infoBox->setVisible(false);
-		infoButton->setToggleState(false,false);
+		infoButton->setToggleState(false,dontSendNotification);
 	}
 }
 
@@ -1624,16 +1624,16 @@ void MidiChordsEditor::mouseUp (const MouseEvent& e)
 		{
 			if (getFilter()->isPreviewChordPlaying()) {
 				getFilter()->playCurrentChord(false);
-				previewButton->setToggleState(false,false);
+				previewButton->setToggleState(false,dontSendNotification);
 			}
 			else {
 				getFilter()->playCurrentChord(true);
-				previewButton->setToggleState(true,false);
+				previewButton->setToggleState(true,dontSendNotification);
 			}
 		}
 		else {
 			getFilter()->playCurrentChord(false);
-			previewButton->setToggleState(false,false);
+			previewButton->setToggleState(false,dontSendNotification);
 		}
 	}
 }
@@ -1731,20 +1731,20 @@ void MidiChordsEditor::updateParametersFromFilter()
 	outputChannelSlider->setValue(outChan,dontSendNotification);
 	velocitySlider->setValue(previewVel,dontSendNotification);
 	transposeSlider->setValue(transpose,dontSendNotification);
-	chordLearnButton->setToggleState(filter->getParameter(kLearnChord)>0,false);
-	triggerLearnButton->setToggleState(filter->getParameter(kFollowInput)>0,false);
-	toggleButton->setToggleState(filter->getParameter(kGuess)>0,false);
-	flatsButton->setToggleState(flats,false);
+	chordLearnButton->setToggleState(filter->getParameter(kLearnChord)>0,dontSendNotification);
+	triggerLearnButton->setToggleState(filter->getParameter(kFollowInput)>0,dontSendNotification);
+	toggleButton->setToggleState(filter->getParameter(kGuess)>0,dontSendNotification);
+	flatsButton->setToggleState(flats,dontSendNotification);
 	guitar->setFlats(flats);
-	pcButton->setToggleState(filter->getParameter(kUseProgCh)>0,false);
-	transposeInputButton->setToggleState(filter->getParameter(kInputTranspose)>0,false);
-	toAllChannelsButton->setToggleState(filter->getParameter(kToAllChannels)>0,false);
+	pcButton->setToggleState(filter->getParameter(kUseProgCh)>0,dontSendNotification);
+	transposeInputButton->setToggleState(filter->getParameter(kInputTranspose)>0,dontSendNotification);
+	toAllChannelsButton->setToggleState(filter->getParameter(kToAllChannels)>0,dontSendNotification);
 
 	accelSlider->setVSTSlider();
 	velRampSlider->setVSTSlider();
 	speedSlider->setVSTSlider();
 	maxTimeSlider->setVSTSlider();
-	strumButton->setToggleState(filter->getParameter(kStrum)>0,false);
+	strumButton->setToggleState(filter->getParameter(kStrum)>0,dontSendNotification);
 	strumDirectionButton->setEnabled(strumButton->getToggleState());
 	accelSlider->setEnabled(strumButton->getToggleState());
 	velRampSlider->setEnabled(strumButton->getToggleState());
@@ -1758,9 +1758,9 @@ void MidiChordsEditor::updateParametersFromFilter()
 	if (chordChan==0) chordKeyboard->setMidiChannelsToDisplay(0xffff);
 	else chordKeyboard->setMidiChannelsToDisplay(1<<(chordChan-1));
 
-	normalButton->setToggleState(newMode==Normal,false);
-	octaveButton->setToggleState(newMode==Octave,false);
-	globalButton->setToggleState(newMode==Global,false);
+	normalButton->setToggleState(newMode==Normal,dontSendNotification);
+	octaveButton->setToggleState(newMode==Octave,dontSendNotification);
+	globalButton->setToggleState(newMode==Global,dontSendNotification);
 
 	chordNameLabel->setText(getCurrentChordName(),dontSendNotification);
 

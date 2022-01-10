@@ -33,7 +33,7 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
 		midiPad[i]->setTriggeredOnMouseDown(false);
 		midiPad[i]->addListener (this);
 		midiPad[i]->addMouseListener (this, true);
-		midiPad[i]->setToggleState(getFilter()->togglestate[i],false);
+		midiPad[i]->setToggleState(getFilter()->togglestate[i],dontSendNotification);
 		sending[i] = false;
 
 		midiPad[i]->showdot=getFilter()->toggle[i];
@@ -806,7 +806,7 @@ void midiPadsEditor::sendMidi(int i, bool shiftclicked) {
 	sending[i]=true;
 	if (getFilter()->togglestate[i]) {
 		getFilter()->togglestate[i] = false;
-		midiPad[i]->setToggleState(false,false);
+		midiPad[i]->setToggleState(false,dontSendNotification);
 		sendMidiOff(i);
 		sending[i]=false;
 		return;
@@ -814,13 +814,13 @@ void midiPadsEditor::sendMidi(int i, bool shiftclicked) {
 	if (getFilter()->getParameter(kMono)>=0.5f) {
 		for (int n=0;n<numPads;n++) {
 			getFilter()->togglestate[n] = false;
-			midiPad[n]->setToggleState(false,false);
+			midiPad[n]->setToggleState(false,dontSendNotification);
 		}
 	}
 	if (getFilter()->toggle[i] || shiftclicked) {
 		dontsend=true;
 		getFilter()->togglestate[i] = true;
-		midiPad[i]->setToggleState(true,false);
+		midiPad[i]->setToggleState(true,dontSendNotification);
 	}
 	midiPad[i]->isPlaying=true;
 	if (!getFilter()->triggered[i]) {

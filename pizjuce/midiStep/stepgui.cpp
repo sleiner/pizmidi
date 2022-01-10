@@ -673,7 +673,7 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kRecord,recordButton->getToggleState()?0.f:1.f);
-		recordButton->setToggleState(!recordButton->getToggleState(),false);
+		recordButton->setToggleState(!recordButton->getToggleState(),dontSendNotification);
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == recArmButton1.get())
@@ -886,7 +886,7 @@ void StepEditor::recArmButtonClicked(Button* buttonThatWasClicked)
 {
 	int index = buttonThatWasClicked->getButtonText().getIntValue()-1;
 	if (ModifierKeys::getCurrentModifiers().isCommandDown()) {
-		buttonThatWasClicked->setToggleState(!buttonThatWasClicked->getToggleState(),false);
+		buttonThatWasClicked->setToggleState(!buttonThatWasClicked->getToggleState(),dontSendNotification);
 		getFilter()->setParameterNotifyingHost(kRecArm+index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
 	} else {
 		getFilter()->setParameterNotifyingHost(kActiveLoop,(float)index/(float)(numLoops-1));
@@ -894,7 +894,7 @@ void StepEditor::recArmButtonClicked(Button* buttonThatWasClicked)
 		activeLoopLabel->setText(String(getFilter()->activeLoop+1));
 		for (int i=0;i<numLoops;i++)
 		{
-			getButtonByIndex(i)->setToggleState(i==index ? true : false,false);
+			getButtonByIndex(i)->setToggleState(i==index ? true : false,dontSendNotification);
 			if (toggleButton->getToggleState()) getFilter()->setParameterNotifyingHost(kRecArm+i, i==index ? 1.f : 0.f);
 		}
 	}

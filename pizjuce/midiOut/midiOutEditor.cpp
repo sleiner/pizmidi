@@ -299,9 +299,9 @@ void MidiOutEditor::updateParametersFromFilter()
     comboBox->setSelectedItemIndex(newDevice+1,true);
 	channelBox->setSelectedItemIndex(channel,true);
 
-    clockButton->setToggleState(clock>=0.5f,false);
-    mtcButton->setToggleState(mtc>=0.5f,false);
-    hostButton->setToggleState(hostout>=0.5f,false);
+    clockButton->setToggleState(clock>=0.5f,dontSendNotification);
+    mtcButton->setToggleState(mtc>=0.5f,dontSendNotification);
+    hostButton->setToggleState(hostout>=0.5f,dontSendNotification);
 
     String fullpath = icon;
     if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())

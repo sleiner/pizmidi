@@ -454,19 +454,19 @@ void midiKeyboardEditor::updateParametersFromFilter()
 
     filter->getCallbackLock().exit();
 
-	useProgCh->setToggleState(progch,false);
-	useCapsLock->setToggleState(capslock,false);
-	grabQwertyButton->setToggleState(qwerty,false);
-	showNumbersButton->setToggleState(showNumbers,false);
+	useProgCh->setToggleState(progch,dontSendNotification);
+	useCapsLock->setToggleState(capslock,dontSendNotification);
+	grabQwertyButton->setToggleState(qwerty,dontSendNotification);
+	showNumbersButton->setToggleState(showNumbers,dontSendNotification);
 	midiKeyboard->setDrawNoteNumber(showNumbers);
 	midiKeyboard->setDrawQwerty(qwerty);
 	if (qwerty) midiKeyboard->grabKeyboardFocus();
     midiKeyboard->setMidiChannelsToDisplay(1<<ch);
     midiKeyboard->setMidiChannel(ch+1);
     chSlider->setValue(ch+1,dontSendNotification);
-    yButton->setToggleState(useY,false);
+    yButton->setToggleState(useY,dontSendNotification);
     velocitySlider->setValue(velocity);
-    inputToggleButton->setToggleState(toggle,false);
+    inputToggleButton->setToggleState(toggle,dontSendNotification);
 	setMouseClickGrabsKeyboardFocus(qwerty);
     midiKeyboard->setMouseClickGrabsKeyboardFocus(qwerty);
 	midiKeyboard->toggle=toggle;

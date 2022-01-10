@@ -1054,19 +1054,19 @@ void midiPCGUIEditor::updateParametersFromFilter()
 	//prog name
 	ProgramName->setText(name,dontSendNotification);
     //toggle buttons
-    b_PCListen->setToggleState(param[kPCListen]>=0.5f,false);
-    b_Thru->setToggleState(param[kThru]>=0.5f,false);
+    b_PCListen->setToggleState(param[kPCListen]>=0.5f,dontSendNotification);
+    b_Thru->setToggleState(param[kThru]>=0.5f,dontSendNotification);
 
     if (param[kMode]<0.5f) {
 		b_Mode->setButtonText("Direct");
-		b_Mode->setToggleState(true,false);
+		b_Mode->setToggleState(true,dontSendNotification);
 		s_Program->setColour (Slider::thumbColourId, Colours::coral);
 		s_BankMSB->setColour (Slider::thumbColourId, Colours::coral);
 		s_BankLSB->setColour (Slider::thumbColourId, Colours::coral);
 	}
     else {
 		b_Mode->setButtonText("Triggered");
-		b_Mode->setToggleState(false,false);
+		b_Mode->setToggleState(false,dontSendNotification);
 		s_Program->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));
 		s_BankMSB->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));
 		s_BankLSB->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));

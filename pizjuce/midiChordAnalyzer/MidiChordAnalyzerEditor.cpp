@@ -703,7 +703,7 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
 	const int chordChan = roundToInt(filter->getParameter(kChannel)*16.f);
 
 	learnChanSlider->setValue(chordChan,dontSendNotification);
-	flatsButton->setToggleState(flats,false);
+	flatsButton->setToggleState(flats,dontSendNotification);
 	if (chordChan==0) chordKeyboard->setMidiChannelsToDisplay(0xffff);
 	else chordKeyboard->setMidiChannelsToDisplay(1<<(chordChan-1));
 

@@ -823,16 +823,16 @@ void MidiMonitorEditor::updateParametersFromFilter()
     //set button states
     if (power>=0.5f) {
         powerButton->setButtonText ("on");
-        powerButton->setToggleState (true, false);
+        powerButton->setToggleState (true, dontSendNotification);
     }
     else {
         powerButton->setButtonText ("off");
-        powerButton->setToggleState (false, false);
+        powerButton->setToggleState (false, dontSendNotification);
     }
-    thruButton->setToggleState (thru>=0.5f, false);
-    wrapButton->setToggleState (wrap>=0.5f, false);
-    bytesButton->setToggleState (showbytes, false);
-    timeButton->setToggleState (showtime, false);
+    thruButton->setToggleState (thru>=0.5f, dontSendNotification);
+    wrapButton->setToggleState (wrap>=0.5f, dontSendNotification);
+    bytesButton->setToggleState (showbytes, dontSendNotification);
+    timeButton->setToggleState (showtime, dontSendNotification);
 
     setSize (filter->lastUIWidth, filter->lastUIHeight);
 

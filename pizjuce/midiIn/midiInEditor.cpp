@@ -260,7 +260,7 @@ void MidiInEditor::updateParametersFromFilter()
     comboBox->setSelectedItemIndex(newDevice+1,true);
 	channelBox->setSelectedItemIndex(channel,true);
 
-    hostButton->setToggleState(hostin>=0.5f,false);
+    hostButton->setToggleState(hostin>=0.5f,dontSendNotification);
 
     String fullpath = icon;
     if (!File(fullpath).existsAsFile())

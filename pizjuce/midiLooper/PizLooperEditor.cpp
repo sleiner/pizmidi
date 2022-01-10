@@ -3045,7 +3045,7 @@ void PizLooperEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 		}
 		else {
 			getFilter()->setActiveSlot(index);
-			buttonThatWasClicked->setToggleState(true,false);
+			buttonThatWasClicked->setToggleState(true,dontSendNotification);
 		}
 	}
     //[/UserbuttonClicked_Pre]
@@ -3153,7 +3153,7 @@ void PizLooperEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == b_Snap.get())
     {
         //[UserButtonCode_b_Snap] -- add your button handler code here..
-		b_Snap->setToggleState(!getFilter()->getPRSetting("snap"),false);
+		b_Snap->setToggleState(!getFilter()->getPRSetting("snap"),dontSendNotification);
 		getFilter()->setPRSetting("snap",b_Snap->getToggleState());
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Snap]
@@ -3247,7 +3247,7 @@ void PizLooperEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == b_Triplet.get())
     {
         //[UserButtonCode_b_Triplet] -- add your button handler code here..
-		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("triplet"),false);
+		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("triplet"),dontSendNotification);
 		getFilter()->setPRSetting("triplet",buttonThatWasClicked->getToggleState());
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Triplet]
@@ -3255,7 +3255,7 @@ void PizLooperEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == b_Dotted.get())
     {
         //[UserButtonCode_b_Dotted] -- add your button handler code here..
-		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("dotted"),false);
+		buttonThatWasClicked->setToggleState(!getFilter()->getPRSetting("dotted"),dontSendNotification);
 		getFilter()->setPRSetting("dotted",buttonThatWasClicked->getToggleState());
 		pianoRoll->repaintBG();
         //[/UserButtonCode_b_Dotted]
@@ -3935,7 +3935,7 @@ void PizLooperEditor::mouseDown (const MouseEvent& e)
 	if (e.mods.isPopupMenu() && index!=-1) {
 		for (int i=0;i<numSlots;i++)
 			getFilter()->notifyHost(kPlay,i,index==i?1.f:0.f);
-		((Button*)e.eventComponent)->setToggleState(true,false);
+		((Button*)e.eventComponent)->setToggleState(true,dontSendNotification);
 	}
 }
 
@@ -4129,11 +4129,11 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 	switch (param)
 	{
 	case kThru:
-		b_Thru->setToggleState(value>=0.5f,false);
+		b_Thru->setToggleState(value>=0.5f,dontSendNotification);
 		b_Monitor->setEnabled(b_Thru->getToggleState());
 		break;
 	case kMonitor:
-		b_Monitor->setToggleState(value>=0.5f,false);
+		b_Monitor->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kSync:
 		syncmodeBox->setText(getFilter()->getCurrentSlotParameterText(kSync),true);
@@ -4150,17 +4150,17 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 	case kRecMode:
 		if (value>=0.8f) {
 			b_Overdub->setColour(TextButton::buttonOnColourId,getLookAndFeel().findColour(TextButton::buttonOnColourId));
-			b_KeepLength->setToggleState(false,false);
+			b_KeepLength->setToggleState(false,dontSendNotification);
 		}
 		else {
 			b_Overdub->setColour(TextButton::buttonOnColourId,Colours::green);
-			b_KeepLength->setToggleState(true,false);
+			b_KeepLength->setToggleState(true,dontSendNotification);
 		}
-		b_Overdub->setToggleState(value>=0.5f,false);
+		b_Overdub->setToggleState(value>=0.5f,dontSendNotification);
 		b_KeepLength->setVisible(value>=0.5f);
 		break;
 	case kSingleLoop:
-		b_SingleLoop->setToggleState(value>=0.5f,false);
+		b_SingleLoop->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kMasterVelocity:
 		s_MasterVelocity->setVSTSlider(value);
@@ -4169,7 +4169,7 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		s_MasterTranspose->setVSTSlider(value);
 		break;
 	case kImmediateTranspose:
-		b_ImmediateTranspose->setToggleState(value>=0.5f,false);
+		b_ImmediateTranspose->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kRecCC:
 		s_RecCC->setVSTSlider(value);
@@ -4179,10 +4179,10 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		break;
 
 	case kRecord:
-		b_Record->setToggleState(value>=0.5f,false);
+		b_Record->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kPlay:
-		b_Play->setToggleState(value>=0.5f,false);
+		b_Play->setToggleState(value>=0.5f,dontSendNotification);
 		b_Play->setButtonText(value>=0.5f ? "STOP" : "PLAY");
 		updateSlotButtons();
 		break;
@@ -4251,7 +4251,7 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		else b_Filt->setButtonText("Filter");
 		break;
 	case kWaitForBar:
-		b_WaitForBar->setToggleState(value>=0.5f,false);
+		b_WaitForBar->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kNumLoops:
 		s_NumLoops->setIndex(lastActiveLoop*numParamsPerSlot+kNumLoops);
@@ -4270,7 +4270,7 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 	    s_MuteGroup->setVSTSlider(value);
 		break;
 	case kForceToKey:
-		b_ForceToKey->setToggleState(value>=0.5f,false);
+		b_ForceToKey->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kScaleChannel:
 		s_ScaleChannel->setIndex(lastActiveLoop*numParamsPerSlot+kScaleChannel);
@@ -4281,19 +4281,19 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		s_TransposeChannel->setVSTSlider(value);
 		break;
 	case kUseScaleChannel:
-		b_UseScaleChannel->setToggleState(value>=0.5f,false);
+		b_UseScaleChannel->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kUseTrChannel:
-		b_UseTrChannel->setToggleState(value>=0.5f,false);
+		b_UseTrChannel->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kNoteToggle:
-		b_NoteToggle->setToggleState(value>=0.5f,false);
+		b_NoteToggle->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kForceToScaleMode:
 		forceModeBox->setText(getFilter()->getCurrentSlotParameterText(kForceToScaleMode),true);
 		break;
 	case kTranspose10:
-		b_Transpose10->setToggleState(value>=0.5f,false);
+		b_Transpose10->setToggleState(value>=0.5f,dontSendNotification);
 	default:
 		break;
 	}
@@ -4352,7 +4352,7 @@ void PizLooperEditor::updateParametersFromFilter()
 
     // ..and after releasing the lock, we're free to do the time-consuming UI stuff..
 	{
-		b_Snap->setToggleState(filter->getPRSetting("snap"),false);
+		b_Snap->setToggleState(filter->getPRSetting("snap"),dontSendNotification);
 		pianoRoll->setSnap(b_Snap->getToggleState());
 		float q = filter->getPRSetting("stepsize");
 		if	   (q==0.0) quantizeBox2->setText("4th",true);
@@ -4360,8 +4360,8 @@ void PizLooperEditor::updateParametersFromFilter()
 		else if (q<0.6) quantizeBox2->setText("16th",true);
 		else if (q<0.9) quantizeBox2->setText("32nd",true);
 		else quantizeBox2->setText("64th",true);
-		b_Dotted->setToggleState(filter->getPRSetting("dotted"),false);
-		b_Triplet->setToggleState(filter->getPRSetting("triplet"),false);
+		b_Dotted->setToggleState(filter->getPRSetting("dotted"),dontSendNotification);
+		b_Triplet->setToggleState(filter->getPRSetting("triplet"),dontSendNotification);
 		float tord = (filter->getPRSetting("triplet")) ? 1.5f : 1.f;
 		if (filter->getPRSetting("dotted")) tord = 0.666666667f;
 		if (q==0.0) pianoRoll->setNoteLength(1*tord);
@@ -4407,7 +4407,7 @@ void PizLooperEditor::updateParametersFromFilter()
 		}
 		b->setButtonText(String(i+1));
 	}
-	getButtonForSlot(lastActiveLoop)->setToggleState(true,false);
+	getButtonForSlot(lastActiveLoop)->setToggleState(true,dontSendNotification);
 
     nameLabel->setText(filter->getProgramName(lastActiveLoop),dontSendNotification);
 
