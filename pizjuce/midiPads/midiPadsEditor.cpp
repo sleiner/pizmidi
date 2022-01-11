@@ -297,7 +297,10 @@ void midiPadsEditor::resized()
 	{
 		float xscale = (float)container->getWidth()/(float)getWidth();
 		float yscale = (float)container->getHeight()/(float)getHeight();
-		container->setBounds (Desktop::getInstance().getDisplays().findDisplayForPoint(container->getScreenPosition(),false).userArea);
+		auto* display = Desktop::getInstance().getDisplays().getDisplayForPoint(container->getScreenPosition(),false);
+		if (display != nullptr) {
+			container->setBounds (display->userArea);
+		}
 		for (int i=0;i<numPads;i++)
 		{
 			midiPad[i]->setBounds(roundToInt((float)midiPad[i]->getPosition().getX()*xscale),

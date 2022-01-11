@@ -124,7 +124,10 @@ void imagePluginEditor::resized()
 	}
 	else
 	{
-		container->setBounds (Desktop::getInstance().getDisplays().findDisplayForPoint(Point<int>(container->getScreenX(),container->getScreenY()),false).userArea);
+		auto* display = Desktop::getInstance().getDisplays().getDisplayForPoint(Point<int>(container->getScreenX(),container->getScreenY()),false);
+		if (display != nullptr) {
+			container->setBounds (display->userArea);
+		}
 		resizer->setVisible(false);
 	}
 
