@@ -4136,13 +4136,13 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		b_Monitor->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kSync:
-		syncmodeBox->setText(getFilter()->getCurrentSlotParameterText(kSync),true);
+		syncmodeBox->setText(getFilter()->getCurrentSlotParameterText(kSync),dontSendNotification);
 		break;
 	case kRecStep:
-		stepsizeBox->setText(getFilter()->getCurrentSlotParameterText(kRecStep),true);
+		stepsizeBox->setText(getFilter()->getCurrentSlotParameterText(kRecStep),dontSendNotification);
 		break;
 	case kQuantize:
-		quantizeBox->setText(getFilter()->getCurrentSlotParameterText(kQuantize),true);
+		quantizeBox->setText(getFilter()->getCurrentSlotParameterText(kQuantize),dontSendNotification);
 		break;
 	case kFixedLength:
 	    s_FixedLength->setVSTSlider(value);
@@ -4219,10 +4219,10 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 	    s_Stretch->setVSTSlider(value);
 		break;
 	case kTrigger:
-		loopmodeBox->setText(getFilter()->getCurrentSlotParameterText(kTrigger),true);
+		loopmodeBox->setText(getFilter()->getCurrentSlotParameterText(kTrigger),dontSendNotification);
 		break;
 	case kNoteTrig:
-		notetriggerBox->setText(getFilter()->getCurrentSlotParameterText(kNoteTrig),true);
+		notetriggerBox->setText(getFilter()->getCurrentSlotParameterText(kNoteTrig),dontSendNotification);
 		break;
 	case kRoot:
 		s_Root->setIndex(lastActiveLoop*numParamsPerSlot+kRoot);
@@ -4290,7 +4290,7 @@ void PizLooperEditor::updateControls(int param, float value, bool forCurProgram)
 		b_NoteToggle->setToggleState(value>=0.5f,dontSendNotification);
 		break;
 	case kForceToScaleMode:
-		forceModeBox->setText(getFilter()->getCurrentSlotParameterText(kForceToScaleMode),true);
+		forceModeBox->setText(getFilter()->getCurrentSlotParameterText(kForceToScaleMode),dontSendNotification);
 		break;
 	case kTranspose10:
 		b_Transpose10->setToggleState(value>=0.5f,dontSendNotification);
@@ -4355,11 +4355,11 @@ void PizLooperEditor::updateParametersFromFilter()
 		b_Snap->setToggleState(filter->getPRSetting("snap"),dontSendNotification);
 		pianoRoll->setSnap(b_Snap->getToggleState());
 		float q = filter->getPRSetting("stepsize");
-		if	   (q==0.0) quantizeBox2->setText("4th",true);
-		else if (q<0.3) quantizeBox2->setText("8th",true);
-		else if (q<0.6) quantizeBox2->setText("16th",true);
-		else if (q<0.9) quantizeBox2->setText("32nd",true);
-		else quantizeBox2->setText("64th",true);
+		if	   (q==0.0) quantizeBox2->setText("4th",dontSendNotification);
+		else if (q<0.3) quantizeBox2->setText("8th",dontSendNotification);
+		else if (q<0.6) quantizeBox2->setText("16th",dontSendNotification);
+		else if (q<0.9) quantizeBox2->setText("32nd",dontSendNotification);
+		else quantizeBox2->setText("64th",dontSendNotification);
 		b_Dotted->setToggleState(filter->getPRSetting("dotted"),dontSendNotification);
 		b_Triplet->setToggleState(filter->getPRSetting("triplet"),dontSendNotification);
 		float tord = (filter->getPRSetting("triplet")) ? 1.5f : 1.f;
