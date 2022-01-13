@@ -1670,10 +1670,6 @@ void midiPads::fillLayouts()
         xml->writeTo(file);
 #endif
     }
-#ifdef _DEBUG
-    //ScopedPointer<XmlElement> xml(layouts->createXml());
-    //xml->writeTo(File("C:\\midiPadsLayouts.xml"));
-#endif
 }
 
 void midiPads::loadDefaultPrograms()

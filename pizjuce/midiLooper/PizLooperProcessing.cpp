@@ -1,5 +1,7 @@
 #include "PizLooper.h"
 
+#include <vector>
+
 void PizLooper::prepareToPlay (double sampleRate, int samplesPerBlock) {
 	lastPosInfo.ppqPosition=0;
 	lastPosInfo.bpm = 0;
@@ -162,13 +164,9 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 	else receventoffset = - fmod (ppq, 0.5);
 
 	const int numevents = midiMessages.getNumEvents();
-	ScopedPointer<bool> played = new bool[numevents];
-	ScopedPointer<bool> usedForScale = new bool[numevents];
-	ScopedPointer<bool> usedForTranspose = new bool[numevents];
-
-	memset (played,0,sizeof(bool)*numevents);
-	memset (usedForScale,0,sizeof(bool)*numevents);
-	memset (usedForTranspose,0,sizeof(bool)*numevents);
+	std::vector<bool> played(numevents, false);
+	std::vector<bool> usedForScale(numevents, false);
+	std::vector<bool> usedForTranspose(numevents, false);
 
 	MidiBuffer kbBuffer;
 	kbstate.processNextMidiBuffer(kbBuffer,0,buffer.getNumSamples(),true);
