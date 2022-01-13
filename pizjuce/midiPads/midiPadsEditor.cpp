@@ -583,17 +583,16 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
 				sub3.clear();
 				icons.clear();
 				icons.addItem(99999,"Load...");
-				DirectoryIterator it(getFilter()->iconPath,true,"*");
 				Array<File> iconFiles;
 				int j=0;
-				while (it.next()) {
-					if (it.getFile().hasFileExtension("svg")
-						|| it.getFile().hasFileExtension("png")
-						|| it.getFile().hasFileExtension("jpg")
-						|| it.getFile().hasFileExtension("gif"))
+				for (auto &&entry : RangedDirectoryIterator(File(getFilter()->iconPath),true)) {
+					if (entry.getFile().hasFileExtension("svg")
+						|| entry.getFile().hasFileExtension("png")
+						|| entry.getFile().hasFileExtension("jpg")
+						|| entry.getFile().hasFileExtension("gif"))
 					{
-						iconFiles.add(it.getFile());
-						icons.addItem(100000+j,it.getFile().getRelativePathFrom(getFilter()->iconPath));
+						iconFiles.add(entry.getFile());
+						icons.addItem(100000+j,entry.getFile().getRelativePathFrom(getFilter()->iconPath));
 						++j;
 					}
 				}
