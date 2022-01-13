@@ -89,8 +89,6 @@ void MidiChordsPrograms::loadDefaults ()
 			}
 		}
 	}
-
-	//DBG(this->createXml()->createDocument(""));
 }
 
 //==============================================================================
