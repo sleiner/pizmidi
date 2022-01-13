@@ -189,7 +189,7 @@ float MidiCurve::getPointValue(int n, int y)
 
 float MidiCurve::findValue(float input)
 {
-	PathFlatteningIterator it(path,AffineTransform::identity,(float)midiScaler);
+	PathFlatteningIterator it(path,{},(float)midiScaler);
 	while (it.next()) {
 		if (it.x1==input) return 1.f-it.y1;
 		if (it.x2>=input) {

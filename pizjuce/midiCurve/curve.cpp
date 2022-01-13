@@ -227,7 +227,7 @@ float MidiCurve::getPointValue(int n, int y)
 
 float MidiCurve::findValue(float input)
 {
-	PathFlatteningIterator it(path,AffineTransform::identity,fmidiScaler);
+	PathFlatteningIterator it(path,{},fmidiScaler);
 	while (it.next()) {
 		if (it.x1==input) return 1.f-it.y1;
 		if (it.x2>=input) {
@@ -341,7 +341,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
 
 int MidiCurve::findPBValue(int input) {
 	float v = (float)input;
-	PathFlatteningIterator it(path,AffineTransform::identity,(float)0.0000610388);
+	PathFlatteningIterator it(path,{},(float)0.0000610388);
 	while (it.next()) {
 		if (it.x1==v) return roundToInt(16383.f * (1.f-it.y1));
 		if (it.x2>=v) {
