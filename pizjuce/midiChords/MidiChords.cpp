@@ -604,7 +604,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 								int velocity = v;
 								if (playingChord[tnote].size()>1) {
 									const float x = (float)(chordpos)/(float)(heldnotes-1);
-									delay = roundToInt((accel*0.3f*sin(float_Pi*x)+x)*maxdelay);
+									delay = roundToInt((accel*0.3f*sin(MathConstants<float>::pi*x)+x)*maxdelay);
 									velocity += roundToInt((2.f*fVelRamp-1.f)*(x*127.f-64.f));
 									velocity = jlimit(1,127,velocity);
 									//float veldelay = 1.f-(fVelToSpeed)*MIDI_TO_FLOAT(strumvel);
