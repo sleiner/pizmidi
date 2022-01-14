@@ -17,5 +17,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/midiPCGUIEditor.cpp")
 
 target_link_libraries(
-  piz_midiPCGUI PUBLIC juce::juce_audio_processors juce::juce_core
-                       juce::juce_events juce::juce_gui_basics)
+  piz_midiPCGUI PRIVATE juce::juce_audio_processors juce::juce_core
+                        juce::juce_events juce::juce_gui_basics)

@@ -25,17 +25,17 @@ class ModuleGUI : public ZoomableShiftableComponent {
 
 
   public:
-    void mouseDrag(const MouseEvent & e);
+    void mouseDrag(const MouseEvent & e) override;
 
-    void mouseUp(const MouseEvent & e);
+    void mouseUp(const MouseEvent & e) override;
 
-    void mouseDown(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
 
-    virtual void setOriginalBounds(const juce::Rectangle<int> bounds);
+    void setOriginalBounds(const juce::Rectangle<int> bounds) override;
 
-    virtual juce::Rectangle<int> getOriginalBounds();
+    juce::Rectangle<int> getOriginalBounds() override;
 
-    void paint(Graphics & g);
+    void paint(Graphics & g) override;
 
     void setPane(ModulePane * pane);
 

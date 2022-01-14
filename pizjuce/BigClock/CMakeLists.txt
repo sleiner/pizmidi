@@ -15,5 +15,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/BigClock.cpp")
 
 target_link_libraries(
-  piz_BigClock PUBLIC juce::juce_events juce::juce_gui_basics
-                      juce::juce_gui_extra)
+  piz_BigClock PRIVATE juce::juce_events juce::juce_gui_basics
+                       juce::juce_gui_extra)

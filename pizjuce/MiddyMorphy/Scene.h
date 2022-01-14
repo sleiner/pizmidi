@@ -23,14 +23,14 @@ class Scene : public Module,
 
     Scene(MidiMorph * core);
 
-     ~Scene();
+     ~Scene() override;
 
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-    void textEditorTextChanged(TextEditor&);
-    void textEditorReturnKeyPressed(TextEditor&);
-    void textEditorEscapeKeyPressed(TextEditor&);
-    void textEditorFocusLost(TextEditor&);
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void textEditorTextChanged(TextEditor&) override;
+    void textEditorReturnKeyPressed(TextEditor&) override;
+    void textEditorEscapeKeyPressed(TextEditor&) override;
+    void textEditorFocusLost(TextEditor&) override;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
   private:
     //stored for performance reason
@@ -64,7 +64,7 @@ class Scene : public Module,
 
     //gets called when the XYItem gets new coordinates
     //in this implementation refresh the distance value
-    virtual void moved();
+    void moved() override;
 
     juce::Colour getColour();
 
@@ -80,13 +80,13 @@ class Scene : public Module,
 
     void distanceFromCursorChanged();
 
-    void mouseDown(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
 
-    void mouseUp(const MouseEvent & e);
+    void mouseUp(const MouseEvent & e) override;
 
     void getMidiMessages(juce::MidiBuffer & buffer, int pos);
 
-    void mouseDrag(const MouseEvent & e);
+    void mouseDrag(const MouseEvent & e) override;
 
     int getId();
 

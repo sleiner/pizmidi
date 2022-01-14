@@ -321,10 +321,10 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
     MidiBuffer midiout;
     bool discard = param[kThru]<0.5f; // if midi thru is off, discard original message
     int outch = (int)(param[kChOut]*15.1f);
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0xfe);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+    for(auto&& msgMetadata : midiMessages) {
+        auto midi_message = msgMetadata.getMessage();
+        auto sample_number = msgMetadata.samplePosition;
+
         //program change
         if (midi_message.isProgramChange() ) {// && (midi_message.isForChannel(channel) || channel==0)) {
             if (midi_message.getProgramChangeNumber()<getNumPrograms())
@@ -498,7 +498,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
             buttondown[i]=false;
             if (UseX[i]) {
                 if (UseXPB[i]) {
-                    int value = jlimit(0,16383,roundFloatToInt( (param[i+xpos]*16383.0f)*(getParameter(kCCOffset)*2) ));
+                    int value = jlimit(0,16383,roundToInt( (param[i+xpos]*16383.0f)*(getParameter(kCCOffset)*2) ));
                     midiout.addEvent(MidiMessage(0xE0|outch,value & 0x007f,(value & 0x3f80)>>7,0),0);
                 }
                 else {
@@ -861,14 +861,14 @@ void midiPads::saveXmlPatch(int index, File file)
 {
     copySettingsToProgram(curProgram);
     auto xml(programs->values_.getChild(index).createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 void midiPads::saveXmlBank(File file)
 {
     copySettingsToProgram(curProgram);
     auto xml(programs->values_.createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 bool midiPads::loadXmlPatch(int index, File file)
@@ -940,7 +940,7 @@ bool midiPads::loadFxp(File file)
 void midiPads::saveXmlLayout(File file)
 {
     auto xml(programs->values_.getChild(curProgram).getChildWithName("Layout").createXml());
-    xml->writeToFile(file," ");
+    xml->writeTo(file);
 }
 
 void midiPads::loadXmlLayout(File file)
@@ -1667,13 +1667,9 @@ void midiPads::fillLayouts()
 #ifdef _DEBUG
         auto xml(layouts->values_.getChild(i).createXml());
         File file(layoutPath+File::getSeparatorString() + "default" + File::getSeparatorString() + layouts->values_.getChild(i).getProperty("name").toString()+".mpadl");
-        xml->writeToFile(file," ");
+        xml->writeTo(file);
 #endif
     }
-#ifdef _DEBUG
-    //ScopedPointer<XmlElement> xml(layouts->createXml());
-    //xml->writeToFile(File("C:\\midiPadsLayouts.xml")," ");
-#endif
 }
 
 void midiPads::loadDefaultPrograms()

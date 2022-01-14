@@ -14,17 +14,17 @@ class CursorGUI : public ModuleGUI, public juce::ChangeListener {
 
 
   public:
-    void paint(Graphics & g);
+    void paint(Graphics & g) override;
 
     CursorGUI(Cursor * cursor);
 
-    void mouseDown(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
 
-    void mouseDrag(const MouseEvent & e);
+    void mouseDrag(const MouseEvent & e) override;
 
-    void mouseUp(const MouseEvent & e);
+    void mouseUp(const MouseEvent & e) override;
 
-    virtual void changeListenerCallback(ChangeBroadcaster* source) override;
+    void changeListenerCallback(ChangeBroadcaster* source) override;
 
 
   private:
@@ -32,6 +32,6 @@ class CursorGUI : public ModuleGUI, public juce::ChangeListener {
 
 
   public:
-    ~CursorGUI();
+    ~CursorGUI() override;
 
 };

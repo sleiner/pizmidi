@@ -15,7 +15,7 @@ class ModulePane : public juce::LassoSource<ModuleGUI*>, public juce::ChangeList
   public:
     ModulePane(ModulePaneModel * modulePaneModel);
 
-    ~ModulePane();
+    ~ModulePane() override;
 
 
   private:
@@ -31,11 +31,11 @@ class ModulePane : public juce::LassoSource<ModuleGUI*>, public juce::ChangeList
 
     //drag the origin around
     //call the reArrangeChildren
-    void mouseDrag(const MouseEvent & e);
+    void mouseDrag(const MouseEvent & e) override;
 
-    void mouseDown(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
 
-    void mouseUp(const MouseEvent & e);
+    void mouseUp(const MouseEvent & e) override;
 
     void mouseWheelMove(const MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
 
@@ -43,27 +43,27 @@ class ModulePane : public juce::LassoSource<ModuleGUI*>, public juce::ChangeList
 
     bool isModuleSelected(const Module * module);
 
-    void paintOverChildren(Graphics & g);
+    void paintOverChildren(Graphics & g) override;
 
-juce_UseDebuggingNewOperator    void changeListenerCallback(ChangeBroadcaster* source);
+juce_UseDebuggingNewOperator    void changeListenerCallback(ChangeBroadcaster* source) override;
 
     //  getLassoSelection
-    SelectedItemSet<ModuleGUI*>& getLassoSelection();
+    SelectedItemSet<ModuleGUI*>& getLassoSelection() override;
 
     void findLassoItemsInArea(Array<ModuleGUI*>& itemsFound, const juce::Rectangle<int>& area) override;
 
     void selectModule(int index, bool deselectOthers);
 
     //perform ()=0
-    bool perform(const InvocationInfo& info);
+    bool perform(const InvocationInfo& info) override;
 
     //ApplicationCommandTarget *  getNextCommandTarget
-    ApplicationCommandTarget* getNextCommandTarget();
+    ApplicationCommandTarget* getNextCommandTarget() override;
 
     //void  getCommandInfo (const CommandID commandID, ApplicationCommandInfo &result)=
-    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result) override;
 
     //void  getAllCommands (Array< CommandID > &commands)=0
-    void getAllCommands(Array<CommandID>& commands);
+    void getAllCommands(Array<CommandID>& commands) override;
 
 };

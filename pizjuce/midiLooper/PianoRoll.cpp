@@ -312,7 +312,7 @@ void PianoRoll::resized ()
 
 void PianoRoll::sequenceChanged()
 {
-	//int extraLength = roundDoubleToInt(sequence->getEndTime() - pixelsToPpq((float)getWidth(),false));
+	//int extraLength = roundToInt(sequence->getEndTime() - pixelsToPpq((float)getWidth(),false));
 	//if (extraLength) setSize(getWidth()+extraLength,getHeight());
 	seqLengthInPpq = jmax(blankLength,sequence->getLength());
 	seqLength = (float)(seqLengthInPpq/stepLengthInPpq);

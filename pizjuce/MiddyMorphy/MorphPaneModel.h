@@ -25,16 +25,16 @@ class MorphPaneModel : public ModulePaneModel,
   public:
     MorphPaneModel(MidiMorph * core);
 
-    virtual int getNumModules();
+    int getNumModules() override;
 
-    void mouseDown(const MouseEvent & e);
-    void mouseUp(const MouseEvent & e);
-    void mouseDrag(const MouseEvent & e);
+    void mouseDown(const MouseEvent & e) override;
+    void mouseUp(const MouseEvent & e) override;
+    void mouseDrag(const MouseEvent & e) override;
 
-    virtual Module* getModule(int index);
-    virtual ModuleGUI* createGUI(int index);
+    Module* getModule(int index) override;
+    ModuleGUI* createGUI(int index) override;
 
-    void selectionChanged(const Array<ModuleGUI*> & modules);
+    void selectionChanged(const Array<ModuleGUI*> & modules) override;
 
-    void labelTextChanged(Label * labelThatHasChanged);
+    void labelTextChanged(Label * labelThatHasChanged) override;
 };

@@ -18,5 +18,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/imagePlugin.cpp")
 
 target_link_libraries(
-  piz_Image PUBLIC juce::juce_audio_processors juce::juce_gui_basics
-                   juce::juce_gui_extra)
+  piz_Image PRIVATE juce::juce_audio_processors juce::juce_gui_basics
+                    juce::juce_gui_extra)

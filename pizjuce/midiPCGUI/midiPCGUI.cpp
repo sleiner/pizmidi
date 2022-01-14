@@ -299,14 +299,12 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
     }
 
 	int listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
-
-	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
 	MidiBuffer output;
-    MidiMessage midi_message(0xf8e);
-    int sample_number;
 
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number))
+	for(auto&& msgMetadata : midiMessages)
 	{
+		auto midi_message = msgMetadata.getMessage();
+
 		bool discard = !thru;
 		const uint8* midiData = midi_message.getRawData();
 		unsigned char status     = midiData[0] & 0xf0;   // scraping  channel
@@ -339,7 +337,7 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
 				}
 			}
     	} // if listenchannel==channel
-		if (!discard) output.addEvent(midi_message,sample_number);
+		if (!discard) output.addEvent(midi_message,msgMetadata.samplePosition);
      } //for() inputs loop
 
 	if (triggerbank) {
@@ -491,7 +489,7 @@ void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInB
             }
 			XmlElement* n = xmlState->getChildByName("names");
 			if (n) {
-				forEachXmlChildElement (*n, e) {
+				for (auto *e : xmlState->getChildIterator()) {
 					progNames.setNameFor(e->getIntAttribute("c"),
 										 e->getIntAttribute("b"),
 										 e->getIntAttribute("p"),
@@ -522,7 +520,7 @@ void midiPCGUI::setStateInformation (const void* data, int sizeInBytes) {
             }
 			XmlElement* n = xmlState->getChildByName("names");
 			if (n) {
-				forEachXmlChildElement (*n, e) {
+				for (auto *e : xmlState->getChildIterator()) {
 					progNames.setNameFor(e->getIntAttribute("c"),
 										 e->getIntAttribute("b"),
 										 e->getIntAttribute("p"),

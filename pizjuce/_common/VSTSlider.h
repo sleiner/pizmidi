@@ -11,8 +11,8 @@ class VSTSlider : public Slider
 {
 public:
     VSTSlider(String name);
-    ~VSTSlider();
-    String getTextFromValue (double value);
+    ~VSTSlider() override;
+    String getTextFromValue (double value) override;
     void setOwner(AudioProcessor*, int);
     float mapToVSTRange();
     void setVSTSlider(float x);

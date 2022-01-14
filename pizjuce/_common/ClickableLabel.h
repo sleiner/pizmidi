@@ -70,35 +70,35 @@ private:
 	int id;
 	ClickableLabelListener *listener;
 
-	void mouseDown(const MouseEvent &e)
+	void mouseDown(const MouseEvent &e) override
 	{
 		if (listener!=0)
 			listener->clickableLabelMouseDown(this, e);
 	}
 
-	void mouseDoubleClick(const MouseEvent &e)
+	void mouseDoubleClick(const MouseEvent &e) override
 	{
 		if (listener!=0)
 			listener->clickableLabelMouseDoubleClick(this, e);
 	}
 
-	void  textEditorTextChanged (TextEditor &editor)
+	void  textEditorTextChanged (TextEditor &editor) override
 	{
 
 	}
 
-	void  textEditorReturnKeyPressed (TextEditor &editor)
+	void  textEditorReturnKeyPressed (TextEditor &editor) override
 	{
 		editor.exitModalState(0);
 	}
 
-	void  textEditorEscapeKeyPressed (TextEditor &editor)
+	void  textEditorEscapeKeyPressed (TextEditor &editor) override
 	{
 		editor.setText(getText());
 		editor.exitModalState(0);
 	}
 
-	void  textEditorFocusLost (TextEditor &editor)
+	void  textEditorFocusLost (TextEditor &editor) override
 	{
 		editor.exitModalState(0);
 	}

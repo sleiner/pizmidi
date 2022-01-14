@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:45:59am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_CURVEEDITOR_CURVEGUI_2037A6EC__
-#define __JUCER_HEADER_CURVEEDITOR_CURVEGUI_2037A6EC__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -32,7 +29,7 @@
 #include "MidiEnvelope.h"
 //[/Headers]
 
-using namespace juce;
+
 
 //==============================================================================
 /**
@@ -42,62 +39,58 @@ using namespace juce;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class CurveEditor  : public AudioProcessorEditor,
-                     public ChangeListener,
-                     public Slider::Listener,
-                     public Button::Listener
+class CurveEditor  : public juce::AudioProcessorEditor,
+                     public juce::ChangeListener,
+                     public juce::Slider::Listener,
+                     public juce::Button::Listener
 {
 public:
     //==============================================================================
     CurveEditor (MidiCurve* const ownerFilter);
-    ~CurveEditor();
+    ~CurveEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-    void buttonClicked (Button* buttonThatWasClicked);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-	void changeListenerCallback (ChangeBroadcaster* source);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
 	void updateParameters();
     ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]
 
     //==============================================================================
-    MidiEnvelope* curve;
-    Label* label;
-    Label* label2;
-    ResizableCornerComponent* resizer;
-    ChannelSlider* channelSlider;
-    Label* label3;
-    TextButton* resetButton;
-    TextButton* helpButton;
-    Label* instructionsLabel;
-    Label* label4;
-    Slider* rangeSlider;
-    Label* label5;
-    Label* label6;
-    Label* label7;
-    Slider* rangeSlider2;
-    Label* label8;
+    std::unique_ptr<MidiEnvelope> curve;
+    std::unique_ptr<juce::Label> label;
+    std::unique_ptr<juce::Label> label2;
+    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<ChannelSlider> channelSlider;
+    std::unique_ptr<juce::Label> label3;
+    std::unique_ptr<juce::TextButton> resetButton;
+    std::unique_ptr<juce::TextButton> helpButton;
+    std::unique_ptr<juce::Label> instructionsLabel;
+    std::unique_ptr<juce::Label> label4;
+    std::unique_ptr<juce::Slider> rangeSlider;
+    std::unique_ptr<juce::Label> label5;
+    std::unique_ptr<juce::Label> label6;
+    std::unique_ptr<juce::Label> label7;
+    std::unique_ptr<juce::Slider> rangeSlider2;
+    std::unique_ptr<juce::Label> label8;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    CurveEditor (const CurveEditor&);
-    const CurveEditor& operator= (const CurveEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CurveEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_CURVEEDITOR_CURVEGUI_2037A6EC__

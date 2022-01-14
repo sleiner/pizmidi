@@ -1,76 +1,75 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  18 May 2013 11:24:04am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDICHORDSEDITOR_MIDICHORDSEDITOR_EF9903BE__
-#define __JUCER_HEADER_MIDICHORDSEDITOR_MIDICHORDSEDITOR_EF9903BE__
-
-#include "juce_audio_utils/juce_audio_utils.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "MidiChords.h"
+#include "juce_audio_utils/juce_audio_utils.h"
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "../_common/ChannelSlider.h"
 #include "../_common/NoteSlider.h"
 #include "../_common/VSTSlider.h"
-#include "../_common/GuitarNeckComponent.h"
 
-class FretsSlider : public Slider
+#include "GuitarNeckComponent.h"
+#include "MidiChords.h"
+
+class FretsSlider : public juce::Slider
 {
 public:
-	FretsSlider(String name) : Slider(name)	{};
-	~FretsSlider() {};
+	FretsSlider(String name) : juce::Slider(name)	{};
+	~FretsSlider() override {};
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		const int n = roundToInt(value);
 		return "Frets: "+String(n);
 	}
 };
 
-class StringsSlider : public Slider
+class StringsSlider : public juce::Slider
 {
 public:
-	StringsSlider(String name) : Slider(name)	{};
-	~StringsSlider() {};
+	StringsSlider(String name) : juce::Slider(name)	{};
+	~StringsSlider() override {};
 
-	String getTextFromValue(double value)
+	String getTextFromValue(double value) override
 	{
 		const int n = roundToInt(value);
 		return "Strings: "+String(n);
 	}
 };
 
-class ChordPresetFileFilter : public FileFilter
+class ChordPresetFileFilter : public juce::FileFilter
 {
 public:
 	ChordPresetFileFilter()
-		: FileFilter("midiChords presets") {}
-	~ChordPresetFileFilter() {}
-	virtual bool isFileSuitable (const File &file) const
+		: juce::FileFilter("midiChords presets") {}
+	~ChordPresetFileFilter() override {}
+	bool isFileSuitable (const File &file) const override
 	{
 		return (file.hasFileExtension("chords")
 			|| file.hasFileExtension("fxp")
 			|| file.hasFileExtension("xml"));
 	}
-	virtual bool isDirectorySuitable (const File &file) const
+	bool isDirectorySuitable (const File &file) const override
 	{
 		return true;
 	}
@@ -93,7 +92,7 @@ private:
 	FrettedNote lastDraggedNote;
 	bool erasing;
 
-	void mouseDraggedToKey(int fret, int string, const MouseEvent& e)
+	void mouseDraggedToKey(int fret, int string, const MouseEvent& e) override
 	{
 		FrettedNote n(fret,string);
 		if (n!=lastDraggedNote)
@@ -113,7 +112,7 @@ private:
 		lastDraggedNote = n;
 	}
 
-	bool mouseDownOnKey(int fret, int string, const MouseEvent &e) {
+	bool mouseDownOnKey(int fret, int string, const MouseEvent &e) override {
 		FrettedNote n(fret,string);
 		int midiNoteNumber = getNote(n);
 		int oldNoteOnString = getNote(FrettedNote(getStringFret(string),string));
@@ -132,11 +131,11 @@ private:
 	}
 };
 
-class ChordsKeyboardComponent : public MidiKeyboardComponent
+class ChordsKeyboardComponent : public juce::MidiKeyboardComponent
 {
 public:
 	ChordsKeyboardComponent(MidiKeyboardState &state, MidiChords* ownerFilter)
-		: MidiKeyboardComponent(state,MidiKeyboardComponent::horizontalKeyboard),
+		: juce::MidiKeyboardComponent(state,MidiKeyboardComponent::horizontalKeyboard),
 		owner(nullptr)
 	{
 		owner = ownerFilter;
@@ -241,7 +240,7 @@ protected:
 	MidiChords* owner;
     MidiKeyboardState* s;
 
-	virtual bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
+	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override
 	{
 		if (e.mods.isPopupMenu())
 		{
@@ -431,7 +430,7 @@ private:
 	MidiChords* owner;
 	bool bypassing;
 
-	virtual bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e)
+	bool mouseDownOnKey(int midiNoteNumber, const MouseEvent &e) override
 	{
 		if (e.mods.isShiftDown() || e.mods.isPopupMenu())
 		{
@@ -487,54 +486,51 @@ private:
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MidiChordsEditor  : public AudioProcessorEditor,
-                          public ChangeListener,
-                          public TextEditor::Listener,
-                          public FileDragAndDropTarget,
-                          public FileBrowserListener,
-                          public Button::Listener,
-                          public Slider::Listener,
-                          public Label::Listener
+class MidiChordsEditor  : public juce::AudioProcessorEditor,
+                          public juce::ChangeListener,
+                          public juce::TextEditor::Listener,
+                          public juce::FileDragAndDropTarget,
+                          public juce::FileBrowserListener,
+                          public juce::Button::Listener,
+                          public juce::Slider::Listener,
+                          public juce::Label::Listener
 {
 public:
     //==============================================================================
     MidiChordsEditor (MidiChords* const ownerFilter);
-    ~MidiChordsEditor();
+    ~MidiChordsEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 	friend class ChordsKeyboardComponent;
 	friend class TriggerKeySelectorKeyboard;
 	static void chordMenuCallback (int result, MidiChordsEditor* editor);
-    void textEditorTextChanged(TextEditor&);
-    void textEditorReturnKeyPressed(TextEditor&);
-    void textEditorEscapeKeyPressed(TextEditor&);
-    void textEditorFocusLost(TextEditor&);
-	void changeListenerCallback (ChangeBroadcaster* source);
-    bool isInterestedInFileDrag (const StringArray& files);
-    void filesDropped (const StringArray& filenames, int mouseX, int mouseY);
-    void mouseDown (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
-	virtual void selectionChanged() {};
-	virtual void fileClicked(const juce::File &file,const juce::MouseEvent &);
-	virtual void fileDoubleClicked (const File &file);
-	virtual void browserRootChanged (const File& newRoot);
+    void textEditorTextChanged(TextEditor&) override;
+    void textEditorReturnKeyPressed(TextEditor&) override;
+    void textEditorEscapeKeyPressed(TextEditor&) override;
+    void textEditorFocusLost(TextEditor&) override;
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
+    void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDoubleClick (const MouseEvent& e) override;
+	void mouseUp (const MouseEvent& e) override;
+	void selectionChanged() override {};
+	void fileClicked(const juce::File &file,const juce::MouseEvent &) override;
+	void fileDoubleClicked (const File &file) override;
+	void browserRootChanged (const File& newRoot) override;
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-    void labelTextChanged (Label* labelThatHasChanged);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void labelTextChanged (juce::Label* labelThatHasChanged) override;
 
     // Binary resources:
     static const char* midichordsLogo_png;
     static const int midichordsLogo_pngSize;
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -596,75 +592,73 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ToggleButton* toggleButton;
-    Label* chordNameLabel;
-    ChordsKeyboardComponent* chordKeyboard;
-    TriggerKeySelectorKeyboard* triggerKeyboard;
-    TextButton* chordLearnButton;
-    TextButton* triggerLearnButton;
-    ChannelSlider* channelSlider;
-    Label* outputLabel;
-    PizButton* pizButton;
-    Label* triggerLabel;
-    TextButton* clearChordButton;
-    TextButton* resetChordButton;
-    TextButton* clearAllButton;
-    TextButton* resetAllButton;
-    TextButton* transposeUpButton;
-    TextButton* transposeDownButton;
-    TextButton* transposeChordUpButton;
-    TextButton* transposeChordDownButton;
-    Slider* transposeSlider;
-    Slider* velocitySlider;
-    Slider* variationSlider;
-    TextButton* normalButton;
-    TextButton* octaveButton;
-    TextButton* globalButton;
-    ToggleButton* flatsButton;
-    TextButton* transposeChordUpButton2;
-    TextButton* transposeChordDownButton2;
-    TextButton* chordMenuButton;
-    Label* presetNameLabel;
-    TextButton* presetMenuButton;
-    TextEditor* chordSaveEditor;
-    TextButton* copyButton;
-    TextButton* pasteButton;
-    TextButton* previewButton;
-    Label* chordEditor;
-    ToggleButton* pcButton;
-    TextButton* nextButton;
-    TextButton* prevButton;
-    Label* triggerNoteLabel;
-    ChannelSlider* learnChanSlider;
-    Label* demoLabel;
-    ChordsGuitar* guitar;
-    Label* versionLabel;
-    ToggleButton* transposeInputButton;
-    ToggleButton* toAllChannelsButton;
-    TextButton* infoButton;
-    TextButton* specialMenuButton;
-    ChannelSlider* outputChannelSlider;
-    TextButton* applyChannelButton;
-    Label* label;
-    Label* label2;
-    TextButton* viewButton;
-    TextButton* setupButton;
-    TextButton* strumDirectionButton;
-    TextButton* strumButton;
-    VSTSlider* maxTimeSlider;
-    VSTSlider* speedSlider;
-    VSTSlider* accelSlider;
-    VSTSlider* velRampSlider;
-    TextEditor* infoBox;
-    TextEditor* tuningSaveEditor;
-    Image cachedImage_midichordsLogo_png;
+    std::unique_ptr<juce::ToggleButton> toggleButton;
+    std::unique_ptr<juce::Label> chordNameLabel;
+    std::unique_ptr<ChordsKeyboardComponent> chordKeyboard;
+    std::unique_ptr<TriggerKeySelectorKeyboard> triggerKeyboard;
+    std::unique_ptr<juce::TextButton> chordLearnButton;
+    std::unique_ptr<juce::TextButton> triggerLearnButton;
+    std::unique_ptr<ChannelSlider> channelSlider;
+    std::unique_ptr<juce::Label> outputLabel;
+    std::unique_ptr<PizButton> pizButton;
+    std::unique_ptr<juce::Label> triggerLabel;
+    std::unique_ptr<juce::TextButton> clearChordButton;
+    std::unique_ptr<juce::TextButton> resetChordButton;
+    std::unique_ptr<juce::TextButton> clearAllButton;
+    std::unique_ptr<juce::TextButton> resetAllButton;
+    std::unique_ptr<juce::TextButton> transposeUpButton;
+    std::unique_ptr<juce::TextButton> transposeDownButton;
+    std::unique_ptr<juce::TextButton> transposeChordUpButton;
+    std::unique_ptr<juce::TextButton> transposeChordDownButton;
+    std::unique_ptr<juce::Slider> transposeSlider;
+    std::unique_ptr<juce::Slider> velocitySlider;
+    std::unique_ptr<juce::Slider> variationSlider;
+    std::unique_ptr<juce::TextButton> normalButton;
+    std::unique_ptr<juce::TextButton> octaveButton;
+    std::unique_ptr<juce::TextButton> globalButton;
+    std::unique_ptr<juce::ToggleButton> flatsButton;
+    std::unique_ptr<juce::TextButton> transposeChordUpButton2;
+    std::unique_ptr<juce::TextButton> transposeChordDownButton2;
+    std::unique_ptr<juce::TextButton> chordMenuButton;
+    std::unique_ptr<juce::Label> presetNameLabel;
+    std::unique_ptr<juce::TextButton> presetMenuButton;
+    std::unique_ptr<juce::TextEditor> chordSaveEditor;
+    std::unique_ptr<juce::TextButton> copyButton;
+    std::unique_ptr<juce::TextButton> pasteButton;
+    std::unique_ptr<juce::TextButton> previewButton;
+    std::unique_ptr<juce::Label> chordEditor;
+    std::unique_ptr<juce::ToggleButton> pcButton;
+    std::unique_ptr<juce::TextButton> nextButton;
+    std::unique_ptr<juce::TextButton> prevButton;
+    std::unique_ptr<juce::Label> triggerNoteLabel;
+    std::unique_ptr<ChannelSlider> learnChanSlider;
+    std::unique_ptr<juce::Label> demoLabel;
+    std::unique_ptr<ChordsGuitar> guitar;
+    std::unique_ptr<juce::Label> versionLabel;
+    std::unique_ptr<juce::ToggleButton> transposeInputButton;
+    std::unique_ptr<juce::ToggleButton> toAllChannelsButton;
+    std::unique_ptr<juce::TextButton> infoButton;
+    std::unique_ptr<juce::TextButton> specialMenuButton;
+    std::unique_ptr<ChannelSlider> outputChannelSlider;
+    std::unique_ptr<juce::TextButton> applyChannelButton;
+    std::unique_ptr<juce::Label> label;
+    std::unique_ptr<juce::Label> label2;
+    std::unique_ptr<juce::TextButton> viewButton;
+    std::unique_ptr<juce::TextButton> setupButton;
+    std::unique_ptr<juce::TextButton> strumDirectionButton;
+    std::unique_ptr<juce::TextButton> strumButton;
+    std::unique_ptr<VSTSlider> maxTimeSlider;
+    std::unique_ptr<VSTSlider> speedSlider;
+    std::unique_ptr<VSTSlider> accelSlider;
+    std::unique_ptr<VSTSlider> velRampSlider;
+    std::unique_ptr<juce::TextEditor> infoBox;
+    std::unique_ptr<juce::TextEditor> tuningSaveEditor;
+    juce::Image cachedImage_midichordsLogo_png_1;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    MidiChordsEditor (const MidiChordsEditor&);
-    const MidiChordsEditor& operator= (const MidiChordsEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiChordsEditor)
 };
 
-
-#endif   // __JUCER_HEADER_MIDICHORDSEDITOR_MIDICHORDSEDITOR_EF9903BE__
+//[EndFile] You can add extra defines here...
+//[/EndFile]

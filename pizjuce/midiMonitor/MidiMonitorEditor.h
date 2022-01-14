@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  28 Sep 2011 11:07:39am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDIMONITOREDITOR_MIDIMONITOREDITOR_B4642E5D__
-#define __JUCER_HEADER_MIDIMONITOREDITOR_MIDIMONITOREDITOR_B4642E5D__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -30,7 +27,7 @@
 #include "MidiMonitor.h"
 //[/Headers]
 
-using namespace juce;
+
 
 //==============================================================================
 /**
@@ -40,33 +37,30 @@ using namespace juce;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MidiMonitorEditor  : public AudioProcessorEditor,
-                           public ChangeListener,
-                           public Timer,
-                           public Button::Listener,
-                           public Slider::Listener
+class MidiMonitorEditor  : public juce::AudioProcessorEditor,
+                           public juce::ChangeListener,
+                           public juce::Timer,
+                           public juce::Button::Listener,
+                           public juce::Slider::Listener
 {
 public:
     //==============================================================================
     MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter);
-    ~MidiMonitorEditor();
+    ~MidiMonitorEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-	void mouseDown(const MouseEvent &e);
-    void timerCallback ();
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+	void mouseDown(const MouseEvent &e) override;
+    void timerCallback () override;
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -90,28 +84,27 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    TextButton* clearButton;
-    ToggleButton* powerButton;
-    ToggleButton* thruButton;
-    ToggleButton* bytesButton;
-    Slider* hueSlider;
-    Slider* saturationSlider;
-    Slider* lightnessSlider;
-    ResizableCornerComponent* resizer;
-    TextButton* saveButton;
-    TextButton* menuButton;
-    TextEditor* midiOutputEditor;
-    ToggleButton* wrapButton;
-    ToggleButton* timeButton;
-    TextButton* colorButton;
-    TextEditor* aboutBox;
+    std::unique_ptr<juce::TextButton> clearButton;
+    std::unique_ptr<juce::ToggleButton> powerButton;
+    std::unique_ptr<juce::ToggleButton> thruButton;
+    std::unique_ptr<juce::ToggleButton> bytesButton;
+    std::unique_ptr<juce::Slider> hueSlider;
+    std::unique_ptr<juce::Slider> saturationSlider;
+    std::unique_ptr<juce::Slider> lightnessSlider;
+    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::TextButton> saveButton;
+    std::unique_ptr<juce::TextButton> menuButton;
+    std::unique_ptr<juce::TextEditor> midiOutputEditor;
+    std::unique_ptr<juce::ToggleButton> wrapButton;
+    std::unique_ptr<juce::ToggleButton> timeButton;
+    std::unique_ptr<juce::TextButton> colorButton;
+    std::unique_ptr<juce::TextEditor> aboutBox;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    MidiMonitorEditor (const MidiMonitorEditor&);
-    const MidiMonitorEditor& operator= (const MidiMonitorEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiMonitorEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_MIDIMONITOREDITOR_MIDIMONITOREDITOR_B4642E5D__

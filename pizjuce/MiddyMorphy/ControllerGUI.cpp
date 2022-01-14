@@ -224,16 +224,16 @@ void ControllerGUI::labelTextChanged(Label * labelThatHasChanged) {
   // Bouml preserved body begin 00048A0D
 	if(labelThatHasChanged == value)
 	{
-		controller->setValue(roundDoubleToInt (value->getValue()));
+		controller->setValue(roundToInt (value->getValue()));
 		repaint();
 	}
 	else if(labelThatHasChanged == ccNo)
 	{
-		controller->ccNo = roundDoubleToInt (ccNo->getValue());
+		controller->ccNo = roundToInt (ccNo->getValue());
 	}
 	else if(labelThatHasChanged == channel)
 	{
-		controller->channel = roundDoubleToInt (channel->getValue());
+		controller->channel = roundToInt (channel->getValue());
 	}
 	//else if(labelThatHasChanged = test)
 	//{

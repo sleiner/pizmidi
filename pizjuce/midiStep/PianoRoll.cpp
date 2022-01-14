@@ -28,7 +28,7 @@ void PianoRoll::setSequence(Loop *sequence_)
 
 int PianoRoll::getTimeInPixels ()
 {
-	return roundFloatToInt((float)sequence->getCurrentTime()*(float)getWidth()/seqLengthInPpq);
+	return roundToInt((float)sequence->getCurrentTime()*(float)getWidth()/seqLengthInPpq);
 }
 
 void PianoRoll::mouseDown (const MouseEvent& e)
@@ -214,7 +214,7 @@ void PianoRoll::resized ()
 
 void PianoRoll::sequenceChanged()
 {
-	//int extraLength = roundDoubleToInt(sequence->getEndTime() - pixelsToPpq((float)getWidth(),false));
+	//int extraLength = roundToInt(sequence->getEndTime() - pixelsToPpq((float)getWidth(),false));
 	//if (extraLength) setSize(getWidth()+extraLength,getHeight());
 	seqLengthInPpq = (float)jmax(blankLength,sequence->getEndTime());
 	seqLength = seqLengthInPpq/(float)stepLengthInPpq;

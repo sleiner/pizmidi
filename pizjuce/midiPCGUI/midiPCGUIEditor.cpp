@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:46:40am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -34,351 +32,256 @@ inline int combineBytes(int lsb, int msb)
 
 //==============================================================================
 midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      groupComponent2 (0),
-      groupComponent (0),
-      s_Program (0),
-      s_BankMSB (0),
-      s_BankLSB (0),
-      b_BankTrig (0),
-      b_PCTrig (0),
-      b_Inc (0),
-      b_Dec (0),
-      b_PCListen (0),
-      s_Channel (0),
-      b_Mode (0),
-      PCDisplay (0),
-      label (0),
-      label2 (0),
-      label3 (0),
-      label4 (0),
-      label5 (0),
-      b_Thru (0),
-      PCDisplay2 (0),
-      PCDisplay3 (0),
-      label6 (0),
-      ProgramName (0),
-      minimize (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (groupComponent2 = new GroupComponent ("new group",
-                                                             "Program"));
-    groupComponent2->setTextLabelPosition (Justification::centred);
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
 
-    addAndMakeVisible (groupComponent = new GroupComponent ("new group",
-                                                            "Bank"));
-    groupComponent->setTextLabelPosition (Justification::centred);
+    groupComponent2.reset (new juce::GroupComponent ("new group",
+                                                     TRANS("Program")));
+    addAndMakeVisible (groupComponent2.get());
+    groupComponent2->setTextLabelPosition (juce::Justification::centred);
 
-    addAndMakeVisible (s_Program = new VSTSlider ("Program"));
-    s_Program->setTooltip ("Next Program Change to send");
+    groupComponent2->setBounds (5, 7, 158, 225);
+
+    groupComponent.reset (new juce::GroupComponent ("new group",
+                                                    TRANS("Bank")));
+    addAndMakeVisible (groupComponent.get());
+    groupComponent->setTextLabelPosition (juce::Justification::centred);
+
+    groupComponent->setBounds (167, 45, 133, 166);
+
+    s_Program.reset (new VSTSlider ("Program"));
+    addAndMakeVisible (s_Program.get());
+    s_Program->setTooltip (TRANS("Next Program Change to send"));
     s_Program->setRange (0, 128, 1);
-    s_Program->setSliderStyle (Slider::LinearHorizontal);
-    s_Program->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
+    s_Program->setSliderStyle (juce::Slider::LinearHorizontal);
+    s_Program->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
     s_Program->addListener (this);
 
-    addAndMakeVisible (s_BankMSB = new VSTSlider ("Bank MSB"));
-    s_BankMSB->setTooltip ("Next Bank Select to send");
+    s_Program->setBounds (18, 171, 133, 24);
+
+    s_BankMSB.reset (new VSTSlider ("Bank MSB"));
+    addAndMakeVisible (s_BankMSB.get());
+    s_BankMSB->setTooltip (TRANS("Next Bank Select to send"));
     s_BankMSB->setRange (0, 128, 1);
-    s_BankMSB->setSliderStyle (Slider::LinearHorizontal);
-    s_BankMSB->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
+    s_BankMSB->setSliderStyle (juce::Slider::LinearHorizontal);
+    s_BankMSB->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
     s_BankMSB->addListener (this);
 
-    addAndMakeVisible (s_BankLSB = new VSTSlider ("Bank LSB"));
-    s_BankLSB->setTooltip ("Next Bank LSB to send");
+    s_BankMSB->setBounds (202, 120, 94, 24);
+
+    s_BankLSB.reset (new VSTSlider ("Bank LSB"));
+    addAndMakeVisible (s_BankLSB.get());
+    s_BankLSB->setTooltip (TRANS("Next Bank LSB to send"));
     s_BankLSB->setRange (0, 128, 1);
-    s_BankLSB->setSliderStyle (Slider::LinearHorizontal);
-    s_BankLSB->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
+    s_BankLSB->setSliderStyle (juce::Slider::LinearHorizontal);
+    s_BankLSB->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
     s_BankLSB->addListener (this);
 
-    addAndMakeVisible (b_BankTrig = new TextButton ("Bank Trig"));
-    b_BankTrig->setTooltip ("Send selected Bank Select message(s)");
-    b_BankTrig->setButtonText ("Trigger Bank");
+    s_BankLSB->setBounds (202, 143, 94, 24);
+
+    b_BankTrig.reset (new juce::TextButton ("Bank Trig"));
+    addAndMakeVisible (b_BankTrig.get());
+    b_BankTrig->setTooltip (TRANS("Send selected Bank Select message(s)"));
+    b_BankTrig->setButtonText (TRANS("Trigger Bank"));
     b_BankTrig->addListener (this);
-    b_BankTrig->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_BankTrig->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_PCTrig = new TextButton ("PC Trig"));
-    b_PCTrig->setTooltip ("Send selected Program Change message");
-    b_PCTrig->setButtonText ("Trigger Program");
+    b_BankTrig->setBounds (179, 177, 109, 24);
+
+    b_PCTrig.reset (new juce::TextButton ("PC Trig"));
+    addAndMakeVisible (b_PCTrig.get());
+    b_PCTrig->setTooltip (TRANS("Send selected Program Change message"));
+    b_PCTrig->setButtonText (TRANS("Trigger Program"));
     b_PCTrig->addListener (this);
-    b_PCTrig->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
+    b_PCTrig->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
 
-    addAndMakeVisible (b_Inc = new TextButton ("Inc"));
-    b_Inc->setButtonText ("+");
-    b_Inc->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnTop);
+    b_PCTrig->setBounds (20, 198, 129, 24);
+
+    b_Inc.reset (new juce::TextButton ("Inc"));
+    addAndMakeVisible (b_Inc.get());
+    b_Inc->setButtonText (TRANS("+"));
+    b_Inc->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
     b_Inc->addListener (this);
-    b_Inc->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
-    b_Inc->setColour (TextButton::textColourOnId, Colours::black);
+    b_Inc->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+    b_Inc->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
 
-    addAndMakeVisible (b_Dec = new TextButton ("Dec"));
-    b_Dec->setButtonText ("-");
-    b_Dec->setConnectedEdges (Button::ConnectedOnRight | Button::ConnectedOnTop);
+    b_Inc->setBounds (84, 135, 40, 24);
+
+    b_Dec.reset (new juce::TextButton ("Dec"));
+    addAndMakeVisible (b_Dec.get());
+    b_Dec->setButtonText (TRANS("-"));
+    b_Dec->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
     b_Dec->addListener (this);
-    b_Dec->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
-    b_Dec->setColour (TextButton::textColourOnId, Colours::black);
+    b_Dec->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+    b_Dec->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
 
-    addAndMakeVisible (b_PCListen = new ToggleButton ("PC Listen"));
-    b_PCListen->setTooltip ("Use incoming Program Changes to select VST programs");
+    b_Dec->setBounds (44, 135, 40, 24);
+
+    b_PCListen.reset (new juce::ToggleButton ("PC Listen"));
+    addAndMakeVisible (b_PCListen.get());
+    b_PCListen->setTooltip (TRANS("Use incoming Program Changes to select VST programs"));
     b_PCListen->addListener (this);
 
-    addAndMakeVisible (s_Channel = new VSTSlider ("Channel"));
-    s_Channel->setTooltip ("Input/Output MIDI Channel");
+    b_PCListen->setBounds (117, 253, 81, 24);
+
+    s_Channel.reset (new VSTSlider ("Channel"));
+    addAndMakeVisible (s_Channel.get());
+    s_Channel->setTooltip (TRANS("Input/Output MIDI Channel"));
     s_Channel->setRange (1, 16, 1);
-    s_Channel->setSliderStyle (Slider::LinearHorizontal);
-    s_Channel->setTextBoxStyle (Slider::TextBoxLeft, false, 28, 20);
+    s_Channel->setSliderStyle (juce::Slider::LinearHorizontal);
+    s_Channel->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
     s_Channel->addListener (this);
 
-    addAndMakeVisible (b_Mode = new TextButton ("Mode"));
-    b_Mode->setTooltip ("Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved");
-    b_Mode->setButtonText ("Triggered");
-    b_Mode->addListener (this);
-    b_Mode->setColour (TextButton::buttonColourId, Colour (0xffbbbbff));
-    b_Mode->setColour (TextButton::buttonOnColourId, Colours::coral);
+    s_Channel->setBounds (190, 227, 94, 24);
 
-    addAndMakeVisible (PCDisplay = new Label ("PCDisplay",
-                                              "128"));
-    PCDisplay->setTooltip ("Last Program Change sent");
-    PCDisplay->setFont (Font (63.3000f, Font::bold));
-    PCDisplay->setJustificationType (Justification::centred);
+    b_Mode.reset (new juce::TextButton ("Mode"));
+    addAndMakeVisible (b_Mode.get());
+    b_Mode->setTooltip (TRANS("Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved"));
+    b_Mode->setButtonText (TRANS("Triggered"));
+    b_Mode->addListener (this);
+    b_Mode->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+    b_Mode->setColour (juce::TextButton::buttonOnColourId, juce::Colours::coral);
+
+    b_Mode->setBounds (23, 249, 78, 24);
+
+    PCDisplay.reset (new juce::Label ("PCDisplay",
+                                      TRANS("128")));
+    addAndMakeVisible (PCDisplay.get());
+    PCDisplay->setTooltip (TRANS("Last Program Change sent"));
+    PCDisplay->setFont (juce::Font (63.30f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    PCDisplay->setJustificationType (juce::Justification::centred);
     PCDisplay->setEditable (false, true, false);
-    PCDisplay->setColour (Label::backgroundColourId, Colour (0xffd0d0d0));
-    PCDisplay->setColour (Label::outlineColourId, Colours::black);
-    PCDisplay->setColour (TextEditor::textColourId, Colours::black);
-    PCDisplay->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    PCDisplay->setColour (juce::Label::backgroundColourId, juce::Colour (0xffd0d0d0));
+    PCDisplay->setColour (juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     PCDisplay->addListener (this);
 
-    addAndMakeVisible (label = new Label ("new label",
-                                          "Channel"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centredLeft);
+    PCDisplay->setBounds (18, 45, 132, 62);
+
+    label.reset (new juce::Label ("new label",
+                                  TRANS("Channel")));
+    addAndMakeVisible (label.get());
+    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label->setJustificationType (juce::Justification::centredLeft);
     label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label2 = new Label ("new label",
-                                           "Mode"));
-    label2->setFont (Font (15.0000f, Font::plain));
-    label2->setJustificationType (Justification::centredLeft);
+    label->setBounds (204, 209, 58, 24);
+
+    label2.reset (new juce::Label ("new label",
+                                   TRANS("Mode")));
+    addAndMakeVisible (label2.get());
+    label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label2->setJustificationType (juce::Justification::centredLeft);
     label2->setEditable (false, false, false);
-    label2->setColour (TextEditor::textColourId, Colours::black);
-    label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label3 = new Label ("new label",
-                                           "MSB"));
-    label3->setFont (Font (12.0000f, Font::plain));
-    label3->setJustificationType (Justification::centredLeft);
+    label2->setBounds (41, 231, 41, 23);
+
+    label3.reset (new juce::Label ("new label",
+                                   TRANS("MSB")));
+    addAndMakeVisible (label3.get());
+    label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label3->setJustificationType (juce::Justification::centredLeft);
     label3->setEditable (false, false, false);
-    label3->setColour (TextEditor::textColourId, Colours::black);
-    label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label4 = new Label ("new label",
-                                           "LSB"));
-    label4->setFont (Font (12.0000f, Font::plain));
-    label4->setJustificationType (Justification::centredLeft);
+    label3->setBounds (174, 120, 33, 24);
+
+    label4.reset (new juce::Label ("new label",
+                                   TRANS("LSB")));
+    addAndMakeVisible (label4.get());
+    label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label4->setJustificationType (juce::Justification::centredLeft);
     label4->setEditable (false, false, false);
-    label4->setColour (TextEditor::textColourId, Colours::black);
-    label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label5 = new Label ("new label",
-                                           "Current Program"));
-    label5->setFont (Font (15.0000f, Font::plain));
-    label5->setJustificationType (Justification::centred);
+    label4->setBounds (176, 143, 33, 24);
+
+    label5.reset (new juce::Label ("new label",
+                                   TRANS("Current Program")));
+    addAndMakeVisible (label5.get());
+    label5->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label5->setJustificationType (juce::Justification::centred);
     label5->setEditable (false, false, false);
-    label5->setColour (TextEditor::textColourId, Colours::black);
-    label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (b_Thru = new ToggleButton ("Thru"));
+    label5->setBounds (21, 25, 126, 24);
+
+    b_Thru.reset (new juce::ToggleButton ("Thru"));
+    addAndMakeVisible (b_Thru.get());
     b_Thru->addListener (this);
 
-    addAndMakeVisible (PCDisplay2 = new Label ("PCDisplay",
-                                               "128"));
-    PCDisplay2->setFont (Font (18.0000f, Font::bold));
-    PCDisplay2->setJustificationType (Justification::centred);
+    b_Thru->setBounds (214, 253, 54, 24);
+
+    PCDisplay2.reset (new juce::Label ("PCDisplay",
+                                       TRANS("128")));
+    addAndMakeVisible (PCDisplay2.get());
+    PCDisplay2->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    PCDisplay2->setJustificationType (juce::Justification::centred);
     PCDisplay2->setEditable (false, true, false);
-    PCDisplay2->setColour (Label::backgroundColourId, Colour (0xffcecece));
-    PCDisplay2->setColour (Label::outlineColourId, Colours::black);
-    PCDisplay2->setColour (TextEditor::textColourId, Colours::black);
-    PCDisplay2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    PCDisplay2->setColour (juce::Label::backgroundColourId, juce::Colour (0xffcecece));
+    PCDisplay2->setColour (juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     PCDisplay2->addListener (this);
 
-    addAndMakeVisible (PCDisplay3 = new Label ("PCDisplay",
-                                               "128"));
-    PCDisplay3->setFont (Font (18.0000f, Font::bold));
-    PCDisplay3->setJustificationType (Justification::centred);
+    PCDisplay2->setBounds (193, 83, 42, 22);
+
+    PCDisplay3.reset (new juce::Label ("PCDisplay",
+                                       TRANS("128")));
+    addAndMakeVisible (PCDisplay3.get());
+    PCDisplay3->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    PCDisplay3->setJustificationType (juce::Justification::centred);
     PCDisplay3->setEditable (false, true, false);
-    PCDisplay3->setColour (Label::backgroundColourId, Colour (0xffd0d0d0));
-    PCDisplay3->setColour (Label::outlineColourId, Colours::black);
-    PCDisplay3->setColour (TextEditor::textColourId, Colours::black);
-    PCDisplay3->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    PCDisplay3->setColour (juce::Label::backgroundColourId, juce::Colour (0xffd0d0d0));
+    PCDisplay3->setColour (juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
     PCDisplay3->addListener (this);
 
-    addAndMakeVisible (label6 = new Label ("new label",
-                                           "Current Bank"));
-    label6->setFont (Font (15.0000f, Font::plain));
-    label6->setJustificationType (Justification::centred);
-    label6->setEditable (false, false, false);
-    label6->setColour (TextEditor::textColourId, Colours::black);
-    label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    PCDisplay3->setBounds (236, 83, 42, 22);
 
-    addAndMakeVisible (ProgramName = new ClickableLabel ("Program Name",
-                                                         "Awesome Thing"));
-    ProgramName->setFont (Font (18.0000f, Font::bold));
-    ProgramName->setJustificationType (Justification::centred);
+    label6.reset (new juce::Label ("new label",
+                                   TRANS("Current Bank")));
+    addAndMakeVisible (label6.get());
+    label6->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label6->setJustificationType (juce::Justification::centred);
+    label6->setEditable (false, false, false);
+    label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label6->setBounds (173, 64, 126, 24);
+
+    ProgramName.reset (new ClickableLabel ("Program Name",
+                                           TRANS("Awesome Thing")));
+    addAndMakeVisible (ProgramName.get());
+    ProgramName->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    ProgramName->setJustificationType (juce::Justification::centred);
     ProgramName->setEditable (false, true, false);
-    ProgramName->setColour (Label::backgroundColourId, Colour (0xffcecece));
-    ProgramName->setColour (Label::outlineColourId, Colours::black);
-    ProgramName->setColour (TextEditor::textColourId, Colours::black);
-    ProgramName->setColour (TextEditor::backgroundColourId, Colours::white);
+    ProgramName->setColour (juce::Label::backgroundColourId, juce::Colour (0xffcecece));
+    ProgramName->setColour (juce::Label::outlineColourId, juce::Colours::black);
+    ProgramName->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    ProgramName->setColour (juce::TextEditor::backgroundColourId, juce::Colours::white);
     ProgramName->addListener (this);
 
-    addAndMakeVisible (minimize = new TextButton ("Minimize"));
-    minimize->setButtonText ("_");
+    ProgramName->setBounds (18, 106, 132, 30);
+
+    minimize.reset (new juce::TextButton ("Minimize"));
+    addAndMakeVisible (minimize.get());
+    minimize->setButtonText (TRANS("_"));
     minimize->addListener (this);
 
-
-    //[UserPreSize]
-    ProgramName->setListener (this);
-	s_Program->setOwner(getAudioProcessor(),kProgram);
-	s_BankMSB->setOwner(getAudioProcessor(),kBankMSB);
-	s_BankLSB->setOwner(getAudioProcessor(),kBankLSB);
-	s_Channel->setOwner(getAudioProcessor(),kChannel);
-	s_Program->setSliderSnapsToMousePosition(false);
-	s_BankMSB->setSliderSnapsToMousePosition(false);
-	s_BankLSB->setSliderSnapsToMousePosition(false);
-	s_Channel->setSliderSnapsToMousePosition(true);
-
-	this->setMouseClickGrabsKeyboardFocus(false);
-	groupComponent->setMouseClickGrabsKeyboardFocus(false);
-	groupComponent2->setMouseClickGrabsKeyboardFocus(false);
-	b_BankTrig->setMouseClickGrabsKeyboardFocus(false);
-	b_PCTrig->setMouseClickGrabsKeyboardFocus(false);
-	b_Inc->setMouseClickGrabsKeyboardFocus(false);
-	b_Dec->setMouseClickGrabsKeyboardFocus(false);
-	b_PCListen->setMouseClickGrabsKeyboardFocus(false);
-	b_Mode->setMouseClickGrabsKeyboardFocus(false);
-	b_Thru->setMouseClickGrabsKeyboardFocus(false);
-	PCDisplay->setMouseClickGrabsKeyboardFocus(false);
-	label->setMouseClickGrabsKeyboardFocus(false);
-	label2->setMouseClickGrabsKeyboardFocus(false);
-	label3->setMouseClickGrabsKeyboardFocus(false);
-	label4->setMouseClickGrabsKeyboardFocus(false);
-	label5->setMouseClickGrabsKeyboardFocus(false);
-
-	minimized = ownerFilter->getParameter(kMinimize)>=0.5f;
-    //[/UserPreSize]
-
-    setSize (310, 280);
-
-
-    //[Constructor] You can add your own custom stuff here..
-    ownerFilter->addChangeListener (this);
-	updateParametersFromFilter();
-    //[/Constructor]
-}
-
-midiPCGUIEditor::~midiPCGUIEditor()
-{
-    //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->removeChangeListener (this);
-    //[/Destructor_pre]
-
-    deleteAndZero (groupComponent2);
-    deleteAndZero (groupComponent);
-    deleteAndZero (s_Program);
-    deleteAndZero (s_BankMSB);
-    deleteAndZero (s_BankLSB);
-    deleteAndZero (b_BankTrig);
-    deleteAndZero (b_PCTrig);
-    deleteAndZero (b_Inc);
-    deleteAndZero (b_Dec);
-    deleteAndZero (b_PCListen);
-    deleteAndZero (s_Channel);
-    deleteAndZero (b_Mode);
-    deleteAndZero (PCDisplay);
-    deleteAndZero (label);
-    deleteAndZero (label2);
-    deleteAndZero (label3);
-    deleteAndZero (label4);
-    deleteAndZero (label5);
-    deleteAndZero (b_Thru);
-    deleteAndZero (PCDisplay2);
-    deleteAndZero (PCDisplay3);
-    deleteAndZero (label6);
-    deleteAndZero (ProgramName);
-    deleteAndZero (minimize);
-
-
-    //[Destructor]. You can add your own custom destruction code here..
-    //[/Destructor]
-}
-
-//==============================================================================
-void midiPCGUIEditor::paint (Graphics& g)
-{
-    //[UserPrePaint] Add your own custom painting code here..
-	if (minimized)
-	{
-		g.fillAll (Colour (0xff464646));
-
-		g.setColour (Colour (0xffe6e6e6));
-		g.fillRoundedRectangle (4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
-
-		g.setColour (Colour (0xffbababa));
-		g.fillRoundedRectangle (14.0f, 13.0f, 282.0f, 255.0f, 10.0000f);
-	}
-	else {
-    //[/UserPrePaint]
-
-    g.fillAll (Colour (0xff464646));
-
-    g.setColour (Colour (0xffe6e6e6));
-    g.fillRoundedRectangle (4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
-
-    g.setColour (Colour (0xffbababa));
-    g.fillRoundedRectangle (14.0f, 26.0f, 140.0f, 138.0f, 10.0000f);
-
-    g.setColour (Colour (0xffbababa));
-    g.fillRoundedRectangle (187.0f, 66.0f, 97.0f, 44.0f, 10.0000f);
-
-    g.setColour (Colour (0xff464646));
-    g.fillRoundedRectangle (165.0f, 10.0f, 137.0f, 30.0f, 4.0000f);
-
-    g.setColour (Colour (0xfffaffa0));
-    g.fillPath (internalPath1);
-
-    g.setColour (Colour (0xfffaffa0));
-    g.fillPath (internalPath2);
-
-    //[UserPaint] Add your own custom painting code here..
-	}
-    //[/UserPaint]
-}
-
-void midiPCGUIEditor::resized()
-{
-    groupComponent2->setBounds (5, 7, 158, 225);
-    groupComponent->setBounds (167, 45, 133, 166);
-    s_Program->setBounds (18, 171, 133, 24);
-    s_BankMSB->setBounds (202, 120, 94, 24);
-    s_BankLSB->setBounds (202, 143, 94, 24);
-    b_BankTrig->setBounds (179, 177, 109, 24);
-    b_PCTrig->setBounds (20, 198, 129, 24);
-    b_Inc->setBounds (84, 135, 40, 24);
-    b_Dec->setBounds (44, 135, 40, 24);
-    b_PCListen->setBounds (117, 253, 81, 24);
-    s_Channel->setBounds (190, 227, 94, 24);
-    b_Mode->setBounds (23, 249, 78, 24);
-    PCDisplay->setBounds (18, 45, 132, 62);
-    label->setBounds (204, 209, 58, 24);
-    label2->setBounds (41, 231, 41, 23);
-    label3->setBounds (174, 120, 33, 24);
-    label4->setBounds (176, 143, 33, 24);
-    label5->setBounds (21, 25, 126, 24);
-    b_Thru->setBounds (214, 253, 54, 24);
-    PCDisplay2->setBounds (193, 83, 42, 22);
-    PCDisplay3->setBounds (236, 83, 42, 22);
-    label6->setBounds (173, 64, 126, 24);
-    ProgramName->setBounds (18, 106, 132, 30);
     minimize->setBounds (284, 258, 20, 16);
-    internalPath1.clear();
+
     internalPath1.startNewSubPath (170.0f, 22.0f);
     internalPath1.lineTo (170.0f, 18.0f);
     internalPath1.lineTo (173.0f, 18.0f);
@@ -561,7 +464,6 @@ void midiPCGUIEditor::resized()
     internalPath1.lineTo (292.0f, 16.0f);
     internalPath1.closeSubPath();
 
-    internalPath2.clear();
     internalPath2.startNewSubPath (179.0f, 29.0f);
     internalPath2.lineTo (179.0f, 34.0f);
     internalPath2.lineTo (177.0f, 34.0f);
@@ -752,6 +654,166 @@ void midiPCGUIEditor::resized()
     internalPath2.lineTo (294.0f, 31.0f);
     internalPath2.closeSubPath();
 
+
+    //[UserPreSize]
+    ProgramName->setListener (this);
+	s_Program->setOwner(getAudioProcessor(),kProgram);
+	s_BankMSB->setOwner(getAudioProcessor(),kBankMSB);
+	s_BankLSB->setOwner(getAudioProcessor(),kBankLSB);
+	s_Channel->setOwner(getAudioProcessor(),kChannel);
+	s_Program->setSliderSnapsToMousePosition(false);
+	s_BankMSB->setSliderSnapsToMousePosition(false);
+	s_BankLSB->setSliderSnapsToMousePosition(false);
+	s_Channel->setSliderSnapsToMousePosition(true);
+
+	this->setMouseClickGrabsKeyboardFocus(false);
+	groupComponent->setMouseClickGrabsKeyboardFocus(false);
+	groupComponent2->setMouseClickGrabsKeyboardFocus(false);
+	b_BankTrig->setMouseClickGrabsKeyboardFocus(false);
+	b_PCTrig->setMouseClickGrabsKeyboardFocus(false);
+	b_Inc->setMouseClickGrabsKeyboardFocus(false);
+	b_Dec->setMouseClickGrabsKeyboardFocus(false);
+	b_PCListen->setMouseClickGrabsKeyboardFocus(false);
+	b_Mode->setMouseClickGrabsKeyboardFocus(false);
+	b_Thru->setMouseClickGrabsKeyboardFocus(false);
+	PCDisplay->setMouseClickGrabsKeyboardFocus(false);
+	label->setMouseClickGrabsKeyboardFocus(false);
+	label2->setMouseClickGrabsKeyboardFocus(false);
+	label3->setMouseClickGrabsKeyboardFocus(false);
+	label4->setMouseClickGrabsKeyboardFocus(false);
+	label5->setMouseClickGrabsKeyboardFocus(false);
+
+	minimized = ownerFilter->getParameter(kMinimize)>=0.5f;
+    //[/UserPreSize]
+
+    setSize (310, 280);
+
+
+    //[Constructor] You can add your own custom stuff here..
+    ownerFilter->addChangeListener (this);
+	updateParametersFromFilter();
+    //[/Constructor]
+}
+
+midiPCGUIEditor::~midiPCGUIEditor()
+{
+    //[Destructor_pre]. You can add your own custom destruction code here..
+    getFilter()->removeChangeListener (this);
+    //[/Destructor_pre]
+
+    groupComponent2 = nullptr;
+    groupComponent = nullptr;
+    s_Program = nullptr;
+    s_BankMSB = nullptr;
+    s_BankLSB = nullptr;
+    b_BankTrig = nullptr;
+    b_PCTrig = nullptr;
+    b_Inc = nullptr;
+    b_Dec = nullptr;
+    b_PCListen = nullptr;
+    s_Channel = nullptr;
+    b_Mode = nullptr;
+    PCDisplay = nullptr;
+    label = nullptr;
+    label2 = nullptr;
+    label3 = nullptr;
+    label4 = nullptr;
+    label5 = nullptr;
+    b_Thru = nullptr;
+    PCDisplay2 = nullptr;
+    PCDisplay3 = nullptr;
+    label6 = nullptr;
+    ProgramName = nullptr;
+    minimize = nullptr;
+
+
+    //[Destructor]. You can add your own custom destruction code here..
+    //[/Destructor]
+}
+
+//==============================================================================
+void midiPCGUIEditor::paint (juce::Graphics& g)
+{
+    //[UserPrePaint] Add your own custom painting code here..
+	if (minimized)
+	{
+		g.fillAll (Colour (0xff464646));
+
+		g.setColour (Colour (0xffe6e6e6));
+		g.fillRoundedRectangle (4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
+
+		g.setColour (Colour (0xffbababa));
+		g.fillRoundedRectangle (14.0f, 13.0f, 282.0f, 255.0f, 10.0000f);
+	}
+	else {
+    //[/UserPrePaint]
+
+    g.fillAll (juce::Colour (0xff464646));
+
+    {
+        float x = 4.0f, y = 4.0f, width = 302.0f, height = 272.0f;
+        juce::Colour fillColour = juce::Colour (0xffe6e6e6);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
+
+    {
+        float x = 14.0f, y = 26.0f, width = 140.0f, height = 138.0f;
+        juce::Colour fillColour = juce::Colour (0xffbababa);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
+
+    {
+        float x = 187.0f, y = 66.0f, width = 97.0f, height = 44.0f;
+        juce::Colour fillColour = juce::Colour (0xffbababa);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
+
+    {
+        float x = 165.0f, y = 10.0f, width = 137.0f, height = 30.0f;
+        juce::Colour fillColour = juce::Colour (0xff464646);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 4.000f);
+    }
+
+    {
+        float x = 0, y = 0;
+        juce::Colour fillColour = juce::Colour (0xfffaffa0);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillPath (internalPath1, juce::AffineTransform::translation(x, y));
+    }
+
+    {
+        float x = 0, y = 0;
+        juce::Colour fillColour = juce::Colour (0xfffaffa0);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillPath (internalPath2, juce::AffineTransform::translation(x, y));
+    }
+
+    //[UserPaint] Add your own custom painting code here..
+	}
+    //[/UserPaint]
+}
+
+void midiPCGUIEditor::resized()
+{
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     //[UserResized] Add your own custom resize handling here..
 	groupComponent->setVisible(!minimized);
 	groupComponent2->setVisible(!minimized);
@@ -791,31 +853,31 @@ void midiPCGUIEditor::resized()
     //[/UserResized]
 }
 
-void midiPCGUIEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void midiPCGUIEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     VSTSlider* slider = (VSTSlider*)sliderThatWasMoved;
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == s_Program)
+    if (sliderThatWasMoved == s_Program.get())
     {
         //[UserSliderCode_s_Program] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kProgram,slider->mapToVSTRange());
         //[/UserSliderCode_s_Program]
     }
-    else if (sliderThatWasMoved == s_BankMSB)
+    else if (sliderThatWasMoved == s_BankMSB.get())
     {
         //[UserSliderCode_s_BankMSB] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kBankMSB,slider->mapToVSTRange());
         //[/UserSliderCode_s_BankMSB]
     }
-    else if (sliderThatWasMoved == s_BankLSB)
+    else if (sliderThatWasMoved == s_BankLSB.get())
     {
         //[UserSliderCode_s_BankLSB] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kBankLSB,slider->mapToVSTRange());
         //[/UserSliderCode_s_BankLSB]
     }
-    else if (sliderThatWasMoved == s_Channel)
+    else if (sliderThatWasMoved == s_Channel.get())
     {
         //[UserSliderCode_s_Channel] -- add your slider handling code here..
         getFilter()->setParameterNotifyingHost(kChannel,slider->mapToVSTRange());
@@ -826,36 +888,36 @@ void midiPCGUIEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void midiPCGUIEditor::buttonClicked (Button* buttonThatWasClicked)
+void midiPCGUIEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == b_BankTrig)
+    if (buttonThatWasClicked == b_BankTrig.get())
     {
         //[UserButtonCode_b_BankTrig] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kBankTrigger,1.f);
         //[/UserButtonCode_b_BankTrig]
     }
-    else if (buttonThatWasClicked == b_PCTrig)
+    else if (buttonThatWasClicked == b_PCTrig.get())
     {
         //[UserButtonCode_b_PCTrig] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kTrigger,1.f);
         //[/UserButtonCode_b_PCTrig]
     }
-    else if (buttonThatWasClicked == b_Inc)
+    else if (buttonThatWasClicked == b_Inc.get())
     {
         //[UserButtonCode_b_Inc] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kInc,1.f);
         //[/UserButtonCode_b_Inc]
     }
-    else if (buttonThatWasClicked == b_Dec)
+    else if (buttonThatWasClicked == b_Dec.get())
     {
         //[UserButtonCode_b_Dec] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kDec,1.f);
         //[/UserButtonCode_b_Dec]
     }
-    else if (buttonThatWasClicked == b_PCListen)
+    else if (buttonThatWasClicked == b_PCListen.get())
     {
         //[UserButtonCode_b_PCListen] -- add your button handler code here..
         if (getFilter()->getParameter(kPCListen)>=0.5f) {
@@ -866,7 +928,7 @@ void midiPCGUIEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_PCListen]
     }
-    else if (buttonThatWasClicked == b_Mode)
+    else if (buttonThatWasClicked == b_Mode.get())
     {
         //[UserButtonCode_b_Mode] -- add your button handler code here..
         if (getFilter()->getParameter(kMode)>=0.5f) {
@@ -877,7 +939,7 @@ void midiPCGUIEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_Mode]
     }
-    else if (buttonThatWasClicked == b_Thru)
+    else if (buttonThatWasClicked == b_Thru.get())
     {
         //[UserButtonCode_b_Thru] -- add your button handler code here..
         if (getFilter()->getParameter(kThru)>=0.5f) {
@@ -888,7 +950,7 @@ void midiPCGUIEditor::buttonClicked (Button* buttonThatWasClicked)
         }
         //[/UserButtonCode_b_Thru]
     }
-    else if (buttonThatWasClicked == minimize)
+    else if (buttonThatWasClicked == minimize.get())
     {
         //[UserButtonCode_minimize] -- add your button handler code here..
 		minimized = !minimized;
@@ -901,12 +963,12 @@ void midiPCGUIEditor::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void midiPCGUIEditor::labelTextChanged (Label* labelThatHasChanged)
+void midiPCGUIEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 {
     //[UserlabelTextChanged_Pre]
     //[/UserlabelTextChanged_Pre]
 
-    if (labelThatHasChanged == PCDisplay)
+    if (labelThatHasChanged == PCDisplay.get())
     {
         //[UserLabelCode_PCDisplay] -- add your label text handling code here..
 		int v = PCDisplay->getText().getIntValue();
@@ -917,7 +979,7 @@ void midiPCGUIEditor::labelTextChanged (Label* labelThatHasChanged)
 		getFilter()->setParameter(kTrigger,1.f);
         //[/UserLabelCode_PCDisplay]
     }
-    else if (labelThatHasChanged == PCDisplay2)
+    else if (labelThatHasChanged == PCDisplay2.get())
     {
         //[UserLabelCode_PCDisplay2] -- add your label text handling code here..
 		int v = PCDisplay2->getText().getIntValue();
@@ -928,7 +990,7 @@ void midiPCGUIEditor::labelTextChanged (Label* labelThatHasChanged)
 		getFilter()->setParameter(kBankTrigger,1.f);
         //[/UserLabelCode_PCDisplay2]
     }
-    else if (labelThatHasChanged == PCDisplay3)
+    else if (labelThatHasChanged == PCDisplay3.get())
     {
         //[UserLabelCode_PCDisplay3] -- add your label text handling code here..
 		int v = PCDisplay3->getText().getIntValue();
@@ -939,7 +1001,7 @@ void midiPCGUIEditor::labelTextChanged (Label* labelThatHasChanged)
 		getFilter()->setParameter(kBankTrigger,1.f);
         //[/UserLabelCode_PCDisplay3]
     }
-    else if (labelThatHasChanged == ProgramName)
+    else if (labelThatHasChanged == ProgramName.get())
     {
         //[UserLabelCode_ProgramName] -- add your label text handling code here..
 		getFilter()->setMidiProgName((int)s_Channel->getValue()-1,
@@ -978,7 +1040,7 @@ void midiPCGUIEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     for (int i=0;i<numParams;i++) param[i] = filter->getParameter(i);
-	const int channel = roundFloatToInt(param[kChannel] * 15.0f);
+	const int channel = roundToInt(param[kChannel] * 15.0f);
 	const int p = filter->actualProgram[channel];
 	const int msb = filter->actualBankMSB[channel];
 	const int lsb = filter->actualBankLSB[channel];
@@ -992,19 +1054,19 @@ void midiPCGUIEditor::updateParametersFromFilter()
 	//prog name
 	ProgramName->setText(name,dontSendNotification);
     //toggle buttons
-    b_PCListen->setToggleState(param[kPCListen]>=0.5f,false);
-    b_Thru->setToggleState(param[kThru]>=0.5f,false);
+    b_PCListen->setToggleState(param[kPCListen]>=0.5f,dontSendNotification);
+    b_Thru->setToggleState(param[kThru]>=0.5f,dontSendNotification);
 
     if (param[kMode]<0.5f) {
 		b_Mode->setButtonText("Direct");
-		b_Mode->setToggleState(true,false);
+		b_Mode->setToggleState(true,dontSendNotification);
 		s_Program->setColour (Slider::thumbColourId, Colours::coral);
 		s_BankMSB->setColour (Slider::thumbColourId, Colours::coral);
 		s_BankLSB->setColour (Slider::thumbColourId, Colours::coral);
 	}
     else {
 		b_Mode->setButtonText("Triggered");
-		b_Mode->setToggleState(false,false);
+		b_Mode->setToggleState(false,dontSendNotification);
 		s_Program->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));
 		s_BankMSB->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));
 		s_BankLSB->setColour (Slider::thumbColourId, Colour(getLookAndFeel().findColour(Slider::thumbColourId)));
@@ -1026,22 +1088,24 @@ void midiPCGUIEditor::updateParametersFromFilter()
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="midiPCGUIEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public ClickableLabelListener"
+                 parentClasses="public juce::AudioProcessorEditor, public juce::ChangeListener, public ClickableLabelListener"
                  constructorParams="midiPCGUI* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="0" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="310" initialHeight="280">
   <BACKGROUND backgroundColour="ff464646">
-    <ROUNDRECT pos="4 4 302 272" cornerSize="10" fill="solid: ffe6e6e6" hasStroke="0"/>
-    <ROUNDRECT pos="14 26 140 138" cornerSize="10" fill="solid: ffbababa" hasStroke="0"/>
-    <ROUNDRECT pos="187 66 97 44" cornerSize="10" fill="solid: ffbababa" hasStroke="0"/>
-    <ROUNDRECT pos="165 10 137 30" cornerSize="4" fill="solid: ff464646" hasStroke="0"/>
+    <ROUNDRECT pos="4 4 302 272" cornerSize="10.0" fill="solid: ffe6e6e6" hasStroke="0"/>
+    <ROUNDRECT pos="14 26 140 138" cornerSize="10.0" fill="solid: ffbababa"
+               hasStroke="0"/>
+    <ROUNDRECT pos="187 66 97 44" cornerSize="10.0" fill="solid: ffbababa" hasStroke="0"/>
+    <ROUNDRECT pos="165 10 137 30" cornerSize="4.0" fill="solid: ff464646" hasStroke="0"/>
     <PATH pos="0 0 100 100" fill="solid: fffaffa0" hasStroke="0" nonZeroWinding="1">s 170.01 22 l 170.01 17.5 l 173.01 17.5 l 173.01 22 x s 170.01 14.5 l 173.01 14.5 l 173.01 16 l 170.01 16 x s 174.51 16 l 182.01 16 l 182.01 22 l 179.01 22 l 179.01 17.5 l 177.51 17.5 l 177.51 22 l 174.51 22 x s 191.01 17.5 l 188.01 17.5 l 188.01 19 l 191.01 19 l 191.01 20.5 l 189.51 20.5 l 189.51 22 l 183.51 22 l 183.51 20.5 l 186.51 20.5 l 186.51 19 l 183.51 19 l 183.51 17.5 l 185.01 17.5 l 185.01 16 l 191.01 16 x s 192.51 22 l 192.51 16 l 200.01 16 l 200.01 19 l 198.51 19 l 198.51 20.5 l 200.01 20.5 l 200.01 22 x s 195.51 18.94 l 197.01 18.94 l 197.01 17.56 l 195.51 17.56 x s 207.51 16 l 207.51 17.5 l 204.51 17.5 l 204.51 22 l 201.51 22 l 201.51 16 x s 215.01 16 l 215.01 17.5 l 213.51 17.5 l 213.51 22 l 210.51 22 l 210.51 17.5 l 209.01 17.5 l 209.01 16 l 210.51 16 l 210.51 14.5 l 213.51 14.5 l 213.51 16 x s 228.51 16 l 228.51 22 l 224.01 22 l 224.01 25 l 221.01 25 l 221.01 16 x s 225.45 20.5 l 225.45 17.5 l 224.01 17.5 l 224.01 20.5 x s 230.01 22 l 230.01 17.5 l 233.01 17.5 l 233.01 22 x s 230.01 14.5 l 233.01 14.5 l 233.01 16 l 230.01 16 x s 237.51 19 l 237.51 17.5 l 234.51 17.5 l 234.51 16 l 242.01 16 l 242.01 17.5 l 240.51 17.5 l 240.51 19 l 239.01 19 l 239.01 20.5 l 242.01 20.5 l 242.01 22 l 234.51 22 l 234.51 20.5 l 236.01 20.5 l 236.01 19 x s 252.51 17.5 l 251.01 17.5 l 251.01 22 l 248.01 22 l 248.01 14.5 l 251.01 14.5 l 251.01 16 l 255.51 16 l 255.51 22 l 252.51 22 x s 257.01 22 l 257.01 16 l 264.51 16 l 264.51 19 l 263.01 19 l 263.01 20.5 l 264.51 20.5 l 264.51 22 x s 260.01 18.94 l 261.51 18.94 l 261.51 17.56 l 260.01 17.56 x s 272.01 16 l 272.01 17.5 l 269.01 17.5 l 269.01 22 l 266.01 22 l 266.01 16 x s 273.51 22 l 273.51 16 l 281.01 16 l 281.01 19 l 279.51 19 l 279.51 20.5 l 281.01 20.5 l 281.01 22 x s 276.51 18.94 l 278.01 18.94 l 278.01 17.56 l 276.51 17.56 x s 282.51 19 l 282.51 17.5 l 290.01 17.5 l 290.01 19 x s 291.51 14.5 l 294.51 14.5 l 294.51 16 l 296.01 16 l 296.01 17.5 l 297.51 17.5 l 297.51 19 l 296.01 19 l 296.01 20.5 l 294.51 20.5 l 294.51 22 l 291.51 22 l 291.51 20.5 l 293.01 20.5 l 293.01 19 l 294.51 19 l 294.51 17.5 l 293.01 17.5 l 293.01 16 l 291.51 16 x</PATH>
     <PATH pos="0 0 100 100" fill="solid: fffaffa0" hasStroke="0" nonZeroWinding="1">s 179.41 29.2 l 179.41 34.4 l 176.81 34.4 l 176.81 30.5 l 175.51 30.5 l 175.51 34.4 l 172.91 34.4 l 172.91 30.5 l 171.61 30.5 l 171.61 34.4 l 169.01 34.4 l 169.01 29.2 x s 180.71 34.4 l 180.71 30.5 l 183.31 30.5 l 183.31 34.4 x s 180.71 27.9 l 183.31 27.9 l 183.31 29.2 l 180.71 29.2 x s 184.61 34.4 l 184.61 29.2 l 188.51 29.2 l 188.51 27.9 l 191.11 27.9 l 191.11 34.4 x s 187.26 30.5 l 187.26 33.1 l 188.51 33.1 l 188.51 30.5 x s 192.41 34.4 l 192.41 30.5 l 195.01 30.5 l 195.01 34.4 x s 192.41 27.9 l 195.01 27.9 l 195.01 29.2 l 192.41 29.2 x s 202.81 27.9 l 202.81 31.8 l 198.91 31.8 l 198.91 34.4 l 196.31 34.4 l 196.31 27.9 x s 198.91 30.5 l 200.21 30.5 l 200.21 29.2 l 198.91 29.2 x s 209.31 29.2 l 209.31 30.5 l 206.71 30.5 l 206.71 34.4 l 204.11 34.4 l 204.11 29.2 x s 217.11 34.4 l 210.61 34.4 l 210.61 29.2 l 217.11 29.2 x s 214.51 30.5 l 213.21 30.5 l 213.21 33.1 l 214.51 33.1 x s 218.41 34.4 l 218.41 29.2 l 224.91 29.2 l 224.91 37 l 218.41 37 l 218.41 35.7 l 222.31 35.7 q 222.31 35.68 222.31 34.4 x s 222.31 30.5 l 221.01 30.5 l 221.01 33.1 l 222.31 33.1 x s 231.41 29.2 l 231.41 30.5 l 228.81 30.5 l 228.81 34.4 l 226.21 34.4 l 226.21 29.2 x s 232.71 30.5 l 234.01 30.5 l 234.01 29.2 l 239.21 29.2 l 239.21 34.4 l 232.71 34.4 x s 236.61 30.5 l 235.31 30.5 l 235.31 33.1 l 236.61 33.1 x s 250.91 29.2 l 250.91 34.4 l 248.31 34.4 l 248.31 30.5 l 247.01 30.5 l 247.01 34.4 l 244.41 34.4 l 244.41 30.5 l 243.11 30.5 l 243.11 34.4 l 240.51 34.4 l 240.51 29.2 x s 258.71 33.1 l 258.71 34.4 l 252.21 34.4 l 252.21 27.9 l 258.71 27.9 l 258.71 29.2 l 254.81 29.2 l 254.81 33.1 x s 263.91 30.5 l 262.61 30.5 l 262.61 34.4 l 260.01 34.4 l 260.01 27.9 l 262.61 27.9 l 262.61 29.2 l 266.51 29.2 l 266.51 34.4 l 263.91 34.4 x s 267.81 30.5 l 269.11 30.5 l 269.11 29.2 l 274.31 29.2 l 274.31 34.4 l 267.81 34.4 x s 271.71 30.5 l 270.41 30.5 l 270.41 33.1 l 271.71 33.1 x s 275.61 29.2 l 282.11 29.2 l 282.11 34.4 l 279.51 34.4 l 279.51 30.5 l 278.21 30.5 l 278.21 34.4 l 275.61 34.4 x s 283.41 34.4 l 283.41 29.2 l 289.91 29.2 l 289.91 37 l 283.41 37 l 283.41 35.7 l 287.31 35.7 q 287.31 35.68 287.31 34.4 x s 287.31 30.5 l 286.01 30.5 l 286.01 33.1 l 287.31 33.1 x s 291.21 34.4 l 291.21 29.2 l 297.71 29.2 l 297.71 31.8 l 296.41 31.8 l 296.41 33.1 l 297.71 33.1 l 297.71 34.4 x s 293.81 31.75 l 295.11 31.75 l 295.11 30.55 l 293.81 30.55 x</PATH>
   </BACKGROUND>
@@ -1053,18 +1117,19 @@ BEGIN_JUCER_METADATA
                   textpos="36"/>
   <SLIDER name="Program" id="2288cc5e58f6e2e5" memberName="s_Program" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="18 171 133 24" tooltip="Next Program Change to send"
-          min="0" max="128" int="1" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="28" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="128.0" int="1.0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="28" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="Bank MSB" id="ef866cf4f66cd415" memberName="s_BankMSB"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="202 120 94 24"
-          tooltip="Next Bank Select to send" min="0" max="128" int="1"
+          tooltip="Next Bank Select to send" min="0.0" max="128.0" int="1.0"
           style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="28" textBoxHeight="20" skewFactor="1"/>
+          textBoxWidth="28" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Bank LSB" id="c2ebdd7ada591c7c" memberName="s_BankLSB"
           virtualName="VSTSlider" explicitFocusOrder="0" pos="202 143 94 24"
-          tooltip="Next Bank LSB to send" min="0" max="128" int="1" style="LinearHorizontal"
-          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="28"
-          textBoxHeight="20" skewFactor="1"/>
+          tooltip="Next Bank LSB to send" min="0.0" max="128.0" int="1.0"
+          style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          textBoxWidth="28" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <TEXTBUTTON name="Bank Trig" id="c6731afd8b59ae43" memberName="b_BankTrig"
               virtualName="" explicitFocusOrder="0" pos="179 177 109 24" tooltip="Send selected Bank Select message(s)"
               bgColOff="ffbbbbff" buttonText="Trigger Bank" connectedEdges="0"
@@ -1087,8 +1152,9 @@ BEGIN_JUCER_METADATA
                 state="0"/>
   <SLIDER name="Channel" id="618548eef3ed7f00" memberName="s_Channel" virtualName="VSTSlider"
           explicitFocusOrder="0" pos="190 227 94 24" tooltip="Input/Output MIDI Channel"
-          min="1" max="16" int="1" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="28" textBoxHeight="20" skewFactor="1"/>
+          min="1.0" max="16.0" int="1.0" style="LinearHorizontal" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="28" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <TEXTBUTTON name="Mode" id="1db4f2da47c7baba" memberName="b_Mode" virtualName=""
               explicitFocusOrder="0" pos="23 249 78 24" tooltip="Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved"
               bgColOff="ffbbbbff" bgColOn="ffff7f50" buttonText="Triggered"
@@ -1098,32 +1164,32 @@ BEGIN_JUCER_METADATA
          bkgCol="ffd0d0d0" outlineCol="ff000000" edTextCol="ff000000"
          edBkgCol="0" labelText="128" editableSingleClick="0" editableDoubleClick="1"
          focusDiscardsChanges="0" fontname="Default font" fontsize="63.3"
-         bold="1" italic="0" justification="36"/>
+         kerning="0.0" bold="1" italic="0" justification="36" typefaceStyle="Bold"/>
   <LABEL name="new label" id="c2ce2e439241d851" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="204 209 58 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Channel" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="353aeda7d51bcccb" memberName="label2" virtualName=""
          explicitFocusOrder="0" pos="41 231 41 23" edTextCol="ff000000"
          edBkgCol="0" labelText="Mode" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="bd317944291c6a08" memberName="label3" virtualName=""
          explicitFocusOrder="0" pos="174 120 33 24" edTextCol="ff000000"
          edBkgCol="0" labelText="MSB" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="12"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="12.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="28b3ac05e6748964" memberName="label4" virtualName=""
          explicitFocusOrder="0" pos="176 143 33 24" edTextCol="ff000000"
          edBkgCol="0" labelText="LSB" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="12"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="12.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="41ad2639bb80eb10" memberName="label5" virtualName=""
          explicitFocusOrder="0" pos="21 25 126 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Current Program" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TOGGLEBUTTON name="Thru" id="804da0df783d655e" memberName="b_Thru" virtualName=""
                 explicitFocusOrder="0" pos="214 253 54 24" buttonText="Thru"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -1131,23 +1197,26 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="193 83 42 22" bkgCol="ffcecece"
          outlineCol="ff000000" edTextCol="ff000000" edBkgCol="0" labelText="128"
          editableSingleClick="0" editableDoubleClick="1" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="18" bold="1" italic="0" justification="36"/>
+         fontname="Default font" fontsize="18.0" kerning="0.0" bold="1"
+         italic="0" justification="36" typefaceStyle="Bold"/>
   <LABEL name="PCDisplay" id="c626351d5ce09a8b" memberName="PCDisplay3"
          virtualName="" explicitFocusOrder="0" pos="236 83 42 22" bkgCol="ffd0d0d0"
          outlineCol="ff000000" edTextCol="ff000000" edBkgCol="0" labelText="128"
          editableSingleClick="0" editableDoubleClick="1" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="18" bold="1" italic="0" justification="36"/>
+         fontname="Default font" fontsize="18.0" kerning="0.0" bold="1"
+         italic="0" justification="36" typefaceStyle="Bold"/>
   <LABEL name="new label" id="b228c4e04dd56cc" memberName="label6" virtualName=""
          explicitFocusOrder="0" pos="173 64 126 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Current Bank" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="Program Name" id="3b96f9e82627ba71" memberName="ProgramName"
          virtualName="ClickableLabel" explicitFocusOrder="0" pos="18 106 132 30"
          bkgCol="ffcecece" outlineCol="ff000000" edTextCol="ff000000"
          edBkgCol="ffffffff" labelText="Awesome Thing" editableSingleClick="0"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="18" bold="1" italic="0" justification="36"/>
+         fontsize="18.0" kerning="0.0" bold="1" italic="0" justification="36"
+         typefaceStyle="Bold"/>
   <TEXTBUTTON name="Minimize" id="4bafc2904b05b5b4" memberName="minimize" virtualName=""
               explicitFocusOrder="0" pos="284 258 20 16" buttonText="_" connectedEdges="0"
               needsCallback="1" radioGroupId="0"/>
@@ -1156,3 +1225,7 @@ BEGIN_JUCER_METADATA
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]

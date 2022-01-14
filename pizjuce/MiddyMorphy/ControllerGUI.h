@@ -15,7 +15,7 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
   public:
     ControllerGUI(Controller * controller, MidiMorph * core);
 
-    ~ControllerGUI();
+    ~ControllerGUI() override;
 
 
   private:
@@ -29,16 +29,16 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
 
 
   public:
-    void resized();
+    void resized() override;
 
-    void paint(Graphics & g);
+    void paint(Graphics & g) override;
 
-    void paintOverChildren(Graphics & g);
+    void paintOverChildren(Graphics & g) override;
 
-    void mouseUp(const MouseEvent & e);
+    void mouseUp(const MouseEvent & e) override;
 
     //()=
-    void sliderValueChanged(Slider* slider);
+    void sliderValueChanged(Slider* slider) override;
 
     void setSelected(bool shouldDrawSelected);
 
@@ -46,14 +46,14 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
 
     void refreshControllerData();
 
-    virtual void textEditorTextChanged(TextEditor& editor);
+    void textEditorTextChanged(TextEditor& editor) override;
 
     //  (       )
-    virtual void textEditorReturnKeyPressed(TextEditor & editor);
+    void textEditorReturnKeyPressed(TextEditor & editor) override;
 
-    virtual void textEditorEscapeKeyPressed(TextEditor & editor);
+    void textEditorEscapeKeyPressed(TextEditor & editor) override;
 
-    virtual void textEditorFocusLost(TextEditor & editor);
+    void textEditorFocusLost(TextEditor & editor) override;
 
 
   private:
@@ -63,7 +63,7 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
 
 
   public:
-    void labelTextChanged(Label * labelThatHasChanged);
+    void labelTextChanged(Label * labelThatHasChanged) override;
 
 
   private:

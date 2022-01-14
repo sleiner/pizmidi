@@ -16,5 +16,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/MidiChsProcessor.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/MidiChsEditor.cpp")
 
-target_link_libraries(piz_midiChs PUBLIC juce::juce_events
-                                         juce::juce_gui_basics)
+target_link_libraries(piz_midiChs PRIVATE juce::juce_events
+                                          juce::juce_gui_basics)

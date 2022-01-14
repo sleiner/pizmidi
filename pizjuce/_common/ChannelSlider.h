@@ -1,34 +1,37 @@
 #ifndef PIZ_CHANNEL_SLIDER_HEADER
 #define PIZ_CHANNEL_SLIDER_HEADER
 
-class ChannelSlider : public Slider
+#include "juce_core/juce_core.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
+class ChannelSlider : public juce::Slider
 {
 public:
-	ChannelSlider(String name) : Slider(name), allText("Any")
+	ChannelSlider(juce::String name) : juce::Slider(name), allText("Any")
 	{
 		this->setRange(0,16,1);
 	};
 	~ChannelSlider() {};
 
-	String getTextFromValue(double value)
+	juce::String getTextFromValue(double value)
 	{
 		if (value<0.5) return allText;
-		return String((int)value);
+		return juce::String((int)value);
 	}
 
-	double getValueFromText(const String &text)
+	double getValueFromText(const juce::String &text)
 	{
 		if (!text.compareIgnoreCase(allText)) return 0;
 		return text.getDoubleValue();
 	}
 
-	void setAllText(String text)
+	void setAllText(juce::String text)
 	{
 		allText = text;
 		updateText();
 	}
 private:
-	String allText;
+	juce::String allText;
 };
 
 #endif

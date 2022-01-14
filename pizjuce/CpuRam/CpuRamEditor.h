@@ -14,7 +14,7 @@ public:
 		for (int i=0;i<numPoints;i++) points[i]=0.f;
 		setMouseClickGrabsKeyboardFocus(false);
 	}
-	~CpuGraph() {};
+	~CpuGraph() override {};
 
 	void addPoint(float value)
 	{
@@ -25,7 +25,7 @@ public:
 private:
 	enum {numPoints=128};
 	float points[numPoints];
-	void paint(Graphics &g)
+	void paint(Graphics &g) override
 	{
 		g.fillAll(Colours::black);
 		g.setColour(Colours::green);
@@ -65,23 +65,23 @@ public:
     CpuRamEditor (CpuRam* const ownerFilter);
 
     /** Destructor. */
-    ~CpuRamEditor();
+    ~CpuRamEditor() override;
 
     //==============================================================================
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (ChangeBroadcaster* source);
-	void timerCallback ();
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-	void mouseUp (const MouseEvent&);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+	void timerCallback () override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+	void mouseUp (const MouseEvent&) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (Graphics& g);
+    void paint (Graphics& g) override;
 
     /** Standard Juce resize callback. */
-    void resized();
+    void resized() override;
 
 
 private:

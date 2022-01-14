@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  31 Oct 2011 7:13:02am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDIKEYBOARDEDITOR_PIZKEYBOARDEDITOR_B0E33023__
-#define __JUCER_HEADER_MIDIKEYBOARDEDITOR_PIZKEYBOARDEDITOR_B0E33023__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -41,38 +38,35 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class midiKeyboardEditor  : public AudioProcessorEditor,
-                            public ChangeListener,
-                            public KeyListener,
-                            public Slider::Listener,
-                            public Button::Listener
+class midiKeyboardEditor  : public juce::AudioProcessorEditor,
+                            public juce::ChangeListener,
+                            public juce::KeyListener,
+                            public juce::Slider::Listener,
+                            public juce::Button::Listener
 {
 public:
     //==============================================================================
     midiKeyboardEditor (PizKeyboard* const ownerFilter);
-    ~midiKeyboardEditor();
+    ~midiKeyboardEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 	friend class PizKeyboardComponent;
-	void changeListenerCallback (ChangeBroadcaster* source);
-	void mouseUp(const MouseEvent &e);
-	bool keyPressed(const KeyPress &key, Component* originatingComponent)
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+	void mouseUp(const MouseEvent &e) override;
+	bool keyPressed(const KeyPress &key, Component* originatingComponent) override
 	{
 		DBG(String(key.getKeyCode()) + " " + key.getTextDescription());
 		return false;
 	}
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-    void buttonClicked (Button* buttonThatWasClicked);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -83,28 +77,27 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    Slider* keyWidthSlider;
-    Slider* chSlider;
-    TextButton* grabQwertyButton;
-    Slider* velocitySlider;
-    ToggleButton* yButton;
-    ToggleButton* inputToggleButton;
-    TextButton* aboutButton;
-    TextButton* hideButton;
-    ResizableCornerComponent* resizer;
-    PizKeyboardComponent* midiKeyboard;
-    TextEditor* aboutBox;
-    ToggleButton* useProgCh;
-    ToggleButton* useCapsLock;
-    TextButton* sendState;
-    ToggleButton* showNumbersButton;
+    std::unique_ptr<juce::Slider> keyWidthSlider;
+    std::unique_ptr<juce::Slider> chSlider;
+    std::unique_ptr<juce::TextButton> grabQwertyButton;
+    std::unique_ptr<juce::Slider> velocitySlider;
+    std::unique_ptr<juce::ToggleButton> yButton;
+    std::unique_ptr<juce::ToggleButton> inputToggleButton;
+    std::unique_ptr<juce::TextButton> aboutButton;
+    std::unique_ptr<juce::TextButton> hideButton;
+    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<PizKeyboardComponent> midiKeyboard;
+    std::unique_ptr<juce::TextEditor> aboutBox;
+    std::unique_ptr<juce::ToggleButton> useProgCh;
+    std::unique_ptr<juce::ToggleButton> useCapsLock;
+    std::unique_ptr<juce::TextButton> sendState;
+    std::unique_ptr<juce::ToggleButton> showNumbersButton;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    midiKeyboardEditor (const midiKeyboardEditor&);
-    const midiKeyboardEditor& operator= (const midiKeyboardEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiKeyboardEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_MIDIKEYBOARDEDITOR_PIZKEYBOARDEDITOR_B0E33023__

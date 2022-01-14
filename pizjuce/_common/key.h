@@ -8,6 +8,14 @@
 using namespace juce;
 
 #ifndef MRALIASPRO
+
+static XmlElement::TextFormat getXmlFormat()
+{
+    XmlElement::TextFormat format{};
+    format.newLineChars = nullptr; // fit everything on one line
+    return format;
+}
+
 static const String encryptXml (const XmlElement* xml,
                                 const String& rsaPrivateKey)
 {
@@ -15,7 +23,7 @@ static const String encryptXml (const XmlElement* xml,
 
     if (xml != 0)
     {
-        const String s (xml->createDocument (String(), true));
+        const String s (xml->toString (getXmlFormat()));
 		const MemoryBlock mb (s.toUTF8(), s.length());
 
         val.loadFromMemoryBlock (mb);
@@ -48,7 +56,7 @@ static std::unique_ptr<XmlElement> decodeEncryptedXml (const String& hexData,
 #ifdef JUCE_DEBUG
     if (xml != nullptr)
     {
-        DBG (xml->createDocument (String(), true));
+        DBG (xml->toString (getXmlFormat()));
     }
 #endif
 

@@ -19,5 +19,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/MidiEnvelope.cpp")
 
 target_link_libraries(
-  piz_midiPBCurve PUBLIC juce::juce_audio_processors juce::juce_events
-                         juce::juce_gui_basics)
+  piz_midiPBCurve PRIVATE juce::juce_audio_processors juce::juce_events
+                          juce::juce_gui_basics)

@@ -52,28 +52,28 @@ class MidiCurve  : public PizAudioProcessor,
 public:
     //==============================================================================
     MidiCurve();
-    ~MidiCurve();
+    ~MidiCurve() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
-
-    //==============================================================================
-    AudioProcessorEditor* createEditor();
+	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    const String getName() const {return JucePlugin_Name;}
-	bool hasEditor() const {return true;}
-    bool acceptsMidi() const {
+    AudioProcessorEditor* createEditor() override;
+
+    //==============================================================================
+    const String getName() const override {return JucePlugin_Name;}
+	bool hasEditor() const override {return true;}
+    bool acceptsMidi() const override {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const {
+    bool producesMidi() const override {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
@@ -81,34 +81,34 @@ public:
 #endif
     }
 
-    int getNumParameters()    { return kNumParams; }
+    int getNumParameters() override    { return kNumParams; }
 
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index);
-    const String getParameterText (int index);
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
 	double getTailLengthSeconds() const override { return 0; }
 
 
     //==============================================================================
 
-    int getNumPrograms()      { return kNumPrograms; }
-    int getCurrentProgram();
-    void setCurrentProgram (int index);
-    const String getProgramName (int index);
-    void changeProgramName (int index, const String& newName);
+    int getNumPrograms() override      { return kNumPrograms; }
+    int getCurrentProgram() override;
+    void setCurrentProgram (int index) override;
+    const String getProgramName (int index) override;
+    void changeProgramName (int index, const String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (MemoryBlock& destData);
-    void setCurrentProgramStateInformation (const void* data, int sizeInBytes);
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
 
 
     //==============================================================================
@@ -117,7 +117,7 @@ public:
 	{
 	public:
 		LastMsgToDisplay() {lastCCOut = lastCCIn = -1;}
-		~LastMsgToDisplay() {}
+		~LastMsgToDisplay() override {}
 		int lastCCOut, lastCCIn;
 	} lastMsg;
 	float getPointValue(int n, int y);
@@ -158,7 +158,7 @@ private:
 	};
 
 	struct PointComparator {
-		int compareElements(midiPoint a, midiPoint b) { return roundFloatToInt(a.p.getX()*127.f) - roundFloatToInt(b.p.getX()*127.f); }
+		int compareElements(midiPoint a, midiPoint b) { return roundToInt(a.p.getX()*127.f) - roundToInt(b.p.getX()*127.f); }
 	} pointComparator;
 
 	Array<midiPoint> points;

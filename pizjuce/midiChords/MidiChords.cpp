@@ -89,8 +89,6 @@ void MidiChordsPrograms::loadDefaults ()
 			}
 		}
 	}
-
-	//DBG(this->createXml()->createDocument(""));
 }
 
 //==============================================================================
@@ -516,11 +514,11 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 			stopPlayingFromGUI = false;
 		}
 	}
-	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-	MidiMessage m(0xf0);
-	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample))
+	for(auto&& msgMetadata : midiMessages)
 	{
+		auto m = msgMetadata.getMessage();
+		auto sample = msgMetadata.samplePosition;
+
 		bool blockOriginalEvent = false;
 		if (m.isProgramChange() && usepc) {// && (m.isForChannel(channel) || channel==0)) {
 			if (m.getProgramChangeNumber()<getNumPrograms())
@@ -606,7 +604,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 								int velocity = v;
 								if (playingChord[tnote].size()>1) {
 									const float x = (float)(chordpos)/(float)(heldnotes-1);
-									delay = roundToInt((accel*0.3f*sin(float_Pi*x)+x)*maxdelay);
+									delay = roundToInt((accel*0.3f*sin(MathConstants<float>::pi*x)+x)*maxdelay);
 									velocity += roundToInt((2.f*fVelRamp-1.f)*(x*127.f-64.f));
 									velocity = jlimit(1,127,velocity);
 									//float veldelay = 1.f-(fVelToSpeed)*MIDI_TO_FLOAT(strumvel);
@@ -760,9 +758,11 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
     //process delay buffer----------------------------------------------------------
 	expectingDelayedNotes=false;
     MidiBuffer newBuffer;
-	MidiBuffer::Iterator mid_buffer_iter2(delayBuffer);
-	while(mid_buffer_iter2.getNextEvent(m,sample))
+	for(auto&& msgMetadata : delayBuffer)
 	{
+		auto m = msgMetadata.getMessage();
+		auto sample = msgMetadata.samplePosition;
+
 		if (sample < buffer.getNumSamples()) {
             //event is due, send it
 			if (m.isNoteOn()) {

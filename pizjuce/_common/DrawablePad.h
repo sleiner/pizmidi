@@ -82,8 +82,8 @@ protected:
 
     void paintButton (Graphics& g,
                       bool isMouseOverButton,
-                      bool isButtonDown);
-    void resized();
+                      bool isButtonDown) override;
+    void resized() override;
 
 
 

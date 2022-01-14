@@ -3,7 +3,7 @@
 
 #include "juce_audio_basics/juce_audio_basics.h"
 #include "juce_gui_basics/juce_gui_basics.h"
-#include "midistuff.h"
+#include "../_common/midistuff.h"
 
 #define maxFrets (32)
 #define maxStrings (16)
@@ -33,7 +33,7 @@ class GuitarNeckComponent : public Component,
 {
 public:
     GuitarNeckComponent (MidiKeyboardState& state);
-    ~GuitarNeckComponent();
+    ~GuitarNeckComponent() override;
 
 	void setNumStrings(int n);
 	void setNumFrets(int n);
@@ -118,33 +118,33 @@ public:
 
     //==============================================================================
     /** @internal */
-    void paint (Graphics& g);
+    void paint (Graphics& g) override;
     /** @internal */
-    void resized();
+    void resized() override;
     /** @internal */
-    void mouseMove (const MouseEvent& e);
+    void mouseMove (const MouseEvent& e) override;
     /** @internal */
-    void mouseDrag (const MouseEvent& e);
+    void mouseDrag (const MouseEvent& e) override;
     /** @internal */
-    void mouseDown (const MouseEvent& e);
+    void mouseDown (const MouseEvent& e) override;
     /** @internal */
-    void mouseUp (const MouseEvent& e);
+    void mouseUp (const MouseEvent& e) override;
     /** @internal */
-    void mouseEnter (const MouseEvent& e);
+    void mouseEnter (const MouseEvent& e) override;
     /** @internal */
-    void mouseExit (const MouseEvent& e);
+    void mouseExit (const MouseEvent& e) override;
     /** @internal */
-    void timerCallback();
+    void timerCallback() override;
     /** @internal */
-    void focusLost (FocusChangeType cause);
+    void focusLost (FocusChangeType cause) override;
     /** @internal */
-    void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity);
+    void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     /** @internal */
-    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity);
+    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     /** @internal */
-    void handleAsyncUpdate();
+    void handleAsyncUpdate() override;
     /** @internal */
-    void colourChanged();
+    void colourChanged() override;
 
 protected:
     //==============================================================================

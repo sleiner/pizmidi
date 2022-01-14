@@ -15,5 +15,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/AudioToCC.cpp")
 
 target_link_libraries(
-  piz_AudioToCC PUBLIC juce::juce_audio_devices juce::juce_core
-                       juce::juce_gui_basics)
+  piz_AudioToCC PRIVATE juce::juce_audio_devices juce::juce_core
+                        juce::juce_gui_basics)

@@ -299,15 +299,6 @@ void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
 
 	if (recording)
 		rectime += (double)buffer.getNumSamples()/getSampleRate();
-    //MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    //MidiMessage midi_message(0);
-    //int sample_number;
-    //while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
-    //    if (midi_message.isProgramChange()) {
-    //        lastUIHeight=0;
-    //        sendChangeMessage(this);
-    //    }
-    //}
 }
 
 //==============================================================================
@@ -382,7 +373,7 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
             bgcolor = Colour(xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
 
-            forEachXmlChildElement (*xmlState, e) {
+            for (auto *e : xmlState->getChildIterator()) {
                 if (e->hasTagName("Cue")) {
                     cue* newcue = new cue();
                     newcue->ppq = e->getDoubleAttribute("ppq");
@@ -454,7 +445,7 @@ void BigClockFilter::saveCues(File cuefile) {
         xmlState.addChildElement(ticks);
     }
 
-    xmlState.writeToFile(cuefile," ");
+    xmlState.writeTo(cuefile);
 }
 
 void BigClockFilter::loadCues(File cuefile) {
@@ -466,7 +457,7 @@ void BigClockFilter::loadCues(File cuefile) {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("BigClockCues"))
         {
-            forEachXmlChildElement (*xmlState, e) {
+            for (auto *e : xmlState->getChildIterator()) {
                 double fps=24.0;
                 double tpb=960.0;
                 int n=4;
@@ -629,7 +620,7 @@ const String BigClockFilter::ppqToString (const double sppq,
     //else seconds =
 
     const long double absSecs = fabs (seconds);
-    const uint64 samples = roundDoubleToInt(sampleRate*absSecs);
+    const uint64 samples = roundToInt(sampleRate*absSecs);
 
     if (getParameter(kSamples)) return sign+String(samples);
     else {

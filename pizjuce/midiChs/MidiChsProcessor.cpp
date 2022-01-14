@@ -220,12 +220,12 @@ void MidiChsProcessor::processBlock (AudioSampleBuffer& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
     }
 
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0);
     MidiBuffer midiout;
-    int sample_number;
     bool discard = false;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+    for(auto&& msgMetadata : midiMessages) {
+        auto midi_message = msgMetadata.getMessage();
+        auto sample_number = msgMetadata.samplePosition;
+
         MidiMessage out_message = midi_message;
         short ch[16];
 	    ch[0]  = (short int)(fChannel1*16);

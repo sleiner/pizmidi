@@ -65,7 +65,7 @@ JuceProgram::JuceProgram ()
     //default program name
 	name = "Default";
 
-	device = "--";
+	device.name = "--";
 }
 
 //==============================================================================
@@ -79,7 +79,7 @@ AudioToCC::AudioToCC() :
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiOutput::getDevices();
+    devices = MidiOutput::getAvailableDevices();
     midiOutput = NULL;
     lastCCL=0;
     lastCCR=0;
@@ -181,8 +181,14 @@ void AudioToCC::setParameter (int index, float newValue)
 
 void AudioToCC::setActiveDevice(String name)
 {
-	activeDevice = programs[curProgram].device = name;
-	int index = devices.indexOf(name);
+	setActiveDevice(getDeviceByName(name));
+}
+
+void AudioToCC::setActiveDevice(MidiDeviceInfo const& device)
+{
+	activeDevice = programs[curProgram].device = device;
+	int index = devices.indexOf(device);
+
 	if (index==-1) {
 		param[kDevice] = programs[curProgram].param[kDevice] = 0.f;
 		if (midiOutput) midiOutput->stopBackgroundThread();
@@ -191,11 +197,15 @@ void AudioToCC::setActiveDevice(String name)
 	else {
 		param[kDevice] = programs[curProgram].param[kDevice] = (float)index/(float)(devices.size()-1);
 		if (midiOutput) midiOutput->stopBackgroundThread();
-		midiOutput = MidiOutput::openDevice(index);
+		midiOutput = MidiOutput::openDevice(device.identifier);
 		midiOutput->startBackgroundThread();
 	}
 }
 
+MidiDeviceInfo AudioToCC::getDeviceByName(String name) const
+{
+	return devices.findIf([&](auto const& device) { return name == device.name; });
+}
 
 const String AudioToCC::getParameterName (int index)
 {
@@ -238,7 +248,7 @@ const String AudioToCC::getParameterText (int index)
     else if (index == kRelease)
 		return String (roundToInt(param[kRelease]*100.f));
     else if (index == kDevice) {
-        if (param[kDevice]>0.0) return devices.joinIntoString("",roundDoubleToInt(param[kDevice]*(devices.size()-1)),1);
+        if (param[kDevice]>0.0) return devices[roundToInt(param[kDevice]*(devices.size()-1))].name;
         else return String("--");
     }
 	else if (index==kCCL || index==kCCR) {
@@ -250,7 +260,7 @@ const String AudioToCC::getParameterText (int index)
         else return String("Stereo");
     }
     else if (index==kChannel)
-		return String (roundDoubleToInt(param[index]*15.0)+1);
+		return String (roundToInt(param[index]*15.0)+1);
     else if (index==kAutomateHost) {
         if (param[kAutomateHost]<0.5f) return String("Off");
         else return String("On");
@@ -347,16 +357,16 @@ void AudioToCC::releaseResources()
 
 // wimpy "interpolation" from last 3 data points
 int AudioToCC::smooth(int data, int old, int older, float inertia) {
-    //data=roundFloatToInt((float)(data+old+older)/3.0f);
+    //data=roundToInt((float)(data+old+older)/3.0f);
     //if (data>old) data=old+1;
     //else if (data<old) data=old-1;
 
     //if increasing
-    //if (data>old) data=data-roundFloatToInt((float)(data-old)*inertia*0.9f);
+    //if (data>old) data=data-roundToInt((float)(data-old)*inertia*0.9f);
     float change = (float)(data-old)*(1.0f-inertia*0.95f);
     if (change<1.0f && change>0.0f) change=1.0f;
     else if (change<0.0f && change>-1.0f) change=-1.0f;
-    data=old+roundFloatToInt(change);
+    data=old+roundToInt(change);
     if (data<1) data=0;
     if (data>127) data=127;
     return data;
@@ -381,11 +391,11 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
     const int gateOffValueL = floatToMidi(param[kGateOffValueCCL]);
     const int gateOffValueR = floatToMidi(param[kGateOffValueCCR]);
     const float thresh = param[kGateThreshold];
-    const int Ch = roundDoubleToInt(param[kChannel]*15.0);
+    const int Ch = roundToInt(param[kChannel]*15.0);
     const float updateRate = (1.0f-param[kRate])*0.0025f+0.001f; //in seconds
     const bool stereo = param[kStereo]>=0.5f;
-	const unsigned int sampleThreshold = param[kRate]==1.f ? 1 : roundDoubleToInt(getSampleRate()*updateRate);
-    const unsigned int RMSThreshold = roundDoubleToInt(getSampleRate()*0.001f);
+	const unsigned int sampleThreshold = param[kRate]==1.f ? 1 : roundToInt(getSampleRate()*updateRate);
+    const unsigned int RMSThreshold = roundToInt(getSampleRate()*0.001f);
 	const bool oldMethod = false;
 	const bool logScale = param[kMode]>=0.5f;
 
@@ -617,7 +627,7 @@ void AudioToCC::getStateInformation (MemoryBlock& destData)
             prog->setAttribute (getParameterName(i).toLowerCase().retainCharacters(goodXmlChars), program->param[i]);
         }
         prog->setAttribute ("progname", program->name);
-		prog->setAttribute ("device", program->device);
+		prog->setAttribute ("device", program->device.name);
 		xmlState.addChildElement(prog);
     }
     copyXmlToBinary (xmlState, destData);
@@ -631,7 +641,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
     {
         if (xmlState->hasTagName ("PizAudioToCCSettings"))
         {
-            forEachXmlChildElement (*xmlState, e)
+			for (auto *e : xmlState->getChildIterator())
 			{
 				if (e->hasTagName("Program"))
 				{
@@ -645,8 +655,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
 						program->param[kPeakGain] *= 0.25f;
 					}
 					program->name = e->getStringAttribute ("progname", program->name);
-					program->device = e->getStringAttribute ("device", programs->device);
-
+					program->device = getDeviceByName(e->getStringAttribute ("device", programs->device.name));
 				}
             }
             setCurrentProgram(xmlState->getIntAttribute("program", 0));

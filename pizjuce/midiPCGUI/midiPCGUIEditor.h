@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:46:40am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDIPCGUIEDITOR_MIDIPCGUIEDITOR_A4034B54__
-#define __JUCER_HEADER_MIDIPCGUIEDITOR_MIDIPCGUIEDITOR_A4034B54__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -42,8 +39,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class midiPCGUIEditor  : public AudioProcessorEditor,
-                         public ChangeListener,
+class midiPCGUIEditor  : public juce::AudioProcessorEditor,
+                         public juce::ChangeListener,
                          public ClickableLabelListener,
                          public juce::Slider::Listener,
                          public juce::Button::Listener,
@@ -52,25 +49,22 @@ class midiPCGUIEditor  : public AudioProcessorEditor,
 public:
     //==============================================================================
     midiPCGUIEditor (midiPCGUI* const ownerFilter);
-    ~midiPCGUIEditor();
+    ~midiPCGUIEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void changeListenerCallback (ChangeBroadcaster* source);
-	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) {}
-	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) {label->edit();}
+	void changeListenerCallback (ChangeBroadcaster* source) override;
+	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) override {}
+	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) override {label->edit();}
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-    void buttonClicked (Button* buttonThatWasClicked);
-    void labelTextChanged (Label* labelThatHasChanged);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void labelTextChanged (juce::Label* labelThatHasChanged) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -88,39 +82,38 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    GroupComponent* groupComponent2;
-    GroupComponent* groupComponent;
-    VSTSlider* s_Program;
-    VSTSlider* s_BankMSB;
-    VSTSlider* s_BankLSB;
-    TextButton* b_BankTrig;
-    TextButton* b_PCTrig;
-    TextButton* b_Inc;
-    TextButton* b_Dec;
-    ToggleButton* b_PCListen;
-    VSTSlider* s_Channel;
-    TextButton* b_Mode;
-    Label* PCDisplay;
-    Label* label;
-    Label* label2;
-    Label* label3;
-    Label* label4;
-    Label* label5;
-    ToggleButton* b_Thru;
-    Label* PCDisplay2;
-    Label* PCDisplay3;
-    Label* label6;
-    ClickableLabel* ProgramName;
-    TextButton* minimize;
-    Path internalPath1;
-    Path internalPath2;
+    std::unique_ptr<juce::GroupComponent> groupComponent2;
+    std::unique_ptr<juce::GroupComponent> groupComponent;
+    std::unique_ptr<VSTSlider> s_Program;
+    std::unique_ptr<VSTSlider> s_BankMSB;
+    std::unique_ptr<VSTSlider> s_BankLSB;
+    std::unique_ptr<juce::TextButton> b_BankTrig;
+    std::unique_ptr<juce::TextButton> b_PCTrig;
+    std::unique_ptr<juce::TextButton> b_Inc;
+    std::unique_ptr<juce::TextButton> b_Dec;
+    std::unique_ptr<juce::ToggleButton> b_PCListen;
+    std::unique_ptr<VSTSlider> s_Channel;
+    std::unique_ptr<juce::TextButton> b_Mode;
+    std::unique_ptr<juce::Label> PCDisplay;
+    std::unique_ptr<juce::Label> label;
+    std::unique_ptr<juce::Label> label2;
+    std::unique_ptr<juce::Label> label3;
+    std::unique_ptr<juce::Label> label4;
+    std::unique_ptr<juce::Label> label5;
+    std::unique_ptr<juce::ToggleButton> b_Thru;
+    std::unique_ptr<juce::Label> PCDisplay2;
+    std::unique_ptr<juce::Label> PCDisplay3;
+    std::unique_ptr<juce::Label> label6;
+    std::unique_ptr<ClickableLabel> ProgramName;
+    std::unique_ptr<juce::TextButton> minimize;
+    juce::Path internalPath1;
+    juce::Path internalPath2;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    midiPCGUIEditor (const midiPCGUIEditor&);
-    const midiPCGUIEditor& operator= (const midiPCGUIEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiPCGUIEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_MIDIPCGUIEDITOR_MIDIPCGUIEDITOR_A4034B54__

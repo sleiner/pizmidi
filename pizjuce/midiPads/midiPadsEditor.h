@@ -12,10 +12,10 @@ class fullScreenContainer : public Component
 {
 public:
 	fullScreenContainer() {bgcolor=Colours::white;}
-	~fullScreenContainer() {};
+	~fullScreenContainer() override {};
 	Colour bgcolor;
 private:
-	void paint(Graphics& g) {g.fillAll(bgcolor);}
+	void paint(Graphics& g) override {g.fillAll(bgcolor);}
 };
 
 class midiPadsEditor   : public AudioProcessorEditor,
@@ -27,25 +27,25 @@ class midiPadsEditor   : public AudioProcessorEditor,
 {
 public:
     midiPadsEditor (midiPads* const ownerFilter);
-    ~midiPadsEditor();
+    ~midiPadsEditor() override;
 
     //==============================================================================
-    void changeListenerCallback (ChangeBroadcaster* source);
-    void buttonClicked (Button*);
-    void buttonStateChanged (Button*);
-    void sliderValueChanged (Slider*);
-    void mouseDown (const MouseEvent& e);
-    void mouseDrag (const MouseEvent& e);
-    void mouseUp (const MouseEvent& e);
-	void mouseDoubleClick(const MouseEvent& e);
-    void textEditorTextChanged(TextEditor&);
-    void textEditorReturnKeyPressed(TextEditor&);
-    void textEditorEscapeKeyPressed(TextEditor&);
-    void textEditorFocusLost(TextEditor&);
-    void filesDropped (const StringArray &files, int x, int y);
-    bool isInterestedInFileDrag (const StringArray& files);
-    void paint (Graphics&);
-    void resized();
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void buttonClicked (Button*) override;
+    void buttonStateChanged (Button*) override;
+    void sliderValueChanged (Slider*) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void mouseUp (const MouseEvent& e) override;
+	void mouseDoubleClick(const MouseEvent& e) override;
+    void textEditorTextChanged(TextEditor&) override;
+    void textEditorReturnKeyPressed(TextEditor&) override;
+    void textEditorEscapeKeyPressed(TextEditor&) override;
+    void textEditorFocusLost(TextEditor&) override;
+    void filesDropped (const StringArray &files, int x, int y) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
+    void paint (Graphics&) override;
+    void resized() override;
 
     Colour color, color2;
 

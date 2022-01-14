@@ -19,5 +19,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/MidiPad.cpp")
 
 target_link_libraries(
-  piz_midiOut PUBLIC juce::juce_audio_devices juce::juce_events
-                     juce::juce_gui_basics)
+  piz_midiOut PRIVATE juce::juce_audio_devices juce::juce_events
+                      juce::juce_gui_basics)

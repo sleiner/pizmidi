@@ -220,7 +220,7 @@ inline String getNoteNameWithoutOctave(int noteNumber, bool sharps = true) {
 inline int mapToRange(float x,float in1,float in2,float out1,float out2) {
       float slope = ((float)(out2-out1))/((float)(in2-in1));
       float b = out1 - slope * in1;
-      return roundFloatToInt(slope * x + b);
+      return roundToInt(slope * x + b);
 }
 
 inline int CombineBytes(unsigned char lsb, unsigned char msb)

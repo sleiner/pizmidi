@@ -33,23 +33,23 @@ public:
     MidiChsEditor (MidiChsProcessor* const ownerFilter);
 
     /** Destructor. */
-    ~MidiChsEditor();
+    ~MidiChsEditor() override;
 
     //==============================================================================
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (Graphics& g);
+    void paint (Graphics& g) override;
 
     /** Standard Juce resize callback. */
-    void resized();
+    void resized() override;
 
-    void buttonClicked (Button*);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
+    void buttonClicked (Button*) override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
 

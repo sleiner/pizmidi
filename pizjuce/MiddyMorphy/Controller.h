@@ -15,7 +15,7 @@ class Controller : public juce::ChangeBroadcaster {
   public:
     Controller(MidiMorph * core);
 
-    ~Controller();
+    ~Controller() override;
 
 
   private:

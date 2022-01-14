@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  3 Dec 2011 4:38:03pm
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,115 +28,134 @@
 
 //==============================================================================
 CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      curve (0),
-      label (0),
-      label2 (0),
-      resizer (0),
-      velocityButton (0),
-      ccButton (0),
-      slider (0),
-      channelSlider (0),
-      label3 (0),
-      channelPressureButton (0),
-      aftertouchButton (0),
-      resetButton (0),
-      helpButton (0),
-      instructionsLabel (0),
-      label4 (0),
-      label5 (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (curve = new MidiEnvelope (0,this,this->getFilter()));
-    curve->setName (L"curve");
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
 
-    addAndMakeVisible (label = new Label (L"new label",
-                                          L"In: --"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centredLeft);
+    curve.reset (new MidiEnvelope (0,this,this->getFilter()));
+    addAndMakeVisible (curve.get());
+    curve->setName ("curve");
+
+    label.reset (new juce::Label ("new label",
+                                  TRANS("In: --")));
+    addAndMakeVisible (label.get());
+    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label->setJustificationType (juce::Justification::centredLeft);
     label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label2 = new Label (L"new label",
-                                           L"Out: --"));
-    label2->setFont (Font (15.0000f, Font::plain));
-    label2->setJustificationType (Justification::centredLeft);
+    label2.reset (new juce::Label ("new label",
+                                   TRANS("Out: --")));
+    addAndMakeVisible (label2.get());
+    label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label2->setJustificationType (juce::Justification::centredLeft);
     label2->setEditable (false, false, false);
-    label2->setColour (TextEditor::textColourId, Colours::black);
-    label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer.get());
 
-    addAndMakeVisible (velocityButton = new ToggleButton (L"new toggle button"));
-    velocityButton->setButtonText (L"Velocity");
+    velocityButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (velocityButton.get());
+    velocityButton->setButtonText (TRANS("Velocity"));
     velocityButton->addListener (this);
 
-    addAndMakeVisible (ccButton = new ToggleButton (L"new toggle button"));
-    ccButton->setButtonText (L"CC");
+    ccButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (ccButton.get());
+    ccButton->setButtonText (TRANS("CC"));
     ccButton->addListener (this);
 
-    addAndMakeVisible (slider = new Slider (L"new slider"));
+    slider.reset (new juce::Slider ("new slider"));
+    addAndMakeVisible (slider.get());
     slider->setRange (0, 127, 1);
-    slider->setSliderStyle (Slider::IncDecButtons);
-    slider->setTextBoxStyle (Slider::TextBoxLeft, false, 35, 20);
-    slider->setColour (Slider::textBoxTextColourId, Colours::black);
+    slider->setSliderStyle (juce::Slider::IncDecButtons);
+    slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
+    slider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
     slider->addListener (this);
 
-    addAndMakeVisible (channelSlider = new ChannelSlider (L"new slider"));
+    channelSlider.reset (new ChannelSlider ("new slider"));
+    addAndMakeVisible (channelSlider.get());
     channelSlider->setRange (0, 16, 1);
-    channelSlider->setSliderStyle (Slider::IncDecButtons);
-    channelSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 35, 20);
-    channelSlider->setColour (Slider::textBoxTextColourId, Colours::black);
+    channelSlider->setSliderStyle (juce::Slider::IncDecButtons);
+    channelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
+    channelSlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
     channelSlider->addListener (this);
 
-    addAndMakeVisible (label3 = new Label (L"new label",
-                                           L"Channel"));
-    label3->setFont (Font (15.0000f, Font::plain));
-    label3->setJustificationType (Justification::centredLeft);
+    label3.reset (new juce::Label ("new label",
+                                   TRANS("Channel")));
+    addAndMakeVisible (label3.get());
+    label3->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label3->setJustificationType (juce::Justification::centredLeft);
     label3->setEditable (false, false, false);
-    label3->setColour (TextEditor::textColourId, Colours::black);
-    label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (channelPressureButton = new ToggleButton (L"new toggle button"));
-    channelPressureButton->setButtonText (L"Ch. Press.");
+    channelPressureButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (channelPressureButton.get());
+    channelPressureButton->setButtonText (TRANS("Ch. Press."));
     channelPressureButton->addListener (this);
 
-    addAndMakeVisible (aftertouchButton = new ToggleButton (L"new toggle button"));
-    aftertouchButton->setButtonText (L"Poly Aft.");
+    aftertouchButton.reset (new juce::ToggleButton ("new toggle button"));
+    addAndMakeVisible (aftertouchButton.get());
+    aftertouchButton->setButtonText (TRANS("Poly Aft."));
     aftertouchButton->addListener (this);
 
-    addAndMakeVisible (resetButton = new TextButton (L"new button"));
-    resetButton->setButtonText (L"Reset");
+    resetButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (resetButton.get());
+    resetButton->setButtonText (TRANS("Reset"));
     resetButton->addListener (this);
 
-    addAndMakeVisible (helpButton = new TextButton (L"new button"));
-    helpButton->setButtonText (L"Help");
+    helpButton.reset (new juce::TextButton ("new button"));
+    addAndMakeVisible (helpButton.get());
+    helpButton->setButtonText (TRANS("Help"));
     helpButton->addListener (this);
 
-    addAndMakeVisible (instructionsLabel = new Label (L"new label",
-                                                      L"X is input, Y is output.\nMax 32 points.\n\nDefault settings load from \"midiCurve.fxb\"\n_______________\n\nDouble-click or Right-click: \nadd or delete a point\n\nMiddle-click or Alt-click: \nmake a curve control point\n\nShift-click/drag: \nset point to center line\n\nCtrl-drag: \nrestrict to horizontal/vertical movement"));
-    instructionsLabel->setFont (Font (18.0000f, Font::plain));
-    instructionsLabel->setJustificationType (Justification::centred);
+    instructionsLabel.reset (new juce::Label ("new label",
+                                              TRANS("X is input, Y is output.\n"
+                                              "Max 32 points.\n"
+                                              "\n"
+                                              "Default settings load from \"midiCurve.fxb\"\n"
+                                              "_______________\n"
+                                              "\n"
+                                              "Double-click or Right-click: \n"
+                                              "add or delete a point\n"
+                                              "\n"
+                                              "Middle-click or Alt-click: \n"
+                                              "make a curve control point\n"
+                                              "\n"
+                                              "Shift-click/drag: \n"
+                                              "set point to center line\n"
+                                              "\n"
+                                              "Ctrl-drag: \n"
+                                              "restrict to horizontal/vertical movement")));
+    addAndMakeVisible (instructionsLabel.get());
+    instructionsLabel->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    instructionsLabel->setJustificationType (juce::Justification::centred);
     instructionsLabel->setEditable (false, false, false);
-    instructionsLabel->setColour (Label::backgroundColourId, Colour (0xcbffffff));
-    instructionsLabel->setColour (TextEditor::textColourId, Colours::black);
-    instructionsLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    instructionsLabel->setColour (juce::Label::backgroundColourId, juce::Colour (0xcbffffff));
+    instructionsLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    instructionsLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label4 = new Label (L"new label",
-                                           L"Last Message"));
-    label4->setFont (Font (15.0000f, Font::bold));
-    label4->setJustificationType (Justification::centred);
+    label4.reset (new juce::Label ("new label",
+                                   TRANS("Last Message")));
+    addAndMakeVisible (label4.get());
+    label4->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    label4->setJustificationType (juce::Justification::centred);
     label4->setEditable (false, false, false);
-    label4->setColour (TextEditor::textColourId, Colours::black);
-    label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    addAndMakeVisible (label5 = new Label (L"new label",
-                                           L"Inputs"));
-    label5->setFont (Font (15.0000f, Font::bold));
-    label5->setJustificationType (Justification::centred);
+    label5.reset (new juce::Label ("new label",
+                                   TRANS("Inputs")));
+    addAndMakeVisible (label5.get());
+    label5->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
+    label5->setJustificationType (juce::Justification::centred);
     label5->setEditable (false, false, false);
-    label5->setColour (TextEditor::textColourId, Colours::black);
-    label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
 
     //[UserPreSize]
@@ -165,22 +182,22 @@ CurveEditor::~CurveEditor()
 	getFilter()->lastMsg.removeChangeListener (this);
     //[/Destructor_pre]
 
-    deleteAndZero (curve);
-    deleteAndZero (label);
-    deleteAndZero (label2);
-    deleteAndZero (resizer);
-    deleteAndZero (velocityButton);
-    deleteAndZero (ccButton);
-    deleteAndZero (slider);
-    deleteAndZero (channelSlider);
-    deleteAndZero (label3);
-    deleteAndZero (channelPressureButton);
-    deleteAndZero (aftertouchButton);
-    deleteAndZero (resetButton);
-    deleteAndZero (helpButton);
-    deleteAndZero (instructionsLabel);
-    deleteAndZero (label4);
-    deleteAndZero (label5);
+    curve = nullptr;
+    label = nullptr;
+    label2 = nullptr;
+    resizer = nullptr;
+    velocityButton = nullptr;
+    ccButton = nullptr;
+    slider = nullptr;
+    channelSlider = nullptr;
+    label3 = nullptr;
+    channelPressureButton = nullptr;
+    aftertouchButton = nullptr;
+    resetButton = nullptr;
+    helpButton = nullptr;
+    instructionsLabel = nullptr;
+    label4 = nullptr;
+    label5 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -188,12 +205,12 @@ CurveEditor::~CurveEditor()
 }
 
 //==============================================================================
-void CurveEditor::paint (Graphics& g)
+void CurveEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffdddddd));
+    g.fillAll (juce::Colour (0xffdddddd));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -201,6 +218,9 @@ void CurveEditor::paint (Graphics& g)
 
 void CurveEditor::resized()
 {
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     curve->setBounds (8, 8, getWidth() - 93, getHeight() - 16);
     label->setBounds (getWidth() - 6 - 72, 41, 72, 16);
     label2->setBounds (getWidth() - 6 - 72, 57, 72, 16);
@@ -223,42 +243,42 @@ void CurveEditor::resized()
     //[/UserResized]
 }
 
-void CurveEditor::buttonClicked (Button* buttonThatWasClicked)
+void CurveEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == velocityButton)
+    if (buttonThatWasClicked == velocityButton.get())
     {
         //[UserButtonCode_velocityButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kVelocity,velocityButton->getToggleState()?1.f:0.f);
         //[/UserButtonCode_velocityButton]
     }
-    else if (buttonThatWasClicked == ccButton)
+    else if (buttonThatWasClicked == ccButton.get())
     {
         //[UserButtonCode_ccButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kCC,ccButton->getToggleState()?1.f:0.f);
         //[/UserButtonCode_ccButton]
     }
-    else if (buttonThatWasClicked == channelPressureButton)
+    else if (buttonThatWasClicked == channelPressureButton.get())
     {
         //[UserButtonCode_channelPressureButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kChannelPressure,channelPressureButton->getToggleState()?1.f:0.f);
         //[/UserButtonCode_channelPressureButton]
     }
-    else if (buttonThatWasClicked == aftertouchButton)
+    else if (buttonThatWasClicked == aftertouchButton.get())
     {
         //[UserButtonCode_aftertouchButton] -- add your button handler code here..
 		getFilter()->setParameterNotifyingHost(kAftertouch,aftertouchButton->getToggleState()?1.f:0.f);
         //[/UserButtonCode_aftertouchButton]
     }
-    else if (buttonThatWasClicked == resetButton)
+    else if (buttonThatWasClicked == resetButton.get())
     {
         //[UserButtonCode_resetButton] -- add your button handler code here..
 		getFilter()->resetPoints();
         //[/UserButtonCode_resetButton]
     }
-    else if (buttonThatWasClicked == helpButton)
+    else if (buttonThatWasClicked == helpButton.get())
     {
         //[UserButtonCode_helpButton] -- add your button handler code here..
 		instructionsLabel->setVisible(!instructionsLabel->isVisible());
@@ -269,18 +289,18 @@ void CurveEditor::buttonClicked (Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void CurveEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void CurveEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == slider)
+    if (sliderThatWasMoved == slider.get())
     {
         //[UserSliderCode_slider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kCCNumber,(float)(slider->getValue()/slider->getMaximum()));
         //[/UserSliderCode_slider]
     }
-    else if (sliderThatWasMoved == channelSlider)
+    else if (sliderThatWasMoved == channelSlider.get())
     {
         //[UserSliderCode_channelSlider] -- add your slider handling code here..
 		getFilter()->setParameterNotifyingHost(kChannel,(float)(channelSlider->getValue()/channelSlider->getMaximum()));
@@ -347,16 +367,17 @@ void CurveEditor::updateParameters ()
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="CurveEditor" componentName=""
                  parentClasses="public AudioProcessorEditor, public ChangeListener"
                  constructorParams="MidiCurve* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffdddddd"/>
   <GENERICCOMPONENT name="curve" id="a93377748ddb46bb" memberName="curve" virtualName=""
@@ -365,13 +386,13 @@ BEGIN_JUCER_METADATA
   <LABEL name="new label" id="2453dab56ac8437b" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="6Rr 41 72 16" edTextCol="ff000000"
          edBkgCol="0" labelText="In: --" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <LABEL name="new label" id="f7832c70777477b2" memberName="label2" virtualName=""
          explicitFocusOrder="0" pos="6Rr 57 72 16" edTextCol="ff000000"
          edBkgCol="0" labelText="Out: --" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <GENERICCOMPONENT name="" id="2a32bbdca363149e" memberName="resizer" virtualName=""
                     explicitFocusOrder="0" pos="0Rr 0Rr 16 16" class="ResizableCornerComponent"
                     params="this, &amp;resizeLimits"/>
@@ -383,18 +404,19 @@ BEGIN_JUCER_METADATA
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="new slider" id="2627973e6f13fd2f" memberName="slider" virtualName=""
           explicitFocusOrder="0" pos="6Rr 205 72 16" textboxtext="ff000000"
-          min="0" max="127" int="1" style="IncDecButtons" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="35" textBoxHeight="20" skewFactor="1"/>
+          min="0.0" max="127.0" int="1.0" style="IncDecButtons" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="35" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
   <SLIDER name="new slider" id="a4e096bdcf717868" memberName="channelSlider"
           virtualName="ChannelSlider" explicitFocusOrder="0" pos="6Rr 128 72 16"
-          textboxtext="ff000000" min="0" max="16" int="1" style="IncDecButtons"
+          textboxtext="ff000000" min="0.0" max="16.0" int="1.0" style="IncDecButtons"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="35"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="new label" id="59be378b1bb0a393" memberName="label3" virtualName=""
          explicitFocusOrder="0" pos="6Rr 112 72 16" edTextCol="ff000000"
          edBkgCol="0" labelText="Channel" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
   <TOGGLEBUTTON name="new toggle button" id="87d9dede60c981e1" memberName="channelPressureButton"
                 virtualName="" explicitFocusOrder="0" pos="6Rr 223 72 24" buttonText="Ch. Press."
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -411,19 +433,26 @@ BEGIN_JUCER_METADATA
          virtualName="" explicitFocusOrder="0" pos="16 16 108M 32M" bkgCol="cbffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="X is input, Y is output.&#10;Max 32 points.&#10;&#10;Default settings load from &quot;midiCurve.fxb&quot;&#10;_______________&#10;&#10;Double-click or Right-click: &#10;add or delete a point&#10;&#10;Middle-click or Alt-click: &#10;make a curve control point&#10;&#10;Shift-click/drag: &#10;set point to center line&#10;&#10;Ctrl-drag: &#10;restrict to horizontal/vertical movement"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="18" bold="0" italic="0" justification="36"/>
+         fontname="Default font" fontsize="18.0" kerning="0.0" bold="0"
+         italic="0" justification="36"/>
   <LABEL name="new label" id="76fe7ddb2ab9df1" memberName="label4" virtualName=""
          explicitFocusOrder="0" pos="6Rr 6 72 32" edTextCol="ff000000"
          edBkgCol="0" labelText="Last Message" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="1" italic="0" justification="36"/>
+         fontsize="15.0" kerning="0.0" bold="1" italic="0" justification="36"
+         typefaceStyle="Bold"/>
   <LABEL name="new label" id="b04715bd509e8494" memberName="label5" virtualName=""
          explicitFocusOrder="0" pos="6Rr 91 72 16" edTextCol="ff000000"
          edBkgCol="0" labelText="Inputs" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="1" italic="0" justification="36"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="1" italic="0" justification="36" typefaceStyle="Bold"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

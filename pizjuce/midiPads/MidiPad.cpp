@@ -108,8 +108,8 @@ void MidiPad::drawButtonBackground (Graphics& g,
 
     const float indent = 2.0f;
 	roundness = jlimit(0.f,1.f,roundness);
-    const int cornerSize = jmin (roundFloatToInt (width * roundness),
-                                 roundFloatToInt (height * roundness));
+    const int cornerSize = jmin (roundToInt (width * roundness),
+                                 roundToInt (height * roundness));
     Colour bc (backgroundColour);
     if (isMouseOverButton)
     {

@@ -1,5 +1,7 @@
 #include "PizLooper.h"
 
+#include <vector>
+
 void PizLooper::prepareToPlay (double sampleRate, int samplesPerBlock) {
 	lastPosInfo.ppqPosition=0;
 	lastPosInfo.bpm = 0;
@@ -162,13 +164,9 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 	else receventoffset = - fmod (ppq, 0.5);
 
 	const int numevents = midiMessages.getNumEvents();
-	ScopedPointer<bool> played = new bool[numevents];
-	ScopedPointer<bool> usedForScale = new bool[numevents];
-	ScopedPointer<bool> usedForTranspose = new bool[numevents];
-
-	memset (played,0,sizeof(bool)*numevents);
-	memset (usedForScale,0,sizeof(bool)*numevents);
-	memset (usedForTranspose,0,sizeof(bool)*numevents);
+	std::vector<bool> played(numevents, false);
+	std::vector<bool> usedForScale(numevents, false);
+	std::vector<bool> usedForTranspose(numevents, false);
 
 	MidiBuffer kbBuffer;
 	kbstate.processNextMidiBuffer(kbBuffer,0,buffer.getNumSamples(),true);
@@ -352,7 +350,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 						for (int i=0;i<128;i++) {
 							if (hanging[slot].count[ch][i]>0) {
 								MidiMessage noteon = MidiMessage(0x90 | ch,i,hanging[slot].vel[ch][i],0);
-								loop->addEvent(noteon,roundDoubleToInt((getLoopStart(slot))*960.0)-(int)(programs[slot].measureFromHere*960.0));
+								loop->addEvent(noteon,roundToInt((getLoopStart(slot))*960.0)-(int)(programs[slot].measureFromHere*960.0));
 								loop->updateMatchedPairs();
 							}
 						}
@@ -376,7 +374,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 							if (hanging[slot].count[ch][i]>0 && recNoteOn[slot][ch][i]==-1) {
 								DBG("creating noteon at " + String(getLoopStart(slot) - programs[slot].measureFromHere));
 								MidiMessage noteon = MidiMessage(0x90 | ch,i,hanging[slot].vel[ch][i],0);
-								loop->addEvent(noteon,roundDoubleToInt((recstart[slot])*960.0)-(int)(measureDubFromHere[slot]*960.0));
+								loop->addEvent(noteon,roundToInt((recstart[slot])*960.0)-(int)(measureDubFromHere[slot]*960.0));
 								loop->updateMatchedPairs();
 							}
 						}
@@ -401,16 +399,16 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 		//midi input part
 		if (!midiMessages.isEmpty())
 		{
-			MidiMessage midi_message(0xfe);
-			int sample_number;
 			int message_number=0;
 			const int scalechan = (getParameterForSlot(kUseScaleChannel,slot)>=0.5)
 				? roundToInt(getParameterForSlot(kScaleChannel,slot)*15.0f)+1 : 0;
 			const int trchan = (getParameterForSlot(kUseTrChannel,slot)>=0.5f)
 				? roundToInt(getParameterForSlot(kTransposeChannel,slot)*15.0f)+1 : 0;
-			MidiBuffer::Iterator midi_buffer_iter(midiMessages);
-			while(midi_buffer_iter.getNextEvent(midi_message,sample_number))
+			for(auto&& msgMetadata : midiMessages)
 			{
+				auto midi_message = msgMetadata.getMessage();
+				auto sample_number = msgMetadata.samplePosition;
+
 				bool discard = param[kThru]<0.5f;
 				const bool isForChannel = channel==-1 || midi_message.isForChannel(channel+1);
 				const int notenum = midi_message.getNoteNumber();
@@ -630,11 +628,11 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
 		//play/record GUI keyboard through current slot:
 		if (slot==curProgram)
 		{
-			MidiMessage midi_message(0xfe);
-			int sample_number;
-			MidiBuffer::Iterator kbIterator(kbBuffer);
-			while(kbIterator.getNextEvent(midi_message,sample_number))
+			for(auto&& msgMetadata : kbBuffer)
 			{
+				auto midi_message = msgMetadata.getMessage();
+				auto sample_number = msgMetadata.samplePosition;
+
 				bool discard=true;
 				const bool isForChannel = channel==-1 || midi_message.isForChannel(channel+1);
 				const int notenum = midi_message.getNoteNumber();

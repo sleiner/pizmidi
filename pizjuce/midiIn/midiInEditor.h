@@ -1,28 +1,29 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:44:57am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_MIDIINEDITOR_MIDIINEDITOR_3F2E21A2__
-#define __JUCER_HEADER_MIDIINEDITOR_MIDIINEDITOR_3F2E21A2__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "juce_audio_processors/juce_audio_processors.h"
+#include "juce_events/juce_events.h"
+#include "juce_gui_basics/juce_gui_basics.h"
+
 #include "midiIn.h"
 #include "MidiPad.h"
 //[/Headers]
@@ -37,31 +38,28 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MidiInEditor  : public AudioProcessorEditor,
-                      public ChangeListener,
-                      public Button::Listener,
-                      public ComboBox::Listener
+class MidiInEditor  : public juce::AudioProcessorEditor,
+                      public juce::ChangeListener,
+                      public juce::ComboBox::Listener,
+                      public juce::Button::Listener
 {
 public:
     //==============================================================================
     MidiInEditor (MidiInFilter* const ownerFilter);
-    ~MidiInEditor();
+    ~MidiInEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source);
-    void buttonStateChanged (Button* buttonThatWasClicked);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void buttonStateChanged (Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void comboBoxChanged (ComboBox* comboBoxThatHasChanged);
-    void buttonClicked (Button* buttonThatWasClicked);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -70,18 +68,17 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ComboBox* comboBox;
-    ToggleButton* hostButton;
-    ComboBox* channelBox;
-    MidiPad* imagepad;
-    Label* label;
+    std::unique_ptr<juce::ComboBox> comboBox;
+    std::unique_ptr<juce::ToggleButton> hostButton;
+    std::unique_ptr<juce::ComboBox> channelBox;
+    std::unique_ptr<MidiPad> imagepad;
+    std::unique_ptr<juce::Label> label;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    MidiInEditor (const MidiInEditor&);
-    const MidiInEditor& operator= (const MidiInEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiInEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_MIDIINEDITOR_MIDIINEDITOR_3F2E21A2__

@@ -29,13 +29,13 @@ MidiMorph::~MidiMorph() {
 
 void MidiMorph::setCursorXRatio(float x) {
   // Bouml preserved body begin 00042D8D
-    cursor->setXY((float)roundFloatToInt(x*paneSize.getWidth()) - cursor->size/2,cursor->Point::getY());
+    cursor->setXY((float)roundToInt(x*paneSize.getWidth()) - cursor->size/2,cursor->Point::getY());
   // Bouml preserved body end 00042D8D
 }
 
 void MidiMorph::setCursorYRatio(float y) {
   // Bouml preserved body begin 00042E0D
-    cursor->setXY(cursor->Point::getX(),(float)roundFloatToInt(y*paneSize.getHeight()) - cursor->size/2);
+    cursor->setXY(cursor->Point::getX(),(float)roundToInt(y*paneSize.getHeight()) - cursor->size/2);
   // Bouml preserved body end 00042E0D
 }
 
@@ -233,7 +233,7 @@ int MidiMorph::getNumSelectedScenes() {
 void MidiMorph::setSelectedScenes(Array<Scene*> & scenes) {
   // Bouml preserved body begin 0003E80D
 
-	this->selectedScenes.swapWithArray(scenes);
+	this->selectedScenes.swapWith(scenes);
 	if(auditSelScene && selectedScenes.size() == 1)
 	{
 		valuesChanged = true;

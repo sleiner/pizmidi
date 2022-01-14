@@ -1,26 +1,23 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:46:54am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_STEPEDITOR_STEPGUI_2085C00C__
-#define __JUCER_HEADER_STEPEDITOR_STEPGUI_2085C00C__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -52,42 +49,39 @@ public:
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class StepEditor  : public AudioProcessorEditor,
-                    public ChangeListener,
-                    public FileDragAndDropTarget,
-                    public Timer,
-                    public Button::Listener,
-                    public Slider::Listener
+class StepEditor  : public juce::AudioProcessorEditor,
+                    public juce::ChangeListener,
+                    public juce::FileDragAndDropTarget,
+                    public juce::Timer,
+                    public juce::Button::Listener,
+                    public juce::Slider::Listener
 {
 public:
     //==============================================================================
     StepEditor (MidiStep* const ownerFilter);
-    ~StepEditor();
+    ~StepEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    bool isInterestedInFileDrag (const StringArray& files);
-	void filesDropped (const StringArray& filenames, int mouseX, int mouseY);
-	void timerCallback ();
+    bool isInterestedInFileDrag (const StringArray& files) override;
+	void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+	void timerCallback () override;
 	void zoomIn(int centerPixel);
 	void zoomOut(int centerPixel);
 	void mouseWheelMove (const MouseEvent &e, float wheelIncrementX, float wheelIncrementY);
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiStep* getFilter() const throw() { return (MidiStep*) getAudioProcessor(); }
-	void changeListenerCallback (ChangeBroadcaster* source);
+	void changeListenerCallback (ChangeBroadcaster* source) override;
 	void updateParameters(bool updateLoop=false);
     ComponentBoundsConstrainer resizeLimits;
     PianoRoll* pianoRoll;
@@ -97,44 +91,43 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    GroupComponent* activeLoopLabel;
-    ResizableCornerComponent* resizer;
-    PianoPort* viewport;
-    TextButton* recordButton;
-    ChannelSlider* outChannelSlider;
-    TextButton* recArmButton1;
-    TextButton* recArmButton2;
-    TextButton* recArmButton3;
-    TextButton* recArmButton4;
-    TextButton* recArmButton5;
-    TextButton* recArmButton6;
-    TextButton* recArmButton7;
-    TextButton* recArmButton8;
-    Slider* keySlider;
-    TextButton* recArmButton9;
-    TextButton* recArmButton10;
-    TextButton* recArmButton11;
-    TextButton* recArmButton12;
-    TextButton* recArmButton13;
-    TextButton* recArmButton14;
-    TextButton* recArmButton15;
-    TextButton* recArmButton16;
-    ChannelSlider* recChannelSlider;
-    Slider* transposeSlider;
-    TextButton* saveButton;
-    PizButton* component;
-    ToggleButton* toggleButton;
-    TextButton* addBarButton;
-    TextButton* deleteBarButton;
-    ToggleButton* thruButton;
-    Path internalPath1;
+    std::unique_ptr<juce::GroupComponent> activeLoopLabel;
+    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<PianoPort> viewport;
+    std::unique_ptr<juce::TextButton> recordButton;
+    std::unique_ptr<ChannelSlider> outChannelSlider;
+    std::unique_ptr<juce::TextButton> recArmButton1;
+    std::unique_ptr<juce::TextButton> recArmButton2;
+    std::unique_ptr<juce::TextButton> recArmButton3;
+    std::unique_ptr<juce::TextButton> recArmButton4;
+    std::unique_ptr<juce::TextButton> recArmButton5;
+    std::unique_ptr<juce::TextButton> recArmButton6;
+    std::unique_ptr<juce::TextButton> recArmButton7;
+    std::unique_ptr<juce::TextButton> recArmButton8;
+    std::unique_ptr<juce::Slider> keySlider;
+    std::unique_ptr<juce::TextButton> recArmButton9;
+    std::unique_ptr<juce::TextButton> recArmButton10;
+    std::unique_ptr<juce::TextButton> recArmButton11;
+    std::unique_ptr<juce::TextButton> recArmButton12;
+    std::unique_ptr<juce::TextButton> recArmButton13;
+    std::unique_ptr<juce::TextButton> recArmButton14;
+    std::unique_ptr<juce::TextButton> recArmButton15;
+    std::unique_ptr<juce::TextButton> recArmButton16;
+    std::unique_ptr<ChannelSlider> recChannelSlider;
+    std::unique_ptr<juce::Slider> transposeSlider;
+    std::unique_ptr<juce::TextButton> saveButton;
+    std::unique_ptr<PizButton> component;
+    std::unique_ptr<juce::ToggleButton> toggleButton;
+    std::unique_ptr<juce::TextButton> addBarButton;
+    std::unique_ptr<juce::TextButton> deleteBarButton;
+    std::unique_ptr<juce::ToggleButton> thruButton;
+    juce::Path internalPath1;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    StepEditor (const StepEditor&);
-    const StepEditor& operator= (const StepEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StepEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_STEPEDITOR_STEPGUI_2085C00C__

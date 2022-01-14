@@ -28,32 +28,32 @@ public:
     imagePluginEditor (imagePluginFilter* const ownerFilter);
 
     /** Destructor. */
-    ~imagePluginEditor();
+    ~imagePluginEditor() override;
 
     //==============================================================================
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (ChangeBroadcaster* source);
-    void buttonClicked (Button*);
-    void buttonStateChanged (Button* buttonThatWasClicked);
-	bool keyPressed (const KeyPress &key, Component* originatingComponent);
-    void textEditorTextChanged(TextEditor &editor);
-    void textEditorReturnKeyPressed(TextEditor &editor);
-    void textEditorEscapeKeyPressed(TextEditor &editor);
-    void textEditorFocusLost(TextEditor &editor);
-    void filesDropped (const StringArray &files, int x, int y);
-    bool isInterestedInFileDrag (const StringArray& files);
-    void sliderValueChanged (Slider* sliderThatWasMoved);
-	void mouseDown(const MouseEvent &e);
-	void mouseDoubleClick(const MouseEvent &e);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void buttonClicked (Button*) override;
+    void buttonStateChanged (Button* buttonThatWasClicked) override;
+	bool keyPressed (const KeyPress &key, Component* originatingComponent) override;
+    void textEditorTextChanged(TextEditor &editor) override;
+    void textEditorReturnKeyPressed(TextEditor &editor) override;
+    void textEditorEscapeKeyPressed(TextEditor &editor) override;
+    void textEditorFocusLost(TextEditor &editor) override;
+    void filesDropped (const StringArray &files, int x, int y) override;
+    bool isInterestedInFileDrag (const StringArray& files) override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+	void mouseDown(const MouseEvent &e) override;
+	void mouseDoubleClick(const MouseEvent &e) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (Graphics&);
+    void paint (Graphics&) override;
 
     /** Standard Juce resize callback. */
-    void resized();
+    void resized() override;
     Colour color, color2;
 
 

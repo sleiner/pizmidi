@@ -12,7 +12,7 @@ class Cursor : public Module, public juce::ChangeBroadcaster {
     Cursor(MidiMorph * core);
 
     //gets called when the XYItem gets new coordinates
-    virtual void moved();
+    void moved() override;
 
 
   private:

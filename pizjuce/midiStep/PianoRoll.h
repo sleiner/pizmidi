@@ -7,7 +7,7 @@ class PianoRoll : public Component
 {
 public:
 	PianoRoll(MidiStep* plugin_);
-	~PianoRoll();
+	~PianoRoll() override;
 
 	void setSequence(Loop* sequence_);
 	void sequenceChanged();
@@ -20,14 +20,14 @@ public:
 	float pixelsPerPpq;
 	float getNoteHeight();
 
-    void mouseDown (const MouseEvent& e);
-    void mouseDrag (const MouseEvent& e);
-    void mouseUp (const MouseEvent& e);
-    void mouseMove (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e);
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void mouseUp (const MouseEvent& e) override;
+    void mouseMove (const MouseEvent& e) override;
+    void mouseDoubleClick (const MouseEvent& e) override;
 
-    void paint (Graphics& g);
-    void resized ();
+    void paint (Graphics& g) override;
+    void resized () override;
 
 private:
 	MidiStep* plugin;

@@ -227,7 +227,7 @@ float MidiCurve::getPointValue(int n, int y)
 
 float MidiCurve::findValue(float input)
 {
-	PathFlatteningIterator it(path,AffineTransform::identity,fmidiScaler);
+	PathFlatteningIterator it(path,{},fmidiScaler);
 	while (it.next()) {
 		if (it.x1==input) return 1.f-it.y1;
 		if (it.x2>=input) {
@@ -253,10 +253,10 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     }
     const int channel = roundToInt(param[kChannel]*16.0f);
 	MidiBuffer output;
-    MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-    MidiMessage midi_message(0xFE);
-    int sample_number;
-    while(mid_buffer_iter.getNextEvent(midi_message,sample_number)) {
+	for(auto&& msgMetadata : midiMessages) {
+		auto midi_message = msgMetadata.getMessage();
+		auto sample_number = msgMetadata.samplePosition;
+
 		if (midi_message.isProgramChange()) {
 			setCurrentProgram(midi_message.getProgramChangeNumber());
 		}
@@ -341,7 +341,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
 
 int MidiCurve::findPBValue(int input) {
 	float v = (float)input;
-	PathFlatteningIterator it(path,AffineTransform::identity,(float)0.0000610388);
+	PathFlatteningIterator it(path,{},(float)0.0000610388);
 	while (it.next()) {
 		if (it.x1==v) return roundToInt(16383.f * (1.f-it.y1));
 		if (it.x2>=v) {

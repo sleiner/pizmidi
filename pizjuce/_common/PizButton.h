@@ -1,32 +1,29 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  17 Aug 2011 6:31:51am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_PIZBUTTON_PIZBUTTON_F1585747__
-#define __JUCER_HEADER_PIZBUTTON_PIZBUTTON_F1585747__
+#pragma once
 
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 //[/Headers]
 
-using namespace juce;
+
 
 //==============================================================================
 /**
@@ -36,41 +33,38 @@ using namespace juce;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PizButton  : public Button
+class PizButton  : public juce::Button
 {
 public:
     //==============================================================================
     PizButton ();
-    ~PizButton();
+    ~PizButton() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void resized();
-    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
 
     // Binary resources:
     static const char* pirate_png;
     static const int pirate_pngSize;
 
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     //[/UserVariables]
 
     //==============================================================================
-    Image cachedImage_pirate_png;
+    juce::Image cachedImage_pirate_png_1;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    PizButton (const PizButton&);
-    const PizButton& operator= (const PizButton&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PizButton)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_PIZBUTTON_PIZBUTTON_F1585747__

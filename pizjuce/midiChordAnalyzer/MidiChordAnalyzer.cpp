@@ -170,11 +170,10 @@ void MidiChordAnalyzer::processBlock (AudioSampleBuffer& buffer,
 
 	chordKbState.processNextMidiBuffer(midiMessages,0,buffer.getNumSamples(),true);
 
-	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-	MidiMessage m(0xf0);
-	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample))
+	for(auto&& msgMetadata : midiMessages)
 	{
+		auto m = msgMetadata.getMessage();
+
 		if (channel==0 || m.isForChannel(channel))
 		{
 			if (m.isNoteOn()) {

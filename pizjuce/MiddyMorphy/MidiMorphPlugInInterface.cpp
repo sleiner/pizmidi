@@ -168,12 +168,10 @@ void MidiMorphPlugInInterface::setStateInformation(const void * data, int sizeIn
 
 void MidiMorphPlugInInterface::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages) {
   // Bouml preserved body begin 0002EB0D
-	MidiBuffer::Iterator it(midiMessages);
-	MidiMessage message = MidiMessage::controllerEvent(1,1,1) ;
-	int pos;
-	while(it.getNextEvent(message,pos))
+	for(auto&& m : midiMessages)
 	{
-		core.onMidiEvent(message);
+		auto msg = m.getMessage();
+		core.onMidiEvent(msg);
 	}
 
 	int delta;

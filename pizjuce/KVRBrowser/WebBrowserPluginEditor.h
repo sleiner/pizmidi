@@ -1,42 +1,39 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:44:22am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_WEBBROWSERPLUGINEDITOR_WEBBROWSERPLUGINEDITOR_9C8171F9__
-#define __JUCER_HEADER_WEBBROWSERPLUGINEDITOR_WEBBROWSERPLUGINEDITOR_9C8171F9__
+#pragma once
 
+//[Headers]     -- You can add your own extra header files here --
 #include "juce_events/juce_events.h"
 #include "juce_gui_extra/juce_gui_extra.h"
 
-//[Headers]     -- You can add your own extra header files here --
 #include "WebBrowserFilter.h"
 
-class MyBrowser : public WebBrowserComponent,
-                  public ChangeBroadcaster
+class MyBrowser : public juce::WebBrowserComponent,
+                  public juce::ChangeBroadcaster
 {
 public:
 	MyBrowser()
 		: unloadPageWhenBrowserIsHidden(false)
 	{};
-    ~MyBrowser() {};
-    bool pageAboutToLoad(const String& newURL);
+    ~MyBrowser() override {};
+    bool pageAboutToLoad(const String& newURL) override;
     String getCurrentURL();
     friend class WebBrowserComponent;
     String lastURL;
@@ -59,30 +56,27 @@ private:
 class WebBrowserPluginEditor  : public AudioProcessorEditor,
                                 public ChangeListener,
                                 public TextEditor::Listener,
-                                public Button::Listener
+                                public juce::Button::Listener
 {
 public:
     //==============================================================================
     WebBrowserPluginEditor (WebBrowserFilter* const ownerFilter);
-    ~WebBrowserPluginEditor();
+    ~WebBrowserPluginEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void textEditorReturnKeyPressed(TextEditor& editor);
-    void textEditorEscapeKeyPressed(TextEditor& editor){};
-    void textEditorTextChanged(TextEditor& editor){};
-    void textEditorFocusLost(TextEditor& editor){};
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(TextEditor& editor) override{};
+    void textEditorTextChanged(TextEditor& editor) override{};
+    void textEditorFocusLost(TextEditor& editor) override{};
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
-    void paint (Graphics& g);
-    void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
+    void paint (juce::Graphics& g) override;
+    void resized() override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -97,22 +91,21 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    TextButton* reloadButton;
-    MyBrowser* wb;
-    TextButton* backButton;
-    TextButton* forwardButton;
-    TextButton* homeButton;
-    TextButton* stopButton;
-    TextEditor* urlBar;
-    TextButton* goButton;
-    ResizableCornerComponent* resizer;
+    std::unique_ptr<juce::TextButton> reloadButton;
+    std::unique_ptr<MyBrowser> wb;
+    std::unique_ptr<juce::TextButton> backButton;
+    std::unique_ptr<juce::TextButton> forwardButton;
+    std::unique_ptr<juce::TextButton> homeButton;
+    std::unique_ptr<juce::TextButton> stopButton;
+    std::unique_ptr<juce::TextEditor> urlBar;
+    std::unique_ptr<juce::TextButton> goButton;
+    std::unique_ptr<ResizableCornerComponent> resizer;
 
 
     //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    WebBrowserPluginEditor (const WebBrowserPluginEditor&);
-    const WebBrowserPluginEditor& operator= (const WebBrowserPluginEditor&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebBrowserPluginEditor)
 };
 
+//[EndFile] You can add extra defines here...
+//[/EndFile]
 
-#endif   // __JUCER_HEADER_WEBBROWSERPLUGINEDITOR_WEBBROWSERPLUGINEDITOR_9C8171F9__

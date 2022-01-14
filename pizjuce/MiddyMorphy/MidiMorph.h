@@ -18,7 +18,7 @@ using namespace juce;
 class MidiMorph : public juce::ChangeBroadcaster {
   public:
     MidiMorph();
-    ~MidiMorph();
+    ~MidiMorph() override;
 
     OwnedArray<Scene> scenes;
     Cursor* cursor;

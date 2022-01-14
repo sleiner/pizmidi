@@ -112,7 +112,7 @@ void PizKeyboard::setParameter (int index, float newValue)
     }
     else if (index==kChannel)
     {
-        channel = roundFloatToInt(newValue*15.f);
+        channel = roundToInt(newValue*15.f);
         sendChangeMessage();
     }
     else if (index==kVelocity)
@@ -201,7 +201,7 @@ const String PizKeyboard::getParameterText (int index)
     if (index == kChannel)
         return String(channel+1);
     if (index == kVelocity)
-        return String (roundFloatToInt(velocity*127.f));
+        return String (roundToInt(velocity*127.f));
     if (index == kUseY)
         return useY ? "Yes" : "No";
 	if (index == kToggleInput)
@@ -349,10 +349,10 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 	}
 
 	bool skip = false;
-	MidiBuffer::Iterator mid_buffer_iter(midiMessages);
-	MidiMessage m(0xf0);
-	int sample;
-	while(mid_buffer_iter.getNextEvent(m,sample)) {
+	for(auto const&& msgMetadata: midiMessages) {
+		auto m = msgMetadata.getMessage();
+		auto sample = msgMetadata.samplePosition;
+
 		if (m.isForChannel(channel+1))
 		{
 			if (toggle)

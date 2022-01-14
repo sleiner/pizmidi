@@ -7,7 +7,9 @@
 #include "juce_data_structures/juce_data_structures.h"
 
 #include "../_common/key.h"
+#include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
+
 #include "MidiLoop.h"
 
 
@@ -162,7 +164,7 @@ private:
     String name;
 	int numerator, denominator;
 	PianoRollSettings PRSettings;
-	String device;
+	MidiDeviceInfo device;
 };
 
 //==============================================================================
@@ -173,21 +175,21 @@ class PizLooper  : public PizAudioProcessor,
 public:
     //==============================================================================
     PizLooper();
-    ~PizLooper();
+    ~PizLooper() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
+	void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor();
-	bool hasEditor(void) const {return true;}
+    AudioProcessorEditor* createEditor() override;
+	bool hasEditor(void) const override {return true;}
     //==============================================================================
-    const String getName() const;
+    const String getName() const override;
 
-    int getNumParameters() { return numParams; }
+    int getNumParameters() override { return numParams; }
 	inline float getParameterForSlot(int parameter, int slot)
 	{
 		if (parameter<numGlobalParams)
@@ -216,8 +218,8 @@ public:
 		notifyHost(kPlay,slot,1.f-getParameterForSlot(kPlay,slot));
 		processGroups(slot);
 	}
-	float getParameter (int index);
-    void setParameter (int index, float newValue);
+	float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
 	void setParameterNotifyingHost(int parameterIndex, float newValue)
 	{
 		if (getParameter(kParamsToHost)>=0.5f)
@@ -247,8 +249,8 @@ public:
 		else
 			setParameterNotifyingHost(parameter + curProgram*numParamsPerSlot,value);
 	}
-	const String getParameterName (int index);
-    const String getParameterText (int index);
+	const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
 	const String getCurrentSlotParameterText(int parameter)
 	{
 		if (parameter<numGlobalParams)
@@ -256,24 +258,24 @@ public:
 		return getParameterText(parameter + curProgram*numParamsPerSlot);
 	}
 
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
 
-    bool acceptsMidi() const {return true;}
-    bool producesMidi() const {return true;}
+    bool acceptsMidi() const override {return true;}
+    bool producesMidi() const override {return true;}
 	double getTailLengthSeconds() const override {return 0;}
 
     //==============================================================================
-    int getNumPrograms()      { return numPrograms; }
-    int getCurrentProgram();
-	void setCurrentProgram (int index) {
+    int getNumPrograms() override      { return numPrograms; }
+    int getCurrentProgram() override;
+	void setCurrentProgram (int index) override {
 		setActiveSlot(index);
 	}
     void resetCurrentProgram (int index);
-    const String getProgramName (int index);
-    void changeProgramName (int index, const String& newName);
+    const String getProgramName (int index) override;
+    void changeProgramName (int index, const String& newName) override;
 	void setActiveSlot(int slot);
 
 	void setSize(int w, int h)
@@ -302,10 +304,10 @@ public:
     //==============================================================================
     //void getCurrentProgramStateInformation (MemoryBlock& destData);
     //void setCurrentProgramStateInformation (const void* data, int sizeInBytes);
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
 
-	void handleNoteOn(MidiKeyboardState *source,int midiChannel, int midiNoteNumber, float velocity)
+	void handleNoteOn(MidiKeyboardState *source,int midiChannel, int midiNoteNumber, float velocity) override
 	{
 		setParameterForSlot(kNote0+midiNoteNumber%12,curProgram,1.f);
 	}
@@ -368,9 +370,11 @@ public:
 	}
 
 	//midi out stuff
-    StringArray devices;
+	PizArray<MidiDeviceInfo> devices;
 	void setActiveDevice(String name);
-	String getActiveDevice() {return activeDevice;}
+	void setActiveDevice(MidiDeviceInfo device);
+	MidiDeviceInfo getActiveDevice() {return activeDevice;}
+    MidiDeviceInfo getDeviceByName(String name) const;
 
 	void setPRSetting(const Identifier &name, const var &value, bool updateEditor=true)
 	{
@@ -736,7 +740,7 @@ private:
     uint64 samples;
 	int samplesInLastBuffer;
 
-	String activeDevice;
+	MidiDeviceInfo activeDevice;
     std::unique_ptr<MidiOutput> midiOutput;
 
 	PianoRollSettings defaultPRSettings;

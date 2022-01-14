@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  14 Sep 2011 10:45:23am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,83 +28,97 @@
 
 //==============================================================================
 MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter),
-      comboBox (0),
-      clockButton (0),
-      mtcButton (0),
-      hostButton (0),
-      channelBox (0),
-      imagepad (0),
-      label (0)
+    : AudioProcessorEditor (ownerFilter)
 {
-    addAndMakeVisible (comboBox = new ComboBox (L"new combo box"));
-    comboBox->setTooltip (L"Output Device");
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    comboBox.reset (new juce::ComboBox ("new combo box"));
+    addAndMakeVisible (comboBox.get());
+    comboBox->setTooltip (TRANS("Output Device"));
     comboBox->setEditableText (false);
-    comboBox->setJustificationType (Justification::centredLeft);
-    comboBox->setTextWhenNothingSelected (String());
-    comboBox->setTextWhenNoChoicesAvailable (L"(no choices)");
+    comboBox->setJustificationType (juce::Justification::centredLeft);
+    comboBox->setTextWhenNothingSelected (juce::String());
+    comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
     comboBox->addListener (this);
 
-    addAndMakeVisible (clockButton = new ToggleButton (L"Send MIDI Clock"));
-    clockButton->setTooltip (L"Send MIDI Clock");
-    clockButton->setButtonText (L"Clock");
+    comboBox->setBounds (4, 4, 219, 22);
+
+    clockButton.reset (new juce::ToggleButton ("Send MIDI Clock"));
+    addAndMakeVisible (clockButton.get());
+    clockButton->setTooltip (TRANS("Send MIDI Clock"));
+    clockButton->setButtonText (TRANS("Clock"));
     clockButton->addListener (this);
 
-    addAndMakeVisible (mtcButton = new ToggleButton (L"Send MTC"));
-    mtcButton->setTooltip (L"Send MTC");
-    mtcButton->setButtonText (L"MTC");
+    clockButton->setBounds (0, 27, 60, 22);
+
+    mtcButton.reset (new juce::ToggleButton ("Send MTC"));
+    addAndMakeVisible (mtcButton.get());
+    mtcButton->setTooltip (TRANS("Send MTC"));
+    mtcButton->setButtonText (TRANS("MTC"));
     mtcButton->addListener (this);
 
-    addAndMakeVisible (hostButton = new ToggleButton (L"Out to host"));
-    hostButton->setTooltip (L"Pass thru MIDI to host");
-    hostButton->setButtonText (L"Host");
+    mtcButton->setBounds (57, 27, 50, 22);
+
+    hostButton.reset (new juce::ToggleButton ("Out to host"));
+    addAndMakeVisible (hostButton.get());
+    hostButton->setTooltip (TRANS("Pass thru MIDI to host"));
+    hostButton->setButtonText (TRANS("Host"));
     hostButton->addListener (this);
 
-    addAndMakeVisible (channelBox = new ComboBox (L"Input Channel"));
-    channelBox->setTooltip (L"Input Channel");
+    hostButton->setBounds (109, 27, 55, 22);
+
+    channelBox.reset (new juce::ComboBox ("Input Channel"));
+    addAndMakeVisible (channelBox.get());
+    channelBox->setTooltip (TRANS("Input Channel"));
     channelBox->setEditableText (false);
-    channelBox->setJustificationType (Justification::centredLeft);
-    channelBox->setTextWhenNothingSelected (L"16");
-    channelBox->setTextWhenNoChoicesAvailable (L"(no choices)");
-    channelBox->addItem (L"All", 1);
-    channelBox->addItem (L"1", 2);
-    channelBox->addItem (L"2", 3);
-    channelBox->addItem (L"3", 4);
-    channelBox->addItem (L"4", 5);
-    channelBox->addItem (L"5", 6);
-    channelBox->addItem (L"6", 7);
-    channelBox->addItem (L"7", 8);
-    channelBox->addItem (L"8", 9);
-    channelBox->addItem (L"9", 10);
-    channelBox->addItem (L"10", 11);
-    channelBox->addItem (L"11", 12);
-    channelBox->addItem (L"12", 13);
-    channelBox->addItem (L"13", 14);
-    channelBox->addItem (L"14", 15);
-    channelBox->addItem (L"15", 16);
-    channelBox->addItem (L"16", 17);
+    channelBox->setJustificationType (juce::Justification::centredLeft);
+    channelBox->setTextWhenNothingSelected (TRANS("16"));
+    channelBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    channelBox->addItem (TRANS("All"), 1);
+    channelBox->addItem (TRANS("1"), 2);
+    channelBox->addItem (TRANS("2"), 3);
+    channelBox->addItem (TRANS("3"), 4);
+    channelBox->addItem (TRANS("4"), 5);
+    channelBox->addItem (TRANS("5"), 6);
+    channelBox->addItem (TRANS("6"), 7);
+    channelBox->addItem (TRANS("7"), 8);
+    channelBox->addItem (TRANS("8"), 9);
+    channelBox->addItem (TRANS("9"), 10);
+    channelBox->addItem (TRANS("10"), 11);
+    channelBox->addItem (TRANS("11"), 12);
+    channelBox->addItem (TRANS("12"), 13);
+    channelBox->addItem (TRANS("13"), 14);
+    channelBox->addItem (TRANS("14"), 15);
+    channelBox->addItem (TRANS("15"), 16);
+    channelBox->addItem (TRANS("16"), 17);
     channelBox->addListener (this);
 
-    addAndMakeVisible (imagepad = new MidiPad());
-    imagepad->setName (L"Icon");
+    channelBox->setBounds (190, 31, 33, 16);
 
-    addAndMakeVisible (label = new Label (L"new label",
-                                          L"Ch:"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centredRight);
+    imagepad.reset (new MidiPad());
+    addAndMakeVisible (imagepad.get());
+    imagepad->setName ("Icon");
+
+    label.reset (new juce::Label ("new label",
+                                  TRANS("Ch:")));
+    addAndMakeVisible (label.get());
+    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label->setJustificationType (juce::Justification::centredRight);
     label->setEditable (false, false, false);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label->setBounds (156, 30, 38, 16);
 
 
     //[UserPreSize]
 	setMouseClickGrabsKeyboardFocus(false);
-    StringArray devices = ownerFilter->devices;
 
     comboBox->setMouseClickGrabsKeyboardFocus(false);
     comboBox->addItem(String("--"),1);
-    for (int i=0;i<devices.size();i++) {
-        comboBox->addItem(devices.joinIntoString("",i,1),i+2);
+    for (int i=0;i<ownerFilter->devices.size();i++) {
+        comboBox->addItem(ownerFilter->devices[i].name,i+2);
     }
     comboBox->setSelectedId(1);
 
@@ -135,13 +147,13 @@ MidiOutEditor::~MidiOutEditor()
     getFilter()->icon=imagepad->drawableButton->getName();
     //[/Destructor_pre]
 
-    deleteAndZero (comboBox);
-    deleteAndZero (clockButton);
-    deleteAndZero (mtcButton);
-    deleteAndZero (hostButton);
-    deleteAndZero (channelBox);
-    deleteAndZero (imagepad);
-    deleteAndZero (label);
+    comboBox = nullptr;
+    clockButton = nullptr;
+    mtcButton = nullptr;
+    hostButton = nullptr;
+    channelBox = nullptr;
+    imagepad = nullptr;
+    label = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -149,12 +161,12 @@ MidiOutEditor::~MidiOutEditor()
 }
 
 //==============================================================================
-void MidiOutEditor::paint (Graphics& g)
+void MidiOutEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffd8d8d8));
+    g.fillAll (juce::Colour (0xffd8d8d8));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -162,23 +174,20 @@ void MidiOutEditor::paint (Graphics& g)
 
 void MidiOutEditor::resized()
 {
-    comboBox->setBounds (4, 4, 219, 22);
-    clockButton->setBounds (0, 27, 60, 22);
-    mtcButton->setBounds (57, 27, 50, 22);
-    hostButton->setBounds (109, 27, 55, 22);
-    channelBox->setBounds (190, 31, 33, 16);
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     imagepad->setBounds (getWidth() - 45, 5, 40, 40);
-    label->setBounds (156, 30, 38, 16);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
 
-void MidiOutEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+void MidiOutEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
 
-    if (comboBoxThatHasChanged == comboBox)
+    if (comboBoxThatHasChanged == comboBox.get())
     {
         //[UserComboBoxCode_comboBox] -- add your combo box handling code here..
 		if (comboBox->getSelectedItemIndex()==0) {
@@ -191,7 +200,7 @@ void MidiOutEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 		}
         //[/UserComboBoxCode_comboBox]
     }
-    else if (comboBoxThatHasChanged == channelBox)
+    else if (comboBoxThatHasChanged == channelBox.get())
     {
         //[UserComboBoxCode_channelBox] -- add your combo box handling code here..
 		getFilter()->setParameter(kChannel,0.0625f * (float)channelBox->getSelectedItemIndex());
@@ -202,24 +211,24 @@ void MidiOutEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     //[/UsercomboBoxChanged_Post]
 }
 
-void MidiOutEditor::buttonClicked (Button* buttonThatWasClicked)
+void MidiOutEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == clockButton)
+    if (buttonThatWasClicked == clockButton.get())
     {
         //[UserButtonCode_clockButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost(kClock,clockButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_clockButton]
     }
-    else if (buttonThatWasClicked == mtcButton)
+    else if (buttonThatWasClicked == mtcButton.get())
     {
         //[UserButtonCode_mtcButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost(kMTC,mtcButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_mtcButton]
     }
-    else if (buttonThatWasClicked == hostButton)
+    else if (buttonThatWasClicked == hostButton.get())
     {
         //[UserButtonCode_hostButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost(kHostOut,hostButton->getToggleState() ? 1.f : 0.f);
@@ -287,12 +296,12 @@ void MidiOutEditor::updateParametersFromFilter()
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    comboBox->setSelectedItemIndex(newDevice+1,true);
-	channelBox->setSelectedItemIndex(channel,true);
+    comboBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
+	channelBox->setSelectedItemIndex(channel,dontSendNotification);
 
-    clockButton->setToggleState(clock>=0.5f,false);
-    mtcButton->setToggleState(mtc>=0.5f,false);
-    hostButton->setToggleState(hostout>=0.5f,false);
+    clockButton->setToggleState(clock>=0.5f,dontSendNotification);
+    mtcButton->setToggleState(mtc>=0.5f,dontSendNotification);
+    hostButton->setToggleState(hostout>=0.5f,dontSendNotification);
 
     String fullpath = icon;
     if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
@@ -312,16 +321,17 @@ void MidiOutEditor::updateParametersFromFilter()
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MidiOutEditor" componentName=""
-                 parentClasses="public AudioProcessorEditor, public ChangeListener, public Button::Listener, public ComboBoxListener"
+                 parentClasses="public juce::AudioProcessorEditor, public juce::ChangeListener"
                  constructorParams="MidiOutFilter* const ownerFilter" variableInitialisers="AudioProcessorEditor (ownerFilter)"
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="275" initialHeight="50">
   <BACKGROUND backgroundColour="ffd8d8d8"/>
   <COMBOBOX name="new combo box" id="a04840c19e04d837" memberName="comboBox"
@@ -347,10 +357,15 @@ BEGIN_JUCER_METADATA
   <LABEL name="new label" id="8f39c0ad00104ec3" memberName="label" virtualName=""
          explicitFocusOrder="0" pos="156 30 38 16" edTextCol="ff000000"
          edBkgCol="0" labelText="Ch:" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="34"/>
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="34"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
 */
 #endif
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+

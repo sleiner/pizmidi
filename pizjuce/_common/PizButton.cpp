@@ -1,20 +1,18 @@
 /*
   ==============================================================================
 
-  This is an automatically generated file created by the Jucer!
-
-  Creation date:  17 Aug 2011 6:31:51am
+  This is an automatically generated GUI class created by the Projucer!
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.12
+  Created with Projucer version: 6.1.4
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-6 by Raw Material Software ltd.
+  The Projucer is part of the JUCE library.
+  Copyright (c) 2020 - Raw Material Software Limited.
 
   ==============================================================================
 */
@@ -30,10 +28,12 @@
 
 //==============================================================================
 PizButton::PizButton ()
-    : Button (String()),
-      cachedImage_pirate_png (nullptr)
+    : Button (juce::String())
 {
-    cachedImage_pirate_png = ImageCache::getFromMemory (pirate_png, pirate_pngSize);
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    cachedImage_pirate_png_1 = juce::ImageCache::getFromMemory (pirate_png, pirate_pngSize);
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -57,19 +57,36 @@ PizButton::~PizButton()
 }
 
 //==============================================================================
+void PizButton::paint (juce::Graphics& g)
+{
+    //[UserPrePaint] Add your own custom painting code here..
+    //[/UserPrePaint]
+
+    //[UserPaint] Add your own custom painting code here..
+    //[/UserPaint]
+}
+
 void PizButton::resized()
 {
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
 
-void PizButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void PizButton::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
-    g.setColour (Colours::black);
-    g.drawImageWithin (cachedImage_pirate_png,
-                       proportionOfWidth (0.0000f), proportionOfHeight (0.0000f), proportionOfWidth (1.0000f), proportionOfHeight (1.0000f),
-                       RectanglePlacement::centred,
-                       false);
+    {
+        int x = proportionOfWidth (0.0000f), y = proportionOfHeight (0.0000f), width = proportionOfWidth (1.0000f), height = proportionOfHeight (1.0000f);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (juce::Colours::black);
+        g.drawImageWithin (cachedImage_pirate_png_1,
+                           x, y, width, height,
+                           juce::RectanglePlacement::centred,
+                           false);
+    }
 }
 
 
@@ -80,15 +97,16 @@ void PizButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 
 //==============================================================================
 #if 0
-/*  -- Jucer information section --
+/*  -- Projucer information section --
 
-    This is where the Jucer puts all of its metadata, so don't change anything in here!
+    This is where the Projucer stores the metadata that describe this GUI layout, so
+    make changes in here at your peril!
 
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Button" className="PizButton" componentName=""
-                 parentClasses="public Button" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 parentClasses="" constructorParams="" variableInitialisers=""
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="0" buttonState="normal" enabled="1"/>
   <BACKGROUND backgroundColour="0" buttonState="over" enabled="0"/>
@@ -97,7 +115,7 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="0" buttonState="over on" enabled="0"/>
   <BACKGROUND backgroundColour="0" buttonState="down on" enabled="0"/>
   <BACKGROUND backgroundColour="0" buttonState="common background" enabled="1">
-    <IMAGE pos="0% 0% 100% 100%" resource="pirate_png" opacity="1" mode="1"/>
+    <IMAGE pos="0% 0% 100% 100%" resource="pirate_png" opacity="1.0" mode="1"/>
   </BACKGROUND>
 </JUCER_COMPONENT>
 
@@ -258,3 +276,8 @@ static const unsigned char resource_PizButton_pirate_png[] = { 137,80,78,71,13,1
 
 const char* PizButton::pirate_png = (const char*) resource_PizButton_pirate_png;
 const int PizButton::pirate_pngSize = 8193;
+
+
+//[EndFile] You can add extra defines here...
+//[/EndFile]
+
