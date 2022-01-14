@@ -11,8 +11,8 @@
     passing through it.
 
 */
-class WebBrowserFilter  : public PizAudioProcessor,
-                          public ChangeBroadcaster
+class WebBrowserFilter : public PizAudioProcessor,
+                         public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -23,7 +23,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
@@ -31,7 +31,7 @@ public:
 
     //==============================================================================
     const String getName() const override;
-	bool hasEditor() const override {return true;}
+    bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
 
@@ -51,11 +51,11 @@ public:
     double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
-    int getNumPrograms() override                                        { return 0; }
-    int getCurrentProgram() override                                     { return 0; }
-    void setCurrentProgram (int index) override                          { }
-    const String getProgramName (int index) override                     { return String(); }
-    void changeProgramName (int index, const String& newName) override   { }
+    int getNumPrograms() override { return 0; }
+    int getCurrentProgram() override { return 0; }
+    void setCurrentProgram (int index) override {}
+    const String getProgramName (int index) override { return String(); }
+    void changeProgramName (int index, const String& newName) override {}
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
@@ -70,17 +70,17 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
 
-    String getURL() {return URL;}
-    void setURL(const String& newURL) {URL=newURL;}
+    String getURL() { return URL; }
+    void setURL (const String& newURL) { URL = newURL; }
     bool initialPageLoaded;
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-    // this is our gain - the UI and the host can access this by getting/setting
-    // parameter 0.
-    float gain;
+        private :
+        // this is our gain - the UI and the host can access this by getting/setting
+        // parameter 0.
+        float gain;
     String URL;
     float lastinL;
     float lastoutL;
@@ -88,6 +88,5 @@ private:
     float lastoutR;
     float R;
 };
-
 
 #endif

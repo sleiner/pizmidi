@@ -23,8 +23,6 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 //[/Headers]
 
-
-
 //==============================================================================
 /**
                                                                     //[Comments]
@@ -33,11 +31,11 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PizButton  : public juce::Button
+class PizButton : public juce::Button
 {
 public:
     //==============================================================================
-    PizButton ();
+    PizButton();
     ~PizButton() override;
 
     //==============================================================================
@@ -52,7 +50,6 @@ public:
     static const char* pirate_png;
     static const int pirate_pngSize;
 
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     //[/UserVariables]
@@ -60,11 +57,9 @@ private:
     //==============================================================================
     juce::Image cachedImage_pirate_png_1;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PizButton)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

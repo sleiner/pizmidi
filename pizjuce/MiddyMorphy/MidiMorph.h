@@ -8,15 +8,25 @@
 #include "Scene.h"
 
 class Cursor;
-namespace juce { class XmlElement; }
-namespace juce { class MidiMessage; }
-namespace juce { class MidiBuffer; }
+namespace juce
+{
+    class XmlElement;
+}
+namespace juce
+{
+    class MidiMessage;
+}
+namespace juce
+{
+    class MidiBuffer;
+}
 class ControllerValue;
 
 using namespace juce;
 
-class MidiMorph : public juce::ChangeBroadcaster {
-  public:
+class MidiMorph : public juce::ChangeBroadcaster
+{
+public:
     MidiMorph();
     ~MidiMorph() override;
 
@@ -29,8 +39,8 @@ class MidiMorph : public juce::ChangeBroadcaster {
     bool autoLearn;
     bool autoKey;
 
-    void setCursorXRatio(float x);
-    void setCursorYRatio(float y);
+    void setCursorXRatio (float x);
+    void setCursorYRatio (float y);
     float getCursorXRatio();
     float getCursorYRatio();
 
@@ -38,7 +48,7 @@ class MidiMorph : public juce::ChangeBroadcaster {
     //
     //-if a scene is selected, (or multiple scenes) the value for that controller gets set.
     //-if no scene is selected and auto key is on, a scene gets added.
-    void controllerChanged(const Controller* controllerThatHasChanged);
+    void controllerChanged (const Controller* controllerThatHasChanged);
 
     //send interpolated controller vaules  that actually differ from the last output to midi out
     void distancesChanged();
@@ -46,13 +56,13 @@ class MidiMorph : public juce::ChangeBroadcaster {
     //foreach scene : moved();
     void cursorChanged();
 
-    void showControllers(bool show);
-    void addController(int ccNo, int Channel);
+    void showControllers (bool show);
+    void addController (int ccNo, int Channel);
     void addController();
-    void addScene(Scene * scene);
+    void addScene (Scene* scene);
     int getNumControllers();
-    int getControllerCCNo(int index);
-    int getControllerValue(int index);
+    int getControllerCCNo (int index);
+    int getControllerValue (int index);
 
     //if controller != cursor controller
     //if   controller is in list
@@ -62,45 +72,45 @@ class MidiMorph : public juce::ChangeBroadcaster {
     //else if "autolearn" is on add controller.
     //		if - scene/s is selected, .> set/add value for selected scenes/s
     //		else if no scene is selected && "autokey" is on, ->add scene at cursor pos, select scene, set/add value for cursor
-    void onMidiEvent(juce::MidiMessage & events);
+    void onMidiEvent (juce::MidiMessage& events);
 
-    void getMidiMessages(int offset, juce::MidiBuffer & buffer);
+    void getMidiMessages (int offset, juce::MidiBuffer& buffer);
 
     float getSumDistances();
 
-    Controller* getController(int index);
+    Controller* getController (int index);
 
     int getNumSelectedScenes();
 
-    void setSelectedScenes(Array<Scene*> & scenes);
+    void setSelectedScenes (Array<Scene*>& scenes);
 
     Array<Scene*>* getSelectedScenes();
 
-    Scene* getSelectedScene(int index);
+    Scene* getSelectedScene (int index);
 
     Cursor* getCursor();
 
     float getSumAffectionValues();
 
-    void removeScene(Scene * scene);
+    void removeScene (Scene* scene);
 
     OwnedArray<Controller>* getControllers();
 
-    juce::XmlElement* getXml(const juce::String tagname);
+    juce::XmlElement* getXml (const juce::String tagname);
 
-    void setFromXml(juce::XmlElement * xmlData);
+    void setFromXml (juce::XmlElement* xmlData);
 
-    int getSceneIndex(Scene * scene);
+    int getSceneIndex (Scene* scene);
 
-    int getUpdateRateSmpls(int rate);
+    int getUpdateRateSmpls (int rate);
 
-    void removeController(Controller * controllerToRemove);
+    void removeController (Controller* controllerToRemove);
 
-    void saveGUIState(juce::XmlElement * state);
+    void saveGUIState (juce::XmlElement* state);
 
     juce::XmlElement* getSavedGUIState();
 
-    void setPaneSize(juce::Rectangle<int> size);
+    void setPaneSize (juce::Rectangle<int> size);
 
     juce::Rectangle<int> getPaneSize();
 
@@ -114,11 +124,11 @@ class MidiMorph : public juce::ChangeBroadcaster {
 
     OwnedArray<Scene>* getScenes();
 
-    void sendChangeMessage(void * ptr);
+    void sendChangeMessage (void* ptr);
 
     void sceneMoved();
 
-    void setAuditSelScene(bool shouldAudit);
+    void setAuditSelScene (bool shouldAudit);
 
     bool getAuditSelScene();
 
@@ -126,7 +136,7 @@ class MidiMorph : public juce::ChangeBroadcaster {
 
     bool needsOneRefresh();
 
-  private:
+private:
     OwnedArray<Controller> controllers;
     Array<Scene*> selectedScenes;
     juce::XmlElement* guiState;
@@ -136,5 +146,4 @@ class MidiMorph : public juce::ChangeBroadcaster {
     float sumDistances;
     bool auditSelScene;
     void* lastRecipant;
-
 };

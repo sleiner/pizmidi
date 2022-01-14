@@ -10,33 +10,39 @@
 class CpuGraph : public Component
 {
 public:
-	CpuGraph() {
-		for (int i=0;i<numPoints;i++) points[i]=0.f;
-		setMouseClickGrabsKeyboardFocus(false);
-	}
-	~CpuGraph() override {};
+    CpuGraph()
+    {
+        for (int i = 0; i < numPoints; i++)
+            points[i] = 0.f;
+        setMouseClickGrabsKeyboardFocus (false);
+    }
+    ~CpuGraph() override{};
 
-	void addPoint(float value)
-	{
-		for(int i=1;i<numPoints;i++) points[i-1]=points[i];
-		points[numPoints-1]=value;
-		this->repaint();
-	}
+    void addPoint (float value)
+    {
+        for (int i = 1; i < numPoints; i++)
+            points[i - 1] = points[i];
+        points[numPoints - 1] = value;
+        this->repaint();
+    }
+
 private:
-	enum {numPoints=128};
-	float points[numPoints];
-	void paint(Graphics &g) override
-	{
-		g.fillAll(Colours::black);
-		g.setColour(Colours::green);
-		for (int i=0;i<numPoints;i++)
-		{
-			float x = ((float)i / float(numPoints)) * getWidth();
-			g.drawLine(x,(float)getHeight(),x,(float)getHeight()-(float)getHeight()*points[i]);
-		}
-	}
+    enum
+    {
+        numPoints = 128
+    };
+    float points[numPoints];
+    void paint (Graphics& g) override
+    {
+        g.fillAll (Colours::black);
+        g.setColour (Colours::green);
+        for (int i = 0; i < numPoints; i++)
+        {
+            float x = ((float) i / float (numPoints)) * getWidth();
+            g.drawLine (x, (float) getHeight(), x, (float) getHeight() - (float) getHeight() * points[i]);
+        }
+    }
 };
-
 
 //==============================================================================
 /**
@@ -51,10 +57,10 @@ private:
     when it's destroyed. When the filter's parameters are changed, it broadcasts
     a message and this editor responds by updating its display.
 */
-class CpuRamEditor   : public AudioProcessorEditor,
-                       public ChangeListener,
-                       public Slider::Listener,
-					   public Timer
+class CpuRamEditor : public AudioProcessorEditor,
+                     public ChangeListener,
+                     public Slider::Listener,
+                     public Timer
 {
 public:
     /** Constructor.
@@ -72,9 +78,9 @@ public:
         its parameters changes.
     */
     void changeListenerCallback (ChangeBroadcaster* source) override;
-	void timerCallback () override;
+    void timerCallback() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
-	void mouseUp (const MouseEvent&) override;
+    void mouseUp (const MouseEvent&) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
@@ -83,22 +89,21 @@ public:
     /** Standard Juce resize callback. */
     void resized() override;
 
-
 private:
     //==============================================================================
     Label* infoLabel;
     Label* memLabel2;
     Slider* slider;
-	CpuGraph* graph;
+    CpuGraph* graph;
     ColourSelector* colourSelector;
     //TooltipWindow tooltipWindow;
     //ResizableCornerComponent* resizer;
     //ComponentBoundsConstrainer resizeLimits;
 
-	CProcessorUsage pu;
+    CProcessorUsage pu;
     float CPULoad();
     MEMORYSTATUSEX RAMLoad();
-    LARGE_INTEGER oi64,ok64,ou64;
+    LARGE_INTEGER oi64, ok64, ou64;
 
     float lastMinimize;
 
@@ -106,8 +111,7 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a CpuRam
     // every time we need it..
-    CpuRam* getFilter() const throw()       { return (CpuRam*) getAudioProcessor(); }
+    CpuRam* getFilter() const throw() { return (CpuRam*) getAudioProcessor(); }
 };
-
 
 #endif

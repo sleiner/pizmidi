@@ -30,7 +30,7 @@ public:
     PizMidiMessageSequence& operator= (const PizMidiMessageSequence& other);
     PizMidiMessageSequence& operator= (const MidiMessageSequence& other);
 
-	MidiMessageSequence getAsJuceSequence();
+    MidiMessageSequence getAsJuceSequence();
 
     /** Destructor. */
     ~PizMidiMessageSequence();
@@ -44,7 +44,7 @@ public:
         @see PizMidiMessageSequence::getEventPointer
     */
 
-	class MidiEventHolder : public ReferenceCountedObject
+    class MidiEventHolder : public ReferenceCountedObject
     {
     public:
         //==============================================================================
@@ -68,12 +68,11 @@ public:
         //==============================================================================
         juce_UseDebuggingNewOperator
 
-    private:
-        friend class PizMidiMessageSequence;
+            private : friend class PizMidiMessageSequence;
         MidiEventHolder (const MidiMessage& message);
     };
 
-	typedef ReferenceCountedObjectPtr<MidiEventHolder> mehPtr;
+    typedef ReferenceCountedObjectPtr<MidiEventHolder> mehPtr;
     //==============================================================================
     /** Clears the sequence. */
     void clear();
@@ -143,10 +142,10 @@ public:
         @see updateMatchedPairs
     */
     void addEvent (const MidiMessage& newMessage, double timeAdjustment = 0);
-	void addNote (const MidiMessage& noteOn, const MidiMessage& noteOff, double timeAdjustment = 0);
+    void addNote (const MidiMessage& noteOn, const MidiMessage& noteOff, double timeAdjustment = 0);
 
     void moveEvent (int index, double timeAdjustment, bool moveMatchingNoteUp);
-	void transposeEvent (int index, int semitones);
+    void transposeEvent (int index, int semitones);
 
     /** Deletes one of the events in the sequence.
 
@@ -179,15 +178,14 @@ public:
 
     void addSequence (const PizMidiMessageSequence& other);
 
-	//==============================================================================
+    //==============================================================================
     /** Makes sure all the note-on and note-off pairs are up-to-date.
 
         Call this after moving messages about or deleting/adding messages, and it
         will scan the list and make sure all the note-offs in the MidiEventHolder
         structures are pointing at the correct ones.
     */
-    void updateMatchedPairs(bool sortEvents=false);
-
+    void updateMatchedPairs (bool sortEvents = false);
 
     //==============================================================================
     /** Copies all the messages for a particular midi channel to another sequence.
@@ -246,28 +244,26 @@ public:
                                 will be the minimum number of controller changes to recreate the
                                 state at the required time.
     */
-    void createControllerUpdatesForTime (int channelNumber, double time,
-                                         OwnedArray<MidiMessage>& resultMessages);
+    void createControllerUpdatesForTime (int channelNumber, double time, OwnedArray<MidiMessage>& resultMessages);
 
     //==============================================================================
     /** Swaps this sequence with another one. */
     void swapWith (PizMidiMessageSequence& other) throw();
 
-	void sort();
+    void sort();
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-    /** @internal */
-    static int compareElements (const mehPtr first,
-                                const mehPtr second) throw();
+        /** @internal */
+        static int
+        compareElements (const mehPtr first,
+                         const mehPtr second) throw();
 
 private:
     //==============================================================================
     friend class MidiFile;
-    ReferenceCountedArray <MidiEventHolder> list;
-
+    ReferenceCountedArray<MidiEventHolder> list;
 };
 
-
-#endif   // __JUCE_MIDIMESSAGESEQUENCE_JUCEHEADER__
+#endif // __JUCE_MIDIMESSAGESEQUENCE_JUCEHEADER__

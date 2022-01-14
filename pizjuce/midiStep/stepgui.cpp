@@ -22,7 +22,6 @@
 
 #include "stepgui.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
@@ -34,7 +33,7 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
     //[/Constructor_pre]
 
     activeLoopLabel.reset (new juce::GroupComponent ("new group",
-                                                     TRANS("16")));
+                                                     TRANS ("16")));
     addAndMakeVisible (activeLoopLabel.get());
     activeLoopLabel->setColour (juce::GroupComponent::outlineColourId, juce::Colour (0x66000000));
 
@@ -48,7 +47,7 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
     recordButton.reset (new juce::TextButton ("Record Button"));
     addAndMakeVisible (recordButton.get());
-    recordButton->setButtonText (TRANS("Record"));
+    recordButton->setButtonText (TRANS ("Record"));
     recordButton->addListener (this);
     recordButton->setColour (juce::TextButton::buttonColourId, juce::Colours::brown);
     recordButton->setColour (juce::TextButton::buttonOnColourId, juce::Colours::red);
@@ -64,42 +63,42 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
     recArmButton1.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton1.get());
-    recArmButton1->setButtonText (TRANS("1"));
+    recArmButton1->setButtonText (TRANS ("1"));
     recArmButton1->addListener (this);
 
     recArmButton2.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton2.get());
-    recArmButton2->setButtonText (TRANS("2"));
+    recArmButton2->setButtonText (TRANS ("2"));
     recArmButton2->addListener (this);
 
     recArmButton3.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton3.get());
-    recArmButton3->setButtonText (TRANS("3"));
+    recArmButton3->setButtonText (TRANS ("3"));
     recArmButton3->addListener (this);
 
     recArmButton4.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton4.get());
-    recArmButton4->setButtonText (TRANS("4"));
+    recArmButton4->setButtonText (TRANS ("4"));
     recArmButton4->addListener (this);
 
     recArmButton5.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton5.get());
-    recArmButton5->setButtonText (TRANS("5"));
+    recArmButton5->setButtonText (TRANS ("5"));
     recArmButton5->addListener (this);
 
     recArmButton6.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton6.get());
-    recArmButton6->setButtonText (TRANS("6"));
+    recArmButton6->setButtonText (TRANS ("6"));
     recArmButton6->addListener (this);
 
     recArmButton7.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton7.get());
-    recArmButton7->setButtonText (TRANS("7"));
+    recArmButton7->setButtonText (TRANS ("7"));
     recArmButton7->addListener (this);
 
     recArmButton8.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton8.get());
-    recArmButton8->setButtonText (TRANS("8"));
+    recArmButton8->setButtonText (TRANS ("8"));
     recArmButton8->addListener (this);
 
     keySlider.reset (new juce::Slider ("new slider"));
@@ -112,42 +111,42 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
     recArmButton9.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton9.get());
-    recArmButton9->setButtonText (TRANS("9"));
+    recArmButton9->setButtonText (TRANS ("9"));
     recArmButton9->addListener (this);
 
     recArmButton10.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton10.get());
-    recArmButton10->setButtonText (TRANS("10"));
+    recArmButton10->setButtonText (TRANS ("10"));
     recArmButton10->addListener (this);
 
     recArmButton11.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton11.get());
-    recArmButton11->setButtonText (TRANS("11"));
+    recArmButton11->setButtonText (TRANS ("11"));
     recArmButton11->addListener (this);
 
     recArmButton12.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton12.get());
-    recArmButton12->setButtonText (TRANS("12"));
+    recArmButton12->setButtonText (TRANS ("12"));
     recArmButton12->addListener (this);
 
     recArmButton13.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton13.get());
-    recArmButton13->setButtonText (TRANS("13"));
+    recArmButton13->setButtonText (TRANS ("13"));
     recArmButton13->addListener (this);
 
     recArmButton14.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton14.get());
-    recArmButton14->setButtonText (TRANS("14"));
+    recArmButton14->setButtonText (TRANS ("14"));
     recArmButton14->addListener (this);
 
     recArmButton15.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton15.get());
-    recArmButton15->setButtonText (TRANS("15"));
+    recArmButton15->setButtonText (TRANS ("15"));
     recArmButton15->addListener (this);
 
     recArmButton16.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (recArmButton16.get());
-    recArmButton16->setButtonText (TRANS("16"));
+    recArmButton16->setButtonText (TRANS ("16"));
     recArmButton16->addListener (this);
 
     recChannelSlider.reset (new ChannelSlider ("new slider"));
@@ -168,7 +167,7 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
     saveButton.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (saveButton.get());
-    saveButton->setButtonText (TRANS("Export..."));
+    saveButton->setButtonText (TRANS ("Export..."));
     saveButton->addListener (this);
 
     component.reset (new PizButton());
@@ -177,26 +176,26 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
 
     toggleButton.reset (new juce::ToggleButton ("new toggle button"));
     addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS("active"));
+    toggleButton->setButtonText (TRANS ("active"));
     toggleButton->addListener (this);
 
     addBarButton.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (addBarButton.get());
-    addBarButton->setButtonText (TRANS("Add Bar"));
+    addBarButton->setButtonText (TRANS ("Add Bar"));
     addBarButton->addListener (this);
 
     addBarButton->setBounds (445, -30, 29, 24);
 
     deleteBarButton.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (deleteBarButton.get());
-    deleteBarButton->setButtonText (TRANS("Del Bar"));
+    deleteBarButton->setButtonText (TRANS ("Del Bar"));
     deleteBarButton->addListener (this);
 
     deleteBarButton->setBounds (413, -30, 29, 24);
 
     thruButton.reset (new juce::ToggleButton ("thru button"));
     addAndMakeVisible (thruButton.get());
-    thruButton->setButtonText (TRANS("thru"));
+    thruButton->setButtonText (TRANS ("thru"));
     thruButton->addListener (this);
 
     internalPath1.startNewSubPath (60.0f, 10.0f);
@@ -475,35 +474,33 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
     internalPath1.lineTo (398.0f, 20.0f);
     internalPath1.closeSubPath();
 
-
     //[UserPreSize]
-	resizeLimits.setSizeLimits (510, 360, 1600, 1600);
+    resizeLimits.setSizeLimits (510, 360, 1600, 1600);
     //[/UserPreSize]
 
     setSize (610, 360);
 
-
     //[Constructor] You can add your own custom stuff here..
-	ownerFilter->addChangeListener(this);
-	pianoRoll = (PianoRoll*)viewport->getViewedComponent();
-	//pianoRoll->addChangeListener(this);
+    ownerFilter->addChangeListener (this);
+    pianoRoll = (PianoRoll*) viewport->getViewedComponent();
+    //pianoRoll->addChangeListener(this);
 
-	pianoRoll->setSize(500,1200);
-	pianoRoll->setSequence(ownerFilter->getActiveLoop());
-	lastActiveLoop = ownerFilter->activeLoop;
-	viewport->setViewPosition(0,pianoRoll->getHeight()/2-viewport->getHeight()/2);
+    pianoRoll->setSize (500, 1200);
+    pianoRoll->setSequence (ownerFilter->getActiveLoop());
+    lastActiveLoop = ownerFilter->activeLoop;
+    viewport->setViewPosition (0, pianoRoll->getHeight() / 2 - viewport->getHeight() / 2);
 
-	this->startTimer(1000/15);
-	this->updateParameters(true);
-	resized();
+    this->startTimer (1000 / 15);
+    this->updateParameters (true);
+    resized();
     //[/Constructor]
 }
 
 StepEditor::~StepEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-	this->stopTimer();
-	getFilter()->removeChangeListener (this);
+    this->stopTimer();
+    getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
     activeLoopLabel = nullptr;
@@ -537,7 +534,6 @@ StepEditor::~StepEditor()
     deleteBarButton = nullptr;
     thruButton = nullptr;
 
-
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
 }
@@ -556,61 +552,57 @@ void StepEditor::paint (juce::Graphics& g)
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setGradientFill (juce::ColourGradient (fillColour1,
-                                             static_cast<float> (getWidth() - 78) - static_cast<float> (getWidth() - 80) + x,
-                                             0.0f - 0.0f + y,
-                                             fillColour2,
-                                             static_cast<float> (getWidth() - 62) - static_cast<float> (getWidth() - 80) + x,
-                                             0.0f - 0.0f + y,
-                                             false));
+                                                 static_cast<float> (getWidth() - 78) - static_cast<float> (getWidth() - 80) + x,
+                                                 0.0f - 0.0f + y,
+                                                 fillColour2,
+                                                 static_cast<float> (getWidth() - 62) - static_cast<float> (getWidth() - 80) + x,
+                                                 0.0f - 0.0f + y,
+                                                 false));
         g.fillRect (x, y, width, height);
     }
 
     {
         int x = getWidth() - 9 - 63, y = 246, width = 63, height = 16;
-        juce::String text (TRANS("Transp."));
+        juce::String text (TRANS ("Transp."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 8 - 63, y = 166, width = 63, height = 16;
-        juce::String text (TRANS("Rec Ch."));
+        juce::String text (TRANS ("Rec Ch."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 8 - 63, y = 206, width = 63, height = 16;
-        juce::String text (TRANS("Trig. Key"));
+        juce::String text (TRANS ("Trig. Key"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 9 - 63, y = 281, width = 63, height = 16;
-        juce::String text (TRANS("Out Ch."));
+        juce::String text (TRANS ("Out Ch."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
@@ -619,7 +611,7 @@ void StepEditor::paint (juce::Graphics& g)
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
-        g.fillPath (internalPath1, juce::AffineTransform::translation(x, y));
+        g.fillPath (internalPath1, juce::AffineTransform::translation (x, y));
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -659,8 +651,8 @@ void StepEditor::resized()
     toggleButton->setBounds (getWidth() - 6 - 61, 49, 61, 21);
     thruButton->setBounds (getWidth() - 67, 313, 61, 21);
     //[UserResized] Add your own custom resize handling here..
-	getFilter()->lastUIHeight=getHeight();
-	getFilter()->lastUIWidth=getWidth();
+    getFilter()->lastUIHeight = getHeight();
+    getFilter()->lastUIWidth = getWidth();
     //[/UserResized]
 }
 
@@ -672,148 +664,151 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == recordButton.get())
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kRecord,recordButton->getToggleState()?0.f:1.f);
-		recordButton->setToggleState(!recordButton->getToggleState(),dontSendNotification);
+        getFilter()->setParameterNotifyingHost (kRecord, recordButton->getToggleState() ? 0.f : 1.f);
+        recordButton->setToggleState (! recordButton->getToggleState(), dontSendNotification);
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == recArmButton1.get())
     {
         //[UserButtonCode_recArmButton1] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton1]
     }
     else if (buttonThatWasClicked == recArmButton2.get())
     {
         //[UserButtonCode_recArmButton2] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton2]
     }
     else if (buttonThatWasClicked == recArmButton3.get())
     {
         //[UserButtonCode_recArmButton3] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton3]
     }
     else if (buttonThatWasClicked == recArmButton4.get())
     {
         //[UserButtonCode_recArmButton4] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton4]
     }
     else if (buttonThatWasClicked == recArmButton5.get())
     {
         //[UserButtonCode_recArmButton5] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton5]
     }
     else if (buttonThatWasClicked == recArmButton6.get())
     {
         //[UserButtonCode_recArmButton6] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton6]
     }
     else if (buttonThatWasClicked == recArmButton7.get())
     {
         //[UserButtonCode_recArmButton7] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton7]
     }
     else if (buttonThatWasClicked == recArmButton8.get())
     {
         //[UserButtonCode_recArmButton8] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton8]
     }
     else if (buttonThatWasClicked == recArmButton9.get())
     {
         //[UserButtonCode_recArmButton9] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton9]
     }
     else if (buttonThatWasClicked == recArmButton10.get())
     {
         //[UserButtonCode_recArmButton10] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton10]
     }
     else if (buttonThatWasClicked == recArmButton11.get())
     {
         //[UserButtonCode_recArmButton11] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton11]
     }
     else if (buttonThatWasClicked == recArmButton12.get())
     {
         //[UserButtonCode_recArmButton12] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton12]
     }
     else if (buttonThatWasClicked == recArmButton13.get())
     {
         //[UserButtonCode_recArmButton13] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton13]
     }
     else if (buttonThatWasClicked == recArmButton14.get())
     {
         //[UserButtonCode_recArmButton14] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton14]
     }
     else if (buttonThatWasClicked == recArmButton15.get())
     {
         //[UserButtonCode_recArmButton15] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton15]
     }
     else if (buttonThatWasClicked == recArmButton16.get())
     {
         //[UserButtonCode_recArmButton16] -- add your button handler code here..
-		recArmButtonClicked(buttonThatWasClicked);
+        recArmButtonClicked (buttonThatWasClicked);
         //[/UserButtonCode_recArmButton16]
     }
     else if (buttonThatWasClicked == saveButton.get())
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
         FileChooser myChooser ("Export MIDI...",
-            File(getFilter()->loopDir + File::getSeparatorString() + "Untitled.mid"),"*.mid");
+                               File (getFilter()->loopDir + File::getSeparatorString() + "Untitled.mid"),
+                               "*.mid");
 
-        if (myChooser.browseForFileToSave(true))
+        if (myChooser.browseForFileToSave (true))
         {
             File midiFile (myChooser.getResult());
-            if (!midiFile.hasFileExtension("mid")) midiFile = midiFile.withFileExtension("mid");
+            if (! midiFile.hasFileExtension ("mid"))
+                midiFile = midiFile.withFileExtension ("mid");
 
-			getFilter()->writeMidiFile(getFilter()->activeLoop,midiFile);
+            getFilter()->writeMidiFile (getFilter()->activeLoop, midiFile);
         }
         //[/UserButtonCode_saveButton]
     }
     else if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kRecActive,toggleButton->getToggleState()?1.f:0.f);
+        getFilter()->setParameterNotifyingHost (kRecActive, toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
     else if (buttonThatWasClicked == addBarButton.get())
     {
         //[UserButtonCode_addBarButton] -- add your button handler code here..
-		pianoRoll->blankLength+=960.0*4.0;
-		pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
-		pianoRoll->sequenceChanged();
+        pianoRoll->blankLength += 960.0 * 4.0;
+        pianoRoll->setSize (pianoRoll->getWidth() + roundToInt (pianoRoll->ppqToPixels (960.0 * 4.0)), pianoRoll->getHeight());
+        pianoRoll->sequenceChanged();
         //[/UserButtonCode_addBarButton]
     }
     else if (buttonThatWasClicked == deleteBarButton.get())
     {
         //[UserButtonCode_deleteBarButton] -- add your button handler code here..
-		pianoRoll->blankLength-=960.0*4.0;
-		if (pianoRoll->blankLength<960.0*4.0) pianoRoll->blankLength = 960.0*4.0;
-		pianoRoll->setSize(roundToInt(pianoRoll->ppqToPixels(pianoRoll->blankLength)),pianoRoll->getHeight());
-		pianoRoll->sequenceChanged();
+        pianoRoll->blankLength -= 960.0 * 4.0;
+        if (pianoRoll->blankLength < 960.0 * 4.0)
+            pianoRoll->blankLength = 960.0 * 4.0;
+        pianoRoll->setSize (roundToInt (pianoRoll->ppqToPixels (pianoRoll->blankLength)), pianoRoll->getHeight());
+        pianoRoll->sequenceChanged();
         //[/UserButtonCode_deleteBarButton]
     }
     else if (buttonThatWasClicked == thruButton.get())
     {
         //[UserButtonCode_thruButton] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kThru,thruButton->getToggleState()?1.f:0.f);
+        getFilter()->setParameterNotifyingHost (kThru, thruButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_thruButton]
     }
 
@@ -829,25 +824,25 @@ void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == outChannelSlider.get())
     {
         //[UserSliderCode_outChannelSlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kOutChannel+getFilter()->activeLoop,channelToFloat((int)outChannelSlider->getValue()));
+        getFilter()->setParameterNotifyingHost (kOutChannel + getFilter()->activeLoop, channelToFloat ((int) outChannelSlider->getValue()));
         //[/UserSliderCode_outChannelSlider]
     }
     else if (sliderThatWasMoved == keySlider.get())
     {
         //[UserSliderCode_keySlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kTriggerKey+getFilter()->activeLoop,midiToFloat((int)keySlider->getValue(),true));
+        getFilter()->setParameterNotifyingHost (kTriggerKey + getFilter()->activeLoop, midiToFloat ((int) keySlider->getValue(), true));
         //[/UserSliderCode_keySlider]
     }
     else if (sliderThatWasMoved == recChannelSlider.get())
     {
         //[UserSliderCode_recChannelSlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kChannel+getFilter()->activeLoop,channelToFloat((int)recChannelSlider->getValue()));
+        getFilter()->setParameterNotifyingHost (kChannel + getFilter()->activeLoop, channelToFloat ((int) recChannelSlider->getValue()));
         //[/UserSliderCode_recChannelSlider]
     }
     else if (sliderThatWasMoved == transposeSlider.get())
     {
         //[UserSliderCode_transposeSlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kTranspose+getFilter()->activeLoop,(float)((transposeSlider->getValue()+48.0)/96.0));
+        getFilter()->setParameterNotifyingHost (kTranspose + getFilter()->activeLoop, (float) ((transposeSlider->getValue() + 48.0) / 96.0));
         //[/UserSliderCode_transposeSlider]
     }
 
@@ -855,145 +850,171 @@ void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-TextButton* StepEditor::getButtonByIndex(int i)
+TextButton* StepEditor::getButtonByIndex (int i)
 {
-	switch(i)
-	{
-	case 0: return recArmButton1.get();
-	case 1: return recArmButton2.get();
-	case 2: return recArmButton3.get();
-	case 3: return recArmButton4.get();
-	case 4: return recArmButton5.get();
-	case 5: return recArmButton6.get();
-	case 6: return recArmButton7.get();
-	case 7: return recArmButton8.get();
-	case 8: return recArmButton9.get();
-	case 9: return recArmButton10.get();
-	case 10: return recArmButton11.get();
-	case 11: return recArmButton12.get();
-	case 12: return recArmButton13.get();
-	case 13: return recArmButton14.get();
-	case 14: return recArmButton15.get();
-	case 15: return recArmButton16.get();
-	default: return 0;
-	}
+    switch (i)
+    {
+        case 0:
+            return recArmButton1.get();
+        case 1:
+            return recArmButton2.get();
+        case 2:
+            return recArmButton3.get();
+        case 3:
+            return recArmButton4.get();
+        case 4:
+            return recArmButton5.get();
+        case 5:
+            return recArmButton6.get();
+        case 6:
+            return recArmButton7.get();
+        case 7:
+            return recArmButton8.get();
+        case 8:
+            return recArmButton9.get();
+        case 9:
+            return recArmButton10.get();
+        case 10:
+            return recArmButton11.get();
+        case 11:
+            return recArmButton12.get();
+        case 12:
+            return recArmButton13.get();
+        case 13:
+            return recArmButton14.get();
+        case 14:
+            return recArmButton15.get();
+        case 15:
+            return recArmButton16.get();
+        default:
+            return 0;
+    }
 }
 
-void StepEditor::recArmButtonClicked(Button* buttonThatWasClicked)
+void StepEditor::recArmButtonClicked (Button* buttonThatWasClicked)
 {
-	int index = buttonThatWasClicked->getButtonText().getIntValue()-1;
-	if (ModifierKeys::getCurrentModifiers().isCommandDown()) {
-		buttonThatWasClicked->setToggleState(!buttonThatWasClicked->getToggleState(),dontSendNotification);
-		getFilter()->setParameterNotifyingHost(kRecArm+index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
-	} else {
-		getFilter()->setParameterNotifyingHost(kActiveLoop,(float)index/(float)(numLoops-1));
-		pianoRoll->setSequence(getFilter()->getActiveLoop());
-		activeLoopLabel->setText(String(getFilter()->activeLoop+1));
-		for (int i=0;i<numLoops;i++)
-		{
-			getButtonByIndex(i)->setToggleState(i==index ? true : false,dontSendNotification);
-			if (toggleButton->getToggleState()) getFilter()->setParameterNotifyingHost(kRecArm+i, i==index ? 1.f : 0.f);
-		}
-	}
+    int index = buttonThatWasClicked->getButtonText().getIntValue() - 1;
+    if (ModifierKeys::getCurrentModifiers().isCommandDown())
+    {
+        buttonThatWasClicked->setToggleState (! buttonThatWasClicked->getToggleState(), dontSendNotification);
+        getFilter()->setParameterNotifyingHost (kRecArm + index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
+    }
+    else
+    {
+        getFilter()->setParameterNotifyingHost (kActiveLoop, (float) index / (float) (numLoops - 1));
+        pianoRoll->setSequence (getFilter()->getActiveLoop());
+        activeLoopLabel->setText (String (getFilter()->activeLoop + 1));
+        for (int i = 0; i < numLoops; i++)
+        {
+            getButtonByIndex (i)->setToggleState (i == index ? true : false, dontSendNotification);
+            if (toggleButton->getToggleState())
+                getFilter()->setParameterNotifyingHost (kRecArm + i, i == index ? 1.f : 0.f);
+        }
+    }
 }
 
-bool StepEditor::isInterestedInFileDrag (const StringArray& files){
-    File file = File(files[0]);
-    if ( file.hasFileExtension("mid") ) return true;
+bool StepEditor::isInterestedInFileDrag (const StringArray& files)
+{
+    File file = File (files[0]);
+    if (file.hasFileExtension ("mid"))
+        return true;
     return false;
 }
 
 void StepEditor::filesDropped (const StringArray& filenames, int mouseX, int mouseY)
 {
-    File file(filenames[0]);
-	if(getFilter()->readMidiFile(getFilter()->activeLoop,file))
-		updateParameters(true);
+    File file (filenames[0]);
+    if (getFilter()->readMidiFile (getFilter()->activeLoop, file))
+        updateParameters (true);
 }
 
-void StepEditor::mouseWheelMove (const MouseEvent &e, float wheelIncrementX, float wheelIncrementY)
+void StepEditor::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
 {
-	if (e.eventComponent==viewport.get())
-	{
-		if (wheelIncrementY>0.f) zoomIn(e.getEventRelativeTo(pianoRoll).x);
-		else if (wheelIncrementY<0.f) zoomOut(e.getEventRelativeTo(pianoRoll).x);
-	}
+    if (e.eventComponent == viewport.get())
+    {
+        if (wheelIncrementY > 0.f)
+            zoomIn (e.getEventRelativeTo (pianoRoll).x);
+        else if (wheelIncrementY < 0.f)
+            zoomOut (e.getEventRelativeTo (pianoRoll).x);
+    }
 }
 
-void StepEditor::timerCallback ()
+void StepEditor::timerCallback()
 {
-	if (getFilter()->getActiveLoop()->isRecording)
-	{
-		int x = roundToInt(pianoRoll->ppqToPixels(getFilter()->getActiveLoop()->recTime));
-		//if (x < viewport->getWidth()-30) x=0;
-		if (x>pianoRoll->getWidth()) {
-			getFilter()->setParameterNotifyingHost(kRecord,0.f);
-			//pianoRoll->blankLength+=960.0*4.0;
-			//pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
-			//pianoRoll->sequenceChanged();
-			////pianoRoll->setSize(x,pianoRoll->getHeight());
-			//viewport->setViewPosition(x-pianoRoll->getWidth(),viewport->getViewPositionY());
-		}
-		pianoRoll->repaint();
-	}
+    if (getFilter()->getActiveLoop()->isRecording)
+    {
+        int x = roundToInt (pianoRoll->ppqToPixels (getFilter()->getActiveLoop()->recTime));
+        //if (x < viewport->getWidth()-30) x=0;
+        if (x > pianoRoll->getWidth())
+        {
+            getFilter()->setParameterNotifyingHost (kRecord, 0.f);
+            //pianoRoll->blankLength+=960.0*4.0;
+            //pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
+            //pianoRoll->sequenceChanged();
+            ////pianoRoll->setSize(x,pianoRoll->getHeight());
+            //viewport->setViewPosition(x-pianoRoll->getWidth(),viewport->getViewPositionY());
+        }
+        pianoRoll->repaint();
+    }
 }
 
 void StepEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-	if(source==getFilter())
-		updateParameters();
+    if (source == getFilter())
+        updateParameters();
 }
 
 void StepEditor::updateParameters (bool updateLoop)
 {
-	MidiStep* const filter = getFilter();
+    MidiStep* const filter = getFilter();
     float param[kNumParams];
 
     filter->getCallbackLock().enter();
-		for (int i=0;i<kNumParams;i++) {
-			param[i] = filter->getParameter(i);
-		}
-		const int activeLoop = filter->activeLoop;
-		const int w = filter->lastUIWidth;
-		const int h = filter->lastUIHeight;
-	filter->getCallbackLock().exit();
+    for (int i = 0; i < kNumParams; i++)
+    {
+        param[i] = filter->getParameter (i);
+    }
+    const int activeLoop = filter->activeLoop;
+    const int w = filter->lastUIWidth;
+    const int h = filter->lastUIHeight;
+    filter->getCallbackLock().exit();
 
-	for (int i=0;i<numLoops;i++) {
-		getButtonByIndex(i)->setColour(TextButton::textColourOnId,i==activeLoop ? Colours::red : Colours::black);
-		getButtonByIndex(i)->setToggleState(param[kRecArm+i]>=0.5f,dontSendNotification);
-	}
-	thruButton->setToggleState(param[kThru]>=0.5f,dontSendNotification);
-	toggleButton->setToggleState(param[kRecActive]>=0.5f,dontSendNotification);
-	recordButton->setToggleState(param[kRecord]>=0.5f,dontSendNotification);
-	keySlider->setValue(floatToMidi(param[kTriggerKey+activeLoop],true),dontSendNotification);
-	transposeSlider->setValue(param[kTranspose+activeLoop]*96.f - 48.f,dontSendNotification);
-	recChannelSlider->setValue(floatToChannel(param[kChannel+activeLoop]),dontSendNotification);
-	outChannelSlider->setValue(floatToChannel(param[kOutChannel+activeLoop]),dontSendNotification);
-	if (updateLoop || lastActiveLoop!=activeLoop)
-	{
-		lastActiveLoop=activeLoop;
-		pianoRoll->setSequence(getFilter()->getActiveLoop());
-		activeLoopLabel->setText(String(activeLoop+1));
-	}
-	else repaint();
-	setSize(w,h);
+    for (int i = 0; i < numLoops; i++)
+    {
+        getButtonByIndex (i)->setColour (TextButton::textColourOnId, i == activeLoop ? Colours::red : Colours::black);
+        getButtonByIndex (i)->setToggleState (param[kRecArm + i] >= 0.5f, dontSendNotification);
+    }
+    thruButton->setToggleState (param[kThru] >= 0.5f, dontSendNotification);
+    toggleButton->setToggleState (param[kRecActive] >= 0.5f, dontSendNotification);
+    recordButton->setToggleState (param[kRecord] >= 0.5f, dontSendNotification);
+    keySlider->setValue (floatToMidi (param[kTriggerKey + activeLoop], true), dontSendNotification);
+    transposeSlider->setValue (param[kTranspose + activeLoop] * 96.f - 48.f, dontSendNotification);
+    recChannelSlider->setValue (floatToChannel (param[kChannel + activeLoop]), dontSendNotification);
+    outChannelSlider->setValue (floatToChannel (param[kOutChannel + activeLoop]), dontSendNotification);
+    if (updateLoop || lastActiveLoop != activeLoop)
+    {
+        lastActiveLoop = activeLoop;
+        pianoRoll->setSequence (getFilter()->getActiveLoop());
+        activeLoopLabel->setText (String (activeLoop + 1));
+    }
+    else
+        repaint();
+    setSize (w, h);
 }
 
-void StepEditor::zoomIn(int centerPixel)
+void StepEditor::zoomIn (int centerPixel)
 {
-	pianoRoll->setSize(roundToInt((float)pianoRoll->getWidth()*1.1f),pianoRoll->getHeight());
-	viewport->setViewPosition(jlimit(0,pianoRoll->getWidth()-viewport->getViewWidth(),centerPixel-viewport->getViewWidth()/2),viewport->getViewPositionY());
+    pianoRoll->setSize (roundToInt ((float) pianoRoll->getWidth() * 1.1f), pianoRoll->getHeight());
+    viewport->setViewPosition (jlimit (0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
 }
 
-void StepEditor::zoomOut(int centerPixel)
+void StepEditor::zoomOut (int centerPixel)
 {
-	pianoRoll->setSize(roundToInt((float)pianoRoll->getWidth()*0.9f),pianoRoll->getHeight());
-	viewport->setViewPosition(jlimit(0,pianoRoll->getWidth()-viewport->getViewWidth(),centerPixel-viewport->getViewWidth()/2),viewport->getViewPositionY());
+    pianoRoll->setSize (roundToInt ((float) pianoRoll->getWidth() * 0.9f), pianoRoll->getHeight());
+    viewport->setViewPosition (jlimit (0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
 }
 //[/MiscUserCode]
-
 
 //==============================================================================
 #if 0
@@ -1131,7 +1152,6 @@ BEGIN_JUCER_METADATA
 END_JUCER_METADATA
 */
 #endif
-
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]

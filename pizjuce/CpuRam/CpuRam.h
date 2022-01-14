@@ -6,10 +6,9 @@
 
 #include "../_common/PizAudioProcessor.h"
 
-
 //==============================================================================
-class CpuRam  : public PizAudioProcessor,
-                public ChangeBroadcaster
+class CpuRam : public PizAudioProcessor,
+               public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -20,24 +19,26 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override {return 0;}
-    const String getName() const override {return JucePlugin_Name;}
-	bool hasEditor() const override {return true;}
-    bool acceptsMidi() const override {
+    double getTailLengthSeconds() const override { return 0; }
+    const String getName() const override { return JucePlugin_Name; }
+    bool hasEditor() const override { return true; }
+    bool acceptsMidi() const override
+    {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const override {
+    bool producesMidi() const override
+    {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
@@ -59,23 +60,23 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override                                        { return 1; }
-    int getCurrentProgram() override                                     { return 0; }
-    void setCurrentProgram (int index) override                          { }
-    const String getProgramName (int index) override                     { return String(); }
-    void changeProgramName (int index, const String& newName) override   { }
+    int getNumPrograms() override { return 1; }
+    int getCurrentProgram() override { return 0; }
+    void setCurrentProgram (int index) override {}
+    const String getProgramName (int index) override { return String(); }
+    void changeProgramName (int index, const String& newName) override {}
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-	void resetToDefaultSettings();
+    void resetToDefaultSettings();
 
     //==============================================================================
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
 
     Colour bgcolor;
-	bool showGraph;
+    bool showGraph;
 
     // these are used to persist the UI's size - the values are stored along with the
     // filter's other parameters, and the UI component will update them when it gets
@@ -85,12 +86,11 @@ public:
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-    // this is our interval - the UI and the host can access this by getting/setting
-    // parameter 0.
-    float interval;
+        private :
+        // this is our interval - the UI and the host can access this by getting/setting
+        // parameter 0.
+        float interval;
     float minimize;
 };
-
 
 #endif

@@ -9,30 +9,30 @@ using namespace juce;
 
 #define midiScaler (0.007874016f)
 
-class MidiPad  : public Button
+class MidiPad : public Button
 {
 public:
     //==============================================================================
-  	MidiPad (int _index);
+    MidiPad (int _index);
     ~MidiPad() override;
 
     void resized() override;
     void buttonClicked (Button*);
-    void setColour(const Colour&);
+    void setColour (const Colour&);
     bool isPlaying;
-	void setXFloat(float v) {x=v;}
-	void setYFloat(float v) {y=v;}
-	void setXInt(int v) {x=v*midiScaler;}
-	void setYInt(int v) {y=v*midiScaler;}
-	int getIndex() {return index;}
-	String getIconPath();
-	void setIconPath(String name);
-	void setText(const String& name);
-	String getText();
+    void setXFloat (float v) { x = v; }
+    void setYFloat (float v) { y = v; }
+    void setXInt (int v) { x = v * midiScaler; }
+    void setYInt (int v) { y = v * midiScaler; }
+    int getIndex() { return index; }
+    String getIconPath();
+    void setIconPath (String name);
+    void setText (const String& name);
+    String getText();
 
     //==============================================================================
     void setImages (const Drawable* normalImage);
-	bool setImageFromFile (File file);
+    bool setImageFromFile (File file);
 
     //==============================================================================
     void setBackgroundColours (const Colour& toggledOffColour,
@@ -48,42 +48,41 @@ public:
     bool showx, showy;
     float roundness;
     bool showdot;
-	bool showvalues;
-	float imageSize;
-	void setCenteredText(bool centered);
-    void setHex(bool newhex);
+    bool showvalues;
+    float imageSize;
+    void setCenteredText (bool centered);
+    void setHex (bool newhex);
     bool isHex();
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-protected:
-	void drawButtonBackground (Graphics& g,
-                               Button& button,
-                               const Colour& backgroundColour,
-                               bool isMouseOverButton,
-                               bool isButtonDown);
+        protected : void
+                    drawButtonBackground (Graphics& g,
+                                          Button& button,
+                                          const Colour& backgroundColour,
+                                          bool isMouseOverButton,
+                                          bool isButtonDown);
 
     void paintButton (Graphics& g,
                       bool isMouseOverButton,
                       bool isButtonDown) override;
 
-
 private:
-	bool centeredText;
+    bool centeredText;
     float x;
     float y;
-	int index;
-    bool hitTest(int x, int y) override;
+    int index;
+    bool hitTest (int x, int y) override;
     std::unique_ptr<Drawable> normalImage;
     Colour backgroundOff, backgroundOn;
     Path hexpath;
     bool hex;
     void deleteImages();
-	String iconPath;
-	Label* text;
+    String iconPath;
+    Label* text;
 
-	MidiPad (const MidiPad&);
+    MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
 };
 

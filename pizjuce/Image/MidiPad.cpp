@@ -2,31 +2,32 @@
 
 #include "MidiPad.h"
 
-MidiPad::MidiPad ()
+MidiPad::MidiPad()
     : Button ("MidiPad"),
       normalImage (nullptr),
-      index(0),
-	  text (0)
+      index (0),
+      text (0)
 
 {
-	bgColour = Colours::white;
-	textColour = Colours::black;
+    bgColour = Colours::white;
+    textColour = Colours::black;
 
-	centeredText=false;
-	imageSize=1.f;
+    centeredText = false;
+    imageSize = 1.f;
     setMouseClickGrabsKeyboardFocus (true);
 
-	addAndMakeVisible(text = new Label("label",""));
+    addAndMakeVisible (text = new Label ("label", ""));
     text->setJustificationType (Justification::centredTop);
     text->setEditable (false, false, false);
-	text->setInterceptsMouseClicks(false,false);
+    text->setInterceptsMouseClicks (false, false);
 
     setSize (200, 200);
 }
 
 MidiPad::~MidiPad()
 {
-	if (text) delete text;
+    if (text)
+        delete text;
     deleteImages();
 }
 
@@ -35,49 +36,54 @@ void MidiPad::deleteImages()
     normalImage.reset();
 }
 
-bool MidiPad::setImageFromFile(File file)
+bool MidiPad::setImageFromFile (File file)
 {
-	if (file.exists())
-	{
-		deleteImages();
+    if (file.exists())
+    {
+        deleteImages();
 
-		normalImage = Drawable::createFromImageFile(file);
-		if (normalImage!=nullptr) {
-			repaint();
-		}
-		else return false;
-		return true;
-	}
-	return false;
+        normalImage = Drawable::createFromImageFile (file);
+        if (normalImage != nullptr)
+        {
+            repaint();
+        }
+        else
+            return false;
+        return true;
+    }
+    return false;
 }
 
 void MidiPad::setImages (const Drawable* normal)
 {
     deleteImages();
-	if (normal != nullptr) {
-		normalImage = normal->createCopy();
-	}
+    if (normal != nullptr)
+    {
+        normalImage = normal->createCopy();
+    }
     repaint();
 }
 
-void MidiPad::setIconPath(String name)
+void MidiPad::setIconPath (String name)
 {
-	iconPath = name;
+    iconPath = name;
 }
 
 String MidiPad::getIconPath()
 {
-	return iconPath;
+    return iconPath;
 }
 
-void MidiPad::setColour(const juce::Colour &colour) {
+void MidiPad::setColour (const juce::Colour& colour)
+{
     bgColour = colour;
-	repaint();
+    repaint();
 }
 
-void MidiPad::setTextColour(const juce::Colour &colour) {
-	textColour = colour;
-	text->setColour (Label::textColourId, colour);
+void MidiPad::setTextColour (const juce::Colour& colour)
+{
+    textColour = colour;
+    text->setColour (Label::textColourId, colour);
 }
 
 const Colour& MidiPad::getBackgroundColour() const throw()
@@ -86,24 +92,21 @@ const Colour& MidiPad::getBackgroundColour() const throw()
 }
 
 void MidiPad::drawButtonBackground (Graphics& g,
-                                Button& button,
-                                const Colour& backgroundColour,
-                                bool isMouseOverButton,
-                                bool isButtonDown)
+                                    Button& button,
+                                    const Colour& backgroundColour,
+                                    bool isMouseOverButton,
+                                    bool isButtonDown)
 {
-	g.fillAll(backgroundColour);
+    g.fillAll (backgroundColour);
 }
 
 void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
     juce::Rectangle<float> imageSpace;
-    const float insetX = getWidth()*(1.f-imageSize)*0.5f;
-    const float insetY = getHeight()*(1.f-imageSize)*0.5f;
+    const float insetX = getWidth() * (1.f - imageSize) * 0.5f;
+    const float insetY = getHeight() * (1.f - imageSize) * 0.5f;
     imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
-    MidiPad::drawButtonBackground (g, *this,
-                                       getBackgroundColour(),
-                                       isMouseOverButton,
-                                       isButtonDown);
+    MidiPad::drawButtonBackground (g, *this, getBackgroundColour(), isMouseOverButton, isButtonDown);
 
     g.setImageResamplingQuality (Graphics::highResamplingQuality);
     g.setOpacity (1.0f);
@@ -113,21 +116,21 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
     if (imageToDraw != 0)
     {
         imageToDraw->drawWithin (g,
-								 imageSpace,
+                                 imageSpace,
                                  RectanglePlacement::centred,
-								 1.f);
+                                 1.f);
     }
 }
 
-void MidiPad::setCenteredText(bool centered)
+void MidiPad::setCenteredText (bool centered)
 {
-	text->setJustificationType (centered ? Justification::centred : Justification::centredTop);
+    text->setJustificationType (centered ? Justification::centred : Justification::centredTop);
 }
 
 void MidiPad::resized()
 {
-	text->setBounds(4,4,getWidth()-8,getHeight()-8);
-    float fontsize = jmax(5.f,jmin((float)(proportionOfWidth(0.2f)),(float)(proportionOfHeight(0.15f))));
+    text->setBounds (4, 4, getWidth() - 8, getHeight() - 8);
+    float fontsize = jmax (5.f, jmin ((float) (proportionOfWidth (0.2f)), (float) (proportionOfHeight (0.15f))));
     text->setFont (Font (fontsize, Font::bold));
 }
 
@@ -141,17 +144,17 @@ const Drawable* MidiPad::getNormalImage() const throw()
     return normalImage.get();
 }
 
-void MidiPad::setText(const String& name)
+void MidiPad::setText (const String& name)
 {
-	text->setText(name,dontSendNotification);
+    text->setText (name, dontSendNotification);
 }
 
-void MidiPad::setButtonText(const String& newText)
+void MidiPad::setButtonText (const String& newText)
 {
-	text->setText(newText,dontSendNotification);
+    text->setText (newText, dontSendNotification);
 }
 
 String MidiPad::getText()
 {
-	return text->getText();
+    return text->getText();
 }

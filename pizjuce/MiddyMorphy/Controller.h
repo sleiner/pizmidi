@@ -1,24 +1,29 @@
 #pragma once
 
-
 #include "juce_core/juce_core.h"
 #include "juce_events/juce_events.h"
 
 class MidiMorph;
 class ControllerValue;
 class Scene;
-namespace juce { class MidiBuffer; }
-namespace juce { class MidiMessage; }
+namespace juce
+{
+    class MidiBuffer;
+}
+namespace juce
+{
+    class MidiMessage;
+}
 using namespace juce;
 
-class Controller : public juce::ChangeBroadcaster {
-  public:
-    Controller(MidiMorph * core);
+class Controller : public juce::ChangeBroadcaster
+{
+public:
+    Controller (MidiMorph* core);
 
     ~Controller() override;
 
-
-  private:
+private:
     bool newMidi;
 
     bool valueChanged;
@@ -31,31 +36,30 @@ class Controller : public juce::ChangeBroadcaster {
 
     String name;
 
-
-  public:
-    enum states {
-      undefined = 0,
-      mutival,
-      defined
+public:
+    enum states
+    {
+        undefined = 0,
+        mutival,
+        defined
 
     };
 
-
-  private:
+private:
     Array<ControllerValue*> values;
 
     MidiMorph* core;
 
-  friend class ControllerValue;
-  friend class ControllerGUI;
+    friend class ControllerValue;
+    friend class ControllerGUI;
 
-  public:
-    ControllerValue* getValue(int index);
+public:
+    ControllerValue* getValue (int index);
 
-    ControllerValue* getValue(const Scene* scene);
+    ControllerValue* getValue (const Scene* scene);
 
     //set value for particular scene
-    void setValue(int newValue, Scene * scene);
+    void setValue (int newValue, Scene* scene);
 
     //refresh value of selected scenes
     void controllerChanged();
@@ -64,15 +68,15 @@ class Controller : public juce::ChangeBroadcaster {
 
     int getInterpolatedValue();
 
-    void addValue(ControllerValue * value);
+    void addValue (ControllerValue* value);
 
     void learn();
 
-    void removeValue(ControllerValue * value);
+    void removeValue (ControllerValue* value);
 
     int getNumValues();
 
-    void getMidiMessage(juce::MidiBuffer & buffer, int pos);
+    void getMidiMessage (juce::MidiBuffer& buffer, int pos);
 
     void remove();
 
@@ -80,21 +84,20 @@ class Controller : public juce::ChangeBroadcaster {
 
     int getCcNo();
 
-    void setCcNo(int val);
+    void setCcNo (int val);
 
     int getChannel();
 
-    void setChannel(int channel);
+    void setChannel (int channel);
 
     String getName();
 
-    void setName(String name);
+    void setName (String name);
 
     //set value for selected Scenes
-    void setValue(int newValue);
+    void setValue (int newValue);
 
-
-  private:
+private:
     juce::MidiMessage* midiMessage;
 
     int lastSentCcNo;
@@ -102,5 +105,4 @@ class Controller : public juce::ChangeBroadcaster {
     int lastSentChannel;
 
     int lastSentValue;
-
 };

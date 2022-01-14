@@ -7,19 +7,17 @@
 class MidiMorph;
 using namespace juce;
 
-class Cursor : public Module, public juce::ChangeBroadcaster {
-  public:
-    Cursor(MidiMorph * core);
+class Cursor : public Module, public juce::ChangeBroadcaster
+{
+public:
+    Cursor (MidiMorph* core);
 
     //gets called when the XYItem gets new coordinates
     void moved() override;
 
-
-  private:
+private:
     MidiMorph* core;
 
-
-  public:
+public:
     juce::Point<float> getCursorPosition();
-
 };

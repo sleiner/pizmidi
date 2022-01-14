@@ -28,8 +28,6 @@
 #include "PizKeyboardComponent.h"
 //[/Headers]
 
-
-
 //==============================================================================
 /**
                                                                     //[Comments]
@@ -38,11 +36,11 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class midiKeyboardEditor  : public juce::AudioProcessorEditor,
-                            public juce::ChangeListener,
-                            public juce::KeyListener,
-                            public juce::Slider::Listener,
-                            public juce::Button::Listener
+class midiKeyboardEditor : public juce::AudioProcessorEditor,
+                           public juce::ChangeListener,
+                           public juce::KeyListener,
+                           public juce::Slider::Listener,
+                           public juce::Button::Listener
 {
 public:
     //==============================================================================
@@ -51,14 +49,14 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	friend class PizKeyboardComponent;
-	void changeListenerCallback (ChangeBroadcaster* source) override;
-	void mouseUp(const MouseEvent &e) override;
-	bool keyPressed(const KeyPress &key, Component* originatingComponent) override
-	{
-		DBG(String(key.getKeyCode()) + " " + key.getTextDescription());
-		return false;
-	}
+    friend class PizKeyboardComponent;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void mouseUp (const MouseEvent& e) override;
+    bool keyPressed (const KeyPress& key, Component* originatingComponent) override
+    {
+        DBG (String (key.getKeyCode()) + " " + key.getTextDescription());
+        return false;
+    }
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -66,14 +64,12 @@ public:
     void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
-
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     ComponentBoundsConstrainer resizeLimits;
     TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
-    PizKeyboard* getFilter() const throw()       { return (PizKeyboard*) getAudioProcessor(); }
+    PizKeyboard* getFilter() const throw() { return (PizKeyboard*) getAudioProcessor(); }
     //[/UserVariables]
 
     //==============================================================================
@@ -93,11 +89,9 @@ private:
     std::unique_ptr<juce::TextButton> sendState;
     std::unique_ptr<juce::ToggleButton> showNumbersButton;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiKeyboardEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

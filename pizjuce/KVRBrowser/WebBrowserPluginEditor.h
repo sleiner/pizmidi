@@ -29,21 +29,19 @@ class MyBrowser : public juce::WebBrowserComponent,
                   public juce::ChangeBroadcaster
 {
 public:
-	MyBrowser()
-		: unloadPageWhenBrowserIsHidden(false)
-	{};
-    ~MyBrowser() override {};
-    bool pageAboutToLoad(const String& newURL) override;
+    MyBrowser()
+        : unloadPageWhenBrowserIsHidden (false){};
+    ~MyBrowser() override{};
+    bool pageAboutToLoad (const String& newURL) override;
     String getCurrentURL();
     friend class WebBrowserComponent;
     String lastURL;
+
 private:
-	bool unloadPageWhenBrowserIsHidden;
+    bool unloadPageWhenBrowserIsHidden;
 };
 
 //[/Headers]
-
-
 
 //==============================================================================
 /**
@@ -53,10 +51,10 @@ private:
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class WebBrowserPluginEditor  : public AudioProcessorEditor,
-                                public ChangeListener,
-                                public TextEditor::Listener,
-                                public juce::Button::Listener
+class WebBrowserPluginEditor : public AudioProcessorEditor,
+                               public ChangeListener,
+                               public TextEditor::Listener,
+                               public juce::Button::Listener
 {
 public:
     //==============================================================================
@@ -65,18 +63,16 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override{};
-    void textEditorTextChanged(TextEditor& editor) override{};
-    void textEditorFocusLost(TextEditor& editor) override{};
+    void textEditorReturnKeyPressed (TextEditor& editor) override;
+    void textEditorEscapeKeyPressed (TextEditor& editor) override{};
+    void textEditorTextChanged (TextEditor& editor) override{};
+    void textEditorFocusLost (TextEditor& editor) override{};
     void changeListenerCallback (ChangeBroadcaster* source) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
     void resized() override;
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
-
-
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -87,7 +83,7 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a DemoJuceFilter
     // every time we need it..
-    WebBrowserFilter* getFilter() const throw()       { return (WebBrowserFilter*) getAudioProcessor(); }
+    WebBrowserFilter* getFilter() const throw() { return (WebBrowserFilter*) getAudioProcessor(); }
     //[/UserVariables]
 
     //==============================================================================
@@ -101,11 +97,9 @@ private:
     std::unique_ptr<juce::TextButton> goButton;
     std::unique_ptr<ResizableCornerComponent> resizer;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebBrowserPluginEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

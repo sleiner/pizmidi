@@ -7,7 +7,7 @@
 
 using namespace juce;
 
-class DrawablePad  : public Button
+class DrawablePad : public Button
 {
 public:
     //==============================================================================
@@ -41,17 +41,16 @@ public:
     {
         // TODO: Remove the raw-pointer function, then the additional copies
         //       can easily be eliminated.
-        return setImages(normalImage.get(),
-                         overImage.get(),
-                         downImage.get(),
-                         disabledImage.get(),
-                         normalImageOn.get(),
-                         overImageOn.get(),
-                         downImageOn.get(),
-                         disabledImageOn.get());
+        return setImages (normalImage.get(),
+                          overImage.get(),
+                          downImage.get(),
+                          disabledImage.get(),
+                          normalImageOn.get(),
+                          overImageOn.get(),
+                          downImageOn.get(),
+                          disabledImageOn.get());
     }
     void deleteImages();
-
 
     //==============================================================================
     void setBackgroundColours (const Colour& toggledOffColour,
@@ -69,8 +68,7 @@ public:
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-
-    String Label;
+        String Label;
 
 protected:
     /** @internal */
@@ -84,10 +82,6 @@ protected:
                       bool isMouseOverButton,
                       bool isButtonDown) override;
     void resized() override;
-
-
-
-
 
 private:
     //==============================================================================

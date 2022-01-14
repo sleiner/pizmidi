@@ -1,5 +1,5 @@
 #if _WIN32
-  #include <Windows.h>
+#include <Windows.h>
 #endif
 
 #include "PizKeyboard.h"
@@ -7,15 +7,15 @@
 
 bool PizKeyboard::isCapsLockOn()
 {
-	// TODO: WTF?
+    // TODO: WTF?
 #if JUCE_WINDOWS
-	return (GetKeyState(VK_CAPITAL) & 0x0001)!=0;
+    return (GetKeyState (VK_CAPITAL) & 0x0001) != 0;
 #elif JUCE_MAC
-	return true;
+    return true;
 #elif JUCE_LINUX
-	return true;
+    return true;
 #else
-	#error "Unsupported platform!"
+#error "Unsupported platform!"
 #endif
 }
 
@@ -32,41 +32,41 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 PizKeyboard::PizKeyboard()
 {
-	DBG("PizKeyboard()");
-    if (!loadDefaultFxb())
-	{
-		keyPosition=48;
-		width = 0.25f;
-		velocity = 1.f;
-		useY = false;
-		channel = 0;
-		octave = 4;
-		toggle = false;
-		hide = false;
-		usepc = false;
-		qwerty = false;
-		capslock = false;
-		showNumbers = false;
-		//sendnotesonpc = true;
-		lastUIWidth = 560;
-		lastUIHeight = 140;
-	}
-	sendHeldNotes=false;
-	clearHeldNotes=false;
-	lastProgram=0;
-	curProgram=0;
+    DBG ("PizKeyboard()");
+    if (! loadDefaultFxb())
+    {
+        keyPosition = 48;
+        width = 0.25f;
+        velocity = 1.f;
+        useY = false;
+        channel = 0;
+        octave = 4;
+        toggle = false;
+        hide = false;
+        usepc = false;
+        qwerty = false;
+        capslock = false;
+        showNumbers = false;
+        //sendnotesonpc = true;
+        lastUIWidth = 560;
+        lastUIHeight = 140;
+    }
+    sendHeldNotes = false;
+    clearHeldNotes = false;
+    lastProgram = 0;
+    curProgram = 0;
 
-	ccqwertyState[0] = KeyPress::isKeyCurrentlyDown(KeyPress::tabKey);
-	ccqwertyState[1] = KeyPress::isKeyCurrentlyDown(KeyPress::createFromDescription("`").getKeyCode());
-	ccState[0] = false;
-	ccState[1] = false;
-	for (int i = keymapLength; --i >= 0;)
-		qwertyState[i] = KeyPress::isKeyCurrentlyDown(keymap[i]);
+    ccqwertyState[0] = KeyPress::isKeyCurrentlyDown (KeyPress::tabKey);
+    ccqwertyState[1] = KeyPress::isKeyCurrentlyDown (KeyPress::createFromDescription ("`").getKeyCode());
+    ccState[0] = false;
+    ccState[1] = false;
+    for (int i = keymapLength; --i >= 0;)
+        qwertyState[i] = KeyPress::isKeyCurrentlyDown (keymap[i]);
 }
 
 PizKeyboard::~PizKeyboard()
 {
-	DBG("~PizKeyboard()");
+    DBG ("~PizKeyboard()");
 }
 
 //==============================================================================
@@ -84,19 +84,32 @@ float PizKeyboard::getParameter (int index)
 {
     switch (index)
     {
-    case kWidth: return width;
-    case kVelocity: return velocity;
-    case kUseY: return useY ? 1.f : 0.f;
-    case kChannel: return ((float)channel)/15.f;
-	case kToggleInput: return toggle ? 1.f : 0.f;
-	case kHidePanel: return hide ? 1.f : 0.f;
-	case kQwertyAnywhere: return qwerty ? 1.f : 0.f;
-	case kCapsLock: return capslock ? 1.f : 0.f;
-	case kUseProgCh: return usepc ? 1.f : 0.f;
-	case kSendHeldNotes: return 0.f;
-	case kClearHeldNotes: return 0.f;
-	case kShowNumbers: return showNumbers ? 1.f : 0.f;
-	default: return 0.0f;
+        case kWidth:
+            return width;
+        case kVelocity:
+            return velocity;
+        case kUseY:
+            return useY ? 1.f : 0.f;
+        case kChannel:
+            return ((float) channel) / 15.f;
+        case kToggleInput:
+            return toggle ? 1.f : 0.f;
+        case kHidePanel:
+            return hide ? 1.f : 0.f;
+        case kQwertyAnywhere:
+            return qwerty ? 1.f : 0.f;
+        case kCapsLock:
+            return capslock ? 1.f : 0.f;
+        case kUseProgCh:
+            return usepc ? 1.f : 0.f;
+        case kSendHeldNotes:
+            return 0.f;
+        case kClearHeldNotes:
+            return 0.f;
+        case kShowNumbers:
+            return showNumbers ? 1.f : 0.f;
+        default:
+            return 0.0f;
     }
 }
 
@@ -107,60 +120,62 @@ void PizKeyboard::setParameter (int index, float newValue)
         if (width != newValue)
         {
             width = newValue;
-            sendChangeMessage ();
+            sendChangeMessage();
         }
     }
-    else if (index==kChannel)
+    else if (index == kChannel)
     {
-        channel = roundToInt(newValue*15.f);
+        channel = roundToInt (newValue * 15.f);
         sendChangeMessage();
     }
-    else if (index==kVelocity)
+    else if (index == kVelocity)
     {
         velocity = newValue;
         sendChangeMessage();
     }
-    else if (index==kUseY)
+    else if (index == kUseY)
     {
-        useY = newValue>=0.5f;
+        useY = newValue >= 0.5f;
         sendChangeMessage();
     }
-    else if (index==kToggleInput)
+    else if (index == kToggleInput)
     {
-        toggle = newValue>=0.5f;
+        toggle = newValue >= 0.5f;
         sendChangeMessage();
     }
-    else if (index==kHidePanel)
+    else if (index == kHidePanel)
     {
-        hide = newValue>=0.5f;
+        hide = newValue >= 0.5f;
         sendChangeMessage();
     }
-    else if (index==kQwertyAnywhere)
+    else if (index == kQwertyAnywhere)
     {
-        qwerty = newValue>=0.5f;
+        qwerty = newValue >= 0.5f;
         sendChangeMessage();
     }
-    else if (index==kCapsLock)
+    else if (index == kCapsLock)
     {
-        capslock = newValue>=0.5f;
+        capslock = newValue >= 0.5f;
         sendChangeMessage();
     }
-    else if (index==kUseProgCh)
+    else if (index == kUseProgCh)
     {
-        usepc = newValue>=0.5f;
+        usepc = newValue >= 0.5f;
         sendChangeMessage();
     }
-	else if (index==kSendHeldNotes)
-	{
-		if (newValue) sendHeldNotes=true;
-	}
-	else if (index==kClearHeldNotes)
-	{
-		if (newValue) clearHeldNotes=true;
-	}
-    else if (index==kShowNumbers)
+    else if (index == kSendHeldNotes)
     {
-        showNumbers = newValue>=0.5f;
+        if (newValue)
+            sendHeldNotes = true;
+    }
+    else if (index == kClearHeldNotes)
+    {
+        if (newValue)
+            clearHeldNotes = true;
+    }
+    else if (index == kShowNumbers)
+    {
+        showNumbers = newValue >= 0.5f;
         sendChangeMessage();
     }
 }
@@ -175,23 +190,23 @@ const String PizKeyboard::getParameterName (int index)
         return "Velocity";
     if (index == kUseY)
         return "Use Y";
-	if (index == kToggleInput)
-		return "Toggle";
-	if (index == kHidePanel)
-		return "HidePanel";
-	if (index == kQwertyAnywhere)
-		return "QwertyAnywhere";
-	if (index == kCapsLock)
-		return "UseCapsLock";
-	if (index == kUseProgCh)
-		return "UseProgCh";
-	if (index == kSendHeldNotes)
-		return "SendHeldNotes";
-	if (index == kClearHeldNotes)
-		return "Reset";
-	if (index == kShowNumbers)
-		return "ShowNumbers";
-	return String();
+    if (index == kToggleInput)
+        return "Toggle";
+    if (index == kHidePanel)
+        return "HidePanel";
+    if (index == kQwertyAnywhere)
+        return "QwertyAnywhere";
+    if (index == kCapsLock)
+        return "UseCapsLock";
+    if (index == kUseProgCh)
+        return "UseProgCh";
+    if (index == kSendHeldNotes)
+        return "SendHeldNotes";
+    if (index == kClearHeldNotes)
+        return "Reset";
+    if (index == kShowNumbers)
+        return "ShowNumbers";
+    return String();
 }
 
 const String PizKeyboard::getParameterText (int index)
@@ -199,28 +214,28 @@ const String PizKeyboard::getParameterText (int index)
     if (index == kWidth)
         return String (width, 2);
     if (index == kChannel)
-        return String(channel+1);
+        return String (channel + 1);
     if (index == kVelocity)
-        return String (roundToInt(velocity*127.f));
+        return String (roundToInt (velocity * 127.f));
     if (index == kUseY)
         return useY ? "Yes" : "No";
-	if (index == kToggleInput)
-		return toggle ? "On" : "Off";
-	if (index == kHidePanel)
-		return toggle ? "Hidden" : "Showing";
-	if (index == kQwertyAnywhere)
-		return toggle ? "On" : "Off";
-	if (index == kCapsLock)
-		return capslock ? "On" : "Off";
+    if (index == kToggleInput)
+        return toggle ? "On" : "Off";
+    if (index == kHidePanel)
+        return toggle ? "Hidden" : "Showing";
+    if (index == kQwertyAnywhere)
+        return toggle ? "On" : "Off";
+    if (index == kCapsLock)
+        return capslock ? "On" : "Off";
     if (index == kUseProgCh)
         return usepc ? "Yes" : "No";
-	if (index == kSendHeldNotes)
-		return "--->";
-	if (index == kClearHeldNotes)
-		return "--->";
+    if (index == kSendHeldNotes)
+        return "--->";
+    if (index == kClearHeldNotes)
+        return "--->";
     if (index == kShowNumbers)
         return showNumbers ? "Yes" : "No";
-	return String();
+    return String();
 }
 
 const String PizKeyboard::getInputChannelName (const int channelIndex) const
@@ -268,158 +283,166 @@ void PizKeyboard::releaseResources()
 void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
                                 MidiBuffer& midiMessages)
 {
-	MidiBuffer output;
-	if (lastProgram!=curProgram)
-	{
-		for (int ch=1;ch<=16;ch++)
-		{
-			for (int n=0;n<128;n++)
-			{
-				if (progKbState[lastProgram].isNoteOn(ch,n)) {
-					editorKbState.noteOff(ch,n, 1.f);
-				}
-			}
-		}
-		for (int ch=1;ch<=16;ch++)
-		{
-			for (int n=0;n<128;n++)
-			{
-				if (progKbState[curProgram].isNoteOn(ch,n)) {
-					editorKbState.noteOn(ch,n,velocity);
-				}
-			}
-		}
-		lastProgram = curProgram;
-		sendChangeMessage();
-	}
-	if (clearHeldNotes)
-	{
-		clearHeldNotes=false;
-		for (int ch=1;ch<=16;ch++)
-		{
-			for (int n=0;n<128;n++)
-			{
-				if (progKbState[curProgram].isNoteOn(ch,n))
-					output.addEvent(MidiMessage::noteOff(ch,n),0);
-			}
-		}
-		progKbState[curProgram].reset();
-		editorKbState.reset();
-		sendChangeMessage();
-	}
+    MidiBuffer output;
+    if (lastProgram != curProgram)
+    {
+        for (int ch = 1; ch <= 16; ch++)
+        {
+            for (int n = 0; n < 128; n++)
+            {
+                if (progKbState[lastProgram].isNoteOn (ch, n))
+                {
+                    editorKbState.noteOff (ch, n, 1.f);
+                }
+            }
+        }
+        for (int ch = 1; ch <= 16; ch++)
+        {
+            for (int n = 0; n < 128; n++)
+            {
+                if (progKbState[curProgram].isNoteOn (ch, n))
+                {
+                    editorKbState.noteOn (ch, n, velocity);
+                }
+            }
+        }
+        lastProgram = curProgram;
+        sendChangeMessage();
+    }
+    if (clearHeldNotes)
+    {
+        clearHeldNotes = false;
+        for (int ch = 1; ch <= 16; ch++)
+        {
+            for (int n = 0; n < 128; n++)
+            {
+                if (progKbState[curProgram].isNoteOn (ch, n))
+                    output.addEvent (MidiMessage::noteOff (ch, n), 0);
+            }
+        }
+        progKbState[curProgram].reset();
+        editorKbState.reset();
+        sendChangeMessage();
+    }
 
+    if (qwerty && (! capslock || isCapsLockOn()))
+    {
+        ////tab key toggles CC 1
+        //if (ccqwertyState[0] != KeyPress::isKeyCurrentlyDown(KeyPress::tabKey)) {
+        //	ccqwertyState[0] = KeyPress::isKeyCurrentlyDown(KeyPress::tabKey);
+        //	if (ccqwertyState[0])
+        //	{
+        //		midiMessages.addEvent(MidiMessage::controllerEvent(channel+1,1,ccState[0] ? 0 : 127),0);
+        //		ccState[0] = !ccState[0];
+        //	}
+        //}
+        ////` is sustain pedal
+        //if (ccqwertyState[1] != KeyPress::isKeyCurrentlyDown(96)) {
+        //	ccqwertyState[1] = KeyPress::isKeyCurrentlyDown(96);
+        //	midiMessages.addEvent(MidiMessage::controllerEvent(channel+1,64,ccqwertyState[1] ? 127 : 0),0);
+        //}
+        for (int i = keymapLength; --i >= 0;)
+        {
+            if (qwertyState[i] != KeyPress::isKeyCurrentlyDown (keymap[i]))
+            {
+                const int note = 12 * octave + i;
+                if (KeyPress::isKeyCurrentlyDown (keymap[i]) != progKbState[curProgram].isNoteOn (channel + 1, note)
+                    && ! ModifierKeys::getCurrentModifiers().isAnyModifierKeyDown())
+                {
+                    if (KeyPress::isKeyCurrentlyDown (keymap[i]))
+                    {
+                        editorKbState.noteOn (channel + 1, note, ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
+                    }
+                    else if (! toggle)
+                    {
+                        editorKbState.noteOff (channel + 1, note, 1.f);
+                    }
+                }
+                else if (toggle && KeyPress::isKeyCurrentlyDown (keymap[i]) && progKbState[curProgram].isNoteOn (channel + 1, note))
+                {
+                    editorKbState.noteOff (channel + 1, note, 1.f);
+                }
+                qwertyState[i] = KeyPress::isKeyCurrentlyDown (keymap[i]);
+            }
+        }
+    }
 
-	if (qwerty && (!capslock || isCapsLockOn()))
-	{
-		////tab key toggles CC 1
-		//if (ccqwertyState[0] != KeyPress::isKeyCurrentlyDown(KeyPress::tabKey)) {
-		//	ccqwertyState[0] = KeyPress::isKeyCurrentlyDown(KeyPress::tabKey);
-		//	if (ccqwertyState[0])
-		//	{
-		//		midiMessages.addEvent(MidiMessage::controllerEvent(channel+1,1,ccState[0] ? 0 : 127),0);
-		//		ccState[0] = !ccState[0];
-		//	}
-		//}
-		////` is sustain pedal
-		//if (ccqwertyState[1] != KeyPress::isKeyCurrentlyDown(96)) {
-		//	ccqwertyState[1] = KeyPress::isKeyCurrentlyDown(96);
-		//	midiMessages.addEvent(MidiMessage::controllerEvent(channel+1,64,ccqwertyState[1] ? 127 : 0),0);
-		//}
-		for (int i = keymapLength; --i >= 0;) {
-			if (qwertyState[i] != KeyPress::isKeyCurrentlyDown(keymap[i]))
-			{
-				const int note = 12 * octave + i;
-				if (KeyPress::isKeyCurrentlyDown(keymap[i]) != progKbState[curProgram].isNoteOn(channel+1,note)
-					&& !ModifierKeys::getCurrentModifiers().isAnyModifierKeyDown())
-				{
-					if (KeyPress::isKeyCurrentlyDown(keymap[i])) {
-						editorKbState.noteOn(channel+1,note,ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
-					}
-					else if (!toggle) {
-						editorKbState.noteOff(channel+1,note,1.f);
-					}
-				}
-				else if (toggle && KeyPress::isKeyCurrentlyDown(keymap[i]) && progKbState[curProgram].isNoteOn(channel+1,note))
-				{
-					editorKbState.noteOff(channel+1,note,1.f);
-				}
-				qwertyState[i] = KeyPress::isKeyCurrentlyDown(keymap[i]);
-			}
-		}
-	}
+    bool skip = false;
+    for (auto const&& msgMetadata : midiMessages)
+    {
+        auto m = msgMetadata.getMessage();
+        auto sample = msgMetadata.samplePosition;
 
-	bool skip = false;
-	for(auto const&& msgMetadata: midiMessages) {
-		auto m = msgMetadata.getMessage();
-		auto sample = msgMetadata.samplePosition;
+        if (m.isForChannel (channel + 1))
+        {
+            if (toggle)
+            {
+                if (m.isNoteOn())
+                {
+                    skip = true;
+                    if (progKbState[curProgram].isNoteOn (m.getChannel(), m.getNoteNumber()))
+                        output.addEvent (MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
+                    else
+                        output.addEvent (m, sample);
+                }
+                else if (m.isNoteOff())
+                {
+                    skip = true;
+                }
+            }
+            if (m.isProgramChange() && usepc)
+            {
+                setCurrentProgram (m.getProgramChangeNumber());
+                if (lastProgram != curProgram)
+                {
+                    for (int ch = 1; ch <= 16; ch++)
+                    {
+                        for (int n = 0; n < 128; n++)
+                        {
+                            if (progKbState[lastProgram].isNoteOn (ch, n))
+                                output.addEvent (MidiMessage::noteOff (ch, n), sample);
+                        }
+                    }
+                    editorKbState.reset();
+                    for (int ch = 1; ch <= 16; ch++)
+                    {
+                        for (int n = 0; n < 128; n++)
+                        {
+                            if (progKbState[curProgram].isNoteOn (ch, n))
+                            {
+                                editorKbState.noteOn (ch, n, velocity);
+                                output.addEvent (MidiMessage::noteOn (ch, n, velocity), sample);
+                            }
+                        }
+                    }
+                    lastProgram = curProgram;
+                    sendChangeMessage();
+                }
+            }
+        }
+        if (! skip)
+            output.addEvent (m, sample);
+    }
+    //if (!toggle)
+    //	output = midiMessages;
 
-		if (m.isForChannel(channel+1))
-		{
-			if (toggle)
-			{
-				if (m.isNoteOn()) {
-					skip = true;
-					if (progKbState[curProgram].isNoteOn(m.getChannel(),m.getNoteNumber()))
-						output.addEvent(MidiMessage::noteOff(m.getChannel(),m.getNoteNumber()),sample);
-					else
-						output.addEvent(m,sample);
-				}
-				else if (m.isNoteOff()) {
-					skip = true;
-				}
-			}
-			if (m.isProgramChange() && usepc)
-			{
-				setCurrentProgram(m.getProgramChangeNumber());
-				if (lastProgram!=curProgram)
-				{
-					for (int ch=1;ch<=16;ch++)
-					{
-						for (int n=0;n<128;n++)
-						{
-							if (progKbState[lastProgram].isNoteOn(ch,n))
-								output.addEvent(MidiMessage::noteOff(ch,n),sample);
-						}
-					}
-					editorKbState.reset();
-					for (int ch=1;ch<=16;ch++)
-					{
-						for (int n=0;n<128;n++)
-						{
-							if (progKbState[curProgram].isNoteOn(ch,n)) {
-								editorKbState.noteOn(ch,n,velocity);
-								output.addEvent(MidiMessage::noteOn(ch,n,velocity),sample);
-							}
-						}
-					}
-					lastProgram = curProgram;
-					sendChangeMessage();
-				}
-			}
-		}
-		if (!skip)
-			output.addEvent(m,sample);
-	}
-	//if (!toggle)
-	//	output = midiMessages;
+    if (sendHeldNotes)
+    {
+        sendHeldNotes = false;
+        for (int ch = 1; ch <= 16; ch++)
+        {
+            for (int n = 0; n < 128; n++)
+            {
+                if (progKbState[curProgram].isNoteOn (ch, n))
+                    output.addEvent (MidiMessage::noteOn (ch, n, velocity), 0);
+            }
+        }
+    }
 
-	if (sendHeldNotes)
-	{
-		sendHeldNotes=false;
-		for (int ch=1;ch<=16;ch++)
-		{
-			for (int n=0;n<128;n++)
-			{
-				if (progKbState[curProgram].isNoteOn(ch,n))
-					output.addEvent(MidiMessage::noteOn(ch,n,velocity),0);
-			}
-		}
-	}
-
-	editorKbState.processNextMidiBuffer(output,0,buffer.getNumSamples(),true);
-	progKbState[curProgram].processNextMidiBuffer (output,0, buffer.getNumSamples(),false);
-	midiMessages.clear();
-	midiMessages = output;
+    editorKbState.processNextMidiBuffer (output, 0, buffer.getNumSamples(), true);
+    progKbState[curProgram].processNextMidiBuffer (output, 0, buffer.getNumSamples(), false);
+    midiMessages.clear();
+    midiMessages = output;
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -464,7 +487,6 @@ void PizKeyboard::getStateInformation (MemoryBlock& destData)
 
     // you could also add as many child elements as you need to here..
 
-
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
 }
@@ -490,12 +512,12 @@ void PizKeyboard::setStateInformation (const void* data, int sizeInBytes)
             usepc = xmlState->getBoolAttribute ("usepc", usepc);
             showNumbers = xmlState->getBoolAttribute ("showNumbers", showNumbers);
             qwerty = xmlState->getBoolAttribute ("qwerty", qwerty);
-			keyPosition = xmlState->getIntAttribute ("keyPosition", keyPosition);
+            keyPosition = xmlState->getIntAttribute ("keyPosition", keyPosition);
             octave = xmlState->getIntAttribute ("octave", octave);
             lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            sendChangeMessage ();
-			this->dispatchPendingMessages();
+            sendChangeMessage();
+            this->dispatchPendingMessages();
         }
     }
 }

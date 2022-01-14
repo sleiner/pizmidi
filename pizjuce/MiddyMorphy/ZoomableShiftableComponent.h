@@ -1,16 +1,16 @@
 #pragma once
 
-
 #include "juce_gui_basics/juce_gui_basics.h"
 
 using namespace juce;
 class ZoomingShiftingComponent;
 
-class ZoomableShiftableComponent : public juce::Component {
-  public:
+class ZoomableShiftableComponent : public juce::Component
+{
+public:
     virtual juce::Rectangle<int> getOriginalBounds() = 0;
 
-    virtual void setOriginalBounds(const juce::Rectangle<int> bounds);
+    virtual void setOriginalBounds (const juce::Rectangle<int> bounds);
 
     //returns
     float getZoomFactorX();
@@ -21,14 +21,11 @@ class ZoomableShiftableComponent : public juce::Component {
     //calcu
     void rePosition();
 
-
-  private:
+private:
     ZoomingShiftingComponent* zoomingComponent;
 
-
-  public:
-    void setZoomer(ZoomingShiftingComponent * zoomer);
+public:
+    void setZoomer (ZoomingShiftingComponent* zoomer);
 
     void refreshOriginalBounds();
-
 };

@@ -3,19 +3,21 @@
 
 #include "juce_data_structures/juce_data_structures.h"
 
-#include "../_common/PizAudioProcessor.h"
 #include "../_common/BankStorage.h"
+#include "../_common/PizAudioProcessor.h"
 
 using namespace juce;
 
-enum parameters {
+enum parameters
+{
     kChannel,
     kNumParams
 };
 
-class ImageBank : public BankStorage{
+class ImageBank : public BankStorage
+{
 public:
-	ImageBank ();
+    ImageBank();
 
 private:
     void loadDefaultValues();
@@ -27,8 +29,8 @@ private:
     passing through it.
 
 */
-class imagePluginFilter  : public PizAudioProcessor,
-                  public ChangeBroadcaster
+class imagePluginFilter : public PizAudioProcessor,
+                          public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -39,32 +41,34 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
-                                     MidiBuffer& midiMessages) override;
+    void processBlock (AudioSampleBuffer& buffer,
+                       MidiBuffer& midiMessages) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override {return JucePlugin_Name;}
-    bool acceptsMidi() const override {
+    const String getName() const override { return JucePlugin_Name; }
+    bool acceptsMidi() const override
+    {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const override {
+    bool producesMidi() const override
+    {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
         return false;
 #endif
     }
-	bool hasEditor() const override {return true;}
+    bool hasEditor() const override { return true; }
     double getTailLengthSeconds() const override { return 0; }
 
-    int getNumParameters() override    { return kNumParams; }
+    int getNumParameters() override { return kNumParams; }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
@@ -77,10 +81,9 @@ public:
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
-
     //==============================================================================
 
-    int getNumPrograms() override      { return 128; }
+    int getNumPrograms() override { return 128; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const String getProgramName (int index) override;
@@ -92,29 +95,29 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-	void setBankColours (Colour colour, Colour text);
-	void applySizeToBank(int h, int w);
-	void clearAllImages();
+    void setBankColours (Colour colour, Colour text);
+    void applySizeToBank (int h, int w);
+    void clearAllImages();
 
-	void setCurrentBank(int index, int program=-1);
-	int getCurrentBank() {return curBank;}
+    void setCurrentBank (int index, int program = -1);
+    int getCurrentBank() { return curBank; }
 
-	void setNoteInput(bool use)
-	{
-		noteInput = use;
-		programs->setGlobal("noteInput",use);
-	}
+    void setNoteInput (bool use)
+    {
+        noteInput = use;
+        programs->setGlobal ("noteInput", use);
+    }
 
-	void setUsePC(bool use)
-	{
-		usePC = use;
-		programs->setGlobal("usePC",use);
-	}
+    void setUsePC (bool use)
+    {
+        usePC = use;
+        programs->setGlobal ("usePC", use);
+    }
 
-	bool getUsePC() {return usePC;}
-	bool getNoteInput() {return noteInput;}
+    bool getUsePC() { return usePC; }
+    bool getNoteInput() { return noteInput; }
 
-	//==============================================================================
+    //==============================================================================
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
 
@@ -123,31 +126,25 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
     Colour bgcolor;
-	Colour textcolor;
+    Colour textcolor;
     String icon;
     String text;
-	bool fullscreen;
-	String iconPath;
+    bool fullscreen;
+    String iconPath;
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-
-
-private:
-    float param[kNumParams];
+        private : float param[kNumParams];
 
     //JuceProgram *programs;
-    ImageBank *programs;
-	int curBank;
+    ImageBank* programs;
+    int curBank;
     int curProgram;
-	bool noteInput;
-	bool usePC;
+    bool noteInput;
+    bool usePC;
 
     bool init;
-
 };
-
-
 
 #endif

@@ -22,18 +22,20 @@
 
 #include "WebBrowserPluginEditor.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //==============================================================================
-bool MyBrowser::pageAboutToLoad(const String& newURL) {
-	if (!newURL.contains("googleads")) {
-        lastURL=newURL;
+bool MyBrowser::pageAboutToLoad (const String& newURL)
+{
+    if (! newURL.contains ("googleads"))
+    {
+        lastURL = newURL;
     }
     sendChangeMessage();
     return true;
 }
 
-String MyBrowser::getCurrentURL() {
+String MyBrowser::getCurrentURL()
+{
     return lastURL;
 }
 
@@ -97,15 +99,13 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
     resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
-
     //[UserPreSize]
-	wb->addChangeListener(this);
-    urlBar->addListener(this);
+    wb->addChangeListener (this);
+    urlBar->addListener (this);
     resizeLimits.setSizeLimits (150, 150, 1600, 1600);
     //[/UserPreSize]
 
     setSize (600, 400);
-
 
     //[Constructor] You can add your own custom stuff here..
     setSize (ownerFilter->lastUIWidth, ownerFilter->lastUIHeight);
@@ -117,8 +117,8 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
 WebBrowserPluginEditor::~WebBrowserPluginEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->setURL(wb->getCurrentURL());
-    getFilter()->initialPageLoaded=false;
+    getFilter()->setURL (wb->getCurrentURL());
+    getFilter()->initialPageLoaded = false;
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
@@ -131,7 +131,6 @@ WebBrowserPluginEditor::~WebBrowserPluginEditor()
     urlBar = nullptr;
     goButton = nullptr;
     resizer = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -173,13 +172,13 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_reloadButton] -- add your button handler code here..
         //if (wb->getCurrentURL().isNotEmpty()) wb->goToURL(wb->getCurrentURL());
-		wb->refresh();
+        wb->refresh();
         //[/UserButtonCode_reloadButton]
     }
     else if (buttonThatWasClicked == backButton.get())
     {
         //[UserButtonCode_backButton] -- add your button handler code here..
-		wb->goBack();
+        wb->goBack();
         //[/UserButtonCode_backButton]
     }
     else if (buttonThatWasClicked == forwardButton.get())
@@ -191,7 +190,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == homeButton.get())
     {
         //[UserButtonCode_homeButton] -- add your button handler code here..
-        wb->goToURL("http://www.kvraudio.com/");
+        wb->goToURL ("http://www.kvraudio.com/");
         //[/UserButtonCode_homeButton]
     }
     else if (buttonThatWasClicked == stopButton.get())
@@ -203,7 +202,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == goButton.get())
     {
         //[UserButtonCode_goButton] -- add your button handler code here..
-        wb->goToURL(urlBar->getText());
+        wb->goToURL (urlBar->getText());
         //[/UserButtonCode_goButton]
     }
 
@@ -211,25 +210,25 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
 void WebBrowserPluginEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-    if (source==getFilter()) {
+    if (source == getFilter())
+    {
         updateParametersFromFilter();
     }
-    else if (source==wb.get()) {
-        getFilter()->setURL(wb->getCurrentURL());
-        urlBar->setText(wb->getCurrentURL());
-        getFilter()->initialPageLoaded=true;
+    else if (source == wb.get())
+    {
+        getFilter()->setURL (wb->getCurrentURL());
+        urlBar->setText (wb->getCurrentURL());
+        getFilter()->initialPageLoaded = true;
     }
 }
 
-void WebBrowserPluginEditor::textEditorReturnKeyPressed(TextEditor& editor)
+void WebBrowserPluginEditor::textEditorReturnKeyPressed (TextEditor& editor)
 {
-    wb->goToURL((const String)(editor.getText()));
+    wb->goToURL ((const String) (editor.getText()));
 }
 
 void WebBrowserPluginEditor::updateParametersFromFilter()
@@ -248,12 +247,12 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    if (URL.isNotEmpty()) wb->goToURL(URL);
+    if (URL.isNotEmpty())
+        wb->goToURL (URL);
 
     setSize (filter->lastUIWidth, filter->lastUIHeight);
 }
 //[/MiscUserCode]
-
 
 //==============================================================================
 #if 0
@@ -304,7 +303,5 @@ END_JUCER_METADATA
 */
 #endif
 
-
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

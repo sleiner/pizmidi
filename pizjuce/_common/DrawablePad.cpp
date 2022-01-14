@@ -33,35 +33,43 @@ void DrawablePad::deleteImages()
 }
 
 void DrawablePad::setImages (const Drawable* normal,
-                     const Drawable* over,
-                     const Drawable* down,
-                     const Drawable* disabled,
-                     const Drawable* normalOn,
-                     const Drawable* overOn,
-                     const Drawable* downOn,
-                     const Drawable* disabledOn)
+                             const Drawable* over,
+                             const Drawable* down,
+                             const Drawable* disabled,
+                             const Drawable* normalOn,
+                             const Drawable* overOn,
+                             const Drawable* downOn,
+                             const Drawable* disabledOn)
 {
     deleteImages();
 
     jassert (normal != nullptr); // you really need to give it at least a normal image..
 
-    if (normal != nullptr) normalImage = normal->createCopy();
-    if (over != nullptr) overImage = over->createCopy();
-    if (down != nullptr) downImage = down->createCopy();
-    if (disabled != nullptr) disabledImage = disabled->createCopy();
-    if (normalOn != nullptr) normalImageOn = normalOn->createCopy();
-    if (overOn != nullptr) overImageOn = overOn->createCopy();
-    if (downOn != nullptr) downImageOn = downOn->createCopy();
-    if (disabledOn != nullptr) disabledImageOn = disabledOn->createCopy();
+    if (normal != nullptr)
+        normalImage = normal->createCopy();
+    if (over != nullptr)
+        overImage = over->createCopy();
+    if (down != nullptr)
+        downImage = down->createCopy();
+    if (disabled != nullptr)
+        disabledImage = disabled->createCopy();
+    if (normalOn != nullptr)
+        normalImageOn = normalOn->createCopy();
+    if (overOn != nullptr)
+        overImageOn = overOn->createCopy();
+    if (downOn != nullptr)
+        downImageOn = downOn->createCopy();
+    if (disabledOn != nullptr)
+        disabledImageOn = disabledOn->createCopy();
 
     repaint();
 }
 
-static std::unique_ptr<Drawable> drawableFromFile(const File& f)
+static std::unique_ptr<Drawable> drawableFromFile (const File& f)
 {
     if (f.exists())
     {
-        return Drawable::createFromImageFile(f);
+        return Drawable::createFromImageFile (f);
     }
 
     return nullptr;
@@ -76,21 +84,21 @@ void DrawablePad::setImages (const File normalImage,
                              const File downImageOn,
                              const File disabledImageOn)
 {
-    setImagesFromUptr(drawableFromFile(normalImage),
-                      drawableFromFile(overImage),
-                      drawableFromFile(downImage),
-                      drawableFromFile(disabledImage),
-                      drawableFromFile(normalImageOn),
-                      drawableFromFile(overImageOn),
-                      drawableFromFile(downImageOn),
-                      drawableFromFile(disabledImageOn));
+    setImagesFromUptr (drawableFromFile (normalImage),
+                       drawableFromFile (overImage),
+                       drawableFromFile (downImage),
+                       drawableFromFile (disabledImage),
+                       drawableFromFile (normalImageOn),
+                       drawableFromFile (overImageOn),
+                       drawableFromFile (downImageOn),
+                       drawableFromFile (disabledImageOn));
 }
 
 void DrawablePad::setBackgroundColours (const Colour& toggledOffColour,
-                                const Colour& toggledOnColour)
+                                        const Colour& toggledOnColour)
 {
     if (backgroundOff != toggledOffColour
-         || backgroundOn != toggledOnColour)
+        || backgroundOn != toggledOnColour)
     {
         backgroundOff = toggledOffColour;
         backgroundOn = toggledOnColour;
@@ -106,10 +114,10 @@ const Colour& DrawablePad::getBackgroundColour() const throw()
 }
 
 void DrawablePad::drawButtonBackground (Graphics& g,
-                                Button& button,
-                                const Colour& backgroundColour,
-                                bool isMouseOverButton,
-                                bool isButtonDown)
+                                        Button& button,
+                                        const Colour& backgroundColour,
+                                        bool isMouseOverButton,
+                                        bool isButtonDown)
 {
 }
 
@@ -143,23 +151,24 @@ void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButto
 
     if (imageToDraw != nullptr)
     {
-		g.fillAll(Colours::transparentBlack);
+        g.fillAll (Colours::transparentBlack);
         imageToDraw->drawWithin (g,
                                  imageSpace.toFloat(),
                                  RectanglePlacement::centred,
-								 1.f);
+                                 1.f);
     }
-	else
-	{
-		g.fillAll(getBackgroundColour());
-	//	g.setColour (getBackgroundColour().contrasting(0.8f));
-	//	g.setFont (Font (9.f, Font::bold));
-	//	g.drawText (Label,
-	//				proportionOfWidth (0.0447f), proportionOfHeight (0.0499f), proportionOfWidth (0.9137f), proportionOfHeight (0.9137f),
-	//				Justification::centred, true);
-	}
+    else
+    {
+        g.fillAll (getBackgroundColour());
+        //	g.setColour (getBackgroundColour().contrasting(0.8f));
+        //	g.setFont (Font (9.f, Font::bold));
+        //	g.drawText (Label,
+        //				proportionOfWidth (0.0447f), proportionOfHeight (0.0499f), proportionOfWidth (0.9137f), proportionOfHeight (0.9137f),
+        //				Justification::centred, true);
+    }
 }
-void DrawablePad::resized() {
+void DrawablePad::resized()
+{
 }
 
 const Drawable* DrawablePad::getCurrentImage() const throw()
@@ -207,16 +216,23 @@ const Drawable* DrawablePad::getDownImage() const throw()
 
     if (getToggleState())
     {
-        if (downImageOn != nullptr) d = downImageOn.get();
-        else if (overImageOn != nullptr) d = overImageOn.get();
-        else if (normalImageOn != nullptr) d = normalImageOn.get();
-        else if (downImage != nullptr) d = downImage.get();
-        else d = getOverImage();
+        if (downImageOn != nullptr)
+            d = downImageOn.get();
+        else if (overImageOn != nullptr)
+            d = overImageOn.get();
+        else if (normalImageOn != nullptr)
+            d = normalImageOn.get();
+        else if (downImage != nullptr)
+            d = downImage.get();
+        else
+            d = getOverImage();
     }
     else
     {
-        if (downImage != nullptr) d = downImage.get();
-        else d = getOverImage();
+        if (downImage != nullptr)
+            d = downImage.get();
+        else
+            d = getOverImage();
     }
 
     return d;

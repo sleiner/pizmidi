@@ -11,39 +11,41 @@ by Reuben Vinal
 enum
 {
     kParam01,
-	kChannel,
-	kNumParams
+    kChannel,
+    kNumParams
 };
 
 class MidiChordHold : public PizMidi
 {
 public:
-	MidiChordHold(audioMasterCallback audioMaster);
-	~MidiChordHold();
+    MidiChordHold (audioMasterCallback audioMaster);
+    ~MidiChordHold();
 
-	void   setProgramName (char *name) {vst_strncpy(_programName,name,kVstMaxProgNameLen);}
-	void   getProgramName (char *name) {vst_strncpy(name,_programName,kVstMaxProgNameLen);}
-	bool   getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text) {
-		vst_strncpy(text,_programName,kVstMaxProgNameLen);return true;
-	}
+    void setProgramName (char* name) { vst_strncpy (_programName, name, kVstMaxProgNameLen); }
+    void getProgramName (char* name) { vst_strncpy (name, _programName, kVstMaxProgNameLen); }
+    bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+    {
+        vst_strncpy (text, _programName, kVstMaxProgNameLen);
+        return true;
+    }
 
-	void   setParameter(VstInt32 index, float value);
-	float  getParameter(VstInt32 index);
-	void   getParameterDisplay(VstInt32 index, char *text);
-	void   getParameterName(VstInt32 index, char *text);
+    void setParameter (VstInt32 index, float value);
+    float getParameter (VstInt32 index);
+    void getParameterDisplay (VstInt32 index, char* text);
+    void getParameterName (VstInt32 index, char* text);
 
 protected:
-	virtual void processMidiEvents(VstMidiEventVec *inputs, VstMidiEventVec *outputs, VstInt32 sampleFrames);
+    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames);
 
     float param[kNumParams];
 
     bool held_notes[128][16];
-	bool waiting;
-	bool holding;
-	bool wasOn;
-	int lastChannel;
+    bool waiting;
+    bool holding;
+    bool wasOn;
+    int lastChannel;
 
-	char _programName[kVstMaxProgNameLen];
+    char _programName[kVstMaxProgNameLen];
 };
 
 #endif

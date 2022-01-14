@@ -8,7 +8,10 @@
 class MidiMorph;
 class ControllerValue;
 class Controller;
-namespace juce { class MidiBuffer; }
+namespace juce
+{
+    class MidiBuffer;
+}
 class Cursor;
 
 using namespace juce;
@@ -18,21 +21,21 @@ class Scene : public Module,
               public Slider::Listener,
               public TextEditor::Listener
 {
-  public:
-    Scene(const Scene & scene);
+public:
+    Scene (const Scene& scene);
 
-    Scene(MidiMorph * core);
+    Scene (MidiMorph* core);
 
-     ~Scene() override;
+    ~Scene() override;
 
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void textEditorTextChanged(TextEditor&) override;
-    void textEditorReturnKeyPressed(TextEditor&) override;
-    void textEditorEscapeKeyPressed(TextEditor&) override;
-    void textEditorFocusLost(TextEditor&) override;
+    void textEditorTextChanged (TextEditor&) override;
+    void textEditorReturnKeyPressed (TextEditor&) override;
+    void textEditorEscapeKeyPressed (TextEditor&) override;
+    void textEditorFocusLost (TextEditor&) override;
     void changeListenerCallback (ChangeBroadcaster* source) override;
 
-  private:
+private:
     //stored for performance reason
     float distanceFromCursor;
 
@@ -46,21 +49,20 @@ class Scene : public Module,
 
     bool affectionValueChanged;
 
-
     MidiMorph* core;
 
     TextEditor* textEditor;
     ColourSelector* colourSelector;
     Slider* sizeSlider;
 
-  public:
+public:
     Array<ControllerValue*> controllerValues;
     float getAffectionRatio();
 
     //get Precalculated Value
     float getDistanceFromCursor();
 
-    int getValue(const Controller* controller);
+    int getValue (const Controller* controller);
 
     //gets called when the XYItem gets new coordinates
     //in this implementation refresh the distance value
@@ -68,29 +70,28 @@ class Scene : public Module,
 
     juce::Colour getColour();
 
-    void setColour(const juce::Colour & colour);
+    void setColour (const juce::Colour& colour);
 
     String getName();
 
-    void setName(String newName);
+    void setName (String newName);
 
-    void addValue( ControllerValue * value);
+    void addValue (ControllerValue* value);
 
     float getAffectionValue();
 
     void distanceFromCursorChanged();
 
-    void mouseDown(const MouseEvent & e) override;
+    void mouseDown (const MouseEvent& e) override;
 
-    void mouseUp(const MouseEvent & e) override;
+    void mouseUp (const MouseEvent& e) override;
 
-    void getMidiMessages(juce::MidiBuffer & buffer, int pos);
+    void getMidiMessages (juce::MidiBuffer& buffer, int pos);
 
-    void mouseDrag(const MouseEvent & e) override;
+    void mouseDrag (const MouseEvent& e) override;
 
     int getId();
 
-  friend class ControllerValue;
+    friend class ControllerValue;
     int id;
-
 };

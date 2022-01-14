@@ -6,11 +6,11 @@
 
 #include "BigClock.h"
 
-class TimeDisplay  : public Button
+class TimeDisplay : public Button
 {
 public:
     //==============================================================================
-    TimeDisplay ();
+    TimeDisplay();
     ~TimeDisplay() override;
 
     //==============================================================================
@@ -19,44 +19,40 @@ public:
     String time;
     Colour textcolor;
 
-
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
+        private :
 
-
-    TimeDisplay (const TimeDisplay&);
+        TimeDisplay (const TimeDisplay&);
     const TimeDisplay& operator= (const TimeDisplay&);
 };
 
-
 //==============================================================================
-class BigClockEditor   : public AudioProcessorEditor,
-                              public Button::Listener,
-                              public TextEditor::Listener,
-                              public ChangeListener,
-							  public Timer
+class BigClockEditor : public AudioProcessorEditor,
+                       public Button::Listener,
+                       public TextEditor::Listener,
+                       public ChangeListener,
+                       public Timer
 {
 public:
     BigClockEditor (BigClockFilter* const ownerFilter);
     ~BigClockEditor() override;
 
-	void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
     void buttonClicked (Button* buttonThatWasClicked) override;
     void buttonStateChanged (Button* buttonThatWasClicked) override;
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override{};
-    void textEditorTextChanged(TextEditor& editor) override{};
-    void textEditorFocusLost(TextEditor& editor) override{};
-	void timerCallback() override;
-	void mouseEnter(const MouseEvent& e) override;
-	void mouseExit(const MouseEvent& e) override;
+    void textEditorReturnKeyPressed (TextEditor& editor) override;
+    void textEditorEscapeKeyPressed (TextEditor& editor) override{};
+    void textEditorTextChanged (TextEditor& editor) override{};
+    void textEditorFocusLost (TextEditor& editor) override{};
+    void timerCallback() override;
+    void mouseEnter (const MouseEvent& e) override;
+    void mouseExit (const MouseEvent& e) override;
 
     //==============================================================================
     void paint (Graphics& g) override;
     void resized() override;
-
 
 private:
     //==============================================================================
@@ -67,20 +63,19 @@ private:
     ComponentBoundsConstrainer resizeLimits;
     TextEditor* textBox;
     Label* cueLabel;
-	Label* modeLabel;
-	TextButton* runButton;
-	TextButton* resetButton;
+    Label* modeLabel;
+    TextButton* runButton;
+    TextButton* resetButton;
 
     bool showtextbox;
-	bool barsbeats;
-	bool recording;
-	bool hosttime;
-	uint32 watchTime;
+    bool barsbeats;
+    bool recording;
+    bool hosttime;
+    uint32 watchTime;
 
     void updateParametersFromFilter();
 
-    BigClockFilter* getFilter() const throw()       { return (BigClockFilter*) getAudioProcessor(); }
+    BigClockFilter* getFilter() const throw() { return (BigClockFilter*) getAudioProcessor(); }
 };
-
 
 #endif

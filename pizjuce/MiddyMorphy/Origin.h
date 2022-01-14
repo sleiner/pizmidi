@@ -6,24 +6,21 @@ class ZoomingShiftingComponent;
 
 using namespace juce;
 
-class Origin : public juce::Component {
-  public:
-    void paint(Graphics & g) override;
+class Origin : public juce::Component
+{
+public:
+    void paint (Graphics& g) override;
 
     Origin();
 
     void resized() override;
 
-
-  private:
+private:
     ZoomingShiftingComponent* owner;
 
-
-  public:
+public:
     void moved() override;
 
-
-  private:
+private:
     float originalSize;
-
 };

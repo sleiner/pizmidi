@@ -5,36 +5,34 @@
 
 #include "../_common/DrawablePad.h"
 
-class MidiPad  : public Component,
-                 public Button::Listener,
-                 public FileDragAndDropTarget
+class MidiPad : public Component,
+                public Button::Listener,
+                public FileDragAndDropTarget
 {
 public:
     //==============================================================================
-	MidiPad ();
+    MidiPad();
     ~MidiPad() override;
 
     void paint (Graphics&) override;
     void resized() override;
     void buttonClicked (Button*) override;
-    void filesDropped (const StringArray &files, int x, int y) override;
+    void filesDropped (const StringArray& files, int x, int y) override;
     bool isInterestedInFileDrag (const StringArray& files) override;
     void setButtonText (const String&);
     void setTooltip (String text);
-    void setColour(const Colour&);
-    void setTriggeredOnMouseDown(const bool);
-    void addButtonListener (Button::Listener *const);
-    void addListener (Button::Listener *const);
-	void clearIcon();
+    void setColour (const Colour&);
+    void setTriggeredOnMouseDown (const bool);
+    void addButtonListener (Button::Listener* const);
+    void addListener (Button::Listener* const);
+    void clearIcon();
 
     DrawablePad* drawableButton;
-
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-	Label* label;
+        private : Label* label;
     MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
 };
