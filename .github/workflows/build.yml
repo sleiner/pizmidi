@@ -65,14 +65,14 @@ jobs:
               with:
                   key: ${{ matrix.config.os }}-${{ matrix.config.cmake_preset }}
                   max-size: 1536M
-            - name: "Ccache: clear"
+            - name: "Ccache: Clear"
               # We are triggered by the "push" event in the case of release branches.
               # For these branches, no cache shall be used - but we still use the
               # Ccache compiler driver in order to build up a cache that pull requests
               # targeting this branch can use.
               if: env.CCACHE_AVAILABLE == 'true' && github.event_name == 'push'
               run: ccache --clear
-            - name: "Ccache: enable compiler driver"
+            - name: "Ccache: Enable compiler driver"
               if: env.CCACHE_AVAILABLE == 'true'
               run: echo "CMAKE_ADDITIONAL_OPTIONS=${{ env.CMAKE_ADDITIONAL_OPTIONS }} -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
             - name: "CMake: Configure"
