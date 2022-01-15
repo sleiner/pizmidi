@@ -6,36 +6,40 @@
 
 #include "../_common/PizAudioProcessor.h"
 
-enum midiPCGUIParameters {
-	kProgram,
-	kBankMSB,
-	kBankLSB,
-	kMode,
-	kTrigger,
-	kInc,
-	kDec,
-	kBankTrigger,
-	kPCListen,
-	kChannel,
-	kThru,
-	kMinimize,
-	numParams
+enum midiPCGUIParameters
+{
+    kProgram,
+    kBankMSB,
+    kBankLSB,
+    kMode,
+    kTrigger,
+    kInc,
+    kDec,
+    kBankTrigger,
+    kPCListen,
+    kChannel,
+    kThru,
+    kMinimize,
+    numParams
 };
 
-class midiPCGUIProgram {
-friend class midiPCGUI;
+class midiPCGUIProgram
+{
+    friend class midiPCGUI;
+
 public:
-	midiPCGUIProgram ();
-	~midiPCGUIProgram () {};
-	void setName(String newName) {name=newName;}
+    midiPCGUIProgram();
+    ~midiPCGUIProgram(){};
+    void setName (String newName) { name = newName; }
+
 private:
     float param[numParams];
     String name;
 };
 
 //==============================================================================
-class midiPCGUI  : public PizAudioProcessor,
-                   public ChangeBroadcaster
+class midiPCGUI : public PizAudioProcessor,
+                  public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -46,18 +50,18 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-	double getTailLengthSeconds() const override {return 0;}
-    const String getName() const override {return JucePlugin_Name;}
-	bool hasEditor() const override {return true;}
-    bool acceptsMidi() const override {return true;}
-    bool producesMidi() const override {return true;}
+    double getTailLengthSeconds() const override { return 0; }
+    const String getName() const override { return JucePlugin_Name; }
+    bool hasEditor() const override { return true; }
+    bool acceptsMidi() const override { return true; }
+    bool producesMidi() const override { return true; }
 
     int getNumParameters() override;
 
@@ -73,17 +77,19 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms()                               override { return 128; }
+    int getNumPrograms() override { return 128; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const String getProgramName (int index) override;
     void changeProgramName (int index, const String& newName) override;
-	void setMidiProgName (int channel, int bank, int prog, const String& newName) {
-		progNames.setNameFor(channel,bank,prog,newName);
-	}
-	String getMidiProgName (int channel, int bank, int prog) {
-		return progNames.getNameFor(channel,bank,prog);
-	}
+    void setMidiProgName (int channel, int bank, int prog, const String& newName)
+    {
+        progNames.setNameFor (channel, bank, prog, newName);
+    }
+    String getMidiProgName (int channel, int bank, int prog)
+    {
+        return progNames.getNameFor (channel, bank, prog);
+    }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
@@ -94,102 +100,118 @@ public:
     //==============================================================================
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
-	int actualProgram[16];
-	int actualBankMSB[16];
-	int actualBankLSB[16];
-
+    int actualProgram[16];
+    int actualBankMSB[16];
+    int actualBankLSB[16];
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-    // this is our gain - the UI and the host can access this by getting/setting
-    // parameter 0.
-    float param[numParams];
-	struct MidiProgName
-	{
-		MidiProgName() {channel=-1;bank=-1;program=-1;name=String();}
-		MidiProgName(int c, int b, int p, const String& n)
-		{
-			channel=c; bank=b; program=p; name=n;
-		}
-		~MidiProgName(){};
-		int channel;
-		int bank;
-		int program;
-		String name;
-	};
+        private :
+        // this is our gain - the UI and the host can access this by getting/setting
+        // parameter 0.
+        float param[numParams];
+    struct MidiProgName
+    {
+        MidiProgName()
+        {
+            channel = -1;
+            bank = -1;
+            program = -1;
+            name = String();
+        }
+        MidiProgName (int c, int b, int p, const String& n)
+        {
+            channel = c;
+            bank = b;
+            program = p;
+            name = n;
+        }
+        ~MidiProgName(){};
+        int channel;
+        int bank;
+        int program;
+        String name;
+    };
 
-	class ProgNames
-	{
-	friend class midiPCGUI;
-	public:
-		ProgNames() {};
-		~ProgNames() {};
-		String getNameFor(int c, int b, int p)
-		{
-			for (int i=0;i<names.size();i++) {
-				if (names.getUnchecked(i).bank==b
-					&& names.getUnchecked(i).channel==c
-					&& names.getUnchecked(i).program==p)
-					return names.getUnchecked(i).name;
-			}
-			return "Program " + String(p+1);
-		}
+    class ProgNames
+    {
+        friend class midiPCGUI;
 
-		bool getNameIfSet(int c, int b, int p, String& name)
-		{
-			for (int i=0;i<names.size();i++) {
-				if (names.getUnchecked(i).bank==b
-					&& names.getUnchecked(i).channel==c
-					&& names.getUnchecked(i).program==p)
-				{
-					name = names.getUnchecked(i).name;
-					return true;
-				}
-			}
-			return false;
-		}
+    public:
+        ProgNames(){};
+        ~ProgNames(){};
+        String getNameFor (int c, int b, int p)
+        {
+            for (int i = 0; i < names.size(); i++)
+            {
+                if (names.getUnchecked (i).bank == b
+                    && names.getUnchecked (i).channel == c
+                    && names.getUnchecked (i).program == p)
+                    return names.getUnchecked (i).name;
+            }
+            return "Program " + String (p + 1);
+        }
 
-		void setNameFor(int c, int b, int p, String newName)
-		{
-			for (int i=0;i<names.size();i++) {
-				if (names.getUnchecked(i).bank==b
-					&& names.getUnchecked(i).channel==c
-					&& names.getUnchecked(i).program==p)
-				{
-					names.remove(i);
-					break;
-				}
-			}
-			names.add(MidiProgName(c,b,p,newName));
-		}
-	private:
-		Array<MidiProgName> names;
-	};
+        bool getNameIfSet (int c, int b, int p, String& name)
+        {
+            for (int i = 0; i < names.size(); i++)
+            {
+                if (names.getUnchecked (i).bank == b
+                    && names.getUnchecked (i).channel == c
+                    && names.getUnchecked (i).program == p)
+                {
+                    name = names.getUnchecked (i).name;
+                    return true;
+                }
+            }
+            return false;
+        }
 
-	ProgNames progNames;
+        void setNameFor (int c, int b, int p, String newName)
+        {
+            for (int i = 0; i < names.size(); i++)
+            {
+                if (names.getUnchecked (i).bank == b
+                    && names.getUnchecked (i).channel == c
+                    && names.getUnchecked (i).program == p)
+                {
+                    names.remove (i);
+                    break;
+                }
+            }
+            names.add (MidiProgName (c, b, p, newName));
+        }
 
-	String pluginPath;
+    private:
+        Array<MidiProgName> names;
+    };
 
-    midiPCGUIProgram *programs;
+    ProgNames progNames;
+
+    String pluginPath;
+
+    midiPCGUIProgram* programs;
     int curProgram;
     bool init;
 
-	enum modes {continuous, triggered};
-	char mode;
-	bool trigger,inc,dec,triggerbank;
-	int program, bankmsb, banklsb;
-	bool senttrig, sentinc, sentdec, sentbank;
-	bool pclisten;
-	bool thru;
-	bool automated[numParams];
+    enum modes
+    {
+        continuous,
+        triggered
+    };
+    char mode;
+    bool trigger, inc, dec, triggerbank;
+    int program, bankmsb, banklsb;
+    bool senttrig, sentinc, sentdec, sentbank;
+    bool pclisten;
+    bool thru;
+    bool automated[numParams];
 
-	bool wait;
-	int delaytime;
-	int counter;
-	int triggerdelta;
+    bool wait;
+    int delaytime;
+    int counter;
+    int triggerdelta;
 };
-
 
 #endif

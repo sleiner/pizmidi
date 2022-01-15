@@ -10,16 +10,17 @@ using namespace juce;
 class VSTSlider : public Slider
 {
 public:
-    VSTSlider(String name);
+    VSTSlider (String name);
     ~VSTSlider() override;
     String getTextFromValue (double value) override;
-    void setOwner(AudioProcessor*, int);
+    void setOwner (AudioProcessor*, int);
     float mapToVSTRange();
-    void setVSTSlider(float x);
+    void setVSTSlider (float x);
 
     void setVSTSlider();
-	void setVSTParam();
-    void setIndex(int index);
+    void setVSTParam();
+    void setIndex (int index);
+
 private:
     AudioProcessor* ownerPlugin;
     int vstIndex;

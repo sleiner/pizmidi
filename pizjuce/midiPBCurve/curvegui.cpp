@@ -22,7 +22,6 @@
 
 #include "curvegui.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
@@ -33,12 +32,12 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    curve.reset (new MidiEnvelope (0,this,this->getFilter()));
+    curve.reset (new MidiEnvelope (0, this, this->getFilter()));
     addAndMakeVisible (curve.get());
     curve->setName ("curve");
 
     label.reset (new juce::Label ("new label",
-                                  TRANS("In: --")));
+                                  TRANS ("In: --")));
     addAndMakeVisible (label.get());
     label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label->setJustificationType (juce::Justification::centredLeft);
@@ -47,7 +46,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
     label2.reset (new juce::Label ("new label",
-                                   TRANS("Out: --")));
+                                   TRANS ("Out: --")));
     addAndMakeVisible (label2.get());
     label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label2->setJustificationType (juce::Justification::centredLeft);
@@ -67,7 +66,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     channelSlider->addListener (this);
 
     label3.reset (new juce::Label ("new label",
-                                   TRANS("Channel")));
+                                   TRANS ("Channel")));
     addAndMakeVisible (label3.get());
     label3->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label3->setJustificationType (juce::Justification::centredLeft);
@@ -77,35 +76,35 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
 
     resetButton.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (resetButton.get());
-    resetButton->setButtonText (TRANS("Reset"));
+    resetButton->setButtonText (TRANS ("Reset"));
     resetButton->addListener (this);
 
     helpButton.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (helpButton.get());
-    helpButton->setButtonText (TRANS("Help"));
+    helpButton->setButtonText (TRANS ("Help"));
     helpButton->addListener (this);
 
     instructionsLabel.reset (new juce::Label ("new label",
-                                              TRANS("X is input, Y is output.\n"
-                                              "Max 32 points.\n"
-                                              "\n"
-                                              "Default settings load from \"midiPBCurve.fxb\"\n"
-                                              "_______________\n"
-                                              "\n"
-                                              "Double-click or Right-click: \n"
-                                              "add or delete a point\n"
-                                              "\n"
-                                              "Middle-click or Alt-click: \n"
-                                              "make a curve control point\n"
-                                              "\n"
-                                              "Shift-click/drag: \n"
-                                              "set point to center line\n"
-                                              "\n"
-                                              "Ctrl-Shift-click/drag: \n"
-                                              "set point to Y-center\n"
-                                              "\n"
-                                              "Ctrl-drag: \n"
-                                              "restrict to horizontal/vertical movement")));
+                                              TRANS ("X is input, Y is output.\n"
+                                                     "Max 32 points.\n"
+                                                     "\n"
+                                                     "Default settings load from \"midiPBCurve.fxb\"\n"
+                                                     "_______________\n"
+                                                     "\n"
+                                                     "Double-click or Right-click: \n"
+                                                     "add or delete a point\n"
+                                                     "\n"
+                                                     "Middle-click or Alt-click: \n"
+                                                     "make a curve control point\n"
+                                                     "\n"
+                                                     "Shift-click/drag: \n"
+                                                     "set point to center line\n"
+                                                     "\n"
+                                                     "Ctrl-Shift-click/drag: \n"
+                                                     "set point to Y-center\n"
+                                                     "\n"
+                                                     "Ctrl-drag: \n"
+                                                     "restrict to horizontal/vertical movement")));
     addAndMakeVisible (instructionsLabel.get());
     instructionsLabel->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     instructionsLabel->setJustificationType (juce::Justification::centred);
@@ -115,7 +114,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     instructionsLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
     label4.reset (new juce::Label ("new label",
-                                   TRANS("Last Message")));
+                                   TRANS ("Last Message")));
     addAndMakeVisible (label4.get());
     label4->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
     label4->setJustificationType (juce::Justification::centred);
@@ -132,7 +131,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     rangeSlider->addListener (this);
 
     label5.reset (new juce::Label ("new label",
-                                   TRANS("PB Range +")));
+                                   TRANS ("PB Range +")));
     addAndMakeVisible (label5.get());
     label5->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label5->setJustificationType (juce::Justification::centredLeft);
@@ -167,7 +166,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     rangeSlider2->addListener (this);
 
     label8.reset (new juce::Label ("new label",
-                                   TRANS("PB Range -")));
+                                   TRANS ("PB Range -")));
     addAndMakeVisible (label8.get());
     label8->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label8->setJustificationType (juce::Justification::centredLeft);
@@ -175,25 +174,23 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label8->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label8->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-
     //[UserPreSize]
-	resizeLimits.setSizeLimits (50, 50, 1600, 1600);
-	instructionsLabel->setVisible(false);
+    resizeLimits.setSizeLimits (50, 50, 1600, 1600);
+    instructionsLabel->setVisible (false);
     //[/UserPreSize]
 
     setSize (600, 400);
 
-
     //[Constructor] You can add your own custom stuff here..
-	ownerFilter->addChangeListener (this);
-	this->updateParameters();
+    ownerFilter->addChangeListener (this);
+    this->updateParameters();
     //[/Constructor]
 }
 
 CurveEditor::~CurveEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-	getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
     curve = nullptr;
@@ -212,7 +209,6 @@ CurveEditor::~CurveEditor()
     label7 = nullptr;
     rangeSlider2 = nullptr;
     label8 = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -252,8 +248,8 @@ void CurveEditor::resized()
     rangeSlider2->setBounds (getWidth() - 6 - 72, 232, 72, 16);
     label8->setBounds (getWidth() - -3 - 86, 216, 86, 16);
     //[UserResized] Add your own custom resize handling here..
-	getFilter()->lastUIHeight=getHeight();
-	getFilter()->lastUIWidth=getWidth();
+    getFilter()->lastUIHeight = getHeight();
+    getFilter()->lastUIWidth = getWidth();
     //[/UserResized]
 }
 
@@ -265,19 +261,19 @@ void CurveEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == channelSlider.get())
     {
         //[UserSliderCode_channelSlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kChannel,(float)(channelSlider->getValue()/channelSlider->getMaximum()));
+        getFilter()->setParameterNotifyingHost (kChannel, (float) (channelSlider->getValue() / channelSlider->getMaximum()));
         //[/UserSliderCode_channelSlider]
     }
     else if (sliderThatWasMoved == rangeSlider.get())
     {
         //[UserSliderCode_rangeSlider] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kPBRange,(float)(rangeSlider->getValue()/rangeSlider->getMaximum()));
+        getFilter()->setParameterNotifyingHost (kPBRange, (float) (rangeSlider->getValue() / rangeSlider->getMaximum()));
         //[/UserSliderCode_rangeSlider]
     }
     else if (sliderThatWasMoved == rangeSlider2.get())
     {
         //[UserSliderCode_rangeSlider2] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kPBRange2,(float)(rangeSlider2->getValue()/rangeSlider2->getMaximum()));
+        getFilter()->setParameterNotifyingHost (kPBRange2, (float) (rangeSlider2->getValue() / rangeSlider2->getMaximum()));
         //[/UserSliderCode_rangeSlider2]
     }
 
@@ -293,13 +289,13 @@ void CurveEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == resetButton.get())
     {
         //[UserButtonCode_resetButton] -- add your button handler code here..
-		getFilter()->resetPoints();
+        getFilter()->resetPoints();
         //[/UserButtonCode_resetButton]
     }
     else if (buttonThatWasClicked == helpButton.get())
     {
         //[UserButtonCode_helpButton] -- add your button handler code here..
-		instructionsLabel->setVisible(!instructionsLabel->isVisible());
+        instructionsLabel->setVisible (! instructionsLabel->isVisible());
         //[/UserButtonCode_helpButton]
     }
 
@@ -307,44 +303,49 @@ void CurveEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-	if(source==getFilter())
-		updateParameters();
+    if (source == getFilter())
+        updateParameters();
 }
 
-void CurveEditor::updateParameters ()
+void CurveEditor::updateParameters()
 {
-	const int lastin = getFilter()->lastCCIn;
-	const int lastout = getFilter()->lastCCOut;
-	const float pbrange = getFilter()->getParameter(kPBRange)*48.f;
-	const float pbrange2 = getFilter()->getParameter(kPBRange2)*48.f;
-	if (lastin!=-1) {
-		label->setText("In: " + String(lastin),sendNotification);
-		if (lastin==8192) label6->setText("(center)",sendNotification);
-		else if (lastin>8192) label6->setText("(+"+String(pbrange*((float)lastin/16383.f-0.5f),2) + ")",sendNotification);
-		else if (lastin<8192) label6->setText("("+String(pbrange2*((float)lastin/16383.f-0.5f),2) + ")",sendNotification);
-	}
-	if (lastout!=-1) {
-		label2->setText("Out: " + String(lastout),sendNotification);
-		if (lastout==8192) label7->setText("(center)",sendNotification);
-		else if (lastout>8192) label7->setText("(+"+String(pbrange*((float)lastout/16383.f-0.5f),2) + ")",sendNotification);
-		else if (lastout<8192) label7->setText("("+String(pbrange2*((float)lastout/16383.f-0.5f),2) + ")",sendNotification);
-	}
+    const int lastin = getFilter()->lastCCIn;
+    const int lastout = getFilter()->lastCCOut;
+    const float pbrange = getFilter()->getParameter (kPBRange) * 48.f;
+    const float pbrange2 = getFilter()->getParameter (kPBRange2) * 48.f;
+    if (lastin != -1)
+    {
+        label->setText ("In: " + String (lastin), sendNotification);
+        if (lastin == 8192)
+            label6->setText ("(center)", sendNotification);
+        else if (lastin > 8192)
+            label6->setText ("(+" + String (pbrange * ((float) lastin / 16383.f - 0.5f), 2) + ")", sendNotification);
+        else if (lastin < 8192)
+            label6->setText ("(" + String (pbrange2 * ((float) lastin / 16383.f - 0.5f), 2) + ")", sendNotification);
+    }
+    if (lastout != -1)
+    {
+        label2->setText ("Out: " + String (lastout), sendNotification);
+        if (lastout == 8192)
+            label7->setText ("(center)", sendNotification);
+        else if (lastout > 8192)
+            label7->setText ("(+" + String (pbrange * ((float) lastout / 16383.f - 0.5f), 2) + ")", sendNotification);
+        else if (lastout < 8192)
+            label7->setText ("(" + String (pbrange2 * ((float) lastout / 16383.f - 0.5f), 2) + ")", sendNotification);
+    }
 
-	channelSlider->setValue(getFilter()->getParameter(kChannel)*channelSlider->getMaximum(),dontSendNotification);
-	rangeSlider->setValue(getFilter()->getParameter(kPBRange)*rangeSlider->getMaximum(),dontSendNotification);
-	rangeSlider2->setValue(getFilter()->getParameter(kPBRange2)*rangeSlider2->getMaximum(),dontSendNotification);
+    channelSlider->setValue (getFilter()->getParameter (kChannel) * channelSlider->getMaximum(), dontSendNotification);
+    rangeSlider->setValue (getFilter()->getParameter (kPBRange) * rangeSlider->getMaximum(), dontSendNotification);
+    rangeSlider2->setValue (getFilter()->getParameter (kPBRange2) * rangeSlider2->getMaximum(), dontSendNotification);
 
-	curve->updateParameters(true);
+    curve->updateParameters (true);
 
-	setSize(getFilter()->lastUIWidth,getFilter()->lastUIHeight);
+    setSize (getFilter()->lastUIWidth, getFilter()->lastUIHeight);
 }
 //[/MiscUserCode]
-
 
 //==============================================================================
 #if 0
@@ -441,7 +442,5 @@ END_JUCER_METADATA
 */
 #endif
 
-
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

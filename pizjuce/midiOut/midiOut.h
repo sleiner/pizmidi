@@ -10,25 +10,29 @@
 
 using namespace juce;
 
-enum parameters {
+enum parameters
+{
     kPower,
     kClock,
     kHostOut,
     kMTC,
     kStamped,
-	kChannel,
+    kChannel,
     numParams
 };
 
-class JuceProgram {
-friend class MidiOutFilter;
+class JuceProgram
+{
+    friend class MidiOutFilter;
+
 public:
-	JuceProgram ();
-	~JuceProgram () {}
+    JuceProgram();
+    ~JuceProgram() {}
+
 private:
     float param[numParams];
     String icon;
-	MidiDeviceInfo device;
+    MidiDeviceInfo device;
     String name;
 };
 
@@ -38,8 +42,8 @@ private:
     passing through it.
 
 */
-class MidiOutFilter  : public PizAudioProcessor,
-                       public ChangeBroadcaster
+class MidiOutFilter : public PizAudioProcessor,
+                      public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -50,18 +54,18 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override {return 0;}
-    const String getName() const override {return JucePlugin_Name;}
-    bool acceptsMidi() const override {return true;}
-    bool producesMidi() const override {return true;}
-	bool hasEditor() const override {return true;}
+    double getTailLengthSeconds() const override { return 0; }
+    const String getName() const override { return JucePlugin_Name; }
+    bool acceptsMidi() const override { return true; }
+    bool producesMidi() const override { return true; }
+    bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
 
@@ -77,7 +81,7 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override                                        { return 1; }
+    int getNumPrograms() override { return 1; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const String getProgramName (int index) override;
@@ -96,21 +100,21 @@ public:
     PizArray<MidiDeviceInfo> devices;
     String icon;
 
-    void setActiveDevice(String name);
-	void setActiveDevice(MidiDeviceInfo device);
-	MidiDeviceInfo getActiveDevice() {return activeDevice;}
-    MidiDeviceInfo getDeviceByName(String name) const;
+    void setActiveDevice (String name);
+    void setActiveDevice (MidiDeviceInfo device);
+    MidiDeviceInfo getActiveDevice() { return activeDevice; }
+    MidiDeviceInfo getDeviceByName (String name) const;
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-    // this is our gain - the UI and the host can access this by getting/setting
-    // parameter 0.
-    float param[numParams];
-	MidiDeviceInfo activeDevice;
+        private :
+        // this is our gain - the UI and the host can access this by getting/setting
+        // parameter 0.
+        float param[numParams];
+    MidiDeviceInfo activeDevice;
 
-    JuceProgram *programs;
+    JuceProgram* programs;
     int curProgram;
     bool init;
     std::unique_ptr<MidiOutput> midiOutput;
@@ -126,8 +130,6 @@ private:
     int samplesToNextMTC;
 
     AudioPlayHead::CurrentPositionInfo lastPosInfo;
-
 };
-
 
 #endif

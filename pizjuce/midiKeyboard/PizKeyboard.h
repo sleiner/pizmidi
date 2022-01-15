@@ -3,30 +3,30 @@
 
 #include "../_common/PizAudioProcessor.h"
 
-enum parameters {
+enum parameters
+{
     kWidth,
     kChannel,
     kVelocity,
     kUseY,
-	kToggleInput,
-	kHidePanel,
-	kQwertyAnywhere,
-	kCapsLock,
-	kUseProgCh,
-	kSendHeldNotes,
-	kClearHeldNotes,
-	kShowNumbers,
+    kToggleInput,
+    kHidePanel,
+    kQwertyAnywhere,
+    kCapsLock,
+    kUseProgCh,
+    kSendHeldNotes,
+    kClearHeldNotes,
+    kShowNumbers,
 
     numParams
 };
 
 static const char* const keymap = "zsxdcvgbhnjmq2w3er5t6y7ui9o0p[+]";
-static const int keymapLength = String(keymap).length();
-
+static const int keymapLength = String (keymap).length();
 
 //==============================================================================
-class PizKeyboard  : public PizAudioProcessor,
-                     public ChangeBroadcaster
+class PizKeyboard : public PizAudioProcessor,
+                    public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -37,7 +37,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
@@ -45,7 +45,7 @@ public:
 
     //==============================================================================
     const String getName() const override;
-	bool hasEditor() const override {return true;}
+    bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
 
@@ -64,16 +64,16 @@ public:
     bool producesMidi() const override;
 
     //==============================================================================
-    int getNumPrograms() override                                        { return 128; }
-    int getCurrentProgram() override                                     { return curProgram; }
-    double getTailLengthSeconds() const override                { return 0; }
+    int getNumPrograms() override { return 128; }
+    int getCurrentProgram() override { return curProgram; }
+    double getTailLengthSeconds() const override { return 0; }
     void setCurrentProgram (int index) override
-	{
-		lastProgram=curProgram;
-		curProgram=index;
-	}
-    const String getProgramName (int index) override                     { return "State " + String(index+1); }
-    void changeProgramName (int index, const String& newName) override   { }
+    {
+        lastProgram = curProgram;
+        curProgram = index;
+    }
+    const String getProgramName (int index) override { return "State " + String (index + 1); }
+    void changeProgramName (int index, const String& newName) override {}
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
@@ -84,41 +84,39 @@ public:
 
     // this is kept up to date with the midi messages that arrive, and the UI component
     // registers with it so it can represent the incoming messages
-	MidiKeyboardState progKbState[128];
-	MidiKeyboardState editorKbState;
-
+    MidiKeyboardState progKbState[128];
+    MidiKeyboardState editorKbState;
 
     // these are used to persist the UI's size - the values are stored along with the
     // filter's other parameters, and the UI component will update them when it gets
     // resized.
     int lastUIWidth, lastUIHeight;
-	int keyPosition;
-	int octave;
+    int keyPosition;
+    int octave;
 
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-	int lastProgram;
-	int curProgram;
+        private : int lastProgram;
+    int curProgram;
     float width;
     float velocity;
     bool useY;
     int channel;
-	bool toggle;
-	bool hide;
-	bool qwerty;
-	bool capslock;
-	bool usepc;
-	bool sendHeldNotes;
-	bool clearHeldNotes;
-	bool showNumbers;
+    bool toggle;
+    bool hide;
+    bool qwerty;
+    bool capslock;
+    bool usepc;
+    bool sendHeldNotes;
+    bool clearHeldNotes;
+    bool showNumbers;
 
-	bool qwertyState[32]; //32==keymapLength
-	bool ccqwertyState[2];
-	bool ccState[2];
+    bool qwertyState[32]; //32==keymapLength
+    bool ccqwertyState[2];
+    bool ccState[2];
 
-	bool isCapsLockOn();
+    bool isCapsLockOn();
 };
 
 #endif

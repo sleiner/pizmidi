@@ -24,8 +24,6 @@
 #include "juce_gui_extra/juce_gui_extra.h"
 //[/Headers]
 
-
-
 //==============================================================================
 /**
                                                                     //[Comments]
@@ -34,13 +32,13 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PadEditor  : public juce::Component,
-                   public juce::Button::Listener,
-                   public juce::Slider::Listener
+class PadEditor : public juce::Component,
+                  public juce::Button::Listener,
+                  public juce::Slider::Listener
 {
 public:
     //==============================================================================
-    PadEditor ();
+    PadEditor();
     ~PadEditor() override;
 
     //==============================================================================
@@ -51,8 +49,6 @@ public:
     void resized() override;
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
     void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-
-
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -98,11 +94,9 @@ private:
     std::unique_ptr<juce::Label> label7;
     std::unique_ptr<juce::Label> label8;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PadEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

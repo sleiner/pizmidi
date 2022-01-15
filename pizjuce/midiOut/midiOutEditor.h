@@ -22,11 +22,9 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "midiOut.h"
 #include "MidiPad.h"
+#include "midiOut.h"
 //[/Headers]
-
-
 
 //==============================================================================
 /**
@@ -36,10 +34,10 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MidiOutEditor  : public juce::AudioProcessorEditor,
-                       public juce::ChangeListener,
-                       public juce::ComboBox::Listener,
-                       public juce::Button::Listener
+class MidiOutEditor : public juce::AudioProcessorEditor,
+                      public juce::ChangeListener,
+                      public juce::ComboBox::Listener,
+                      public juce::Button::Listener
 {
 public:
     //==============================================================================
@@ -57,12 +55,10 @@ public:
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
-
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     void updateParametersFromFilter();
-    MidiOutFilter* getFilter() const throw()       { return (MidiOutFilter*) getAudioProcessor(); }
+    MidiOutFilter* getFilter() const throw() { return (MidiOutFilter*) getAudioProcessor(); }
     //[/UserVariables]
 
     //==============================================================================
@@ -74,11 +70,9 @@ private:
     std::unique_ptr<MidiPad> imagepad;
     std::unique_ptr<juce::Label> label;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiOutEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

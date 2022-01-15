@@ -24,12 +24,10 @@
 #include "juce_events/juce_events.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "midiPCGUI.h"
-#include "../_common/VSTSlider.h"
 #include "../_common/ClickableLabel.h"
+#include "../_common/VSTSlider.h"
+#include "midiPCGUI.h"
 //[/Headers]
-
-
 
 //==============================================================================
 /**
@@ -39,12 +37,12 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class midiPCGUIEditor  : public juce::AudioProcessorEditor,
-                         public juce::ChangeListener,
-                         public ClickableLabelListener,
-                         public juce::Slider::Listener,
-                         public juce::Button::Listener,
-                         public juce::Label::Listener
+class midiPCGUIEditor : public juce::AudioProcessorEditor,
+                        public juce::ChangeListener,
+                        public ClickableLabelListener,
+                        public juce::Slider::Listener,
+                        public juce::Button::Listener,
+                        public juce::Label::Listener
 {
 public:
     //==============================================================================
@@ -53,9 +51,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-	void changeListenerCallback (ChangeBroadcaster* source) override;
-	void clickableLabelMouseDown(ClickableLabel *label, const MouseEvent &e) override {}
-	void clickableLabelMouseDoubleClick(ClickableLabel *label, const MouseEvent &e) override {label->edit();}
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void clickableLabelMouseDown (ClickableLabel* label, const MouseEvent& e) override {}
+    void clickableLabelMouseDoubleClick (ClickableLabel* label, const MouseEvent& e) override { label->edit(); }
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -64,17 +62,14 @@ public:
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
     void labelTextChanged (juce::Label* labelThatHasChanged) override;
 
-
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-//    ResizableCornerComponent* resizer;
-//    ComponentBoundsConstrainer resizeLimits;
+    //    ResizableCornerComponent* resizer;
+    //    ComponentBoundsConstrainer resizeLimits;
     TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
 
-	bool minimized;
-
+    bool minimized;
 
     // handy wrapper method to avoid having to cast the filter to a PizLooper
     // every time we need it..
@@ -109,11 +104,9 @@ private:
     juce::Path internalPath1;
     juce::Path internalPath2;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiPCGUIEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

@@ -22,7 +22,6 @@
 
 #include "midiOutEditor.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
@@ -35,63 +34,63 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
 
     comboBox.reset (new juce::ComboBox ("new combo box"));
     addAndMakeVisible (comboBox.get());
-    comboBox->setTooltip (TRANS("Output Device"));
+    comboBox->setTooltip (TRANS ("Output Device"));
     comboBox->setEditableText (false);
     comboBox->setJustificationType (juce::Justification::centredLeft);
     comboBox->setTextWhenNothingSelected (juce::String());
-    comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    comboBox->setTextWhenNoChoicesAvailable (TRANS ("(no choices)"));
     comboBox->addListener (this);
 
     comboBox->setBounds (4, 4, 219, 22);
 
     clockButton.reset (new juce::ToggleButton ("Send MIDI Clock"));
     addAndMakeVisible (clockButton.get());
-    clockButton->setTooltip (TRANS("Send MIDI Clock"));
-    clockButton->setButtonText (TRANS("Clock"));
+    clockButton->setTooltip (TRANS ("Send MIDI Clock"));
+    clockButton->setButtonText (TRANS ("Clock"));
     clockButton->addListener (this);
 
     clockButton->setBounds (0, 27, 60, 22);
 
     mtcButton.reset (new juce::ToggleButton ("Send MTC"));
     addAndMakeVisible (mtcButton.get());
-    mtcButton->setTooltip (TRANS("Send MTC"));
-    mtcButton->setButtonText (TRANS("MTC"));
+    mtcButton->setTooltip (TRANS ("Send MTC"));
+    mtcButton->setButtonText (TRANS ("MTC"));
     mtcButton->addListener (this);
 
     mtcButton->setBounds (57, 27, 50, 22);
 
     hostButton.reset (new juce::ToggleButton ("Out to host"));
     addAndMakeVisible (hostButton.get());
-    hostButton->setTooltip (TRANS("Pass thru MIDI to host"));
-    hostButton->setButtonText (TRANS("Host"));
+    hostButton->setTooltip (TRANS ("Pass thru MIDI to host"));
+    hostButton->setButtonText (TRANS ("Host"));
     hostButton->addListener (this);
 
     hostButton->setBounds (109, 27, 55, 22);
 
     channelBox.reset (new juce::ComboBox ("Input Channel"));
     addAndMakeVisible (channelBox.get());
-    channelBox->setTooltip (TRANS("Input Channel"));
+    channelBox->setTooltip (TRANS ("Input Channel"));
     channelBox->setEditableText (false);
     channelBox->setJustificationType (juce::Justification::centredLeft);
-    channelBox->setTextWhenNothingSelected (TRANS("16"));
-    channelBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    channelBox->addItem (TRANS("All"), 1);
-    channelBox->addItem (TRANS("1"), 2);
-    channelBox->addItem (TRANS("2"), 3);
-    channelBox->addItem (TRANS("3"), 4);
-    channelBox->addItem (TRANS("4"), 5);
-    channelBox->addItem (TRANS("5"), 6);
-    channelBox->addItem (TRANS("6"), 7);
-    channelBox->addItem (TRANS("7"), 8);
-    channelBox->addItem (TRANS("8"), 9);
-    channelBox->addItem (TRANS("9"), 10);
-    channelBox->addItem (TRANS("10"), 11);
-    channelBox->addItem (TRANS("11"), 12);
-    channelBox->addItem (TRANS("12"), 13);
-    channelBox->addItem (TRANS("13"), 14);
-    channelBox->addItem (TRANS("14"), 15);
-    channelBox->addItem (TRANS("15"), 16);
-    channelBox->addItem (TRANS("16"), 17);
+    channelBox->setTextWhenNothingSelected (TRANS ("16"));
+    channelBox->setTextWhenNoChoicesAvailable (TRANS ("(no choices)"));
+    channelBox->addItem (TRANS ("All"), 1);
+    channelBox->addItem (TRANS ("1"), 2);
+    channelBox->addItem (TRANS ("2"), 3);
+    channelBox->addItem (TRANS ("3"), 4);
+    channelBox->addItem (TRANS ("4"), 5);
+    channelBox->addItem (TRANS ("5"), 6);
+    channelBox->addItem (TRANS ("6"), 7);
+    channelBox->addItem (TRANS ("7"), 8);
+    channelBox->addItem (TRANS ("8"), 9);
+    channelBox->addItem (TRANS ("9"), 10);
+    channelBox->addItem (TRANS ("10"), 11);
+    channelBox->addItem (TRANS ("11"), 12);
+    channelBox->addItem (TRANS ("12"), 13);
+    channelBox->addItem (TRANS ("13"), 14);
+    channelBox->addItem (TRANS ("14"), 15);
+    channelBox->addItem (TRANS ("15"), 16);
+    channelBox->addItem (TRANS ("16"), 17);
     channelBox->addListener (this);
 
     channelBox->setBounds (190, 31, 33, 16);
@@ -101,7 +100,7 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
     imagepad->setName ("Icon");
 
     label.reset (new juce::Label ("new label",
-                                  TRANS("Ch:")));
+                                  TRANS ("Ch:")));
     addAndMakeVisible (label.get());
     label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label->setJustificationType (juce::Justification::centredRight);
@@ -111,28 +110,27 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
 
     label->setBounds (156, 30, 38, 16);
 
-
     //[UserPreSize]
-	setMouseClickGrabsKeyboardFocus(false);
+    setMouseClickGrabsKeyboardFocus (false);
 
-    comboBox->setMouseClickGrabsKeyboardFocus(false);
-    comboBox->addItem(String("--"),1);
-    for (int i=0;i<ownerFilter->devices.size();i++) {
-        comboBox->addItem(ownerFilter->devices[i].name,i+2);
+    comboBox->setMouseClickGrabsKeyboardFocus (false);
+    comboBox->addItem (String ("--"), 1);
+    for (int i = 0; i < ownerFilter->devices.size(); i++)
+    {
+        comboBox->addItem (ownerFilter->devices[i].name, i + 2);
     }
-    comboBox->setSelectedId(1);
+    comboBox->setSelectedId (1);
 
-    imagepad->setTriggeredOnMouseDown(true);
-    imagepad->addButtonListener(this);
-    imagepad->drawableButton->Label = String("Drag\nIcon");
+    imagepad->setTriggeredOnMouseDown (true);
+    imagepad->addButtonListener (this);
+    imagepad->drawableButton->Label = String ("Drag\nIcon");
 
-	clockButton->setMouseClickGrabsKeyboardFocus(false);
-    mtcButton->setMouseClickGrabsKeyboardFocus(false);
-    hostButton->setMouseClickGrabsKeyboardFocus(false);
+    clockButton->setMouseClickGrabsKeyboardFocus (false);
+    mtcButton->setMouseClickGrabsKeyboardFocus (false);
+    hostButton->setMouseClickGrabsKeyboardFocus (false);
     //[/UserPreSize]
 
     setSize (275, 50);
-
 
     //[Constructor] You can add your own custom stuff here..
     ownerFilter->addChangeListener (this);
@@ -144,7 +142,7 @@ MidiOutEditor::~MidiOutEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     getFilter()->removeChangeListener (this);
-    getFilter()->icon=imagepad->drawableButton->getName();
+    getFilter()->icon = imagepad->drawableButton->getName();
     //[/Destructor_pre]
 
     comboBox = nullptr;
@@ -154,7 +152,6 @@ MidiOutEditor::~MidiOutEditor()
     channelBox = nullptr;
     imagepad = nullptr;
     label = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -190,20 +187,22 @@ void MidiOutEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == comboBox.get())
     {
         //[UserComboBoxCode_comboBox] -- add your combo box handling code here..
-		if (comboBox->getSelectedItemIndex()==0) {
-			getFilter()->setParameter(0,0.0f);
-			getFilter()->setActiveDevice(comboBox->getText());
-		}
-		else {
-			getFilter()->setActiveDevice(comboBox->getText());
-			//getFilter()->setParameter(0,float(comboBox->getSelectedItemIndex()-1)/float(getFilter()->devices.size()-1)+0.00001f);
-		}
+        if (comboBox->getSelectedItemIndex() == 0)
+        {
+            getFilter()->setParameter (0, 0.0f);
+            getFilter()->setActiveDevice (comboBox->getText());
+        }
+        else
+        {
+            getFilter()->setActiveDevice (comboBox->getText());
+            //getFilter()->setParameter(0,float(comboBox->getSelectedItemIndex()-1)/float(getFilter()->devices.size()-1)+0.00001f);
+        }
         //[/UserComboBoxCode_comboBox]
     }
     else if (comboBoxThatHasChanged == channelBox.get())
     {
         //[UserComboBoxCode_channelBox] -- add your combo box handling code here..
-		getFilter()->setParameter(kChannel,0.0625f * (float)channelBox->getSelectedItemIndex());
+        getFilter()->setParameter (kChannel, 0.0625f * (float) channelBox->getSelectedItemIndex());
         //[/UserComboBoxCode_channelBox]
     }
 
@@ -219,19 +218,19 @@ void MidiOutEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == clockButton.get())
     {
         //[UserButtonCode_clockButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost(kClock,clockButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kClock, clockButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_clockButton]
     }
     else if (buttonThatWasClicked == mtcButton.get())
     {
         //[UserButtonCode_mtcButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost(kMTC,mtcButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kMTC, mtcButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_mtcButton]
     }
     else if (buttonThatWasClicked == hostButton.get())
     {
         //[UserButtonCode_hostButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost(kHostOut,hostButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kHostOut, hostButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_hostButton]
     }
 
@@ -239,20 +238,21 @@ void MidiOutEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked) {
-    getFilter()->icon=imagepad->drawableButton->getName();
-    if (imagepad->drawableButton->isDown()) {
+void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked)
+{
+    getFilter()->icon = imagepad->drawableButton->getName();
+    if (imagepad->drawableButton->isDown())
+    {
         ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
-        if (mousebutton.isPopupMenu()) {
+        if (mousebutton.isPopupMenu())
+        {
             PopupMenu m, sub1;
             //m.addItem(0,"Text:",false);
             //m.addCustomItem (1, textEditor, 200 , 24, false);
             //m.addSeparator();
 
-            m.addItem(66,"Clear Image");
+            m.addItem (66, "Clear Image");
             //sub1.addCustomItem (1234, colourSelector, 300, 300, false);
             //m.addSubMenu ("Color", sub1);
             m.addSeparator();
@@ -260,9 +260,10 @@ void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked) {
             int result = m.show();
             if (result != 0)
             {
-                if (result==66) {
-                    getFilter()->icon = String("");
-					imagepad->clearIcon();
+                if (result == 66)
+                {
+                    getFilter()->icon = String ("");
+                    imagepad->clearIcon();
                 }
             }
         }
@@ -272,8 +273,8 @@ void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked) {
 //==============================================================================
 void MidiOutEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-	if (source==getFilter())
-		updateParametersFromFilter();
+    if (source == getFilter())
+        updateParametersFromFilter();
 }
 
 void MidiOutEditor::updateParametersFromFilter()
@@ -286,38 +287,38 @@ void MidiOutEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
 
     // take a local copy of the info we need while we've got the lock..
-    const int newDevice = filter->devices.indexOf(filter->getActiveDevice());
+    const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
     const float clock = filter->getParameter (kClock);
     const float mtc = filter->getParameter (kMTC);
     const float hostout = filter->getParameter (kHostOut);
-	const int channel = roundToInt(filter->getParameter (kChannel) * 16.f);
-    const String icon=filter->icon;
+    const int channel = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const String icon = filter->icon;
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    comboBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
-	channelBox->setSelectedItemIndex(channel,dontSendNotification);
+    comboBox->setSelectedItemIndex (newDevice + 1, dontSendNotification);
+    channelBox->setSelectedItemIndex (channel, dontSendNotification);
 
-    clockButton->setToggleState(clock>=0.5f,dontSendNotification);
-    mtcButton->setToggleState(mtc>=0.5f,dontSendNotification);
-    hostButton->setToggleState(hostout>=0.5f,dontSendNotification);
+    clockButton->setToggleState (clock >= 0.5f, dontSendNotification);
+    mtcButton->setToggleState (mtc >= 0.5f, dontSendNotification);
+    hostButton->setToggleState (hostout >= 0.5f, dontSendNotification);
 
     String fullpath = icon;
-    if (!File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
-        fullpath = ((File::getSpecialLocation(File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+    if (! File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
+        fullpath = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
                    + File::getSeparatorString() + icon;
-    auto image = Drawable::createFromImageFile(File(fullpath));
-	if (image)
-	{
-		imagepad->drawableButton->setImages(image.get());
-		imagepad->drawableButton->setName(icon);
-		imagepad->setButtonText(String());
-	}
-	else imagepad->setButtonText("IPH\nmidiOut\n1.3");
+    auto image = Drawable::createFromImageFile (File (fullpath));
+    if (image)
+    {
+        imagepad->drawableButton->setImages (image.get());
+        imagepad->drawableButton->setName (icon);
+        imagepad->setButtonText (String());
+    }
+    else
+        imagepad->setButtonText ("IPH\nmidiOut\n1.3");
 }
 //[/MiscUserCode]
-
 
 //==============================================================================
 #if 0
@@ -365,7 +366,5 @@ END_JUCER_METADATA
 */
 #endif
 
-
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

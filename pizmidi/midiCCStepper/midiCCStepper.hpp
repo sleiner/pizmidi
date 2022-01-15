@@ -12,48 +12,51 @@ enum
     kSync,
     kBeatOffset,
     kSendAfter,
-	kLowCC,
-	kHighCC,
-	kCCOffset,
+    kLowCC,
+    kHighCC,
+    kCCOffset,
     kChannel,
     kThru,
-	kNumParams,
-	kNumPrograms = 16
+    kNumParams,
+    kNumPrograms = 16
 };
 
-class MidiCCStepperProgram {
-friend class MidiCCStepper;
+class MidiCCStepperProgram
+{
+    friend class MidiCCStepper;
+
 public:
-	MidiCCStepperProgram ();
-	~MidiCCStepperProgram () {}
+    MidiCCStepperProgram();
+    ~MidiCCStepperProgram() {}
+
 private:
-	float param[kNumParams];
-	char name[kVstMaxProgNameLen];
+    float param[kNumParams];
+    char name[kVstMaxProgNameLen];
 };
 
 class MidiCCStepper : public PizMidi
 {
 public:
-	MidiCCStepper(audioMasterCallback audioMaster);
-	~MidiCCStepper();
+    MidiCCStepper (audioMasterCallback audioMaster);
+    ~MidiCCStepper();
 
-	virtual void   setProgram (VstInt32 program);
-	virtual void   setProgramName (char *name);
-	virtual void   getProgramName (char *name);
-	virtual bool   getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
+    virtual void setProgram (VstInt32 program);
+    virtual void setProgramName (char* name);
+    virtual void getProgramName (char* name);
+    virtual bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
 
-	virtual void   setParameter(VstInt32 index, float value);
-	virtual float  getParameter(VstInt32 index);
-	virtual void   getParameterDisplay(VstInt32 index, char *text);
-	virtual void   getParameterName(VstInt32 index, char *text);
+    virtual void setParameter (VstInt32 index, float value);
+    virtual float getParameter (VstInt32 index);
+    virtual void getParameterDisplay (VstInt32 index, char* text);
+    virtual void getParameterName (VstInt32 index, char* text);
 
 protected:
-	bool init(void);
-	virtual void processMidiEvents(VstMidiEventVec *inputs, VstMidiEventVec *outputs, VstInt32 sampleFrames);
+    bool init (void);
+    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames);
 
-	virtual void preProcess(void);
-	
-   	MidiCCStepperProgram *programs;
+    virtual void preProcess (void);
+
+    MidiCCStepperProgram* programs;
 
     //parameters
     float param[kNumParams];

@@ -1,7 +1,6 @@
 //#include "CpuRam.h"
 #include "CpuRamEditor.h"
 
-
 //==============================================================================
 /**
     This function must be implemented to create the actual plugin object that
@@ -15,18 +14,18 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 CpuRam::CpuRam()
 {
-	if (!loadDefaultFxb())
-		resetToDefaultSettings();
+    if (! loadDefaultFxb())
+        resetToDefaultSettings();
 }
 
 void CpuRam::resetToDefaultSettings()
 {
-	interval = 0.12f;
-	minimize = 0.0f;
-	showGraph = true;
-	lastUIWidth = 230;
-	lastUIHeight = 30;
-	bgcolor = Colour (0xffb8bcc0);
+    interval = 0.12f;
+    minimize = 0.0f;
+    showGraph = true;
+    lastUIWidth = 230;
+    lastUIHeight = 30;
+    bgcolor = Colour (0xffb8bcc0);
 }
 
 CpuRam::~CpuRam()
@@ -41,10 +40,14 @@ int CpuRam::getNumParameters()
 
 float CpuRam::getParameter (int index)
 {
-    if      (index == 0) return interval;
-    if      (index == 1) return minimize;
-    if      (index == 2) return showGraph ? 1.f : 0.f;
-	else return 0.0f;
+    if (index == 0)
+        return interval;
+    if (index == 1)
+        return minimize;
+    if (index == 2)
+        return showGraph ? 1.f : 0.f;
+    else
+        return 0.0f;
 }
 
 void CpuRam::setParameter (int index, float newValue)
@@ -62,44 +65,58 @@ void CpuRam::setParameter (int index, float newValue)
         if (minimize != newValue)
         {
             minimize = newValue;
-            if (minimize>=0.5f) lastUIHeight=0;
-            else lastUIHeight=30;
-            sendChangeMessage ();
+            if (minimize >= 0.5f)
+                lastUIHeight = 0;
+            else
+                lastUIHeight = 30;
+            sendChangeMessage();
         }
     }
     else if (index == 2)
     {
-        if (showGraph != (newValue>=0.5f))
+        if (showGraph != (newValue >= 0.5f))
         {
-            showGraph = newValue>=0.5f;
-            if (showGraph) lastUIHeight=30;
-            else lastUIHeight=15;
-            sendChangeMessage ();
+            showGraph = newValue >= 0.5f;
+            if (showGraph)
+                lastUIHeight = 30;
+            else
+                lastUIHeight = 15;
+            sendChangeMessage();
         }
     }
 }
 
 const String CpuRam::getParameterName (int index)
 {
-    if (index == 0) return "interval";
-    if (index == 1) return "minimize";
-    if (index == 2) return "show graph";
-	else return String();
+    if (index == 0)
+        return "interval";
+    if (index == 1)
+        return "minimize";
+    if (index == 2)
+        return "show graph";
+    else
+        return String();
 }
 
 const String CpuRam::getParameterText (int index)
 {
-    if (index == 0) {
-        return String((int)(interval*1700.0)+300)+String(" ms");
+    if (index == 0)
+    {
+        return String ((int) (interval * 1700.0) + 300) + String (" ms");
     }
-    if (index == 1) {
-        if (minimize>=0.5f) return String("yes");
-        else return String("no");
+    if (index == 1)
+    {
+        if (minimize >= 0.5f)
+            return String ("yes");
+        else
+            return String ("no");
     }
-    if (index == 2) {
-        return showGraph ? String("yes") : String("no");
+    if (index == 2)
+    {
+        return showGraph ? String ("yes") : String ("no");
     }
-	else return String();
+    else
+        return String();
 }
 const String CpuRam::getInputChannelName (const int channelIndex) const
 {
@@ -134,14 +151,14 @@ void CpuRam::releaseResources()
 }
 
 void CpuRam::processBlock (AudioSampleBuffer& buffer,
-                                   MidiBuffer& midiMessages)
+                           MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
 
-	midiMessages.clear();
+    midiMessages.clear();
 }
 
 //==============================================================================
@@ -164,13 +181,12 @@ void CpuRam::getStateInformation (JUCE_NAMESPACE::MemoryBlock& destData)
     // add some attributes to it..
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("intervalLevel", interval);
-	xmlState.setAttribute ("showGraph", showGraph);
+    xmlState.setAttribute ("showGraph", showGraph);
     xmlState.setAttribute ("uiWidth", lastUIWidth);
     xmlState.setAttribute ("uiHeight", lastUIHeight);
-    xmlState.setAttribute ("bgcolor", (int)(bgcolor.getARGB()));
+    xmlState.setAttribute ("bgcolor", (int) (bgcolor.getARGB()));
 
     // you could also add as many child elements as you need to here..
-
 
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
@@ -188,11 +204,11 @@ void CpuRam::setStateInformation (const void* data, int sizeInBytes)
         {
             // ok, now pull out our parameters..
             interval = (float) xmlState->getDoubleAttribute ("intervalLevel", interval);
-			showGraph = xmlState->getBoolAttribute ("showGraph", showGraph);
+            showGraph = xmlState->getBoolAttribute ("showGraph", showGraph);
             lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bgcolor = Colour(xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
-            sendChangeMessage ();
+            bgcolor = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
+            sendChangeMessage();
         }
     }
 }

@@ -5,7 +5,6 @@
 
 #include "MidiChsProcessor.h"
 
-
 //==============================================================================
 /**
     This is the Component that our filter will use as its UI.
@@ -19,10 +18,10 @@
     when it's destroyed. When the filter's parameters are changed, it broadcasts
     a message and this editor responds by updating its display.
 */
-class MidiChsEditor   : public AudioProcessorEditor,
-                              public ChangeListener,
-                              public Slider::Listener,
-                              public Button::Listener
+class MidiChsEditor : public AudioProcessorEditor,
+                      public ChangeListener,
+                      public Slider::Listener,
+                      public Button::Listener
 {
 public:
     /** Constructor.
@@ -51,8 +50,6 @@ public:
     void buttonClicked (Button*) override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
-
-
 private:
     //==============================================================================
     //Label* infoLabel[16];
@@ -67,8 +64,7 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a MidiChsProcessor
     // every time we need it..
-    MidiChsProcessor* getFilter() const throw()       { return (MidiChsProcessor*) getAudioProcessor(); }
+    MidiChsProcessor* getFilter() const throw() { return (MidiChsProcessor*) getAudioProcessor(); }
 };
-
 
 #endif

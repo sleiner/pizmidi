@@ -5,10 +5,9 @@
 
 #include "../_common/PizAudioProcessor.h"
 
-
 //==============================================================================
-class MidiChsProcessor  : public PizAudioProcessor,
-                          public ChangeBroadcaster
+class MidiChsProcessor : public PizAudioProcessor,
+                         public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -19,23 +18,25 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override {return JucePlugin_Name;}
-	bool hasEditor() const override {return true;}
-    bool acceptsMidi() const override {
+    const String getName() const override { return JucePlugin_Name; }
+    bool hasEditor() const override { return true; }
+    bool acceptsMidi() const override
+    {
 #if JucePlugin_WantsMidiInput
         return true;
 #else
         return false;
 #endif
     }
-    bool producesMidi() const override {
+    bool producesMidi() const override
+    {
 #if JucePlugin_ProducesMidiOutput
         return true;
 #else
@@ -57,12 +58,12 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override                                        { return 0; }
-    int getCurrentProgram() override                                     { return 0; }
-    void setCurrentProgram (int index) override                          { }
-    const String getProgramName (int index) override                     { return String(); }
-    void changeProgramName (int index, const String& newName) override   { }
-    double getTailLengthSeconds() const override                { return 0; }
+    int getNumPrograms() override { return 0; }
+    int getCurrentProgram() override { return 0; }
+    void setCurrentProgram (int index) override {}
+    const String getProgramName (int index) override { return String(); }
+    void changeProgramName (int index, const String& newName) override {}
+    double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
@@ -80,32 +81,30 @@ public:
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-    //parameters
-	float fChannel1;
-	float fChannel2;
-	float fChannel3;
-	float fChannel4;
-	float fChannel5;
-	float fChannel6;
-	float fChannel7;
-	float fChannel8;
-	float fChannel9;
-	float fChannel10;
-	float fChannel11;
-	float fChannel12;
-	float fChannel13;
-	float fChannel14;
-	float fChannel15;
-	float fChannel16;
-	float fReset;
-	float fClear;
+        private :
+        //parameters
+        float fChannel1;
+    float fChannel2;
+    float fChannel3;
+    float fChannel4;
+    float fChannel5;
+    float fChannel6;
+    float fChannel7;
+    float fChannel8;
+    float fChannel9;
+    float fChannel10;
+    float fChannel11;
+    float fChannel12;
+    float fChannel13;
+    float fChannel14;
+    float fChannel15;
+    float fChannel16;
+    float fReset;
+    float fClear;
     float bghue;
     float bgsat;
     float bgbri;
     float contrast;
-
 };
-
 
 #endif

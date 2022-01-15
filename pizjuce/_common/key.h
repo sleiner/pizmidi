@@ -24,7 +24,7 @@ static const String encryptXml (const XmlElement* xml,
     if (xml != 0)
     {
         const String s (xml->toString (getXmlFormat()));
-		const MemoryBlock mb (s.toUTF8(), s.length());
+        const MemoryBlock mb (s.toUTF8(), s.length());
 
         val.loadFromMemoryBlock (mb);
     }

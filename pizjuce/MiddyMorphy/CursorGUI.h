@@ -8,30 +8,27 @@ class Cursor;
 
 using namespace juce;
 
-class CursorGUI : public ModuleGUI, public juce::ChangeListener {
-  private:
+class CursorGUI : public ModuleGUI, public juce::ChangeListener
+{
+private:
     juce::ComponentDragger dragger;
 
+public:
+    void paint (Graphics& g) override;
 
-  public:
-    void paint(Graphics & g) override;
+    CursorGUI (Cursor* cursor);
 
-    CursorGUI(Cursor * cursor);
+    void mouseDown (const MouseEvent& e) override;
 
-    void mouseDown(const MouseEvent & e) override;
+    void mouseDrag (const MouseEvent& e) override;
 
-    void mouseDrag(const MouseEvent & e) override;
+    void mouseUp (const MouseEvent& e) override;
 
-    void mouseUp(const MouseEvent & e) override;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
-    void changeListenerCallback(ChangeBroadcaster* source) override;
-
-
-  private:
+private:
     Cursor* cursor;
 
-
-  public:
+public:
     ~CursorGUI() override;
-
 };

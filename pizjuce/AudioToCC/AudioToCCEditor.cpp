@@ -22,7 +22,6 @@
 
 #include "AudioToCCEditor.h"
 
-
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
@@ -44,7 +43,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_Thresh->setBounds (32, 182, 152, 45);
 
     label20.reset (new juce::Label ("new label",
-                                    TRANS("Peak")));
+                                    TRANS ("Peak")));
     addAndMakeVisible (label20.get());
     label20->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label20->setJustificationType (juce::Justification::centred);
@@ -56,7 +55,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     clipR.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (clipR.get());
-    clipR->setButtonText (TRANS("gate"));
+    clipR->setButtonText (TRANS ("gate"));
     clipR->setConnectedEdges (juce::Button::ConnectedOnLeft);
     clipR->addListener (this);
     clipR->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffc33333));
@@ -66,7 +65,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     clipL.reset (new juce::TextButton ("new button"));
     addAndMakeVisible (clipL.get());
-    clipL->setButtonText (TRANS("gate"));
+    clipL->setButtonText (TRANS ("gate"));
     clipL->setConnectedEdges (juce::Button::ConnectedOnLeft);
     clipL->addListener (this);
     clipL->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffc33333));
@@ -77,11 +76,11 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     comboBox.reset (new juce::ComboBox ("new combo box"));
     addAndMakeVisible (comboBox.get());
-    comboBox->setTooltip (TRANS("Output Device"));
+    comboBox->setTooltip (TRANS ("Output Device"));
     comboBox->setEditableText (false);
     comboBox->setJustificationType (juce::Justification::centredLeft);
-    comboBox->setTextWhenNothingSelected (TRANS("--"));
-    comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    comboBox->setTextWhenNothingSelected (TRANS ("--"));
+    comboBox->setTextWhenNoChoicesAvailable (TRANS ("(no choices)"));
     comboBox->addListener (this);
 
     comboBox->setBounds (280, 41, 194, 16);
@@ -115,7 +114,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     b_Stereo.reset (new juce::TextButton ("mono/stereo"));
     addAndMakeVisible (b_Stereo.get());
-    b_Stereo->setButtonText (TRANS("Stereo"));
+    b_Stereo->setButtonText (TRANS ("Stereo"));
     b_Stereo->addListener (this);
     b_Stereo->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffbbbbff));
 
@@ -140,7 +139,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_Inertia->setBounds (296, 240, 40, 48);
 
     label.reset (new juce::Label ("new label",
-                                  TRANS("MIDI Out Device:")));
+                                  TRANS ("MIDI Out Device:")));
     addAndMakeVisible (label.get());
     label->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label->setJustificationType (juce::Justification::centredLeft);
@@ -151,7 +150,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label->setBounds (275, 29, 150, 8);
 
     label2.reset (new juce::Label ("new label",
-                                   TRANS("RMS")));
+                                   TRANS ("RMS")));
     addAndMakeVisible (label2.get());
     label2->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label2->setJustificationType (juce::Justification::centred);
@@ -162,7 +161,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label2->setBounds (32, 132, 72, 16);
 
     label3.reset (new juce::Label ("new label",
-                                   TRANS("L CC:")));
+                                   TRANS ("L CC:")));
     addAndMakeVisible (label3.get());
     label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label3->setJustificationType (juce::Justification::centredRight);
@@ -173,7 +172,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label3->setBounds (232, 104, 40, 16);
 
     label4.reset (new juce::Label ("new label",
-                                   TRANS("R CC:")));
+                                   TRANS ("R CC:")));
     addAndMakeVisible (label4.get());
     label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label4->setJustificationType (juce::Justification::centredRight);
@@ -184,7 +183,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label4->setBounds (232, 128, 40, 16);
 
     label5.reset (new juce::Label ("new label",
-                                   TRANS("Ch:")));
+                                   TRANS ("Ch:")));
     addAndMakeVisible (label5.get());
     label5->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label5->setJustificationType (juce::Justification::centredRight);
@@ -195,7 +194,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label5->setBounds (272, 61, 40, 16);
 
     label6.reset (new juce::Label ("new label",
-                                   TRANS("Rate")));
+                                   TRANS ("Rate")));
     addAndMakeVisible (label6.get());
     label6->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label6->setJustificationType (juce::Justification::centred);
@@ -216,7 +215,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_Gain->setBounds (32, 78, 72, 88);
 
     label7.reset (new juce::Label ("new label",
-                                   TRANS("Inertia")));
+                                   TRANS ("Inertia")));
     addAndMakeVisible (label7.get());
     label7->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label7->setJustificationType (juce::Justification::centred);
@@ -252,14 +251,14 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     toggleButton.reset (new juce::ToggleButton ("new toggle button"));
     addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS("Automation to host"));
+    toggleButton->setButtonText (TRANS ("Automation to host"));
     toggleButton->addListener (this);
 
     toggleButton->setBounds (48, 288, 120, 16);
 
     toggleButton2.reset (new juce::ToggleButton ("new toggle button"));
     addAndMakeVisible (toggleButton2.get());
-    toggleButton2->setButtonText (TRANS("MIDI to host"));
+    toggleButton2->setButtonText (TRANS ("MIDI to host"));
     toggleButton2->addListener (this);
 
     toggleButton2->setBounds (384, 25, 88, 16);
@@ -283,7 +282,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_Release->setBounds (296, 168, 40, 48);
 
     label8.reset (new juce::Label ("new label",
-                                   TRANS("Attack")));
+                                   TRANS ("Attack")));
     addAndMakeVisible (label8.get());
     label8->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label8->setJustificationType (juce::Justification::centred);
@@ -294,7 +293,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label8->setBounds (240, 152, 56, 16);
 
     label9.reset (new juce::Label ("new label",
-                                   TRANS("Release")));
+                                   TRANS ("Release")));
     addAndMakeVisible (label9.get());
     label9->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label9->setJustificationType (juce::Justification::centred);
@@ -306,14 +305,14 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     b_Mode.reset (new juce::TextButton ("dB"));
     addAndMakeVisible (b_Mode.get());
-    b_Mode->setButtonText (TRANS("Logarithmic"));
+    b_Mode->setButtonText (TRANS ("Logarithmic"));
     b_Mode->addListener (this);
     b_Mode->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffbbbbff));
 
     b_Mode->setBounds (244, -21, 80, 16);
 
     label10.reset (new juce::Label ("new label",
-                                    TRANS("Scale:")));
+                                    TRANS ("Scale:")));
     addAndMakeVisible (label10.get());
     label10->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label10->setJustificationType (juce::Justification::centredRight);
@@ -324,7 +323,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label10->setBounds (196, -21, 46, 16);
 
     label11.reset (new juce::Label ("new label",
-                                    TRANS("L")));
+                                    TRANS ("L")));
     addAndMakeVisible (label11.get());
     label11->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label11->setJustificationType (juce::Justification::centredRight);
@@ -335,7 +334,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label11->setBounds (16, 240, 16, 16);
 
     label12.reset (new juce::Label ("new label",
-                                    TRANS("R")));
+                                    TRANS ("R")));
     addAndMakeVisible (label12.get());
     label12->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label12->setJustificationType (juce::Justification::centredRight);
@@ -364,7 +363,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_GateCCR->setBounds (432, 216, 72, 16);
 
     label13.reset (new juce::Label ("new label",
-                                    TRANS("Gate L CC:")));
+                                    TRANS ("Gate L CC:")));
     addAndMakeVisible (label13.get());
     label13->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label13->setJustificationType (juce::Justification::centredRight);
@@ -375,7 +374,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label13->setBounds (368, 136, 64, 16);
 
     label14.reset (new juce::Label ("new label",
-                                    TRANS("Gate R CC:")));
+                                    TRANS ("Gate R CC:")));
     addAndMakeVisible (label14.get());
     label14->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label14->setJustificationType (juce::Justification::centredRight);
@@ -404,7 +403,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_OnValueR->setBounds (432, 240, 72, 16);
 
     label15.reset (new juce::Label ("new label",
-                                    TRANS("On Value L:")));
+                                    TRANS ("On Value L:")));
     addAndMakeVisible (label15.get());
     label15->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label15->setJustificationType (juce::Justification::centredRight);
@@ -415,7 +414,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label15->setBounds (360, 160, 72, 16);
 
     label16.reset (new juce::Label ("new label",
-                                    TRANS("On Value R:")));
+                                    TRANS ("On Value R:")));
     addAndMakeVisible (label16.get());
     label16->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label16->setJustificationType (juce::Justification::centredRight);
@@ -444,7 +443,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     s_OffValueR->setBounds (432, 264, 72, 16);
 
     label17.reset (new juce::Label ("new label",
-                                    TRANS("Off Value L:")));
+                                    TRANS ("Off Value L:")));
     addAndMakeVisible (label17.get());
     label17->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label17->setJustificationType (juce::Justification::centredRight);
@@ -455,7 +454,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label17->setBounds (352, 184, 80, 16);
 
     label18.reset (new juce::Label ("new label",
-                                    TRANS("Off Value R:")));
+                                    TRANS ("Off Value R:")));
     addAndMakeVisible (label18.get());
     label18->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label18->setJustificationType (juce::Justification::centredRight);
@@ -466,7 +465,7 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
     label18->setBounds (352, 264, 80, 16);
 
     label19.reset (new juce::Label ("new label",
-                                    TRANS("Threshold:")));
+                                    TRANS ("Threshold:")));
     addAndMakeVisible (label19.get());
     label19->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
     label19->setJustificationType (juce::Justification::centredRight);
@@ -512,109 +511,108 @@ AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
 
     s_IndicatorLIn->setBounds (32, 182, 152, 16);
 
-
     //[UserPreSize]
-	setMouseClickGrabsKeyboardFocus(false);
+    setMouseClickGrabsKeyboardFocus (false);
 
-    s_LCC->setMouseClickGrabsKeyboardFocus(false);
-    s_RCC->setMouseClickGrabsKeyboardFocus(false);
-    s_Channel->setMouseClickGrabsKeyboardFocus(false);
-    s_Rate->setMouseClickGrabsKeyboardFocus(false);
-    s_Inertia->setMouseClickGrabsKeyboardFocus(false);
-    s_Gain->setMouseClickGrabsKeyboardFocus(false);
-    s_Attack->setMouseClickGrabsKeyboardFocus(false);
-    s_Release->setMouseClickGrabsKeyboardFocus(false);
-    label->setMouseClickGrabsKeyboardFocus(false);
-    label2->setMouseClickGrabsKeyboardFocus(false);
-    label3->setMouseClickGrabsKeyboardFocus(false);
-    label4->setMouseClickGrabsKeyboardFocus(false);
-    label5->setMouseClickGrabsKeyboardFocus(false);
-    label6->setMouseClickGrabsKeyboardFocus(false);
-    label7->setMouseClickGrabsKeyboardFocus(false);
-    label8->setMouseClickGrabsKeyboardFocus(false);
-    label9->setMouseClickGrabsKeyboardFocus(false);
-    label10->setMouseClickGrabsKeyboardFocus(false);
-    label11->setMouseClickGrabsKeyboardFocus(false);
-    label12->setMouseClickGrabsKeyboardFocus(false);
-    s_IndicatorL->setMouseClickGrabsKeyboardFocus(false);
-    s_IndicatorR->setMouseClickGrabsKeyboardFocus(false);
-    b_Stereo->setMouseClickGrabsKeyboardFocus(false);
-    b_Mode->setMouseClickGrabsKeyboardFocus(false);
-    toggleButton->setMouseClickGrabsKeyboardFocus(false);
-    toggleButton2->setMouseClickGrabsKeyboardFocus(false);
-	comboBox->setMouseClickGrabsKeyboardFocus(false);
-    s_GateLCC->setMouseClickGrabsKeyboardFocus(false);
-    s_GateCCR->setMouseClickGrabsKeyboardFocus(false);
-    s_OnValueL->setMouseClickGrabsKeyboardFocus(false);
-    s_OnValueR->setMouseClickGrabsKeyboardFocus(false);
-    s_OffValueL->setMouseClickGrabsKeyboardFocus(false);
-    s_OffValueR->setMouseClickGrabsKeyboardFocus(false);
-    s_Thresh->setMouseClickGrabsKeyboardFocus(false);
-    s_IndicatorLIn->setMouseClickGrabsKeyboardFocus(false);
-    s_IndicatorRIn->setMouseClickGrabsKeyboardFocus(false);
-    label13->setMouseClickGrabsKeyboardFocus(false);
-    label14->setMouseClickGrabsKeyboardFocus(false);
-    label15->setMouseClickGrabsKeyboardFocus(false);
-    label16->setMouseClickGrabsKeyboardFocus(false);
-    label17->setMouseClickGrabsKeyboardFocus(false);
-    label18->setMouseClickGrabsKeyboardFocus(false);
-    label19->setMouseClickGrabsKeyboardFocus(false);
-    clipR->setMouseClickGrabsKeyboardFocus(false);
-    clipL->setMouseClickGrabsKeyboardFocus(false);
+    s_LCC->setMouseClickGrabsKeyboardFocus (false);
+    s_RCC->setMouseClickGrabsKeyboardFocus (false);
+    s_Channel->setMouseClickGrabsKeyboardFocus (false);
+    s_Rate->setMouseClickGrabsKeyboardFocus (false);
+    s_Inertia->setMouseClickGrabsKeyboardFocus (false);
+    s_Gain->setMouseClickGrabsKeyboardFocus (false);
+    s_Attack->setMouseClickGrabsKeyboardFocus (false);
+    s_Release->setMouseClickGrabsKeyboardFocus (false);
+    label->setMouseClickGrabsKeyboardFocus (false);
+    label2->setMouseClickGrabsKeyboardFocus (false);
+    label3->setMouseClickGrabsKeyboardFocus (false);
+    label4->setMouseClickGrabsKeyboardFocus (false);
+    label5->setMouseClickGrabsKeyboardFocus (false);
+    label6->setMouseClickGrabsKeyboardFocus (false);
+    label7->setMouseClickGrabsKeyboardFocus (false);
+    label8->setMouseClickGrabsKeyboardFocus (false);
+    label9->setMouseClickGrabsKeyboardFocus (false);
+    label10->setMouseClickGrabsKeyboardFocus (false);
+    label11->setMouseClickGrabsKeyboardFocus (false);
+    label12->setMouseClickGrabsKeyboardFocus (false);
+    s_IndicatorL->setMouseClickGrabsKeyboardFocus (false);
+    s_IndicatorR->setMouseClickGrabsKeyboardFocus (false);
+    b_Stereo->setMouseClickGrabsKeyboardFocus (false);
+    b_Mode->setMouseClickGrabsKeyboardFocus (false);
+    toggleButton->setMouseClickGrabsKeyboardFocus (false);
+    toggleButton2->setMouseClickGrabsKeyboardFocus (false);
+    comboBox->setMouseClickGrabsKeyboardFocus (false);
+    s_GateLCC->setMouseClickGrabsKeyboardFocus (false);
+    s_GateCCR->setMouseClickGrabsKeyboardFocus (false);
+    s_OnValueL->setMouseClickGrabsKeyboardFocus (false);
+    s_OnValueR->setMouseClickGrabsKeyboardFocus (false);
+    s_OffValueL->setMouseClickGrabsKeyboardFocus (false);
+    s_OffValueR->setMouseClickGrabsKeyboardFocus (false);
+    s_Thresh->setMouseClickGrabsKeyboardFocus (false);
+    s_IndicatorLIn->setMouseClickGrabsKeyboardFocus (false);
+    s_IndicatorRIn->setMouseClickGrabsKeyboardFocus (false);
+    label13->setMouseClickGrabsKeyboardFocus (false);
+    label14->setMouseClickGrabsKeyboardFocus (false);
+    label15->setMouseClickGrabsKeyboardFocus (false);
+    label16->setMouseClickGrabsKeyboardFocus (false);
+    label17->setMouseClickGrabsKeyboardFocus (false);
+    label18->setMouseClickGrabsKeyboardFocus (false);
+    label19->setMouseClickGrabsKeyboardFocus (false);
+    clipR->setMouseClickGrabsKeyboardFocus (false);
+    clipL->setMouseClickGrabsKeyboardFocus (false);
 
-	s_IndicatorL->setInterceptsMouseClicks(false,false);
-    s_IndicatorR->setInterceptsMouseClicks(false,false);
-    s_IndicatorLIn->setInterceptsMouseClicks(false,false);
-    s_IndicatorRIn->setInterceptsMouseClicks(false,false);
+    s_IndicatorL->setInterceptsMouseClicks (false, false);
+    s_IndicatorR->setInterceptsMouseClicks (false, false);
+    s_IndicatorLIn->setInterceptsMouseClicks (false, false);
+    s_IndicatorRIn->setInterceptsMouseClicks (false, false);
 
-	s_LCC->setSliderSnapsToMousePosition(false);
-	s_RCC->setSliderSnapsToMousePosition(false);
-	s_Channel->setSliderSnapsToMousePosition(false);
-    s_GateLCC->setSliderSnapsToMousePosition(false);
-    s_GateCCR->setSliderSnapsToMousePosition(false);
-    s_OnValueL->setSliderSnapsToMousePosition(false);
-    s_OnValueR->setSliderSnapsToMousePosition(false);
-    s_OffValueL->setSliderSnapsToMousePosition(false);
-    s_OffValueR->setSliderSnapsToMousePosition(false);
-    s_Thresh->setSliderSnapsToMousePosition(true);
+    s_LCC->setSliderSnapsToMousePosition (false);
+    s_RCC->setSliderSnapsToMousePosition (false);
+    s_Channel->setSliderSnapsToMousePosition (false);
+    s_GateLCC->setSliderSnapsToMousePosition (false);
+    s_GateCCR->setSliderSnapsToMousePosition (false);
+    s_OnValueL->setSliderSnapsToMousePosition (false);
+    s_OnValueR->setSliderSnapsToMousePosition (false);
+    s_OffValueL->setSliderSnapsToMousePosition (false);
+    s_OffValueR->setSliderSnapsToMousePosition (false);
+    s_Thresh->setSliderSnapsToMousePosition (true);
 
-	s_LCC->setOwner(getAudioProcessor(),kCCL);
-	s_RCC->setOwner(getAudioProcessor(),kCCR);
-    s_Channel->setOwner(getAudioProcessor(),kChannel);
-    s_Rate->setOwner(getAudioProcessor(),kRate);
-    s_Inertia->setOwner(getAudioProcessor(),kSmooth);
+    s_LCC->setOwner (getAudioProcessor(), kCCL);
+    s_RCC->setOwner (getAudioProcessor(), kCCR);
+    s_Channel->setOwner (getAudioProcessor(), kChannel);
+    s_Rate->setOwner (getAudioProcessor(), kRate);
+    s_Inertia->setOwner (getAudioProcessor(), kSmooth);
     //s_Gain->setOwner(getAudioProcessor(),kGain);
-    s_Attack->setOwner(getAudioProcessor(),kAttack);
-    s_Release->setOwner(getAudioProcessor(),kRelease);
-    s_GateLCC->setOwner(getAudioProcessor(),kGateCCL);
-    s_GateCCR->setOwner(getAudioProcessor(),kGateCCR);
-    s_OnValueL->setOwner(getAudioProcessor(),kGateOnValueCCL);
-    s_OnValueR->setOwner(getAudioProcessor(),kGateOnValueCCR);
-    s_OffValueL->setOwner(getAudioProcessor(),kGateOffValueCCL);
-    s_OffValueR->setOwner(getAudioProcessor(),kGateOffValueCCR);
+    s_Attack->setOwner (getAudioProcessor(), kAttack);
+    s_Release->setOwner (getAudioProcessor(), kRelease);
+    s_GateLCC->setOwner (getAudioProcessor(), kGateCCL);
+    s_GateCCR->setOwner (getAudioProcessor(), kGateCCR);
+    s_OnValueL->setOwner (getAudioProcessor(), kGateOnValueCCL);
+    s_OnValueR->setOwner (getAudioProcessor(), kGateOnValueCCR);
+    s_OffValueL->setOwner (getAudioProcessor(), kGateOffValueCCL);
+    s_OffValueR->setOwner (getAudioProcessor(), kGateOffValueCCR);
     //s_Thresh->setOwner(getAudioProcessor(),kGateThreshold);
 
-	s_Gain->setDoubleClickReturnValue(true,1.f);
-	s_PeakGain->setDoubleClickReturnValue(true,1.f);
+    s_Gain->setDoubleClickReturnValue (true, 1.f);
+    s_PeakGain->setDoubleClickReturnValue (true, 1.f);
 
-	b_Stereo->setClickingTogglesState(true);
-	b_Mode->setClickingTogglesState(true);
+    b_Stereo->setClickingTogglesState (true);
+    b_Mode->setClickingTogglesState (true);
 
-    comboBox->addItem(L"--",1);
-    for (int i=0;i<ownerFilter->devices.size();i++) {
-        comboBox->addItem(ownerFilter->devices[i].name, i+2);
+    comboBox->addItem (L"--", 1);
+    for (int i = 0; i < ownerFilter->devices.size(); i++)
+    {
+        comboBox->addItem (ownerFilter->devices[i].name, i + 2);
     }
-    comboBox->setSelectedId(1);
+    comboBox->setSelectedId (1);
 
     //[/UserPreSize]
 
     setSize (528, 312);
 
-
     //[Constructor] You can add your own custom stuff here..
-    ownerFilter->addChangeListener(this);
+    ownerFilter->addChangeListener (this);
     updateParametersFromFilter();
-	peakcounter=0;
+    peakcounter = 0;
     startTimer (50);
     //[/Constructor]
 }
@@ -672,7 +670,6 @@ AudioToCCEditor::~AudioToCCEditor()
     s_PeakGain = nullptr;
     s_IndicatorRIn = nullptr;
     s_IndicatorLIn = nullptr;
-
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -733,62 +730,57 @@ void AudioToCCEditor::paint (juce::Graphics& g)
 
     {
         int x = 235, y = 76, width = 117, height = 30;
-        juce::String text (TRANS("Continuous"));
+        juce::String text (TRANS ("Continuous"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 363, y = 76, width = 149, height = 30;
-        juce::String text (TRANS("Gate"));
+        juce::String text (TRANS ("Gate"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 40, y = 16, width = 136, height = 16;
-        juce::String text (TRANS("Insert Piz Here->"));
+        juce::String text (TRANS ("Insert Piz Here->"));
         juce::Colour fillColour = juce::Colours::white;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (11.20f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 235, y = 2, width = 277, height = 30;
-        juce::String text (TRANS("MIDI"));
+        juce::String text (TRANS ("MIDI"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 40, y = 26, width = 136, height = 24;
-        juce::String text (TRANS("AudioToCC"));
+        juce::String text (TRANS ("AudioToCC"));
         juce::Colour fillColour = juce::Colours::white;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
@@ -802,14 +794,13 @@ void AudioToCCEditor::paint (juce::Graphics& g)
 
     {
         int x = 27, y = 60, width = 165, height = 30;
-        juce::String text (TRANS("Gain"));
+        juce::String text (TRANS ("Gain"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
         g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height,
-                    juce::Justification::centred, true);
+        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -833,43 +824,43 @@ void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == s_Thresh.get())
     {
         //[UserSliderCode_s_Thresh] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateThreshold,(float)(s_Thresh->getValue()));
+        getFilter()->setParameterNotifyingHost (kGateThreshold, (float) (s_Thresh->getValue()));
         //[/UserSliderCode_s_Thresh]
     }
     else if (sliderThatWasMoved == s_LCC.get())
     {
         //[UserSliderCode_s_LCC] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kCCL,s_LCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kCCL, s_LCC->mapToVSTRange());
         //[/UserSliderCode_s_LCC]
     }
     else if (sliderThatWasMoved == s_RCC.get())
     {
         //[UserSliderCode_s_RCC] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kCCR,s_RCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kCCR, s_RCC->mapToVSTRange());
         //[/UserSliderCode_s_RCC]
     }
     else if (sliderThatWasMoved == s_Channel.get())
     {
         //[UserSliderCode_s_Channel] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kChannel,s_Channel->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kChannel, s_Channel->mapToVSTRange());
         //[/UserSliderCode_s_Channel]
     }
     else if (sliderThatWasMoved == s_Rate.get())
     {
         //[UserSliderCode_s_Rate] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kRate,s_Rate->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kRate, s_Rate->mapToVSTRange());
         //[/UserSliderCode_s_Rate]
     }
     else if (sliderThatWasMoved == s_Inertia.get())
     {
         //[UserSliderCode_s_Inertia] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kSmooth,s_Inertia->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kSmooth, s_Inertia->mapToVSTRange());
         //[/UserSliderCode_s_Inertia]
     }
     else if (sliderThatWasMoved == s_Gain.get())
     {
         //[UserSliderCode_s_Gain] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGain,(float)(s_Gain->getValue())/maxGain);
+        getFilter()->setParameterNotifyingHost (kGain, (float) (s_Gain->getValue()) / maxGain);
         //[/UserSliderCode_s_Gain]
     }
     else if (sliderThatWasMoved == s_IndicatorL.get())
@@ -885,55 +876,55 @@ void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == s_Attack.get())
     {
         //[UserSliderCode_s_Attack] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kAttack,s_Attack->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kAttack, s_Attack->mapToVSTRange());
         //[/UserSliderCode_s_Attack]
     }
     else if (sliderThatWasMoved == s_Release.get())
     {
         //[UserSliderCode_s_Release] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kRelease,s_Release->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kRelease, s_Release->mapToVSTRange());
         //[/UserSliderCode_s_Release]
     }
     else if (sliderThatWasMoved == s_GateLCC.get())
     {
         //[UserSliderCode_s_GateLCC] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateCCL,s_GateLCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateCCL, s_GateLCC->mapToVSTRange());
         //[/UserSliderCode_s_GateLCC]
     }
     else if (sliderThatWasMoved == s_GateCCR.get())
     {
         //[UserSliderCode_s_GateCCR] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateCCR,s_GateCCR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateCCR, s_GateCCR->mapToVSTRange());
         //[/UserSliderCode_s_GateCCR]
     }
     else if (sliderThatWasMoved == s_OnValueL.get())
     {
         //[UserSliderCode_s_OnValueL] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateOnValueCCL,s_OnValueL->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateOnValueCCL, s_OnValueL->mapToVSTRange());
         //[/UserSliderCode_s_OnValueL]
     }
     else if (sliderThatWasMoved == s_OnValueR.get())
     {
         //[UserSliderCode_s_OnValueR] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateOnValueCCR,s_OnValueR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateOnValueCCR, s_OnValueR->mapToVSTRange());
         //[/UserSliderCode_s_OnValueR]
     }
     else if (sliderThatWasMoved == s_OffValueL.get())
     {
         //[UserSliderCode_s_OffValueL] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateOffValueCCL,s_OffValueL->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateOffValueCCL, s_OffValueL->mapToVSTRange());
         //[/UserSliderCode_s_OffValueL]
     }
     else if (sliderThatWasMoved == s_OffValueR.get())
     {
         //[UserSliderCode_s_OffValueR] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kGateOffValueCCR,s_OffValueR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost (kGateOffValueCCR, s_OffValueR->mapToVSTRange());
         //[/UserSliderCode_s_OffValueR]
     }
     else if (sliderThatWasMoved == s_PeakGain.get())
     {
         //[UserSliderCode_s_PeakGain] -- add your slider handling code here..
-		getFilter()->setParameterNotifyingHost(kPeakGain,(float)(s_PeakGain->getValue())/maxGain);
+        getFilter()->setParameterNotifyingHost (kPeakGain, (float) (s_PeakGain->getValue()) / maxGain);
         //[/UserSliderCode_s_PeakGain]
     }
     else if (sliderThatWasMoved == s_IndicatorRIn.get())
@@ -959,37 +950,37 @@ void AudioToCCEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == clipR.get())
     {
         //[UserButtonCode_clipR] -- add your button handler code here..
-		getFilter()->setParameter(kGateResetR,1.f);
+        getFilter()->setParameter (kGateResetR, 1.f);
         //[/UserButtonCode_clipR]
     }
     else if (buttonThatWasClicked == clipL.get())
     {
         //[UserButtonCode_clipL] -- add your button handler code here..
-		getFilter()->setParameter(kGateResetL,1.f);
+        getFilter()->setParameter (kGateResetL, 1.f);
         //[/UserButtonCode_clipL]
     }
     else if (buttonThatWasClicked == b_Stereo.get())
     {
         //[UserButtonCode_b_Stereo] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kStereo,b_Stereo->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kStereo, b_Stereo->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_b_Stereo]
     }
     else if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kAutomateHost,toggleButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kAutomateHost, toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
     else if (buttonThatWasClicked == toggleButton2.get())
     {
         //[UserButtonCode_toggleButton2] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kMidiToHost,toggleButton2->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kMidiToHost, toggleButton2->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton2]
     }
     else if (buttonThatWasClicked == b_Mode.get())
     {
         //[UserButtonCode_b_Mode] -- add your button handler code here..
-		getFilter()->setParameterNotifyingHost(kMode,b_Mode->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost (kMode, b_Mode->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_b_Mode]
     }
 
@@ -1005,14 +996,16 @@ void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == comboBox.get())
     {
         //[UserComboBoxCode_comboBox] -- add your combo box handling code here..
-		if (comboBox->getSelectedItemIndex()==0) {
-			getFilter()->setParameter(kDevice,0.0f);
-			getFilter()->setActiveDevice(comboBox->getText());
-		}
-		else {
-			getFilter()->setActiveDevice(comboBox->getText());
-			//getFilter()->setParameter(0,float(comboBox->getSelectedItemIndex()-1)/float(getFilter()->devices.size()-1)+0.00001f);
-		}
+        if (comboBox->getSelectedItemIndex() == 0)
+        {
+            getFilter()->setParameter (kDevice, 0.0f);
+            getFilter()->setActiveDevice (comboBox->getText());
+        }
+        else
+        {
+            getFilter()->setActiveDevice (comboBox->getText());
+            //getFilter()->setParameter(0,float(comboBox->getSelectedItemIndex()-1)/float(getFilter()->devices.size()-1)+0.00001f);
+        }
         //[/UserComboBoxCode_comboBox]
     }
 
@@ -1020,85 +1013,83 @@ void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     //[/UsercomboBoxChanged_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void AudioToCCEditor::changeListenerCallback (ChangeBroadcaster* source)
 {
-	if (source==getFilter())
-		updateParametersFromFilter();
+    if (source == getFilter())
+        updateParametersFromFilter();
 }
 
 void AudioToCCEditor::updateParametersFromFilter()
 {
     AudioToCC* const filter = getFilter();
 
-	float p[numParams];
+    float p[numParams];
     filter->getCallbackLock().enter();
-    const int newDevice = filter->devices.indexOf(filter->getActiveDevice());
-	for (int i=0;i<numParams;i++)
-		p[i] = filter->getParameter(i);
-	const int ccL = filter->lastCCL;
-	const int ccR = filter->lastCCR;
+    const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
+    for (int i = 0; i < numParams; i++)
+        p[i] = filter->getParameter (i);
+    const int ccL = filter->lastCCL;
+    const int ccR = filter->lastCCR;
     filter->getCallbackLock().exit();
 
-	s_Gain->setValue(p[kGain] * maxGain);
-	s_PeakGain->setValue(p[kPeakGain] * maxGain);
-	s_LCC->setVSTSlider(p[kCCL]);
-	s_RCC->setVSTSlider(p[kCCR]);
-    s_Channel->setVSTSlider(p[kChannel]);
-    s_Rate->setVSTSlider(p[kRate]);
-    s_Inertia->setVSTSlider(p[kSmooth]);
-    s_Attack->setVSTSlider(p[kAttack]);
-    s_Release->setVSTSlider(p[kRelease]);
-    s_GateLCC->setVSTSlider(p[kGateCCL]);
-    s_GateCCR->setVSTSlider(p[kGateCCR]);
-    s_OnValueL->setVSTSlider(p[kGateOnValueCCL]);
-    s_OnValueR->setVSTSlider(p[kGateOnValueCCR]);
-    s_OffValueL->setVSTSlider(p[kGateOffValueCCL]);
-    s_OffValueR->setVSTSlider(p[kGateOffValueCCR]);
-	s_Thresh->setValue(p[kGateThreshold]);
+    s_Gain->setValue (p[kGain] * maxGain);
+    s_PeakGain->setValue (p[kPeakGain] * maxGain);
+    s_LCC->setVSTSlider (p[kCCL]);
+    s_RCC->setVSTSlider (p[kCCR]);
+    s_Channel->setVSTSlider (p[kChannel]);
+    s_Rate->setVSTSlider (p[kRate]);
+    s_Inertia->setVSTSlider (p[kSmooth]);
+    s_Attack->setVSTSlider (p[kAttack]);
+    s_Release->setVSTSlider (p[kRelease]);
+    s_GateLCC->setVSTSlider (p[kGateCCL]);
+    s_GateCCR->setVSTSlider (p[kGateCCR]);
+    s_OnValueL->setVSTSlider (p[kGateOnValueCCL]);
+    s_OnValueR->setVSTSlider (p[kGateOnValueCCR]);
+    s_OffValueL->setVSTSlider (p[kGateOffValueCCL]);
+    s_OffValueR->setVSTSlider (p[kGateOffValueCCR]);
+    s_Thresh->setValue (p[kGateThreshold]);
 
-    comboBox->setSelectedItemIndex(newDevice+1,dontSendNotification);
-    toggleButton->setToggleState(p[kAutomateHost]>=0.5f,dontSendNotification);
-    toggleButton2->setToggleState(p[kMidiToHost]>=0.5f,dontSendNotification);
-	b_Stereo->setToggleState(p[kStereo]>=0.5f,dontSendNotification);
-	b_Stereo->setButtonText(p[kStereo]>=0.5f ? "Stereo" : "Mono (L+R)");
-	b_Mode->setToggleState(p[kMode]>=0.5f,dontSendNotification);
-	b_Mode->setButtonText(p[kMode]>=0.5f ? "Logarithmic" : "Linear");
+    comboBox->setSelectedItemIndex (newDevice + 1, dontSendNotification);
+    toggleButton->setToggleState (p[kAutomateHost] >= 0.5f, dontSendNotification);
+    toggleButton2->setToggleState (p[kMidiToHost] >= 0.5f, dontSendNotification);
+    b_Stereo->setToggleState (p[kStereo] >= 0.5f, dontSendNotification);
+    b_Stereo->setButtonText (p[kStereo] >= 0.5f ? "Stereo" : "Mono (L+R)");
+    b_Mode->setToggleState (p[kMode] >= 0.5f, dontSendNotification);
+    b_Mode->setButtonText (p[kMode] >= 0.5f ? "Logarithmic" : "Linear");
 }
 
 void AudioToCCEditor::timerCallback()
 {
     getFilter()->getCallbackLock().enter();
-	const int ccL = getFilter()->lastCCL;
-	const int ccR = getFilter()->lastCCR;
-	const float inL = getFilter()->lastInL;
-	const float inR = getFilter()->lastInR;
-	const bool gateL = getFilter()->lastGateCCL;
-	const bool gateR = getFilter()->lastGateCCR;
+    const int ccL = getFilter()->lastCCL;
+    const int ccR = getFilter()->lastCCR;
+    const float inL = getFilter()->lastInL;
+    const float inR = getFilter()->lastInR;
+    const bool gateL = getFilter()->lastGateCCL;
+    const bool gateR = getFilter()->lastGateCCR;
     getFilter()->getCallbackLock().exit();
 
-	s_IndicatorL->setValue(ccL,dontSendNotification);
-	s_IndicatorR->setValue(ccR,dontSendNotification);
-	s_IndicatorLIn->setValue(inL,dontSendNotification);
-	s_IndicatorRIn->setValue(inR,dontSendNotification);
-	++peakcounter;
-	if (peakcounter==2)
-	{
-		peakcounter=0;
-		clipL->setToggleState(gateL,dontSendNotification);
-		clipR->setToggleState(gateR,dontSendNotification);
-	}
-	else {
-		if (gateL)
-			clipL->setToggleState(true,dontSendNotification);
-		if (gateR)
-			clipR->setToggleState(true,dontSendNotification);
-	}
+    s_IndicatorL->setValue (ccL, dontSendNotification);
+    s_IndicatorR->setValue (ccR, dontSendNotification);
+    s_IndicatorLIn->setValue (inL, dontSendNotification);
+    s_IndicatorRIn->setValue (inR, dontSendNotification);
+    ++peakcounter;
+    if (peakcounter == 2)
+    {
+        peakcounter = 0;
+        clipL->setToggleState (gateL, dontSendNotification);
+        clipR->setToggleState (gateR, dontSendNotification);
+    }
+    else
+    {
+        if (gateL)
+            clipL->setToggleState (true, dontSendNotification);
+        if (gateR)
+            clipR->setToggleState (true, dontSendNotification);
+    }
 }
 //[/MiscUserCode]
-
 
 //==============================================================================
 #if 0
@@ -1373,7 +1364,5 @@ END_JUCER_METADATA
 */
 #endif
 
-
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-

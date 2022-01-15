@@ -9,43 +9,46 @@ by Reuben Vinal
 
 enum
 {
-	kChannel,
-	kNumParams,
-	kNumPrograms = 16
+    kChannel,
+    kNumParams,
+    kNumPrograms = 16
 };
 
-class MidiChannelFilterProgram {	
-friend class MidiChannelFilter;
+class MidiChannelFilterProgram
+{
+    friend class MidiChannelFilter;
+
 public:
-	MidiChannelFilterProgram ();
-	~MidiChannelFilterProgram () {}
+    MidiChannelFilterProgram();
+    ~MidiChannelFilterProgram() {}
+
 private:
-	float fChannel;
-	char name[kVstMaxProgNameLen + 1];
+    float fChannel;
+    char name[kVstMaxProgNameLen + 1];
 };
 
 class MidiChannelFilter : public PizMidi
 {
 public:
-	MidiChannelFilter(audioMasterCallback audioMaster);
-	~MidiChannelFilter();
+    MidiChannelFilter (audioMasterCallback audioMaster);
+    ~MidiChannelFilter();
 
-	virtual void   setProgram (VstInt32 program);
-	virtual void   setProgramName (char *name);
-	virtual void   getProgramName (char *name);
-	virtual bool   getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
+    virtual void setProgram (VstInt32 program);
+    virtual void setProgramName (char* name);
+    virtual void getProgramName (char* name);
+    virtual bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
 
-    virtual void   setParameter(VstInt32 index, float value);
-	virtual float  getParameter(VstInt32 index);
-	virtual void   getParameterDisplay(VstInt32 index, char *text);
-	virtual void   getParameterName(VstInt32 index, char *text);
+    virtual void setParameter (VstInt32 index, float value);
+    virtual float getParameter (VstInt32 index);
+    virtual void getParameterDisplay (VstInt32 index, char* text);
+    virtual void getParameterName (VstInt32 index, char* text);
 
 protected:
-	float fChannel;
+    float fChannel;
 
-	virtual void processMidiEvents(VstMidiEventVec *inputs, VstMidiEventVec *outputs, VstInt32 sampleFrames);
+    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames);
 
-   	MidiChannelFilterProgram *programs;
+    MidiChannelFilterProgram* programs;
 };
 
 #endif

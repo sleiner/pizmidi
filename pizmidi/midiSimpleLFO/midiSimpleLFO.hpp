@@ -10,75 +10,78 @@ by Reuben Vinal
 
 enum
 {
-	kWave,      
-	kCC,
-	kChannel,
-	kSync,
-	kFreq,
-	kPhase,
-	kRange,
-	kOffset,
-	kTrigger,
-	kPower,
-	kNumParams,
-	kNumPrograms = 16
+    kWave,
+    kCC,
+    kChannel,
+    kSync,
+    kFreq,
+    kPhase,
+    kRange,
+    kOffset,
+    kTrigger,
+    kPower,
+    kNumParams,
+    kNumPrograms = 16
 };
 
-class MidiSimpleLFOProgram {
-friend class MidiSimpleLFO;
+class MidiSimpleLFOProgram
+{
+    friend class MidiSimpleLFO;
+
 public:
-	MidiSimpleLFOProgram ();
-	~MidiSimpleLFOProgram () {}
+    MidiSimpleLFOProgram();
+    ~MidiSimpleLFOProgram() {}
+
 private:
-	float fWave;
-	float fCC;
-	float fChannel;
-	float fSync;
-	float fFreq;
-	float fPhase;
-	float fRange;
-	float fOffset;
-	float fTrigger;
-	float fPower;
-	char name[kVstMaxProgNameLen];
+    float fWave;
+    float fCC;
+    float fChannel;
+    float fSync;
+    float fFreq;
+    float fPhase;
+    float fRange;
+    float fOffset;
+    float fTrigger;
+    float fPower;
+    char name[kVstMaxProgNameLen];
 };
 
 class MidiSimpleLFO : public PizMidi
 {
 public:
-	MidiSimpleLFO(audioMasterCallback audioMaster);
-	~MidiSimpleLFO();
+    MidiSimpleLFO (audioMasterCallback audioMaster);
+    ~MidiSimpleLFO();
 
-	virtual void   setProgram (VstInt32 program);
-	virtual void   setProgramName (char *name);
-	virtual void   getProgramName (char *name);
-	virtual bool   getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
+    virtual void setProgram (VstInt32 program);
+    virtual void setProgramName (char* name);
+    virtual void getProgramName (char* name);
+    virtual bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text);
 
-	virtual void   setParameter(VstInt32 index, float value);
-	virtual float  getParameter(VstInt32 index);
-	virtual void   getParameterLabel(VstInt32 index, char *label);
-	virtual void   getParameterDisplay(VstInt32 index, char *text);
-	virtual void   getParameterName(VstInt32 index, char *text);
+    virtual void setParameter (VstInt32 index, float value);
+    virtual float getParameter (VstInt32 index);
+    virtual void getParameterLabel (VstInt32 index, char* label);
+    virtual void getParameterDisplay (VstInt32 index, char* text);
+    virtual void getParameterName (VstInt32 index, char* text);
 
 protected:
-	float fWave;
-	float fCC;
-	float fSync;
-	float fFreq;
-	float fPhase;
-	float fChannel;
-	float fRange;
-	float fOffset;
-	float fTrigger;
-	float fPower;
+    float fWave;
+    float fCC;
+    float fSync;
+    float fFreq;
+    float fPhase;
+    float fChannel;
+    float fRange;
+    float fOffset;
+    float fTrigger;
+    float fPower;
 
-	VstInt32 samp;
+    VstInt32 samp;
     int oldenv;
     int step;
 
-	virtual void processMidiEvents(VstMidiEventVec *inputs, VstMidiEventVec *outputs, VstInt32 sampleFrames);
+    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames);
 
-	virtual void preProcess(void);
+    virtual void preProcess (void);
     float _bpm;
     //float _bar;
     float _ppq;
@@ -93,13 +96,13 @@ protected:
     bool playing;
     bool ccsent;
 
-   	MidiSimpleLFOProgram *programs;
+    MidiSimpleLFOProgram* programs;
 
-   	int data2;
-   	bool on;
-   	bool retrigger;
-   	int voices;
-   	//int modinput;
+    int data2;
+    bool on;
+    bool retrigger;
+    int voices;
+    //int modinput;
 };
 
 #endif

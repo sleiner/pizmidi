@@ -5,20 +5,29 @@
 
 class Controller;
 class MidiMorph;
-namespace juce { class TextEditor; }
-namespace juce { class Slider; }
+namespace juce
+{
+    class TextEditor;
+}
+namespace juce
+{
+    class Slider;
+}
 class ControllerValue;
 class TextBoxSlider;
-namespace juce { class Label; }
+namespace juce
+{
+    class Label;
+}
 
-class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeListener, public juce::Component, public juce::Slider::Listener, public juce::Label::Listener {
-  public:
-    ControllerGUI(Controller * controller, MidiMorph * core);
+class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeListener, public juce::Component, public juce::Slider::Listener, public juce::Label::Listener
+{
+public:
+    ControllerGUI (Controller* controller, MidiMorph* core);
 
     ~ControllerGUI() override;
 
-
-  private:
+private:
     bool isSelected;
 
     Controller* controller;
@@ -27,46 +36,42 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
 
     juce::TextEditor* name;
 
-
-  public:
+public:
     void resized() override;
 
-    void paint(Graphics & g) override;
+    void paint (Graphics& g) override;
 
-    void paintOverChildren(Graphics & g) override;
+    void paintOverChildren (Graphics& g) override;
 
-    void mouseUp(const MouseEvent & e) override;
+    void mouseUp (const MouseEvent& e) override;
 
     //()=
-    void sliderValueChanged(Slider* slider) override;
+    void sliderValueChanged (Slider* slider) override;
 
-    void setSelected(bool shouldDrawSelected);
+    void setSelected (bool shouldDrawSelected);
 
-    void changeListenerCallback(ChangeBroadcaster* source) override;
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
     void refreshControllerData();
 
-    void textEditorTextChanged(TextEditor& editor) override;
+    void textEditorTextChanged (TextEditor& editor) override;
 
     //  (       )
-    void textEditorReturnKeyPressed(TextEditor & editor) override;
+    void textEditorReturnKeyPressed (TextEditor& editor) override;
 
-    void textEditorEscapeKeyPressed(TextEditor & editor) override;
+    void textEditorEscapeKeyPressed (TextEditor& editor) override;
 
-    void textEditorFocusLost(TextEditor & editor) override;
+    void textEditorFocusLost (TextEditor& editor) override;
 
-
-  private:
+private:
     TextBoxSlider* test;
 
     TextBoxSlider* ccNo;
 
+public:
+    void labelTextChanged (Label* labelThatHasChanged) override;
 
-  public:
-    void labelTextChanged(Label * labelThatHasChanged) override;
-
-
-  private:
+private:
     TextBoxSlider* channel;
 
     TextBoxSlider* value;
@@ -76,5 +81,4 @@ class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeList
     juce::Label* labCh;
 
     juce::Colour lineColour;
-
 };

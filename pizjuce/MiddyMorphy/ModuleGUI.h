@@ -9,12 +9,12 @@ class ModulePane;
 
 using namespace juce;
 
-class ModuleGUI : public ZoomableShiftableComponent {
-  public:
-    ModuleGUI(Module * module);
+class ModuleGUI : public ZoomableShiftableComponent
+{
+public:
+    ModuleGUI (Module* module);
 
-
-  private:
+private:
     bool selectionBool;
 
     Module* module;
@@ -23,28 +23,26 @@ class ModuleGUI : public ZoomableShiftableComponent {
 
     ModulePane* pane;
 
+public:
+    void mouseDrag (const MouseEvent& e) override;
 
-  public:
-    void mouseDrag(const MouseEvent & e) override;
+    void mouseUp (const MouseEvent& e) override;
 
-    void mouseUp(const MouseEvent & e) override;
+    void mouseDown (const MouseEvent& e) override;
 
-    void mouseDown(const MouseEvent & e) override;
-
-    void setOriginalBounds(const juce::Rectangle<int> bounds) override;
+    void setOriginalBounds (const juce::Rectangle<int> bounds) override;
 
     juce::Rectangle<int> getOriginalBounds() override;
 
-    void paint(Graphics & g) override;
+    void paint (Graphics& g) override;
 
-    void setPane(ModulePane * pane);
+    void setPane (ModulePane* pane);
 
-    void startDrag(juce::MouseEvent const& e);
+    void startDrag (juce::MouseEvent const& e);
 
-    void drag(const MouseEvent & e);
+    void drag (const MouseEvent& e);
 
     bool isSelected();
 
     Module* getModule();
-
 };

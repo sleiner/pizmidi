@@ -4,32 +4,33 @@
 #include "juce_data_structures/juce_data_structures.h"
 #include "juce_events/juce_events.h"
 
-#include "../_common/PizAudioProcessor.h"
-#include "../_common/midistuff.h"
-#include "../_common/ChordFunctions.h"
-#include "../_common/key.h"
 #include "../_common/BankStorage.h"
+#include "../_common/ChordFunctions.h"
+#include "../_common/PizAudioProcessor.h"
+#include "../_common/key.h"
+#include "../_common/midistuff.h"
 
-enum parameters {
+enum parameters
+{
     kChannel,
-	kFlats,
+    kFlats,
 
     numParams,
-	numProgs = 1
+    numProgs = 1
 };
 
-
-class MidiChordAnalyzerPrograms : public BankStorage {
+class MidiChordAnalyzerPrograms : public BankStorage
+{
 public:
-	MidiChordAnalyzerPrograms ();
+    MidiChordAnalyzerPrograms();
 
 private:
     void loadDefaultValues();
 };
 
 //==============================================================================
-class MidiChordAnalyzer  : public PizAudioProcessor,
-                    public ChangeBroadcaster
+class MidiChordAnalyzer : public PizAudioProcessor,
+                          public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -40,7 +41,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-	void processBlock (AudioSampleBuffer& buffer,
+    void processBlock (AudioSampleBuffer& buffer,
                        MidiBuffer& midiMessages) override;
 
     //==============================================================================
@@ -48,7 +49,7 @@ public:
 
     //==============================================================================
     const String getName() const override;
-	bool hasEditor() const override {return true;}
+    bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
 
@@ -63,17 +64,17 @@ public:
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
-	bool acceptsMidi() const override {return true;}
-    bool producesMidi() const override {return true;}
+    bool acceptsMidi() const override { return true; }
+    bool producesMidi() const override { return true; }
 
     //==============================================================================
-    int getNumPrograms() override                                        { return numProgs; }
-    int getCurrentProgram() override                                     { return curProgram; }
+    int getNumPrograms() override { return numProgs; }
+    int getCurrentProgram() override { return curProgram; }
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override                     { return programs->get(0,index,"Name"); }
-    void changeProgramName (int index, const String& newName) override   { programs->set(0,index,"Name",newName); }
-	void copySettingsToProgram(int index);
-    double getTailLengthSeconds() const override                { return 0; }
+    const String getProgramName (int index) override { return programs->get (0, index, "Name"); }
+    void changeProgramName (int index, const String& newName) override { programs->set (0, index, "Name", newName); }
+    void copySettingsToProgram (int index);
+    double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
@@ -82,22 +83,21 @@ public:
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-	MidiKeyboardState chordKbState;
-	//String getCurrentChordName();
-	int lastUIWidth, lastUIHeight;
+    MidiKeyboardState chordKbState;
+    //String getCurrentChordName();
+    int lastUIWidth, lastUIHeight;
     //==============================================================================
     juce_UseDebuggingNewOperator
 
-private:
-	MidiChordAnalyzerPrograms* programs;
-	int curProgram;
-	int curTrigger;
+        private : MidiChordAnalyzerPrograms* programs;
+    int curProgram;
+    int curTrigger;
 
-	bool init;
+    bool init;
 
     int channel;
-	bool flats;
-	AudioPlayHead::CurrentPositionInfo lastPosInfo;
+    bool flats;
+    AudioPlayHead::CurrentPositionInfo lastPosInfo;
 };
 
 #endif

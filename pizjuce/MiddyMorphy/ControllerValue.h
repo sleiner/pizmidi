@@ -1,34 +1,33 @@
 #pragma once
 
-
 class Controller;
 class Scene;
-namespace juce { class MidiBuffer; } 
+namespace juce
+{
+    class MidiBuffer;
+}
 
-class ControllerValue {
-  public:
-    ControllerValue(Controller * controller, Scene * scene);
+class ControllerValue
+{
+public:
+    ControllerValue (Controller* controller, Scene* scene);
 
     //at destruction make shure to deletete reference in controller AND scene!!
     ~ControllerValue();
 
     bool active;
 
-
-  private:
+private:
     int value;
 
-
-  public:
+public:
     Scene* scene;
 
-
-  private:
+private:
     Controller* controller;
 
-
-  public:
-    void setValue(int newValue);
+public:
+    void setValue (int newValue);
 
     int getValue();
 
@@ -38,8 +37,7 @@ class ControllerValue {
 
     Controller* getController();
 
-    void getMidiMessage(juce::MidiBuffer & buffer, int pos);
+    void getMidiMessage (juce::MidiBuffer& buffer, int pos);
 
-  friend class Controller;
+    friend class Controller;
 };
-

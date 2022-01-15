@@ -22,12 +22,10 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "curve.h"
-#include "MidiEnvelope.h"
 #include "../_common/ChannelSlider.h"
+#include "MidiEnvelope.h"
+#include "curve.h"
 //[/Headers]
-
-
 
 //==============================================================================
 /**
@@ -37,10 +35,10 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class CurveEditor  : public AudioProcessorEditor,
-                     public ChangeListener,
-                     public juce::Button::Listener,
-                     public juce::Slider::Listener
+class CurveEditor : public AudioProcessorEditor,
+                    public ChangeListener,
+                    public juce::Button::Listener,
+                    public juce::Slider::Listener
 {
 public:
     //==============================================================================
@@ -56,13 +54,11 @@ public:
     void buttonClicked (juce::Button* buttonThatWasClicked) override;
     void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
 
-
-
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-	void changeListenerCallback (ChangeBroadcaster* source) override;
-	void updateParameters();
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void updateParameters();
     ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]
 
@@ -84,11 +80,9 @@ private:
     std::unique_ptr<juce::Label> label4;
     std::unique_ptr<juce::Label> label5;
 
-
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CurveEditor)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
-
