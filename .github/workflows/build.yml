@@ -18,16 +18,25 @@ permissions:
 
 jobs:
     build:
-        name: Build all Plugins
-        runs-on: ${{ matrix.os }}
+        name: Plugins and Packages - ${{ matrix.config.name }}
+        runs-on: ${{ matrix.config.os }}
         strategy:
-            # If the job fails for one OS, don't abort the jobs for the other OSes
+            # If the job fails for one config, don't abort the jobs for the other configs
             fail-fast: false
             matrix:
-                os: [macos-11, ubuntu-20.04, windows-2019]
+                config:
+                    - name: "macOS - universal"
+                      os: "macos-11"
+                      cmake_preset: "mac-universal"
+                    - name: "Ubuntu 20.04 - x86_64"
+                      os: "ubuntu-20.04"
+                      cmake_preset: "linux-native"
+                    - name: "Windows"
+                      os: "windows-2019"
+                      cmake_preset: "windows-native"
         env:
             # Unfortunately, Ccache is not available yet for Windows and MSVC
-            CCACHE_AVAILABLE: ${{ matrix.os == 'macos-11' || matrix.os == 'ubuntu-20.04' }}
+            CCACHE_AVAILABLE: ${{ matrix.config.os == 'macos-11' || matrix.config.os == 'ubuntu-20.04' }}
             CMAKE_ADDITIONAL_OPTIONS: ""
         steps:
             - name: Install toolchain (macOS)
@@ -50,21 +59,12 @@ jobs:
                     ninja-build
             - name: Checkout pizmidi
               uses: actions/checkout@v2
-            - name: "Select CMake preset: mac-universal"
-              if: runner.os == 'macOS'
-              run: echo "CMAKE_PRESET=mac-universal" >> $GITHUB_ENV
-            - name: "Select CMake preset: linux-native"
-              if: runner.os == 'Linux'
-              run: echo "CMAKE_PRESET=linux-native" >> $GITHUB_ENV
-            - name: "Select CMake preset: windows-native"
-              if: runner.os == 'Windows'
-              run: echo "CMAKE_PRESET=windows-native" >> $Env:GITHUB_ENV
             - name: "Ccache"
               uses: hendrikmuhs/ccache-action@1ed7eb5b4b2afeceab143d0caa0d7fa87c33047b # v1.0.5
               if: env.CCACHE_AVAILABLE == 'true'
               with:
                   # No need to include the OS, since that is already included in CMAKE_PRESET
-                  key: ${{ env.CMAKE_PRESET }}
+                  key: ${{ matrix.config.cmake_preset }}
                   max-size: 1536M
             - name: "Ccache: clear"
               # We are triggered by the "push" event in the case of release branches.
@@ -77,15 +77,15 @@ jobs:
               if: env.CCACHE_AVAILABLE == 'true'
               run: echo "CMAKE_ADDITIONAL_OPTIONS=${{ env.CMAKE_ADDITIONAL_OPTIONS }} -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
             - name: "CMake: Configure"
-              run: cmake -S . --preset=${{ env.CMAKE_PRESET }} ${{ env.CMAKE_ADDITIONAL_OPTIONS }}
+              run: cmake -S . --preset=${{ matrix.config.cmake_preset }} ${{ env.CMAKE_ADDITIONAL_OPTIONS }}
             - name: "CMake: Build plugins"
-              run: cmake --build --preset=${{ env.CMAKE_PRESET }} --parallel
+              run: cmake --build --preset=${{ matrix.config.cmake_preset }} --parallel
             - name: "CMake: Build packages"
-              run: cmake --build --preset=${{ env.CMAKE_PRESET }} --parallel --target package
+              run: cmake --build --preset=${{ matrix.config.cmake_preset }} --parallel --target package
             - name: Store packages
               uses: actions/upload-artifact@v2
               with:
                   name: packages
                   path: |
-                      build/${{ env.CMAKE_PRESET }}/packages
-                      !build/${{ env.CMAKE_PRESET }}/packages/_CPack_Packages
+                      build/${{ matrix.config.cmake_preset }}/packages
+                      !build/${{ matrix.config.cmake_preset }}/packages/_CPack_Packages
