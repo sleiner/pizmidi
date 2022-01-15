@@ -63,8 +63,7 @@ jobs:
               uses: hendrikmuhs/ccache-action@1ed7eb5b4b2afeceab143d0caa0d7fa87c33047b # v1.0.5
               if: env.CCACHE_AVAILABLE == 'true'
               with:
-                  # No need to include the OS, since that is already included in CMAKE_PRESET
-                  key: ${{ matrix.config.cmake_preset }}
+                  key: ${{ matrix.config.os }}-${{ matrix.config.cmake_preset }}
                   max-size: 1536M
             - name: "Ccache: clear"
               # We are triggered by the "push" event in the case of release branches.
