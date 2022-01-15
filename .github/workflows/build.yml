@@ -13,6 +13,9 @@ on:
             # Release branches
             - main
 
+permissions:
+    repository-projects: read
+
 jobs:
     build:
         name: Build all Plugins
