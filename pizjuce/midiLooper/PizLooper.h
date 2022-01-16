@@ -6,8 +6,8 @@
 #include "juce_audio_devices/juce_audio_devices.h"
 #include "juce_data_structures/juce_data_structures.h"
 
+#include "piz/JArray.h"
 #include "piz/key.h"
-#include "piz/PizArray.h"
 #include "piz/PizAudioProcessor.h"
 
 #include "MidiLoop.h"
@@ -391,7 +391,7 @@ public:
     }
 
     //midi out stuff
-    PizArray<MidiDeviceInfo> devices;
+    piz::JArray<MidiDeviceInfo> devices;
     void setActiveDevice (String name);
     void setActiveDevice (MidiDeviceInfo device);
     MidiDeviceInfo getActiveDevice() { return activeDevice; }

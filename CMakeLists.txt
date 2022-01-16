@@ -21,3 +21,4 @@ include(cmake/installer.cmake)
 include(cmake/dependencies.cmake)
 
 add_subdirectory(pizjuce)
+add_subdirectory(pizmidi)

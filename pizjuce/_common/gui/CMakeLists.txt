@@ -11,7 +11,6 @@ target_sources(
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/DrawablePad.h"
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/MIDI.h"
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/NoteSlider.h"
-            "${CMAKE_CURRENT_LIST_DIR}/include/piz/PizArray.h"
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/PizAudioProcessor.h"
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/PizButton.h"
             "${CMAKE_CURRENT_LIST_DIR}/include/piz/VSTSlider.h"

@@ -22,6 +22,7 @@ additional_commands:
         kwargs:
             DESCRIPTION: 1
             EDITOR_WANTS_KEYBOARD_FOCUS: 1
+            HAS_GUI: 0
             IS_MIDI_EFFECT: 1
             IS_SYNTH: 1
             PLUGIN_CODE: 1

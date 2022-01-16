@@ -4,22 +4,23 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     DESCRIPTION "CPU/RAM meter"
     PLUGIN_CODE "cpur"
     PRODUCT_NAME "CPU and RAM"
+    HAS_GUI
     IS_SYNTH TRUE)
 
   target_sources(
     piz_CpuRam
-    PRIVATE # Headers
-            "${CMAKE_CURRENT_LIST_DIR}/CpuRam.h"
-            "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.h"
-            "${CMAKE_CURRENT_LIST_DIR}/cputime.h"
-            # Sources
-            "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/cputime.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/CpuRam.cpp")
+    INTERFACE # Headers
+              "${CMAKE_CURRENT_LIST_DIR}/CpuRam.h"
+              "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.h"
+              "${CMAKE_CURRENT_LIST_DIR}/cputime.h"
+              # Sources
+              "${CMAKE_CURRENT_LIST_DIR}/CpuRamEditor.cpp"
+              "${CMAKE_CURRENT_LIST_DIR}/cputime.cpp"
+              "${CMAKE_CURRENT_LIST_DIR}/CpuRam.cpp")
 
   target_link_libraries(
-    piz_CpuRam PRIVATE juce::juce_events juce::juce_gui_basics
-                       juce::juce_gui_extra piz_common_gui)
+    piz_CpuRam INTERFACE juce::juce_events juce::juce_gui_basics
+                         juce::juce_gui_extra)
 else()
   message(
     NOTICE
