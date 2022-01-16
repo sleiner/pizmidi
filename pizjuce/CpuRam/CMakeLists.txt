@@ -19,7 +19,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 
   target_link_libraries(
     piz_CpuRam PRIVATE juce::juce_events juce::juce_gui_basics
-                       juce::juce_gui_extra)
+                       juce::juce_gui_extra piz_common_gui)
 else()
   message(
     NOTICE

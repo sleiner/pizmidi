@@ -24,8 +24,8 @@
 #include "juce_events/juce_events.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/ChannelSlider.h"
 #include "PianoRoll.h"
+#include "piz/ChannelSlider.h"
 #include "step.h"
 class PianoPort : public Viewport
 {
@@ -38,7 +38,7 @@ public:
 };
 //[/Headers]
 
-#include "../_common/PizButton.h"
+#include "piz/PizButton.h"
 
 //==============================================================================
 /**

@@ -19,4 +19,4 @@ target_sources(
 
 target_link_libraries(
   piz_Image PRIVATE juce::juce_audio_processors juce::juce_gui_basics
-                    juce::juce_gui_extra)
+                    juce::juce_gui_extra piz_common_gui)

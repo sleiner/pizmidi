@@ -17,5 +17,6 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/MidiChordAnalyzer.cpp")
 
 target_link_libraries(
-  piz_midiChordAnalyzer PRIVATE juce::juce_audio_utils
-                                juce::juce_data_structures juce::juce_events)
+  piz_midiChordAnalyzer
+  PRIVATE juce::juce_audio_utils juce::juce_data_structures juce::juce_events
+          piz_common_gui)

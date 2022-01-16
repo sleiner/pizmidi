@@ -1,46 +1,16 @@
-add_library(pizjuce_common INTERFACE)
-target_include_directories(pizjuce_common INTERFACE ${CMAKE_CURRENT_LIST_DIR})
-target_sources(
-  pizjuce_common
-  INTERFACE # Headers
-            "${CMAKE_CURRENT_LIST_DIR}/BankStorage.h"
-            "${CMAKE_CURRENT_LIST_DIR}/ChannelSlider.h"
-            "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.h"
-            "${CMAKE_CURRENT_LIST_DIR}/ClickableLabel.h"
-            "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.h"
-            "${CMAKE_CURRENT_LIST_DIR}/MIDI.h"
-            "${CMAKE_CURRENT_LIST_DIR}/NoteSlider.h"
-            "${CMAKE_CURRENT_LIST_DIR}/PizArray.h"
-            "${CMAKE_CURRENT_LIST_DIR}/PizAudioProcessor.h"
-            "${CMAKE_CURRENT_LIST_DIR}/PizButton.h"
-            "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.h"
-            "${CMAKE_CURRENT_LIST_DIR}/key.h"
-            "${CMAKE_CURRENT_LIST_DIR}/midistuff.h"
-            # Sources
-            "${CMAKE_CURRENT_LIST_DIR}/ChordFunctions.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/DrawablePad.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/PizButton.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/BankStorage.cpp"
-            "${CMAKE_CURRENT_LIST_DIR}/VSTSlider.cpp")
-target_link_libraries(
-  pizjuce_common
-  INTERFACE juce::juce_core #
-            juce::juce_audio_processors #
-            juce::juce_data_structures #
-            juce::juce_gui_basics)
+add_subdirectory(gui)
 
-add_library(pizjuce_build_options INTERFACE)
+add_library(piz_common_build_options INTERFACE)
 target_link_libraries(
-  pizjuce_build_options
+  piz_common_build_options
   INTERFACE juce::juce_recommended_config_flags
             # Currently, there are too many warnings, so this is still off:
             # juce::juce_recommended_warning_flags
             juce::juce_recommended_lto_flags)
 
 target_compile_definitions(
-  pizjuce_common
-  INTERFACE JUCE_MODAL_LOOPS_PERMITTED=1 #
-            JUCER_ENABLE_GPL_MODE=1 #
+  piz_common_build_options
+  INTERFACE JUCER_ENABLE_GPL_MODE=1 #
             JUCE_DISPLAY_SPLASH_SCREEN=0 #
             JUCE_VST3_CAN_REPLACE_VST2=0)
 
@@ -75,9 +45,7 @@ function(piz_add_plugin target)
   target_link_libraries(
     "${target}"
     # The options need to be linked publically to take full effect:
-    PUBLIC pizjuce_build_options
-    # The actual sources only need to be compiled once per target:
-    PRIVATE pizjuce_common)
+    PUBLIC piz_common_build_options)
 
   # Add plugin to installer
   piz_add_to_installer("${target}")

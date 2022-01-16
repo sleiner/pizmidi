@@ -2157,7 +2157,7 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="34"/>
   <JUCERCOMP name="" id="bad9b853cca3ec4a" memberName="pizButton" virtualName=""
-             explicitFocusOrder="0" pos="38 3 74 40" sourceFile="../_common/PizButton.cpp"
+             explicitFocusOrder="0" pos="38 3 74 40" sourceFile="../_common/gui/include/piz/PizButton.cpp"
              constructorParams=""/>
   <LABEL name="new label" id="9c19fc858eab3133" memberName="triggerLabel"
          virtualName="" explicitFocusOrder="0" pos="464 203 97 24" textCol="ffffffff"

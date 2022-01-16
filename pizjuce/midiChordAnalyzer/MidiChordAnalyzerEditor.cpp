@@ -787,7 +787,7 @@ BEGIN_JUCER_METADATA
                     explicitFocusOrder="0" pos="8 124 16M 47" class="ChordAnalyzerKeyboardComponent"
                     params="ownerFilter-&gt;chordKbState, ownerFilter"/>
   <JUCERCOMP name="" id="bad9b853cca3ec4a" memberName="pizButton" virtualName=""
-             explicitFocusOrder="0" pos="49 9 74 40" sourceFile="../_common/PizButton.cpp"
+             explicitFocusOrder="0" pos="49 9 74 40" sourceFile="../_common/gui/include/piz/PizButton.cpp"
              constructorParams=""/>
   <TOGGLEBUTTON name="new toggle button" id="fb8f2d76e48f6291" memberName="flatsButton"
                 virtualName="" explicitFocusOrder="0" pos="472 97 48 24" buttonText="flats"

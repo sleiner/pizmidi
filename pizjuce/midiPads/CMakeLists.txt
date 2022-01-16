@@ -23,4 +23,5 @@ target_sources(
 target_link_libraries(
   piz_midiPads
   PRIVATE juce::juce_audio_processors juce::juce_core
-          juce::juce_data_structures juce::juce_gui_basics juce::juce_gui_extra)
+          juce::juce_data_structures juce::juce_gui_basics juce::juce_gui_extra
+          piz_common_gui)

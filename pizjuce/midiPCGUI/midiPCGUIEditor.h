@@ -24,9 +24,9 @@
 #include "juce_events/juce_events.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/ClickableLabel.h"
-#include "../_common/VSTSlider.h"
 #include "midiPCGUI.h"
+#include "piz/ClickableLabel.h"
+#include "piz/VSTSlider.h"
 //[/Headers]
 
 //==============================================================================

@@ -7,8 +7,8 @@
 #include "juce_core/juce_core.h"
 #include "juce_events/juce_events.h"
 
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizArray.h"
+#include "piz/PizAudioProcessor.h"
 
 using namespace juce;
 

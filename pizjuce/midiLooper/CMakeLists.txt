@@ -33,4 +33,5 @@ target_link_libraries(
           juce::juce_core
           juce::juce_cryptography
           juce::juce_events
-          juce::juce_gui_basics)
+          juce::juce_gui_basics
+          piz_common_gui)

@@ -21,4 +21,4 @@ target_sources(
 target_link_libraries(
   piz_midiKeyboard
   PRIVATE juce::juce_audio_processors juce::juce_audio_utils juce::juce_events
-          juce::juce_graphics juce::juce_gui_basics)
+          juce::juce_graphics juce::juce_gui_basics piz_common_gui)

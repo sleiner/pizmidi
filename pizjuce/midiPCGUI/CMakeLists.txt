@@ -18,4 +18,4 @@ target_sources(
 
 target_link_libraries(
   piz_midiPCGUI PRIVATE juce::juce_audio_processors juce::juce_core
-                        juce::juce_events juce::juce_gui_basics)
+                        juce::juce_events juce::juce_gui_basics piz_common_gui)

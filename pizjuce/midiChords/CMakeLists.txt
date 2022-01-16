@@ -19,5 +19,6 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/MidiChordsEditor.cpp")
 
 target_link_libraries(
-  piz_midiChords PRIVATE juce::juce_audio_basics juce::juce_audio_utils
-                         juce::juce_cryptography juce::juce_gui_basics)
+  piz_midiChords
+  PRIVATE juce::juce_audio_basics juce::juce_audio_utils
+          juce::juce_cryptography juce::juce_gui_basics piz_common_gui)

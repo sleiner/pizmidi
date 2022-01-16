@@ -18,4 +18,4 @@ target_sources(
 
 target_link_libraries(
   piz_midiMonitor PRIVATE juce::juce_audio_devices juce::juce_events
-                          juce::juce_gui_basics)
+                          juce::juce_gui_basics piz_common_gui)

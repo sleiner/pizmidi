@@ -16,4 +16,4 @@ target_sources(
 
 target_link_libraries(
   piz_BigClock PRIVATE juce::juce_events juce::juce_gui_basics
-                       juce::juce_gui_extra)
+                       juce::juce_gui_extra piz_common_gui)

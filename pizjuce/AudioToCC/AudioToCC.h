@@ -34,8 +34,8 @@
 
 #include <memory>
 
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizArray.h"
+#include "piz/PizAudioProcessor.h"
 
 #include "juce_audio_devices/juce_audio_devices.h"
 #include "juce_core/juce_core.h"

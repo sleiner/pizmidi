@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizAudioProcessor.h"
 
 using namespace juce;
 

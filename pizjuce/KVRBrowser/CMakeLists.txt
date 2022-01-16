@@ -17,5 +17,5 @@ target_sources(
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserPluginEditor.cpp"
           "${CMAKE_CURRENT_LIST_DIR}/WebBrowserFilter.cpp")
 
-target_link_libraries(piz_KVRBrowser PRIVATE juce::juce_events
-                                             juce::juce_gui_extra)
+target_link_libraries(
+  piz_KVRBrowser PRIVATE juce::juce_events juce::juce_gui_extra piz_common_gui)

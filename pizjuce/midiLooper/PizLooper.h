@@ -6,9 +6,9 @@
 #include "juce_audio_devices/juce_audio_devices.h"
 #include "juce_data_structures/juce_data_structures.h"
 
-#include "../_common/key.h"
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/key.h"
+#include "piz/PizArray.h"
+#include "piz/PizAudioProcessor.h"
 
 #include "MidiLoop.h"
 

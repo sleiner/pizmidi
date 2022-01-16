@@ -4,8 +4,8 @@
 // Chord regognition functions are adapted from PyChoReLib: http://chordrecognizer.sourceforge.net/
 // (GPL chord recognizer written in Python)
 
-#include "../_common/midistuff.h"
 #include "juce_core/juce_core.h"
+#include "piz/midistuff.h"
 #include <algorithm>
 
 Array<int> getAsStackedChord (Array<int>& chord, bool reduce = true);

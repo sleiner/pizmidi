@@ -1,8 +1,8 @@
 #ifndef MidiStepPLUGINFILTER_H
 #define MidiStepPLUGINFILTER_H
-#include "../_common/midistuff.h"
-#include "../_common/PizAudioProcessor.h"
 #include "MidiLoop.h"
+#include "piz/midistuff.h"
+#include "piz/PizAudioProcessor.h"
 
 #define numLoops (16)
 
