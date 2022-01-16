@@ -19,21 +19,21 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiScaleChangerProgram::MidiScaleChangerProgram()
 {
     // default Program Values
-    n0 = 0.5f; // C
-    n1 = 0.f; // C#
-    n2 = 0.5f; // D
-    n3 = 0.f; // D#
-    n4 = 0.5f; // E
-    n5 = 0.5f; // F
-    n6 = 0.f; // F#
-    n7 = 0.5f; // G
-    n8 = 0.f; // G#
-    n9 = 0.5f; // A
-    n10 = 0.f; // A#
-    n11 = 0.5f; // B
-    fRoot = 0.5f;
-    fWrap = 0.f;
-    fChannel = CHANNEL_TO_FLOAT (-1);
+    n0          = 0.5f; // C
+    n1          = 0.f;  // C#
+    n2          = 0.5f; // D
+    n3          = 0.f;  // D#
+    n4          = 0.5f; // E
+    n5          = 0.5f; // F
+    n6          = 0.f;  // F#
+    n7          = 0.5f; // G
+    n8          = 0.f;  // G#
+    n9          = 0.5f; // A
+    n10         = 0.f;  // A#
+    n11         = 0.5f; // B
+    fRoot       = 0.5f;
+    fWrap       = 0.f;
+    fChannel    = CHANNEL_TO_FLOAT (-1);
     fAltChannel = CHANNEL_TO_FLOAT (-1);
 
     // default program name
@@ -55,21 +55,21 @@ MidiScaleChanger::MidiScaleChanger (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < numPrograms; i++)
                 {
-                    n0 = defaultBank->GetProgParm (i, k0);
-                    n1 = defaultBank->GetProgParm (i, k1);
-                    n2 = defaultBank->GetProgParm (i, k2);
-                    n3 = defaultBank->GetProgParm (i, k3);
-                    n4 = defaultBank->GetProgParm (i, k4);
-                    n5 = defaultBank->GetProgParm (i, k5);
-                    n6 = defaultBank->GetProgParm (i, k6);
-                    n7 = defaultBank->GetProgParm (i, k7);
-                    n8 = defaultBank->GetProgParm (i, k8);
-                    n9 = defaultBank->GetProgParm (i, k9);
-                    n10 = defaultBank->GetProgParm (i, k10);
-                    n11 = defaultBank->GetProgParm (i, k11);
-                    fRoot = defaultBank->GetProgParm (i, kRoot);
-                    fWrap = defaultBank->GetProgParm (i, kWrap);
-                    fChannel = defaultBank->GetProgParm (i, kChannel);
+                    n0          = defaultBank->GetProgParm (i, k0);
+                    n1          = defaultBank->GetProgParm (i, k1);
+                    n2          = defaultBank->GetProgParm (i, k2);
+                    n3          = defaultBank->GetProgParm (i, k3);
+                    n4          = defaultBank->GetProgParm (i, k4);
+                    n5          = defaultBank->GetProgParm (i, k5);
+                    n6          = defaultBank->GetProgParm (i, k6);
+                    n7          = defaultBank->GetProgParm (i, k7);
+                    n8          = defaultBank->GetProgParm (i, k8);
+                    n9          = defaultBank->GetProgParm (i, k9);
+                    n10         = defaultBank->GetProgParm (i, k10);
+                    n11         = defaultBank->GetProgParm (i, k11);
+                    fRoot       = defaultBank->GetProgParm (i, kRoot);
+                    fWrap       = defaultBank->GetProgParm (i, kWrap);
+                    fChannel    = defaultBank->GetProgParm (i, kChannel);
                     fAltChannel = defaultBank->GetProgParm (i, kAltChannel);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
@@ -89,7 +89,7 @@ MidiScaleChanger::MidiScaleChanger (audioMasterCallback audioMaster)
     {
         for (int c = 0; c < 16; c++)
         {
-            transposed[n][c] = n;
+            transposed[n][c]    = n;
             noteOnChannel[n][c] = c;
         }
     }
@@ -111,7 +111,7 @@ void MidiScaleChanger::setProgram (VstInt32 program)
     MidiScaleChangerProgram* ap = &programs[program];
 
     settingprog = true;
-    curProgram = program;
+    curProgram  = program;
     setParameter (k0, ap->n0);
     setParameter (k1, ap->n1);
     setParameter (k2, ap->n2);
@@ -163,43 +163,43 @@ void MidiScaleChanger::setParameter (VstInt32 index, float value)
     switch (index)
     {
         case k0:
-            n0 = ap->n0 = value;
+            n0 = ap->n0  = value;
             notetable[0] = roundToInt (value * 25.f) - 13;
             break;
         case k1:
-            n1 = ap->n1 = value;
+            n1 = ap->n1  = value;
             notetable[1] = roundToInt (value * 25.f) - 13;
             break;
         case k2:
-            n2 = ap->n2 = value;
+            n2 = ap->n2  = value;
             notetable[2] = roundToInt (value * 25.f) - 13;
             break;
         case k3:
-            n3 = ap->n3 = value;
+            n3 = ap->n3  = value;
             notetable[3] = roundToInt (value * 25.f) - 13;
             break;
         case k4:
-            n4 = ap->n4 = value;
+            n4 = ap->n4  = value;
             notetable[4] = roundToInt (value * 25.f) - 13;
             break;
         case k5:
-            n5 = ap->n5 = value;
+            n5 = ap->n5  = value;
             notetable[5] = roundToInt (value * 25.f) - 13;
             break;
         case k6:
-            n6 = ap->n6 = value;
+            n6 = ap->n6  = value;
             notetable[6] = roundToInt (value * 25.f) - 13;
             break;
         case k7:
-            n7 = ap->n7 = value;
+            n7 = ap->n7  = value;
             notetable[7] = roundToInt (value * 25.f) - 13;
             break;
         case k8:
-            n8 = ap->n8 = value;
+            n8 = ap->n8  = value;
             notetable[8] = roundToInt (value * 25.f) - 13;
             break;
         case k9:
-            n9 = ap->n9 = value;
+            n9 = ap->n9  = value;
             notetable[9] = roundToInt (value * 25.f) - 13;
             break;
         case k10:
@@ -211,12 +211,12 @@ void MidiScaleChanger::setParameter (VstInt32 index, float value)
             notetable[11] = roundToInt (value * 25.f) - 13;
             break;
         case kRoot:
-            root = roundToInt (value * 96.f) - 48;
+            root  = roundToInt (value * 96.f) - 48;
             fRoot = ap->fRoot = value;
             updateDisplay();
             break;
         case kWrap:
-            wrap = value >= 0.5f;
+            wrap  = value >= 0.5f;
             fWrap = ap->fWrap = value;
             break;
         case kChannel:
@@ -388,11 +388,11 @@ void MidiScaleChanger::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventV
     for (unsigned int i = 0; i < inputs[0].size(); i++)
     {
         VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
-        bool discard = false;
-        int tchannel = FLOAT_TO_CHANNEL (fChannel);
+        const int status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int channel  = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        const int data1    = tomod.midiData[1] & 0x7f;
+        bool discard       = false;
+        int tchannel       = FLOAT_TO_CHANNEL (fChannel);
         if (tchannel == -1)
             tchannel = channel;
 
@@ -403,7 +403,7 @@ void MidiScaleChanger::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventV
             {
                 if (nchannel == -1)
                 {
-                    discard = true;
+                    discard                    = true;
                     transposed[data1][channel] = -999;
                 }
                 else
@@ -418,22 +418,22 @@ void MidiScaleChanger::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventV
                 {
                     if (wrap)
                     {
-                        newdata1 = midiNoteWrap (newdata1);
+                        newdata1                   = midiNoteWrap (newdata1);
                         transposed[data1][channel] = newdata1;
-                        tomod.midiData[0] = MIDI_NOTEON | tchannel;
-                        tomod.midiData[1] = newdata1;
+                        tomod.midiData[0]          = MIDI_NOTEON | tchannel;
+                        tomod.midiData[1]          = newdata1;
                     }
                     else
                     {
-                        discard = true;
+                        discard                    = true;
                         transposed[data1][channel] = -999;
                     }
                 }
                 else
                 {
                     transposed[data1][channel] = newdata1;
-                    tomod.midiData[0] = MIDI_NOTEON | tchannel;
-                    tomod.midiData[1] = (char) newdata1;
+                    tomod.midiData[0]          = MIDI_NOTEON | tchannel;
+                    tomod.midiData[1]          = (char) newdata1;
                 }
             }
             noteOnChannel[data1][channel] = tomod.midiData[0] & 0x0f;
@@ -448,18 +448,18 @@ void MidiScaleChanger::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventV
                 tomod.midiData[0] = MIDI_NOTEOFF | noteOnChannel[data1][channel];
                 tomod.midiData[1] = transposed[data1][channel];
             }
-            transposed[data1][channel] = data1;
+            transposed[data1][channel]    = data1;
             noteOnChannel[data1][channel] = channel;
         }
         else if (status == MIDI_POLYKEYPRESSURE)
         {
-            int n = data1 % 12;
+            int n        = data1 % 12;
             int newdata1 = root + data1 + notetable[n];
             if (newdata1 > 127 || newdata1 < 0)
             {
                 if (wrap)
                 {
-                    newdata1 = midiNoteWrap (newdata1);
+                    newdata1          = midiNoteWrap (newdata1);
                     tomod.midiData[0] = MIDI_NOTEON | tchannel;
                     tomod.midiData[1] = newdata1;
                 }

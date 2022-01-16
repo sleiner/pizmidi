@@ -126,7 +126,7 @@ void MidiCCModulator::resume()
 {
     lastmod = -1;
     lastout = -1;
-    lastin = -1;
+    lastin  = -1;
     AudioEffectX::resume();
 }
 
@@ -138,7 +138,7 @@ void MidiCCModulator::setParameter (VstInt32 index, float value)
     switch (index)
     {
         case kPower:
-            on = param[index] >= 0.33f;
+            on       = param[index] >= 0.33f;
             modnotes = param[index] >= 0.67f;
             updateDisplay();
             break;
@@ -208,7 +208,7 @@ void MidiCCModulator::setParameter (VstInt32 index, float value)
             lastout = -1;
             break;
         case kModCC:
-            modcc = FLOAT_TO_MIDI_X (param[index]);
+            modcc   = FLOAT_TO_MIDI_X (param[index]);
             lastmod = -1;
             break;
         case kSlider:
@@ -216,7 +216,7 @@ void MidiCCModulator::setParameter (VstInt32 index, float value)
             {
                 if (lastmod != FLOAT_TO_MIDI (param[index]))
                 {
-                    lastmod = FLOAT_TO_MIDI (param[index]);
+                    lastmod     = FLOAT_TO_MIDI (param[index]);
                     slidermoved = true;
                 }
             }
@@ -434,13 +434,13 @@ void MidiCCModulator::getParameterDisplay (VstInt32 index, char* text)
 //-----------------------------------------------------------------------------------------
 bool MidiCCModulator::init (void)
 {
-    lastmod = -1;
-    lastout = -1;
-    lastin = -1;
-    playing = false;
-    wasplaying = false;
+    lastmod     = -1;
+    lastout     = -1;
+    lastin      = -1;
+    playing     = false;
+    wasplaying  = false;
     slidermoved = false;
-    modnotes = param[kPower] >= 0.67f;
+    modnotes    = param[kPower] >= 0.67f;
 
     return PizMidi::init();
 }
@@ -448,7 +448,7 @@ bool MidiCCModulator::init (void)
 void MidiCCModulator::preProcess()
 {
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff);
+    timeInfo              = getTimeInfo (0xffff);
 
     playing = false;
     if (timeInfo)
@@ -466,9 +466,9 @@ void MidiCCModulator::preProcess()
 
 void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    signed char incc = FLOAT_TO_MIDI_X (param[kInCC]);
+    signed char incc  = FLOAT_TO_MIDI_X (param[kInCC]);
     signed char outcc = FLOAT_TO_MIDI_X (param[kOutCC]);
-    signed char ch = FLOAT_TO_CHANNEL (param[kChannel]);
+    signed char ch    = FLOAT_TO_CHANNEL (param[kChannel]);
     if (slidermoved)
     {
         slidermoved = false;
@@ -479,7 +479,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
             if (lastin == -1)
                 lastin = 0;
             VstInt32 o = modulate (lastin, lastmod);
-            o = roundToInt (2.f * param[kOutput] * (float) o);
+            o          = roundToInt (2.f * param[kOutput] * (float) o);
             if (o > 127)
                 o = 127;
             else if (o < 0)
@@ -503,16 +503,16 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
+        unsigned char status  = tomod.midiData[0] & 0xf0; // scraping  channel
         unsigned char channel = tomod.midiData[0] & 0x0f; // isolating channel
-        unsigned char data1 = tomod.midiData[1] & 0x7f;
-        unsigned char data2 = tomod.midiData[2] & 0x7f;
+        unsigned char data1   = tomod.midiData[1] & 0x7f;
+        unsigned char data2   = tomod.midiData[2] & 0x7f;
 
         //reset these for every event
         bool discard = ! thru;
-        incc = FLOAT_TO_MIDI_X (param[kInCC]);
-        outcc = FLOAT_TO_MIDI_X (param[kOutCC]);
-        ch = FLOAT_TO_CHANNEL (param[kChannel]);
+        incc         = FLOAT_TO_MIDI_X (param[kInCC]);
+        outcc        = FLOAT_TO_MIDI_X (param[kOutCC]);
+        ch           = FLOAT_TO_CHANNEL (param[kChannel]);
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;
 
@@ -539,7 +539,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         else if (lastin != -1 && mode != bNOT)
                         {
                             VstInt32 o = modulate (lastin, lastmod);
-                            o = roundToInt (2.f * param[kOutput] * (float) o);
+                            o          = roundToInt (2.f * param[kOutput] * (float) o);
                             if (o > 127)
                                 o = 127;
                             else if (o < 0)
@@ -547,7 +547,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                             tomod.midiData[2] = o;
                             if (lastout == tomod.midiData[2])
                                 discard = true;
-                            lastout = tomod.midiData[2];
+                            lastout           = tomod.midiData[2];
                             tomod.midiData[1] = outcc;
                             tomod.midiData[0] = status | ch;
                         }
@@ -556,11 +556,11 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                 else if (data1 == incc && ! modnotes)
                 {
                     discard = false; //when thru is off, only outcc is sent
-                    lastin = data2;
+                    lastin  = data2;
                     if (lastmod != -1 || mode == bNOT)
                     {
                         VstInt32 o = modulate (lastin, lastmod);
-                        o = roundToInt (2.f * param[kOutput] * (float) o);
+                        o          = roundToInt (2.f * param[kOutput] * (float) o);
                         if (o > 127)
                             o = 127;
                         else if (o < 0)
@@ -569,7 +569,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         if (lastout == tomod.midiData[2])
                             discard = true;
                     }
-                    lastout = tomod.midiData[2];
+                    lastout           = tomod.midiData[2];
                     tomod.midiData[1] = outcc;
                     tomod.midiData[0] = status | ch;
                 }
@@ -584,7 +584,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                     {
                         //modulate velocity
                         discard = false; //when thru is off, only outcc is sent
-                        lastin = data2;
+                        lastin  = data2;
                         if (lastmod != -1 || mode == bNOT)
                         { //bNOT is unary, so we don't need a real mod input
                             VstInt32 o = modulate (lastin, lastmod, true);
@@ -600,7 +600,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 tomod.midiData[2] = o;
                             }
                         }
-                        lastout = tomod.midiData[2];
+                        lastout           = tomod.midiData[2];
                         tomod.midiData[1] = data1;
                         tomod.midiData[0] = MIDI_NOTEON | ch;
                     }
@@ -630,7 +630,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
     { //just stopped
         lastmod = -1;
         lastout = -1;
-        lastin = -1;
+        lastin  = -1;
     }
     wasplaying = playing;
 }
@@ -638,7 +638,7 @@ void MidiCCModulator::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
 VstInt32 MidiCCModulator::modulate (char input, char mod, bool notes)
 {
     VstInt32 output = input;
-    char threshold = FLOAT_TO_MIDI (param[kAmount]);
+    char threshold  = FLOAT_TO_MIDI (param[kAmount]);
     switch (mode)
     {
         case uniadd:

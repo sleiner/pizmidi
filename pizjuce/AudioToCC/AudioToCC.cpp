@@ -5,6 +5,7 @@
 EnvelopeFollower::EnvelopeFollower()
 {
     envelope = 0;
+
     a = pow (0.01, 1.0 / (10 * 44100 * 0.001));
     r = pow (0.01, 1.0 / (500 * 44100 * 0.001));
 }
@@ -39,29 +40,29 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 JuceProgram::JuceProgram()
 {
     //default values
-    param[kGain] = 2.f / maxGain;
-    param[kPeakGain] = 1.f / maxGain;
-    param[kCCL] = midiToFloat (1);
-    param[kCCR] = midiToFloat (2);
-    param[kStereo] = 1.0;
-    param[kRate] = 0.5f;
-    param[kDevice] = 0.0;
-    param[kSmooth] = 0.5f;
-    param[kChannel] = 0.0;
-    param[kLOut] = 0.0;
-    param[kROut] = 0.0;
-    param[kLClip] = 0.0;
-    param[kRClip] = 0.0;
-    param[kAutomateHost] = 0.0;
-    param[kMidiToHost] = 1.0;
-    param[kMode] = 0.f;
-    param[kAttack] = 0.02f;
-    param[kRelease] = 0.12f;
-    param[kGateThreshold] = 1.f;
-    param[kGateCCL] = midiToFloat (3);
-    param[kGateCCR] = midiToFloat (4);
-    param[kGateOnValueCCL] = midiToFloat (127);
-    param[kGateOnValueCCR] = midiToFloat (127);
+    param[kGain]            = 2.f / maxGain;
+    param[kPeakGain]        = 1.f / maxGain;
+    param[kCCL]             = midiToFloat (1);
+    param[kCCR]             = midiToFloat (2);
+    param[kStereo]          = 1.0;
+    param[kRate]            = 0.5f;
+    param[kDevice]          = 0.0;
+    param[kSmooth]          = 0.5f;
+    param[kChannel]         = 0.0;
+    param[kLOut]            = 0.0;
+    param[kROut]            = 0.0;
+    param[kLClip]           = 0.0;
+    param[kRClip]           = 0.0;
+    param[kAutomateHost]    = 0.0;
+    param[kMidiToHost]      = 1.0;
+    param[kMode]            = 0.f;
+    param[kAttack]          = 0.02f;
+    param[kRelease]         = 0.12f;
+    param[kGateThreshold]   = 1.f;
+    param[kGateCCL]         = midiToFloat (3);
+    param[kGateCCR]         = midiToFloat (4);
+    param[kGateOnValueCCL]  = midiToFloat (127);
+    param[kGateOnValueCCR]  = midiToFloat (127);
     param[kGateOffValueCCL] = midiToFloat (0);
     param[kGateOffValueCCR] = midiToFloat (0);
 
@@ -81,34 +82,34 @@ AudioToCC::AudioToCC() : envL (0),
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiOutput::getAvailableDevices();
-    midiOutput = NULL;
-    lastCCL = 0;
-    lastCCR = 0;
-    oldenv[0] = 0;
+    devices     = MidiOutput::getAvailableDevices();
+    midiOutput  = NULL;
+    lastCCL     = 0;
+    lastCCR     = 0;
+    oldenv[0]   = 0;
     olderenv[0] = 0;
-    oldenv[1] = 0;
+    oldenv[1]   = 0;
     olderenv[1] = 0;
 
-    samp[0] = 0;
-    continualRMS[0] = 0.0;
+    samp[0]            = 0;
+    continualRMS[0]    = 0.0;
     guiContinualRMS[0] = 0.0;
-    samp[1] = 0;
-    continualRMS[1] = 0.0;
+    samp[1]            = 0;
+    continualRMS[1]    = 0.0;
     guiContinualRMS[1] = 0.0;
-    rateCounter = 0;
+    rateCounter        = 0;
 
-    envL = new EnvelopeFollower();
-    envR = new EnvelopeFollower();
+    envL     = new EnvelopeFollower();
+    envR     = new EnvelopeFollower();
     peakenvL = new EnvelopeFollower();
     peakenvR = new EnvelopeFollower();
 
-    lastInL = 0.f;
-    lastInR = 0.f;
+    lastInL     = 0.f;
+    lastInR     = 0.f;
     lastGateCCL = false;
     lastGateCCR = false;
-    resetGateL = false;
-    resetGateR = false;
+    resetGateL  = false;
+    resetGateR  = false;
 
     curProgram = 0;
     if (! loadDefaultFxb())
@@ -198,8 +199,9 @@ void AudioToCC::setActiveDevice (String name)
 
 void AudioToCC::setActiveDevice (MidiDeviceInfo const& device)
 {
-    activeDevice = programs[curProgram].device = device;
-    int index = devices.indexOf (device);
+    activeDevice                = device;
+    programs[curProgram].device = device;
+    int index                   = devices.indexOf (device);
 
     if (index == -1)
     {
@@ -391,7 +393,7 @@ bool AudioToCC::isOutputChannelStereoPair (int index) const
 void AudioToCC::setCurrentProgram (int index)
 {
     JuceProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram      = index;
     setActiveDevice (ap->device);
     memcpy (param, ap->param, sizeof (param));
     sendChangeMessage();
@@ -459,27 +461,27 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
     }
     midiMessages.clear();
 
-    const int ccL = floatToMidi (param[kCCL]);
-    const int ccR = floatToMidi (param[kCCR]);
-    const int gateccL = floatToMidi (param[kGateCCL]);
-    const int gateccR = floatToMidi (param[kGateCCR]);
-    const int gateOnValueL = floatToMidi (param[kGateOnValueCCL]);
-    const int gateOnValueR = floatToMidi (param[kGateOnValueCCR]);
-    const int gateOffValueL = floatToMidi (param[kGateOffValueCCL]);
-    const int gateOffValueR = floatToMidi (param[kGateOffValueCCR]);
-    const float thresh = param[kGateThreshold];
-    const int Ch = roundToInt (param[kChannel] * 15.0);
-    const float updateRate = (1.0f - param[kRate]) * 0.0025f + 0.001f; //in seconds
-    const bool stereo = param[kStereo] >= 0.5f;
+    const int ccL                      = floatToMidi (param[kCCL]);
+    const int ccR                      = floatToMidi (param[kCCR]);
+    const int gateccL                  = floatToMidi (param[kGateCCL]);
+    const int gateccR                  = floatToMidi (param[kGateCCR]);
+    const int gateOnValueL             = floatToMidi (param[kGateOnValueCCL]);
+    const int gateOnValueR             = floatToMidi (param[kGateOnValueCCR]);
+    const int gateOffValueL            = floatToMidi (param[kGateOffValueCCL]);
+    const int gateOffValueR            = floatToMidi (param[kGateOffValueCCR]);
+    const float thresh                 = param[kGateThreshold];
+    const int Ch                       = roundToInt (param[kChannel] * 15.0);
+    const float updateRate             = (1.0f - param[kRate]) * 0.0025f + 0.001f; //in seconds
+    const bool stereo                  = param[kStereo] >= 0.5f;
     const unsigned int sampleThreshold = param[kRate] == 1.f ? 1 : roundToInt (getSampleRate() * updateRate);
-    const unsigned int RMSThreshold = roundToInt (getSampleRate() * 0.001f);
-    const bool oldMethod = false;
-    const bool logScale = param[kMode] >= 0.5f;
+    const unsigned int RMSThreshold    = roundToInt (getSampleRate() * 0.001f);
+    const bool oldMethod               = false;
+    const bool logScale                = param[kMode] >= 0.5f;
 
     const float* in1 = buffer.getReadPointer (0);
     const float* in2 = buffer.getReadPointer (1);
 
-    float gain = maxGain * param[kGain];
+    float gain     = maxGain * param[kGain];
     float peakgain = maxGain * param[kPeakGain];
 
     if (resetGateL)
@@ -495,7 +497,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 setParameterNotifyingHost (kLClip, 0.f);
         }
         lastGateCCL = false;
-        resetGateL = false;
+        resetGateL  = false;
         sendChangeMessage();
     }
     if (resetGateR)
@@ -511,18 +513,18 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 setParameterNotifyingHost (kRClip, 0.f);
         }
         lastGateCCR = false;
-        resetGateR = false;
+        resetGateR  = false;
         sendChangeMessage();
     }
 
     for (int i = 0; i < buffer.getNumSamples(); i++)
     {
         float sample = in1[i] * gain;
-        lastInL = peakenvL->process (in1[i] * peakgain);
+        lastInL      = peakenvL->process (in1[i] * peakgain);
         //if mono mode, sum the left and right channels:
         if (! stereo)
         {
-            sample = (sample + (in2[i] * gain)) * 0.5f;
+            sample  = (sample + (in2[i] * gain)) * 0.5f;
             lastInR = peakenvL->process ((in1[i] + in2[i]) * 0.5f * peakgain);
         }
 
@@ -575,11 +577,11 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 if (logScale)
                 {
                     float logrms = 127.f + 100.f * log10 (rms + 0.000000001f);
-                    data2 = roundToInt (jlimit (0.f, 127.f, 2 * param[kGain] * envL->process (logrms)));
+                    data2        = roundToInt (jlimit (0.f, 127.f, 2 * param[kGain] * envL->process (logrms)));
                 }
                 else
                 {
-                    rms = jlimit (0.f, 1.f, envL->process (rms));
+                    rms   = jlimit (0.f, 1.f, envL->process (rms));
                     data2 = roundToInt (rms * 127.f);
                 }
                 data2 = smooth (data2, oldenv[0], olderenv[0], param[kSmooth]);
@@ -589,8 +591,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 data2 = (int) (127 * rms);
                 data2 = smooth (data2, oldenv[0], olderenv[0], param[kSmooth]);
             }
-            samp[0] = 0;
-            continualRMS[0] = 0.0;
+            samp[0]            = 0;
+            continualRMS[0]    = 0.0;
             guiContinualRMS[0] = 0.0;
         }
         if (rateCounter >= sampleThreshold)
@@ -608,8 +610,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                         setParameterNotifyingHost (kLOut, midiToFloat (data2, false));
                 }
                 olderenv[0] = oldenv[0];
-                oldenv[0] = data2;
-                lastCCL = data2;
+                oldenv[0]   = data2;
+                lastCCL     = data2;
             }
         }
     }
@@ -620,7 +622,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
         for (int i = 0; i < buffer.getNumSamples(); i++)
         {
             float sample = in2[i] * gain;
-            lastInR = peakenvR->process ((in2[i] * peakgain));
+            lastInR      = peakenvR->process ((in2[i] * peakgain));
 
             if (gateccR >= 0)
             {
@@ -667,11 +669,11 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                     if (logScale)
                     {
                         float logrms = 127.f + 100.f * log10 (rms + 0.000000001f);
-                        data2 = roundToInt (jlimit (0.f, 127.f, 2 * param[kGain] * envR->process (logrms)));
+                        data2        = roundToInt (jlimit (0.f, 127.f, 2 * param[kGain] * envR->process (logrms)));
                     }
                     else
                     {
-                        rms = jlimit (0.f, 1.f, envR->process (rms));
+                        rms   = jlimit (0.f, 1.f, envR->process (rms));
                         data2 = roundToInt (rms * 127.f);
                     }
                     data2 = smooth (data2, oldenv[1], olderenv[1], param[kSmooth]);
@@ -681,8 +683,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                     data2 = (int) (127.f * rms);
                     data2 = smooth (data2, oldenv[1], olderenv[1], param[kSmooth]);
                 }
-                samp[1] = 0;
-                continualRMS[1] = 0.0;
+                samp[1]            = 0;
+                continualRMS[1]    = 0.0;
                 guiContinualRMS[1] = 0.0;
             }
             if (rateCounter >= sampleThreshold)
@@ -700,8 +702,8 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                             setParameterNotifyingHost (kROut, midiToFloat (data2, false));
                     }
                     olderenv[1] = oldenv[1];
-                    oldenv[1] = data2;
-                    lastCCR = data2;
+                    oldenv[1]   = data2;
+                    lastCCR     = data2;
                 }
             }
         }
@@ -750,7 +752,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
             {
                 if (e->hasTagName ("Program"))
                 {
-                    const int p = e->getIntAttribute ("index");
+                    const int p          = e->getIntAttribute ("index");
                     JuceProgram* program = &programs[p];
                     for (int i = 0; i < (numParams - 2); i++)
                     {
@@ -761,7 +763,7 @@ void AudioToCC::setStateInformation (const void* data, int sizeInBytes)
                         program->param[kGain] *= 0.25f;
                         program->param[kPeakGain] *= 0.25f;
                     }
-                    program->name = e->getStringAttribute ("progname", program->name);
+                    program->name   = e->getStringAttribute ("progname", program->name);
                     program->device = getDeviceByName (e->getStringAttribute ("device", programs->device.name));
                 }
             }

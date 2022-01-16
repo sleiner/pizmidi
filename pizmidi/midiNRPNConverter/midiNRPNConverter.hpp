@@ -81,7 +81,7 @@ enum
     kNRPNout16,
     kDiscard,
     kNumParams,
-    kNumSlots = 16,
+    kNumSlots    = 16,
     kNumPrograms = 128,
 };
 

@@ -9,7 +9,7 @@
 
 template <typename ElementType,
           typename TypeOfCriticalSectionToUse = juce::DummyCriticalSection,
-          int minimumAllocatedSize = 0>
+          int minimumAllocatedSize            = 0>
 class PizArray : public juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>
 {
 public:

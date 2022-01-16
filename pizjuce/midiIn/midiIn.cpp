@@ -10,8 +10,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 JuceProgram::JuceProgram()
 {
     //default values
-    param[kPower] = 0.0f;
-    param[kHostIn] = 1.0f;
+    param[kPower]   = 0.0f;
+    param[kHostIn]  = 1.0f;
     param[kChannel] = 0.f;
 
     icon = String (""); // icon filename
@@ -25,11 +25,11 @@ MidiInFilter::MidiInFilter()
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiInput::getAvailableDevices();
+    devices   = MidiInput::getAvailableDevices();
     midiInput = 0;
     loadDefaultFxb();
     curProgram = 0;
-    init = true;
+    init       = true;
     setCurrentProgram (0);
 
     wasPlaying = false;
@@ -84,7 +84,7 @@ void MidiInFilter::setActiveDevice (MidiDeviceInfo device)
         midiInput->stop();
     }
     activeDevice = programs[curProgram].device = device;
-    midiInput = MidiInput::openDevice (device.identifier, &collector);
+    midiInput                                  = MidiInput::openDevice (device.identifier, &collector);
     if (midiInput != nullptr)
     {
         midiInput->start();
@@ -159,7 +159,7 @@ void MidiInFilter::setCurrentProgram (int index)
     init = false;
 
     JuceProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram      = index;
     setActiveDevice (ap->device);
     for (int i = 0; i < getNumParameters(); i++)
     {
@@ -322,9 +322,9 @@ void MidiInFilter::setStateInformation (const void* data, int sizeInBytes)
                 {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
                 }
-                programs[p].icon = xmlState->getStringAttribute (prefix + "icon", programs[p].icon);
+                programs[p].icon   = xmlState->getStringAttribute (prefix + "icon", programs[p].icon);
                 programs[p].device = getDeviceByName (xmlState->getStringAttribute (prefix + "device", programs[p].device.name));
-                programs[p].name = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
+                programs[p].name   = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
             }
             init = true;
             setCurrentProgram (xmlState->getIntAttribute ("program", 0));

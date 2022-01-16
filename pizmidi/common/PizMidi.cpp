@@ -12,9 +12,9 @@ PizMidi::PizMidi (audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt3
       _vstSysexEventsToHost (0)
 {
     numinputs = numoutputs = 0;
-    bottomOctave = -2;
+    bottomOctave           = -2;
     char* host;
-    host = new char[kVstMaxVendorStrLen + 1];
+    host      = new char[kVstMaxVendorStrLen + 1];
     bool inst = false;
     bool ignoreDefault;
     if (getHostVendorString (host))
@@ -131,16 +131,16 @@ bool PizMidi::init()
 {
     try
     {
-        _vstEventsToHost = new MyVstEvents;
+        _vstEventsToHost            = new MyVstEvents;
         _vstEventsToHost->numEvents = 0;
-        _vstMidiEventsToHost = new VstMidiEvent[MAX_EVENTS_PER_TIMESLICE];
-        _vstSysexEventsToHost = new VstMidiSysexEvent[MAX_EVENTS_PER_TIMESLICE];
+        _vstMidiEventsToHost        = new VstMidiEvent[MAX_EVENTS_PER_TIMESLICE];
+        _vstSysexEventsToHost       = new VstMidiSysexEvent[MAX_EVENTS_PER_TIMESLICE];
 
-        _midiEventsIn = new VstMidiEventVec[PLUG_MIDI_INPUTS];
+        _midiEventsIn      = new VstMidiEventVec[PLUG_MIDI_INPUTS];
         _midiSysexEventsIn = new VstSysexEventVec[PLUG_MIDI_INPUTS];
         _cleanMidiInBuffers();
 
-        _midiEventsOut = new VstMidiEventVec[PLUG_MIDI_OUTPUTS];
+        _midiEventsOut      = new VstMidiEventVec[PLUG_MIDI_OUTPUTS];
         _midiSysexEventsOut = new VstSysexEventVec[PLUG_MIDI_OUTPUTS];
         _cleanMidiOutBuffers();
     }
@@ -281,7 +281,7 @@ void PizMidi::postProcess (void)
 {
     if (PLUG_MIDI_OUTPUTS)
     {
-        VstInt32 left = (VstInt32) _midiEventsOut[0].size();
+        VstInt32 left  = (VstInt32) _midiEventsOut[0].size();
         VstInt32 count = 0;
         while (left > 0)
         {
@@ -291,18 +291,18 @@ void PizMidi::postProcess (void)
                 _vstEventsToHost->numEvents = MAX_EVENTS_PER_TIMESLICE;
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
-                VstInt32 j = i + count;
-                _vstMidiEventsToHost[i].type = kVstMidiType;
-                _vstMidiEventsToHost[i].byteSize = 24;
+                VstInt32 j                          = i + count;
+                _vstMidiEventsToHost[i].type        = kVstMidiType;
+                _vstMidiEventsToHost[i].byteSize    = 24;
                 _vstMidiEventsToHost[i].deltaFrames = _midiEventsOut[0][j].deltaFrames;
-                _vstMidiEventsToHost[i].flags = 0;
-                _vstMidiEventsToHost[i].noteLength = 0;
-                _vstMidiEventsToHost[i].noteOffset = 0;
+                _vstMidiEventsToHost[i].flags       = 0;
+                _vstMidiEventsToHost[i].noteLength  = 0;
+                _vstMidiEventsToHost[i].noteOffset  = 0;
                 _vstMidiEventsToHost[i].midiData[0] = _midiEventsOut[0][j].midiData[0];
                 _vstMidiEventsToHost[i].midiData[1] = _midiEventsOut[0][j].midiData[1];
                 _vstMidiEventsToHost[i].midiData[2] = _midiEventsOut[0][j].midiData[2];
                 _vstMidiEventsToHost[i].midiData[3] = 0;
-                _vstMidiEventsToHost[i].detune = _midiEventsOut[0][j].detune;
+                _vstMidiEventsToHost[i].detune      = _midiEventsOut[0][j].detune;
 
                 _vstEventsToHost->events[i] = (VstEvent*) &_vstMidiEventsToHost[i];
             }
@@ -313,7 +313,7 @@ void PizMidi::postProcess (void)
             count += _vstEventsToHost->numEvents;
         }
 
-        left = (VstInt32) _midiSysexEventsOut[0].size();
+        left  = (VstInt32) _midiSysexEventsOut[0].size();
         count = 0;
         while (left > 0)
         {
@@ -323,15 +323,15 @@ void PizMidi::postProcess (void)
                 _vstEventsToHost->numEvents = MAX_EVENTS_PER_TIMESLICE;
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
-                VstInt32 j = i + count;
-                _vstSysexEventsToHost[i].type = kVstSysExType;
-                _vstSysexEventsToHost[i].byteSize = _midiSysexEventsOut[0][j].byteSize;
+                VstInt32 j                           = i + count;
+                _vstSysexEventsToHost[i].type        = kVstSysExType;
+                _vstSysexEventsToHost[i].byteSize    = _midiSysexEventsOut[0][j].byteSize;
                 _vstSysexEventsToHost[i].deltaFrames = _midiSysexEventsOut[0][j].deltaFrames;
-                _vstSysexEventsToHost[i].flags = 0;
-                _vstSysexEventsToHost[i].dumpBytes = _midiSysexEventsOut[0][j].dumpBytes;
-                _vstSysexEventsToHost[i].resvd1 = 0;
-                _vstSysexEventsToHost[i].sysexDump = _midiSysexEventsOut[0][j].sysexDump;
-                _vstSysexEventsToHost[i].resvd2 = 0;
+                _vstSysexEventsToHost[i].flags       = 0;
+                _vstSysexEventsToHost[i].dumpBytes   = _midiSysexEventsOut[0][j].dumpBytes;
+                _vstSysexEventsToHost[i].resvd1      = 0;
+                _vstSysexEventsToHost[i].sysexDump   = _midiSysexEventsOut[0][j].sysexDump;
+                _vstSysexEventsToHost[i].resvd2      = 0;
 
                 _vstEventsToHost->events[i] = (VstEvent*) &_vstSysexEventsToHost[i];
             }
@@ -385,8 +385,8 @@ void PizMidi::process (float** inputs, float** outputs, VstInt32 sampleFrames)
 
     if (numinputs && numoutputs)
     {
-        float* in1 = inputs[0];
-        float* in2 = inputs[1];
+        float* in1  = inputs[0];
+        float* in2  = inputs[1];
         float* out1 = outputs[0];
         float* out2 = outputs[1];
 
@@ -425,8 +425,8 @@ void PizMidi::processReplacing (float** inputs, float** outputs, VstInt32 sample
 
     if (numinputs && numoutputs)
     {
-        float* in1 = inputs[0];
-        float* in2 = inputs[1];
+        float* in1  = inputs[0];
+        float* in2  = inputs[1];
         float* out1 = outputs[0];
         float* out2 = outputs[1];
 
@@ -463,8 +463,8 @@ void PizMidi::processDoubleReplacing (double** inputs, double** outputs, VstInt3
 
     if (numinputs && numoutputs)
     {
-        double* in1 = inputs[0];
-        double* in2 = inputs[1];
+        double* in1  = inputs[0];
+        double* in2  = inputs[1];
         double* out1 = outputs[0];
         double* out2 = outputs[1];
 

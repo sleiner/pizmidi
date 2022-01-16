@@ -10,15 +10,15 @@
 class Cursor;
 namespace juce
 {
-    class XmlElement;
+class XmlElement;
 }
 namespace juce
 {
-    class MidiMessage;
+class MidiMessage;
 }
 namespace juce
 {
-    class MidiBuffer;
+class MidiBuffer;
 }
 class ControllerValue;
 

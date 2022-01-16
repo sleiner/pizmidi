@@ -1,7 +1,7 @@
 #ifndef MidiStepPLUGINFILTER_H
 #define MidiStepPLUGINFILTER_H
-#include "../_common/PizAudioProcessor.h"
 #include "../_common/midistuff.h"
+#include "../_common/PizAudioProcessor.h"
 #include "MidiLoop.h"
 
 #define numLoops (16)
@@ -14,12 +14,12 @@ enum parameters
     kThru,
     kNumGlobalParams,
 
-    kRecArm = kNumGlobalParams,
-    kChannel = kRecArm + numLoops,
+    kRecArm     = kNumGlobalParams,
+    kChannel    = kRecArm + numLoops,
     kTriggerKey = kChannel + numLoops,
-    kTranspose = kTriggerKey + numLoops,
+    kTranspose  = kTriggerKey + numLoops,
     kOutChannel = kTranspose + numLoops,
-    kNumParams = kOutChannel + numLoops
+    kNumParams  = kOutChannel + numLoops
 };
 
 class JuceProgram

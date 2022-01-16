@@ -36,7 +36,7 @@ public:
         {
             if (midiNoteNumber >= baseOctave * 12 && midiNoteNumber < 32 + baseOctave * 12)
             {
-                int n = midiNoteNumber - baseOctave * 12;
+                int n      = midiNoteNumber - baseOctave * 12;
                 String key = String::charToString (keymap[n]);
                 g.setColour (Colours::white.withMultipliedAlpha (0.5f));
                 if (midiNoteNumber / 12 == baseOctave && midiNoteNumber % 12 == 0)
@@ -64,7 +64,7 @@ public:
         {
             if (midiNoteNumber >= baseOctave * 12 && midiNoteNumber < 32 + baseOctave * 12)
             {
-                int n = midiNoteNumber - baseOctave * 12;
+                int n      = midiNoteNumber - baseOctave * 12;
                 String key = String::charToString (keymap[n]);
                 g.setColour (Colours::grey.withMultipliedAlpha (0.5f));
                 if (midiNoteNumber / 12 == baseOctave && midiNoteNumber % 12 == 0)

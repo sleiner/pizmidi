@@ -8,11 +8,11 @@ class ControllerValue;
 class Scene;
 namespace juce
 {
-    class MidiBuffer;
+class MidiBuffer;
 }
 namespace juce
 {
-    class MidiMessage;
+class MidiMessage;
 }
 using namespace juce;
 

@@ -53,16 +53,16 @@ MidiSostenuto::MidiSostenuto (audioMasterCallback audioMaster)
     }
 
     sostenuto = 0;
-    discard = 0;
+    discard   = 0;
     for (int i = 0; i < 128; i++)
     {
-        held_notes[i] = 0;
-        sustained_notes[i] = 0;
-        noteon_queue[i] = 0;
+        held_notes[i]            = 0;
+        sustained_notes[i]       = 0;
+        noteon_queue[i]          = 0;
         noteon_queue_velocity[i] = 0;
     }
     CCvalue_current = 0;
-    CCvalue_prev = 0;
+    CCvalue_prev    = 0;
 
     init();
 }
@@ -78,7 +78,7 @@ MidiSostenuto::~MidiSostenuto()
 void MidiSostenuto::setProgram (VstInt32 program)
 {
     MidiSostenutoProgram* ap = &programs[program];
-    curProgram = program;
+    curProgram               = program;
     setParameter (kParam01, ap->fParam01);
     setParameter (kParam02, ap->fParam02);
     setParameter (kParam03, ap->fParam03);
@@ -243,9 +243,9 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (held_notes[n] != 1)
                 { //don't turn it off if it's being held manually
                     VstMidiEvent noteoffplease = inputs[0][0];
-                    noteoffplease.midiData[0] = MIDI_NOTEOFF + outchannel;
-                    noteoffplease.midiData[1] = n;
-                    noteoffplease.midiData[2] = 0;
+                    noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
+                    noteoffplease.midiData[1]  = n;
+                    noteoffplease.midiData[2]  = 0;
                     outputs[0].push_back (noteoffplease);
                 }
             }
@@ -259,12 +259,12 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = tomod.midiData[0] & 0x0f; // isolating channel
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        short channel  = tomod.midiData[0] & 0x0f; // isolating channel
+        short data1    = tomod.midiData[1] & 0x7f;
+        short data2    = tomod.midiData[2] & 0x7f;
         short listenCC = FLOAT_TO_MIDI (fParam01);
-        short lownote = FLOAT_TO_MIDI (fParam02);
+        short lownote  = FLOAT_TO_MIDI (fParam02);
         short highnote = FLOAT_TO_MIDI (fParam03);
 
         if (channel == outchannel)
@@ -277,11 +277,11 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     if (sustained_notes[n] == 1)
                     {
-                        sustained_notes[n] = 0;
+                        sustained_notes[n]         = 0;
                         VstMidiEvent noteoffplease = inputs[0][i];
-                        noteoffplease.midiData[0] = MIDI_NOTEOFF + outchannel;
-                        noteoffplease.midiData[1] = n;
-                        noteoffplease.midiData[2] = 0;
+                        noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
+                        noteoffplease.midiData[1]  = n;
+                        noteoffplease.midiData[2]  = 0;
                         outputs[0].push_back (noteoffplease);
                     }
                 }
@@ -295,8 +295,8 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     {
                         if (sustained_notes[data1] == 1)
                         {
-                            tomod.midiData[0] = MIDI_NOTEOFF + outchannel;
-                            noteon_queue[data1] = 1;
+                            tomod.midiData[0]            = MIDI_NOTEOFF + outchannel;
+                            noteon_queue[data1]          = 1;
                             noteon_queue_velocity[data1] = data2;
                         }
                     }
@@ -316,7 +316,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             else if (status == MIDI_CONTROLCHANGE && data1 == listenCC)
             {
                 setParameterAutomated (kParam04, MIDI_TO_FLOAT (data2)); //energyXT2 used to move the slider with the CC. anybody else?
-                discard = 1; //don't send the CC through
+                discard = 1;                                             //don't send the CC through
                 if (data2 >= PEDAL_THRESHOLD && sostenuto == 0)
                 {
                     sostenuto = 1;
@@ -337,9 +337,9 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             if (held_notes[n] != 1)
                             { //don't turn it off if it's being held manually
                                 VstMidiEvent noteoffplease = inputs[0][i];
-                                noteoffplease.midiData[0] = MIDI_NOTEOFF + outchannel;
-                                noteoffplease.midiData[1] = n;
-                                noteoffplease.midiData[2] = 0;
+                                noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
+                                noteoffplease.midiData[1]  = n;
+                                noteoffplease.midiData[2]  = 0;
                                 outputs[0].push_back (noteoffplease);
                             }
                         }
@@ -359,9 +359,9 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             if (noteon_queue[n] == 1)
             {
                 VstMidiEvent noteonplease = inputs[0][i];
-                noteonplease.midiData[0] = MIDI_NOTEON + outchannel;
-                noteonplease.midiData[1] = n;
-                noteonplease.midiData[2] = (char) noteon_queue_velocity[n];
+                noteonplease.midiData[0]  = MIDI_NOTEON + outchannel;
+                noteonplease.midiData[1]  = n;
+                noteonplease.midiData[2]  = (char) noteon_queue_velocity[n];
                 outputs[0].push_back (noteonplease);
                 noteon_queue[n] = 0;
             }

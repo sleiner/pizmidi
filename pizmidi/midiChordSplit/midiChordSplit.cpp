@@ -122,7 +122,7 @@ bool MidiChordSplit::midiSort::operator() (const VstMidiEvent& first, const VstM
             case quietest:
                 if (bothOff)
                     result = onvelocity[first.midiData[0] & 0x0f][first.midiData[1]]
-                             < onvelocity[second.midiData[0] & 0x0f][second.midiData[1]];
+                           < onvelocity[second.midiData[0] & 0x0f][second.midiData[1]];
                 else
                     result = first.midiData[2] > second.midiData[2];
                 break;
@@ -552,10 +552,10 @@ bool MidiChordSplit::init (void)
     srand ((unsigned int) time (NULL));
 
     lastoutch = 0;
-    oldness = 0;
+    oldness   = 0;
     //queued=0;
-    sustain = false;
-    playing = false;
+    sustain    = false;
+    playing    = false;
     wasplaying = false;
     memset (ntime, -1, sizeof (ntime));
     memset (held, 0, sizeof (held));
@@ -563,9 +563,9 @@ bool MidiChordSplit::init (void)
     centerNote = sorter.centerNote = 60;
     for (int ch = 0; ch < MIDI_MAX_CHANNELS; ch++)
     {
-        poly[ch] = roundToInt (((float) maxPoly - 1) * param[kCh1Poly + ch * 4]) + 1;
+        poly[ch]     = roundToInt (((float) maxPoly - 1) * param[kCh1Poly + ch * 4]) + 1;
         lastNote[ch] = FLOAT_TO_MIDI (param[kCh1Low + ch * 4]) + FLOAT_TO_MIDI ((param[kCh1High + ch * 4] - param[kCh1Low + ch * 4]) / 2.f);
-        voices[ch] = 0;
+        voices[ch]   = 0;
         for (int i = 0; i < maxPoly; i++)
         {
             Voice[ch][i].reset();
@@ -583,7 +583,7 @@ void MidiChordSplit::preProcess (void)
 {
     // preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     playing = false;
     if (timeInfo)
@@ -746,15 +746,15 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         for (unsigned int i = 0; i < inputs[0].size(); i++)
         {
             VstMidiEvent m = inputs[0][i];
-            int channel = m.midiData[0] & 0x0f;
-            int note = m.midiData[1] & 0x7f;
+            int channel    = m.midiData[0] & 0x0f;
+            int note       = m.midiData[1] & 0x7f;
             if (isNoteOn (m))
                 held2[channel][note] = true;
             else if (isNoteOff (m))
                 held2[channel][note] = false;
         }
         //find center note
-        int top = -1;
+        int top    = -1;
         int bottom = 128;
         for (int n = 0; n < 128; n++)
         {
@@ -819,25 +819,25 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
             //copying event "i" from input (with all its fields)
             VstMidiEvent tomod = inputs[0][i];
 
-            int status = tomod.midiData[0] & 0xf0; // scraping  channel
+            int status  = tomod.midiData[0] & 0xf0; // scraping  channel
             int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-            int data1 = tomod.midiData[1] & 0x7f;
-            int data2 = tomod.midiData[2] & 0x7f;
+            int data1   = tomod.midiData[1] & 0x7f;
+            int data2   = tomod.midiData[2] & 0x7f;
 
             bool discard = false;
 
             if (isNoteOn (tomod))
             {
-                held[channel][data1] = true;
+                held[channel][data1]              = true;
                 sorter.onvelocity[channel][data1] = data2;
                 findCenterNote();
                 if ((channel == listenchannel || listenchannel == -1) && param[kPower] >= 0.5f)
                 {
                     ntime[data1][channel] = tomod.deltaFrames;
-                    int outch = -1;
+                    int outch             = -1;
                     //int melodych = -1;
                     int stealch = -1;
-                    int outn = voices[outch] - 1;
+                    int outn    = voices[outch] - 1;
                     v stealme;
                     //oldness: older==smaller number
                     if (stealmode == oldest)
@@ -852,30 +852,30 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     else
                         stealme.note = 128;
                     stealme.vel = 128;
-                    stealme.on = true;
+                    stealme.on  = true;
 
-                    bool stop = false;
+                    bool stop    = false;
                     bool nosteal = false;
 
-                    int d[16]; //interval between incoming note and center of each channel range
+                    int d[16];        //interval between incoming note and center of each channel range
                     int interval[16]; //interval between incoming note and last note played on each channel
                     int tempd1 = 999;
                     int tempi1 = 999;
                     for (int ch = 0; ch < 16; ch++)
                     {
-                        d[ch] = abs (centerOfRange[ch] - data1);
+                        d[ch]        = abs (centerOfRange[ch] - data1);
                         interval[ch] = abs (lastNote[ch] - data1);
                         if (lownote[ch] <= data1 && highnote[ch] >= data1 && useChan[ch])
                         {
                             if (d[ch] < tempd1)
                             {
-                                tempd1 = d[ch];
+                                tempd1  = d[ch];
                                 stealch = ch;
                             }
                             if (interval[ch] < tempi1 && voices[ch] < poly[ch])
                             {
                                 tempi1 = interval[ch];
-                                outch = ch;
+                                outch  = ch;
                             }
                         }
                     }
@@ -906,10 +906,10 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     break;
                                 if (Voice[outch][n].on == false)
                                 {
-                                    outn = n;
-                                    stop = true;
+                                    outn                   = n;
+                                    stop                   = true;
                                     sounding[outch][data1] = true;
-                                    lastNote[outch] = data1;
+                                    lastNote[outch]        = data1;
                                 }
                             }
                         }
@@ -929,9 +929,9 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             {
                                                 //find oldest note for stealing
                                                 stealme.oldness = Voice[ch][n].oldness;
-                                                stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                stealme.note    = Voice[ch][n].note;
+                                                outch           = ch;
+                                                outn            = n;
                                             }
                                             break;
                                         case newest:
@@ -939,19 +939,19 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             {
                                                 //find oldest note for stealing
                                                 stealme.oldness = Voice[ch][n].oldness;
-                                                stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                stealme.note    = Voice[ch][n].note;
+                                                outch           = ch;
+                                                outn            = n;
                                             }
                                             break;
                                         case quietest:
                                             if (Voice[ch][n].vel < stealme.vel)
                                             {
                                                 //find quietest note for stealing
-                                                stealme.vel = Voice[ch][n].vel;
+                                                stealme.vel  = Voice[ch][n].vel;
                                                 stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                outch        = ch;
+                                                outn         = n;
                                             }
                                             break;
                                         case lowest:
@@ -959,8 +959,8 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             {
                                                 //find lowest note for stealing
                                                 stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                outch        = ch;
+                                                outn         = n;
                                             }
                                             break;
                                         case highest:
@@ -968,8 +968,8 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             {
                                                 //find highest note for stealing
                                                 stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                outch        = ch;
+                                                outn         = n;
                                             }
                                             break;
                                         case centered:
@@ -977,8 +977,8 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             if (abs (Voice[ch][n].note - centerNote) > abs (stealme.note - centerNote))
                                             {
                                                 stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
+                                                outch        = ch;
+                                                outn         = n;
                                             }
                                             break;
                                         case random:
@@ -986,16 +986,16 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             if (rand() < RAND_MAX / 2)
                                             {
                                                 stealme.note = Voice[ch][n].note;
-                                                outch = ch;
-                                                outn = n;
-                                                nosteal = false;
+                                                outch        = ch;
+                                                outn         = n;
+                                                nosteal      = false;
                                             }
                                             else
                                                 nosteal = true;
 
                                     } //switch(stealmode)
-                                } //if voice on
-                            } //for n
+                                }     //if voice on
+                            }         //for n
                             //if (retrig) {
                             if (stealmode == lowest && stealme.note > data1)
                                 nosteal = true;
@@ -1026,10 +1026,10 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         if (Queue[q].on && Queue[q].note == stealme.note && Queue[q].chan == outch)
                                         {
                                             dbg ("same note already queued q=" << q);
-                                            Queue[q] = copyVoice (stealme);
-                                            Queue[q].on = true;
+                                            Queue[q]           = copyVoice (stealme);
+                                            Queue[q].on        = true;
                                             Queue[q].sustained = false;
-                                            gotq = true;
+                                            gotq               = true;
                                         }
 #ifdef _DEBUG
                                         else
@@ -1046,10 +1046,10 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         if (! Queue[q].on)
                                         {
                                             dbg ("found empty queue slot q=" << q);
-                                            Queue[q] = copyVoice (stealme);
-                                            Queue[q].on = true;
+                                            Queue[q]           = copyVoice (stealme);
+                                            Queue[q].on        = true;
                                             Queue[q].sustained = false;
-                                            gotq = true;
+                                            gotq               = true;
                                             //++queued;
                                         }
                                     }
@@ -1062,7 +1062,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                 kill.midiData[1] = (char) stealme.note;
                                 kill.midiData[2] = 0;
                                 kill.deltaFrames = tomod.deltaFrames;
-                                kill.detune = 0;
+                                kill.detune      = 0;
                                 outputs[0].push_back (kill);
                                 sounding[outch][stealme.note] = false;
                                 --voices[outch];
@@ -1086,14 +1086,14 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         break;
                                     if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                                     {
-                                        Queue[q].oldness = ++oldness;
-                                        Queue[q].inch = channel;
-                                        Queue[q].chan = outch;
-                                        Queue[q].note = data1;
-                                        Queue[q].vel = data2;
-                                        Queue[q].on = true;
+                                        Queue[q].oldness   = ++oldness;
+                                        Queue[q].inch      = channel;
+                                        Queue[q].chan      = outch;
+                                        Queue[q].note      = data1;
+                                        Queue[q].vel       = data2;
+                                        Queue[q].on        = true;
                                         Queue[q].sustained = false;
-                                        gotq = true;
+                                        gotq               = true;
                                     }
                                 }
                                 for (int q = 0; q < queueSize; q++)
@@ -1102,14 +1102,14 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         break;
                                     if (! Queue[q].on)
                                     {
-                                        Queue[q].oldness = ++oldness;
-                                        Queue[q].inch = channel;
-                                        Queue[q].chan = outch;
-                                        Queue[q].note = data1;
-                                        Queue[q].vel = data2;
-                                        Queue[q].on = true;
+                                        Queue[q].oldness   = ++oldness;
+                                        Queue[q].inch      = channel;
+                                        Queue[q].chan      = outch;
+                                        Queue[q].note      = data1;
+                                        Queue[q].vel       = data2;
+                                        Queue[q].on        = true;
                                         Queue[q].sustained = false;
-                                        gotq = true;
+                                        gotq               = true;
                                         //++queued;
                                         dbg ("voice [" << (int) outch << "][" << (int) outn << "]." << Voice[outch][outn].note << " not used, queued");
                                     }
@@ -1120,17 +1120,17 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                         }
                         else
                         {
-                            Voice[outch][outn].oldness = ++oldness;
-                            Voice[outch][outn].inch = channel;
-                            Voice[outch][outn].chan = outch;
-                            Voice[outch][outn].note = data1;
-                            Voice[outch][outn].vel = data2;
-                            Voice[outch][outn].on = true;
+                            Voice[outch][outn].oldness   = ++oldness;
+                            Voice[outch][outn].inch      = channel;
+                            Voice[outch][outn].chan      = outch;
+                            Voice[outch][outn].note      = data1;
+                            Voice[outch][outn].vel       = data2;
+                            Voice[outch][outn].on        = true;
                             Voice[outch][outn].sustained = false;
-                            tomod.midiData[0] = outch | MIDI_NOTEON;
-                            sorter.priorityNote = data1;
-                            sounding[outch][data1] = true;
-                            lastNote[outch] = data1;
+                            tomod.midiData[0]            = outch | MIDI_NOTEON;
+                            sorter.priorityNote          = data1;
+                            sounding[outch][data1]       = true;
+                            lastNote[outch]              = data1;
                             ++voices[outch];
                             lastoutch = outch;
 
@@ -1144,9 +1144,9 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                 if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                                 {
                                     dbg ("playing note already queued q=" << q);
-                                    Queue[q].on = false;
+                                    Queue[q].on        = false;
                                     Queue[q].sustained = false;
-                                    gotq = true;
+                                    gotq               = true;
                                     //dbg(queued<<" queued");
                                 }
 #ifdef _DEBUG
@@ -1183,7 +1183,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                             {
                                 //--queued;
                                 Queue[q].sustained = false;
-                                Queue[q].on = false;
+                                Queue[q].on        = false;
                                 dbg ("sustain off, q[" << q << "]." << Queue[q].note << " off");
                             }
                         }
@@ -1199,11 +1199,11 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     off.midiData[1] = (char) Voice[ch][n].note;
                                     off.midiData[2] = 0;
                                     off.deltaFrames = tomod.deltaFrames;
-                                    off.detune = 0;
+                                    off.detune      = 0;
                                     outputs[0].push_back (off);
                                     sounding[ch][Voice[ch][n].note] = false;
                                     --voices[ch];
-                                    Voice[ch][n].on = false;
+                                    Voice[ch][n].on        = false;
                                     Voice[ch][n].sustained = false;
                                     dbg ("sustain off, v[" << ch << "][" << n << "]." << Voice[ch][n].note << " off, " << voices[ch] << " voices");
                                 }
@@ -1228,7 +1228,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                             m.midiData[1] = data1;
                             m.midiData[2] = data2;
                             m.deltaFrames = tomod.deltaFrames;
-                            m.detune = 0;
+                            m.detune      = 0;
                             outputs[0].push_back (m);
                             discard = true; //to avoid sending twice on input channel
                         }
@@ -1237,12 +1237,12 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
             }
             else if (isNoteOff (tomod))
             { //process every note-off to avoid hanging notes
-                held[channel][data1] = false;
+                held[channel][data1]              = false;
                 sorter.onvelocity[channel][data1] = 0;
                 findCenterNote();
                 dbg ("noteoff input n" << (int) data1 << " ch" << (int) channel);
-                discard = true;
-                bool done = false;
+                discard            = true;
+                bool done          = false;
                 bool queuednoteoff = false;
                 //see if the note is in the queue
                 for (int q = 0; q < queueSize; q++)
@@ -1257,7 +1257,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                         }
                         else
                         {
-                            Queue[q].on = false;
+                            Queue[q].on        = false;
                             Queue[q].sustained = false;
                             //--queued;
                             dbg ("queued note q[" << q << "]." << Queue[q].note << " note-off");
@@ -1290,16 +1290,16 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                 else
                                 {
                                     VstMidiEvent off = tomod;
-                                    off.midiData[0] = MIDI_NOTEOFF | ch;
-                                    off.midiData[1] = (char) Voice[ch][n].note;
-                                    off.midiData[2] = 0;
-                                    off.deltaFrames = tomod.deltaFrames;
-                                    off.detune = 0;
+                                    off.midiData[0]  = MIDI_NOTEOFF | ch;
+                                    off.midiData[1]  = (char) Voice[ch][n].note;
+                                    off.midiData[2]  = 0;
+                                    off.deltaFrames  = tomod.deltaFrames;
+                                    off.detune       = 0;
                                     outputs[0].push_back (off);
                                     sounding[ch][Voice[ch][n].note] = false;
                                     --voices[ch];
                                     //if (voices[outch]<0) voices[outch]=0;
-                                    Voice[ch][n].on = false;
+                                    Voice[ch][n].on        = false;
                                     Voice[ch][n].sustained = false;
                                     dbg ("voice [" << ch << "][" << n << "]." << Voice[ch][n].note << " stopped, " << voices[ch] << " voices");
                                     //this voice is now free, so look for a queued note
@@ -1317,8 +1317,8 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         else
                                             useme.note = -1;
                                         useme.vel = 1;
-                                        useme.on = true;
-                                        int useq = 0;
+                                        useme.on  = true;
+                                        int useq  = 0;
                                         bool stop = false;
                                         for (int q = 0; q < queueSize; q++)
                                         {
@@ -1331,7 +1331,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find newest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case newest:
@@ -1339,7 +1339,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find oldest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case quietest:
@@ -1347,7 +1347,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find loudest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case lowest:
@@ -1355,7 +1355,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find highest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case highest:
@@ -1363,7 +1363,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find lowest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case centered:
@@ -1371,7 +1371,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //find lowest queued note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         break;
                                                     case random:
@@ -1379,7 +1379,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                         {
                                                             //get random note
                                                             useme = copyVoice (Queue[q]);
-                                                            useq = q;
+                                                            useq  = q;
                                                         }
                                                         else
                                                         {
@@ -1387,13 +1387,13 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                                             if (useme.note == -1)
                                                             {
                                                                 useme = copyVoice (Queue[0]);
-                                                                useq = q;
+                                                                useq  = q;
                                                             }
                                                         }
                                                         break;
                                                 } // /switch
-                                            } //if Queue[q].on
-                                        } // /for 0<=q<16
+                                            }     //if Queue[q].on
+                                        }         // /for 0<=q<16
                                         //send the queued note
                                         if (useme.note != -1)
                                         {
@@ -1403,21 +1403,21 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                             if (retrig)
                                             {
                                                 VstMidiEvent queue = tomod;
-                                                queue.midiData[0] = MIDI_NOTEON + useme.chan;
-                                                queue.midiData[1] = (unsigned char) useme.note;
-                                                queue.midiData[2] = (unsigned char) useme.vel;
-                                                queue.deltaFrames = tomod.deltaFrames;
-                                                queue.detune = 0;
+                                                queue.midiData[0]  = MIDI_NOTEON + useme.chan;
+                                                queue.midiData[1]  = (unsigned char) useme.note;
+                                                queue.midiData[2]  = (unsigned char) useme.vel;
+                                                queue.deltaFrames  = tomod.deltaFrames;
+                                                queue.detune       = 0;
                                                 //--queued;
-                                                Queue[useq].on = false;
+                                                Queue[useq].on        = false;
                                                 Queue[useq].sustained = false;
                                                 outputs[0].push_back (queue);
                                                 dbg ("queued note q[" << useq << "]." << Queue[useq].note << " unqueued");
                                                 //update the voice
-                                                Voice[ch][n] = copyVoice (useme);
-                                                Voice[ch][n].sustained = false;
+                                                Voice[ch][n]                     = copyVoice (useme);
+                                                Voice[ch][n].sustained           = false;
                                                 sounding[useme.chan][useme.note] = true;
-                                                lastNote[useme.chan] = useme.note;
+                                                lastNote[useme.chan]             = useme.note;
                                                 ++voices[ch];
                                                 dbg ("voice [" << ch << "][" << n << "]." << Voice[ch][n].note << " retriggered, " << voices[ch] << " voices");
                                             }
@@ -1429,9 +1429,9 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     } // /if queued>0
                                 }
                             } //got match
-                        } // for n
-                    } //for ch
-                } //if(!done)
+                        }     // for n
+                    }         //for ch
+                }             //if(!done)
                 if (done)
                     discard = true;
                 else if (! queuednoteoff)
@@ -1447,17 +1447,17 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 memset (sounding, 0, sizeof (sounding));
                 //queued=0;
                 voices[channel] = 0;
-                sustain = false;
+                sustain         = false;
                 for (int i = 0; i < maxPoly; i++)
                 {
-                    Voice[channel][i].on = false;
+                    Voice[channel][i].on        = false;
                     Voice[channel][i].sustained = false;
                 }
                 for (int q = 0; q < queueSize; q++)
                 {
                     if (Queue[q].chan == channel)
                     {
-                        Queue[q].on = false;
+                        Queue[q].on        = false;
                         Queue[q].sustained = false;
                     }
                 }
@@ -1487,10 +1487,10 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     kill.midiData[1] = (char) Voice[channel][i].note;
                     kill.midiData[2] = 0;
                     kill.deltaFrames = 0;
-                    kill.detune = 0;
+                    kill.detune      = 0;
                     outputs[0].push_back (kill);
-                    Voice[channel][i].on = false;
-                    Voice[channel][i].sustained = false;
+                    Voice[channel][i].on                      = false;
+                    Voice[channel][i].sustained               = false;
                     sounding[channel][Voice[channel][i].note] = false;
                 }
             }
@@ -1507,7 +1507,7 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 //kill.detune = 0;
                 //outputs[0].push_back(kill);
                 //sounding[Queue[q].chan][Queue[q].note]=false;
-                Queue[q].on = false;
+                Queue[q].on        = false;
                 Queue[q].sustained = false;
             }
         }
@@ -1520,12 +1520,12 @@ void MidiChordSplit::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
 v MidiChordSplit::copyVoice (v in)
 {
     v out;
-    out.oldness = in.oldness;
-    out.inch = in.inch;
-    out.chan = in.chan;
-    out.note = in.note;
-    out.vel = in.vel;
-    out.on = in.on;
+    out.oldness   = in.oldness;
+    out.inch      = in.inch;
+    out.chan      = in.chan;
+    out.note      = in.note;
+    out.vel       = in.vel;
+    out.on        = in.on;
     out.sustained = in.sustained;
     return out;
 }
@@ -1533,7 +1533,7 @@ v MidiChordSplit::copyVoice (v in)
 void MidiChordSplit::findCenterNote()
 {
     //find center note
-    int top = -1;
+    int top    = -1;
     int bottom = 128;
     std::vector<int> heldNoteNumbers;
     for (int n = 0; n < 128; n++)

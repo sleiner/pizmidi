@@ -10,7 +10,7 @@ class ControllerValue;
 class Controller;
 namespace juce
 {
-    class MidiBuffer;
+class MidiBuffer;
 }
 class Cursor;
 

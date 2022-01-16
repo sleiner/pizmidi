@@ -5,11 +5,11 @@
 
 namespace juce
 {
-    class AudioProcessorEditor;
+class AudioProcessorEditor;
 }
 namespace juce
 {
-    class MidiBuffer;
+class MidiBuffer;
 }
 class MidiMorphGUI;
 

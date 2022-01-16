@@ -11,13 +11,13 @@ JuceProgram::JuceProgram()
 {
     //default values
     zeromem (param, sizeof (param));
-    param[kPower] = 0.0f;
-    param[kClock] = 1.0f;
+    param[kPower]   = 0.0f;
+    param[kClock]   = 1.0f;
     param[kHostOut] = 1.0f;
     param[kStamped] = 1.0f;
     param[kChannel] = 0.0f;
 
-    icon = String (""); // icon filename
+    icon   = String (""); // icon filename
     device = MidiDeviceInfo();
 
     //program name
@@ -29,21 +29,21 @@ MidiOutFilter::MidiOutFilter()
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices = MidiOutput::getAvailableDevices();
+    devices    = MidiOutput::getAvailableDevices();
     midiOutput = 0;
     loadDefaultFxb();
     curProgram = 0;
-    init = true;
+    init       = true;
     setCurrentProgram (0);
 
     samplesToNextClock = 0;
-    samplesToNextMTC = 0;
-    wasPlaying = false;
-    startAt = -999.0;
-    startMTCAt = -999.0;
-    sendclock = false;
-    sendmtc = false;
-    mtcNumber = 0;
+    samplesToNextMTC   = 0;
+    wasPlaying         = false;
+    startAt            = -999.0;
+    startMTCAt         = -999.0;
+    sendclock          = false;
+    sendmtc            = false;
+    mtcNumber          = 0;
 
     zeromem (&lastPosInfo, sizeof (lastPosInfo));
 }
@@ -221,7 +221,7 @@ void MidiOutFilter::setCurrentProgram (int index)
     init = false;
 
     JuceProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram      = index;
     setActiveDevice (ap->device);
     for (int i = 0; i < getNumParameters(); i++)
     {
@@ -269,7 +269,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
     }
 
-    const double SR = getSampleRate();
+    const double SR  = getSampleRate();
     const double iSR = 1.0 / SR;
     AudioPlayHead::CurrentPositionInfo pos;
     if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
@@ -281,11 +281,11 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                 double frameRate = 24.0;
                 int mtcFrameRate = 0;
 
-                const double samplesPerPpq = 60.0 * SR / pos.bpm;
+                const double samplesPerPpq   = 60.0 * SR / pos.bpm;
                 const double samplesPerClock = SR / (4.0 * frameRate);
-                const long double seconds = (long double) (pos.ppqPosition * 60.0f / pos.bpm) /*+ smpteOffset*/;
-                const long double absSecs = fabs (seconds);
-                const bool neg = seconds < 0.0;
+                const long double seconds    = (long double) (pos.ppqPosition * 60.0f / pos.bpm) /*+ smpteOffset*/;
+                const long double absSecs    = fabs (seconds);
+                const bool neg               = seconds < 0.0;
 
                 int hours, mins, secs, frames;
                 if (frameRate == 29.97)
@@ -293,23 +293,23 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                     int64 frameNumber = int64 (absSecs * 29.97);
                     frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
 
-                    hours = int ((((frameNumber / 30) / 60) / 60) % 24);
-                    mins = int (((frameNumber / 30) / 60) % 60);
-                    secs = int ((frameNumber / 30) % 60);
+                    hours  = int ((((frameNumber / 30) / 60) / 60) % 24);
+                    mins   = int (((frameNumber / 30) / 60) % 60);
+                    secs   = int ((frameNumber / 30) % 60);
                     frames = int (frameNumber % 30);
                 }
                 else
                 {
-                    hours = (int) (absSecs / (60.0 * 60.0));
-                    mins = ((int) (absSecs / 60.0)) % 60;
-                    secs = ((int) absSecs) % 60;
+                    hours  = (int) (absSecs / (60.0 * 60.0));
+                    mins   = ((int) (absSecs / 60.0)) % 60;
+                    secs   = ((int) absSecs) % 60;
                     frames = (int) (int64 (absSecs * frameRate) % (int) frameRate);
                 }
                 if (pos.isPlaying)
                 {
-                    double i = 0.0;
+                    double i              = 0.0;
                     const double clockppq = fmod (absSecs * frameRate * 4.0, (long double) 1.0);
-                    samplesToNextMTC = (int) (samplesPerClock * (clockppq + i));
+                    samplesToNextMTC      = (int) (samplesPerClock * (clockppq + i));
                     i += 1.0;
                     if (! wasPlaying)
                     {
@@ -355,7 +355,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                             samplesToNextMTC = (int) (samplesPerClock * (clockppq + i));
                             i += 1.0;
                             startMTCAt = -999.0;
-                            sendmtc = true;
+                            sendmtc    = true;
                         }
 
                         midiMessages.addEvents (temp, 0, buffer.getNumSamples(), 0);
@@ -398,7 +398,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                         samplesToNextMTC = (int) (samplesPerClock * (clockppq + i));
                         i += 1.0;
                         startMTCAt = -999.0;
-                        sendmtc = true;
+                        sendmtc    = true;
                     }
                     if (sendmtc)
                     {
@@ -463,13 +463,13 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
             {
                 //keep these as doubles to minimize rounding errors
                 const double samplesPerPpq = 60.0 * SR / pos.bpm;
-                const double ppqPerSample = pos.bpm / (60.0 * SR);
+                const double ppqPerSample  = pos.bpm / (60.0 * SR);
                 //const double ppqPerClock=1.0/24.0;
                 const double samplesPerClock = 2.5 * SR / pos.bpm;
-                const double clockppq = fmod (pos.ppqPosition * 24.0, 1.0);
+                const double clockppq        = fmod (pos.ppqPosition * 24.0, 1.0);
                 if (pos.isPlaying)
                 {
-                    double i = 0.0;
+                    double i           = 0.0;
                     samplesToNextClock = (int) (samplesPerClock * (clockppq + i));
                     i += 1.0;
                     if (! wasPlaying)
@@ -482,7 +482,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                         //send song position pointer & continue
                         //MIDI beat == 16th note
                         const double beat = floor (pos.ppqPosition * 4.0);
-                        int intbeat = (int) beat;
+                        int intbeat       = (int) beat;
                         if (pos.ppqPosition * 4.0 - beat > 0.0000000000000001)
                         {
                             intbeat += 1;
@@ -492,7 +492,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                             MidiMessage position (0xf2, intbeat & 0x007f, (intbeat & 0x3f80) >> 7);
                             midiMessages.addEvent (position, 0);
                         }
-                        startAt = (double) intbeat * 0.25;
+                        startAt            = (double) intbeat * 0.25;
                         samplesToNextClock = (int) (samplesPerPpq * (startAt - pos.ppqPosition));
 
                         if (samplesToNextClock < buffer.getNumSamples())
@@ -511,7 +511,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                             midiMessages.addEvent (midiclock, samplesToNextClock);
                             samplesToNextClock = (int) (samplesPerClock * (clockppq + i));
                             i += 1.0;
-                            startAt = -999.0;
+                            startAt   = -999.0;
                             sendclock = true;
                         }
 
@@ -534,7 +534,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                         midiMessages.addEvent (midiclock, samplesToNextClock);
                         samplesToNextClock = (int) (samplesPerClock * (clockppq + i));
                         i += 1.0;
-                        startAt = -999.0;
+                        startAt   = -999.0;
                         sendclock = true;
                     }
                     if (sendclock)
@@ -558,7 +558,7 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                         sendclock = false;
                     }
                     const double beat = floor (pos.ppqPosition * 4.0);
-                    int intbeat = (int) beat;
+                    int intbeat       = (int) beat;
                     if (pos.ppqPosition * 4.0 - beat > 0.0000000000000001)
                     {
                         intbeat += 1;
@@ -571,15 +571,15 @@ void MidiOutFilter::processBlock (AudioSampleBuffer& buffer,
                 }
             }
         }
-        wasPlaying = pos.isPlaying;
+        wasPlaying  = pos.isPlaying;
         lastPosInfo = pos;
     }
     else
     {
         zeromem (&lastPosInfo, sizeof (lastPosInfo));
-        lastPosInfo.timeSigNumerator = 4;
+        lastPosInfo.timeSigNumerator   = 4;
         lastPosInfo.timeSigDenominator = 4;
-        lastPosInfo.bpm = 120;
+        lastPosInfo.bpm                = 120;
     }
 
     const int channel = roundToInt (param[kChannel] * 16.f);
@@ -699,9 +699,9 @@ void MidiOutFilter::setStateInformation (const void* data, int sizeInBytes)
                 {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
                 }
-                programs[p].icon = xmlState->getStringAttribute (prefix + L"icon", programs[p].icon);
+                programs[p].icon   = xmlState->getStringAttribute (prefix + L"icon", programs[p].icon);
                 programs[p].device = getDeviceByName (xmlState->getStringAttribute (prefix + L"device", programs[p].device.name));
-                programs[p].name = xmlState->getStringAttribute (prefix + L"progname", programs[p].name);
+                programs[p].name   = xmlState->getStringAttribute (prefix + L"progname", programs[p].name);
             }
             init = true;
             setCurrentProgram (xmlState->getIntAttribute ("program", 0));

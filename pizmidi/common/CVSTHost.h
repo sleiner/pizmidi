@@ -36,8 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #if defined(VST_2_4_EXTENSIONS)
 #else
 typedef int VstInt32; /* this one's heavily used in V2.4++ */
-// ... and Steinberg goofed big time by making this 'typedef int VstInt32' in
-// the original VST SDK 2.4, which is architecture-dependent...
+                      // ... and Steinberg goofed big time by making this 'typedef int VstInt32' in
+                      // the original VST SDK 2.4, which is architecture-dependent...
 #endif
 
 #if ! defined(VST_2_1_EXTENSIONS)
@@ -46,7 +46,7 @@ struct VstFileSelect;
 struct VstKeyCode
 {
     long character;
-    unsigned char virt; // see enum VstVirtualKey
+    unsigned char virt;     // see enum VstVirtualKey
     unsigned char modifier; // see enum VstModifierKey
 };
 struct MidiProgramName;
@@ -70,12 +70,12 @@ struct MidiKeyName;
 /* Constants used in the files - copied verbatim from vstfxstore.h           */
 /*****************************************************************************/
 
-#define cMagic 'CcnK'
-#define fMagic 'FxCk'
-#define bankMagic 'FxBk'
+#define cMagic           'CcnK'
+#define fMagic           'FxCk'
+#define bankMagic        'FxBk'
 #define chunkGlobalMagic 'FxCh'
 #define chunkPresetMagic 'FPCh'
-#define chunkBankMagic 'FBCh'
+#define chunkBankMagic   'FBCh'
 
 /*****************************************************************************/
 /* SFxHeader : header for all chunks                                         */
@@ -84,7 +84,7 @@ struct MidiKeyName;
 struct SFxHeader
 {
     VstInt32 chunkMagic; /* 'CcnK' in any case                */
-    VstInt32 byteSize; /* size of this chunk, excluding     */
+    VstInt32 byteSize;   /* size of this chunk, excluding     */
     /* chunkMagic & byteSize             */
 };
 
@@ -103,7 +103,7 @@ struct SFxBase : public SFxHeader
     VstInt32 version; /* format version                    */
     /* for programs: 1                   */
     /* for banks: 1 or 2                 */
-    VstInt32 fxID; /* fx unique ID                      */
+    VstInt32 fxID;      /* fx unique ID                      */
     VstInt32 fxVersion; /* fx version                        */
 };
 
@@ -114,7 +114,7 @@ struct SFxBase : public SFxHeader
 struct SFxProgramBase : public SFxBase
 {
     VstInt32 numParams; /* number of parameters              */
-    char prgName[28]; /* program name (ASCIIZ)             */
+    char prgName[28];   /* program name (ASCIIZ)             */
 };
 
 /*****************************************************************************/
@@ -143,7 +143,7 @@ struct SFxProgramChunk : public SFxProgramBase
 
 struct SFxBankBase : public SFxBase
 {
-    VstInt32 numPrograms; /* number of programs in bank        */
+    VstInt32 numPrograms;    /* number of programs in bank        */
     VstInt32 currentProgram; /* if version 2, current program,    */
     /* else irrelevant                   */
     char future[124]; /* reserved (should be zero)         */

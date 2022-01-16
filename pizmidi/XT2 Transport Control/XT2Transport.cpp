@@ -9,15 +9,15 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 XT2TransportControlProgram::XT2TransportControlProgram()
 {
     // default Program Values
-    fPauseNote = MIDI_TO_FLOAT_X (0);
-    fPauseMsg = 0.0f;
-    fStopNote = MIDI_TO_FLOAT_X (1);
-    fStopMsg = 0.0f;
+    fPauseNote  = MIDI_TO_FLOAT_X (0);
+    fPauseMsg   = 0.0f;
+    fStopNote   = MIDI_TO_FLOAT_X (1);
+    fStopMsg    = 0.0f;
     fRewindNote = MIDI_TO_FLOAT_X (2);
-    fRewindMsg = 0.0f;
+    fRewindMsg  = 0.0f;
     fRecordNote = MIDI_TO_FLOAT_X (3);
-    fRecordMsg = 0.0f;
-    fChannel = CHANNEL_TO_FLOAT (0); //0==any channel
+    fRecordMsg  = 0.0f;
+    fChannel    = CHANNEL_TO_FLOAT (0); //0==any channel
 
     strcpy (name, "default");
 }
@@ -35,39 +35,39 @@ XT2TransportControl::XT2TransportControl (audioMasterCallback audioMaster)
         switch (i)
         {
             case 0:
-                programs[i].fPauseNote = MIDI_TO_FLOAT_X (0);
-                programs[i].fPauseMsg = 0.0f;
-                programs[i].fStopNote = MIDI_TO_FLOAT_X (1);
-                programs[i].fStopMsg = 0.0f;
+                programs[i].fPauseNote  = MIDI_TO_FLOAT_X (0);
+                programs[i].fPauseMsg   = 0.0f;
+                programs[i].fStopNote   = MIDI_TO_FLOAT_X (1);
+                programs[i].fStopMsg    = 0.0f;
                 programs[i].fRewindNote = MIDI_TO_FLOAT_X (2);
-                programs[i].fRewindMsg = 0.0f;
+                programs[i].fRewindMsg  = 0.0f;
                 programs[i].fRecordNote = MIDI_TO_FLOAT_X (3);
-                programs[i].fRecordMsg = 0.0f;
-                programs[i].fChannel = CHANNEL_TO_FLOAT (0);
+                programs[i].fRecordMsg  = 0.0f;
+                programs[i].fChannel    = CHANNEL_TO_FLOAT (0);
                 sprintf (programs[i].name, "Notes\0");
                 break;
             case 1:
-                programs[i].fPauseNote = MIDI_TO_FLOAT_X (0);
-                programs[i].fPauseMsg = 1.0f;
-                programs[i].fStopNote = MIDI_TO_FLOAT_X (1);
-                programs[i].fStopMsg = 1.0f;
+                programs[i].fPauseNote  = MIDI_TO_FLOAT_X (0);
+                programs[i].fPauseMsg   = 1.0f;
+                programs[i].fStopNote   = MIDI_TO_FLOAT_X (1);
+                programs[i].fStopMsg    = 1.0f;
                 programs[i].fRewindNote = MIDI_TO_FLOAT_X (2);
-                programs[i].fRewindMsg = 1.0f;
+                programs[i].fRewindMsg  = 1.0f;
                 programs[i].fRecordNote = MIDI_TO_FLOAT_X (3);
-                programs[i].fRecordMsg = 1.0f;
-                programs[i].fChannel = CHANNEL_TO_FLOAT (0);
+                programs[i].fRecordMsg  = 1.0f;
+                programs[i].fChannel    = CHANNEL_TO_FLOAT (0);
                 sprintf (programs[i].name, "CCs\0");
                 break;
             case 2:
-                programs[i].fPauseNote = MIDI_TO_FLOAT_X (0);
-                programs[i].fPauseMsg = 0.5f;
-                programs[i].fStopNote = MIDI_TO_FLOAT_X (1);
-                programs[i].fStopMsg = 0.5f;
+                programs[i].fPauseNote  = MIDI_TO_FLOAT_X (0);
+                programs[i].fPauseMsg   = 0.5f;
+                programs[i].fStopNote   = MIDI_TO_FLOAT_X (1);
+                programs[i].fStopMsg    = 0.5f;
                 programs[i].fRewindNote = MIDI_TO_FLOAT_X (2);
-                programs[i].fRewindMsg = 0.5f;
+                programs[i].fRewindMsg  = 0.5f;
                 programs[i].fRecordNote = MIDI_TO_FLOAT_X (3);
-                programs[i].fRecordMsg = 0.5f;
-                programs[i].fChannel = CHANNEL_TO_FLOAT (0);
+                programs[i].fRecordMsg  = 0.5f;
+                programs[i].fChannel    = CHANNEL_TO_FLOAT (0);
                 sprintf (programs[i].name, "ProgChanges\0");
                 break;
         }
@@ -100,7 +100,7 @@ BOOL CALLBACK EnumWindowsProc (HWND hWnd, LPARAM lParam)
         HINSTANCE hInstance = (HINSTANCE) GetWindowLong (hWnd, GWL_HINSTANCE);
         DWORD dwProcessId;
         DWORD dwThreadId = GetWindowThreadProcessId (hWnd, &dwProcessId);
-        HANDLE hProcess = OpenProcess (PROCESS_ALL_ACCESS, FALSE, dwProcessId);
+        HANDLE hProcess  = OpenProcess (PROCESS_ALL_ACCESS, FALSE, dwProcessId);
         if (GetModuleFileNameEx (hProcess, hInstance, String, sizeof (String)))
         {
             char* xtfile = strstr (String, XT_EXE_NAME);
@@ -138,9 +138,9 @@ void XT2TransportControl::XT2_Transport (int button)
 }
 
 #else
-#include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 #include <X11/keysym.h>
+#include <X11/Xlib.h>
 //figure out linux method here
 
 void XT2TransportControl::XT2_Transport (int button)
@@ -425,10 +425,10 @@ void XT2TransportControl::getParameterDisplay (VstInt32 index, char* text)
 
 void XT2TransportControl::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    int pausenote = FLOAT_TO_MIDI_X (fPauseNote);
-    int stopnote = FLOAT_TO_MIDI_X (fStopNote);
-    int rewnote = FLOAT_TO_MIDI_X (fRewindNote);
-    int recnote = FLOAT_TO_MIDI_X (fRecordNote);
+    int pausenote     = FLOAT_TO_MIDI_X (fPauseNote);
+    int stopnote      = FLOAT_TO_MIDI_X (fStopNote);
+    int rewnote       = FLOAT_TO_MIDI_X (fRewindNote);
+    int recnote       = FLOAT_TO_MIDI_X (fRecordNote);
     int listenchannel = FLOAT_TO_CHANNEL (fChannel);
 
     // process incoming events
@@ -436,10 +436,10 @@ void XT2TransportControl::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        int channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int status         = tomod.midiData[0] & 0xf0;       // scraping  channel
+        int channel        = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        int data1          = tomod.midiData[1] & 0x7f;
+        int data2          = tomod.midiData[2] & 0x7f;
 
         if (channel == listenchannel || listenchannel == 0)
         { //only look at the selected channel

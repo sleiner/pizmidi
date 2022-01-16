@@ -16,18 +16,18 @@ MidiChsProcessor::MidiChsProcessor()
 {
     if (! loadDefaultFxb())
     {
-        lastUIWidth = 330;
+        lastUIWidth  = 330;
         lastUIHeight = 126;
 
-        fChannel1 = 1.0 * 0.0625;
-        fChannel2 = 2.0 * 0.0625;
-        fChannel3 = 3.0 * 0.0625;
-        fChannel4 = 4.0 * 0.0625;
-        fChannel5 = 5.0 * 0.0625;
-        fChannel6 = 6.0 * 0.0625;
-        fChannel7 = 7.0 * 0.0625;
-        fChannel8 = 8.0 * 0.0625;
-        fChannel9 = 9.0 * 0.0625;
+        fChannel1  = 1.0 * 0.0625;
+        fChannel2  = 2.0 * 0.0625;
+        fChannel3  = 3.0 * 0.0625;
+        fChannel4  = 4.0 * 0.0625;
+        fChannel5  = 5.0 * 0.0625;
+        fChannel6  = 6.0 * 0.0625;
+        fChannel7  = 7.0 * 0.0625;
+        fChannel8  = 8.0 * 0.0625;
+        fChannel9  = 9.0 * 0.0625;
         fChannel10 = 10.0 * 0.0625;
         fChannel11 = 11.0 * 0.0625;
         fChannel12 = 12.0 * 0.0625;
@@ -35,12 +35,12 @@ MidiChsProcessor::MidiChsProcessor()
         fChannel14 = 14.0 * 0.0625;
         fChannel15 = 15.0 * 0.0625;
         fChannel16 = 16.0 * 0.0625;
-        fReset = 0.0;
-        fClear = 0.0;
+        fReset     = 0.0;
+        fClear     = 0.0;
 
-        bghue = 0.0;
-        bgsat = 0.0;
-        bgbri = 0.0;
+        bghue    = 0.0;
+        bgsat    = 0.0;
+        bgbri    = 0.0;
         contrast = 1.0;
     }
 }
@@ -407,21 +407,21 @@ void MidiChsProcessor::processBlock (AudioSampleBuffer& buffer,
     bool discard = false;
     for (auto&& msgMetadata : midiMessages)
     {
-        auto midi_message = msgMetadata.getMessage();
+        auto midi_message  = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
         MidiMessage out_message = midi_message;
         short ch[16];
-        ch[0] = (short int) (fChannel1 * 16);
-        ch[1] = (short int) (fChannel2 * 16);
-        ch[2] = (short int) (fChannel3 * 16);
-        ch[3] = (short int) (fChannel4 * 16);
-        ch[4] = (short int) (fChannel5 * 16);
-        ch[5] = (short int) (fChannel6 * 16);
-        ch[6] = (short int) (fChannel7 * 16);
-        ch[7] = (short int) (fChannel8 * 16);
-        ch[8] = (short int) (fChannel9 * 16);
-        ch[9] = (short int) (fChannel10 * 16);
+        ch[0]  = (short int) (fChannel1 * 16);
+        ch[1]  = (short int) (fChannel2 * 16);
+        ch[2]  = (short int) (fChannel3 * 16);
+        ch[3]  = (short int) (fChannel4 * 16);
+        ch[4]  = (short int) (fChannel5 * 16);
+        ch[5]  = (short int) (fChannel6 * 16);
+        ch[6]  = (short int) (fChannel7 * 16);
+        ch[7]  = (short int) (fChannel8 * 16);
+        ch[8]  = (short int) (fChannel9 * 16);
+        ch[9]  = (short int) (fChannel10 * 16);
         ch[10] = (short int) (fChannel11 * 16);
         ch[11] = (short int) (fChannel12 * 16);
         ch[12] = (short int) (fChannel13 * 16);
@@ -508,15 +508,15 @@ void MidiChsProcessor::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            fChannel1 = (float) xmlState->getDoubleAttribute ("1", fChannel1);
-            fChannel2 = (float) xmlState->getDoubleAttribute ("2", fChannel2);
-            fChannel3 = (float) xmlState->getDoubleAttribute ("3", fChannel3);
-            fChannel4 = (float) xmlState->getDoubleAttribute ("4", fChannel4);
-            fChannel5 = (float) xmlState->getDoubleAttribute ("5", fChannel5);
-            fChannel6 = (float) xmlState->getDoubleAttribute ("6", fChannel6);
-            fChannel7 = (float) xmlState->getDoubleAttribute ("7", fChannel7);
-            fChannel8 = (float) xmlState->getDoubleAttribute ("8", fChannel8);
-            fChannel9 = (float) xmlState->getDoubleAttribute ("9", fChannel9);
+            fChannel1  = (float) xmlState->getDoubleAttribute ("1", fChannel1);
+            fChannel2  = (float) xmlState->getDoubleAttribute ("2", fChannel2);
+            fChannel3  = (float) xmlState->getDoubleAttribute ("3", fChannel3);
+            fChannel4  = (float) xmlState->getDoubleAttribute ("4", fChannel4);
+            fChannel5  = (float) xmlState->getDoubleAttribute ("5", fChannel5);
+            fChannel6  = (float) xmlState->getDoubleAttribute ("6", fChannel6);
+            fChannel7  = (float) xmlState->getDoubleAttribute ("7", fChannel7);
+            fChannel8  = (float) xmlState->getDoubleAttribute ("8", fChannel8);
+            fChannel9  = (float) xmlState->getDoubleAttribute ("9", fChannel9);
             fChannel10 = (float) xmlState->getDoubleAttribute ("10", fChannel10);
             fChannel11 = (float) xmlState->getDoubleAttribute ("11", fChannel11);
             fChannel12 = (float) xmlState->getDoubleAttribute ("12", fChannel12);
@@ -524,12 +524,12 @@ void MidiChsProcessor::setStateInformation (const void* data, int sizeInBytes)
             fChannel14 = (float) xmlState->getDoubleAttribute ("14", fChannel14);
             fChannel15 = (float) xmlState->getDoubleAttribute ("15", fChannel15);
             fChannel16 = (float) xmlState->getDoubleAttribute ("16", fChannel16);
-            bghue = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
-            contrast = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
+            bghue      = (float) xmlState->getDoubleAttribute ("Hue", bghue);
+            bgsat      = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
+            bgbri      = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
+            contrast   = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
 
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
 
             sendChangeMessage();

@@ -9,10 +9,10 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiBlackKeyFilterProgram::MidiBlackKeyFilterProgram()
 {
     // default program values
-    param[kInChannel] = CHANNEL_TO_FLOAT (ANY_CHANNEL);
-    param[kWhiteChannel] = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+    param[kInChannel]     = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+    param[kWhiteChannel]  = CHANNEL_TO_FLOAT (ANY_CHANNEL);
     param[kWhiteVelocity] = 0.5f;
-    param[kBlackChannel] = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+    param[kBlackChannel]  = CHANNEL_TO_FLOAT (ANY_CHANNEL);
     param[kBlackVelocity] = 0.5f;
 
     // default program name
@@ -180,8 +180,8 @@ void MidiBlackKeyFilter::getParameterDisplay (VstInt32 index, char* text)
 void MidiBlackKeyFilter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     const int listenchannel = FLOAT_TO_CHANNEL (param[kInChannel]);
-    int BlackChannel = FLOAT_TO_CHANNEL (param[kBlackChannel]);
-    int WhiteChannel = FLOAT_TO_CHANNEL (param[kWhiteChannel]);
+    int BlackChannel        = FLOAT_TO_CHANNEL (param[kBlackChannel]);
+    int WhiteChannel        = FLOAT_TO_CHANNEL (param[kWhiteChannel]);
 
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -190,9 +190,9 @@ void MidiBlackKeyFilter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEven
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        const int data1 = tomod.midiData[1] & 0x7f;
-        const int data2 = tomod.midiData[2] & 0x7f;
+        const int channel   = tomod.midiData[0] & 0x0f; // isolating channel
+        const int data1     = tomod.midiData[1] & 0x7f;
+        const int data2     = tomod.midiData[2] & 0x7f;
 
         // make zero-velocity noteons look like "real" noteoffs
         if (status == MIDI_NOTEON && data2 == 0)

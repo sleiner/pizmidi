@@ -30,7 +30,7 @@ MidiFingered::MidiFingered (audioMasterCallback audioMaster)
     }
 
     // default values
-    param[kPower] = 1.0f;
+    param[kPower]   = 1.0f;
     param[kChannel] = 0.0f;
 
     for (int ch = 0; ch < 16; ch++)
@@ -121,10 +121,10 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0; // scraping  channel
         short channel = tomod.midiData[0] & 0x0f; // isolating channel
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short data1   = tomod.midiData[1] & 0x7f;
+        short data2   = tomod.midiData[2] & 0x7f;
 
         //make 0-velocity notes look like "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
@@ -147,11 +147,11 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
             //}
             if (voices[channel] <= 0)
             {
-                voices[channel] = 0;
+                voices[channel]       = 0;
                 VstMidiEvent portaOff = inputs[0][i];
-                portaOff.midiData[0] = MIDI_CONTROLCHANGE | channel;
-                portaOff.midiData[1] = 65;
-                portaOff.midiData[2] = 0;
+                portaOff.midiData[0]  = MIDI_CONTROLCHANGE | channel;
+                portaOff.midiData[1]  = 65;
+                portaOff.midiData[2]  = 0;
                 if (on)
                     outputs[0].push_back (portaOff);
             }
@@ -163,9 +163,9 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
             if (voices[channel] == 1)
             {
                 VstMidiEvent portaOn = inputs[0][i];
-                portaOn.midiData[0] = MIDI_CONTROLCHANGE | channel;
-                portaOn.midiData[1] = 65;
-                portaOn.midiData[2] = 127;
+                portaOn.midiData[0]  = MIDI_CONTROLCHANGE | channel;
+                portaOn.midiData[1]  = 65;
+                portaOn.midiData[2]  = 127;
                 if (on)
                     outputs[0].push_back (portaOn);
             }
@@ -185,9 +185,9 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                 if (on)
                 {
                     VstMidiEvent portaOff = inputs[0][i];
-                    portaOff.midiData[0] = MIDI_CONTROLCHANGE | channel;
-                    portaOff.midiData[1] = 65;
-                    portaOff.midiData[2] = 0;
+                    portaOff.midiData[0]  = MIDI_CONTROLCHANGE | channel;
+                    portaOff.midiData[1]  = 65;
+                    portaOff.midiData[2]  = 0;
                     outputs[0].push_back (portaOff);
                 }
                 voices[channel] = 0;

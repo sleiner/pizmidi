@@ -8,7 +8,7 @@
 ControllerValue::ControllerValue (Controller* controller, Scene* scene)
 {
     // Bouml preserved body begin 00035A8D
-    this->scene = scene;
+    this->scene      = scene;
     this->controller = controller;
     // Bouml preserved body end 00035A8D
 }

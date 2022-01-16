@@ -35,8 +35,10 @@ class smpte
 public:
     smpte()
     {
-        hr = mn = sc = 0;
-        fr = 0.0;
+        hr   = 0;
+        mn   = 0;
+        sc   = 0;
+        fr   = 0.0;
         rate = 24.0;
     }
     smpte (int h, int m, int s, double f, double r = 24.0)
@@ -87,16 +89,16 @@ public:
     bool enabled;
     cue()
     {
-        time = 0.0;
-        text = String();
-        ppq = 0.0;
+        time    = 0.0;
+        text    = String();
+        ppq     = 0.0;
         enabled = true;
     }
     cue (double t, double p, String s, bool e = true)
     {
-        time = t;
-        text = s;
-        ppq = p;
+        time    = t;
+        text    = s;
+        ppq     = p;
         enabled = e;
     }
     ~cue(){};

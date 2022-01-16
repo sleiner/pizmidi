@@ -15,66 +15,66 @@ JuceProgram::JuceProgram()
         param[i] = 0;
 
     //set default values
-    param[kRecord] = 0.0f;
-    param[kPlay] = 0.0f;
-    param[kTranspose] = 0.5f; // 0
-    param[kOctave] = 0.5f; // 0
-    param[kVelocity] = 0.5f; // 100%
-    param[kLoopStart] = 0.5f; // 0
-    param[kLoopEnd] = 0.5f; // 0
-    param[kShift] = 0.5f; // 0
-    param[kStretch] = 0.49f; // x1.0
+    param[kRecord]    = 0.0f;
+    param[kPlay]      = 0.0f;
+    param[kTranspose] = 0.5f;  // 0
+    param[kOctave]    = 0.5f;  // 0
+    param[kVelocity]  = 0.5f;  // 100%
+    param[kLoopStart] = 0.5f;  // 0
+    param[kLoopEnd]   = 0.5f;  // 0
+    param[kShift]     = 0.5f;  // 0
+    param[kStretch]   = 0.49f; // x1.0
 
-    param[kTrigger] = 0.0f; //0.0 ==> loop after record
-    param[kNoteTrig] = 0.0f; //0.0 ==> off
-    param[kRoot] = midiToFloat (60); //middle C
-    param[kNLow] = midiToFloat (0); //    full
-    param[kNHigh] = midiToFloat (127); //  range
-    param[kChannel] = 0.0f; //0.0 ==> channel 1
+    param[kTrigger]  = 0.0f;              //0.0 ==> loop after record
+    param[kNoteTrig] = 0.0f;              //0.0 ==> off
+    param[kRoot]     = midiToFloat (60);  //middle C
+    param[kNLow]     = midiToFloat (0);   //    full
+    param[kNHigh]    = midiToFloat (127); //  range
+    param[kChannel]  = 0.0f;              //0.0 ==> channel 1
 
     param[kFullRelease] = 0.f;
-    param[kPlayGroup] = 0.f; //none
-    param[kMuteGroup] = 0.f; //none
-    param[kNote0] = 1.f; //C
-    param[kNote1] = 0.f; //C#
-    param[kNote2] = 1.f; //D
-    param[kNote3] = 0.f; //D#
-    param[kNote4] = 1.f; //E
-    param[kNote5] = 1.f; //F
-    param[kNote6] = 0.f; //F#
-    param[kNote7] = 1.f; //G
-    param[kNote8] = 0.f; //G#
-    param[kNote9] = 1.f; //A
-    param[kNote10] = 0.f; //A#
-    param[kNote11] = 1.f; //B
-    param[kReverse] = 0.f; //forward/reverse playback
-    param[kNoteToggle] = 0.f; //note triggers toggle or momentary
+    param[kPlayGroup]   = 0.f; //none
+    param[kMuteGroup]   = 0.f; //none
+    param[kNote0]       = 1.f; //C
+    param[kNote1]       = 0.f; //C#
+    param[kNote2]       = 1.f; //D
+    param[kNote3]       = 0.f; //D#
+    param[kNote4]       = 1.f; //E
+    param[kNote5]       = 1.f; //F
+    param[kNote6]       = 0.f; //F#
+    param[kNote7]       = 1.f; //G
+    param[kNote8]       = 0.f; //G#
+    param[kNote9]       = 1.f; //A
+    param[kNote10]      = 0.f; //A#
+    param[kNote11]      = 1.f; //B
+    param[kReverse]     = 0.f; //forward/reverse playback
+    param[kNoteToggle]  = 0.f; //note triggers toggle or momentary
     param[kTranspose10] = 0.f;
 
-    param[kMasterVelocity] = 0.5f; // 100%
+    param[kMasterVelocity]  = 0.5f; // 100%
     param[kMasterTranspose] = 0.5f; // 0
-    param[kPlayMain] = 0.f;
-    param[kRecordMain] = 0.f;
-    param[kSingleLoop] = 0.f;
-    param[kRecMode] = 0.0f; // replace
-    param[kRecStep] = 0.0f; // 1 bar
-    param[kQuantize] = 0.0f; // off
-    param[kSync] = 0.3f; //0.3 ==> ppq (zeropoint == recstart)
-    param[kThru] = 0.0f; //0.0 ==> off
-    param[kFile] = 0.5f;
-    param[kSave] = 0.0f;
-    param[kParamsToHost] = 0.25f;
-    param[kRecCC] = (-1 + 2) / 129.f;
-    param[kPlayCC] = (-1 + 2) / 129.f;
+    param[kPlayMain]        = 0.f;
+    param[kRecordMain]      = 0.f;
+    param[kSingleLoop]      = 0.f;
+    param[kRecMode]         = 0.0f; // replace
+    param[kRecStep]         = 0.0f; // 1 bar
+    param[kQuantize]        = 0.0f; // off
+    param[kSync]            = 0.3f; //0.3 ==> ppq (zeropoint == recstart)
+    param[kThru]            = 0.0f; //0.0 ==> off
+    param[kFile]            = 0.5f;
+    param[kSave]            = 0.0f;
+    param[kParamsToHost]    = 0.25f;
+    param[kRecCC]           = (-1 + 2) / 129.f;
+    param[kPlayCC]          = (-1 + 2) / 129.f;
 
     param[kMonitor] = 1.f;
 
-    looplength = 0;
-    loopstart = 0;
+    looplength      = 0;
+    loopstart       = 0;
     measureFromHere = 0;
 
     numerator = denominator = 4;
-    device = MidiDeviceInfo();
+    device                  = MidiDeviceInfo();
 
     //program name
     name = "Default";
@@ -88,11 +88,11 @@ JuceProgram::~JuceProgram()
 PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
 {
     DBG ("PizLooper()");
-    demo = ! readKeyFile();
-    init = true;
-    newLoop = false;
-    curProgram = 0;
-    currentLength = 0.0;
+    demo             = ! readKeyFile();
+    init             = true;
+    newLoop          = false;
+    curProgram       = 0;
+    currentLength    = 0.0;
     currentNumEvents = 0;
     keySelectorState.reset();
     memset (barTriggerSample, 0, sizeof (barTriggerSample));
@@ -101,18 +101,18 @@ PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
     for (int i = 0; i < numSlots; i++)
     {
         programs[i].PRSettings.set ("slot", i);
-        capturingScale[i] = 0;
-        capturingTranspose[i] = 0;
+        capturingScale[i]       = 0;
+        capturingTranspose[i]   = 0;
         lowestScaleInputNote[i] = 999;
     }
-    lastUIWidth = 800;
+    lastUIWidth  = 800;
     lastUIHeight = 487;
-    devices = MidiOutput::getAvailableDevices();
+    devices      = MidiOutput::getAvailableDevices();
     recCC = playCC = -1;
-    midiOutput = NULL;
-    info = new Info();
-    loopDir = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-              + File::getSeparatorString() + String ("midiloops");
+    midiOutput     = NULL;
+    info           = new Info();
+    loopDir        = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+            + File::getSeparatorString() + String ("midiloops");
 
     //look for a default bank
     if (! loadDefaultFxb())
@@ -126,8 +126,8 @@ PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
                 param[p] = programs[i].param[p];
             for (int p = 0; p < numParamsPerSlot; p++)
             {
-                int index = p + numGlobalParams;
-                int realindex = index + numParamsPerSlot * i;
+                int index        = p + numGlobalParams;
+                int realindex    = index + numParamsPerSlot * i;
                 param[realindex] = programs[i].param[index];
             }
             //readMidiFile(i,programs[i].name);
@@ -151,44 +151,44 @@ PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
             for (int n = 0; n < 128; n++)
                 recNoteOn[i][ch][n] = -1;
         }
-        loopPpq[i] = 0.f;
+        loopPpq[i]       = 0.f;
         recordAndPlay[i] = false;
-        tRules[i] = 0;
-        tRules[i] = new TransposeRules (this, i);
-        oldloop[i] = PizMidiMessageSequence();
-        temploop[i] = PizMidiMessageSequence();
+        tRules[i]        = 0;
+        tRules[i]        = new TransposeRules (this, i);
+        oldloop[i]       = PizMidiMessageSequence();
+        temploop[i]      = PizMidiMessageSequence();
         for (int p = 0; p < polyphony; p++)
         {
-            polytrigger[i][p] = -1;
+            polytrigger[i][p]         = -1;
             measurePlayFromHere[i][p] = 0;
             //			playstarted[i][p]=0;
             lastPlayedIndex[i][p] = -1;
-            lastLoopCount[i][p] = -1;
-            startLoopCount[i][p] = -1;
+            lastLoopCount[i][p]   = -1;
+            startLoopCount[i][p]  = -1;
         }
         programs[i].loop.setSemitones (roundToInt (getParameterForSlot (kTranspose, i) * 24.f) - 12);
         programs[i].loop.setOctaves (roundToInt (getParameterForSlot (kOctave, i) * 8.f) - 4);
-        currentPoly[i] = 0;
-        newlooplength[i] = 0;
-        lastrec[i] = programs[i].param[kRecord];
-        lastplay[i] = programs[i].param[kPlay];
-        lastchannel[i] = roundToInt (programs[i].param[kChannel] * 16.0f) - 1;
-        lastshift[i] = (double) roundToInt (programs[i].param[kShift] * 16.0f - 8.0f);
-        lastend[i] = (double) roundToInt (programs[i].param[kLoopEnd] * 16.0f - 8.0f);
-        laststart[i] = (double) roundToInt (programs[i].param[kLoopStart] * 16.0f - 8.0f);
-        laststretch[i] = 1.0;
-        recstart[i] = 0;
-        recstop[i] = 0;
-        oldlength[i] = getLoopLength (i);
+        currentPoly[i]        = 0;
+        newlooplength[i]      = 0;
+        lastrec[i]            = programs[i].param[kRecord];
+        lastplay[i]           = programs[i].param[kPlay];
+        lastchannel[i]        = roundToInt (programs[i].param[kChannel] * 16.0f) - 1;
+        lastshift[i]          = (double) roundToInt (programs[i].param[kShift] * 16.0f - 8.0f);
+        lastend[i]            = (double) roundToInt (programs[i].param[kLoopEnd] * 16.0f - 8.0f);
+        laststart[i]          = (double) roundToInt (programs[i].param[kLoopStart] * 16.0f - 8.0f);
+        laststretch[i]        = 1.0;
+        recstart[i]           = 0;
+        recstop[i]            = 0;
+        oldlength[i]          = getLoopLength (i);
         measureDubFromHere[i] = 0;
-        kill_all_notes[i] = false;
+        kill_all_notes[i]     = false;
     }
 
     //keySelectorState.addListener(this);
-    samples = 0;
+    samples             = 0;
     samplesInLastBuffer = 0;
-    FilenameIndex = 0;
-    info->s = "Stopped";
+    FilenameIndex       = 0;
+    info->s             = "Stopped";
 }
 
 PizLooper::~PizLooper()
@@ -263,8 +263,8 @@ void PizLooper::setParameter (int index, float newValue)
         if (param[index] != newValue)
         {
             JuceProgram* ap = &programs[curProgram];
-            int p = index;
-            int slot = curProgram;
+            int p           = index;
+            int slot        = curProgram;
             if (index < numGlobalParams)
             {
                 //global parameters
@@ -279,7 +279,7 @@ void PizLooper::setParameter (int index, float newValue)
                         setLoopLength (curProgram, 0);
                         setLoopStart (curProgram, 0);
                         programs[curProgram].measureFromHere = 0;
-                        param[kFile] = 0.5f;
+                        param[kFile]                         = 0.5f;
                         this->getCallbackLock().exit();
                         newLoop = true;
                         updateLoopInfo();
@@ -291,7 +291,7 @@ void PizLooper::setParameter (int index, float newValue)
                         ap->loop.clear();
                         this->getCallbackLock().exit();
                         readMidiFile (curProgram, getProgramName (curProgram));
-                        param[kFile] = 0.5f;
+                        param[kFile]                         = 0.5f;
                         programs[curProgram].measureFromHere = 0;
                     }
                 }
@@ -341,8 +341,8 @@ void PizLooper::setParameter (int index, float newValue)
             else
             {
                 slot = getParameterName (index).getTrailingIntValue() - 1;
-                p = index - slot * numParamsPerSlot;
-                ap = &programs[slot];
+                p    = index - slot * numParamsPerSlot;
+                ap   = &programs[slot];
                 switch (p)
                 {
                     case kPlay:
@@ -431,8 +431,8 @@ void PizLooper::setActiveSlot (int slot)
             if (isAnySlotPlaying)
                 playSlot (slot);
         }
-        curProgram = slot;
-        currentLength = programs[slot].looplength;
+        curProgram       = slot;
+        currentLength    = programs[slot].looplength;
         currentNumEvents = programs[slot].loop.getNumEvents();
         keySelectorState.reset();
         for (int i = 0; i < 12; i++)
@@ -466,7 +466,7 @@ void PizLooper::setActiveDevice (MidiDeviceInfo device)
     }
     else
     {
-        device.name = "--";
+        device.name       = "--";
         device.identifier = "";
     }
     getCallbackLock().exit();
@@ -978,7 +978,7 @@ void PizLooper::resetCurrentProgram (int index)
 
         //then set the new program
         JuceProgram* ap = &programs[index];
-        curProgram = index;
+        curProgram      = index;
 
         setActiveDevice (ap->device);
         for (int i = 0; i < numGlobalParams + numParamsPerSlot; i++)
@@ -995,11 +995,11 @@ void PizLooper::resetCurrentProgram (int index)
             if (getParameterForSlot (kNote0 + i, curProgram) >= 0.5f)
                 keySelectorState.noteOn (1, i, 1.f);
         playCC = roundToInt (param[kPlayCC] * 129.f) - 2;
-        recCC = roundToInt (param[kRecCC] * 129.f) - 2;
+        recCC  = roundToInt (param[kRecCC] * 129.f) - 2;
         ap->loop.setSemitones (roundToInt (ap->param[kTranspose] * 24.f) - 12);
         ap->loop.setOctaves (roundToInt (ap->param[kOctave] * 8.f) - 4);
         kbstate.reset();
-        currentLength = ap->looplength;
+        currentLength    = ap->looplength;
         currentNumEvents = ap->loop.getNumEvents();
         killNotes (curProgram);
 
@@ -1135,9 +1135,9 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
     auto xmlState = getXmlFromBinary (data, sizeInBytes);
     if (xmlState == 0)
     {
-        uint8* datab = (uint8*) data;
+        uint8* datab      = (uint8*) data;
         int totalMidiSize = 0;
-        bool oldBank = false;
+        bool oldBank      = false;
         for (int i = 0; i < numPrograms; i++)
         {
             programs[i].loop.clear();
@@ -1161,7 +1161,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                         programs[i].loop.addSequence (*midifile.getTrack (midifile.getNumTracks() - 1), 0, 0, midifile.getLastTimestamp() + 1);
                         programs[i].loop.updateMatchedPairs();
                         uint8 bogus[3] = { 0xff, 0x2f, 0x00 };
-                        int lastIndex = programs[i].loop.getNumEvents() - 1;
+                        int lastIndex  = programs[i].loop.getNumEvents() - 1;
                         const uint8* lastmsg; /* = programs[i].loop.getEventPointer(lastIndex)->message.getRawData();*/
                         bool done = false;
                         while (lastIndex >= 0 && ! done)
@@ -1194,7 +1194,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 {
                     param[i] = programs[p].param[i] = (float) xmlState->getDoubleAttribute (getParameterName (i), param[i]);
                 }
-                lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+                lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
                 lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
                 XmlElement* xmlProgram (xmlState->getChildByName ("Slot" + String (p)));
                 if (xmlProgram)
@@ -1211,9 +1211,9 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                     setLoopLength (p, xmlProgram->getDoubleAttribute (String ("looplength"), getLoopLength (p)));
                     setLoopStart (p, xmlProgram->getDoubleAttribute (String ("loopstart1"), getLoopStart (p)));
                     programs[p].measureFromHere = xmlProgram->getDoubleAttribute (String ("measureFromHere"), programs[p].measureFromHere);
-                    programs[p].denominator = xmlProgram->getIntAttribute ("denominator", programs[p].denominator);
-                    programs[p].numerator = xmlProgram->getIntAttribute ("numerator", programs[p].numerator);
-                    programs[p].name = xmlProgram->getStringAttribute (String ("name"), programs[p].name);
+                    programs[p].denominator     = xmlProgram->getIntAttribute ("denominator", programs[p].denominator);
+                    programs[p].numerator       = xmlProgram->getIntAttribute ("numerator", programs[p].numerator);
+                    programs[p].name            = xmlProgram->getStringAttribute (String ("name"), programs[p].name);
                     programs[p].loop.setSemitones (roundToInt (param[kTranspose + numParamsPerSlot * p] * 24.f) - 12);
                     programs[p].loop.setOctaves (roundToInt (param[kOctave + numParamsPerSlot * p] * 8.f) - 4);
                     programs[p].device = getDeviceByName (xmlProgram->getStringAttribute ("device", programs[p].device.name));
@@ -1245,11 +1245,11 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 setLoopLength (p, xmlState->getDoubleAttribute (String ("looplength"), getLoopLength (p)));
                 setLoopStart (p, xmlState->getDoubleAttribute (String ("loopstart1"), getLoopStart (p)));
                 programs[p].measureFromHere = xmlState->getDoubleAttribute (prefix + String ("measureFromHere"), programs[p].measureFromHere);
-                lastUIWidth = xmlState->getIntAttribute (prefix + "uiWidth", lastUIWidth);
-                lastUIHeight = xmlState->getIntAttribute (prefix + "uiHeight", lastUIHeight);
-                programs[p].denominator = xmlState->getIntAttribute (prefix + "denominator", programs[p].denominator);
-                programs[p].numerator = xmlState->getIntAttribute (prefix + "numerator", programs[p].numerator);
-                programs[p].name = xmlState->getStringAttribute (prefix + String ("progname"), programs[p].name);
+                lastUIWidth                 = xmlState->getIntAttribute (prefix + "uiWidth", lastUIWidth);
+                lastUIHeight                = xmlState->getIntAttribute (prefix + "uiHeight", lastUIHeight);
+                programs[p].denominator     = xmlState->getIntAttribute (prefix + "denominator", programs[p].denominator);
+                programs[p].numerator       = xmlState->getIntAttribute (prefix + "numerator", programs[p].numerator);
+                programs[p].name            = xmlState->getStringAttribute (prefix + String ("progname"), programs[p].name);
                 programs[p].loop.setSemitones (roundToInt (param[kTranspose + numParamsPerSlot * p] * 24.f) - 12);
                 programs[p].loop.setOctaves (roundToInt (param[kOctave + numParamsPerSlot * p] * 8.f) - 4);
                 programs[p].device = getDeviceByName (xmlState->getStringAttribute (prefix + "device", programs[p].device.name));
@@ -1272,7 +1272,7 @@ bool PizLooper::writeMidiFile (int index, File file, bool IncrementFilename)
     midifile.setTicksPerQuarterNote (960);
 
     uint8 dd = 0;
-    int d = getDenominator (index);
+    int d    = getDenominator (index);
     while (d > 1)
     {
         d = d >> 1;
@@ -1332,18 +1332,18 @@ void PizLooper::loadMidiFile (File file)
 bool PizLooper::readMidiFile (int index, String progname, File mid)
 {
     double ppqPerBar = 4.0;
-    double l = ppqPerBar * (double) getPRSetting ("bars");
+    double l         = ppqPerBar * (double) getPRSetting ("bars");
     if (! mid.exists())
     {
         String path = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                      + File::getSeparatorString() + String ("midiloops");
+                    + File::getSeparatorString() + String ("midiloops");
         mid = File (path + File::getSeparatorString() + getProgramName (index) + String (".mid"));
     }
     if (mid.exists())
     {
         programs[index].loop.clear();
         programs[index].looplength = 0;
-        programs[index].loopstart = 0;
+        programs[index].loopstart  = 0;
         MidiFile midifile;
         {
             FileInputStream f (mid);
@@ -1370,7 +1370,7 @@ bool PizLooper::readMidiFile (int index, String progname, File mid)
         {
             for (int t = 0; t < midifile.getNumTracks(); t++)
             {
-                bool loopAreaTrack = false;
+                bool loopAreaTrack               = false;
                 const MidiMessageSequence* track = midifile.getTrack (t);
                 for (int i = 0; i < track->getNumEvents(); i++)
                 {
@@ -1396,7 +1396,7 @@ bool PizLooper::readMidiFile (int index, String progname, File mid)
                                     //round length to two decimal places
                                     setLoopLength (index, (double) (roundToInt ((t2 - t1) / 9.6)) * 0.01);
                                     programs[index].measureFromHere = 0;
-                                    loopAreaTrack = true;
+                                    loopAreaTrack                   = true;
                                     break;
                                 }
                             }
@@ -1429,7 +1429,7 @@ Loop* PizLooper::getActiveLoop() { return &(programs[curProgram].loop); }
 void PizLooper::updateLoopInfo()
 {
     currentNumEvents = programs[curProgram].loop.getNumEvents();
-    currentLength = programs[curProgram].looplength;
+    currentLength    = programs[curProgram].looplength;
     //killNotes(curProgram);
 }
 

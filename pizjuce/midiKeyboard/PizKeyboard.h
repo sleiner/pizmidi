@@ -22,7 +22,7 @@ enum parameters
 };
 
 static const char* const keymap = "zsxdcvgbhnjmq2w3er5t6y7ui9o0p[+]";
-static const int keymapLength = String (keymap).length();
+static const int keymapLength   = String (keymap).length();
 
 //==============================================================================
 class PizKeyboard : public PizAudioProcessor,
@@ -70,7 +70,7 @@ public:
     void setCurrentProgram (int index) override
     {
         lastProgram = curProgram;
-        curProgram = index;
+        curProgram  = index;
     }
     const String getProgramName (int index) override { return "State " + String (index + 1); }
     void changeProgramName (int index, const String& newName) override {}

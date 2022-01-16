@@ -251,14 +251,14 @@ void MidiKeySplit4::getParameterDisplay (VstInt32 index, char* text)
 
 void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const char ch = FLOAT_TO_CHANNEL015 (param[kInChannel]);
-    signed char ch1 = FLOAT_TO_CHANNEL (param[kOutChannel1]);
-    signed char ch2 = FLOAT_TO_CHANNEL (param[kOutChannel2]);
-    signed char ch3 = FLOAT_TO_CHANNEL (param[kOutChannel3]);
-    signed char ch4 = FLOAT_TO_CHANNEL (param[kOutChannel4]);
-    const char split1 = FLOAT_TO_MIDI_X (param[kSplit1]);
-    const char split2 = FLOAT_TO_MIDI_X (param[kSplit2]);
-    const char split3 = FLOAT_TO_MIDI_X (param[kSplit3]);
+    const char ch      = FLOAT_TO_CHANNEL015 (param[kInChannel]);
+    signed char ch1    = FLOAT_TO_CHANNEL (param[kOutChannel1]);
+    signed char ch2    = FLOAT_TO_CHANNEL (param[kOutChannel2]);
+    signed char ch3    = FLOAT_TO_CHANNEL (param[kOutChannel3]);
+    signed char ch4    = FLOAT_TO_CHANNEL (param[kOutChannel4]);
+    const char split1  = FLOAT_TO_MIDI_X (param[kSplit1]);
+    const char split2  = FLOAT_TO_MIDI_X (param[kSplit2]);
+    const char split3  = FLOAT_TO_MIDI_X (param[kSplit3]);
     const char transp1 = roundToInt (96.f * param[kTransp1]) - 48;
     const char transp2 = roundToInt (96.f * param[kTransp2]) - 48;
     const char transp3 = roundToInt (96.f * param[kTransp3]) - 48;
@@ -270,10 +270,10 @@ void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int data1   = tomod.midiData[1] & 0x7f;
+        int data2   = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;

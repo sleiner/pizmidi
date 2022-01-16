@@ -53,7 +53,7 @@ MidiCurvePrograms::MidiCurvePrograms()
 MidiCurve::MidiCurve()
 {
     // create built-in programs
-    programs = new MidiCurvePrograms;
+    programs           = new MidiCurvePrograms;
     String defaultBank = String();
     loadDefaultFxb();
 
@@ -195,7 +195,7 @@ void MidiCurve::setCurrentProgram (int index)
 
     if (curProgram != index)
     {
-        lastMsg.lastCCIn = -1;
+        lastMsg.lastCCIn  = -1;
         lastMsg.lastCCOut = -1;
     }
     //then set the new program
@@ -206,7 +206,7 @@ void MidiCurve::setCurrentProgram (int index)
     {
         param[i] = programs->get (index, getParameterName (i));
     }
-    lastUIWidth = programs->get (index, "lastUIWidth");
+    lastUIWidth  = programs->get (index, "lastUIWidth");
     lastUIHeight = programs->get (index, "lastUIHeight");
 
     updatePath();
@@ -274,7 +274,7 @@ float MidiCurve::findValue (float input)
 double MidiCurve::linearInterpolate (double x, double y1, double y2, double x1, double x2)
 {
     double slope = (y2 - y1) / (x2 - x1);
-    double y0 = y1 - slope * x1;
+    double y0    = y1 - slope * x1;
     return slope * x + y0;
 }
 
@@ -289,7 +289,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     MidiBuffer output;
     for (auto&& msgMetadata : midiMessages)
     {
-        auto midi_message = msgMetadata.getMessage();
+        auto midi_message  = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
         if (midi_message.isProgramChange())
@@ -302,12 +302,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kCC] >= 0.5f && midi_message.getControllerNumber() == roundToInt (param[kCCNumber] * 127.f))
                 {
-                    int v = midi_message.getControllerValue();
+                    int v             = midi_message.getControllerValue();
                     const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn = v;
-                    v = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCIn  = v;
+                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
                     lastMsg.lastCCOut = v;
-                    MidiMessage cc = MidiMessage (data[0], data[1], v);
+                    MidiMessage cc    = MidiMessage (data[0], data[1], v);
                     output.addEvent (cc, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -318,12 +318,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kVelocity] >= 0.5f)
                 {
-                    int v = midi_message.getVelocity();
+                    int v             = midi_message.getVelocity();
                     const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn = v;
-                    v = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCIn  = v;
+                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
                     lastMsg.lastCCOut = v;
-                    MidiMessage cc = MidiMessage (data[0], data[1], v);
+                    MidiMessage cc    = MidiMessage (data[0], data[1], v);
                     output.addEvent (cc, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -334,12 +334,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kChannelPressure] >= 0.5f)
                 {
-                    int v = midi_message.getChannelPressureValue();
+                    int v             = midi_message.getChannelPressureValue();
                     const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn = v;
-                    v = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCIn  = v;
+                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
                     lastMsg.lastCCOut = v;
-                    MidiMessage out = MidiMessage (data[0], v);
+                    MidiMessage out   = MidiMessage (data[0], v);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -350,12 +350,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kAftertouch] >= 0.5f)
                 {
-                    int v = midi_message.getAfterTouchValue();
+                    int v             = midi_message.getAfterTouchValue();
                     const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn = v;
-                    v = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCIn  = v;
+                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
                     lastMsg.lastCCOut = v;
-                    MidiMessage out = MidiMessage (data[0], data[1], v);
+                    MidiMessage out   = MidiMessage (data[0], data[1], v);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -366,12 +366,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kPitchBend] >= 0.5f)
                 {
-                    int v = midi_message.getPitchWheelValue();
+                    int v             = midi_message.getPitchWheelValue();
                     const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn = (v & 0x3f80) >> 7;
-                    v = findPBValue (v);
+                    lastMsg.lastCCIn  = (v & 0x3f80) >> 7;
+                    v                 = findPBValue (v);
                     lastMsg.lastCCOut = (v & 0x3f80) >> 7;
-                    MidiMessage out = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
+                    MidiMessage out   = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -476,13 +476,14 @@ void MidiCurve::resetPoints (bool copyToProgram)
 {
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
-        param[i * 2] = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler;
-        param[i * 2 + 1] = param[i * 2];
+        param[i * 2]       = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler;
+        param[i * 2 + 1]   = param[i * 2];
         param[kActive + i] = 0.f;
     }
-    param[kActive] = 1.f;
-    param[kActive + 1] = 1.f;
-    param[2] = param[3] = 64.f * fmidiScaler;
+    param[kActive]                           = 1.f;
+    param[kActive + 1]                       = 1.f;
+    param[2]                                 = 64.f * fmidiScaler;
+    param[3]                                 = 64.f * fmidiScaler;
     param[kActive + MAX_ENVELOPE_POINTS - 1] = 1.f;
 
     if (copyToProgram)
@@ -551,7 +552,7 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
             {
                 param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
             }
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
 
             copySettingsToProgram (curProgram);

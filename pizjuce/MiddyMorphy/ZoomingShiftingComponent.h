@@ -9,7 +9,7 @@ using namespace juce;
 
 namespace juce
 {
-    class XmlElement;
+class XmlElement;
 }
 class ZoomableShiftableComponent;
 

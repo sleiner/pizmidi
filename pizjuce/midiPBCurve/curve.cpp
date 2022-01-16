@@ -20,22 +20,22 @@ JuceProgram::JuceProgram()
     //default values
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
-        param[i * 2] = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * (float) midiScaler;
-        param[i * 2 + 1] = param[i * 2];
+        param[i * 2]       = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * (float) midiScaler;
+        param[i * 2 + 1]   = param[i * 2];
         param[kActive + i] = 0.f;
     }
-    param[kActive] = 1.f;
+    param[kActive]     = 1.f;
     param[kActive + 1] = 1.f;
-    param[2] = param[3] = 0.5f;
+    param[2] = param[3]                      = 0.5f;
     param[kActive + MAX_ENVELOPE_POINTS - 1] = 1.f;
 
-    param[kChannel] = 0.0f;
+    param[kChannel]   = 0.0f;
     param[kPitchBend] = 1.f;
-    param[kPBRange] = 0.5f;
-    param[kPBRange2] = 0.f;
+    param[kPBRange]   = 0.5f;
+    param[kPBRange2]  = 0.f;
 
     //default GUI size
-    lastUIWidth = 600;
+    lastUIWidth  = 600;
     lastUIHeight = 400;
 }
 
@@ -52,7 +52,7 @@ MidiCurve::MidiCurve()
         }
     }
     //start up with the first program
-    init = true;
+    init      = true;
     lastCCOut = lastCCIn = -1;
     setCurrentProgram (0);
 }
@@ -144,18 +144,18 @@ void MidiCurve::setCurrentProgram (int index)
     if (! init)
     {
         programs[curProgram].lastUIHeight = lastUIHeight;
-        programs[curProgram].lastUIWidth = lastUIWidth;
+        programs[curProgram].lastUIWidth  = lastUIWidth;
     }
     init = false;
 
     //then set the new program
     JuceProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram      = index;
     for (int i = 0; i < getNumParameters(); i++)
     {
         param[i] = ap->param[i];
     }
-    lastUIWidth = ap->lastUIWidth;
+    lastUIWidth  = ap->lastUIWidth;
     lastUIHeight = ap->lastUIHeight;
 
     updatePath();
@@ -223,7 +223,7 @@ float MidiCurve::findValue (float input)
 double MidiCurve::linearInterpolate (double x, double y1, double y2, double x1, double x2)
 {
     double slope = (y2 - y1) / (x2 - x1);
-    double y0 = y1 - slope * x1;
+    double y0    = y1 - slope * x1;
     return slope * x + y0;
 }
 
@@ -238,7 +238,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
     MidiBuffer output;
     for (auto&& msgMetadata : midiMessages)
     {
-        auto midi_message = msgMetadata.getMessage();
+        auto midi_message  = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
         if (midi_message.isForChannel (channel) || channel == 0)
@@ -247,12 +247,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kPitchBend] >= 0.5f)
                 {
-                    int v = midi_message.getPitchWheelValue();
+                    int v             = midi_message.getPitchWheelValue();
                     const uint8* data = midi_message.getRawData();
-                    lastCCIn = v;
-                    v = roundToInt (16383.f * findValue (v * (float) 0.00006103888));
-                    lastCCOut = v;
-                    MidiMessage out = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
+                    lastCCIn          = v;
+                    v                 = roundToInt (16383.f * findValue (v * (float) 0.00006103888));
+                    lastCCOut         = v;
+                    MidiMessage out   = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
                     output.addEvent (out, sample_number);
                     sendChangeMessage();
                 }
@@ -343,13 +343,13 @@ void MidiCurve::resetPoints()
 {
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
-        param[i * 2] = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * (float) midiScaler;
-        param[i * 2 + 1] = param[i * 2];
+        param[i * 2]       = (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * (float) midiScaler;
+        param[i * 2 + 1]   = param[i * 2];
         param[kActive + i] = 0.f;
     }
-    param[kActive] = 1.f;
+    param[kActive]     = 1.f;
     param[kActive + 1] = 1.f;
-    param[2] = param[3] = 8192.f * (float) 0.00006103888;
+    param[2] = param[3]                      = 8192.f * (float) 0.00006103888;
     param[kActive + MAX_ENVELOPE_POINTS - 1] = 1.f;
     updatePath();
     sendChangeMessage();
@@ -380,7 +380,7 @@ void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
-    programs[curProgram].lastUIWidth = lastUIWidth;
+    programs[curProgram].lastUIWidth  = lastUIWidth;
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
     // XML is a much cleaner way of doing it - here's an example of how to store your
@@ -410,7 +410,7 @@ void MidiCurve::getStateInformation (MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
-    programs[curProgram].lastUIWidth = lastUIWidth;
+    programs[curProgram].lastUIWidth  = lastUIWidth;
 
     XmlElement xmlState ("MYPLUGINSETTINGS");
     xmlState.setAttribute ("pluginVersion", 1);
@@ -445,7 +445,7 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
             {
                 param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
             }
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
 
             sendChangeMessage();
@@ -468,9 +468,9 @@ void MidiCurve::setStateInformation (const void* data, int sizeInBytes)
                 {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
                 }
-                programs[p].lastUIWidth = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
+                programs[p].lastUIWidth  = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
                 programs[p].lastUIHeight = xmlState->getIntAttribute (prefix + "uiHeight", programs[p].lastUIHeight);
-                programs[p].name = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
+                programs[p].name         = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
             }
             init = true;
             setCurrentProgram (xmlState->getIntAttribute ("program", 0));

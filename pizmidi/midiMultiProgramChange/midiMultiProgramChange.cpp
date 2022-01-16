@@ -20,7 +20,7 @@ MidiProgramChangeProgram::MidiProgramChangeProgram()
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
         param[i] = 0.f;
-    param[kThru] = 1.f;
+    param[kThru]    = 1.f;
     param[kTrigger] = 0.4f;
     // default program name
     strcpy (name, "Default");
@@ -67,9 +67,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
     for (int i = 0; i < kNumParams; i++)
         automated[i] = false;
 
-    wait = false;
-    delaytime = (int) (sampleRate * 0.002f);
-    counter = 0;
+    wait         = false;
+    delaytime    = (int) (sampleRate * 0.002f);
+    counter      = 0;
     triggerdelta = 0;
 
     if (programs)
@@ -89,13 +89,13 @@ MidiProgramChange::~MidiProgramChange()
 void MidiProgramChange::setProgram (VstInt32 prog)
 {
     MidiProgramChangeProgram* ap = &programs[prog];
-    curProgram = prog;
-    settingProgram = true;
+    curProgram                   = prog;
+    settingProgram               = true;
     for (int i = 0; i < kNumParams; i++)
     {
         setParameterAutomated (i, ap->param[i]);
     }
-    trigger = true;
+    trigger        = true;
     settingProgram = false;
 }
 
@@ -139,7 +139,7 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
     }
     if (index == kThru)
     {
-        thru = value >= 0.5f;
+        thru         = value >= 0.5f;
         param[index] = value;
         for (int i = 0; i < kNumPrograms; i++)
             programs[i].param[index] = value;
@@ -166,8 +166,8 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
     else if (index >= kProgram && index < kProgram + 16)
     {
         program[index - kProgram] = FLOAT_TO_MIDI2 (value);
-        trigger = true;
-        trig[index - kProgram] = true;
+        trigger                   = true;
+        trig[index - kProgram]    = true;
         param[index] = ap->param[index] = value;
     }
 }
@@ -248,8 +248,8 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-        char channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        char data1 = tomod.midiData[1] & 0x7f;
+        char channel         = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        char data1           = tomod.midiData[1] & 0x7f;
         //char data2	    = tomod.midiData[2] & 0x7f;
 
         bool discard = ! thru;

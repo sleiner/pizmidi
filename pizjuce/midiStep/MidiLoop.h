@@ -69,9 +69,9 @@ public:
     void startRecording()
     {
         clear();
-        recTime = 0;
+        recTime      = 0;
         currentIndex = 0;
-        isRecording = true;
+        isRecording  = true;
     }
 
     bool findNextNote()
@@ -122,7 +122,7 @@ public:
 
     void sendCurrentNoteToBuffer (MidiBuffer& buffer, int sample_number, int velocity)
     {
-        MidiMessage m = this->getEventPointer (currentIndex)->message;
+        MidiMessage m                                      = this->getEventPointer (currentIndex)->message;
         playingNote[m.getNoteNumber()][m.getChannel() - 1] = jlimit (0, 127, m.getNoteNumber() + transpose);
         m.setNoteNumber (jlimit (0, 127, m.getNoteNumber() + transpose));
         m.setVelocity ((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
@@ -219,7 +219,7 @@ public:
                                     8, 10, 80 (SMPTE bit resolution), or 100. For millisecond
                                     timing, setSmpteTimeFormat (25, 40)
 			*/
-            int framesPerSecond = -(timeBase / 0x100);
+            int framesPerSecond    = -(timeBase / 0x100);
             int subframeResolution = (timeBase & 0x00ff);
         }
     }

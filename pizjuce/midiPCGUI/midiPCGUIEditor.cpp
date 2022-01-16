@@ -699,29 +699,29 @@ midiPCGUIEditor::~midiPCGUIEditor()
     //[/Destructor_pre]
 
     groupComponent2 = nullptr;
-    groupComponent = nullptr;
-    s_Program = nullptr;
-    s_BankMSB = nullptr;
-    s_BankLSB = nullptr;
-    b_BankTrig = nullptr;
-    b_PCTrig = nullptr;
-    b_Inc = nullptr;
-    b_Dec = nullptr;
-    b_PCListen = nullptr;
-    s_Channel = nullptr;
-    b_Mode = nullptr;
-    PCDisplay = nullptr;
-    label = nullptr;
-    label2 = nullptr;
-    label3 = nullptr;
-    label4 = nullptr;
-    label5 = nullptr;
-    b_Thru = nullptr;
-    PCDisplay2 = nullptr;
-    PCDisplay3 = nullptr;
-    label6 = nullptr;
-    ProgramName = nullptr;
-    minimize = nullptr;
+    groupComponent  = nullptr;
+    s_Program       = nullptr;
+    s_BankMSB       = nullptr;
+    s_BankLSB       = nullptr;
+    b_BankTrig      = nullptr;
+    b_PCTrig        = nullptr;
+    b_Inc           = nullptr;
+    b_Dec           = nullptr;
+    b_PCListen      = nullptr;
+    s_Channel       = nullptr;
+    b_Mode          = nullptr;
+    PCDisplay       = nullptr;
+    label           = nullptr;
+    label2          = nullptr;
+    label3          = nullptr;
+    label4          = nullptr;
+    label5          = nullptr;
+    b_Thru          = nullptr;
+    PCDisplay2      = nullptr;
+    PCDisplay3      = nullptr;
+    label6          = nullptr;
+    ProgramName     = nullptr;
+    minimize        = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -1045,9 +1045,9 @@ void midiPCGUIEditor::updateParametersFromFilter()
     for (int i = 0; i < numParams; i++)
         param[i] = filter->getParameter (i);
     const int channel = roundToInt (param[kChannel] * 15.0f);
-    const int p = filter->actualProgram[channel];
-    const int msb = filter->actualBankMSB[channel];
-    const int lsb = filter->actualBankLSB[channel];
+    const int p       = filter->actualProgram[channel];
+    const int msb     = filter->actualBankMSB[channel];
+    const int lsb     = filter->actualBankLSB[channel];
     const String name = filter->getMidiProgName (channel, combineBytes (lsb - 1, msb - 1), p - 1);
 
     // ..release the lock ASAP

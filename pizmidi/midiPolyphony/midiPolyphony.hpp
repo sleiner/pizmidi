@@ -20,8 +20,8 @@ enum
     kMode,
     kNumParams,
     kNumPrograms = 16,
-    maxPoly = 64,
-    queueSize = 256
+    maxPoly      = 64,
+    queueSize    = 256
 };
 
 struct v
@@ -35,12 +35,12 @@ struct v
     bool sustained;
     void reset()
     {
-        oldness = 0;
-        inch = 0;
-        chan = 0;
-        note = 0;
-        vel = 0;
-        on = false;
+        oldness   = 0;
+        inch      = 0;
+        chan      = 0;
+        note      = 0;
+        vel       = 0;
+        on        = false;
         sustained = false;
     }
     v() { this->reset(); }
@@ -85,7 +85,7 @@ protected:
 
     virtual void preProcess (void);
 
-    int voices[MIDI_MAX_CHANNELS]; //voices per channel
+    int voices[MIDI_MAX_CHANNELS];       //voices per channel
     v Voice[MIDI_MAX_CHANNELS][maxPoly]; //
     v Queue[queueSize];
     //unsigned char queued;
@@ -121,8 +121,8 @@ protected:
         midiSort()
         {
             memset (onvelocity, 0, sizeof (onvelocity));
-            centerNote = 60;
-            mode = 0;
+            centerNote   = 60;
+            mode         = 0;
             priorityNote = -1;
         }
     };

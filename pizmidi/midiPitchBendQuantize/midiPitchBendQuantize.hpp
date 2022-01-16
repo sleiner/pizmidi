@@ -13,8 +13,8 @@ enum
 {
     //parameters appear in this order
     kNumSteps = 25,
-    kStep = 0,
-    kChannel = kNumSteps,
+    kStep     = 0,
+    kChannel  = kNumSteps,
     kNumParams, //counts the parameters
     kNumPrograms = 128
 };

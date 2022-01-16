@@ -40,24 +40,24 @@ typedef double ReaSample;
 #include <windows.h>
 
 #define REAPER_PLUGIN_DLL_EXPORT __declspec(dllexport)
-#define REAPER_PLUGIN_HINSTANCE HINSTANCE
+#define REAPER_PLUGIN_HINSTANCE  HINSTANCE
 
 #else
 #include "../WDL/swell/swell.h"
 #include <pthread.h>
 
 #define REAPER_PLUGIN_DLL_EXPORT __attribute__ ((visibility ("default")))
-#define REAPER_PLUGIN_HINSTANCE void*
+#define REAPER_PLUGIN_HINSTANCE  void*
 #endif
 
-#define REAPER_PLUGIN_ENTRYPOINT ReaperPluginEntry
+#define REAPER_PLUGIN_ENTRYPOINT      ReaperPluginEntry
 #define REAPER_PLUGIN_ENTRYPOINT_NAME "ReaperPluginEntry"
 
 #ifdef _MSC_VER
-#define INT64 __int64
+#define INT64             __int64
 #define INT64_CONSTANT(x) (x##i64)
 #else
-#define INT64 long long
+#define INT64             long long
 #define INT64_CONSTANT(x) (x##LL)
 #endif
 
@@ -74,29 +74,29 @@ static int REAPER_MAKELEINT (int x)
 }
 static void REAPER_MAKELEINTMEM (void* buf)
 {
-    char* p = (char*) buf;
+    char* p  = (char*) buf;
     char tmp = p[0];
-    p[0] = p[3];
-    p[3] = tmp;
-    tmp = p[1];
-    p[1] = p[2];
-    p[2] = tmp;
+    p[0]     = p[3];
+    p[3]     = tmp;
+    tmp      = p[1];
+    p[1]     = p[2];
+    p[2]     = tmp;
 }
 static void REAPER_MAKELEINTMEM8 (void* buf)
 {
-    char* p = (char*) buf;
+    char* p  = (char*) buf;
     char tmp = p[0];
-    p[0] = p[7];
-    p[7] = tmp;
-    tmp = p[1];
-    p[1] = p[6];
-    p[6] = tmp;
-    tmp = p[2];
-    p[2] = p[5];
-    p[5] = tmp;
-    tmp = p[3];
-    p[3] = p[4];
-    p[4] = tmp;
+    p[0]     = p[7];
+    p[7]     = tmp;
+    tmp      = p[1];
+    p[1]     = p[6];
+    p[6]     = tmp;
+    tmp      = p[2];
+    p[2]     = p[5];
+    p[5]     = tmp;
+    tmp      = p[3];
+    p[3]     = p[4];
+    p[4]     = tmp;
 }
 #define REAPER_FOURCC(d, c, b, a) (((unsigned int) (d) &0xff) | (((unsigned int) (c) &0xff) << 8) | (((unsigned int) (b) &0xff) << 16) | (((unsigned int) (a) &0xff) << 24))
 
@@ -168,18 +168,18 @@ public:
 typedef struct
 {
     int frame_offset;
-    int size; // bytes used by midi_message, can be >3, but should never be <3, even if a short 1 or 2 byte msg
+    int size;                      // bytes used by midi_message, can be >3, but should never be <3, even if a short 1 or 2 byte msg
     unsigned char midi_message[4]; // size is number of bytes valid -- can be more than 4!
 } MIDI_event_t;
 
 class MIDI_eventlist
 {
 public:
-    virtual void AddItem (MIDI_event_t* evt) = 0; // puts the item in the correct place
+    virtual void AddItem (MIDI_event_t* evt)    = 0; // puts the item in the correct place
     virtual MIDI_event_t* EnumItems (int* bpos) = 0;
-    virtual void DeleteItem (int bpos) = 0;
-    virtual int GetSize() = 0; // size of block in bytes
-    virtual void Empty() = 0;
+    virtual void DeleteItem (int bpos)          = 0;
+    virtual int GetSize()                       = 0; // size of block in bytes
+    virtual void Empty()                        = 0;
 };
 
 /***************************************************************************************
@@ -196,7 +196,7 @@ typedef struct
     int length; // desired length in sample(pair)s of output
 
     ReaSample* samples; // samples filled in (the caller allocates this)
-    int samples_out; // updated with number of sample(pair)s actually rendered
+    int samples_out;    // updated with number of sample(pair)s actually rendered
 
     MIDI_eventlist* midi_events;
 
@@ -208,20 +208,20 @@ typedef struct
 typedef struct
 {
     double start_time; // start time of block
-    double peakrate; // peaks per second (see samplerate below)
+    double peakrate;   // peaks per second (see samplerate below)
 
     int numpeak_points; // desired number of points for data
 
     int nchpeaks; // number of channels of peaks data requested
 
     ReaSample* peaks; // peaks output (caller allocated)
-    int peaks_out; // number of points actually output (less than desired means at end)
+    int peaks_out;    // number of points actually output (less than desired means at end)
 
     enum
     {
-        PEAKTRANSFER_PEAKS_MODE = 0,
+        PEAKTRANSFER_PEAKS_MODE    = 0,
         PEAKTRANSFER_WAVEFORM_MODE = 1,
-        PEAKTRANSFER_MIDI_MODE = 2
+        PEAKTRANSFER_MIDI_MODE     = 2
     };
     int output_mode; // see enum above
 
@@ -242,7 +242,7 @@ typedef struct
     double global_time;
     double global_item_time;
     double srate;
-    int length; // length in samples
+    int length;        // length in samples
     int overwritemode; // 0=overdub, 1=replace,
         // -1 = literal (do nothing just add)
         // 65536+(16 bit mask) = replace just these channels (touch-replace)
@@ -266,30 +266,30 @@ public:
     virtual void SetAvailable (bool avail) {} // optional, if called with avail=false, close files/etc, and so on
     virtual const char* GetType() = 0;
     virtual const char* GetFileName() { return NULL; }; // return NULL if no filename (not purely a file)
-    virtual bool SetFileName (const char* newfn) = 0; // return TRUE if supported, this will only be called when offline
+    virtual bool SetFileName (const char* newfn) = 0;   // return TRUE if supported, this will only be called when offline
 
     virtual PCM_source* GetSource() { return NULL; }
     virtual void SetSource (PCM_source* src) {}
-    virtual int GetNumChannels() = 0; // return number of channels
-    virtual double GetSampleRate() = 0; // returns preferred sample rate. if < 1.0 then it is assumed to be silent (or MIDI)
-    virtual double GetLength() = 0; // length in seconds
-    virtual double GetLengthBeats() { return -1.0; } // length in beats if supported
-    virtual int GetBitsPerSample() { return 0; } // returns bits/sample, if available. only used for metadata purposes, since everything returns as doubles anyway
+    virtual int GetNumChannels()   = 0;                    // return number of channels
+    virtual double GetSampleRate() = 0;                    // returns preferred sample rate. if < 1.0 then it is assumed to be silent (or MIDI)
+    virtual double GetLength()     = 0;                    // length in seconds
+    virtual double GetLengthBeats() { return -1.0; }       // length in beats if supported
+    virtual int GetBitsPerSample() { return 0; }           // returns bits/sample, if available. only used for metadata purposes, since everything returns as doubles anyway
     virtual double GetPreferredPosition() { return -1.0; } // not supported returns -1
 
     virtual int PropertiesWindow (HWND hwndParent) = 0;
 
-    virtual void GetSamples (PCM_source_transfer_t* block) = 0;
+    virtual void GetSamples (PCM_source_transfer_t* block)      = 0;
     virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0;
 
-    virtual void SaveState (ProjectStateContext* ctx) = 0;
+    virtual void SaveState (ProjectStateContext* ctx)                 = 0;
     virtual int LoadState (char* firstline, ProjectStateContext* ctx) = 0; // -1 on error
 
     // these are called by the peaks building UI to build peaks for files.
     virtual void Peaks_Clear (bool deleteFile) = 0;
-    virtual int PeaksBuild_Begin() = 0; // returns nonzero if building is opened, otherwise it may mean building isn't necessary
-    virtual int PeaksBuild_Run() = 0; // returns nonzero if building should continue
-    virtual void PeaksBuild_Finish() = 0; // called when done
+    virtual int PeaksBuild_Begin()             = 0; // returns nonzero if building is opened, otherwise it may mean building isn't necessary
+    virtual int PeaksBuild_Run()               = 0; // returns nonzero if building should continue
+    virtual void PeaksBuild_Finish()           = 0; // called when done
 
     virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
 };
@@ -299,7 +299,7 @@ typedef struct
     int m_id;
     double m_time, m_endtime;
     bool m_isregion;
-    char* m_name; // can be NULL if unnamed
+    char* m_name;    // can be NULL if unnamed
     char resvd[128]; // future expansion -- should be 0
 } REAPER_cue;
 
@@ -315,12 +315,12 @@ typedef struct
     double draw_start_time;
     int draw_start_y; // can be >0 to treat there as extra data
     double pixels_per_second;
-    int width, height; // width and height of view
+    int width, height;    // width and height of view
     int mouse_x, mouse_y; // valid only on mouse/key messages
-    void* extraParms[8]; // WM_KEYDOWN uses [0] for MSG *
+    void* extraParms[8];  // WM_KEYDOWN uses [0] for MSG *
 } REAPER_inline_positioninfo;
 
-#define PCM_SOURCE_EXT_INLINEEDITOR 0x100 // parm1 = (void *)(INT_PTR)message, parm2/parm3 = parms                                        \
+#define PCM_SOURCE_EXT_INLINEEDITOR          0x100     // parm1 = (void *)(INT_PTR)message, parm2/parm3 = parms                                        \
     // messages: 0 = query if editor is available/supported. returns <0 if supported but unavailable, >0 if available, 0=if not supported \
     //  WM_CREATE to create the editor instance, WM_DESTROY to destroy it (nonzero if success)                                            \
     //  WM_ERASEBKGND / WM_PAINT / WM_NCPAINT (3 stages) for drawing, parm2 = LICE_IBitmap *, parm3 = (REAPER_inline_positioninfo*)       \
@@ -329,53 +329,53 @@ typedef struct
     // return REAPER_INLINE_* flags                                                                                                       \
     // WM_SETCURSOR gets parm3=REAPER_inline_positioninfo*, should return HCURSOR                                                         \
     // WM_KEYDOWN gets parm3=REAPER_inline_positioninfo* with extraParms[0] to MSG*
-#define REAPER_INLINE_RETNOTIFY_INVALIDATE 0x1000000 // want refresh of display
-#define REAPER_INLINE_RETNOTIFY_SETCAPTURE 0x2000000 // setcapture
-#define REAPER_INLINE_RETNOTIFY_SETFOCUS 0x4000000 // set focus to item
+#define REAPER_INLINE_RETNOTIFY_INVALIDATE   0x1000000 // want refresh of display
+#define REAPER_INLINE_RETNOTIFY_SETCAPTURE   0x2000000 // setcapture
+#define REAPER_INLINE_RETNOTIFY_SETFOCUS     0x4000000 // set focus to item
 #define REAPER_INLINE_RETNOTIFY_NOAUTOSCROLL 0x8000000
 
 #define REAPER_INLINEFLAG_WANTOVERLAYEDCONTROLS 0x4000 // only valid as a ret for msg 0, to have fades/etc still drawn over like normal
 
 #define PCM_SOURCE_EXT_PROJCHANGENOTIFY 0x2000 // parm1 = nonzero if activated project, zero if deactivated project
 
-#define PCM_SOURCE_EXT_OPENEDITOR 0x10001 // parm1=hwnd, parm2=track idx, parm3=item description
+#define PCM_SOURCE_EXT_OPENEDITOR      0x10001 // parm1=hwnd, parm2=track idx, parm3=item description
 #define PCM_SOURCE_EXT_GETEDITORSTRING 0x10002 // parm1=index (0 or 1), returns desc
 // 0x10003 is deprecated
-#define PCM_SOURCE_EXT_SETITEMCONTEXT 0x10004 // parm1=pointer to item handle, parm2=pointer to take handle
-#define PCM_SOURCE_EXT_ADDMIDIEVENTS 0x10005 // parm1=pointer to midi_realtime_write_struct_t, nch=1 for replace, =0 for overdub, parm2=midi_quantize_mode_t* (optional)
-#define PCM_SOURCE_EXT_GETASSOCIATED_RPP 0x10006 // parm1=pointer to char* that will receive a pointer to the string
-#define PCM_SOURCE_EXT_GETMETADATA 0x10007 // parm1=pointer to name string, parm2=pointer to buffer, parm3=(int)buffersizemax . returns length used. Defined strings are "DESC", "ORIG", "ORIGREF", "DATE", "TIME", "UMID", "CODINGHISTORY" (i.e. BWF)
+#define PCM_SOURCE_EXT_SETITEMCONTEXT       0x10004 // parm1=pointer to item handle, parm2=pointer to take handle
+#define PCM_SOURCE_EXT_ADDMIDIEVENTS        0x10005 // parm1=pointer to midi_realtime_write_struct_t, nch=1 for replace, =0 for overdub, parm2=midi_quantize_mode_t* (optional)
+#define PCM_SOURCE_EXT_GETASSOCIATED_RPP    0x10006 // parm1=pointer to char* that will receive a pointer to the string
+#define PCM_SOURCE_EXT_GETMETADATA          0x10007 // parm1=pointer to name string, parm2=pointer to buffer, parm3=(int)buffersizemax . returns length used. Defined strings are "DESC", "ORIG", "ORIGREF", "DATE", "TIME", "UMID", "CODINGHISTORY" (i.e. BWF)
 #define PCM_SOURCE_EXT_SETASSECONDARYSOURCE 0x10008 // parm1=optional pointer to src (same subtype as receiver), if supplied, set the receiver as secondary src for parm1's editor, if not supplied, receiver has to figure out if there is an appropriate editor open to attach to, parm2=trackidx, parm3=itemname
-#define PCM_SOURCE_EXT_SHOWMIDIPREVIEW 0x10009 // parm1=(MIDI_eventlist*), can be NULL for all-notes-off (also to check if this source supports showing preview at this moment)
-#define PCM_SOURCE_EXT_CONFIGISFILENAME 0x20000
-#define PCM_SOURCE_EXT_GETBPMANDINFO 0x40000 // parm1=pointer to double for bpm. parm2=pointer to double for snap/downbeat offset (seconds).
-#define PCM_SOURCE_EXT_GETNTRACKS 0x80000 // for midi data, returns number of tracks that would have been available
-#define PCM_SOURCE_EXT_GETTITLE 0x80001
-#define PCM_SOURCE_EXT_GETTEMPOMAP 0x80002
-#define PCM_SOURCE_EXT_WANTOLDBEATSTYLE 0x80003
-#define PCM_SOURCE_EXT_WANTTRIM 0x90002 // bla
-#define PCM_SOURCE_EXT_TRIMITEM 0x90003 // parm1=lrflag, parm2=double *{position,length,startoffs,rate}
-#define PCM_SOURCE_EXT_EXPORTTOFILE 0x90004 // parm1=output filename, only currently supported by MIDI but in theory any source could support this
-#define PCM_SOURCE_EXT_ENUMCUES 0x90005 // parm1=(int) index of cue to get, parm2=REAPER_cue **. returns 0/sets parm2 to NULL when out of cues
+#define PCM_SOURCE_EXT_SHOWMIDIPREVIEW      0x10009 // parm1=(MIDI_eventlist*), can be NULL for all-notes-off (also to check if this source supports showing preview at this moment)
+#define PCM_SOURCE_EXT_CONFIGISFILENAME     0x20000
+#define PCM_SOURCE_EXT_GETBPMANDINFO        0x40000 // parm1=pointer to double for bpm. parm2=pointer to double for snap/downbeat offset (seconds).
+#define PCM_SOURCE_EXT_GETNTRACKS           0x80000 // for midi data, returns number of tracks that would have been available
+#define PCM_SOURCE_EXT_GETTITLE             0x80001
+#define PCM_SOURCE_EXT_GETTEMPOMAP          0x80002
+#define PCM_SOURCE_EXT_WANTOLDBEATSTYLE     0x80003
+#define PCM_SOURCE_EXT_WANTTRIM             0x90002 // bla
+#define PCM_SOURCE_EXT_TRIMITEM             0x90003 // parm1=lrflag, parm2=double *{position,length,startoffs,rate}
+#define PCM_SOURCE_EXT_EXPORTTOFILE         0x90004 // parm1=output filename, only currently supported by MIDI but in theory any source could support this
+#define PCM_SOURCE_EXT_ENUMCUES             0x90005 // parm1=(int) index of cue to get, parm2=REAPER_cue **. returns 0/sets parm2 to NULL when out of cues
 // a PCM_source may be the parent of a number of beat-based slices, if so the parent should report length and nchannels only, handle ENUMSLICES, and be deleted after the slices are retrieved
-#define PCM_SOURCE_EXT_ENUMSLICES 0x90006 // parm1=(int*) index of slice to get, parm2=REAPER_slice* (pointing to caller's existing slice struct). if parm2 passed in zero, returns the number of slices. returns 0 if no slices or out of slices.
-#define PCM_SOURCE_EXT_ENDPLAYNOTIFY 0x90007 // notify a source that it can release any pooled resources
+#define PCM_SOURCE_EXT_ENUMSLICES      0x90006 // parm1=(int*) index of slice to get, parm2=REAPER_slice* (pointing to caller's existing slice struct). if parm2 passed in zero, returns the number of slices. returns 0 if no slices or out of slices.
+#define PCM_SOURCE_EXT_ENDPLAYNOTIFY   0x90007 // notify a source that it can release any pooled resources
 #define PCM_SOURCE_EXT_SETPREVIEWTEMPO 0x90008 // parm1=(double*)bpm, only meaningful for slice-based source media
 
 enum
 {
-    RAWMIDI_NOTESONLY = 1,
+    RAWMIDI_NOTESONLY  = 1,
     RAWMIDI_UNFILTERED = 2
 };
 #define PCM_SOURCE_EXT_GETRAWMIDIEVENTS 0x90009 // parm1 = (PCM_source_transfer_t *), parm2 = RAWMIDI flags
 
-#define PCM_SOURCE_EXT_SETRESAMPLEMODE 0x9000A // parm1= mode to pass to resampler->Extended(RESAMPLE_EXT_SETRSMODE,mode,0,0)
+#define PCM_SOURCE_EXT_SETRESAMPLEMODE      0x9000A // parm1= mode to pass to resampler->Extended(RESAMPLE_EXT_SETRSMODE,mode,0,0)
 #define PCM_SOURCE_EXT_NOTIFYPREVIEWPLAYPOS 0x9000B // parm1 = ptr to double of play position, or NULL if stopped
 
 // register with Register("pcmsrc",&struct ... and unregister with "-pcmsrc"
 typedef struct
 {
-    PCM_source* (*CreateFromType) (const char* type, int priority); // priority is 0-7, 0 is highest
+    PCM_source* (*CreateFromType) (const char* type, int priority);     // priority is 0-7, 0 is highest
     PCM_source* (*CreateFromFile) (const char* filename, int priority); // if priority is 5-7, and the file isn't found, open it in an offline state anyway, thanks
 
     // this is used for UI only, not so muc
@@ -403,20 +403,20 @@ public:
     virtual void Close (bool fullClose) = 0;
 
     virtual const char* GetFileName() = 0;
-    virtual const char* GetType() = 0;
+    virtual const char* GetType()     = 0;
 
     // an info string suitable for a dialog, and a title for that dialog
     virtual void GetInfoString (char* buf, int buflen, char* title, int titlelen) = 0;
 
-    virtual bool IsOpen() = 0;
+    virtual bool IsOpen()        = 0;
     virtual int GetNumChannels() = 0;
 
     virtual int GetBitsPerSample() = 0;
     virtual double GetSampleRate() = 0;
 
     // positions in sample frames
-    virtual INT64 GetLength() = 0;
-    virtual INT64 GetPosition() = 0;
+    virtual INT64 GetLength()            = 0;
+    virtual INT64 GetPosition()          = 0;
     virtual void SetPosition (INT64 pos) = 0;
 
     // returns sample-frames read. buf will be at least length*GetNumChannels() ReaSamples long.
@@ -433,12 +433,12 @@ public:
 typedef struct
 {
     bool doquant;
-    char movemode; // 0=default(l/r), -1=left only, 1=right only
-    char sizemode; // 0=preserve length, 1=quantize end
+    char movemode;      // 0=default(l/r), -1=left only, 1=right only
+    char sizemode;      // 0=preserve length, 1=quantize end
     char quantstrength; // 1-100
-    double quantamt; // quantize to (in qn)
-    char swingamt; // 1-100
-    char range_min; // 0-100
+    double quantamt;    // quantize to (in qn)
+    char swingamt;      // 1-100
+    char range_min;     // 0-100
     char range_max;
 } midi_quantize_mode_t;
 
@@ -452,11 +452,11 @@ public:
     virtual double GetStartTime() { return m_st; }
     virtual void SetStartTime (double st) { m_st = st; }
     virtual const char* GetFileName() = 0; // get filename, if applicable (otherwise "")
-    virtual int GetNumChannels() = 0; // return number of channels
-    virtual double GetLength() = 0; // length in seconds, so far
-    virtual INT64 GetFileSize() = 0;
+    virtual int GetNumChannels()      = 0; // return number of channels
+    virtual double GetLength()        = 0; // length in seconds, so far
+    virtual INT64 GetFileSize()       = 0;
 
-    virtual void WriteMIDI (MIDI_eventlist* events, int len, double samplerate) = 0;
+    virtual void WriteMIDI (MIDI_eventlist* events, int len, double samplerate)                = 0;
     virtual void WriteDoubles (ReaSample** samples, int len, int nch, int offset, int spacing) = 0;
     virtual bool WantMIDI() { return 0; }
 
@@ -470,12 +470,12 @@ private:
 };
 
 #define PCM_SINK_EXT_CREATESOURCE 0x80000 // parm1 = PCM_source ** (will be created if supported)
-#define PCM_SINK_EXT_DONE 0x80001 // parm1 = HWND of the render dialog
-#define PCM_SINK_EXT_VERIFYFMT 0x80002 // parm1=int *srate, parm2= int *nch. plugin can override (and return 1!!)
-#define PCM_SINK_EXT_SETQUANT 0x80003 // parm1 = (midi_quantize_mode_t*), or NULL to disable
-#define PCM_SINK_EXT_SETRATE 0x80004 // parm1 = (double *) rateadj
-#define PCM_SINK_EXT_GETBITDEPTH 0x80005 // parm1 = (int*) bitdepth (return 1 if supported)
-#define PCM_SINK_EXT_ADDCUE 0x80006 // parm1=(PCM_cue*)cue
+#define PCM_SINK_EXT_DONE         0x80001 // parm1 = HWND of the render dialog
+#define PCM_SINK_EXT_VERIFYFMT    0x80002 // parm1=int *srate, parm2= int *nch. plugin can override (and return 1!!)
+#define PCM_SINK_EXT_SETQUANT     0x80003 // parm1 = (midi_quantize_mode_t*), or NULL to disable
+#define PCM_SINK_EXT_SETRATE      0x80004 // parm1 = (double *) rateadj
+#define PCM_SINK_EXT_GETBITDEPTH  0x80005 // parm1 = (int*) bitdepth (return 1 if supported)
+#define PCM_SINK_EXT_ADDCUE       0x80006 // parm1=(PCM_cue*)cue
 
 typedef struct // register using "pcmsink"
 {
@@ -499,7 +499,7 @@ typedef struct // register using "pcmsink_ext"
 } pcmsink_register_ext_t;
 
 // supported via pcmsink_register_ext_t::Extended:
-#define PCMSINKEXT_GETFORMATDESC 0x80000 // parm1=(void*)cfg, parm2=(int)cfglen, parm3=(const char*)retstring
+#define PCMSINKEXT_GETFORMATDESC     0x80000 // parm1=(void*)cfg, parm2=(int)cfglen, parm3=(const char*)retstring
 #define PCMSINKEXT_GETFORMATDATARATE 0x80001 // parm1=(void*)cfg, parm2=(int)cfglen, parm3 = int[] {channels, samplerate}
 
 /***************************************************************************************
@@ -514,15 +514,15 @@ class REAPER_Resample_Interface
 public:
     virtual ~REAPER_Resample_Interface() {}
     virtual void SetRates (double rate_in, double rate_out) = 0;
-    virtual void Reset() = 0;
+    virtual void Reset()                                    = 0;
 
-    virtual double GetCurrentLatency() = 0; // latency in seconds buffered -- do not call between resampleprepare and resampleout, undefined if you do...
-    virtual int ResamplePrepare (int out_samples, int nch, ReaSample** inbuffer) = 0; // sample ratio
+    virtual double GetCurrentLatency()                                                   = 0; // latency in seconds buffered -- do not call between resampleprepare and resampleout, undefined if you do...
+    virtual int ResamplePrepare (int out_samples, int nch, ReaSample** inbuffer)         = 0; // sample ratio
     virtual int ResampleOut (ReaSample* out, int nsamples_in, int nsamples_out, int nch) = 0; // returns output samples
 
     virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
 };
-#define RESAMPLE_EXT_SETRSMODE 0x1000 // parm1 == (int)resamplemode, or -1 for project default
+#define RESAMPLE_EXT_SETRSMODE   0x1000 // parm1 == (int)resamplemode, or -1 for project default
 #define RESAMPLE_EXT_SETFEEDMODE 0x1001 // parm1 = nonzero to set ResamplePrepare's out_samples to refer to request a specific number of input samples
 
 /***************************************************************************************
@@ -538,14 +538,14 @@ class IReaperPitchShift
 {
 public:
     virtual ~IReaperPitchShift(){};
-    virtual void set_srate (double srate) = 0;
-    virtual void set_nch (int nch) = 0;
-    virtual void set_shift (double shift) = 0;
+    virtual void set_srate (double srate)         = 0;
+    virtual void set_nch (int nch)                = 0;
+    virtual void set_shift (double shift)         = 0;
     virtual void set_formant_shift (double shift) = 0; // shift can be <0 for "only shift when in formant preserve mode", so that you can use it for effective rate changes etc in that mode
-    virtual void set_tempo (double tempo) = 0;
+    virtual void set_tempo (double tempo)         = 0;
 
-    virtual void Reset() = 0; // reset all buffers/latency
-    virtual ReaSample* GetBuffer (int size) = 0;
+    virtual void Reset()                       = 0; // reset all buffers/latency
+    virtual ReaSample* GetBuffer (int size)    = 0;
     virtual void BufferDone (int input_filled) = 0;
 
     virtual void FlushSamples() = 0; // make sure all output is available
@@ -571,7 +571,7 @@ class REAPER_PeakGet_Interface
 public:
     virtual ~REAPER_PeakGet_Interface() {}
 
-    virtual double GetMaxPeakRes() = 0;
+    virtual double GetMaxPeakRes()                              = 0;
     virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0;
 
     virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
@@ -583,9 +583,9 @@ public:
     virtual ~REAPER_PeakBuild_Interface() {}
 
     virtual void ProcessSamples (ReaSample** samples, int len, int nch, int offs, int spread) = 0; // in case a sink wants to build its own peaks (make sure it was created with src=NULL)
-    virtual int Run() = 0; // or let it do it automatically (created with source!=NULL)
+    virtual int Run()                                                                         = 0; // or let it do it automatically (created with source!=NULL)
 
-    virtual int GetLastSecondPeaks (int sz, ReaSample* buf) = 0; // returns number of peaks in the last second, sz is maxsize
+    virtual int GetLastSecondPeaks (int sz, ReaSample* buf)     = 0; // returns number of peaks in the last second, sz is maxsize
     virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0; // allow getting of peaks thus far (won't hit the highest resolution mipmap, just the 10/sec one or so)
 
     virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
@@ -593,8 +593,8 @@ public:
 
 // recommended settings for sources switching to peak caches
 #define REAPER_PEAKRES_MAX_NOPKS 200.0
-#define REAPER_PEAKRES_MUL_MIN 0.00001 // recommended for plug-ins, when 1000peaks/pix, toss hires source
-#define REAPER_PEAKRES_MUL_MAX 1.0 // recommended for plug-ins, when 1.5pix/peak, switch to hi res source. this may be configurable someday via some sneakiness
+#define REAPER_PEAKRES_MUL_MIN   0.00001 // recommended for plug-ins, when 1000peaks/pix, toss hires source
+#define REAPER_PEAKRES_MUL_MAX   1.0     // recommended for plug-ins, when 1.5pix/peak, switch to hi res source. this may be configurable someday via some sneakiness
 
 /*
 ** accelerator_register_t allows you to register ("accelerator") a record which lets you get a place in the 
@@ -621,9 +621,9 @@ typedef struct accelerator_register_t
 
 typedef struct
 {
-    ACCEL accel; // key flags/etc represent default values (user may customize)
+    ACCEL accel;      // key flags/etc represent default values (user may customize)
     const char* desc; // description (for user customizability)
-} gaccel_register_t; // use "gaccel"
+} gaccel_register_t;  // use "gaccel"
 
 /*
 ** action_help_t lets you register help text ("action_help") for an action, mapped by action name
@@ -682,7 +682,7 @@ because these menus can be customized and item order can change.
 typedef struct // register with "editor"
 {
     int (*editFile) (const char* filename, HWND parent, int trackidx); // return TRUE if handled for this file
-    const char* (*wouldHandle) (const char* filename); // return your editor's description string
+    const char* (*wouldHandle) (const char* filename);                 // return your editor's description string
 
 } editor_register_t;
 
@@ -693,8 +693,8 @@ typedef struct // register with "editor"
 */
 typedef struct // register with "projectimport"
 {
-    bool (*WantProjectFile) (const char* fn); // is this our file?
-    const char* (*EnumFileExtensions) (int i, char** descptr); // call increasing i until returns NULL. if descptr's output is NULL, use last description
+    bool (*WantProjectFile) (const char* fn);                           // is this our file?
+    const char* (*EnumFileExtensions) (int i, char** descptr);          // call increasing i until returns NULL. if descptr's output is NULL, use last description
     int (*LoadProject) (const char* fn, ProjectStateContext* genstate); // return 0=ok, Generate RPP compatible project info in genstate
 } project_import_register_t;
 
@@ -744,20 +744,20 @@ struct CommandAction;
 
 typedef struct
 {
-    DWORD cmd; // action command ID
+    DWORD cmd;        // action command ID
     const char* text; // description of action
 } KbdCmd;
 
 typedef struct
 {
-    int key; // key identifier
-    int cmd; // action command ID
+    int key;   // key identifier
+    int cmd;   // action command ID
     int flags; // key flags
 } KbdKeyBindingInfo;
 
 typedef struct
 {
-    int uniqueID; // 0=main, < 0x10000000 for cockos use only plzkthx
+    int uniqueID;     // 0=main, < 0x10000000 for cockos use only plzkthx
     const char* name; // section name
 
     KbdCmd* action_list; // list of assignable actions
@@ -813,44 +813,44 @@ typedef struct
 ** ColorTheme API access, these are used with GetColorTheme()
 */
 
-#define COLORTHEMEIDX_TIMELINEFG 0
-#define COLORTHEMEIDX_ITEMTEXT 1
-#define COLORTHEMEIDX_ITEMBG 2
-#define COLORTHEMEIDX_TIMELINEBG 4
+#define COLORTHEMEIDX_TIMELINEFG    0
+#define COLORTHEMEIDX_ITEMTEXT      1
+#define COLORTHEMEIDX_ITEMBG        2
+#define COLORTHEMEIDX_TIMELINEBG    4
 #define COLORTHEMEIDX_TIMELINESELBG 5
-#define COLORTHEMEIDX_ITEMCONTROLS 6
-#define COLORTHEMEIDX_TRACKBG1 24
-#define COLORTHEMEIDX_TRACKBG2 25
-#define COLORTHEMEIDX_PEAKS1 28
-#define COLORTHEMEIDX_PEAKS2 29
-#define COLORTHEMEIDX_EDITCURSOR 35
-#define COLORTHEMEIDX_GRID1 36
-#define COLORTHEMEIDX_GRID2 37
-#define COLORTHEMEIDX_MARKER 38
-#define COLORTHEMEIDX_REGION 40
-#define COLORTHEMEIDX_GRID3 61
-#define COLORTHEMEIDX_LOOPSELBG 100
+#define COLORTHEMEIDX_ITEMCONTROLS  6
+#define COLORTHEMEIDX_TRACKBG1      24
+#define COLORTHEMEIDX_TRACKBG2      25
+#define COLORTHEMEIDX_PEAKS1        28
+#define COLORTHEMEIDX_PEAKS2        29
+#define COLORTHEMEIDX_EDITCURSOR    35
+#define COLORTHEMEIDX_GRID1         36
+#define COLORTHEMEIDX_GRID2         37
+#define COLORTHEMEIDX_MARKER        38
+#define COLORTHEMEIDX_REGION        40
+#define COLORTHEMEIDX_GRID3         61
+#define COLORTHEMEIDX_LOOPSELBG     100
 
 #define COLORTHEMEIDX_ITEM_LOGFONT -2 // these return LOGFONT * as (int)
-#define COLORTHEMEIDX_TL_LOGFONT -1
+#define COLORTHEMEIDX_TL_LOGFONT   -1
 
-#define COLORTHEMEIDX_MIDI_TIMELINEBG 66
-#define COLORTHEMEIDX_MIDI_TIMELINEFG 67
-#define COLORTHEMEIDX_MIDI_GRID1 68
-#define COLORTHEMEIDX_MIDI_GRID2 69
-#define COLORTHEMEIDX_MIDI_GRID3 70
-#define COLORTHEMEIDX_MIDI_TRACKBG1 71
-#define COLORTHEMEIDX_MIDI_TRACKBG2 72
-#define COLORTHEMEIDX_MIDI_ENDPT 73
-#define COLORTHEMEIDX_MIDI_NOTEBG 74
-#define COLORTHEMEIDX_MIDI_NOTEFG 75
-#define COLORTHEMEIDX_MIDI_ITEMCONTROLS 76
-#define COLORTHEMEIDX_MIDI_EDITCURSOR 77
-#define COLORTHEMEIDX_MIDI_PKEY1 78
-#define COLORTHEMEIDX_MIDI_PKEY2 79
-#define COLORTHEMEIDX_MIDI_PKEY3 80
-#define COLORTHEMEIDX_MIDI_PKEYTEXT 81
-#define COLORTHEMEIDX_MIDI_OFFSCREENNOTE 103
+#define COLORTHEMEIDX_MIDI_TIMELINEBG       66
+#define COLORTHEMEIDX_MIDI_TIMELINEFG       67
+#define COLORTHEMEIDX_MIDI_GRID1            68
+#define COLORTHEMEIDX_MIDI_GRID2            69
+#define COLORTHEMEIDX_MIDI_GRID3            70
+#define COLORTHEMEIDX_MIDI_TRACKBG1         71
+#define COLORTHEMEIDX_MIDI_TRACKBG2         72
+#define COLORTHEMEIDX_MIDI_ENDPT            73
+#define COLORTHEMEIDX_MIDI_NOTEBG           74
+#define COLORTHEMEIDX_MIDI_NOTEFG           75
+#define COLORTHEMEIDX_MIDI_ITEMCONTROLS     76
+#define COLORTHEMEIDX_MIDI_EDITCURSOR       77
+#define COLORTHEMEIDX_MIDI_PKEY1            78
+#define COLORTHEMEIDX_MIDI_PKEY2            79
+#define COLORTHEMEIDX_MIDI_PKEY3            80
+#define COLORTHEMEIDX_MIDI_PKEYTEXT         81
+#define COLORTHEMEIDX_MIDI_OFFSCREENNOTE    103
 #define COLORTHEMEIDX_MIDI_OFFSCREENNOTESEL 104
 
 #endif // colortheme stuff deprecated
@@ -866,13 +866,13 @@ typedef struct
 */
 enum
 {
-    SCREENSET_ACTION_GETHWND = 0,
-    SCREENSET_ACTION_IS_DOCKED = 1,
-    SCREENSET_ACTION_SHOW = 2, //param2 = dock status
-    SCREENSET_ACTION_CLOSE = 3,
+    SCREENSET_ACTION_GETHWND     = 0,
+    SCREENSET_ACTION_IS_DOCKED   = 1,
+    SCREENSET_ACTION_SHOW        = 2, //param2 = dock status
+    SCREENSET_ACTION_CLOSE       = 3,
     SCREENSET_ACTION_SWITCH_DOCK = 4, //dock if undocked and vice-versa
-    SCREENSET_ACTION_NOMOVE = 5, //return 1 if no move desired
-    SCREENSET_ACTION_GETHASH = 6, //return hash string
+    SCREENSET_ACTION_NOMOVE      = 5, //return 1 if no move desired
+    SCREENSET_ACTION_GETHASH     = 6, //return hash string
 };
 typedef LRESULT (*screensetCallbackFunc) (int action, char* id, void* param, int param2);
 
@@ -890,7 +890,7 @@ public:
 
     virtual void BeginBlock() {} // outputs can implement these if they wish to have timed block sends
     virtual void EndBlock (int length, double srate, double curtempo) {}
-    virtual void SendMsg (MIDI_event_t* msg, int frame_offset) = 0; // frame_offset can be <0 for "instant" if supported
+    virtual void SendMsg (MIDI_event_t* msg, int frame_offset)                                     = 0; // frame_offset can be <0 for "instant" if supported
     virtual void Send (unsigned char status, unsigned char d1, unsigned char d2, int frame_offset) = 0; // frame_offset can be <0 for "instant" if supported
 };
 
@@ -900,7 +900,7 @@ public:
     virtual ~midi_Input() {}
 
     virtual void start() = 0;
-    virtual void stop() = 0;
+    virtual void stop()  = 0;
 
     virtual void SwapBufs (unsigned int timestamp) = 0; // DEPRECATED call SwapBufsPrecise() instead  // timestamp=process ms
 
@@ -930,8 +930,8 @@ public:
     IReaperControlSurface() {}
     virtual ~IReaperControlSurface() {}
 
-    virtual const char* GetTypeString() = 0; // simple unique string with only A-Z, 0-9, no spaces or other chars
-    virtual const char* GetDescString() = 0; // human readable description (can include instance specific info)
+    virtual const char* GetTypeString()   = 0; // simple unique string with only A-Z, 0-9, no spaces or other chars
+    virtual const char* GetDescString()   = 0; // human readable description (can include instance specific info)
     virtual const char* GetConfigString() = 0; // string of configuration data
 
     virtual void CloseNoReset() {} // close without sending "reset" messages, prevent "reset" being sent on destructor
@@ -974,11 +974,11 @@ typedef struct
 // note you can also add a control surface behind the scenes with "csurf_inst" (IReaperControlSurface*)instance
 
 #ifndef UNDO_STATE_ALL
-#define UNDO_STATE_ALL 0xFFFFFFFF
+#define UNDO_STATE_ALL      0xFFFFFFFF
 #define UNDO_STATE_TRACKCFG 1 // has track/master vol/pan/routing, ALL envelopes (matser included)
-#define UNDO_STATE_FX 2 // track/master fx
-#define UNDO_STATE_ITEMS 4 // track items
-#define UNDO_STATE_MISCCFG 8 // loop selection, markers, regions, extensions!
+#define UNDO_STATE_FX       2 // track/master fx
+#define UNDO_STATE_ITEMS    4 // track items
+#define UNDO_STATE_MISCCFG  8 // loop selection, markers, regions, extensions!
 #endif
 
 #endif //_REAPER_PLUGIN_H_

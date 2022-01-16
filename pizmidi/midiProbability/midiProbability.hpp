@@ -30,8 +30,8 @@ enum parameters
 
     kNumParams,
     numParamsPerSlot = kMode2 - kMode1,
-    numSlots = 2,
-    kNumPrograms = 16
+    numSlots         = 2,
+    kNumPrograms     = 16
 };
 
 class MidiProbabilityProgram
@@ -82,7 +82,7 @@ protected:
     bool notePlaying[128][16];
     enum effects
     {
-        off = -1,
+        off  = -1,
         disc = 0,
         octup,
         octdown,

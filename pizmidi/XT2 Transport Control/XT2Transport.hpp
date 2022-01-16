@@ -9,7 +9,7 @@ by Reuben Vinal
 #include "../common/PizMidi.h"
 
 #define XT_WINDOW_TITLE "energyXT"
-#define XT_EXE_NAME "energyXT.exe"
+#define XT_EXE_NAME     "energyXT.exe"
 
 enum
 {

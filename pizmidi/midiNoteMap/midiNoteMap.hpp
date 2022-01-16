@@ -15,7 +15,7 @@ enum
     kClear,
     kNotes,
 
-    kNumParams = kNotes + 128,
+    kNumParams   = kNotes + 128,
     kNumPrograms = 128
 };
 

@@ -9,9 +9,9 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiDuplicateBlockerProgram::MidiDuplicateBlockerProgram()
 {
     // default program values
-    param[kPower] = 0.2f; // CCs
+    param[kPower]   = 0.2f;                    // CCs
     param[kChannel] = CHANNEL_TO_FLOAT016 (0); // any channel
-    param[kTimer] = 0.0f;
+    param[kTimer]   = 0.0f;
 
     // default program name
     vst_strncpy (name, "default", kVstMaxProgNameLen);
@@ -23,25 +23,25 @@ MidiDuplicateBlocker::MidiDuplicateBlocker (audioMasterCallback audioMaster)
 {
     for (int ch = 0; ch < 16; ch++)
     {
-        lastNote[ch] = 255;
-        lastProgCh[ch] = 255;
-        lastChanAft[ch] = 255;
-        lastPB[ch] = 0xFFFF;
-        Notetimer[ch] = 0;
-        ProgChtimer[ch] = 0;
+        lastNote[ch]     = 255;
+        lastProgCh[ch]   = 255;
+        lastChanAft[ch]  = 255;
+        lastPB[ch]       = 0xFFFF;
+        Notetimer[ch]    = 0;
+        ProgChtimer[ch]  = 0;
         ChanAfttimer[ch] = 0;
-        PBtimer[ch] = 0;
+        PBtimer[ch]      = 0;
         for (int i = 0; i < 128; i++)
         {
-            lastCC[ch][i] = 255;
-            lastPolyAft[ch][i] = 255;
-            CCtimer[ch][i] = 0;
+            lastCC[ch][i]       = 255;
+            lastPolyAft[ch][i]  = 255;
+            CCtimer[ch][i]      = 0;
             PolyAfttimer[ch][i] = 0;
-            playing[ch][i] = false;
+            playing[ch][i]      = false;
         }
     }
 
-    time = 1000;
+    time      = 1000;
     totalTime = 0;
 
     programs = new MidiDuplicateBlockerProgram[numPrograms];
@@ -241,10 +241,10 @@ void MidiDuplicateBlocker::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        const short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        const short data1 = tomod.midiData[1] & 0x7f;
-        const short data2 = tomod.midiData[2] & 0x7f;
+        const short status   = tomod.midiData[0] & 0xf0;       // scraping  channel
+        const short channel  = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        const short data1    = tomod.midiData[1] & 0x7f;
+        const short data2    = tomod.midiData[2] & 0x7f;
         const VstInt32 delta = tomod.deltaFrames;
 
         bool discard = false;
@@ -271,7 +271,7 @@ void MidiDuplicateBlocker::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
                         discard = true;
                     else
                     {
-                        Notetimer[channel - 1] = totalTime + delta + time;
+                        Notetimer[channel - 1]  = totalTime + delta + time;
                         playing[channel][data1] = true;
                     }
                 }

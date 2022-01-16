@@ -157,10 +157,10 @@ void MidiChannelize::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
     for (unsigned int i = 0; i < inputs[0].size(); i++)
     {
         //copying event "i" from input (with all its fields)
-        VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        VstMidiEvent tomod   = inputs[0][i];
+        const int status     = tomod.midiData[0] & 0xf0; // scraping  channel
         const int in_channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
+        const int data1      = tomod.midiData[1] & 0x7f;
         //const int data2	 = tomod.midiData[2] & 0x7f;
         if (tomod.midiData[0] < 0xF0)
         {

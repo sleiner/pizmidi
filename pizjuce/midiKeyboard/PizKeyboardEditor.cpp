@@ -211,20 +211,20 @@ midiKeyboardEditor::~midiKeyboardEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    keyWidthSlider = nullptr;
-    chSlider = nullptr;
-    grabQwertyButton = nullptr;
-    velocitySlider = nullptr;
-    yButton = nullptr;
+    keyWidthSlider    = nullptr;
+    chSlider          = nullptr;
+    grabQwertyButton  = nullptr;
+    velocitySlider    = nullptr;
+    yButton           = nullptr;
     inputToggleButton = nullptr;
-    aboutButton = nullptr;
-    hideButton = nullptr;
-    resizer = nullptr;
-    midiKeyboard = nullptr;
-    aboutBox = nullptr;
-    useProgCh = nullptr;
-    useCapsLock = nullptr;
-    sendState = nullptr;
+    aboutButton       = nullptr;
+    hideButton        = nullptr;
+    resizer           = nullptr;
+    midiKeyboard      = nullptr;
+    aboutBox          = nullptr;
+    useProgCh         = nullptr;
+    useCapsLock       = nullptr;
+    sendState         = nullptr;
     showNumbersButton = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -287,7 +287,7 @@ void midiKeyboardEditor::resized()
     if (getFilter()->getParameter (kHidePanel) >= 0.5f)
         midiKeyboard->setBounds (4, 4, getWidth() - 8, getHeight() - 8);
     midiKeyboard->setKeyWidth (jmax ((float) getWidth() / 76.f, getFilter()->getParameter (kWidth) * 150.0f + 5.0f));
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
     //[/UserResized]
 }
@@ -420,7 +420,7 @@ void midiKeyboardEditor::changeListenerCallback (ChangeBroadcaster* source)
     if (source == midiKeyboard.get())
     {
         getFilter()->keyPosition = midiKeyboard->getLowestVisibleKey();
-        getFilter()->octave = midiKeyboard->getKeyPressBaseOctave();
+        getFilter()->octave      = midiKeyboard->getKeyPressBaseOctave();
     }
     else if (source == getFilter())
         updateParametersFromFilter();
@@ -432,20 +432,20 @@ void midiKeyboardEditor::updateParametersFromFilter()
     PizKeyboard* const filter = getFilter();
 
     filter->getCallbackLock().enter();
-    const int ch = roundToInt (filter->getParameter (kChannel) * 15.f);
-    const float keywidth = filter->getParameter (kWidth);
-    const float velocity = filter->getParameter (kVelocity) * 127.f;
-    const bool useY = filter->getParameter (kUseY) >= 0.5f;
-    const bool toggle = filter->getParameter (kToggleInput) >= 0.5f;
-    const bool hide = filter->getParameter (kHidePanel) >= 0.5f;
-    const bool qwerty = filter->getParameter (kQwertyAnywhere) >= 0.5f;
-    const bool capslock = filter->getParameter (kCapsLock) >= 0.5f;
-    const bool progch = filter->getParameter (kUseProgCh) >= 0.5f;
+    const int ch           = roundToInt (filter->getParameter (kChannel) * 15.f);
+    const float keywidth   = filter->getParameter (kWidth);
+    const float velocity   = filter->getParameter (kVelocity) * 127.f;
+    const bool useY        = filter->getParameter (kUseY) >= 0.5f;
+    const bool toggle      = filter->getParameter (kToggleInput) >= 0.5f;
+    const bool hide        = filter->getParameter (kHidePanel) >= 0.5f;
+    const bool qwerty      = filter->getParameter (kQwertyAnywhere) >= 0.5f;
+    const bool capslock    = filter->getParameter (kCapsLock) >= 0.5f;
+    const bool progch      = filter->getParameter (kUseProgCh) >= 0.5f;
     const bool showNumbers = filter->getParameter (kShowNumbers) >= 0.5f;
-    const int w = filter->lastUIWidth;
-    const int h = filter->lastUIHeight;
-    const int keyPos = filter->keyPosition;
-    const int octave = filter->octave;
+    const int w            = filter->lastUIWidth;
+    const int h            = filter->lastUIHeight;
+    const int keyPos       = filter->keyPosition;
+    const int octave       = filter->octave;
 
     filter->getCallbackLock().exit();
 

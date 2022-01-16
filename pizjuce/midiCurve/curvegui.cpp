@@ -180,22 +180,22 @@ CurveEditor::~CurveEditor()
     getFilter()->lastMsg.removeChangeListener (this);
     //[/Destructor_pre]
 
-    curve = nullptr;
-    label = nullptr;
-    label2 = nullptr;
-    resizer = nullptr;
-    velocityButton = nullptr;
-    ccButton = nullptr;
-    slider = nullptr;
-    channelSlider = nullptr;
-    label3 = nullptr;
+    curve                 = nullptr;
+    label                 = nullptr;
+    label2                = nullptr;
+    resizer               = nullptr;
+    velocityButton        = nullptr;
+    ccButton              = nullptr;
+    slider                = nullptr;
+    channelSlider         = nullptr;
+    label3                = nullptr;
     channelPressureButton = nullptr;
-    aftertouchButton = nullptr;
-    resetButton = nullptr;
-    helpButton = nullptr;
-    instructionsLabel = nullptr;
-    label4 = nullptr;
-    label5 = nullptr;
+    aftertouchButton      = nullptr;
+    resetButton           = nullptr;
+    helpButton            = nullptr;
+    instructionsLabel     = nullptr;
+    label4                = nullptr;
+    label5                = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -236,7 +236,7 @@ void CurveEditor::resized()
     label5->setBounds (getWidth() - 6 - 72, 91, 72, 16);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIHeight = getHeight();
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     //[/UserResized]
 }
 
@@ -316,7 +316,7 @@ void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
     else if (source == &getFilter()->lastMsg)
     {
         getFilter()->getCallbackLock().enter();
-        const int lastin = getFilter()->lastMsg.lastCCIn;
+        const int lastin  = getFilter()->lastMsg.lastCCIn;
         const int lastout = getFilter()->lastMsg.lastCCOut;
         getFilter()->getCallbackLock().exit();
         if (lastin != -1)
@@ -332,17 +332,17 @@ void CurveEditor::updateParameters()
     MidiCurve* const filter = getFilter();
 
     filter->getCallbackLock().enter();
-    const int lastin = filter->lastMsg.lastCCIn;
-    const int lastout = filter->lastMsg.lastCCOut;
-    const int h = filter->lastUIHeight;
-    const int w = filter->lastUIWidth;
-    const float p_ccnumber = filter->getParameter (kCCNumber);
-    const float p_channel = filter->getParameter (kChannel);
-    const float p_velocity = filter->getParameter (kVelocity);
-    const float p_cc = filter->getParameter (kCC);
-    const float p_aftertouch = filter->getParameter (kAftertouch);
+    const int lastin              = filter->lastMsg.lastCCIn;
+    const int lastout             = filter->lastMsg.lastCCOut;
+    const int h                   = filter->lastUIHeight;
+    const int w                   = filter->lastUIWidth;
+    const float p_ccnumber        = filter->getParameter (kCCNumber);
+    const float p_channel         = filter->getParameter (kChannel);
+    const float p_velocity        = filter->getParameter (kVelocity);
+    const float p_cc              = filter->getParameter (kCC);
+    const float p_aftertouch      = filter->getParameter (kAftertouch);
     const float p_channelpressure = filter->getParameter (kChannelPressure);
-    const float p_pitchbend = filter->getParameter (kPitchBend);
+    const float p_pitchbend       = filter->getParameter (kPitchBend);
     filter->getCallbackLock().exit();
 
     slider->setValue (p_ccnumber * slider->getMaximum(), dontSendNotification);

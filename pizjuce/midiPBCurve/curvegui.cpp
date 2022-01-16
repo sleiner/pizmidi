@@ -193,22 +193,22 @@ CurveEditor::~CurveEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    curve = nullptr;
-    label = nullptr;
-    label2 = nullptr;
-    resizer = nullptr;
-    channelSlider = nullptr;
-    label3 = nullptr;
-    resetButton = nullptr;
-    helpButton = nullptr;
+    curve             = nullptr;
+    label             = nullptr;
+    label2            = nullptr;
+    resizer           = nullptr;
+    channelSlider     = nullptr;
+    label3            = nullptr;
+    resetButton       = nullptr;
+    helpButton        = nullptr;
     instructionsLabel = nullptr;
-    label4 = nullptr;
-    rangeSlider = nullptr;
-    label5 = nullptr;
-    label6 = nullptr;
-    label7 = nullptr;
-    rangeSlider2 = nullptr;
-    label8 = nullptr;
+    label4            = nullptr;
+    rangeSlider       = nullptr;
+    label5            = nullptr;
+    label6            = nullptr;
+    label7            = nullptr;
+    rangeSlider2      = nullptr;
+    label8            = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -249,7 +249,7 @@ void CurveEditor::resized()
     label8->setBounds (getWidth() - -3 - 86, 216, 86, 16);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIHeight = getHeight();
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     //[/UserResized]
 }
 
@@ -312,9 +312,9 @@ void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
 
 void CurveEditor::updateParameters()
 {
-    const int lastin = getFilter()->lastCCIn;
-    const int lastout = getFilter()->lastCCOut;
-    const float pbrange = getFilter()->getParameter (kPBRange) * 48.f;
+    const int lastin     = getFilter()->lastCCIn;
+    const int lastout    = getFilter()->lastCCOut;
+    const float pbrange  = getFilter()->getParameter (kPBRange) * 48.f;
     const float pbrange2 = getFilter()->getParameter (kPBRange2) * 48.f;
     if (lastin != -1)
     {

@@ -289,8 +289,8 @@ void MidiChs::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outpu
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel (1-16)
+        const int status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int channel  = tomod.midiData[0] & 0x0f; // isolating channel (1-16)
         //const int data1      = tomod.midiData[1] & 0x7f;
         //const int data2	     = tomod.midiData[2] & 0x7f;
 

@@ -20,7 +20,7 @@ enum
 
     kNumParams,
     kNumPrograms = 16,
-    learn = -1
+    learn        = -1
 };
 
 class MidiKeySplit4Program

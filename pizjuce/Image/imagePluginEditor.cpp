@@ -154,7 +154,7 @@ void imagePluginEditor::resized()
         resizersize = 12;
     resizer->setBounds (container->getWidth() - resizersize, container->getHeight() - resizersize, resizersize, resizersize);
 
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
 }
 
@@ -374,7 +374,7 @@ void imagePluginEditor::filesDropped (const juce::StringArray& filenames, int mo
     if (isInterestedInFileDrag (filenames))
     {
         String filename = filenames.joinIntoString (String(), 0, 1);
-        File file = File (filename);
+        File file       = File (filename);
         if (imagepad->setImageFromFile (file))
         {
             //save the relative path
@@ -421,13 +421,13 @@ void imagePluginEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
 
-    const String t = filter->text;
-    const String icon = filter->icon;
-    const Colour bgcolor = filter->bgcolor;
+    const String t         = filter->text;
+    const String icon      = filter->icon;
+    const Colour bgcolor   = filter->bgcolor;
     const Colour textcolor = filter->textcolor;
-    const int bank = filter->getCurrentBank();
-    const int prog = filter->getCurrentProgram();
-    const float chan = filter->getParameter (kChannel);
+    const int bank         = filter->getCurrentBank();
+    const int prog         = filter->getCurrentProgram();
+    const float chan       = filter->getParameter (kChannel);
     //fullscreen = filter->fullscreen;
 
     // ..release the lock ASAP

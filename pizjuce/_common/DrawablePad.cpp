@@ -15,8 +15,8 @@ DrawablePad::DrawablePad (const String& name)
 {
     setSize (200, 200);
     backgroundOff = Colour (0xffbbbbff);
-    backgroundOn = Colour (0xff3333ff);
-    Label = "Pad";
+    backgroundOn  = Colour (0xff3333ff);
+    Label         = "Pad";
     setMouseClickGrabsKeyboardFocus (false);
 }
 
@@ -101,7 +101,7 @@ void DrawablePad::setBackgroundColours (const Colour& toggledOffColour,
         || backgroundOn != toggledOnColour)
     {
         backgroundOff = toggledOffColour;
-        backgroundOn = toggledOnColour;
+        backgroundOn  = toggledOnColour;
 
         repaint();
     }

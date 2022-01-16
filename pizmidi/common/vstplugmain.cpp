@@ -3,7 +3,7 @@
 
 #if defined(_WIN32) && defined(_DEBUG)
 BOOL stupid = AllocConsole();
-FILE* dumb = freopen ("CONOUT$", "w", stdout);
+FILE* dumb  = freopen ("CONOUT$", "w", stdout);
 #endif
 
 //just for fxb loading:
@@ -145,7 +145,7 @@ bool getInstancePath (char* outInstancePath, char* fileName, bool hostpath)
         return false;
     }
     outInstancePath[countloc + 1] = 0;
-    char* tmp = strrchr (outInstancePath, '\\');
+    char* tmp                     = strrchr (outInstancePath, '\\');
     if (tmp)
     {
         tmp++;

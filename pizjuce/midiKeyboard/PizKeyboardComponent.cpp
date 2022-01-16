@@ -64,7 +64,7 @@ bool PizKeyboardComponent::mouseDownOnKey (int midiNoteNumber, const MouseEvent&
         editor->getFilter()->setParameter (kHidePanel, 1.f - editor->getFilter()->getParameter (kHidePanel));
         return false;
     }
-    int l = isBlackKey (midiNoteNumber) ? this->getBlackNoteLength() : getHeight();
+    int l          = isBlackKey (midiNoteNumber) ? this->getBlackNoteLength() : getHeight();
     float velocity = editor->getFilter()->getParameter (kUseY) >= 0.5f ? (float) e.getMouseDownY() / (float) l : editor->getFilter()->getParameter (kVelocity);
     if (e.mods.isCtrlDown() || e.mods.isMiddleButtonDown())
     {

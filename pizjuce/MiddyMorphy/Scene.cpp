@@ -15,9 +15,9 @@ Scene::Scene (const Scene& scene)
 Scene::Scene (MidiMorph* core)
 {
     // Bouml preserved body begin 00034B0D
-    this->core = core;
+    this->core   = core;
     this->colour = Colours::green;
-    this->size = 50;
+    this->size   = 50;
 
     addAndMakeVisible (textEditor = new TextEditor ("new text editor"));
     textEditor->setMultiLine (false);
@@ -60,7 +60,7 @@ float Scene::getAffectionRatio()
     // Bouml preserved body begin 0003C68D
     if (affectionRatioChanged || core->needsRefresh())
     {
-        affectionRatio = getAffectionValue() / core->getSumAffectionValues();
+        affectionRatio        = getAffectionValue() / core->getSumAffectionValues();
         affectionRatioChanged = false;
     }
     return affectionRatio;
@@ -144,7 +144,7 @@ float Scene::getAffectionValue()
                 facOtherDis *= scene->getDistanceFromCursor();
             }
         }
-        this->affectionValue = sumOtherDis / core->getSumDistances() * facOtherDis;
+        this->affectionValue        = sumOtherDis / core->getSumDistances() * facOtherDis;
         this->affectionValueChanged = false;
     }
     return this->affectionValue;
@@ -156,8 +156,8 @@ void Scene::distanceFromCursorChanged()
 {
     // Bouml preserved body begin 0003F58D
     distanceFromCursorChanged_ = true;
-    affectionRatioChanged = true;
-    affectionValueChanged = true;
+    affectionRatioChanged      = true;
+    affectionValueChanged      = true;
     // Bouml preserved body end 0003F58D
 }
 

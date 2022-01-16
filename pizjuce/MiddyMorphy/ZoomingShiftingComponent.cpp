@@ -20,6 +20,7 @@ void ZoomingShiftingComponent::setFromXml (juce::XmlElement* data)
     {
         int x = data->getIntAttribute ("xoff");
         int y = data->getIntAttribute ("yoff");
+
         this->zoomFactorX = (float) data->getDoubleAttribute ("xzoom");
         this->zoomFactorY = (float) data->getDoubleAttribute ("yzoom");
         origin.setTopLeftPosition (x, y);
@@ -48,19 +49,19 @@ void ZoomingShiftingComponent::zoom (float multX, float multY, float x, float y)
     float newZoomRatioX = multX * zoomFactorX;
     float newZoomRatioY = multY * zoomFactorY;
 
-    double grownTop = 0;
+    double grownTop  = 0;
     double grownLeft = 0;
 
     if (newZoomRatioX >= 0.1 && newZoomRatioX <= 10)
     {
-        x = origin.getX() - x;
-        grownLeft = (double) x * (newZoomRatioX - zoomFactorX) / zoomFactorY;
+        x           = origin.getX() - x;
+        grownLeft   = (double) x * (newZoomRatioX - zoomFactorX) / zoomFactorY;
         zoomFactorX = newZoomRatioX;
     }
     if (newZoomRatioY >= 0.1 && newZoomRatioY <= 10)
     {
-        y = origin.getY() - y;
-        grownTop = (double) y * (newZoomRatioY - zoomFactorY) / zoomFactorY;
+        y           = origin.getY() - y;
+        grownTop    = (double) y * (newZoomRatioY - zoomFactorY) / zoomFactorY;
         zoomFactorY = newZoomRatioY;
     }
 

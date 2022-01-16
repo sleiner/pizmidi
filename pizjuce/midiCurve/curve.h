@@ -4,18 +4,18 @@
 #include "../_common/BankStorage.h"
 #include "../_common/PizAudioProcessor.h"
 
-#define MAX_ENVELOPE_POINTS (32)
-#define MAX_ENVELOPE_LENGTH (127.0f)
-#define MAX_ENVELOPE_GAIN (127.0f)
+#define MAX_ENVELOPE_POINTS   (32)
+#define MAX_ENVELOPE_LENGTH   (127.0f)
+#define MAX_ENVELOPE_GAIN     (127.0f)
 #define MAX_ENVELOPE_DOT_SIZE (8)
-#define midiScaler (0.007874015748031496062992125984252)
-#define fmidiScaler (0.007874015748f)
+#define midiScaler            (0.007874015748031496062992125984252)
+#define fmidiScaler           (0.007874015748f)
 
 enum parameters
 {
     kNumPointParams = MAX_ENVELOPE_POINTS * 2, //x1,y1,x2,y2...
-    kActive = kNumPointParams, //active1,active2,...
-    kCC = kActive + MAX_ENVELOPE_POINTS,
+    kActive         = kNumPointParams,         //active1,active2,...
+    kCC             = kActive + MAX_ENVELOPE_POINTS,
     kCCNumber,
     kVelocity,
     kChannelPressure,
@@ -143,13 +143,13 @@ public:
         {
             p.setXY (x, y);
             isControl = control;
-            isActive = active;
+            isActive  = active;
         }
         midiPoint()
         {
             p.setXY (0.f, 0.f);
             isControl = false;
-            isActive = true;
+            isActive  = true;
         }
         ~midiPoint(){};
 

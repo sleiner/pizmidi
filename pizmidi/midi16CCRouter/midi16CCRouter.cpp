@@ -11,12 +11,12 @@ Midi16CCRouterProgram::Midi16CCRouterProgram()
     // default program values
     for (int i = 0; i < numCCs; i++)
     {
-        param[i * 2] = MIDI_TO_FLOAT (i); //in
-        param[i * 2 + 1] = 0.0; //out; 0 means no change, otherwise use MIDI_TO_FLOAT2()
+        param[i * 2]     = MIDI_TO_FLOAT (i); //in
+        param[i * 2 + 1] = 0.0;               //out; 0 means no change, otherwise use MIDI_TO_FLOAT2()
     }
     param[kChi] = CHANNEL_TO_FLOAT016 (0); // any channel
     param[kCho] = CHANNEL_TO_FLOAT016 (0); // same channel as input
-    param[kPC] = 1.0f;
+    param[kPC]  = 1.0f;
 
     // default program name
     vst_strncpy (name, "program", kVstMaxProgNameLen);
@@ -26,7 +26,7 @@ Midi16CCRouterProgram::Midi16CCRouterProgram()
 Midi16CCRouter::Midi16CCRouter (audioMasterCallback audioMaster)
     : PizMidi (audioMaster, kNumPrograms, kNumParams)
 {
-    programs = new Midi16CCRouterProgram[numPrograms];
+    programs  = new Midi16CCRouterProgram[numPrograms];
     automated = false;
 
     if (programs)
@@ -193,9 +193,9 @@ void Midi16CCRouter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0;       // scraping  channel
         short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
+        short data1   = tomod.midiData[1] & 0x7f;
         //short data2		 = tomod.midiData[2] & 0x7f;
 
         int cci[numCCs];

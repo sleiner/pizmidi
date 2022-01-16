@@ -9,9 +9,9 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 ForceToRangeProgram::ForceToRangeProgram()
 {
     // default program values
-    param[kLowNote] = MIDI_TO_FLOAT (0);
+    param[kLowNote]  = MIDI_TO_FLOAT (0);
     param[kHighNote] = MIDI_TO_FLOAT (127);
-    param[kChannel] = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+    param[kChannel]  = CHANNEL_TO_FLOAT (ANY_CHANNEL);
 
     // default program name
     vst_strncpy (name, "default", kVstMaxProgNameLen);
@@ -22,7 +22,7 @@ ForceToRange::ForceToRange (audioMasterCallback audioMaster)
     : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
 {
     settingProgram = false;
-    programs = new ForceToRangeProgram[numPrograms];
+    programs       = new ForceToRangeProgram[numPrograms];
     if (programs)
     {
         CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
@@ -48,12 +48,12 @@ ForceToRange::ForceToRange (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 0:
-                        programs[i].param[kLowNote] = MIDI_TO_FLOAT (48);
+                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT (48);
                         programs[i].param[kHighNote] = MIDI_TO_FLOAT (60);
                         sprintf (programs[i].name, "Octave 2");
                         break;
                     case 1:
-                        programs[i].param[kLowNote] = MIDI_TO_FLOAT (60);
+                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT (60);
                         programs[i].param[kHighNote] = MIDI_TO_FLOAT (72);
                         sprintf (programs[i].name, "Octave 3");
                         break;
@@ -88,7 +88,7 @@ void ForceToRange::setProgram (VstInt32 program)
 {
     if (program < numPrograms)
     {
-        settingProgram = true;
+        settingProgram          = true;
         ForceToRangeProgram* ap = &programs[program];
 
         curProgram = program;
@@ -192,8 +192,8 @@ void ForceToRange::getParameterDisplay (VstInt32 index, char* text)
 
 void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const char lowlimit = FLOAT_TO_MIDI (param[kLowNote]);
-    const char highlimit = FLOAT_TO_MIDI (param[kHighNote]);
+    const char lowlimit      = FLOAT_TO_MIDI (param[kLowNote]);
+    const char highlimit     = FLOAT_TO_MIDI (param[kHighNote]);
     const char listenchannel = FLOAT_TO_CHANNEL (param[kChannel]);
 
     // process incoming events
@@ -203,9 +203,9 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const char channel = tomod.midiData[0] & 0x0f; // isolating channel
-        const char data1 = tomod.midiData[1] & 0x7f;
-        const char data2 = tomod.midiData[2] & 0x7f;
+        const char channel   = tomod.midiData[0] & 0x0f; // isolating channel
+        const char data1     = tomod.midiData[1] & 0x7f;
+        const char data2     = tomod.midiData[2] & 0x7f;
 
         // make zero-velocity noteons look like "real" noteoffs
         if (status == MIDI_NOTEON && data2 == 0)
@@ -244,7 +244,7 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
             else if (status == MIDI_NOTEOFF)
             {
                 // always transpose noteoff by the same amount as the noteon was transposed
-                tomod.midiData[1] = transposed[data1][channel];
+                tomod.midiData[1]          = transposed[data1][channel];
                 transposed[data1][channel] = data1;
             }
         }

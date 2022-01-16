@@ -5,7 +5,7 @@
 void TextBoxSlider::mouseDrag (const MouseEvent& e)
 {
     // Bouml preserved body begin 0004818D
-    double delta = this->step * e.getDistanceFromDragStartY() / pixelStep;
+    double delta  = this->step * e.getDistanceFromDragStartY() / pixelStep;
     double newVal = oldValue - delta;
     setValue (newVal, sendNotification);
 
@@ -55,9 +55,9 @@ void TextBoxSlider::mouseUp (const MouseEvent& e)
 void TextBoxSlider::setRange (double min, double max, double stepsize, int pixelPerStep)
 {
     // Bouml preserved body begin 0004848D
-    this->min = min;
-    this->max = max;
-    this->step = stepsize;
+    this->min       = min;
+    this->max       = max;
+    this->step      = stepsize;
     this->pixelStep = pixelPerStep;
     // Bouml preserved body end 0004848D
 }
@@ -116,9 +116,9 @@ void TextBoxSlider::setValue (double newVal, NotificationType notification)
 {
     // Bouml preserved body begin 00048A8D
     long newValInt = roundToInt (newVal / step);
-    newVal = newValInt * step;
-    newVal = jmin (max, newVal);
-    newVal = jmax (min, newVal);
+    newVal         = newValInt * step;
+    newVal         = jmin (max, newVal);
+    newVal         = jmax (min, newVal);
 
     value = newVal;
     Label::setText (String (value), notification);

@@ -6,27 +6,27 @@
 #include "juce_audio_devices/juce_audio_devices.h"
 #include "juce_data_structures/juce_data_structures.h"
 
+#include "../_common/key.h"
 #include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
-#include "../_common/key.h"
 
 #include "MidiLoop.h"
 
 //==============================================================================
 enum parameters
 {
-    kThru = 0, //midi thru
-    kFile, //clear/load loop from midi file
-    kSave, //save midi file on demand
-    kSync, //sync mode
-    kRecStep, //loop length step
-    kQuantize, //input quantize
-    kFixedLength, //fixed-length recording time
-    kRecMode, //replace/overdub
-    kSingleLoop, //loop play follows slot selection
-    kPlayMain, //plays the active slot
-    kRecordMain, //records to the active slot
-    kMasterVelocity, //applies velocity scale to all played notes
+    kThru = 0,        //midi thru
+    kFile,            //clear/load loop from midi file
+    kSave,            //save midi file on demand
+    kSync,            //sync mode
+    kRecStep,         //loop length step
+    kQuantize,        //input quantize
+    kFixedLength,     //fixed-length recording time
+    kRecMode,         //replace/overdub
+    kSingleLoop,      //loop play follows slot selection
+    kPlayMain,        //plays the active slot
+    kRecordMain,      //records to the active slot
+    kMasterVelocity,  //applies velocity scale to all played notes
     kMasterTranspose, //applies transposition to all played notes (after forcing to scale)
     kMidiOutDevice,
     kParamsToHost,
@@ -37,31 +37,31 @@ enum parameters
     numGlobalParams,
 
     kRecord = numGlobalParams, //record toggle
-    kPlay, //play toggle
-    kTranspose, //live transposition by semitone
-    kOctave, //live transposition by octave
-    kVelocity, //live velocity offset
-    kVeloSens, //velocity sensitivity for note triggering
-    kLoopStart, //loop start offset
-    kLoopEnd, //loop end offset
-    kShift, //beat shift
-    kStretch, //time stretch
-    kTrigger, //trigger mode
-    kNoteTrig, //midi note triggering
-    kRoot, //root (no transposition) note for note triggering
-    kNLow, // low
-    kNHigh, //     & high notes: range to use for note triggering
-    kFullRelease, //always play loop to end (not implemented)
-    kWaitForBar, //play/stop on next bar
-    kNumLoops, //number of times to play slot, 0=>loop forever
-    kNextSlot, //slot to play after this one
+    kPlay,                     //play toggle
+    kTranspose,                //live transposition by semitone
+    kOctave,                   //live transposition by octave
+    kVelocity,                 //live velocity offset
+    kVeloSens,                 //velocity sensitivity for note triggering
+    kLoopStart,                //loop start offset
+    kLoopEnd,                  //loop end offset
+    kShift,                    //beat shift
+    kStretch,                  //time stretch
+    kTrigger,                  //trigger mode
+    kNoteTrig,                 //midi note triggering
+    kRoot,                     //root (no transposition) note for note triggering
+    kNLow,                     // low
+    kNHigh,                    //     & high notes: range to use for note triggering
+    kFullRelease,              //always play loop to end (not implemented)
+    kWaitForBar,               //play/stop on next bar
+    kNumLoops,                 //number of times to play slot, 0=>loop forever
+    kNextSlot,                 //slot to play after this one
     kPlayGroup,
     kMuteGroup,
-    kForceToKey, //on/off
-    kScaleChannel, //midi channel for force to scale
+    kForceToKey,       //on/off
+    kScaleChannel,     //midi channel for force to scale
     kTransposeChannel, //midi channel for transpose
-    kUseScaleChannel, //toggle using midi channel for force to scale
-    kUseTrChannel, //toggle using midi channel for transposing
+    kUseScaleChannel,  //toggle using midi channel for force to scale
+    kUseTrChannel,     //toggle using midi channel for transposing
     kNote0,
     kNote1,
     kNote2,
@@ -77,14 +77,14 @@ enum parameters
     kForceToScaleMode,
     kImmediateTranspose,
     kTranspose10,
-    kReverse, //forward/reverse playback
+    kReverse,    //forward/reverse playback
     kNoteToggle, //note triggers toggle or momentary
-    kChannel, //midi channel (input filter, output transformer)
-    kTrigChan, //midi channel for note triggering
-    kFiltChan, //channel filter/transformer switch
+    kChannel,    //midi channel (input filter, output transformer)
+    kTrigChan,   //midi channel for note triggering
+    kFiltChan,   //channel filter/transformer switch
     numParamsPerSlot = kFiltChan + 1 - numGlobalParams,
-    numPrograms = 128,
-    numSlots = numPrograms,
+    numPrograms      = 128,
+    numSlots         = numPrograms,
 
     numParams = numParamsPerSlot * numSlots + numGlobalParams,
 };
@@ -296,7 +296,7 @@ public:
 
     void setSize (int w, int h)
     {
-        lastUIWidth = w;
+        lastUIWidth  = w;
         lastUIHeight = h;
     }
 
@@ -386,7 +386,7 @@ public:
     int getDenominator (int slot) { return programs[slot].denominator; }
     void setTimeSig (int slot, int n, int d)
     {
-        programs[slot].numerator = n;
+        programs[slot].numerator   = n;
         programs[slot].denominator = d;
     }
 
@@ -411,7 +411,7 @@ public:
 
     double getPlayPosition (bool& playing, bool& recording)
     {
-        playing = isSlotPlaying (curProgram);
+        playing   = isSlotPlaying (curProgram);
         recording = getParameterForSlot (kRecord, curProgram) >= 0.5f;
         return loopPpq[curProgram];
     }
@@ -448,13 +448,13 @@ public:
     int lastchannel[numPrograms];
     struct h
     {
-        int vel[16][128]; // velocity of currently playing input notes
+        int vel[16][128];   // velocity of currently playing input notes
         int count[16][128]; // number of instances of each note
     } hanging[numPrograms];
     int inputNoteTransposition[16][128];
     int recNoteOn[numPrograms][16][128];
     int polytrigger[numPrograms][polyphony]; // note numbers of polyphonic triggers
-    int currentPoly[numPrograms]; // number of playing instances of current pattern
+    int currentPoly[numPrograms];            // number of playing instances of current pattern
 
     void endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int slot, int voice = -1, bool kill = false);
     class TransposeRules
@@ -504,28 +504,28 @@ public:
                 memcpy (&oldrules, &rules, sizeof (Rules));
             else if (memcmp (&rules, &oldrules, sizeof (Rules)) == 0)
                 return false;
-            rules.semitones = roundToInt (plugin->getParameterForSlot (kTranspose, slot) * 24.f) - 12;
-            rules.octaves = roundToInt (plugin->getParameterForSlot (kOctave, slot) * 8.f) - 4;
-            rules.forceToScale = plugin->getParameterForSlot (kForceToKey, slot) >= 0.5f;
-            rules.noteswitch[0] = plugin->getParameterForSlot (kNote0, slot) >= 0.5f;
-            rules.noteswitch[1] = plugin->getParameterForSlot (kNote1, slot) >= 0.5f;
-            rules.noteswitch[2] = plugin->getParameterForSlot (kNote2, slot) >= 0.5f;
-            rules.noteswitch[3] = plugin->getParameterForSlot (kNote3, slot) >= 0.5f;
-            rules.noteswitch[4] = plugin->getParameterForSlot (kNote4, slot) >= 0.5f;
-            rules.noteswitch[5] = plugin->getParameterForSlot (kNote5, slot) >= 0.5f;
-            rules.noteswitch[6] = plugin->getParameterForSlot (kNote6, slot) >= 0.5f;
-            rules.noteswitch[7] = plugin->getParameterForSlot (kNote7, slot) >= 0.5f;
-            rules.noteswitch[8] = plugin->getParameterForSlot (kNote8, slot) >= 0.5f;
-            rules.noteswitch[9] = plugin->getParameterForSlot (kNote9, slot) >= 0.5f;
-            rules.noteswitch[10] = plugin->getParameterForSlot (kNote10, slot) >= 0.5f;
-            rules.noteswitch[11] = plugin->getParameterForSlot (kNote11, slot) >= 0.5f;
-            rules.root = floatToMidi (plugin->getParameterForSlot (kRoot, slot));
+            rules.semitones         = roundToInt (plugin->getParameterForSlot (kTranspose, slot) * 24.f) - 12;
+            rules.octaves           = roundToInt (plugin->getParameterForSlot (kOctave, slot) * 8.f) - 4;
+            rules.forceToScale      = plugin->getParameterForSlot (kForceToKey, slot) >= 0.5f;
+            rules.noteswitch[0]     = plugin->getParameterForSlot (kNote0, slot) >= 0.5f;
+            rules.noteswitch[1]     = plugin->getParameterForSlot (kNote1, slot) >= 0.5f;
+            rules.noteswitch[2]     = plugin->getParameterForSlot (kNote2, slot) >= 0.5f;
+            rules.noteswitch[3]     = plugin->getParameterForSlot (kNote3, slot) >= 0.5f;
+            rules.noteswitch[4]     = plugin->getParameterForSlot (kNote4, slot) >= 0.5f;
+            rules.noteswitch[5]     = plugin->getParameterForSlot (kNote5, slot) >= 0.5f;
+            rules.noteswitch[6]     = plugin->getParameterForSlot (kNote6, slot) >= 0.5f;
+            rules.noteswitch[7]     = plugin->getParameterForSlot (kNote7, slot) >= 0.5f;
+            rules.noteswitch[8]     = plugin->getParameterForSlot (kNote8, slot) >= 0.5f;
+            rules.noteswitch[9]     = plugin->getParameterForSlot (kNote9, slot) >= 0.5f;
+            rules.noteswitch[10]    = plugin->getParameterForSlot (kNote10, slot) >= 0.5f;
+            rules.noteswitch[11]    = plugin->getParameterForSlot (kNote11, slot) >= 0.5f;
+            rules.root              = floatToMidi (plugin->getParameterForSlot (kRoot, slot));
             rules.transposedTrigger = plugin->getParameterForSlot (kNoteTrig, slot) > 0.0
-                                      && plugin->getParameterForSlot (kNoteTrig, slot) < 0.2f
-                                      && rules.root > -1;
+                                   && plugin->getParameterForSlot (kNoteTrig, slot) < 0.2f
+                                   && rules.root > -1;
             rules.masterTranspose = roundToInt (plugin->getParameter (kMasterTranspose) * 24.f) - 12;
-            rules.mode = roundToInt (plugin->getParameterForSlot (kForceToScaleMode, slot) * (float) (numForceToKeyModes - 1));
-            rules.transpose10 = plugin->getParameterForSlot (kTranspose10, slot) >= 0.5f;
+            rules.mode            = roundToInt (plugin->getParameterForSlot (kForceToScaleMode, slot) * (float) (numForceToKeyModes - 1));
+            rules.transpose10     = plugin->getParameterForSlot (kTranspose10, slot) >= 0.5f;
             if (initialize)
                 memcpy (&oldrules, &rules, sizeof (Rules));
             return memcmp (&rules, &oldrules, sizeof (Rules)) != 0;
@@ -541,14 +541,14 @@ public:
             if (channel == 10 && ! rules.transpose10)
                 return note;
             int transposey = 0;
-            int interval = (! isInputNote && rules.transposedTrigger) ? (trignote[voice] - rules.root) : 0;
+            int interval   = (! isInputNote && rules.transposedTrigger) ? (trignote[voice] - rules.root) : 0;
             if (interval != 0 && rules.forceToScale)
             {
                 //first force trigger note to scale
                 if (! rules.noteswitch[trignote[voice] % 12])
                 {
                     int force = 0;
-                    int j = -1;
+                    int j     = -1;
                     switch (rules.mode)
                     {
                         //nearest note, down when tied (same as ndc)
@@ -558,7 +558,7 @@ public:
                             {
                                 if (rules.noteswitch[(trignote[voice] + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -570,13 +570,13 @@ public:
                             break;
                         //always up
                         case alwaysup:
-                            j = 1;
+                            j        = 1;
                             killNote = true;
                             while (j < 12)
                             {
                                 if (rules.noteswitch[(trignote[voice] + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -590,7 +590,7 @@ public:
                             {
                                 if (rules.noteswitch[(trignote[voice] + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -607,7 +607,7 @@ public:
                     }
                     trignote[voice] += force;
                 }
-                int m = 0;
+                int m       = 0;
                 int counter = 0;
                 if (trignote[voice] > rules.root)
                 {
@@ -632,7 +632,7 @@ public:
                     }
                 }
                 transposey = counter;
-                interval = 0;
+                interval   = 0;
             }
             int newNote = note + rules.semitones + rules.octaves * 12;
             if (rules.forceToScale)
@@ -640,7 +640,7 @@ public:
                 if (! rules.noteswitch[newNote % 12])
                 {
                     int force = 0;
-                    int j = -1;
+                    int j     = -1;
                     switch (rules.mode)
                     {
                         //nearest note, down when tied (same as ndc)
@@ -650,7 +650,7 @@ public:
                             {
                                 if (rules.noteswitch[(newNote + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -662,13 +662,13 @@ public:
                             break;
                         //always up
                         case alwaysup:
-                            j = 1;
+                            j        = 1;
                             killNote = true;
                             while (j < 12)
                             {
                                 if (rules.noteswitch[(newNote + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -682,7 +682,7 @@ public:
                             {
                                 if (rules.noteswitch[(newNote + j) % 12])
                                 {
-                                    force = j;
+                                    force    = j;
                                     killNote = false;
                                     break;
                                 }
@@ -702,7 +702,7 @@ public:
                 {
                     //move the note up to the right scale degree
                     int counter = 0;
-                    int m = 0;
+                    int m       = 0;
                     while (counter < transposey)
                     {
                         m++;
@@ -717,7 +717,7 @@ public:
                 {
                     //move the note down the scale
                     int counter = 0;
-                    int m = 0;
+                    int m       = 0;
                     while (counter > transposey)
                     {
                         m++;

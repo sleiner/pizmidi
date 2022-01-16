@@ -101,7 +101,7 @@ void midiStuckNoteKiller::preProcess (void)
 {
     //// preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -142,12 +142,12 @@ void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0; // scraping  channel
         short channel = tomod.midiData[0] & 0x0f; // isolating channel
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short data1   = tomod.midiData[1] & 0x7f;
+        short data2   = tomod.midiData[2] & 0x7f;
 
-        bool on = fParam01 >= 0.5f;
+        bool on      = fParam01 >= 0.5f;
         bool discard = false;
 
         if (on && status == MIDI_CONTROLCHANGE && data1 == 123)
@@ -159,9 +159,9 @@ void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
                     if (held_notes[n][ch])
                     {
                         VstMidiEvent kill = tomod;
-                        kill.midiData[0] = MIDI_NOTEOFF | ch;
-                        kill.midiData[1] = n;
-                        kill.midiData[2] = 0;
+                        kill.midiData[0]  = MIDI_NOTEOFF | ch;
+                        kill.midiData[1]  = n;
+                        kill.midiData[2]  = 0;
                         outputs[0].push_back (kill);
                         held_notes[n][ch] = false;
                     }

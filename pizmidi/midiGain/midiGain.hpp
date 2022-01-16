@@ -32,12 +32,12 @@ enum parameters
 };
 
 //max 1!!! it cant have more than one midi stream in VST 2.x!!
-#define PLUG_MIDI_INPUTS 1 //(only 1 or 0!)
+#define PLUG_MIDI_INPUTS  1 //(only 1 or 0!)
 #define PLUG_MIDI_OUTPUTS 1 //(only 1 or 0!)
 
 // you absolutely MUST change all the following!!!!////
-#define PLUG_IDENT 'mGEx'
-#define PLUG_NAME "midiGain"
+#define PLUG_IDENT  'mGEx'
+#define PLUG_NAME   "midiGain"
 #define PLUG_VENDOR "Insert Piz Here"
 
 #define PLUG_VERSION 1000

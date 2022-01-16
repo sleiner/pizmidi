@@ -10,9 +10,9 @@ MidiAliasProgram::MidiAliasProgram()
 {
     // default Program Values
     fMirror = MIDI_TO_FLOAT (127);
-    fZero = 0.f;
-    fShift = 0.5f;
-    fPower = 1.0f;
+    fZero   = 0.f;
+    fShift  = 0.5f;
+    fPower  = 1.0f;
     // default program name
     strcpy (name, "Default");
 }
@@ -33,9 +33,9 @@ MidiAlias::MidiAlias (audioMasterCallback audioMaster)
                 for (int i = 0; i < kNumPrograms; i++)
                 {
                     programs[i].fMirror = defaultBank->GetProgParm (i, 0);
-                    programs[i].fZero = defaultBank->GetProgParm (i, 0);
-                    programs[i].fShift = defaultBank->GetProgParm (i, 0);
-                    programs[i].fPower = defaultBank->GetProgParm (i, 1);
+                    programs[i].fZero   = defaultBank->GetProgParm (i, 0);
+                    programs[i].fShift  = defaultBank->GetProgParm (i, 0);
+                    programs[i].fPower  = defaultBank->GetProgParm (i, 1);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -204,18 +204,18 @@ void MidiAlias::getParameterDisplay (VstInt32 index, char* text)
 void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     const int nyquist = FLOAT_TO_MIDI (fMirror);
-    const int zero = FLOAT_TO_MIDI (fZero);
-    const int shift = roundToInt (fShift * 200.f) - 100;
+    const int zero    = FLOAT_TO_MIDI (fZero);
+    const int shift   = roundToInt (fShift * 200.f) - 100;
 
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
-        bool discard = false;
+        const int status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int channel  = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        const int data1    = tomod.midiData[1] & 0x7f;
+        bool discard       = false;
 
         if (isNoteOn (tomod) || status == MIDI_POLYKEYPRESSURE)
         {
@@ -249,7 +249,7 @@ void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         else if (isNoteOff (tomod))
         {
             // always transpose noteoff by the same amount as the noteon was transposed
-            tomod.midiData[1] = (char) transposed[data1][channel];
+            tomod.midiData[1]          = (char) transposed[data1][channel];
             transposed[data1][channel] = data1;
         }
         if (! discard)

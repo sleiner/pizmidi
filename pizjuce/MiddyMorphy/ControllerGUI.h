@@ -7,17 +7,17 @@ class Controller;
 class MidiMorph;
 namespace juce
 {
-    class TextEditor;
+class TextEditor;
 }
 namespace juce
 {
-    class Slider;
+class Slider;
 }
 class ControllerValue;
 class TextBoxSlider;
 namespace juce
 {
-    class Label;
+class Label;
 }
 
 class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeListener, public juce::Component, public juce::Slider::Listener, public juce::Label::Listener

@@ -10,7 +10,7 @@ MidiPitchBendToNotesProgram::MidiPitchBendToNotesProgram()
 {
     // default Program Values
     fChannel = CHANNEL_TO_FLOAT (0);
-    fPower = 1.f;
+    fPower   = 1.f;
 
     vst_strncpy (name, "Pitch Bend To Notes", kVstMaxProgNameLen);
 }
@@ -31,7 +31,7 @@ MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
                 for (int i = 0; i < numPrograms; i++)
                 {
                     programs[i].fChannel = defaultBank->GetProgParm (i, 0);
-                    programs[i].fPower = defaultBank->GetProgParm (i, 1);
+                    programs[i].fPower   = defaultBank->GetProgParm (i, 1);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -51,7 +51,7 @@ MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         transpose[ch] = 0;
-        rpn[ch] = -999;
+        rpn[ch]       = -999;
         rpncoarse[ch] = -999;
         for (int n = 0; n < 128; n++)
             lastTranspose[n][ch] = NOT_PLAYING;
@@ -183,11 +183,11 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
         for (unsigned int i = 0; i < inputs[0].size(); i++)
         {
             //copying event "i" from input (with all its fields)
-            VstMidiEvent tomod = inputs[0][i];
-            unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-            const char in_channel = tomod.midiData[0] & 0x0f; // isolating channel
-            const char data1 = tomod.midiData[1] & 0x7f;
-            const char data2 = tomod.midiData[2] & 0x7f;
+            VstMidiEvent tomod     = inputs[0][i];
+            unsigned char status   = tomod.midiData[0] & 0xf0; // scraping  channel
+            const char in_channel  = tomod.midiData[0] & 0x0f; // isolating channel
+            const char data1       = tomod.midiData[1] & 0x7f;
+            const char data2       = tomod.midiData[2] & 0x7f;
             const char out_channel = (char) FLOAT_TO_CHANNEL (fChannel);
 
             if ((status == MIDI_NOTEON) && (data2 == 0))
@@ -227,8 +227,8 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
             else if (status == MIDI_NOTEON)
             {
                 lastTranspose[data1][in_channel] = transpose[in_channel];
-                tomod.midiData[0] = out_channel | MIDI_NOTEON;
-                tomod.midiData[1] = (data1 + transpose[in_channel]) & 0x7f;
+                tomod.midiData[0]                = out_channel | MIDI_NOTEON;
+                tomod.midiData[1]                = (data1 + transpose[in_channel]) & 0x7f;
                 outputs[0].push_back (tomod);
             }
             else if (status == MIDI_NOTEOFF)

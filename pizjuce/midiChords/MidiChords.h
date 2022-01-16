@@ -6,9 +6,9 @@
 
 #include "../_common/BankStorage.h"
 #include "../_common/ChordFunctions.h"
-#include "../_common/PizAudioProcessor.h"
 #include "../_common/key.h"
 #include "../_common/midistuff.h"
+#include "../_common/PizAudioProcessor.h"
 
 using namespace juce;
 
@@ -72,16 +72,16 @@ public:
     GuitarDefinition()
     {
         guitarName = String();
-        chordFile = "Chords.txt";
-        numFrets = 0;
+        chordFile  = "Chords.txt";
+        numFrets   = 0;
         numStrings = 0;
     }
 
     GuitarDefinition (String name, String file, int frets, Array<int>& notes)
     {
         guitarName = name;
-        chordFile = file;
-        numFrets = frets;
+        chordFile  = file;
+        numFrets   = frets;
         stringNotes.addArray (notes);
         numStrings = notes.size();
     }

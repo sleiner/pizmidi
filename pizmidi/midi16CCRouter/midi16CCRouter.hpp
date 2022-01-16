@@ -10,11 +10,11 @@ by Reuben Vinal
 enum
 {
     //parameters appear in this order
-    numCCs = 16,
-    kChi = numCCs * 2,
-    kCho = numCCs * 2 + 1,
-    kPC = numCCs * 2 + 2,
-    kNumParams = numCCs * 2 + 3, //conveniently counts the parameters
+    numCCs       = 16,
+    kChi         = numCCs * 2,
+    kCho         = numCCs * 2 + 1,
+    kPC          = numCCs * 2 + 2,
+    kNumParams   = numCCs * 2 + 3, //conveniently counts the parameters
     kNumPrograms = 128
 };
 

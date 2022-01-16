@@ -18,11 +18,11 @@ enum
     kPlay,
 
     kNumGlobalParams = kThru + 1,
-    kNumSlots = 8,
-    kNumParams = kNumGlobalParams + kNumSlots * 3,
-    kNumPrograms = 128,
+    kNumSlots        = 8,
+    kNumParams       = kNumGlobalParams + kNumSlots * 3,
+    kNumPrograms     = 128,
 
-    off = -1,
+    off   = -1,
     learn = -2
 };
 

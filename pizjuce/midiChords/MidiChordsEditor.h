@@ -84,7 +84,7 @@ public:
           erasing (false)
     {
         owner = ownerFilter;
-        s = &state;
+        s     = &state;
     }
 
 private:
@@ -98,7 +98,7 @@ private:
         FrettedNote n (fret, string);
         if (n != lastDraggedNote)
         {
-            int midiNoteNumber = getNote (n);
+            int midiNoteNumber  = getNote (n);
             int oldNoteOnString = getNote (FrettedNote (getStringFret (string), string));
             if (s->isNoteOn (string + 1, midiNoteNumber))
             {
@@ -118,7 +118,7 @@ private:
     bool mouseDownOnKey (int fret, int string, const MouseEvent& e) override
     {
         FrettedNote n (fret, string);
-        int midiNoteNumber = getNote (n);
+        int midiNoteNumber  = getNote (n);
         int oldNoteOnString = getNote (FrettedNote (getStringFret (string), string));
         if (s->isNoteOn (string + 1, midiNoteNumber))
         {
@@ -145,7 +145,7 @@ public:
           owner (nullptr)
     {
         owner = ownerFilter;
-        s = &state;
+        s     = &state;
         this->setMidiChannel (1);
         this->setLowestVisibleKey (36);
     }
@@ -325,7 +325,7 @@ public:
     TriggerKeySelectorKeyboard (MidiKeyboardState& state, MidiChords* ownerFilter)
         : MidiKeyboardComponent (state, MidiKeyboardComponent::horizontalKeyboard), owner (0)
     {
-        s = &state;
+        s     = &state;
         owner = ownerFilter;
         this->setMidiChannel (1);
         this->setLowestVisibleKey (36);

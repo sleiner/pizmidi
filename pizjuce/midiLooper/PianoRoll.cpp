@@ -21,10 +21,10 @@ PianoRoll::PianoRoll (AudioProcessor* _plugin, AudioProcessorEditor* _owner, Tim
       draggingNoteTimeDelta (0)
 
 {
-    plugin = _plugin;
-    owner = _owner;
-    timeline = _timeline;
-    blankLength = timebase * 16.0;
+    plugin       = _plugin;
+    owner        = _owner;
+    timeline     = _timeline;
+    blankLength  = timebase * 16.0;
     pixelsPerPpq = (float) (800.0 / blankLength);
     setNoteLength (4.f);
     setTimeSig (4, 4);
@@ -49,7 +49,7 @@ PianoRoll::~PianoRoll()
 
 void PianoRoll::setSequence (Loop* sequence_)
 {
-    sequence = sequence_;
+    sequence  = sequence_;
     numEvents = sequence->getNumEvents();
     sequenceChanged();
 }
@@ -61,24 +61,25 @@ int PianoRoll::getTimeInPixels()
 
 void PianoRoll::mouseDown (const MouseEvent& e)
 {
-    bool snap = snapToGrid != e.mods.isShiftDown();
-    int n = (int) ((float) (getHeight() - e.y) * 128.f / (float) getHeight());
-    double t = pixelsToPpq ((float) e.x, true);
+    bool snap           = snapToGrid != e.mods.isShiftDown();
+    int n               = (int) ((float) (getHeight() - e.y) * 128.f / (float) getHeight());
+    double t            = pixelsToPpq ((float) e.x, true);
     double accurateTime = pixelsToPpq ((float) e.x, false);
-    hoveringNoteIndex = sequence->getIndexOfNote (n, accurateTime);
+    hoveringNoteIndex   = sequence->getIndexOfNote (n, accurateTime);
     if (hoveringNoteIndex != No_Note)
     {
         hoveringNote = sequence->getEventPointer (hoveringNoteIndex);
         //existing note
-        draggingNoteTimeDelta = 0.0;
+        draggingNoteTimeDelta     = 0.0;
         draggingNoteTransposition = 0;
-        draggingNoteNumber = n;
-        draggingNoteVelocity = originalNoteVelocity = hoveringNote->message.getVelocity();
-        draggingNoteLength = sequence->getTimeOfMatchingKeyUp (hoveringNoteIndex) - sequence->getEventTime (hoveringNoteIndex);
-        draggingNoteStartTime = sequence->getEventTime (hoveringNoteIndex);
-        draggingNoteChannel = hoveringNote->message.getChannel() - 1;
-        draggingNoteEndOffset = (draggingNoteStartTime + draggingNoteLength) - accurateTime;
-        lastDragTime = snap ? t : accurateTime;
+        draggingNoteNumber        = n;
+        originalNoteVelocity      = hoveringNote->message.getVelocity();
+        draggingNoteVelocity      = originalNoteVelocity;
+        draggingNoteLength        = sequence->getTimeOfMatchingKeyUp (hoveringNoteIndex) - sequence->getEventTime (hoveringNoteIndex);
+        draggingNoteStartTime     = sequence->getEventTime (hoveringNoteIndex);
+        draggingNoteChannel       = hoveringNote->message.getChannel() - 1;
+        draggingNoteEndOffset     = (draggingNoteStartTime + draggingNoteLength) - accurateTime;
+        lastDragTime              = snap ? t : accurateTime;
         if (! selectedNotes.contains (hoveringNote))
         {
             clearSelection();
@@ -93,15 +94,15 @@ void PianoRoll::mouseDown (const MouseEvent& e)
         //make a new note
         wasResizing = true;
         clearSelection();
-        hoveringNoteIndex = New_Note;
-        draggingNoteNumber = n;
+        hoveringNoteIndex    = New_Note;
+        draggingNoteNumber   = n;
         draggingNoteVelocity = originalNoteVelocity = 127;
-        draggingNoteLength = stepLengthInPpq - 1;
-        draggingNoteStartTime = snap ? t : accurateTime;
-        draggingNoteChannel = defaultChannel;
-        draggingNoteTimeDelta = 0.0;
-        draggingNoteTransposition = 0;
-        lastDragTime = snap ? t : accurateTime;
+        draggingNoteLength                          = stepLengthInPpq - 1;
+        draggingNoteStartTime                       = snap ? t : accurateTime;
+        draggingNoteChannel                         = defaultChannel;
+        draggingNoteTimeDelta                       = 0.0;
+        draggingNoteTransposition                   = 0;
+        lastDragTime                                = snap ? t : accurateTime;
         if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
             timeline->setLoop (0, quarterNotesPerBar * ceil ((lastDragTime + 1) / (timebase * quarterNotesPerBar)));
         plugin->getCallbackLock().enter();
@@ -121,7 +122,7 @@ void PianoRoll::mouseDown (const MouseEvent& e)
 void PianoRoll::mouseDrag (const MouseEvent& e)
 {
     bool snap = snapToGrid != e.mods.isShiftDown();
-    double x = pixelsToPpq ((float) e.x, false);
+    double x  = pixelsToPpq ((float) e.x, false);
     if (snap)
     {
         lastDragTime = snapPpqToGrid (lastDragTime);
@@ -130,23 +131,23 @@ void PianoRoll::mouseDrag (const MouseEvent& e)
     if (hoveringNoteIndex != No_Note)
     {
         double startTime = draggingNoteStartTime;
-        double length = draggingNoteLength;
-        double offset = lastDragTime - startTime;
+        double length    = draggingNoteLength;
+        double offset    = lastDragTime - startTime;
         if (! e.mods.isAltDown())
         {
-            int noteDelta = n - draggingNoteNumber;
+            int noteDelta    = n - draggingNoteNumber;
             double timeDelta = jmax (0.0, snap ? snapPpqToGrid (x - offset) : x - offset) - draggingNoteStartTime;
             draggingNoteNumber += noteDelta;
             draggingNoteStartTime += timeDelta;
             draggingNoteTransposition = n - hoveringNote->message.getNoteNumber();
-            draggingNoteTimeDelta = jmax (0.0, snap ? snapPpqToGrid (x - offset) : x - offset) - hoveringNote->message.getTimeStamp();
+            draggingNoteTimeDelta     = jmax (0.0, snap ? snapPpqToGrid (x - offset) : x - offset) - hoveringNote->message.getTimeStamp();
         }
         else
         {
-            wasResizing = true;
-            length = x - startTime + draggingNoteEndOffset;
+            wasResizing        = true;
+            length             = x - startTime + draggingNoteEndOffset;
             double lengthDelta = snap ? snapPpqToGrid (length - draggingNoteLength, true) : length - draggingNoteLength;
-            int velocityDelta = jlimit (1, 127, originalNoteVelocity + (getHeight() - e.y) - draggingNoteNumber * getHeight() / 128) - draggingNoteVelocity;
+            int velocityDelta  = jlimit (1, 127, originalNoteVelocity + (getHeight() - e.y) - draggingNoteNumber * getHeight() / 128) - draggingNoteVelocity;
             for (int i = 0; i < selectedNotes.size(); i++)
             {
                 if (selectedNotes.getUnchecked (i)->noteOffObject)
@@ -178,7 +179,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
     int highnote, lownote;
     if (lasso.getWidth() > 0)
     {
-        lownote = (int) ((float) (getHeight() - lasso.getY()) * 128.f / (float) getHeight());
+        lownote  = (int) ((float) (getHeight() - lasso.getY()) * 128.f / (float) getHeight());
         highnote = (int) ((float) (getHeight() - (lasso.getY() + lasso.getHeight())) * 128.f / (float) getHeight());
         if (lownote > highnote)
             std::swap (lownote, highnote);
@@ -265,7 +266,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
             }
         }
         hoveringNoteIndex = No_Note;
-        hoveringNote = nullptr;
+        hoveringNote      = nullptr;
         sendChangeMessage();
         noteLayer->repaint();
     }
@@ -280,19 +281,20 @@ void PianoRoll::mouseDoubleClick (const MouseEvent& e)
 {
     if (e.mods.isLeftButtonDown())
     {
-        bool snap = snapToGrid != e.mods.isShiftDown();
-        int n = (int) ((float) (getHeight() - e.y) * 128.f / (float) getHeight());
-        double t = pixelsToPpq ((float) e.x, true);
-        double accurateTime = pixelsToPpq ((float) e.x, false);
-        hoveringNoteIndex = sequence->getIndexOfNote (n, accurateTime);
-        draggingNoteTimeDelta = 0.0;
+        bool snap                 = snapToGrid != e.mods.isShiftDown();
+        int n                     = (int) ((float) (getHeight() - e.y) * 128.f / (float) getHeight());
+        double t                  = pixelsToPpq ((float) e.x, true);
+        double accurateTime       = pixelsToPpq ((float) e.x, false);
+        hoveringNoteIndex         = sequence->getIndexOfNote (n, accurateTime);
+        draggingNoteTimeDelta     = 0.0;
         draggingNoteTransposition = 0;
-        draggingNoteNumber = n;
-        draggingNoteVelocity = originalNoteVelocity = 127;
-        draggingNoteLength = stepLengthInPpq - 1;
-        draggingNoteStartTime = snap ? t : accurateTime;
-        draggingNoteChannel = defaultChannel;
-        lastDragTime = snap ? t : accurateTime;
+        draggingNoteNumber        = n;
+        draggingNoteVelocity      = 127;
+        originalNoteVelocity      = 127;
+        draggingNoteLength        = stepLengthInPpq - 1;
+        draggingNoteStartTime     = snap ? t : accurateTime;
+        draggingNoteChannel       = defaultChannel;
+        lastDragTime              = snap ? t : accurateTime;
         if (hoveringNoteIndex == No_Note)
         {
             if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
@@ -324,23 +326,23 @@ void PianoRoll::resized()
     noteLayer->setBounds (0, 0, getWidth(), getHeight());
     gridSize = (float) noteLayer->getWidth() / seqLength;
     beatSize = ppqToPixels (timebase * 4.0 / (double) timeSigD);
-    barSize = ppqToPixels (timebase * quarterNotesPerBar);
-    xinc = (float) noteLayer->getWidth() / (seqLength - 1);
-    yinc = (float) getHeight() / 128.f;
+    barSize  = ppqToPixels (timebase * quarterNotesPerBar);
+    xinc     = (float) noteLayer->getWidth() / (seqLength - 1);
+    yinc     = (float) getHeight() / 128.f;
 }
 
 void PianoRoll::sequenceChanged()
 {
     //int extraLength = roundToInt(sequence->getEndTime() - pixelsToPpq((float)getWidth(),false));
     //if (extraLength) setSize(getWidth()+extraLength,getHeight());
-    seqLengthInPpq = jmax (blankLength, sequence->getLength());
-    seqLength = (float) (seqLengthInPpq / stepLengthInPpq);
-    gridSize = (float) noteLayer->getWidth() / seqLength;
-    beatSize = ppqToPixels (timebase * 4.0 / (double) timeSigD);
+    seqLengthInPpq     = jmax (blankLength, sequence->getLength());
+    seqLength          = (float) (seqLengthInPpq / stepLengthInPpq);
+    gridSize           = (float) noteLayer->getWidth() / seqLength;
+    beatSize           = ppqToPixels (timebase * 4.0 / (double) timeSigD);
     quarterNotesPerBar = (double) (timeSigN * 4) / (double) timeSigD;
-    barSize = ppqToPixels (timebase * quarterNotesPerBar);
-    xinc = (float) noteLayer->getWidth() / (seqLength - 1);
-    numEvents = sequence->getNumEvents();
+    barSize            = ppqToPixels (timebase * quarterNotesPerBar);
+    xinc               = (float) noteLayer->getWidth() / (seqLength - 1);
+    numEvents          = sequence->getNumEvents();
     bg->repaint();
     noteLayer->repaint();
     timeline->repaint();
@@ -348,22 +350,22 @@ void PianoRoll::sequenceChanged()
 
 void PianoRoll::setTimeSig (int n, int d)
 {
-    timeSigN = n;
-    timeSigD = d;
+    timeSigN           = n;
+    timeSigD           = d;
     quarterNotesPerBar = (double) (n * 4) / (double) d;
-    beatSize = ppqToPixels (timebase * 4.0 / (double) d);
-    barSize = ppqToPixels (timebase * quarterNotesPerBar);
+    beatSize           = ppqToPixels (timebase * 4.0 / (double) d);
+    barSize            = ppqToPixels (timebase * quarterNotesPerBar);
 }
 
 void PianoRoll::setNoteLength (float newBeatDiv)
 {
     if (noteLength != 1.f / newBeatDiv)
     {
-        noteLength = 1.f / newBeatDiv;
+        noteLength      = 1.f / newBeatDiv;
         stepLengthInPpq = timebase * noteLength;
-        seqLength = (float) (seqLengthInPpq / stepLengthInPpq);
-        gridSize = (float) getWidth() / seqLength;
-        xinc = (float) getWidth() / (seqLength - 1);
+        seqLength       = (float) (seqLengthInPpq / stepLengthInPpq);
+        gridSize        = (float) getWidth() / seqLength;
+        xinc            = (float) getWidth() / (seqLength - 1);
     }
 }
 

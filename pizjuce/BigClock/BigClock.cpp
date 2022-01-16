@@ -14,21 +14,21 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 BigClockFilter::BigClockFilter()
 {
-    recording = false;
-    runwatch = false;
-    rectime = 0;
-    watchtime = 0;
-    plugintime = Time::getMillisecondCounter();
-    mode = 0;
-    barsbeats = 1.0f;
-    look = 1.0f;
-    showms = 1.0f;
-    showhrs = 0.0f;
-    showsubfr = 0.0f;
-    ticks = 0.0f;
-    frames = 0.0f;
-    samples = 0.0f;
-    lastUIWidth = 250;
+    recording    = false;
+    runwatch     = false;
+    rectime      = 0;
+    watchtime    = 0;
+    plugintime   = Time::getMillisecondCounter();
+    mode         = 0;
+    barsbeats    = 1.0f;
+    look         = 1.0f;
+    showms       = 1.0f;
+    showhrs      = 0.0f;
+    showsubfr    = 0.0f;
+    ticks        = 0.0f;
+    frames       = 0.0f;
+    samples      = 0.0f;
+    lastUIWidth  = 250;
     lastUIHeight = 30;
 
     sampleRate = getSampleRate();
@@ -36,9 +36,9 @@ BigClockFilter::BigClockFilter()
     bgcolor = Colour (0xffb8bcc0);
 
     zeromem (&lastPosInfo, sizeof (lastPosInfo));
-    lastPosInfo.timeSigNumerator = 4;
+    lastPosInfo.timeSigNumerator   = 4;
     lastPosInfo.timeSigDenominator = 4;
-    lastPosInfo.bpm = 120;
+    lastPosInfo.bpm                = 120;
 
     loadDefaultFxp();
 
@@ -351,9 +351,9 @@ void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
     else
     {
         zeromem (&lastPosInfo, sizeof (lastPosInfo));
-        lastPosInfo.timeSigNumerator = 4;
+        lastPosInfo.timeSigNumerator   = 4;
         lastPosInfo.timeSigDenominator = 4;
-        lastPosInfo.bpm = 120;
+        lastPosInfo.bpm                = 120;
     }
 
     if (recording)
@@ -414,33 +414,33 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            barsbeats = (float) xmlState->getDoubleAttribute ("gainLeve", barsbeats);
-            barsbeats = (float) xmlState->getDoubleAttribute ("barsbeats", barsbeats);
-            look = (float) xmlState->getDoubleAttribute ("contrast", look);
-            showms = (float) xmlState->getDoubleAttribute ("showms", showms);
-            showhrs = (float) xmlState->getDoubleAttribute ("showhrs", showhrs);
-            showsubfr = (float) xmlState->getDoubleAttribute ("showsubfr", showsubfr);
-            ticks = (float) xmlState->getDoubleAttribute ("ticks", ticks);
-            frames = (float) xmlState->getDoubleAttribute ("frames", frames);
-            samples = (float) xmlState->getDoubleAttribute ("samples", samples);
-            showcues = xmlState->getBoolAttribute ("showcues", showcues);
-            mode = xmlState->getIntAttribute ("clockmode", mode);
-            rectime = xmlState->getDoubleAttribute ("rectime", rectime);
+            barsbeats  = (float) xmlState->getDoubleAttribute ("gainLeve", barsbeats);
+            barsbeats  = (float) xmlState->getDoubleAttribute ("barsbeats", barsbeats);
+            look       = (float) xmlState->getDoubleAttribute ("contrast", look);
+            showms     = (float) xmlState->getDoubleAttribute ("showms", showms);
+            showhrs    = (float) xmlState->getDoubleAttribute ("showhrs", showhrs);
+            showsubfr  = (float) xmlState->getDoubleAttribute ("showsubfr", showsubfr);
+            ticks      = (float) xmlState->getDoubleAttribute ("ticks", ticks);
+            frames     = (float) xmlState->getDoubleAttribute ("frames", frames);
+            samples    = (float) xmlState->getDoubleAttribute ("samples", samples);
+            showcues   = xmlState->getBoolAttribute ("showcues", showcues);
+            mode       = xmlState->getIntAttribute ("clockmode", mode);
+            rectime    = xmlState->getDoubleAttribute ("rectime", rectime);
             plugintime = xmlState->getIntAttribute ("plugintime", plugintime);
-            watchtime = xmlState->getIntAttribute ("watchtime", watchtime);
+            watchtime  = xmlState->getIntAttribute ("watchtime", watchtime);
 
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bgcolor = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
+            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
 
             for (auto* e : xmlState->getChildIterator())
             {
                 if (e->hasTagName ("Cue"))
                 {
-                    cue* newcue = new cue();
-                    newcue->ppq = e->getDoubleAttribute ("ppq");
-                    newcue->time = e->getDoubleAttribute ("time");
-                    newcue->text = e->getStringAttribute ("text");
+                    cue* newcue     = new cue();
+                    newcue->ppq     = e->getDoubleAttribute ("ppq");
+                    newcue->time    = e->getDoubleAttribute ("time");
+                    newcue->text    = e->getStringAttribute ("text");
                     newcue->enabled = e->getBoolAttribute ("enabled");
                     cues.addSorted (c, newcue);
                 }
@@ -553,8 +553,8 @@ void BigClockFilter::loadCues (File cuefile)
             {
                 double fps = 24.0;
                 double tpb = 960.0;
-                int n = 4;
-                int d = 4;
+                int n      = 4;
+                int d      = 4;
                 if (e->hasTagName ("FrameRate"))
                 {
                     fps = e->getDoubleAttribute ("rate");
@@ -620,10 +620,10 @@ void BigClockFilter::loadCues (File cuefile)
                 }
                 else if (e->hasTagName ("Cue"))
                 {
-                    cue* newcue = new cue();
-                    newcue->ppq = barsbeatsStringToPpq (e->getStringAttribute ("barsbeats", ppqToBarsbeatsString (smpteStringToSeconds (e->getStringAttribute ("time"), fps) * lastPosInfo.bpm / 60.0)));
-                    newcue->time = smpteStringToSeconds (e->getStringAttribute ("time", secondsToSmpteString (newcue->ppq * 60.0 / lastPosInfo.bpm, fps)), fps);
-                    newcue->text = e->getStringAttribute ("text");
+                    cue* newcue     = new cue();
+                    newcue->ppq     = barsbeatsStringToPpq (e->getStringAttribute ("barsbeats", ppqToBarsbeatsString (smpteStringToSeconds (e->getStringAttribute ("time"), fps) * lastPosInfo.bpm / 60.0)));
+                    newcue->time    = smpteStringToSeconds (e->getStringAttribute ("time", secondsToSmpteString (newcue->ppq * 60.0 / lastPosInfo.bpm, fps)), fps);
+                    newcue->text    = e->getStringAttribute ("text");
                     newcue->enabled = e->getBoolAttribute ("enabled", true);
                     cues.addSorted (c, newcue);
                 }
@@ -660,7 +660,7 @@ String BigClockFilter::getCue (double ppq, bool barsbeats)
                                     lastPosInfo.timeSigDenominator,
                                     lastPosInfo.bpm,
                                     getParameter (kBarsBeats) >= 0.5)
-                       + " - " + cues[i]->text;
+                     + " - " + cues[i]->text;
             }
         }
         else
@@ -674,7 +674,7 @@ String BigClockFilter::getCue (double ppq, bool barsbeats)
                                     lastPosInfo.timeSigDenominator,
                                     lastPosInfo.bpm,
                                     getParameter (kBarsBeats) >= 0.5)
-                       + " - " + cues[i]->text;
+                     + " - " + cues[i]->text;
             }
         }
     }
@@ -697,9 +697,9 @@ const String BigClockFilter::ppqToString (const double sppq,
         return L"1|1|0";
     const wchar_t* const sign = (sppq < 0) ? L"-" : L"";
 
-    const double ppq = fabs (sppq);
+    const double ppq       = fabs (sppq);
     const double ppqPerBar = ((double) numerator * 4.0 / (double) denominator);
-    double beats = (fmod (ppq, ppqPerBar) / ppqPerBar) * numerator;
+    double beats           = (fmod (ppq, ppqPerBar) / ppqPerBar) * numerator;
 
     float tpb;
     if (getParameter (kTicks) == 0.0)
@@ -743,7 +743,7 @@ const String BigClockFilter::ppqToString (const double sppq,
         fps = 25.0;
     else if (getParameter (kFrames) < 0.5)
     {
-        fps = 29.97f;
+        fps       = 29.97f;
         dropframe = true;
     }
     else if (getParameter (kFrames) < 0.6)
@@ -759,14 +759,14 @@ const String BigClockFilter::ppqToString (const double sppq,
     else
         fps = 120.0;
 
-    int bar = (int) (ppq / ppqPerBar) + 1;
-    int beat = ((int) beats) + 1;
+    int bar   = (int) (ppq / ppqPerBar) + 1;
+    int beat  = ((int) beats) + 1;
     int ticks = ((int) (fmod (beats, 1.0) * tpb));
 
     if (sppq < 0)
     {
         bar -= 1;
-        beat = numerator - beat + 1;
+        beat  = numerator - beat + 1;
         ticks = (int) tpb - ticks - 1;
     }
 
@@ -775,7 +775,7 @@ const String BigClockFilter::ppqToString (const double sppq,
     //else seconds =
 
     const long double absSecs = fabs (seconds);
-    const uint64 samples = roundToInt (sampleRate * absSecs);
+    const uint64 samples      = roundToInt (sampleRate * absSecs);
 
     if (getParameter (kSamples))
         return sign + String (samples);
@@ -784,12 +784,12 @@ const String BigClockFilter::ppqToString (const double sppq,
         int hours;
         int mins;
 
-        bool showms = getParameter (kShowms) >= 0.5f;
+        bool showms  = getParameter (kShowms) >= 0.5f;
         bool showhrs = getParameter (kShowhrs) >= 0.5f;
         if (showhrs)
         {
             hours = (int) (absSecs / (60.0 * 60.0));
-            mins = ((int) (absSecs / 60.0)) % 60;
+            mins  = ((int) (absSecs / 60.0)) % 60;
         }
         else
             mins = (int) (absSecs / 60.0);
@@ -820,10 +820,10 @@ const String BigClockFilter::ppqToString (const double sppq,
                     {
                         int64 frameNumber = int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
-                        int frames = int (frameNumber % 30);
+                        int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
-                        int dhours = int ((((frameNumber / 30) / 60) / 60) % 24);
+                        int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
                         s1 = String::formatted (L"%s%02d;%02d;%02d;%.2d",
                                                 sign,
@@ -881,7 +881,7 @@ const String BigClockFilter::ppqToString (const double sppq,
                     {
                         int64 frameNumber = int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
-                        int frames = int (frameNumber % 30);
+                        int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
 
@@ -941,9 +941,9 @@ double BigClockFilter::smpteStringToSeconds (String smpte, double fps)
     StringArray smpteArray;
     smpteArray.addTokens (smpte, ":;", "");
     return smpteArray[0].getDoubleValue() * 60 * 60 //hours
-           + smpteArray[1].getDoubleValue() * 60 //minutes
-           + smpteArray[2].getDoubleValue() //seconds
-           + smpteArray[3].getDoubleValue() / fps; //frames
+         + smpteArray[1].getDoubleValue() * 60      //minutes
+         + smpteArray[2].getDoubleValue()           //seconds
+         + smpteArray[3].getDoubleValue() / fps;    //frames
 }
 
 String BigClockFilter::secondsToSmpteString (double seconds, double fps)
@@ -963,7 +963,7 @@ String BigClockFilter::secondsToSmpteString (double seconds, double fps)
             fps = 25.0;
         else if (getParameter (kFrames) < 0.5)
         {
-            fps = 29.97f;
+            fps       = 29.97f;
             dropframe = true;
         }
         else if (getParameter (kFrames) < 0.6)
@@ -979,21 +979,21 @@ String BigClockFilter::secondsToSmpteString (double seconds, double fps)
         else
             fps = 120.0;
     }
-    const double absSecs = fabs (seconds);
+    const double absSecs      = fabs (seconds);
     const wchar_t* const sign = (seconds < 0) ? L"-" : L"";
-    const int hours = (int) (absSecs / (60.0 * 60.0));
-    const int mins = ((int) (absSecs / 60.0)) % 60;
-    const int secs = ((int) absSecs) % 60;
+    const int hours           = (int) (absSecs / (60.0 * 60.0));
+    const int mins            = ((int) (absSecs / 60.0)) % 60;
+    const int secs            = ((int) absSecs) % 60;
     if (fps <= 100.0)
     {
         if (fps == 29.97)
         {
             int64 frameNumber = int64 (seconds * 29.97);
             frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
-            int frames = int (frameNumber % 30);
+            int frames   = int (frameNumber % 30);
             int dseconds = int ((frameNumber / 30) % 60);
             int dminutes = int (((frameNumber / 30) / 60) % 60);
-            int dhours = int ((((frameNumber / 30) / 60) / 60) % 24);
+            int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
             return String::formatted (L"%s%02d;%02d;%02d;%.2d",
                                       sign,
@@ -1051,7 +1051,7 @@ double BigClockFilter::barsbeatsStringToPpq (String barsbeats, int n, int d)
 
     StringArray smpteArray;
     smpteArray.addTokens (barsbeats, ":", "");
-    const double ppqPerBar = ((double) n * 4.0 / (double) d);
+    const double ppqPerBar  = ((double) n * 4.0 / (double) d);
     const double ppqPerBeat = 4.0 / (double) d;
     return (smpteArray[0].getIntValue() - 1) * ppqPerBar + (smpteArray[1].getIntValue() - 1) * ppqPerBeat + smpteArray[2].getDoubleValue() / tpb;
 }
@@ -1059,7 +1059,7 @@ double BigClockFilter::barsbeatsStringToPpq (String barsbeats, int n, int d)
 String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
 {
     const double ppqPerBar = ((double) n * 4.0 / (double) d);
-    double beats = (fmod (ppq, ppqPerBar) / ppqPerBar) * n;
+    double beats           = (fmod (ppq, ppqPerBar) / ppqPerBar) * n;
 
     float tpb;
     if (getParameter (kTicks) == 0.0)
@@ -1089,8 +1089,8 @@ String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
     else
         tpb = 0.0;
 
-    const int bar = (int) (ppq / ppqPerBar) + 1;
-    const int beat = ((int) beats) + 1;
+    const int bar   = (int) (ppq / ppqPerBar) + 1;
+    const int beat  = ((int) beats) + 1;
     const int ticks = ((int) (fmod (beats, 1.0) * tpb));
 
     String padding = String();

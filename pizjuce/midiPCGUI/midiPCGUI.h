@@ -116,16 +116,16 @@ public:
         MidiProgName()
         {
             channel = -1;
-            bank = -1;
+            bank    = -1;
             program = -1;
-            name = String();
+            name    = String();
         }
         MidiProgName (int c, int b, int p, const String& n)
         {
             channel = c;
-            bank = b;
+            bank    = b;
             program = p;
-            name = n;
+            name    = n;
         }
         ~MidiProgName(){};
         int channel;

@@ -9,11 +9,11 @@ MidiPad::MidiPad()
       text (0)
 
 {
-    bgColour = Colours::white;
+    bgColour   = Colours::white;
     textColour = Colours::black;
 
     centeredText = false;
-    imageSize = 1.f;
+    imageSize    = 1.f;
     setMouseClickGrabsKeyboardFocus (true);
 
     addAndMakeVisible (text = new Label ("label", ""));
@@ -112,7 +112,7 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
     g.setOpacity (1.0f);
 
     const Drawable* imageToDraw = 0;
-    imageToDraw = getCurrentImage();
+    imageToDraw                 = getCurrentImage();
     if (imageToDraw != 0)
     {
         imageToDraw->drawWithin (g,

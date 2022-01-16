@@ -46,9 +46,9 @@ Loop::~Loop()
 void Loop::startRecording()
 {
     clear();
-    recTime = 0;
+    recTime      = 0;
     currentIndex = 0;
-    isRecording = true;
+    isRecording  = true;
 }
 
 bool Loop::findNextNote()
@@ -273,7 +273,7 @@ void Loop::convertTimeBase (short timeBase)
 		8, 10, 80 (SMPTE bit resolution), or 100. For millisecond
 		timing, setSmpteTimeFormat (25, 40) 
 		*/
-        int framesPerSecond = -(timeBase / 0x100);
+        int framesPerSecond    = -(timeBase / 0x100);
         int subframeResolution = (timeBase & 0x00ff);
     }
 }

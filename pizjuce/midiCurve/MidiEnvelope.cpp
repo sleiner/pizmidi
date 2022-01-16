@@ -56,7 +56,7 @@ void MidiEnvelope::resized()
 //==============================================================================
 void MidiEnvelope::paint (Graphics& g)
 {
-    const int dotSize = MAX_ENVELOPE_DOT_SIZE;
+    const int dotSize     = MAX_ENVELOPE_DOT_SIZE;
     const int halfDotSize = dotSize / 2;
 
     g.fillAll (Colour (0xffffffff));
@@ -266,8 +266,8 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 
     if (draggingPoint != -1)
     {
-        int prevPoint = jmax (0, draggingPoint - 1);
-        int nextPoint = jmin (MAX_ENVELOPE_POINTS, draggingPoint + 1);
+        int prevPoint   = jmax (0, draggingPoint - 1);
+        int nextPoint   = jmin (MAX_ENVELOPE_POINTS, draggingPoint + 1);
         int paramNumber = draggingPoint * 2;
 
         // calculate X
@@ -277,7 +277,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         }
         else if (draggingPoint > 0 && draggingPoint < MAX_ENVELOPE_POINTS - 1)
         {
-            float snapx = (float) getWidth() * (float) roundToInt (127.0 * ((double) e.x / (double) getWidth())) / 127.f;
+            float snapx              = (float) getWidth() * (float) roundToInt (127.0 * ((double) e.x / (double) getWidth())) / 127.f;
             points[draggingPoint][0] = restrict == -1 ? oldpoints[draggingPoint][0] : (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
         }
         else
@@ -308,7 +308,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapy = (float) getHeight() * (float) roundToInt (127.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 127.f;
+                float snapy  = (float) getHeight() * (float) roundToInt (127.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 127.f;
                 points[i][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
                 points[i][0] = oldpoints[i][0];
                 plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
@@ -319,7 +319,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapx = (float) getWidth() * (float) roundToInt (127.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 127.f;
+                float snapx  = (float) getWidth() * (float) roundToInt (127.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 127.f;
                 points[i][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
                 points[i][1] = oldpoints[i][1];
                 plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
@@ -378,9 +378,9 @@ int MidiEnvelope::addPoint (float x, float y, bool control)
     {
         setPointActive (newPoint, true);
         setPointControl (newPoint, control);
-        float snapx = (float) getWidth() * (float) roundToInt (127.0 * (x / (double) getWidth())) / 127.f;
+        float snapx         = (float) getWidth() * (float) roundToInt (127.0 * (x / (double) getWidth())) / 127.f;
         points[newPoint][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
-        float snapy = (float) getHeight() * (float) roundToInt (127.0 * (y / (double) getHeight())) / 127.f;
+        float snapy         = (float) getHeight() * (float) roundToInt (127.0 * (y / (double) getHeight())) / 127.f;
         points[newPoint][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
         plugin->setParameterNotifyingHost ((newPoint * 2), points[newPoint][0]);
         plugin->setParameterNotifyingHost ((newPoint * 2 + 1), (1.f - points[newPoint][1]));
