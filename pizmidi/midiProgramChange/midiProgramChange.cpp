@@ -20,12 +20,12 @@ MidiProgramChangeProgram::MidiProgramChangeProgram()
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
         param[i] = 0.f;
-    param[kMode] = 1.f;
-    param[kThru] = 1.f;
-    param[kTrigger] = 0.4f;
+    param[kMode]        = 1.f;
+    param[kThru]        = 1.f;
+    param[kTrigger]     = 0.4f;
     param[kBankTrigger] = 0.4f;
-    param[kInc] = 0.4f;
-    param[kDec] = 0.4f;
+    param[kInc]         = 0.4f;
+    param[kDec]         = 0.4f;
     // default program name
     strcpy (name, "Default");
 }
@@ -64,24 +64,24 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
         setProgram (0);
     }
 
-    trigger = false;
+    trigger     = false;
     triggerbank = false;
-    inc = false;
-    dec = false;
-    program = 0;
-    bankmsb = 0;
-    banklsb = 0;
-    sentinc = false;
-    sentdec = false;
-    senttrig = false;
-    sentbank = false;
+    inc         = false;
+    dec         = false;
+    program     = 0;
+    bankmsb     = 0;
+    banklsb     = 0;
+    sentinc     = false;
+    sentdec     = false;
+    senttrig    = false;
+    sentbank    = false;
     for (int i = 0; i < kNumParams; i++)
         automated[i] = false;
     mode = continuous;
 
-    wait = false;
-    delaytime = (int) (sampleRate * 0.002f);
-    counter = 0;
+    wait         = false;
+    delaytime    = (int) (sampleRate * 0.002f);
+    counter      = 0;
     triggerdelta = 0;
 
     if (programs)
@@ -101,7 +101,7 @@ MidiProgramChange::~MidiProgramChange()
 void MidiProgramChange::setProgram (VstInt32 prog)
 {
     MidiProgramChangeProgram* ap = &programs[prog];
-    curProgram = prog;
+    curProgram                   = prog;
     for (int i = 0; i < kNumParams; i++)
     {
         setParameter (i, ap->param[i]);
@@ -156,18 +156,18 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
             param[index] = ap->param[index] = value;
             break;
         case kPCListen:
-            pclisten = value >= 0.5f;
+            pclisten     = value >= 0.5f;
             param[index] = ap->param[index] = value;
             break;
         case kThru:
-            thru = value >= 0.5f;
+            thru         = value >= 0.5f;
             param[index] = ap->param[index] = value;
             break;
         case kTrigger:
             param[index] = value;
             if (value == 1.f)
             { // && !senttrig) {
-                trigger = true;
+                trigger  = true;
                 senttrig = true;
             }
             else if (value < 1.f && senttrig)
@@ -178,7 +178,7 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
             if (value == 1.f)
             { // && !sentbank) {
                 triggerbank = true;
-                sentbank = true;
+                sentbank    = true;
             }
             else if (value < 1.f && sentbank)
                 sentbank = false;
@@ -187,7 +187,7 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
             param[index] = value;
             if (value == 1.f)
             { // && !sentinc) {
-                inc = true;
+                inc     = true;
                 sentinc = true;
             }
             else if (value < 1.f && sentinc)
@@ -197,7 +197,7 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
             param[index] = value;
             if (value == 1.f)
             { // && !sentdec) {
-                dec = true;
+                dec     = true;
                 sentdec = true;
             }
             else if (value < 1.f && sentdec)
@@ -369,8 +369,8 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-        char channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        char data1 = tomod.midiData[1] & 0x7f;
+        char channel         = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        char data1           = tomod.midiData[1] & 0x7f;
         //char data2	    = tomod.midiData[2] & 0x7f;
 
         bool discard = ! thru;
@@ -425,11 +425,11 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             if (triggerbank)
             {
                 //delay program change if bank was sent
-                wait = true;
+                wait        = true;
                 triggerbank = false;
                 if (samples > delaytime)
                 {
-                    wait = false;
+                    wait    = false;
                     counter = 0;
                     VstMidiEvent progch;
                     progch.midiData[0] = MIDI_PROGRAMCHANGE | listenchannel;

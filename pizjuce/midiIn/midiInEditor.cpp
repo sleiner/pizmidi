@@ -128,11 +128,11 @@ MidiInEditor::~MidiInEditor()
     getFilter()->icon = imagepad->drawableButton->getName();
     //[/Destructor_pre]
 
-    comboBox = nullptr;
+    comboBox   = nullptr;
     hostButton = nullptr;
     channelBox = nullptr;
-    imagepad = nullptr;
-    label = nullptr;
+    imagepad   = nullptr;
+    label      = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -251,9 +251,9 @@ void MidiInEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
-    const float hostin = filter->getParameter (kHostIn);
-    const String icon = filter->icon;
-    const int channel = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const float hostin  = filter->getParameter (kHostIn);
+    const String icon   = filter->icon;
+    const int channel   = roundToInt (filter->getParameter (kChannel) * 16.f);
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
@@ -266,7 +266,7 @@ void MidiInEditor::updateParametersFromFilter()
     String fullpath = icon;
     if (! File (fullpath).existsAsFile())
         fullpath = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                   + File::getSeparatorString() + icon;
+                 + File::getSeparatorString() + icon;
     auto image = Drawable::createFromImageFile (File (fullpath));
     if (image != nullptr)
     {

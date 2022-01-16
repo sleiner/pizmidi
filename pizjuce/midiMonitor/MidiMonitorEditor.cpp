@@ -214,21 +214,21 @@ MidiMonitorEditor::~MidiMonitorEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    clearButton = nullptr;
-    powerButton = nullptr;
-    thruButton = nullptr;
-    bytesButton = nullptr;
-    hueSlider = nullptr;
+    clearButton      = nullptr;
+    powerButton      = nullptr;
+    thruButton       = nullptr;
+    bytesButton      = nullptr;
+    hueSlider        = nullptr;
     saturationSlider = nullptr;
-    lightnessSlider = nullptr;
-    resizer = nullptr;
-    saveButton = nullptr;
-    menuButton = nullptr;
+    lightnessSlider  = nullptr;
+    resizer          = nullptr;
+    saveButton       = nullptr;
+    menuButton       = nullptr;
     midiOutputEditor = nullptr;
-    wrapButton = nullptr;
-    timeButton = nullptr;
-    colorButton = nullptr;
-    aboutBox = nullptr;
+    wrapButton       = nullptr;
+    timeButton       = nullptr;
+    colorButton      = nullptr;
+    aboutBox         = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     deleteAndZero (maxLinesEditor);
@@ -259,7 +259,7 @@ void MidiMonitorEditor::resized()
     midiOutputEditor->setBounds (8, 16, getWidth() - 16, getHeight() - 24);
     aboutBox->setBounds (8, 16, getWidth() - 16, getHeight() - 24);
     //[UserResized] Add your own custom resize handling here..
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
     //[/UserResized]
 }
@@ -622,8 +622,8 @@ void MidiMonitorEditor::timerCallback()
                     midiLine += "Off: ";
                 }
                 midiLine += MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
-                            + " (" + String (msg.getNoteNumber()) + "), Velocity: "
-                            + String (msg.getVelocity());
+                          + " (" + String (msg.getNoteNumber()) + "), Velocity: "
+                          + String (msg.getVelocity());
             }
             else if (msg.isController() && getFilter()->useCC)
             {
@@ -657,9 +657,9 @@ void MidiMonitorEditor::timerCallback()
                 if (msg.getChannel() > 0)
                     midiLine = "Ch." + String (msg.getChannel()) + "  ";
                 midiLine += "Poly Aftertouch: "
-                            + MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
-                            + " (" + String (msg.getNoteNumber()) + "), Value: "
-                            + String (msg.getAfterTouchValue());
+                          + MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
+                          + " (" + String (msg.getNoteNumber()) + "), Value: "
+                          + String (msg.getAfterTouchValue());
             }
             else if (msg.isChannelPressure() && getFilter()->useCP)
             {
@@ -677,7 +677,7 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isSysEx() && getFilter()->useSysEx)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "Sysex: ";
                 midiLine += String (msg.getSysExDataSize());
                 midiLine += " bytes";
@@ -695,7 +695,7 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isTempoMetaEvent() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "Tempo: ";
                 midiLine += String (msg.getTempoSecondsPerQuarterNote());
                 //midiLine += " ";
@@ -703,7 +703,7 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isMidiMachineControlMessage() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MMC: ";
 
                 switch (msg.getMidiMachineControlCommand())
@@ -736,28 +736,28 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isMidiStart() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Start";
             }
             else if (msg.isMidiContinue() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Continue";
             }
             else if (msg.isMidiStop() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Stop";
             }
             else if (msg.isSongPositionPointer() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "Song Position: ";
                 midiLine += String (msg.getSongPositionPointerMidiBeat());
             }
             else if (msg.isQuarterFrame() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MTC Quarter Frame: ";
                 midiLine += String (msg.getQuarterFrameSequenceNumber());
                 midiLine += " ";
@@ -765,7 +765,7 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isFullFrame() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MTC Full Frame: ";
 
                 msg.getFullFrameParameters (hours, minutes, seconds, frames, timeCode);
@@ -797,7 +797,7 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isMidiMachineControlGoto (hours, minutes, seconds, frames) && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MMC GOTO: ";
                 midiLine += String (hours);
                 midiLine += ":";
@@ -809,22 +809,22 @@ void MidiMonitorEditor::timerCallback()
             }
             else if (msg.isMidiClock() && getFilter()->useClock)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Clock";
             }
             else if (msg.isActiveSense() && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "Active Sense";
             }
             else if (msg.getRawData()[0] == 0xff && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Reset";
             }
             else if (msg.getRawData()[0] == 0xf9 && getFilter()->useOther)
             {
-                ignore = false;
+                ignore   = false;
                 midiLine = "MIDI Tick";
             }
             else if (getFilter()->useOther)
@@ -851,7 +851,7 @@ void MidiMonitorEditor::timerCallback()
 
                 if (showbytes)
                 {
-                    Font defaultFont = midiOutputEditor->getFont();
+                    Font defaultFont   = midiOutputEditor->getFont();
                     String bytesString = numLines > 1 ? "\n" : String();
                     bytesString += String::toHexString (msg.getRawData(), msg.getRawDataSize()).toUpperCase() + "  ";
                     midiOutputEditor->setFont (Font ("Courier New", midiOutputEditor->getFont().getHeight(), Font::plain));
@@ -889,17 +889,17 @@ void MidiMonitorEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
 
     // take a local copy of the info we need while we've got the lock..
-    const float hue = filter->getParameter (0);
-    const float sat = filter->getParameter (1);
-    const float bri = filter->getParameter (2);
+    const float hue      = filter->getParameter (0);
+    const float sat      = filter->getParameter (1);
+    const float bri      = filter->getParameter (2);
     const float contrast = filter->getParameter (3);
-    const float power = filter->getParameter (4);
-    const float thru = filter->getParameter (5);
-    const float wrap = filter->getParameter (kWrap);
-    showbytes = filter->getParameter (kBytes) >= 0.5f;
-    showtime = filter->getParameter (kTime) >= 0.5f;
-    const float ftmode = filter->getParameter (kTimeMode);
-    maxLines = filter->getMaxLines();
+    const float power    = filter->getParameter (4);
+    const float thru     = filter->getParameter (5);
+    const float wrap     = filter->getParameter (kWrap);
+    showbytes            = filter->getParameter (kBytes) >= 0.5f;
+    showtime             = filter->getParameter (kTime) >= 0.5f;
+    const float ftmode   = filter->getParameter (kTimeMode);
+    maxLines             = filter->getMaxLines();
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
@@ -981,10 +981,10 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
     else if (timemode == 0)
     {
         //bars/beats/ticks
-        const double ppq = fabs (sppq);
+        const double ppq       = fabs (sppq);
         const double ppqPerBar = ((double) numerator * 4.0 / (double) denominator);
-        const double beats = (fmod (ppq, ppqPerBar) / ppqPerBar) * numerator;
-        const float t = getFilter()->getParameter (kTicks);
+        const double beats     = (fmod (ppq, ppqPerBar) / ppqPerBar) * numerator;
+        const float t          = getFilter()->getParameter (kTicks);
 
         float tpb;
         if (t == 0.0)
@@ -1014,8 +1014,8 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
         else
             tpb = 0.0;
 
-        int bar = (int) (ppq / ppqPerBar) + 1;
-        int beat = ((int) beats) + 1;
+        int bar   = (int) (ppq / ppqPerBar) + 1;
+        int beat  = ((int) beats) + 1;
         int ticks = tpb == 960.0 ? roundToInt (fmod (beats, 1.0) * tpb) : (int) (fmod (beats, 1.0) * tpb);
 
         if (ticks == (int) tpb)
@@ -1032,7 +1032,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
         if (sppq < 0)
         {
             bar -= 1;
-            beat = numerator - beat + 1;
+            beat  = numerator - beat + 1;
             ticks = (int) tpb - ticks - 1;
         }
 
@@ -1053,10 +1053,10 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
     else
     {
         //SMPTE
-        const bool showms = getFilter()->getParameter (kShowms) >= 0.5f;
-        const bool showhrs = getFilter()->getParameter (kShowhrs) >= 0.5f;
+        const bool showms    = getFilter()->getParameter (kShowms) >= 0.5f;
+        const bool showhrs   = getFilter()->getParameter (kShowhrs) >= 0.5f;
         const bool showsubfr = getFilter()->getParameter (kShowsubfr) >= 0.5f;
-        const float f = getFilter()->getParameter (kFrames);
+        const float f        = getFilter()->getParameter (kFrames);
 
         bool dropframe = false;
         float fps;
@@ -1072,7 +1072,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
             fps = 25.0;
         else if (f < 0.5)
         {
-            fps = 29.97f;
+            fps       = 29.97f;
             dropframe = true;
         }
         else if (f < 0.6)
@@ -1094,7 +1094,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
         if (showhrs)
         {
             hours = (int) (absSecs / (60.0 * 60.0));
-            mins = ((int) (absSecs / 60.0)) % 60;
+            mins  = ((int) (absSecs / 60.0)) % 60;
         }
         else
             mins = (int) (absSecs / 60.0);
@@ -1125,10 +1125,10 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
                     {
                         int64 frameNumber = int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
-                        int frames = int (frameNumber % 30);
+                        int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
-                        int dhours = int ((((frameNumber / 30) / 60) / 60) % 24);
+                        int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
                         s1 = String::formatted (L"%s%02d;%02d;%02d;%.2d",
                                                 sign,
@@ -1186,7 +1186,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
                     {
                         int64 frameNumber = int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
-                        int frames = int (frameNumber % 30);
+                        int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
 

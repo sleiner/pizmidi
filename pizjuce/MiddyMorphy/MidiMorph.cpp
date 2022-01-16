@@ -6,14 +6,14 @@
 MidiMorph::MidiMorph()
 {
     // Bouml preserved body begin 0003540D
-    cursor = new Cursor (this);
+    cursor        = new Cursor (this);
     valuesChanged = false;
-    refreshRate = 200;
+    refreshRate   = 200;
     guiBounds.setSize (450, 300);
     guiState = 0;
     paneSize.setSize (300, 300);
-    autoKey = true;
-    autoLearn = true;
+    autoKey             = true;
+    autoLearn           = true;
     controllerListWidth = 150;
     // Bouml preserved body end 0003540D
 }
@@ -195,7 +195,7 @@ void MidiMorph::getMidiMessages (int offset, juce::MidiBuffer& buffer)
     if (auditSelScene && selectedScenes.size() > 0 && hasNewMidi())
     {
         selectedScenes.getFirst()->getMidiMessages (buffer, offset);
-        valueChanged = false;
+        valueChanged  = false;
         valuesChanged = false;
     }
     else
@@ -211,7 +211,7 @@ void MidiMorph::getMidiMessages (int offset, juce::MidiBuffer& buffer)
                 controllers[i]->getMidiMessage (buffer, offset);
             }
         }
-        valueChanged = false;
+        valueChanged  = false;
         valuesChanged = false;
     }
 
@@ -224,7 +224,7 @@ float MidiMorph::getSumDistances()
     if (sumDistancesChanged)
     {
         sumDistancesChanged = false;
-        sumDistances = 0;
+        sumDistances        = 0;
         for (int i = 0; i < scenes.size(); i++)
         {
             sumDistances += scenes[i]->getDistanceFromCursor();
@@ -327,12 +327,12 @@ juce::XmlElement* MidiMorph::getXml (const juce::String tagname)
     for (int i = 0; i < this->controllers.size(); i++)
     {
         Controller* controller = controllers[i];
-        controllerXml = new XmlElement ("controller");
+        controllerXml          = new XmlElement ("controller");
         XmlElement* valueXml;
         for (int i = 0; i < controller->getNumValues(); i++)
         {
             ControllerValue* value = controller->getValue (i);
-            valueXml = new XmlElement ("value");
+            valueXml               = new XmlElement ("value");
             valueXml->setAttribute ("value", value->getValue());
             valueXml->setAttribute ("scene", value->getScene()->getId());
             controllerXml->addChildElement (valueXml);
@@ -348,7 +348,7 @@ juce::XmlElement* MidiMorph::getXml (const juce::String tagname)
     for (int i = 0; i < this->scenes.size(); i++)
     {
         Scene* scene = scenes[i];
-        sceneXml = new XmlElement ("scene");
+        sceneXml     = new XmlElement ("scene");
         sceneXml->setAttribute ("id", i);
         sceneXml->setAttribute ("name", scene->getName());
         sceneXml->setAttribute ("colour", scene->getColour().toString());
@@ -395,7 +395,7 @@ void MidiMorph::setFromXml (juce::XmlElement* xmlData)
     for (int i = 0; i < scenesXml->getNumChildElements(); i++)
     {
         XmlElement* sceneXml = scenesXml->getChildElement (i);
-        Scene* scene = new Scene (this);
+        Scene* scene         = new Scene (this);
         scene->setXY ((float) sceneXml->getIntAttribute ("x"), (float) sceneXml->getIntAttribute ("y"));
         scene->setColour (Colour::fromString (sceneXml->getStringAttribute ("colour")));
         scene->setName (sceneXml->getStringAttribute ("name"));
@@ -408,16 +408,16 @@ void MidiMorph::setFromXml (juce::XmlElement* xmlData)
     {
         Controller* controller;
         XmlElement* controllerXml = controllersXml->getChildElement (i);
-        controller = new Controller (this);
+        controller                = new Controller (this);
         controller->setCcNo (controllerXml->getIntAttribute ("ccno"));
         controller->setChannel (controllerXml->getIntAttribute ("channel"));
 
         for (int j = 0; j < controllerXml->getNumChildElements(); j++)
         {
-            XmlElement* valueXml = controllerXml->getChildElement (j);
-            int cValue = valueXml->getIntAttribute ("value");
-            int sceneId = valueXml->getIntAttribute ("scene");
-            Scene* scene = scenes[sceneId];
+            XmlElement* valueXml   = controllerXml->getChildElement (j);
+            int cValue             = valueXml->getIntAttribute ("value");
+            int sceneId            = valueXml->getIntAttribute ("scene");
+            Scene* scene           = scenes[sceneId];
             ControllerValue* value = new ControllerValue (controller, scene);
             value->setValue (cValue);
             controller->addValue (value);
@@ -442,7 +442,7 @@ void MidiMorph::setFromXml (juce::XmlElement* xmlData)
     XmlElement* options = xmlData->getChildByName ("options");
     if (xmlData->containsChildElement (options))
     {
-        this->autoKey = options->getBoolAttribute ("autokey", this->autoKey);
+        this->autoKey   = options->getBoolAttribute ("autokey", this->autoKey);
         this->autoLearn = options->getBoolAttribute ("autolearn", this->autoLearn);
         setAuditSelScene (options->getBoolAttribute ("auditselscene", this->auditSelScene));
         this->refreshRate = options->getIntAttribute ("refreshrate", this->refreshRate);

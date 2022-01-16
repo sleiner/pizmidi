@@ -5,21 +5,21 @@
 #include "juce_audio_basics/juce_audio_basics.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#define maxFrets (32)
+#define maxFrets   (32)
 #define maxStrings (16)
-#define nutWidth (7)
+#define nutWidth   (7)
 
 class FrettedNote
 {
 public:
     FrettedNote()
     {
-        fret = -1;
+        fret   = -1;
         string = -1;
     }
     FrettedNote (int f, int s)
     {
-        fret = f;
+        fret   = f;
         string = s;
     }
     ~FrettedNote() {}
@@ -27,7 +27,7 @@ public:
     bool isValid() const { return fret >= 0 && string >= 0; }
     void invalidate()
     {
-        fret = -1;
+        fret   = -1;
         string = -1;
     }
 
@@ -89,14 +89,14 @@ public:
     */
     enum ColourIds
     {
-        whiteNoteColourId = 0x1005000,
-        blackNoteColourId = 0x1005001,
-        keySeparatorLineColourId = 0x1005002,
-        mouseOverKeyOverlayColourId = 0x1005003, /**< This colour will be overlaid on the normal note colour. */
-        keyDownOverlayColourId = 0x1005004, /**< This colour will be overlaid on the normal note colour. */
-        textLabelColourId = 0x1005005,
+        whiteNoteColourId              = 0x1005000,
+        blackNoteColourId              = 0x1005001,
+        keySeparatorLineColourId       = 0x1005002,
+        mouseOverKeyOverlayColourId    = 0x1005003, /**< This colour will be overlaid on the normal note colour. */
+        keyDownOverlayColourId         = 0x1005004, /**< This colour will be overlaid on the normal note colour. */
+        textLabelColourId              = 0x1005005,
         upDownButtonBackgroundColourId = 0x1005006,
-        upDownButtonArrowColourId = 0x1005007
+        upDownButtonArrowColourId      = 0x1005007
     };
 
     /** Returns the position within the component of the left-hand edge of a key.

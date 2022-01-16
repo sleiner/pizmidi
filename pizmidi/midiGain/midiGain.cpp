@@ -67,7 +67,7 @@ void MidiGain::setProgram (VstInt32 program)
     if (program < numPrograms)
     {
         MidiGainProgram* ap = &programs[program];
-        curProgram = program;
+        curProgram          = program;
         for (int i = 0; i < numParams; i++)
             setParameter (i, ap->param[i]);
     }
@@ -237,9 +237,9 @@ bool MidiGain::init()
 {
     try
     {
-        _vstEventsToHost = new MyVstEvents;
+        _vstEventsToHost            = new MyVstEvents;
         _vstEventsToHost->numEvents = 0;
-        _vstMidiEventsToHost = new VstMidiEvent[MAX_EVENTS_PER_TIMESLICE]; //might be not enough...!!
+        _vstMidiEventsToHost        = new VstMidiEvent[MAX_EVENTS_PER_TIMESLICE]; //might be not enough...!!
 
         _midiEventsIn = new VstMidiEventVec[PLUG_MIDI_INPUTS];
         _cleanMidiInBuffers();
@@ -272,7 +272,7 @@ void MidiGain::preProcess()
 {
     // preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -291,17 +291,17 @@ void MidiGain::postProcess()
         _vstEventsToHost->numEvents = (VstInt32) (_midiEventsOut[0].size());
         for (unsigned int i = 0; i < _midiEventsOut[0].size(); i++)
         {
-            _vstMidiEventsToHost[i].type = kVstMidiType;
-            _vstMidiEventsToHost[i].byteSize = 24;
+            _vstMidiEventsToHost[i].type        = kVstMidiType;
+            _vstMidiEventsToHost[i].byteSize    = 24;
             _vstMidiEventsToHost[i].deltaFrames = _midiEventsOut[0][i].deltaFrames;
-            _vstMidiEventsToHost[i].flags = 0;
-            _vstMidiEventsToHost[i].noteLength = 0;
-            _vstMidiEventsToHost[i].noteOffset = 0;
+            _vstMidiEventsToHost[i].flags       = 0;
+            _vstMidiEventsToHost[i].noteLength  = 0;
+            _vstMidiEventsToHost[i].noteOffset  = 0;
             _vstMidiEventsToHost[i].midiData[0] = _midiEventsOut[0][i].midiData[0];
             _vstMidiEventsToHost[i].midiData[1] = _midiEventsOut[0][i].midiData[1];
             _vstMidiEventsToHost[i].midiData[2] = _midiEventsOut[0][i].midiData[2];
             _vstMidiEventsToHost[i].midiData[3] = 0;
-            _vstMidiEventsToHost[i].detune = _midiEventsOut[0][i].detune;
+            _vstMidiEventsToHost[i].detune      = _midiEventsOut[0][i].detune;
 
             _vstEventsToHost->events[i] = (VstEvent*) &_vstMidiEventsToHost[i];
         }
@@ -311,7 +311,7 @@ void MidiGain::postProcess()
     }
     else
     {
-        VstInt32 left = (VstInt32) _midiEventsOut[0].size();
+        VstInt32 left  = (VstInt32) _midiEventsOut[0].size();
         VstInt32 count = 0;
         while (left > 0)
         {
@@ -321,18 +321,18 @@ void MidiGain::postProcess()
                 _vstEventsToHost->numEvents = left;
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
-                VstInt32 j = i + count;
-                _vstMidiEventsToHost[i].type = kVstMidiType;
-                _vstMidiEventsToHost[i].byteSize = 24;
+                VstInt32 j                          = i + count;
+                _vstMidiEventsToHost[i].type        = kVstMidiType;
+                _vstMidiEventsToHost[i].byteSize    = 24;
                 _vstMidiEventsToHost[i].deltaFrames = _midiEventsOut[0][j].deltaFrames;
-                _vstMidiEventsToHost[i].flags = 0;
-                _vstMidiEventsToHost[i].noteLength = 0;
-                _vstMidiEventsToHost[i].noteOffset = 0;
+                _vstMidiEventsToHost[i].flags       = 0;
+                _vstMidiEventsToHost[i].noteLength  = 0;
+                _vstMidiEventsToHost[i].noteOffset  = 0;
                 _vstMidiEventsToHost[i].midiData[0] = _midiEventsOut[0][j].midiData[0];
                 _vstMidiEventsToHost[i].midiData[1] = _midiEventsOut[0][j].midiData[1];
                 _vstMidiEventsToHost[i].midiData[2] = _midiEventsOut[0][j].midiData[2];
                 _vstMidiEventsToHost[i].midiData[3] = 0;
-                _vstMidiEventsToHost[i].detune = _midiEventsOut[0][j].detune;
+                _vstMidiEventsToHost[i].detune      = _midiEventsOut[0][j].detune;
 
                 _vstEventsToHost->events[i] = (VstEvent*) &_vstMidiEventsToHost[i];
             }
@@ -375,8 +375,8 @@ void MidiGain::process (float** inputs, float** outputs, VstInt32 sampleFrames)
     processMidiEvents (_midiEventsIn, _midiEventsOut);
 
     //dummy audio processing, copy inputs to outputs
-    float* in1 = inputs[0];
-    float* in2 = inputs[1];
+    float* in1  = inputs[0];
+    float* in2  = inputs[1];
     float* out1 = outputs[0];
     float* out2 = outputs[1];
 
@@ -401,8 +401,8 @@ void MidiGain::processReplacing (float** inputs, float** outputs, VstInt32 sampl
     processMidiEvents (_midiEventsIn, _midiEventsOut);
 
     //dummy audio processing, copy inputs to outputs
-    float* in1 = inputs[0];
-    float* in2 = inputs[1];
+    float* in1  = inputs[0];
+    float* in2  = inputs[1];
     float* out1 = outputs[0];
     float* out2 = outputs[1];
 
@@ -423,10 +423,10 @@ void MidiGain::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outp
     VstMidiEventVec::iterator it;
     for (it = inputs[0].begin(); it < inputs[0].end(); it++)
     {
-        const int status = it->midiData[0] & 0xf0; // scraping channel
+        const int status  = it->midiData[0] & 0xf0; // scraping channel
         const int channel = it->midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = it->midiData[1] & 0x7f; // note/cc number, etc
-        const int data2 = it->midiData[2] & 0x7f; // velocity/cc value, etc
+        const int data1   = it->midiData[1] & 0x7f; // note/cc number, etc
+        const int data2   = it->midiData[2] & 0x7f; // velocity/cc value, etc
 
         if (isNoteOn (*it))
         {

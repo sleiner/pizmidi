@@ -12,13 +12,13 @@ MidiCCResetProgram::MidiCCResetProgram()
     this->param[kTrigger] = 0.f;
     this->param[kUsePlay] = 1.f;
     this->param[kCapture] = 1.f;
-    this->param[kClear] = 0.f;
+    this->param[kClear]   = 0.f;
     //this->param[kTimeout]  = 0;
-    this->param[kChannel] = CHANNEL_TO_FLOAT016 (0); // any channel
+    this->param[kChannel]    = CHANNEL_TO_FLOAT016 (0); // any channel
     this->param[kProgChSend] = 1.f;
-    this->param[kUsePC] = 0.f;
-    this->param[kThru] = 1.f;
-    this->param[kBlockDup] = 0.f;
+    this->param[kUsePC]      = 0.f;
+    this->param[kThru]       = 1.f;
+    this->param[kBlockDup]   = 0.f;
     //param[kUseMIDIReset]  = 0;
 
     // default program name
@@ -88,7 +88,7 @@ VstInt32 MidiCCReset::getChunk (void** data, bool isPreset)
     if (isPreset)
     {
         MidiCCResetProgram* ap = &programs[curProgram];
-        *data = (void*) ap;
+        *data                  = (void*) ap;
         return sizeof (programs[curProgram]);
     }
     else
@@ -180,7 +180,7 @@ void MidiCCReset::setProgram (VstInt32 program)
         //send default CC values for new program
         if (param[kProgChSend] >= 0.5f)
         {
-            trigger = true;
+            trigger             = true;
             triggeredFromPreset = true;
         }
     }
@@ -356,7 +356,7 @@ void MidiCCReset::getParameterDisplay (VstInt32 index, char* text)
 //-----------------------------------------------------------------------------------------
 bool MidiCCReset::init()
 {
-    trigger = false;
+    trigger             = false;
     triggeredFromPreset = false;
 
     return PizMidi::init();
@@ -366,7 +366,7 @@ void MidiCCReset::preProcess (void)
 {
     // preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -455,7 +455,7 @@ void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                 }
             }
         }
-        trigger = false;
+        trigger             = false;
         triggeredFromPreset = false;
     }
 
@@ -465,10 +465,10 @@ void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0;       // scraping  channel
         short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short data1   = tomod.midiData[1] & 0x7f;
+        short data2   = tomod.midiData[2] & 0x7f;
 
         bool discard = param[kThru] < 0.5f;
 

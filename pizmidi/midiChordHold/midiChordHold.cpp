@@ -37,9 +37,9 @@ MidiChordHold::MidiChordHold (audioMasterCallback audioMaster)
             held_notes[i][ch] = false;
     }
 
-    holding = false;
-    waiting = true;
-    wasOn = false;
+    holding     = false;
+    waiting     = true;
+    wasOn       = false;
     lastChannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
 
     init();
@@ -103,7 +103,7 @@ void MidiChordHold::getParameterDisplay (VstInt32 index, char* text)
 void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     const int inputChannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
-    const bool on = param[kParam01] >= 0.5f;
+    const bool on          = param[kParam01] >= 0.5f;
 
     if ((! on && wasOn) || (inputChannel != lastChannel))
     {
@@ -137,10 +137,10 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int data1   = tomod.midiData[1] & 0x7f;
+        int data2   = tomod.midiData[2] & 0x7f;
 
         bool discard = false;
 
@@ -159,9 +159,9 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         if (held_notes[n][channel])
                         {
                             VstMidiEvent kill = tomod;
-                            kill.midiData[0] = MIDI_NOTEOFF | channel;
-                            kill.midiData[1] = n;
-                            kill.midiData[2] = 0;
+                            kill.midiData[0]  = MIDI_NOTEOFF | channel;
+                            kill.midiData[1]  = n;
+                            kill.midiData[2]  = 0;
                             outputs[0].push_back (kill);
                             held_notes[n][channel] = false;
                         }

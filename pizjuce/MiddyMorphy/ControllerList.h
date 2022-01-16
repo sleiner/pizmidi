@@ -6,7 +6,7 @@
 class MidiMorph;
 namespace juce
 {
-    class Component;
+class Component;
 }
 class ControllerGUI;
 

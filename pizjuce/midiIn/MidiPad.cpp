@@ -55,8 +55,8 @@ void MidiPad::filesDropped (const juce::StringArray& filenames, int mouseX, int 
     if (isInterestedInFileDrag (filenames))
     {
         String filename = filenames.joinIntoString (String(), 0, 1);
-        File file = File (filename);
-        auto image = Drawable::createFromImageFile (file);
+        File file       = File (filename);
+        auto image      = Drawable::createFromImageFile (file);
         drawableButton->setImages (image.get());
         //save the relative path
         drawableButton->setName (file.getRelativePathFrom (File::getSpecialLocation (File::currentExecutableFile)));

@@ -36,30 +36,30 @@ PizKeyboard::PizKeyboard()
     if (! loadDefaultFxb())
     {
         keyPosition = 48;
-        width = 0.25f;
-        velocity = 1.f;
-        useY = false;
-        channel = 0;
-        octave = 4;
-        toggle = false;
-        hide = false;
-        usepc = false;
-        qwerty = false;
-        capslock = false;
+        width       = 0.25f;
+        velocity    = 1.f;
+        useY        = false;
+        channel     = 0;
+        octave      = 4;
+        toggle      = false;
+        hide        = false;
+        usepc       = false;
+        qwerty      = false;
+        capslock    = false;
         showNumbers = false;
         //sendnotesonpc = true;
-        lastUIWidth = 560;
+        lastUIWidth  = 560;
         lastUIHeight = 140;
     }
-    sendHeldNotes = false;
+    sendHeldNotes  = false;
     clearHeldNotes = false;
-    lastProgram = 0;
-    curProgram = 0;
+    lastProgram    = 0;
+    curProgram     = 0;
 
     ccqwertyState[0] = KeyPress::isKeyCurrentlyDown (KeyPress::tabKey);
     ccqwertyState[1] = KeyPress::isKeyCurrentlyDown (KeyPress::createFromDescription ("`").getKeyCode());
-    ccState[0] = false;
-    ccState[1] = false;
+    ccState[0]       = false;
+    ccState[1]       = false;
     for (int i = keymapLength; --i >= 0;)
         qwertyState[i] = KeyPress::isKeyCurrentlyDown (keymap[i]);
 }
@@ -370,7 +370,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
     bool skip = false;
     for (auto const&& msgMetadata : midiMessages)
     {
-        auto m = msgMetadata.getMessage();
+        auto m      = msgMetadata.getMessage();
         auto sample = msgMetadata.samplePosition;
 
         if (m.isForChannel (channel + 1))
@@ -502,19 +502,19 @@ void PizKeyboard::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            width = (float) xmlState->getDoubleAttribute ("gainLevel", width); //old name for compatibility
-            width = (float) xmlState->getDoubleAttribute ("keyWidth", width);
-            velocity = (float) xmlState->getDoubleAttribute ("velocity", velocity);
-            channel = xmlState->getIntAttribute ("channel", channel);
-            useY = xmlState->getBoolAttribute ("useY", useY);
-            toggle = xmlState->getBoolAttribute ("toggle", toggle);
-            hide = xmlState->getBoolAttribute ("hide", hide);
-            usepc = xmlState->getBoolAttribute ("usepc", usepc);
-            showNumbers = xmlState->getBoolAttribute ("showNumbers", showNumbers);
-            qwerty = xmlState->getBoolAttribute ("qwerty", qwerty);
-            keyPosition = xmlState->getIntAttribute ("keyPosition", keyPosition);
-            octave = xmlState->getIntAttribute ("octave", octave);
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            width        = (float) xmlState->getDoubleAttribute ("gainLevel", width); //old name for compatibility
+            width        = (float) xmlState->getDoubleAttribute ("keyWidth", width);
+            velocity     = (float) xmlState->getDoubleAttribute ("velocity", velocity);
+            channel      = xmlState->getIntAttribute ("channel", channel);
+            useY         = xmlState->getBoolAttribute ("useY", useY);
+            toggle       = xmlState->getBoolAttribute ("toggle", toggle);
+            hide         = xmlState->getBoolAttribute ("hide", hide);
+            usepc        = xmlState->getBoolAttribute ("usepc", usepc);
+            showNumbers  = xmlState->getBoolAttribute ("showNumbers", showNumbers);
+            qwerty       = xmlState->getBoolAttribute ("qwerty", qwerty);
+            keyPosition  = xmlState->getIntAttribute ("keyPosition", keyPosition);
+            octave       = xmlState->getIntAttribute ("octave", octave);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
             sendChangeMessage();
             this->dispatchPendingMessages();

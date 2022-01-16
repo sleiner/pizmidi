@@ -14,10 +14,10 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 WebBrowserFilter::WebBrowserFilter()
 {
-    gain = 0.5f;
-    lastUIWidth = 640;
-    lastUIHeight = 480;
-    URL = "http://www.kvraudio.com/";
+    gain              = 0.5f;
+    lastUIWidth       = 640;
+    lastUIHeight      = 480;
+    URL               = "http://www.kvraudio.com/";
     initialPageLoaded = false;
 }
 
@@ -107,11 +107,11 @@ bool WebBrowserFilter::producesMidi() const
 void WebBrowserFilter::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // do your pre-playback setup stuff here..
-    lastinL = 0;
-    lastinR = 0;
+    lastinL  = 0;
+    lastinR  = 0;
     lastoutL = 0;
     lastoutR = 0;
-    R = (float) (1.0 - (126.0 / sampleRate));
+    R        = (float) (1.0 - (126.0 / sampleRate));
 }
 
 void WebBrowserFilter::releaseResources()
@@ -126,10 +126,10 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
     if (! initialPageLoaded)
         sendChangeMessage();
 
-    int16 mask1 = URL.hashCode() & 0xffff;
-    int16 mask2 = URL.hashCode() / 0x10000;
-    float rm = (float) (URL.hashCode() & 0xff) / 255.f;
-    int8 mask3 = ~(roundToInt (255.f * buffer.getMagnitude (0, buffer.getNumSamples()) * gain * 0.1f) & 0xff);
+    int16 mask1      = URL.hashCode() & 0xffff;
+    int16 mask2      = URL.hashCode() / 0x10000;
+    float rm         = (float) (URL.hashCode() & 0xff) / 255.f;
+    int8 mask3       = ~(roundToInt (255.f * buffer.getMagnitude (0, buffer.getNumSamples()) * gain * 0.1f) & 0xff);
     float integerMax = 32767.f;
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
@@ -144,20 +144,20 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
     {
         float sampleL = in1[i] * gain * 0.01f + denorm;
         float sampleR = in2[i] * gain * 0.01f + denorm;
-        int16 L16 = roundToInt (sampleL * integerMax);
-        int16 R16 = roundToInt (sampleR * integerMax);
-        L16 = L16 & mask1;
-        R16 = R16 & mask2;
-        int8 L8 = L16 & mask3;
-        int8 R8 = R16 & mask3;
-        sampleL = (float) L8 / 255.f + denorm;
-        sampleR = (float) R8 / 255.f + denorm;
+        int16 L16     = roundToInt (sampleL * integerMax);
+        int16 R16     = roundToInt (sampleR * integerMax);
+        L16           = L16 & mask1;
+        R16           = R16 & mask2;
+        int8 L8       = L16 & mask3;
+        int8 R8       = R16 & mask3;
+        sampleL       = (float) L8 / 255.f + denorm;
+        sampleR       = (float) R8 / 255.f + denorm;
 
         //dc removal
-        in1[i] = sampleL - lastinL + R * lastoutL + denorm;
-        in2[i] = sampleR - lastinR + R * lastoutR + denorm;
-        lastinL = sampleL;
-        lastinR = sampleR;
+        in1[i]   = sampleL - lastinL + R * lastoutL + denorm;
+        in2[i]   = sampleR - lastinR + R * lastoutR + denorm;
+        lastinL  = sampleL;
+        lastinR  = sampleR;
         lastoutL = in1[i];
         lastoutR = in2[i];
     }
@@ -214,9 +214,9 @@ void WebBrowserFilter::setStateInformation (const void* data, int sizeInBytes)
             // ok, now pull out our parameters..
             gain = (float) xmlState->getDoubleAttribute ("gainLevel", gain);
 
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            URL = xmlState->getStringAttribute ("lastURL", URL);
+            URL          = xmlState->getStringAttribute ("lastURL", URL);
 
             sendChangeMessage();
         }

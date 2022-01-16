@@ -6,9 +6,9 @@
 
 #include "../_common/BankStorage.h"
 #include "../_common/ChordFunctions.h"
-#include "../_common/PizAudioProcessor.h"
 #include "../_common/key.h"
 #include "../_common/midistuff.h"
+#include "../_common/PizAudioProcessor.h"
 
 enum parameters
 {

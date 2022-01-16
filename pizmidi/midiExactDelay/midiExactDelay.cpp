@@ -75,7 +75,7 @@ MidiExactDelay::MidiExactDelay (audioMasterCallback audioMaster)
     srand ((unsigned int) time (NULL));
 
     wasplaying = false;
-    isplaying = false;
+    isplaying  = false;
 
     init();
 }
@@ -390,11 +390,11 @@ void MidiExactDelay::preProcess (void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
-    int numerator = 4;
+    int numerator   = 4;
     int denominator = 4;
-    float bpm = 120.f;
+    float bpm       = 120.f;
 
     if (timeInfo)
     {
@@ -403,7 +403,7 @@ void MidiExactDelay::preProcess (void)
             bpm = (float) timeInfo->tempo;
         if (kVstTimeSigValid & timeInfo->flags)
         {
-            numerator = timeInfo->timeSigNumerator;
+            numerator   = timeInfo->timeSigNumerator;
             denominator = timeInfo->timeSigDenominator;
         }
 
@@ -412,10 +412,10 @@ void MidiExactDelay::preProcess (void)
         else
             isplaying = false;
     }
-    ppqPerBar = ((float) numerator * 4.f / (float) denominator);
-    samplesPerBeat = roundToInt (60.0f * sampleRate / bpm);
+    ppqPerBar           = ((float) numerator * 4.f / (float) denominator);
+    samplesPerBeat      = roundToInt (60.0f * sampleRate / bpm);
     samplesPerNumerator = roundToInt ((float) samplesPerBeat * (float) numerator * 0.25f);
-    samplesPerTick = roundToInt ((float) samplesPerBeat / 960.0f);
+    samplesPerTick      = roundToInt ((float) samplesPerBeat / 960.0f);
 
     _cleanMidiOutBuffers();
 
@@ -455,7 +455,7 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
     for (unsigned int i = 0; i < midiDelayBuffer.size(); i++)
     {
         VstMidiEvent event = midiDelayBuffer[i];
-        short status = event.midiData[0] & 0xf0; // scraping  channel
+        short status       = event.midiData[0] & 0xf0; // scraping  channel
         //short channel    = event.midiData[0] & 0x0f;   // isolating channel (0-15)
         //short data1      = event.midiData[1] & 0x7f;
         short data2 = event.midiData[2] & 0x7f;
@@ -467,7 +467,7 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         {
             //event is due, send it if output>0 and mode is right
             VstMidiEvent out = event;
-            out.midiData[2] = roundToInt ((float) data2 * param[kWet]);
+            out.midiData[2]  = roundToInt ((float) data2 * param[kWet]);
             if (status == MIDI_NOTEON && param[kMode] > 0.0f)
             {
                 if (out.midiData[2] < 1)
@@ -504,7 +504,7 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0; // scraping  channel
         short channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
         //short data1     = tomod.midiData[1] & 0x7f;
         short data2 = tomod.midiData[2] & 0x7f;
@@ -552,7 +552,7 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 midiDelayBuffer.push_back (delayed);
             }
         } // if listenchannel==channel
-    } //for() inputs loop
+    }     //for() inputs loop
 
     sortMidiEvents (outputs[0]);
 

@@ -159,8 +159,8 @@ void MidiChannelFilter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
     VstMidiEventVec::iterator it;
     for (it = inputs[0].begin(); it < inputs[0].end(); it++)
     {
-        const int status = it->midiData[0] & 0xf0; // scraping  channel
-        const int in_channel = (it->midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        const int status      = it->midiData[0] & 0xf0;       // scraping  channel
+        const int in_channel  = (it->midiData[0] & 0x0f) + 1; // isolating channel (1-16)
         const int out_channel = FLOAT_TO_CHANNEL016 (fChannel);
 
         if (status < 0xF0)

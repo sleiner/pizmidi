@@ -166,14 +166,14 @@ void MidiNoteToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         const int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        const int data1 = tomod.midiData[1] & 0x7f;
-        const int data2 = tomod.midiData[2] & 0x7f;
+        const int data1   = tomod.midiData[1] & 0x7f;
+        const int data2   = tomod.midiData[2] & 0x7f;
 
-        const bool on = param[kPower] >= 0.5f;
-        const int lownote = FLOAT_TO_MIDI (param[kLowNote]);
-        const int highnote = FLOAT_TO_MIDI (param[kHighNote]);
+        const bool on        = param[kPower] >= 0.5f;
+        const int lownote    = FLOAT_TO_MIDI (param[kLowNote]);
+        const int highnote   = FLOAT_TO_MIDI (param[kHighNote]);
         const int outchannel = FLOAT_TO_CHANNEL (param[kChannel]) == -1 ? channel : FLOAT_TO_CHANNEL (param[kChannel]);
 
         bool discard = false;

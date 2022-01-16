@@ -78,7 +78,7 @@ enum
     kProg,
     kNumParams,
     kNumPrograms = 128,
-    kNumSlots = 16
+    kNumSlots    = 16
 };
 
 class midi2qwertyProgram

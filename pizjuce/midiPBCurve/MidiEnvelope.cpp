@@ -51,17 +51,17 @@ void MidiEnvelope::resized()
 //==============================================================================
 void MidiEnvelope::paint (Graphics& g)
 {
-    const int dotSize = MAX_ENVELOPE_DOT_SIZE;
+    const int dotSize     = MAX_ENVELOPE_DOT_SIZE;
     const int halfDotSize = dotSize / 2;
 
     g.fillAll (Colour (0xffffffff));
 
     for (int grid = 1; grid < 16383; grid++)
     {
-        float inc = 1.f / 16383.f;
+        float inc      = 1.f / 16383.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 24.f;
-        int pbstep = roundToInt (8192.f / (jmax (1.f, plugin->getParameter (kPBRange) * 24.f)));
-        int pbstep2 = pbrange2 == 0.f ? pbstep : roundToInt (8192.f / (jmax (1.f, pbrange2)));
+        int pbstep     = roundToInt (8192.f / (jmax (1.f, plugin->getParameter (kPBRange) * 24.f)));
+        int pbstep2    = pbrange2 == 0.f ? pbstep : roundToInt (8192.f / (jmax (1.f, pbrange2)));
         if (grid == 8192)
         { //center line
             g.setColour (Colours::blueviolet);
@@ -221,7 +221,7 @@ void MidiEnvelope::mouseDown (const MouseEvent& e)
             labelX->setColour (Label::textColourId, Colours::red);
             labelY->setColour (Label::textColourId, Colours::red);
             Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
-            float pbrange = plugin->getParameter (kPBRange) * 48.f;
+            float pbrange  = plugin->getParameter (kPBRange) * 48.f;
             float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
             if (pbrange2 == 0.f)
                 pbrange2 = pbrange;
@@ -330,8 +330,8 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
 
     if (draggingPoint != -1)
     {
-        int prevPoint = jmax (0, draggingPoint - 1);
-        int nextPoint = jmin (MAX_ENVELOPE_POINTS, draggingPoint + 1);
+        int prevPoint   = jmax (0, draggingPoint - 1);
+        int nextPoint   = jmin (MAX_ENVELOPE_POINTS, draggingPoint + 1);
         int paramNumber = draggingPoint * 2;
 
         // calculate X
@@ -341,7 +341,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         }
         else if (draggingPoint > 0 && draggingPoint < MAX_ENVELOPE_POINTS - 1)
         {
-            float snapx = (float) getWidth() * (float) roundToInt (16383.0 * ((double) e.x / (double) getWidth())) / 16383.f;
+            float snapx              = (float) getWidth() * (float) roundToInt (16383.0 * ((double) e.x / (double) getWidth())) / 16383.f;
             points[draggingPoint][0] = restrict == -1 ? oldpoints[draggingPoint][0] : (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
         }
         else
@@ -366,7 +366,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         labelX->setColour (Label::textColourId, Colours::red);
         labelY->setColour (Label::textColourId, Colours::red);
         Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
-        float pbrange = plugin->getParameter (kPBRange) * 48.f;
+        float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
             pbrange2 = pbrange;
@@ -407,7 +407,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapy = (float) getHeight() * (float) roundToInt (16383.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 16383.f;
+                float snapy  = (float) getHeight() * (float) roundToInt (16383.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 16383.f;
                 points[i][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
                 points[i][0] = oldpoints[i][0];
                 plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
@@ -418,7 +418,7 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapx = (float) getWidth() * (float) roundToInt (16383.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 16383.f;
+                float snapx  = (float) getWidth() * (float) roundToInt (16383.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 16383.f;
                 points[i][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
                 points[i][1] = oldpoints[i][1];
                 plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
@@ -456,7 +456,7 @@ void MidiEnvelope::mouseMove (const MouseEvent& e)
         labelY->setColour (Label::textColourId, Colours::green);
 
         Point<float> p (points[hoveringPoint][0], 1.f - points[hoveringPoint][1]);
-        float pbrange = plugin->getParameter (kPBRange) * 48.f;
+        float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
             pbrange2 = pbrange;
@@ -497,7 +497,7 @@ void MidiEnvelope::mouseMove (const MouseEvent& e)
         labelY->setColour (Label::textColourId, Colours::black);
 
         Point<float> p ((float) e.x / (float) getWidth(), 1.f - (float) e.y / (float) getHeight());
-        float pbrange = plugin->getParameter (kPBRange) * 48.f;
+        float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
             pbrange2 = pbrange;
@@ -541,9 +541,9 @@ int MidiEnvelope::addPoint (float x, float y, bool control)
     {
         setPointActive (newPoint, true);
         setPointControl (newPoint, control);
-        float snapx = (float) getWidth() * (float) roundToInt (16383.0 * (x / (double) getWidth())) / 16383.f;
+        float snapx         = (float) getWidth() * (float) roundToInt (16383.0 * (x / (double) getWidth())) / 16383.f;
         points[newPoint][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
-        float snapy = (float) getHeight() * (float) roundToInt (16383.0 * (y / (double) getHeight())) / 16383.f;
+        float snapy         = (float) getHeight() * (float) roundToInt (16383.0 * (y / (double) getHeight())) / 16383.f;
         points[newPoint][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
         plugin->setParameterNotifyingHost ((newPoint * 2), points[newPoint][0]);
         plugin->setParameterNotifyingHost ((newPoint * 2 + 1), (1.f - points[newPoint][1]));

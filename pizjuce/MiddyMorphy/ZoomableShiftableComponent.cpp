@@ -29,10 +29,12 @@ void ZoomableShiftableComponent::rePosition()
 {
     // Bouml preserved body begin 0003AF0D
     Rectangle<int> rect = getOriginalBounds();
+
     int w = roundToInt ((float) rect.getWidth() * getZoomFactorX());
     int h = roundToInt ((float) rect.getHeight() * getZoomFactorY());
     int x = roundToInt ((float) rect.getX() * getZoomFactorX());
     int y = roundToInt ((float) rect.getY() * getZoomFactorY());
+
     setBounds (roundToInt (zoomingComponent->getXOffset()) + x, roundToInt (zoomingComponent->getYOffset()) + y, w, h);
     // Bouml preserved body end 0003AF0D
 }
@@ -52,8 +54,8 @@ void ZoomableShiftableComponent::refreshOriginalBounds()
 
     float w = getWidth() / getZoomFactorX();
     float h = getHeight() / getZoomFactorY();
-    x = x / getZoomFactorX();
-    y = y / getZoomFactorY();
+    x       = x / getZoomFactorX();
+    y       = y / getZoomFactorY();
 
     Rectangle<int> rect (roundToInt (x), roundToInt (y), roundToInt (w), roundToInt (h));
     setOriginalBounds (rect);

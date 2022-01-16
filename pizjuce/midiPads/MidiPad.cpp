@@ -8,20 +8,20 @@ MidiPad::MidiPad (int _index)
 
 {
     backgroundOff = Colour (0xffbbbbff);
-    backgroundOn = Colour (0xff3333ff);
+    backgroundOn  = Colour (0xff3333ff);
 
-    Description = "x:0 y:0";
-    showdot = false;
-    showvalues = false;
-    showx = false;
-    showy = false;
-    hex = false;
+    Description  = "x:0 y:0";
+    showdot      = false;
+    showvalues   = false;
+    showx        = false;
+    showy        = false;
+    hex          = false;
     centeredText = false;
-    x = 0;
-    y = 0;
-    roundness = 0.4f;
-    imageSize = 0.5f;
-    isPlaying = false;
+    x            = 0;
+    y            = 0;
+    roundness    = 0.4f;
+    imageSize    = 0.5f;
+    isPlaying    = false;
     setMouseClickGrabsKeyboardFocus (false);
 
     addAndMakeVisible (text = new Label ("label", ""));
@@ -107,11 +107,11 @@ void MidiPad::drawButtonBackground (Graphics& g,
                                     bool isMouseOverButton,
                                     bool isButtonDown)
 {
-    const int width = button.getWidth();
+    const int width  = button.getWidth();
     const int height = button.getHeight();
 
-    const float indent = 2.0f;
-    roundness = jlimit (0.f, 1.f, roundness);
+    const float indent   = 2.0f;
+    roundness            = jlimit (0.f, 1.f, roundness);
     const int cornerSize = jmin (roundToInt (width * roundness),
                                  roundToInt (height * roundness));
     Colour bc (backgroundColour);
@@ -202,8 +202,8 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
     }
     if (showdot)
     {
-        x = jlimit (0.f, 1.f, x);
-        y = jlimit (0.f, 1.f, y);
+        x              = jlimit (0.f, 1.f, x);
+        y              = jlimit (0.f, 1.f, y);
         float diameter = jlimit (10.f, jmax (10.f, jmin (getHeight(), getWidth()) * 0.4f), jmax ((float) (proportionOfHeight (0.125f)), (float) (proportionOfWidth (0.125f))));
         g.setColour (Colour (0x88faa52a));
         g.fillEllipse ((float) (proportionOfWidth (x)) - diameter * 0.5f,

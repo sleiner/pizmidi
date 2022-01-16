@@ -22,19 +22,19 @@ MidiPadsPrograms::MidiPadsPrograms()
             y[p][i] = 0.5f;
             ValueTree pv ("PadValues");
             pv.setProperty ("padIndex", i, 0);
-            pv.setProperty ("Ydata1", 60, 0); //note
-            pv.setProperty ("Ycc", i, 0); //y cc
-            pv.setProperty ("Ytype", 0, 0); //0==note, 1==cc, 2==program change???
-            pv.setProperty ("Ydata2", 127, 0); //data2
-            pv.setProperty ("Yoff", 0, 0); //y off value
-            pv.setProperty ("trigger", 0, 0); //trigger note
-            pv.setProperty ("Xcc", 1, 0); //x cc
-            pv.setProperty ("Xoff", 64, 0); //x off value
-            pv.setProperty ("UseX", false, 0); // use x-position?
-            pv.setProperty ("UseY", false, 0); // use y-position?
-            pv.setProperty ("UseYCC", false, 0); // (don't) send y-cc with note
-            pv.setProperty ("UseXPB", false, 0); // (don't) use x as pitch bend
-            pv.setProperty ("toggle", false, 0); // toggle mode off
+            pv.setProperty ("Ydata1", 60, 0);     //note
+            pv.setProperty ("Ycc", i, 0);         //y cc
+            pv.setProperty ("Ytype", 0, 0);       //0==note, 1==cc, 2==program change???
+            pv.setProperty ("Ydata2", 127, 0);    //data2
+            pv.setProperty ("Yoff", 0, 0);        //y off value
+            pv.setProperty ("trigger", 0, 0);     //trigger note
+            pv.setProperty ("Xcc", 1, 0);         //x cc
+            pv.setProperty ("Xoff", 64, 0);       //x off value
+            pv.setProperty ("UseX", false, 0);    // use x-position?
+            pv.setProperty ("UseY", false, 0);    // use y-position?
+            pv.setProperty ("UseYCC", false, 0);  // (don't) send y-cc with note
+            pv.setProperty ("UseXPB", false, 0);  // (don't) use x as pitch bend
+            pv.setProperty ("toggle", false, 0);  // toggle mode off
             pv.setProperty ("SendOff", false, 0); // send off value
 
             pv.setProperty ("icon", String (i + 1) + ".svg", 0); //icon filename
@@ -54,16 +54,16 @@ MidiPadsPrograms::MidiPadsPrograms()
         }
 
         ValueTree gv ("GlobalValues");
-        gv.setProperty ("VelOffset", 0.5f, 0); // velocity offset
-        gv.setProperty ("CCOffset", 0.5f, 0); // cc value offset
-        gv.setProperty ("ChIn", 0.0f / 15.0f, 0); // in channel
+        gv.setProperty ("VelOffset", 0.5f, 0);     // velocity offset
+        gv.setProperty ("CCOffset", 0.5f, 0);      // cc value offset
+        gv.setProperty ("ChIn", 0.0f / 15.0f, 0);  // in channel
         gv.setProperty ("ChOut", 0.0f / 15.0f, 0); // out channel
-        gv.setProperty ("UseTrigger", 0.0f, 0); // use triggering?
-        gv.setProperty ("NoteOnTrig", 0.0f, 0); // "piezo trigger mode"
-        gv.setProperty ("UseVel", 1.0f, 0); // use trigger velocity?
-        gv.setProperty ("Thru", 1.f, 0); // midi thru?
-        gv.setProperty ("UseAft", 0.f, 0); // send aftertouch?
-        gv.setProperty ("Mono", 0.f, 0); // mono mode
+        gv.setProperty ("UseTrigger", 0.0f, 0);    // use triggering?
+        gv.setProperty ("NoteOnTrig", 0.0f, 0);    // "piezo trigger mode"
+        gv.setProperty ("UseVel", 1.0f, 0);        // use trigger velocity?
+        gv.setProperty ("Thru", 1.f, 0);           // midi thru?
+        gv.setProperty ("UseAft", 0.f, 0);         // send aftertouch?
+        gv.setProperty ("Mono", 0.f, 0);           // mono mode
 
         //default GUI size
         gv.setProperty ("lastUIWidth", 400, 0);
@@ -108,8 +108,8 @@ midiPads::midiPads()
     pluginPath = getCurrentPath() + File::getSeparatorString() + "midiPads";
     layoutPath = pluginPath + File::getSeparatorString() + "midiPadLayouts";
     presetPath = pluginPath + File::getSeparatorString() + "midiPadPresets";
-    bankPath = pluginPath + File::getSeparatorString() + "midiPadBanks";
-    iconPath = pluginPath + File::getSeparatorString() + "midiPadIcons";
+    bankPath   = pluginPath + File::getSeparatorString() + "midiPadBanks";
+    iconPath   = pluginPath + File::getSeparatorString() + "midiPadIcons";
 
     layouts = new PadLayouts();
     fillLayouts();
@@ -134,16 +134,16 @@ midiPads::midiPads()
         isplaying[i] = false;
     for (int i = 0; i < numPads; i++)
     {
-        buttondown[i] = false;
-        midilisten[i] = 0.0f;
-        triggered[i] = false;
-        send[i] = 0.0f;
-        sendoff[i] = 0.0f;
-        lastx[i] = programs->getForPad (curProgram, i, "lastx");
-        lasty[i] = SendOff[i] ? Yoff[i] : (int) programs->getForPad (curProgram, i, "lasty");
+        buttondown[i]   = false;
+        midilisten[i]   = 0.0f;
+        triggered[i]    = false;
+        send[i]         = 0.0f;
+        sendoff[i]      = 0.0f;
+        lastx[i]        = programs->getForPad (curProgram, i, "lastx");
+        lasty[i]        = SendOff[i] ? Yoff[i] : (int) programs->getForPad (curProgram, i, "lasty");
         lastxccvalue[i] = -1;
         lastyccvalue[i] = -1;
-        dotmoved[i] = false;
+        dotmoved[i]     = false;
     }
 }
 
@@ -167,14 +167,14 @@ void midiPads::setParameter (int index, float newValue)
     else if (index >= ypos)
     {
         programs->y[curProgram][index - ypos] = newValue;
-        buttondown[index - ypos] = true;
-        dotmoved[index - ypos] = true;
+        buttondown[index - ypos]              = true;
+        dotmoved[index - ypos]                = true;
     }
     else
     {
         programs->x[curProgram][index - xpos] = newValue;
-        buttondown[index - xpos] = true;
-        dotmoved[index - xpos] = true;
+        buttondown[index - xpos]              = true;
+        dotmoved[index - xpos]                = true;
     }
     sendChangeMessage();
     //}
@@ -261,46 +261,46 @@ void midiPads::setCurrentProgram (int index)
         param[i] = programs->get (index, getGlobalParamValueName (i));
     }
 
-    squares = programs->get (index, "squares");
-    lastUIWidth = programs->get (index, "lastUIWidth");
+    squares      = programs->get (index, "squares");
+    lastUIWidth  = programs->get (index, "lastUIWidth");
     lastUIHeight = programs->get (index, "lastUIHeight");
     for (int i = 0; i < numPads; i++)
     {
         param[xpos + i] = programs->x[index][xpos + i];
         param[ypos + i] = programs->y[index][ypos + i];
-        icon[i] = programs->getForPad (index, i, "icon");
-        text[i] = programs->getForPad (index, i, "text");
-        padcolor[i] = Colour::fromString (programs->getForPad (index, i, "padcolor").toString());
-        Ydata1[i] = programs->getForPad (index, i, "Ydata1");
-        Ycc[i] = programs->getForPad (index, i, "Ycc");
-        Ytype[i] = programs->getForPad (index, i, "Ytype");
-        Ydata2[i] = programs->getForPad (index, i, "Ydata2");
-        Yoff[i] = programs->getForPad (index, i, "Yoff");
-        Xoff[i] = programs->getForPad (index, i, "Xoff");
-        trigger[i] = programs->getForPad (index, i, "trigger");
-        Xcc[i] = programs->getForPad (index, i, "Xcc");
-        SendOff[i] = programs->getForPad (index, i, "SendOff");
-        UseX[i] = programs->getForPad (index, i, "UseX");
-        UseY[i] = programs->getForPad (index, i, "UseY");
-        UseYCC[i] = programs->getForPad (index, i, "UseYCC");
-        UseXPB[i] = programs->getForPad (index, i, "UseXPB");
-        lastx[i] = programs->getForPad (index, i, "lastx");
-        lasty[i] = programs->getForPad (index, i, "lasty");
-        toggle[i] = programs->getForPad (index, i, "toggle");
-        togglestate[i] = programs->getForPad (index, i, "togglestate");
-        showdots[i] = programs->getForPad (index, i, "showdots");
-        showvalues[i] = programs->getForPad (index, i, "showvalues");
-        roundness[i] = programs->getForPad (index, i, "roundness");
-        iconsize[i] = programs->getForPad (index, i, "iconsize");
+        icon[i]         = programs->getForPad (index, i, "icon");
+        text[i]         = programs->getForPad (index, i, "text");
+        padcolor[i]     = Colour::fromString (programs->getForPad (index, i, "padcolor").toString());
+        Ydata1[i]       = programs->getForPad (index, i, "Ydata1");
+        Ycc[i]          = programs->getForPad (index, i, "Ycc");
+        Ytype[i]        = programs->getForPad (index, i, "Ytype");
+        Ydata2[i]       = programs->getForPad (index, i, "Ydata2");
+        Yoff[i]         = programs->getForPad (index, i, "Yoff");
+        Xoff[i]         = programs->getForPad (index, i, "Xoff");
+        trigger[i]      = programs->getForPad (index, i, "trigger");
+        Xcc[i]          = programs->getForPad (index, i, "Xcc");
+        SendOff[i]      = programs->getForPad (index, i, "SendOff");
+        UseX[i]         = programs->getForPad (index, i, "UseX");
+        UseY[i]         = programs->getForPad (index, i, "UseY");
+        UseYCC[i]       = programs->getForPad (index, i, "UseYCC");
+        UseXPB[i]       = programs->getForPad (index, i, "UseXPB");
+        lastx[i]        = programs->getForPad (index, i, "lastx");
+        lasty[i]        = programs->getForPad (index, i, "lasty");
+        toggle[i]       = programs->getForPad (index, i, "toggle");
+        togglestate[i]  = programs->getForPad (index, i, "togglestate");
+        showdots[i]     = programs->getForPad (index, i, "showdots");
+        showvalues[i]   = programs->getForPad (index, i, "showvalues");
+        roundness[i]    = programs->getForPad (index, i, "roundness");
+        iconsize[i]     = programs->getForPad (index, i, "iconsize");
         centeredText[i] = programs->getForPad (index, i, "centeredText");
     }
-    bghue = programs->get (index, "bghue");
-    bgsat = programs->get (index, "bgsat");
-    bgbri = programs->get (index, "bgbri");
-    contrast = programs->get (index, "contrast");
-    editmode = programs->get (index, "editmode");
+    bghue      = programs->get (index, "bghue");
+    bgsat      = programs->get (index, "bgsat");
+    bgbri      = programs->get (index, "bgbri");
+    contrast   = programs->get (index, "contrast");
+    editmode   = programs->get (index, "editmode");
     usemouseup = programs->get (index, "usemouseup");
-    hex = programs->get (index, "hex");
+    hex        = programs->get (index, "hex");
 
     sendChangeMessage();
 }
@@ -343,10 +343,10 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
 
     MidiBuffer midiout;
     bool discard = param[kThru] < 0.5f; // if midi thru is off, discard original message
-    int outch = (int) (param[kChOut] * 15.1f);
+    int outch    = (int) (param[kChOut] * 15.1f);
     for (auto&& msgMetadata : midiMessages)
     {
-        auto midi_message = msgMetadata.getMessage();
+        auto midi_message  = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
         //program change
@@ -365,17 +365,17 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     if (midi_message.isNoteOn() && (midi_message.getVelocity() > 1))
                     {
                         midilisten[i] = 0;
-                        Ydata1[i] = midi_message.getNoteNumber();
-                        Ytype[i] = 0;
-                        Ydata2[i] = midi_message.getVelocity();
+                        Ydata1[i]     = midi_message.getNoteNumber();
+                        Ytype[i]      = 0;
+                        Ydata2[i]     = midi_message.getVelocity();
                         sendChangeMessage();
                     }
                     else if (midi_message.isController())
                     {
                         midilisten[i] = 0;
-                        Ycc[i] = midi_message.getControllerNumber();
-                        Ytype[i] = 1;
-                        Ydata2[i] = midi_message.getControllerValue();
+                        Ycc[i]        = midi_message.getControllerNumber();
+                        Ytype[i]      = 1;
+                        Ydata2[i]     = midi_message.getControllerValue();
                         sendChangeMessage();
                     }
                 }
@@ -385,13 +385,13 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     if (midi_message.isNoteOn() && (midi_message.getVelocity() > 1))
                     {
                         midilisten[i] = 0;
-                        Yoff[i] = midi_message.getVelocity();
+                        Yoff[i]       = midi_message.getVelocity();
                         sendChangeMessage();
                     }
                     else if (midi_message.isController())
                     {
                         midilisten[i] = 0;
-                        Yoff[i] = midi_message.getControllerValue();
+                        Yoff[i]       = midi_message.getControllerValue();
                         sendChangeMessage();
                     }
                 }
@@ -401,13 +401,13 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     if (midi_message.isController())
                     {
                         midilisten[i] = 0;
-                        Xcc[i] = midi_message.getControllerNumber();
+                        Xcc[i]        = midi_message.getControllerNumber();
                         sendChangeMessage();
                     }
                     else if (midi_message.isPitchWheel())
                     {
                         midilisten[i] = 0;
-                        UseXPB[i] = true;
+                        UseXPB[i]     = true;
                         sendChangeMessage();
                     }
                 }
@@ -417,7 +417,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     if (midi_message.isController())
                     {
                         midilisten[i] = 0;
-                        Xoff[i] = midi_message.getControllerValue();
+                        Xoff[i]       = midi_message.getControllerValue();
                         sendChangeMessage();
                     }
                 }
@@ -427,7 +427,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     if (midi_message.isNoteOn() && (midi_message.getVelocity() > 1))
                     {
                         midilisten[i] = 0;
-                        trigger[i] = midi_message.getNoteNumber();
+                        trigger[i]    = midi_message.getNoteNumber();
                         sendChangeMessage();
                     }
                     //else if (midi_message.isController()) {
@@ -444,7 +444,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     {
                         if (param[kNoteOnTrig] >= 0.5f)
                         {
-                            trig = true;
+                            trig       = true;
                             triggervel = midi_message.getVelocity();
                             sendChangeMessage();
                         }
@@ -488,8 +488,8 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                                     }
                                     midiout.addEvent (MidiMessage (0x90 | outch, note, vel, 0), sample_number);
                                     isplaying[note] = true;
-                                    triggered[i] = true;
-                                    trig = true;
+                                    triggered[i]    = true;
+                                    trig            = true;
                                 }
                                 discard = true; //kill trigger message
                             }
@@ -514,7 +514,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                                 {
                                     midiout.addEvent (MidiMessage (0xB0 | outch, Ycc[i], value, 0), sample_number);
                                     triggered[i] = true;
-                                    trig = true;
+                                    trig         = true;
                                 }
                                 discard = true; //kill trigger message
                             }
@@ -544,7 +544,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                                         }
                                     }
                                     triggered[i] = false;
-                                    trig = true;
+                                    trig         = true;
                                     sendChangeMessage();
                                 }
                             }
@@ -685,7 +685,7 @@ void midiPads::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages
                     midiout.addEvent (MidiMessage (0xA0 | outch, note, 0, 0), 0);
                 if (UseYCC[i] && SendOff[i])
                     midiout.addEvent (MidiMessage (0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
-                midiout.addEvent (MidiMessage (0x80 | outch, note, Yoff[i], 0), 0); //noteoff
+                midiout.addEvent (MidiMessage (0x80 | outch, note, Yoff[i], 0), 0);       //noteoff
                 isplaying[note] = false;
             }
             else
@@ -778,16 +778,16 @@ void midiPads::setCurrentProgramStateInformation (const void* data, int sizeInBy
             {
                 param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
             }
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bghue = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
-            contrast = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
-            squares = xmlState->getIntAttribute ("squares", squares);
-            editmode = xmlState->getBoolAttribute ("editmode", editmode);
-            hex = xmlState->getBoolAttribute ("hex", hex);
-            usemouseup = xmlState->getBoolAttribute ("usemouseup", usemouseup);
+            bghue        = (float) xmlState->getDoubleAttribute ("Hue", bghue);
+            bgsat        = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
+            bgbri        = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
+            contrast     = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
+            squares      = xmlState->getIntAttribute ("squares", squares);
+            editmode     = xmlState->getBoolAttribute ("editmode", editmode);
+            hex          = xmlState->getBoolAttribute ("hex", hex);
+            usemouseup   = xmlState->getBoolAttribute ("usemouseup", usemouseup);
             if (hex)
                 setLayout (curProgram, hexagonpads);
             else
@@ -845,31 +845,31 @@ void midiPads::setCurrentProgramStateInformation (const void* data, int sizeInBy
             for (int i = 0; i < squares; i++)
             {
                 centeredText[i] = false;
-                iconsize[i] = 0.5f;
-                roundness[i] = (float) xmlState->getDoubleAttribute ("roundness", roundness[i]);
-                showdots[i] = xmlState->getBoolAttribute ("showdots", showdots[i]);
-                showdots[i] = xmlState->getBoolAttribute ("showdots" + String (i), showdots[i]);
-                showvalues[i] = xmlState->getBoolAttribute ("showvalues" + String (i), showvalues[i]);
-                icon[i] = xmlState->getStringAttribute ("icon" + String (i), icon[i]);
-                text[i] = xmlState->getStringAttribute ("text" + String (i), text[i]);
-                padcolor[i] = Colour (xmlState->getIntAttribute ("padcolor" + String (i), padcolor[i].getARGB()));
-                Ydata1[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata1" + String (i), Ydata1[i] * midiScaler));
-                Ycc[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Ycc" + String (i), Ycc[i] * midiScaler));
-                Ytype[i] = roundToInt (xmlState->getDoubleAttribute ("Ytype" + String (i), Ytype[i]));
-                Ydata2[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata2" + String (i), Ydata2[i] * midiScaler));
-                Yoff[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Yoff" + String (i), Yoff[i] * midiScaler));
-                trigger[i] = (int) (127.1 * xmlState->getDoubleAttribute ("trigger" + String (i), trigger[i] * midiScaler));
-                Xcc[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Xcc" + String (i), Xcc[i] * midiScaler));
-                Xoff[i] = (int) (127.1 * xmlState->getDoubleAttribute ("Xoff" + String (i), Xoff[i] * midiScaler));
-                SendOff[i] = xmlState->getBoolAttribute ("SendOff" + String (i), SendOff[i]);
-                UseX[i] = xmlState->getDoubleAttribute ("UseX" + String (i), UseX[i]) >= 0.5f;
-                UseY[i] = xmlState->getDoubleAttribute ("UseY" + String (i), UseY[i]) >= 0.5f;
-                UseYCC[i] = xmlState->getBoolAttribute ("UseYCC" + String (i), UseYCC[i]);
-                UseXPB[i] = xmlState->getBoolAttribute ("UseXPB" + String (i), UseXPB[i]);
-                lastx[i] = xmlState->getIntAttribute ("lastx" + String (i), lastx[i]);
-                lasty[i] = xmlState->getIntAttribute ("lasty" + String (i), lasty[i]);
-                toggle[i] = xmlState->getBoolAttribute ("toggle" + String (i), toggle[i]);
-                togglestate[i] = xmlState->getBoolAttribute ("togglestate" + String (i), togglestate[i]);
+                iconsize[i]     = 0.5f;
+                roundness[i]    = (float) xmlState->getDoubleAttribute ("roundness", roundness[i]);
+                showdots[i]     = xmlState->getBoolAttribute ("showdots", showdots[i]);
+                showdots[i]     = xmlState->getBoolAttribute ("showdots" + String (i), showdots[i]);
+                showvalues[i]   = xmlState->getBoolAttribute ("showvalues" + String (i), showvalues[i]);
+                icon[i]         = xmlState->getStringAttribute ("icon" + String (i), icon[i]);
+                text[i]         = xmlState->getStringAttribute ("text" + String (i), text[i]);
+                padcolor[i]     = Colour (xmlState->getIntAttribute ("padcolor" + String (i), padcolor[i].getARGB()));
+                Ydata1[i]       = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata1" + String (i), Ydata1[i] * midiScaler));
+                Ycc[i]          = (int) (127.1 * xmlState->getDoubleAttribute ("Ycc" + String (i), Ycc[i] * midiScaler));
+                Ytype[i]        = roundToInt (xmlState->getDoubleAttribute ("Ytype" + String (i), Ytype[i]));
+                Ydata2[i]       = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata2" + String (i), Ydata2[i] * midiScaler));
+                Yoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute ("Yoff" + String (i), Yoff[i] * midiScaler));
+                trigger[i]      = (int) (127.1 * xmlState->getDoubleAttribute ("trigger" + String (i), trigger[i] * midiScaler));
+                Xcc[i]          = (int) (127.1 * xmlState->getDoubleAttribute ("Xcc" + String (i), Xcc[i] * midiScaler));
+                Xoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute ("Xoff" + String (i), Xoff[i] * midiScaler));
+                SendOff[i]      = xmlState->getBoolAttribute ("SendOff" + String (i), SendOff[i]);
+                UseX[i]         = xmlState->getDoubleAttribute ("UseX" + String (i), UseX[i]) >= 0.5f;
+                UseY[i]         = xmlState->getDoubleAttribute ("UseY" + String (i), UseY[i]) >= 0.5f;
+                UseYCC[i]       = xmlState->getBoolAttribute ("UseYCC" + String (i), UseYCC[i]);
+                UseXPB[i]       = xmlState->getBoolAttribute ("UseXPB" + String (i), UseXPB[i]);
+                lastx[i]        = xmlState->getIntAttribute ("lastx" + String (i), lastx[i]);
+                lasty[i]        = xmlState->getIntAttribute ("lasty" + String (i), lasty[i]);
+                toggle[i]       = xmlState->getBoolAttribute ("toggle" + String (i), toggle[i]);
+                togglestate[i]  = xmlState->getBoolAttribute ("togglestate" + String (i), togglestate[i]);
             }
             sendChangeMessage();
         }
@@ -1113,7 +1113,7 @@ void midiPads::loadXmlLayout (File file)
         XmlDocument xmldoc (file.loadFileAsString());
         auto xmlState (xmldoc.getDocumentElement());
         ValueTree program = programs->values_.getChild (curProgram);
-        int index = program.indexOf (program.getChildWithName ("Layout"));
+        int index         = program.indexOf (program.getChildWithName ("Layout"));
         program.removeChild (index, 0);
         program.addChild (ValueTree::fromXml (*xmlState), index, 0);
     }
@@ -1882,7 +1882,7 @@ void midiPads::loadDefaultPrograms()
                 {
                     programs->setPadVisible (i, pad, true);
                     programs->setForPad (i, pad, "UseY", true);
-                    programs->setForPad (i, pad, "Ycc", i); //data1
+                    programs->setForPad (i, pad, "Ycc", i);   //data1
                     programs->setForPad (i, pad, "Ytype", 1); //type,CC
                     programs->setForPad (i, pad, "icon", String());
                     programs->setForPad (i, pad, "SendOff", false);
@@ -1896,8 +1896,8 @@ void midiPads::loadDefaultPrograms()
                 programs->set (i, "lastUIHeight", 400);
                 for (int pad = 0; pad < 4; pad++)
                 {
-                    programs->setForPad (i, pad, "Ycc", i); //data1
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad (i, pad, "Ycc", i);       //data1
+                    programs->setForPad (i, pad, "Ytype", 1);     //type,CC
                     programs->setForPad (i, pad, "Xcc", 1 + pad); //x cc
                     programs->setForPad (i, pad, "UseX", true);
                     programs->setForPad (i, pad, "UseY", true);
@@ -1912,9 +1912,9 @@ void midiPads::loadDefaultPrograms()
                 programs->set (i, "lastUIHeight", 400);
                 programs->setForPad (i, 0, "UseX", true);
                 programs->setForPad (i, 0, "UseY", true);
-                programs->setForPad (i, 0, "Ycc", 74); //data1
+                programs->setForPad (i, 0, "Ycc", 74);  //data1
                 programs->setForPad (i, 0, "Ytype", 1); //type,CC
-                programs->setForPad (i, 0, "Xcc", 1); //x cc
+                programs->setForPad (i, 0, "Xcc", 1);   //x cc
                 programs->setForPad (i, 0, "icon", String());
                 programs->setForPad (i, 0, "text", String());
                 programs->setForPad (i, 0, "roundness", 0.05f);
@@ -2222,24 +2222,24 @@ void midiPads::loadDefaultPrograms()
 void midiPads::copyPadSettings (int source, int dest)
 {
     centeredText[dest] = centeredText[source];
-    iconsize[dest] = iconsize[source];
-    roundness[dest] = roundness[source];
-    padcolor[dest] = padcolor[source];
-    showdots[dest] = showdots[source];
-    showvalues[dest] = showvalues[source];
-    toggle[dest] = toggle[source];
-    icon[dest] = icon[source];
-    SendOff[dest] = SendOff[source];
-    text[dest] = text[source];
-    UseX[dest] = UseX[source];
-    UseXPB[dest] = UseXPB[source];
-    UseY[dest] = UseY[source];
-    UseYCC[dest] = UseYCC[source];
-    Xcc[dest] = Xcc[source];
-    Xoff[dest] = Xoff[source];
-    Ycc[dest] = Ycc[source];
-    Ydata1[dest] = Ydata1[source];
-    Ydata2[dest] = Ydata2[source];
-    Yoff[dest] = Yoff[source];
-    Ytype[dest] = Ytype[source];
+    iconsize[dest]     = iconsize[source];
+    roundness[dest]    = roundness[source];
+    padcolor[dest]     = padcolor[source];
+    showdots[dest]     = showdots[source];
+    showvalues[dest]   = showvalues[source];
+    toggle[dest]       = toggle[source];
+    icon[dest]         = icon[source];
+    SendOff[dest]      = SendOff[source];
+    text[dest]         = text[source];
+    UseX[dest]         = UseX[source];
+    UseXPB[dest]       = UseXPB[source];
+    UseY[dest]         = UseY[source];
+    UseYCC[dest]       = UseYCC[source];
+    Xcc[dest]          = Xcc[source];
+    Xoff[dest]         = Xoff[source];
+    Ycc[dest]          = Ycc[source];
+    Ydata1[dest]       = Ydata1[source];
+    Ydata2[dest]       = Ydata2[source];
+    Yoff[dest]         = Yoff[source];
+    Ytype[dest]        = Ytype[source];
 }

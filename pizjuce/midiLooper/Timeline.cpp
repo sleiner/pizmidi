@@ -30,7 +30,7 @@ double Timeline::getStart() { return loopStart / 960.0; }
 void Timeline::setLoop (double start, double length)
 {
     loopStart = start * 960.0;
-    loopEnd = (start + length) * 960.0;
+    loopEnd   = (start + length) * 960.0;
     repaint();
 }
 

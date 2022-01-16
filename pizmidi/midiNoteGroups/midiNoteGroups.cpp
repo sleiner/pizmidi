@@ -21,7 +21,7 @@ MidiNoteGroupsProgram::MidiNoteGroupsProgram()
     for (int i = 0; i < kNumParams; i++)
         param[i] = 0.f; //just in case
     param[kChannel] = 0.f;
-    param[kThru] = 1.f;
+    param[kThru]    = 1.f;
     for (int s = 0; s < kNumSlots; s++)
         param[kNote + s * 3] = MIDI_TO_FLOAT3 (off);
 
@@ -63,7 +63,7 @@ MidiNoteGroups::MidiNoteGroups (audioMasterCallback audioMaster)
     }
 
     wasplaying = false;
-    isplaying = false;
+    isplaying  = false;
     if (programs)
         setProgram (0);
 
@@ -128,7 +128,7 @@ void MidiNoteGroups::setParameter (VstInt32 index, float value)
                 param[index] = value;
                 break;
             default:
-                ap = &programs[curProgram];
+                ap           = &programs[curProgram];
                 param[index] = ap->param[index] = value;
                 break;
         }
@@ -231,7 +231,7 @@ void MidiNoteGroups::preProcess (void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -255,18 +255,18 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         VstMidiEvent tomod = inputs[0][i];
 
         const int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
-        const int data2 = tomod.midiData[2] & 0x7f;
-        const int status = (tomod.midiData[0] & 0xf0) == MIDI_NOTEON && data2 == 0 ? MIDI_NOTEOFF : tomod.midiData[0] & 0xf0; // scraping  channel
+        const int data1   = tomod.midiData[1] & 0x7f;
+        const int data2   = tomod.midiData[2] & 0x7f;
+        const int status  = (tomod.midiData[0] & 0xf0) == MIDI_NOTEON && data2 == 0 ? MIDI_NOTEOFF : tomod.midiData[0] & 0xf0; // scraping  channel
 
         int listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
-        bool discard = param[kThru] < 0.5f;
+        bool discard      = param[kThru] < 0.5f;
 
         Slot slot[kNumSlots];
         for (int s = 0; s < kNumSlots; s++)
         {
-            slot[s].note = FLOAT_TO_MIDI3 (param[kNote + s * 3]);
-            slot[s].playgroup = FLOAT_TO_GROUP (param[kPlay + s * 3]);
+            slot[s].note       = FLOAT_TO_MIDI3 (param[kNote + s * 3]);
+            slot[s].playgroup  = FLOAT_TO_GROUP (param[kPlay + s * 3]);
             slot[s].chokegroup = FLOAT_TO_GROUP (param[kChoke + s * 3]);
         }
 
@@ -294,9 +294,9 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     if (notesPlaying[slot[s].note])
                                     {
                                         VstMidiEvent m = tomod;
-                                        m.midiData[0] = MIDI_NOTEOFF | channel;
-                                        m.midiData[1] = slot[s].note;
-                                        m.midiData[2] = 0;
+                                        m.midiData[0]  = MIDI_NOTEOFF | channel;
+                                        m.midiData[1]  = slot[s].note;
+                                        m.midiData[2]  = 0;
                                         outputs[0].push_back (m);
                                         notesPlaying[slot[s].note] = false;
                                     }
@@ -313,9 +313,9 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     if (! notesPlaying[slot[s].note])
                                     {
                                         VstMidiEvent m = tomod;
-                                        m.midiData[0] = MIDI_NOTEON | channel;
-                                        m.midiData[1] = slot[s].note;
-                                        m.midiData[2] = data2;
+                                        m.midiData[0]  = MIDI_NOTEON | channel;
+                                        m.midiData[1]  = slot[s].note;
+                                        m.midiData[2]  = data2;
                                         outputs[0].push_back (m);
                                         notesPlaying[slot[s].note] = true;
                                     }
@@ -346,9 +346,9 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     if (notesPlaying[slot[s].note])
                                     {
                                         VstMidiEvent m = tomod;
-                                        m.midiData[0] = MIDI_NOTEOFF | channel;
-                                        m.midiData[1] = slot[s].note;
-                                        m.midiData[2] = 0;
+                                        m.midiData[0]  = MIDI_NOTEOFF | channel;
+                                        m.midiData[1]  = slot[s].note;
+                                        m.midiData[2]  = 0;
                                         outputs[0].push_back (m);
                                         notesPlaying[slot[s].note] = false;
                                     }
@@ -369,10 +369,10 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 {
                     if (notesPlaying[i])
                     {
-                        VstMidiEvent m = tomod;
-                        m.midiData[0] = MIDI_NOTEOFF | channel;
-                        m.midiData[1] = i;
-                        m.midiData[2] = 0;
+                        VstMidiEvent m  = tomod;
+                        m.midiData[0]   = MIDI_NOTEOFF | channel;
+                        m.midiData[1]   = i;
+                        m.midiData[2]   = 0;
                         notesPlaying[i] = false;
                     }
                 }

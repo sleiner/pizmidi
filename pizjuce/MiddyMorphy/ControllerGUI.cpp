@@ -8,7 +8,7 @@ ControllerGUI::ControllerGUI (Controller* controller, MidiMorph* core)
 {
     // Bouml preserved body begin 00033A8D
     this->controller = controller;
-    this->core = core;
+    this->core       = core;
 
     addAndMakeVisible (value = new TextBoxSlider (0));
     value->setRange (0, 127, 1, 2);
@@ -68,13 +68,13 @@ ControllerGUI::~ControllerGUI()
 void ControllerGUI::resized()
 {
     // Bouml preserved body begin 00033B0D
-    int left = roundToInt ((float) getWidth() * 0.30f);
-    int right = getWidth() - left;
-    int h2 = getHeight() / 2;
+    int left       = roundToInt ((float) getWidth() * 0.30f);
+    int right      = getWidth() - left;
+    int h2         = getHeight() / 2;
     int rightdelta = roundToInt ((float) right * 0.25f);
-    int right1 = rightdelta + left;
-    int right2 = right1 + rightdelta;
-    int right3 = right2 + rightdelta;
+    int right1     = rightdelta + left;
+    int right2     = right1 + rightdelta;
+    int right3     = right2 + rightdelta;
 
     value->setBounds (0, 0, left, getHeight());
 

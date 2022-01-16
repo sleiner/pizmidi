@@ -110,19 +110,19 @@ MidiDelay::MidiDelay (audioMasterCallback audioMaster)
     {
         for (int ch = 0; ch < 16; ch++)
         {
-            lastout[n][ch] = -1;
+            lastout[n][ch]       = -1;
             noteOnChannel[n][ch] = ch;
         }
     }
     srand ((unsigned int) time (NULL));
 
-    _ppq = 0.0;
-    _bpm = 120.0f;
-    _beatpos = 0.0;
+    _ppq           = 0.0;
+    _bpm           = 120.0f;
+    _beatpos       = 0.0;
     samplesPerBeat = 0;
-    counter = 0;
-    wasplaying = false;
-    isplaying = false;
+    counter        = 0;
+    wasplaying     = false;
+    isplaying      = false;
 
     init();
 }
@@ -406,7 +406,7 @@ void MidiDelay::preProcess (void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -423,7 +423,7 @@ void MidiDelay::preProcess (void)
 
     samplesPerBeat = roundToInt (60.f * sampleRate / _bpm);
     samplesPerTick = roundToInt ((float) samplesPerBeat / 960.0f);
-    totalSamples = roundToInt (_ppq * (double) samplesPerBeat);
+    totalSamples   = roundToInt (_ppq * (double) samplesPerBeat);
 
     _cleanMidiOutBuffers();
 
@@ -433,8 +433,8 @@ void MidiDelay::preProcess (void)
 void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
     int listenchannel = FLOAT_TO_CHANNEL (param[kChannel]);
-    int targetCount = roundToInt (param[kCount] * (maxCount - 1)) + 1;
-    VstInt32 delay = roundToInt ((float) samplesPerBeat * stepsize);
+    int targetCount   = roundToInt (param[kCount] * (maxCount - 1)) + 1;
+    VstInt32 delay    = roundToInt ((float) samplesPerBeat * stepsize);
     if (param[kSync] < 0.5f)
         delay = roundToInt (((1.f - param[kTime]) * 1.98f + 0.02f) * sampleRate);
     int repeats = roundToInt (param[kLimit] * 100.f) - 1;
@@ -445,10 +445,10 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int data1   = tomod.midiData[1] & 0x7f;
+        int data2   = tomod.midiData[2] & 0x7f;
 
         int wetChannel = FLOAT_TO_CHANNEL (param[kOutChannel]);
         if (wetChannel == -1)
@@ -459,7 +459,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         //make 0-velocity notes into "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
         {
-            status = MIDI_NOTEOFF;
+            status            = MIDI_NOTEOFF;
             tomod.midiData[0] = MIDI_NOTEOFF | channel;
         }
 
@@ -474,17 +474,17 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
             {
                 if (/*param[kWet]>0.f && */ repeating[data1][channel])
                 {
-                    repeating[data1][channel] = false;
-                    tomod.midiData[0] = MIDI_NOTEOFF + noteOnChannel[data1][channel];
+                    repeating[data1][channel]      = false;
+                    tomod.midiData[0]              = MIDI_NOTEOFF + noteOnChannel[data1][channel];
                     notePlaying[data1][wetChannel] = false;
-                    noteOnChannel[data1][channel] = channel;
+                    noteOnChannel[data1][channel]  = channel;
                     if (repeats > 0)
                     {
                         //repeating[data1][channel]=true;
                         VstMidiEvent delayed = tomod;
-                        delayed.deltaFrames = (delay - (samples - delayed.deltaFrames));
-                        delayed.midiData[3] = 127;
-                        delayed.flags = repeats;
+                        delayed.deltaFrames  = (delay - (samples - delayed.deltaFrames));
+                        delayed.midiData[3]  = 127;
+                        delayed.flags        = repeats;
                         midiDelayBuffer.push_back (delayed);
                     }
                     dbg ("wet note off");
@@ -493,9 +493,9 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 {
                     int dryvel = roundToInt ((float) data2 * param[kDry]);
                     dbg ("dry note off");
-                    tomod.midiData[0] = MIDI_NOTEOFF + channel;
-                    tomod.midiData[2] = dryvel;
-                    discard = true;
+                    tomod.midiData[0]           = MIDI_NOTEOFF + channel;
+                    tomod.midiData[2]           = dryvel;
+                    discard                     = true;
                     notePlaying[data1][channel] = false;
                     if (! noteKilled[data1][channel])
                         outputs[0].push_back (tomod);
@@ -520,7 +520,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[1] = data1;
                             kill.midiData[2] = 0;
                             kill.deltaFrames = tomod.deltaFrames;
-                            kill.detune = 0;
+                            kill.detune      = 0;
                             outputs[0].push_back (kill);
                             noteKilled[data1][channel] = true;
                             dbg ("365: killed note " << data1);
@@ -529,7 +529,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         if (dryvel == 0)
                             dryvel = 1;
                         tomod.midiData[2] = dryvel;
-                        discard = true;
+                        discard           = true;
                         outputs[0].push_back (tomod);
                         notePlaying[data1][channel] = true;
                         dbg ("373: dry note " << data1);
@@ -551,7 +551,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[1] = data1;
                             kill.midiData[2] = 0;
                             kill.deltaFrames = tomod.deltaFrames;
-                            kill.detune = 0;
+                            kill.detune      = 0;
                             outputs[0].push_back (kill);
                             noteKilled[data1][wetChannel] = true;
                             dbg ("392: killed note " << data1);
@@ -559,29 +559,29 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         discard = true;
                         if (repeats > -1)
                         {
-                            repeating[data1][channel] = true;
+                            repeating[data1][channel]     = true;
                             noteOnChannel[data1][channel] = wetChannel;
-                            tomod.midiData[0] = MIDI_NOTEON + wetChannel;
-                            tomod.midiData[2] = max (1, roundToInt (param[kWet] * (float) data2));
+                            tomod.midiData[0]             = MIDI_NOTEON + wetChannel;
+                            tomod.midiData[2]             = max (1, roundToInt (param[kWet] * (float) data2));
                             outputs[0].push_back (tomod);
                             notePlaying[data1][wetChannel] = true;
                             dbg ("400: wet note " << data1);
                             if (repeats > 0)
                             {
                                 VstMidiEvent delayed = tomod;
-                                delayed.midiData[2] = roundToInt ((float) data2 * param[kFeedback]);
+                                delayed.midiData[2]  = roundToInt ((float) data2 * param[kFeedback]);
                                 if (delayed.midiData[2] > 0)
                                 {
                                     delayed.deltaFrames = (delay - (samples - tomod.deltaFrames));
                                     delayed.midiData[3] = 127;
-                                    delayed.flags = repeats;
+                                    delayed.flags       = repeats;
                                     midiDelayBuffer.push_back (delayed);
                                 }
                             }
                         }
                         else
                         {
-                            noteKilled[data1][wetChannel] = true;
+                            noteKilled[data1][wetChannel]  = true;
                             notePlaying[data1][wetChannel] = false;
                         }
                     }
@@ -613,11 +613,11 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
     for (unsigned int i = 0; i < midiDelayBuffer.size(); i++)
     {
         VstMidiEvent event = midiDelayBuffer[i];
-        int status = event.midiData[0] & 0xf0; // scraping  channel
-        int channel = event.midiData[0] & 0x0f; // isolating channel (0-15)
-        int data1 = event.midiData[1] & 0x7f;
-        int data2 = event.midiData[2] & 0x7f;
-        bool discard = false;
+        int status         = event.midiData[0] & 0xf0; // scraping  channel
+        int channel        = event.midiData[0] & 0x0f; // isolating channel (0-15)
+        int data1          = event.midiData[1] & 0x7f;
+        int data2          = event.midiData[2] & 0x7f;
+        bool discard       = false;
 
         if (event.deltaFrames < samples)
         {
@@ -633,7 +633,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         kill.midiData[1] = data1;
                         kill.midiData[2] = 0;
                         kill.deltaFrames = event.deltaFrames;
-                        kill.detune = 0;
+                        kill.detune      = 0;
                         outputs[0].push_back (kill);
                         noteKilled[data1][channel] = true;
                         dbg ("468: killed note " << data1);
@@ -644,7 +644,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 else
                 {
                     repeating[data1][channel] = false;
-                    discard = true;
+                    discard                   = true;
                 }
             }
             else if (status == MIDI_NOTEOFF)
@@ -673,7 +673,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
             if (! discard)
             {
                 VstMidiEvent out = event;
-                out.midiData[2] = roundToInt ((float) data2 * param[kWet]);
+                out.midiData[2]  = roundToInt ((float) data2 * param[kWet]);
                 outputs[0].push_back (out);
             }
             event.flags--;
@@ -696,8 +696,8 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         if (! noteKilled[data1][channel])
                         {
                             notePlaying[data1][channel] = false;
-                            VstMidiEvent out1 = event;
-                            out1.midiData[2] = roundToInt ((float) event.midiData[2] * param[kWet]);
+                            VstMidiEvent out1           = event;
+                            out1.midiData[2]            = roundToInt ((float) event.midiData[2] * param[kWet]);
                             outputs[0].push_back (out1);
                             event.flags--;
                         }
@@ -707,7 +707,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     else if (status == MIDI_NOTEON)
                     {
                         VstMidiEvent out1 = event;
-                        out1.midiData[2] = roundToInt ((float) event.midiData[2] * param[kWet]);
+                        out1.midiData[2]  = roundToInt ((float) event.midiData[2] * param[kWet]);
                         if (out1.midiData[2] > 0)
                         {
                             if (notePlaying[data1][channel])
@@ -717,7 +717,7 @@ void MidiDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 kill.midiData[1] = data1;
                                 kill.midiData[2] = 0;
                                 kill.deltaFrames = event.deltaFrames;
-                                kill.detune = 0;
+                                kill.detune      = 0;
                                 outputs[0].push_back (kill);
                                 noteKilled[data1][channel] = true;
                                 dbg ("537: killed note " << data1);

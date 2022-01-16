@@ -12,7 +12,7 @@
 MorphPaneModel::MorphPaneModel (MidiMorph* core)
 {
     // Bouml preserved body begin 0003CC0D
-    this->core = core;
+    this->core   = core;
     this->cursor = core->getCursor();
 
     addAndMakeVisible (rateBox = new TextBoxSlider (0));

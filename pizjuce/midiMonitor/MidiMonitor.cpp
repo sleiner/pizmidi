@@ -24,36 +24,36 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 MidiMonitorPlugin::MidiMonitorPlugin()
     : loop (0), messages (0)
 {
-    iter = 0;
-    lastUIWidth = 392;
+    iter         = 0;
+    lastUIWidth  = 392;
     lastUIHeight = 250;
-    loop = new MidiMessageSequence();
-    messages = new MidiMessageSequence();
+    loop         = new MidiMessageSequence();
+    messages     = new MidiMessageSequence();
 
     useNotes = true;
-    useCC = true;
-    usePB = true;
-    usePA = true;
-    useCP = true;
-    usePC = true;
+    useCC    = true;
+    usePB    = true;
+    usePA    = true;
+    useCP    = true;
+    usePC    = true;
     useSysEx = true;
     useOther = true;
     useClock = true;
 
     waitingForFirstMessage = true;
 
-    bghue = 1.f; //0.61f;
-    bgsat = 0.f; //0.52f;
-    bgbri = 1.f; //0.11f;
+    bghue    = 1.f; //0.61f;
+    bgsat    = 0.f; //0.52f;
+    bgbri    = 1.f; //0.11f;
     contrast = 1.0f;
-    power = 1.0f;
-    thru = 1.0f;
-    bytes = 1.0f;
-    wrap = 0.f;
+    power    = 1.0f;
+    thru     = 1.0f;
+    bytes    = 1.0f;
+    wrap     = 0.f;
     showtime = 0.f;
-    ticks = 0.f;
-    frames = 0.f;
-    mode = 0.f;
+    ticks    = 0.f;
+    frames   = 0.f;
+    mode     = 0.f;
     maxLines = 5000;
 
     programName = "midiMonitor " + String (JucePlugin_VersionString);
@@ -319,10 +319,10 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
         else
         { //no timeinfo
             zeromem (&lastPosInfo, sizeof (lastPosInfo));
-            lastPosInfo.timeSigNumerator = 4;
+            lastPosInfo.timeSigNumerator   = 4;
             lastPosInfo.timeSigDenominator = 4;
-            lastPosInfo.bpm = 120;
-            lastPosInfo.ppqPosition = samples * (120 / (60 * getSampleRate()));
+            lastPosInfo.bpm                = 120;
+            lastPosInfo.ppqPosition        = samples * (120 / (60 * getSampleRate()));
         }
         //if (param[kSync]>=0.5f) { //sample sync
         //    lastPosInfo.ppqPosition = samples*(lastPosInfo.bpm/(60*getSampleRate()));
@@ -337,7 +337,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
         double counter = Time::getMillisecondCounterHiRes();
         for (auto&& msgMetadata : midiMessages)
         {
-            auto message = msgMetadata.getMessage();
+            auto message   = msgMetadata.getMessage();
             auto samplePos = msgMetadata.samplePosition;
 
             bool use = false;
@@ -361,7 +361,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
             {
                 if (waitingForFirstMessage)
                 {
-                    samples = 0;
+                    samples                = 0;
                     waitingForFirstMessage = false;
                 }
                 //message.setTimeStamp(counter);
@@ -451,31 +451,31 @@ void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            bghue = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
+            bghue    = (float) xmlState->getDoubleAttribute ("Hue", bghue);
+            bgsat    = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
+            bgbri    = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
             contrast = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
-            power = (float) xmlState->getDoubleAttribute ("Power", power);
-            thru = (float) xmlState->getDoubleAttribute ("Thru", thru);
-            bytes = (float) xmlState->getDoubleAttribute ("ShowBytes", bytes);
-            wrap = (float) xmlState->getDoubleAttribute ("WordWrap", wrap);
+            power    = (float) xmlState->getDoubleAttribute ("Power", power);
+            thru     = (float) xmlState->getDoubleAttribute ("Thru", thru);
+            bytes    = (float) xmlState->getDoubleAttribute ("ShowBytes", bytes);
+            wrap     = (float) xmlState->getDoubleAttribute ("WordWrap", wrap);
             showtime = (float) xmlState->getDoubleAttribute ("ShowTime", showtime);
-            mode = (float) xmlState->getDoubleAttribute ("TimeMode", mode);
-            ticks = (float) xmlState->getDoubleAttribute ("TicksPerBeat", ticks);
-            frames = (float) xmlState->getDoubleAttribute ("FramesPerSec", frames);
+            mode     = (float) xmlState->getDoubleAttribute ("TimeMode", mode);
+            ticks    = (float) xmlState->getDoubleAttribute ("TicksPerBeat", ticks);
+            frames   = (float) xmlState->getDoubleAttribute ("FramesPerSec", frames);
             maxLines = xmlState->getIntAttribute ("MaxLines", maxLines);
 
             useNotes = xmlState->getBoolAttribute ("useNotes", true);
-            useCC = xmlState->getBoolAttribute ("useCC", true);
-            usePB = xmlState->getBoolAttribute ("usePB", true);
-            usePC = xmlState->getBoolAttribute ("usePC", true);
-            useCP = xmlState->getBoolAttribute ("useCP", true);
-            usePA = xmlState->getBoolAttribute ("usePA", true);
+            useCC    = xmlState->getBoolAttribute ("useCC", true);
+            usePB    = xmlState->getBoolAttribute ("usePB", true);
+            usePC    = xmlState->getBoolAttribute ("usePC", true);
+            useCP    = xmlState->getBoolAttribute ("useCP", true);
+            usePA    = xmlState->getBoolAttribute ("usePA", true);
             useClock = xmlState->getBoolAttribute ("useClock", true);
             useSysEx = xmlState->getBoolAttribute ("useSysEx", true);
             useOther = xmlState->getBoolAttribute ("useOther", true);
 
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
 
             sendChangeMessage();
@@ -493,7 +493,7 @@ bool MidiMonitorPlugin::writeMidiFile (File mid)
     MidiMessage nstart = MidiMessage (0x9f, 62, 1, 0);
     metadata.addEvent (nstart, 0.0);
 
-    uint8 tn[] = { 0xFF, 0x03, 11, 'm', 'i', 'd', 'i', 'M', 'o', 'n', 'i', 't', 'o', 'r' };
+    uint8 tn[]            = { 0xFF, 0x03, 11, 'm', 'i', 'd', 'i', 'M', 'o', 'n', 'i', 't', 'o', 'r' };
     MidiMessage trackname = MidiMessage (tn, 14, 0);
     loop->addEvent (trackname);
 
@@ -512,6 +512,6 @@ bool MidiMonitorPlugin::writeMidiFile (File mid)
 void MidiMonitorPlugin::clearLoop()
 {
     loop->clear();
-    samples = 0;
+    samples                = 0;
     waitingForFirstMessage = true;
 };

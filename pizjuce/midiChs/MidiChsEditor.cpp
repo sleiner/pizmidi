@@ -84,7 +84,7 @@ void MidiChsEditor::resized()
 
     // if we've been resized, tell the filter so that it can store the new size
     // in its settings
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
 }
 
@@ -137,11 +137,11 @@ void MidiChsEditor::updateParametersFromFilter()
     float ch[16];
     for (int i = 0; i < 16; i++)
         ch[i] = filter->getParameter (i);
-    const float reset = filter->getParameter (16);
-    const float clear = filter->getParameter (17);
-    const float hue = filter->getParameter (18);
-    const float sat = filter->getParameter (19);
-    const float bri = filter->getParameter (20);
+    const float reset    = filter->getParameter (16);
+    const float clear    = filter->getParameter (17);
+    const float hue      = filter->getParameter (18);
+    const float sat      = filter->getParameter (19);
+    const float bri      = filter->getParameter (20);
     const float contrast = filter->getParameter (21);
 
     // ..release the lock ASAP

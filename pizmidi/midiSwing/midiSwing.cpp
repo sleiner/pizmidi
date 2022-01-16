@@ -15,18 +15,18 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiSwingProgram::MidiSwingProgram()
 {
     // default Program Values
-    param[kMode] = 0.4f;
-    param[kValue] = 11.5f / 21.f; //8
-    param[kAmount] = 0.0f;
-    param[kRadius] = 0.25f;
-    param[kShape] = 0.0f;
-    param[kVelocity] = 0.5f;
-    param[kProb] = 1.0f;
-    param[kRandom] = 0.0f;
-    param[kChannel] = 0.0f;
+    param[kMode]      = 0.4f;
+    param[kValue]     = 11.5f / 21.f; //8
+    param[kAmount]    = 0.0f;
+    param[kRadius]    = 0.25f;
+    param[kShape]     = 0.0f;
+    param[kVelocity]  = 0.5f;
+    param[kProb]      = 1.0f;
+    param[kRandom]    = 0.0f;
+    param[kChannel]   = 0.0f;
     param[kMaxAmount] = 0.0f;
-    param[kOverlap] = 0.0f;
-    param[kOffset] = 0.5f;
+    param[kOverlap]   = 0.0f;
+    param[kOffset]    = 0.5f;
     // default program name
     strcpy (name, "Default");
 }
@@ -69,76 +69,76 @@ MidiSwing::MidiSwing (audioMasterCallback audioMaster)
                         break;
                     case 1:
                         sprintf (programs[i].name, "Sub-Light Swing");
-                        programs[i].param[kValue] = 14.5f / 21.f; //16
-                        programs[i].param[kAmount] = 1.0f;
-                        programs[i].param[kRadius] = 0.25f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.4f;
-                        programs[i].param[kProb] = 0.8f;
-                        programs[i].param[kRandom] = 0.1f;
+                        programs[i].param[kValue]     = 14.5f / 21.f; //16
+                        programs[i].param[kAmount]    = 1.0f;
+                        programs[i].param[kRadius]    = 0.25f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.4f;
+                        programs[i].param[kProb]      = 0.8f;
+                        programs[i].param[kRandom]    = 0.1f;
                         programs[i].param[kMaxAmount] = 0.0f;
-                        programs[i].param[kOffset] = 0.5f;
+                        programs[i].param[kOffset]    = 0.5f;
                         break;
                     case 2:
                         sprintf (programs[i].name, "Light Swing");
-                        programs[i].param[kValue] = 11.5f / 21.f;
-                        programs[i].param[kAmount] = 1.0f;
-                        programs[i].param[kRadius] = 0.25f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.45f;
-                        programs[i].param[kProb] = 1.0f;
-                        programs[i].param[kRandom] = 0.05f;
+                        programs[i].param[kValue]     = 11.5f / 21.f;
+                        programs[i].param[kAmount]    = 1.0f;
+                        programs[i].param[kRadius]    = 0.25f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.45f;
+                        programs[i].param[kProb]      = 1.0f;
+                        programs[i].param[kRandom]    = 0.05f;
                         programs[i].param[kMaxAmount] = 0.2f;
-                        programs[i].param[kOffset] = 0.5f;
+                        programs[i].param[kOffset]    = 0.5f;
                         break;
                     case 3:
                         sprintf (programs[i].name, "Heavy Swing");
-                        programs[i].param[kValue] = 11.5f / 21.f;
-                        programs[i].param[kAmount] = 1.0f;
-                        programs[i].param[kRadius] = 0.25f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.5f;
-                        programs[i].param[kProb] = 1.0f;
-                        programs[i].param[kRandom] = 0.0f;
+                        programs[i].param[kValue]     = 11.5f / 21.f;
+                        programs[i].param[kAmount]    = 1.0f;
+                        programs[i].param[kRadius]    = 0.25f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.5f;
+                        programs[i].param[kProb]      = 1.0f;
+                        programs[i].param[kRandom]    = 0.0f;
                         programs[i].param[kMaxAmount] = 0.3f;
-                        programs[i].param[kOffset] = 0.5f;
+                        programs[i].param[kOffset]    = 0.5f;
                         break;
                     case 4:
                         sprintf (programs[i].name, "Ridiculous Swing");
-                        programs[i].param[kValue] = 11.5f / 21.f;
-                        programs[i].param[kAmount] = 1.0f;
-                        programs[i].param[kRadius] = 0.1f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.6f;
-                        programs[i].param[kProb] = 0.8f;
-                        programs[i].param[kRandom] = 0.1f;
+                        programs[i].param[kValue]     = 11.5f / 21.f;
+                        programs[i].param[kAmount]    = 1.0f;
+                        programs[i].param[kRadius]    = 0.1f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.6f;
+                        programs[i].param[kProb]      = 0.8f;
+                        programs[i].param[kRandom]    = 0.1f;
                         programs[i].param[kMaxAmount] = 0.7f;
-                        programs[i].param[kOffset] = 0.5f;
+                        programs[i].param[kOffset]    = 0.5f;
                         break;
                     case 5:
                         sprintf (programs[i].name, "Ludicrous Swing");
-                        programs[i].param[kValue] = 9.5f / 21.f;
-                        programs[i].param[kAmount] = 0.95f;
-                        programs[i].param[kRadius] = 0.0f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.7f;
-                        programs[i].param[kProb] = 0.5f;
-                        programs[i].param[kRandom] = 0.2f;
+                        programs[i].param[kValue]     = 9.5f / 21.f;
+                        programs[i].param[kAmount]    = 0.95f;
+                        programs[i].param[kRadius]    = 0.0f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.7f;
+                        programs[i].param[kProb]      = 0.5f;
+                        programs[i].param[kRandom]    = 0.2f;
                         programs[i].param[kMaxAmount] = 1.0f;
-                        programs[i].param[kOffset] = 0.5f;
+                        programs[i].param[kOffset]    = 0.5f;
                         break;
                     case 6:
                         sprintf (programs[i].name, "Quarter");
-                        programs[i].param[kMode] = 1.0f;
-                        programs[i].param[kValue] = 8.5f / 21.f;
-                        programs[i].param[kAmount] = 0.5f;
-                        programs[i].param[kRadius] = 0.5f;
-                        programs[i].param[kShape] = 0.0f;
-                        programs[i].param[kVelocity] = 0.6f;
-                        programs[i].param[kProb] = 1.0f;
-                        programs[i].param[kRandom] = 0.0f;
+                        programs[i].param[kMode]      = 1.0f;
+                        programs[i].param[kValue]     = 8.5f / 21.f;
+                        programs[i].param[kAmount]    = 0.5f;
+                        programs[i].param[kRadius]    = 0.5f;
+                        programs[i].param[kShape]     = 0.0f;
+                        programs[i].param[kVelocity]  = 0.6f;
+                        programs[i].param[kProb]      = 1.0f;
+                        programs[i].param[kRandom]    = 0.0f;
                         programs[i].param[kMaxAmount] = 0.0f;
-                        programs[i].param[kOffset] = 0.0f;
+                        programs[i].param[kOffset]    = 0.0f;
                         break;
                     case 7:
                         sprintf (programs[i].name, "Dime");
@@ -494,9 +494,9 @@ bool MidiSwing::init (void)
 {
     srand ((unsigned int) time (NULL));
 
-    _ppq = 0.0;
-    _bpm = 120.0f;
-    _beatpos = 0.0;
+    _ppq           = 0.0;
+    _bpm           = 120.0f;
+    _beatpos       = 0.0;
     samplesPerBeat = 0;
 
     for (int ch = 0; ch < 16; ch++)
@@ -505,27 +505,27 @@ bool MidiSwing::init (void)
         {
             for (int v = 0; v < MAX_VOICES_PER_NOTE; v++)
             {
-                noteOnCounter[n][ch][v] = 0;
+                noteOnCounter[n][ch][v]  = 0;
                 noteOffCounter[n][ch][v] = 0;
-                noteOrigVel[n][ch][v] = 0;
-                noteOrigPos[n][ch][v] = 0;
-                noteDelay[n][ch][v] = 0;
-                noteOffDelay[n][ch][v] = 0;
-                notePlaying[n][ch][v] = false;
+                noteOrigVel[n][ch][v]    = 0;
+                noteOrigPos[n][ch][v]    = 0;
+                noteDelay[n][ch][v]      = 0;
+                noteOffDelay[n][ch][v]   = 0;
+                notePlaying[n][ch][v]    = false;
             }
-            noteKilled[n][ch] = false;
-            voices[n][ch] = 0;
-            CCCounter[n][ch] = 0;
-            CCDelay[n][ch] = 0;
+            noteKilled[n][ch]  = false;
+            voices[n][ch]      = 0;
+            CCCounter[n][ch]   = 0;
+            CCDelay[n][ch]     = 0;
             CCOrigValue[n][ch] = 0;
-            CCRecieved[n][ch] = false;
+            CCRecieved[n][ch]  = false;
         }
         expectingDelayedEvents[ch] = 0;
-        expectingDelayedCC[ch] = 0;
+        expectingDelayedCC[ch]     = 0;
     }
 
     wasplaying = false;
-    isplaying = false;
+    isplaying  = false;
 
     return PizMidi::init();
 }
@@ -534,7 +534,7 @@ void MidiSwing::preProcess()
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -554,7 +554,7 @@ void MidiSwing::preProcess()
 
     samplesPerBeat = roundToInt (60.0f * sampleRate / _bpm);
     samplesPerTick = roundToInt ((float) samplesPerBeat / 960.0f);
-    totalSamples = roundToInt (_ppq * (double) samplesPerBeat);
+    totalSamples   = roundToInt (_ppq * (double) samplesPerBeat);
 
     _cleanMidiOutBuffers();
 }
@@ -581,7 +581,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
     else
         delaymult = 2.0f;
 
-    bool overlap = param[kOverlap] < 0.33333f;
+    bool overlap   = param[kOverlap] < 0.33333f;
     bool swingoffs = param[kOverlap] >= 0.66667f;
 
     //special case for applying velocity offset only
@@ -612,7 +612,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             cc.midiData[1] = n;
                             cc.midiData[2] = CCOrigValue[n][ch];
                             cc.deltaFrames = delta;
-                            cc.detune = 0;
+                            cc.detune      = 0;
                             outputs[0].push_back (cc);
                             dbg ("sending delayed CC=" << n << " total_delay=" << CCCounter[n][ch] + cc.deltaFrames << " delta=" << cc.deltaFrames);
                             resetCC (n, ch);
@@ -649,7 +649,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                     noteoff.midiData[1] = n;
                                     noteoff.midiData[2] = 0;
                                     noteoff.deltaFrames = delta;
-                                    noteoff.detune = 0;
+                                    noteoff.detune      = 0;
                                     outputs[0].push_back (noteoff);
                                     dbg ("sending delayed noteoff=" << n << " v=" << v << " total_delay=" << noteOffCounter[n][ch][v] + noteoff.deltaFrames << " delta=" << noteoff.deltaFrames);
                                     resetNote (n, ch, v, true);
@@ -663,7 +663,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                     dbg ("ignored previously killed delayed noteoff=" << n << " v=" << v);
                                     //reset properties for voice but keep note "playing"
                                     //resetNote(n,ch,v-1,true);
-                                    noteKilled[n][ch] = false;
+                                    noteKilled[n][ch]     = false;
                                     notePlaying[n][ch][v] = true;
                                     expectingDelayedEvents[ch]--;
                                 }
@@ -694,7 +694,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                     kill.midiData[1] = n;
                                     kill.midiData[2] = 0;
                                     kill.deltaFrames = delta;
-                                    kill.detune = 0;
+                                    kill.detune      = 0;
                                     outputs[0].push_back (kill);
                                     dbg ("killed note " << n);
                                     resetNote (n, ch, v - 1, true);
@@ -706,7 +706,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 note.midiData[1] = n;
                                 note.midiData[2] = noteOrigVel[n][ch][v];
                                 note.deltaFrames = delta;
-                                note.detune = 0;
+                                note.detune      = 0;
                                 outputs[0].push_back (note);
                                 dbg ("sending delayed noteon " << n << " v=" << v << " total_delay=" << noteOnCounter[n][ch][v] + note.deltaFrames << " delta=" << note.deltaFrames);
 
@@ -734,16 +734,16 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-        char channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        char data1 = tomod.midiData[1] & 0x7f;
-        char data2 = tomod.midiData[2] & 0x7f;
+        char channel         = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        char data1           = tomod.midiData[1] & 0x7f;
+        char data2           = tomod.midiData[2] & 0x7f;
 
         dbg ("incoming midi event, i=" << i << " status=" << status << " ch=" << (int) channel);
 
         //make 0-velocity notes into "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
         {
-            status = MIDI_NOTEOFF;
+            status            = MIDI_NOTEOFF;
             tomod.midiData[0] = MIDI_NOTEOFF | channel;
         }
 
@@ -770,7 +770,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         if (abs (beatpos_samples - samplesPerBeat / 2) <= samplesPerBeat / (param[kRadius] * 13 + 3))
                         {
                             float random = 1.0f - param[kRandom] * float (rand() % 1000) * 0.001f;
-                            float c = closeness (beatpos_samples);
+                            float c      = closeness (beatpos_samples);
 
                             //determine delay amount, in samples:
                             delay = roundToInt ((float) samplesPerBeat * (c * amount * random / (delaymult * stepsize)))
@@ -815,7 +815,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             expectingDelayedEvents[channel]++;
                             // delayed event is in a future block, so start counter
                             noteOffCounter[data1][channel][v] += samples - tomod.deltaFrames;
-                            discard = true;
+                            discard                         = true;
                             noteOffDelay[data1][channel][v] = delay;
                         }
                     }
@@ -891,7 +891,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             expectingDelayedEvents[channel]++;
                             // delayed event is in a future block, so start counter
                             noteOffCounter[data1][channel][v] += samples - tomod.deltaFrames;
-                            discard = true;
+                            discard                         = true;
                             noteOffDelay[data1][channel][v] = delay;
                         }
                     }
@@ -914,12 +914,12 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 dbg ("Incoming NoteOn=" << data1 << " v" << v << " delta=" << tomod.deltaFrames << " beatpos=" << beatpos_samples << " samplesPerBeat=" << samplesPerBeat);
 
                 VstInt32 delay = 0;
-                int velocity = data2;
+                int velocity   = data2;
                 // if "close" to the beat division, delay it:
                 if (abs (beatpos_samples - samplesPerBeat / 2) <= samplesPerBeat / (param[kRadius] * 13 + 3))
                 {
                     float random = 1.0f - param[kRandom] * float (rand() % 1000) * 0.001f;
-                    float c = closeness (beatpos_samples);
+                    float c      = closeness (beatpos_samples);
 
                     //determine delay amount, in samples:
                     delay = roundToInt ((float) samplesPerBeat * (c * amount * random / (delaymult * stepsize)))
@@ -929,7 +929,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
 
                     //determine velocity
                     float v = 127.0f * (2.0f * param[kVelocity] - 1.0f); //max velocity offset
-                    velocity += roundToInt (c * v * random); //new (offset) velocity
+                    velocity += roundToInt (c * v * random);             //new (offset) velocity
                     if (velocity < 1)
                         velocity = 1;
                     else if (velocity > 127)
@@ -941,9 +941,9 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     {
                         if ((float) (rand() % 99) >= c * 100.0f * param[kProb])
                         {
-                            discard = true;
-                            velocity = 0;
-                            delay = 0;
+                            discard                    = true;
+                            velocity                   = 0;
+                            delay                      = 0;
                             noteKilled[data1][channel] = true; //so the noteoff can be dealt with
                         }
                     }
@@ -964,14 +964,14 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[1] = data1;
                             kill.midiData[2] = 0;
                             kill.deltaFrames = tomod.deltaFrames;
-                            kill.detune = 0;
+                            kill.detune      = 0;
                             outputs[0].push_back (kill);
                             dbg ("killed note " << data1 << " v=" << v - 1);
                             resetNote (data1, channel, v - 1, true);
                             noteKilled[data1][channel] = true;
                         }
                         notePlaying[data1][channel][v] = true;
-                        tomod.midiData[2] = velocity;
+                        tomod.midiData[2]              = velocity;
                     }
                     else
                     {
@@ -997,7 +997,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         kill.midiData[1] = data1;
                         kill.midiData[2] = 0;
                         kill.deltaFrames = tomod.deltaFrames - 1;
-                        kill.detune = 0;
+                        kill.detune      = 0;
                         outputs[0].push_back (kill);
                         dbg ("killed note " << data1);
                         resetNote (data1, channel, v - 1, true);
@@ -1025,7 +1025,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     if (abs (beatpos_samples - samplesPerBeat / 2) <= samplesPerBeat / (param[kRadius] * 13 + 3))
                     {
                         float random = 1.0f - param[kRandom] * float (rand() % 1000) * 0.001f;
-                        float c = closeness (beatpos_samples);
+                        float c      = closeness (beatpos_samples);
 
                         //determine delay amount, in samples:
                         float delaymult = 4.0f; //6=100%, 4=150%, 3=200%
@@ -1071,7 +1071,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 expectingDelayedCC[channel]++;
                             }
                             CCRecieved[data1][channel] = true;
-                            discard = true; //takes the event out of the current block
+                            discard                    = true; //takes the event out of the current block
                             dbg ("delay CC in later block, counter=" << CCCounter[data1][channel]);
                         }
                         CCDelay[data1][channel] = delay;
@@ -1109,7 +1109,7 @@ void MidiSwing::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         kill.midiData[1] = n;
                         kill.midiData[2] = 0;
                         kill.deltaFrames = samples - 1;
-                        kill.detune = 0;
+                        kill.detune      = 0;
                         outputs[0].push_back (kill);
                         dbg ("stopped, killed note " << n);
                         resetNote (n, ch, v, true);
@@ -1147,24 +1147,24 @@ inline void MidiSwing::resetNote (char n, char ch, char v, bool off)
     {
         dbg ("Resetting NoteOff v" << v);
         noteOffCounter[n][ch][v] = 0;
-        noteOffDelay[n][ch][v] = 0;
-        noteDelay[n][ch][v] = 0;
-        notePlaying[n][ch][v] = false;
-        noteOrigPos[n][ch][v] = 0;
-        noteKilled[n][ch] = false;
+        noteOffDelay[n][ch][v]   = 0;
+        noteDelay[n][ch][v]      = 0;
+        notePlaying[n][ch][v]    = false;
+        noteOrigPos[n][ch][v]    = 0;
+        noteKilled[n][ch]        = false;
     }
     else
     {
         dbg ("Resetting NoteOn v" << v);
         noteOnCounter[n][ch][v] = 0;
-        noteOrigVel[n][ch][v] = 0;
-        notePlaying[n][ch][v] = true;
+        noteOrigVel[n][ch][v]   = 0;
+        notePlaying[n][ch][v]   = true;
     }
 }
 
 inline void MidiSwing::resetCC (char n, char ch)
 {
-    CCCounter[n][ch] = 0;
-    CCDelay[n][ch] = 0;
+    CCCounter[n][ch]  = 0;
+    CCDelay[n][ch]    = 0;
     CCRecieved[n][ch] = false;
 }

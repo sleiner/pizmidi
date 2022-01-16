@@ -113,7 +113,7 @@ void MidiMorphGUI::changeListenerCallback (ChangeBroadcaster* source)
 {
     // Bouml preserved body begin 0003350D
     void* objectThatHasChanged = source;
-    OwnedArray<Scene>* scenes = core->getScenes();
+    OwnedArray<Scene>* scenes  = core->getScenes();
     if (objectThatHasChanged == core->getSelectedScenes())
     {
         this->controllerListModel->scenesSelected();

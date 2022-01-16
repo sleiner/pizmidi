@@ -27,9 +27,9 @@ enum
     kOutputVal,
 
     kNumGlobalParams = kThru + 1,
-    kNumSlots = 8,
-    kNumParams = kNumGlobalParams + kNumSlots * 3,
-    kNumPrograms = 128
+    kNumSlots        = 8,
+    kNumParams       = kNumGlobalParams + kNumSlots * 3,
+    kNumPrograms     = 128
 };
 
 class MidiTriggerListProgram

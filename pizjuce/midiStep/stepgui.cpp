@@ -503,36 +503,36 @@ StepEditor::~StepEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    activeLoopLabel = nullptr;
-    resizer = nullptr;
-    viewport = nullptr;
-    recordButton = nullptr;
+    activeLoopLabel  = nullptr;
+    resizer          = nullptr;
+    viewport         = nullptr;
+    recordButton     = nullptr;
     outChannelSlider = nullptr;
-    recArmButton1 = nullptr;
-    recArmButton2 = nullptr;
-    recArmButton3 = nullptr;
-    recArmButton4 = nullptr;
-    recArmButton5 = nullptr;
-    recArmButton6 = nullptr;
-    recArmButton7 = nullptr;
-    recArmButton8 = nullptr;
-    keySlider = nullptr;
-    recArmButton9 = nullptr;
-    recArmButton10 = nullptr;
-    recArmButton11 = nullptr;
-    recArmButton12 = nullptr;
-    recArmButton13 = nullptr;
-    recArmButton14 = nullptr;
-    recArmButton15 = nullptr;
-    recArmButton16 = nullptr;
+    recArmButton1    = nullptr;
+    recArmButton2    = nullptr;
+    recArmButton3    = nullptr;
+    recArmButton4    = nullptr;
+    recArmButton5    = nullptr;
+    recArmButton6    = nullptr;
+    recArmButton7    = nullptr;
+    recArmButton8    = nullptr;
+    keySlider        = nullptr;
+    recArmButton9    = nullptr;
+    recArmButton10   = nullptr;
+    recArmButton11   = nullptr;
+    recArmButton12   = nullptr;
+    recArmButton13   = nullptr;
+    recArmButton14   = nullptr;
+    recArmButton15   = nullptr;
+    recArmButton16   = nullptr;
     recChannelSlider = nullptr;
-    transposeSlider = nullptr;
-    saveButton = nullptr;
-    component = nullptr;
-    toggleButton = nullptr;
-    addBarButton = nullptr;
-    deleteBarButton = nullptr;
-    thruButton = nullptr;
+    transposeSlider  = nullptr;
+    saveButton       = nullptr;
+    component        = nullptr;
+    toggleButton     = nullptr;
+    addBarButton     = nullptr;
+    deleteBarButton  = nullptr;
+    thruButton       = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -652,7 +652,7 @@ void StepEditor::resized()
     thruButton->setBounds (getWidth() - 67, 313, 61, 21);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIHeight = getHeight();
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     //[/UserResized]
 }
 
@@ -976,8 +976,8 @@ void StepEditor::updateParameters (bool updateLoop)
         param[i] = filter->getParameter (i);
     }
     const int activeLoop = filter->activeLoop;
-    const int w = filter->lastUIWidth;
-    const int h = filter->lastUIHeight;
+    const int w          = filter->lastUIWidth;
+    const int h          = filter->lastUIHeight;
     filter->getCallbackLock().exit();
 
     for (int i = 0; i < numLoops; i++)

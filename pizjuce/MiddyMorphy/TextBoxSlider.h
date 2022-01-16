@@ -4,12 +4,12 @@
 
 namespace juce
 {
-    class TextEditor;
+class TextEditor;
 }
 class NumberBox;
 namespace juce
 {
-    class String;
+class String;
 }
 using namespace juce;
 

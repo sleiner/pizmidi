@@ -25,10 +25,10 @@ public:
     {
         if (reaper)
         {
-            int szout = 0;
+            int szout        = 0;
             int reaperOctave = 0;
-            void* p = 0;
-            p = get_config_var ("midioctoffs", &szout);
+            void* p          = 0;
+            p                = get_config_var ("midioctoffs", &szout);
             if (p)
             {
                 reaperOctave = *(int*) p;
@@ -42,7 +42,7 @@ public:
     {
         //look for a default bank
         String defaultBank = currentPath + File::getSeparatorString()
-                             + File::getSpecialLocation (File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
+                           + File::getSpecialLocation (File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
         if (File (defaultBank).exists())
         {
             juce::MemoryBlock bank = juce::MemoryBlock (0, true);
@@ -71,7 +71,7 @@ public:
     {
         //look for a default patch
         String defaultBank = currentPath + File::getSeparatorString()
-                             + File::getSpecialLocation (File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
+                           + File::getSpecialLocation (File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
         if (File (defaultBank).exists())
         {
             juce::MemoryBlock bank = juce::MemoryBlock (0, true);

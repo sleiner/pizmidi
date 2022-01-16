@@ -22,8 +22,8 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "MidiPad.h"
 #include "midiOut.h"
+#include "MidiPad.h"
 //[/Headers]
 
 //==============================================================================

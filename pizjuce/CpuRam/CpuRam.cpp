@@ -20,12 +20,12 @@ CpuRam::CpuRam()
 
 void CpuRam::resetToDefaultSettings()
 {
-    interval = 0.12f;
-    minimize = 0.0f;
-    showGraph = true;
-    lastUIWidth = 230;
+    interval     = 0.12f;
+    minimize     = 0.0f;
+    showGraph    = true;
+    lastUIWidth  = 230;
     lastUIHeight = 30;
-    bgcolor = Colour (0xffb8bcc0);
+    bgcolor      = Colour (0xffb8bcc0);
 }
 
 CpuRam::~CpuRam()
@@ -203,11 +203,11 @@ void CpuRam::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            interval = (float) xmlState->getDoubleAttribute ("intervalLevel", interval);
-            showGraph = xmlState->getBoolAttribute ("showGraph", showGraph);
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            interval     = (float) xmlState->getDoubleAttribute ("intervalLevel", interval);
+            showGraph    = xmlState->getBoolAttribute ("showGraph", showGraph);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bgcolor = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
+            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
             sendChangeMessage();
         }
     }

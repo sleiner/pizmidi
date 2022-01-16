@@ -7,11 +7,11 @@
 Controller::Controller (MidiMorph* core)
 {
     // Bouml preserved body begin 00034E0D
-    this->core = core;
-    this->channel = 1;
-    this->ccNo = 0;
+    this->core         = core;
+    this->channel      = 1;
+    this->ccNo         = 0;
     this->valueChanged = true;
-    this->newMidi = true;
+    this->newMidi      = true;
     //this->midiMessage =  & MidiMessage::controllerEvent(channel,ccNo,64);
     // Bouml preserved body end 00034E0D
 }
@@ -76,7 +76,7 @@ void Controller::controllerChanged()
 {
     // Bouml preserved body begin 0003598D
     this->valueChanged = true;
-    this->newMidi = true;
+    this->newMidi      = true;
     this->core->controllerChanged (this);
     // Bouml preserved body end 0003598D
 }
@@ -143,7 +143,7 @@ int Controller::getInterpolatedValue()
             tmp += scene->getValue (this) * scene->getAffectionRatio();
         }
         valueChanged = false;
-        value = roundToInt (tmp);
+        value        = roundToInt (tmp);
     }
     return value;
     // Bouml preserved body end 0003518D
@@ -207,7 +207,7 @@ bool Controller::hasNewMidi()
     // Bouml preserved body begin 0004218D
 
     bool result = newMidi || core->needsRefresh();
-    newMidi = false;
+    newMidi     = false;
     return result;
 
     // Bouml preserved body end 0004218D

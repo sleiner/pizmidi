@@ -2,30 +2,30 @@
 
 #include "cputime.h"
 
-DWORD CProcessorUsage::s_TickMark = 0;
-__int64 CProcessorUsage::s_time = 0;
-__int64 CProcessorUsage::s_idleTime = 0;
-__int64 CProcessorUsage::s_kernelTime = 0;
-__int64 CProcessorUsage::s_userTime = 0;
+DWORD CProcessorUsage::s_TickMark            = 0;
+__int64 CProcessorUsage::s_time              = 0;
+__int64 CProcessorUsage::s_idleTime          = 0;
+__int64 CProcessorUsage::s_kernelTime        = 0;
+__int64 CProcessorUsage::s_userTime          = 0;
 __int64 CProcessorUsage::s_kernelTimeProcess = 0;
-__int64 CProcessorUsage::s_userTimeProcess = 0;
-int CProcessorUsage::s_count = 0;
-int CProcessorUsage::s_index = 0;
-float CProcessorUsage::s_lastCpu = 0;
-float CProcessorUsage::s_cpu[5] = { 0, 0, 0, 0, 0 };
-float CProcessorUsage::s_cpuProcess[5] = { 0, 0, 0, 0, 0 };
+__int64 CProcessorUsage::s_userTimeProcess   = 0;
+int CProcessorUsage::s_count                 = 0;
+int CProcessorUsage::s_index                 = 0;
+float CProcessorUsage::s_lastCpu             = 0;
+float CProcessorUsage::s_cpu[5]              = { 0, 0, 0, 0, 0 };
+float CProcessorUsage::s_cpuProcess[5]       = { 0, 0, 0, 0, 0 };
 
 CProcessorUsage::CProcessorUsage()
 {
     ::InitializeCriticalSection (&m_cs);
 
     s_pfnNtQuerySystemInformation = NULL;
-    s_pfnGetSystemTimes = NULL;
+    s_pfnGetSystemTimes           = NULL;
 
-    m_pInfo = NULL;
+    m_pInfo       = NULL;
     m_uInfoLength = 0;
 
-    interval = 200;
+    interval  = 200;
     firstTime = true;
 
     HMODULE hModule = ::GetModuleHandle (TEXT ("kernel32.dll"));
@@ -62,9 +62,9 @@ void CProcessorUsage::GetSysTimes (__int64& idleTime, __int64& kernelTime, __int
         s_pfnGetSystemTimes ((LPFILETIME) &idleTime, (LPFILETIME) &kernelTime, (LPFILETIME) &userTime);
     else
     {
-        idleTime = 0;
+        idleTime   = 0;
         kernelTime = 0;
-        userTime = 0;
+        userTime   = 0;
         if (s_pfnNtQuerySystemInformation && m_uInfoLength && ! s_pfnNtQuerySystemInformation (0x08, m_pInfo, m_uInfoLength, &m_uInfoLength))
         {
             // NtQuerySystemInformation returns information for all
@@ -94,7 +94,7 @@ float CProcessorUsage::GetUsage (bool processOnly)
     float sLastCpu;
 
     //CCritSecLock cs(m_cs);
-    sTime = s_time;
+    sTime    = s_time;
     sLastCpu = s_lastCpu;
 
     if (((::GetTickCount() - s_TickMark) & 0x7FFFFFFF) <= interval && ! firstTime)
@@ -117,14 +117,14 @@ float CProcessorUsage::GetUsage (bool processOnly)
         FILETIME exitTime;
         ::GetProcessTimes (::GetCurrentProcess(), &createTime, &exitTime, (LPFILETIME) &kernelTimeProcess, (LPFILETIME) &userTimeProcess);
 
-        s_time = time;
-        s_idleTime = idleTime;
-        s_kernelTime = kernelTime;
-        s_userTime = userTime;
+        s_time              = time;
+        s_idleTime          = idleTime;
+        s_kernelTime        = kernelTime;
+        s_userTime          = userTime;
         s_kernelTimeProcess = kernelTimeProcess;
-        s_userTimeProcess = userTimeProcess;
-        s_lastCpu = 0;
-        s_TickMark = ::GetTickCount();
+        s_userTimeProcess   = userTimeProcess;
+        s_lastCpu           = 0;
+        s_TickMark          = ::GetTickCount();
         return 0;
     }
 
@@ -151,13 +151,13 @@ float CProcessorUsage::GetUsage (bool processOnly)
 
     cpuProcess = float ((((userTimeProcess - s_userTimeProcess) + (kernelTimeProcess - s_kernelTimeProcess)) * 100) / div);
 
-    s_time = time;
-    s_idleTime = idleTime;
-    s_kernelTime = kernelTime;
-    s_userTime = userTime;
-    s_kernelTimeProcess = kernelTimeProcess;
-    s_userTimeProcess = userTimeProcess;
-    s_cpu[(s_index++) % 5] = cpu;
+    s_time                        = time;
+    s_idleTime                    = idleTime;
+    s_kernelTime                  = kernelTime;
+    s_userTime                    = userTime;
+    s_kernelTimeProcess           = kernelTimeProcess;
+    s_userTimeProcess             = userTimeProcess;
+    s_cpu[(s_index++) % 5]        = cpu;
     s_cpuProcess[(s_index++) % 5] = cpuProcess;
     s_count++;
 
@@ -175,8 +175,8 @@ float CProcessorUsage::GetUsage (bool processOnly)
 
     cpu /= s_count;
     cpuProcess /= s_count;
-    s_lastCpu = processOnly ? cpuProcess : cpu;
-    sLastCpu = s_lastCpu;
+    s_lastCpu  = processOnly ? cpuProcess : cpu;
+    sLastCpu   = s_lastCpu;
     s_TickMark = ::GetTickCount();
     return sLastCpu;
 }

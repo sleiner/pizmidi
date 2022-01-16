@@ -24,14 +24,14 @@ JuceProgram::JuceProgram()
     }
     for (int i = 0; i < numLoops; i++)
     {
-        param[kTranspose + i] = 0.5f;
+        param[kTranspose + i]  = 0.5f;
         param[kTriggerKey + i] = midiToFloat (0, true);
     }
-    param[kRecArm] = 1.f;
+    param[kRecArm]    = 1.f;
     param[kRecActive] = 1.f;
 
     //default GUI size
-    lastUIWidth = 610;
+    lastUIWidth  = 610;
     lastUIHeight = 360;
 }
 
@@ -50,9 +50,9 @@ MidiStep::MidiStep()
         loop.add (new Loop());
 
     loopDir = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-              + File::getSeparatorString() + "midiStep";
+            + File::getSeparatorString() + "midiStep";
     String defaultBank = loopDir + File::getSeparatorString() + "default.fxb";
-    programs = new JuceProgram[getNumPrograms()];
+    programs           = new JuceProgram[getNumPrograms()];
     if (File (defaultBank).exists())
     {
         MemoryBlock bank = MemoryBlock (0, true);
@@ -222,18 +222,18 @@ void MidiStep::setCurrentProgram (int index)
     if (! init)
     {
         programs[curProgram].lastUIHeight = lastUIHeight;
-        programs[curProgram].lastUIWidth = lastUIWidth;
+        programs[curProgram].lastUIWidth  = lastUIWidth;
     }
     init = false;
 
     //then set the new program
     JuceProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram      = index;
     for (int i = 0; i < getNumParameters(); i++)
     {
         setParameter (i, ap->param[i]);
     }
-    lastUIWidth = ap->lastUIWidth;
+    lastUIWidth  = ap->lastUIWidth;
     lastUIHeight = ap->lastUIHeight;
 
     sendChangeMessage();
@@ -289,10 +289,10 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
     else
     { //no timeinfo
         zeromem (&lastPosInfo, sizeof (lastPosInfo));
-        lastPosInfo.timeSigNumerator = 4;
+        lastPosInfo.timeSigNumerator   = 4;
         lastPosInfo.timeSigDenominator = 4;
-        lastPosInfo.bpm = 120;
-        lastPosInfo.ppqPosition = samples * (120 / (60 * getSampleRate()));
+        lastPosInfo.bpm                = 120;
+        lastPosInfo.ppqPosition        = samples * (120 / (60 * getSampleRate()));
     }
     //if (param[kSync]>=0.5f) { //sample sync
     //    lastPosInfo.ppqPosition = samples*(lastPosInfo.bpm/(60*getSampleRate()));
@@ -336,7 +336,7 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
     bool thru = param[kThru] >= 0.5f;
     for (auto&& msgMetadata : midiMessages)
     {
-        auto msg = msgMetadata.getMessage();
+        auto msg           = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
         if (msg.isController())
@@ -422,7 +422,7 @@ void MidiStep::getStateInformation (MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
-    programs[curProgram].lastUIWidth = lastUIWidth;
+    programs[curProgram].lastUIWidth  = lastUIWidth;
 
     //save patterns
     for (int i = 0; i < numLoops; i++)
@@ -463,7 +463,7 @@ void MidiStep::getStateInformation (MemoryBlock& destData)
 
 void MidiStep::setStateInformation (const void* data, int sizeInBytes)
 {
-    uint8* datab = (uint8*) data;
+    uint8* datab      = (uint8*) data;
     int totalMidiSize = 0;
     for (int i = 0; i < numLoops; i++)
     {
@@ -497,9 +497,9 @@ void MidiStep::setStateInformation (const void* data, int sizeInBytes)
                 {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
                 }
-                programs[p].lastUIWidth = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
+                programs[p].lastUIWidth  = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
                 programs[p].lastUIHeight = xmlState->getIntAttribute (prefix + "uiHeight", programs[p].lastUIHeight);
-                programs[p].name = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
+                programs[p].name         = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
             }
             init = true;
             setCurrentProgram (0);
@@ -514,7 +514,7 @@ bool MidiStep::writeMidiFile (int index, File& file)
     midifile.setTicksPerQuarterNote (960);
 
     MidiMessageSequence midi (*loop[index]);
-    uint8 tn[] = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
+    uint8 tn[]            = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
     MidiMessage trackname = MidiMessage (tn, 7, 0);
     midi.addEvent (trackname);
 

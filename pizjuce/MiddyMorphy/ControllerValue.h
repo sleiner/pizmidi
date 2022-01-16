@@ -4,7 +4,7 @@ class Controller;
 class Scene;
 namespace juce
 {
-    class MidiBuffer;
+class MidiBuffer;
 }
 
 class ControllerValue

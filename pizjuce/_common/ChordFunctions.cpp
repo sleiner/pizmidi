@@ -56,7 +56,7 @@ bool operator< (const PizChord& first, const PizChord& second)
 
 ChordName::ChordName (String chordName, String noteString)
 {
-    name = chordName;
+    name    = chordName;
     pattern = getIntervalString (noteString);
 }
 
@@ -93,7 +93,7 @@ String ChordName::getIntervalString (String noteString)
     {
         temp.add (getNoteValue (a[i]));
     }
-    root = temp[0];
+    root               = temp[0];
     Array<int> stacked = getAsStackedChord (temp);
     for (int i = 0; i < stacked.size(); i++)
     {
@@ -467,7 +467,7 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
         bass = getIntervalValue (sa[0].upToFirstOccurrenceOf (".", false, false));
         if (bass > root)
             bass -= 12;
-        last = bass - root;
+        last        = bass - root;
         int channel = multichannel ? sa[0].fromFirstOccurrenceOf (".", false, false).getIntValue() : 0;
         if (channel > 0)
             string += String (last) + "." + String (channel);

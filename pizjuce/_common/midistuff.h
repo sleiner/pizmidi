@@ -4,16 +4,16 @@
 #include "juce_core/juce_core.h"
 using namespace juce;
 
-#define NOT_PLAYING (-999)
-#define ANY_CHANNEL (0)
+#define NOT_PLAYING  (-999)
+#define ANY_CHANNEL  (0)
 #define MIDI_NOTEOFF (0x80)
-#define MIDI_NOTEON (0x90)
-#define midiScaler ((float) 0.007874015748031496062992125984252)
-#define NOT_A_NOTE (98765)
+#define MIDI_NOTEON  (0x90)
+#define midiScaler   ((float) 0.007874015748031496062992125984252)
+#define NOT_A_NOTE   (98765)
 
 const String Flat ("b"); //(L"\x266d");
 const String Natural (L"\x266e");
-const String Sharp ("#"); //(L"\x266f");
+const String Sharp ("#");      //(L"\x266f");
 const String Diminished ("o"); //(L"\x0080");
 
 enum NoteNames
@@ -82,9 +82,9 @@ inline int getNoteValue (String noteName, int bottomOctave, bool& hasOctaveNumbe
     int octave = 0;
     if (noteName.containsAnyOf ("-0123456789"))
     {
-        octave = (noteName.getTrailingIntValue() - bottomOctave) * 12;
+        octave          = (noteName.getTrailingIntValue() - bottomOctave) * 12;
         hasOctaveNumber = true;
-        noteName = noteName.removeCharacters ("-0123456789");
+        noteName        = noteName.removeCharacters ("-0123456789");
     }
     else
         hasOctaveNumber = false;
@@ -117,7 +117,7 @@ inline int getNoteValue (String noteName, int bottomOctave, bool& hasOctaveNumbe
 
 inline int getIntervalValue (String intervalName)
 {
-    int result = NOT_A_NOTE;
+    int result    = NOT_A_NOTE;
     bool inverted = intervalName.startsWith ("-");
     if (inverted)
         intervalName = intervalName.fromFirstOccurrenceOf ("-", false, true);
@@ -320,7 +320,7 @@ inline String getNoteNameWithoutOctave (int noteNumber, bool sharps = true)
 inline int mapToRange (float x, float in1, float in2, float out1, float out2)
 {
     float slope = ((float) (out2 - out1)) / ((float) (in2 - in1));
-    float b = out1 - slope * in1;
+    float b     = out1 - slope * in1;
     return roundToInt (slope * x + b);
 }
 

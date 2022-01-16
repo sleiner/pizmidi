@@ -1,14 +1,12 @@
-# Adapted from https://forum.juce.com/t/automatic-juce-like-code-formatting-with-clang-format/31624/13
-# Commented-out options are not supported in the current mainline clang-format.
-
 ---
 AccessModifierOffset: "-4"
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: "false"
-AlignConsecutiveDeclarations: "false"
-AlignEscapedNewlinesLeft: "false"
-AlignOperands: "true"
-AlignTrailingComments: "false"
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: None
+AlignConsecutiveMacros: Consecutive
+AlignEscapedNewlines: Right
+AlignOperands: AlignAfterOperator
+AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: "false"
 AllowShortBlocksOnASingleLine: "false"
 AllowShortCaseLabelsOnASingleLine: "false"
@@ -27,7 +25,7 @@ BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: "true"
 BreakConstructorInitializersBeforeComma: "false"
 BreakStringLiterals: "false"
-ColumnLimit: "0"
+ColumnLimit: 0
 ConstructorInitializerAllOnOneLineOrOnePerLine: "true"
 ConstructorInitializerIndentWidth: "4"
 ContinuationIndentWidth: "4"
@@ -41,10 +39,10 @@ IndentWrappedFunctionNames: "true"
 KeepEmptyLinesAtTheStartOfBlocks: "false"
 Language: Cpp
 MaxEmptyLinesToKeep: "1"
-NamespaceIndentation: All
+NamespaceIndentation: Inner
 PointerAlignment: Left
 ReflowComments: "false"
-SortIncludes: "true"
+SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: "true"
 SpaceAfterLogicalNot: "true"
 SpaceBeforeAssignmentOperators: "true"
@@ -55,13 +53,6 @@ SpacesInCStyleCastParentheses: "false"
 SpacesInContainerLiterals: "true"
 SpacesInParentheses: "false"
 SpacesInSquareBrackets: "false"
-Standard: Cpp11
+Standard: c++17
 TabWidth: "4"
 UseTab: Never
-
----
-# Unsupported options in current clang-format:
-# ============================================
-#
-# SpaceBeforeCpp11BracedList: NonEmpty
-# SpacesBeforeInheritanceColon: 2

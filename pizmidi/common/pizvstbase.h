@@ -12,7 +12,7 @@
 #endif
 
 #ifdef _DEBUG
-#define dbg(i) std::cout << i << "\n";
+#define dbg(i)  std::cout << i << "\n";
 #define dbg2(i) std::cout << i;
 #else
 #define dbg(i)
@@ -53,27 +53,27 @@ inline void getHostStuff (char* host, bool& inst, int& numoutputs, bool& ignoreD
         || strncmp ("Image-Line", host, 10) == 0
         || strncmp ("brainspawn", host, 10) == 0)
     {
-        inst = true;
-        numoutputs = 2;
+        inst          = true;
+        numoutputs    = 2;
         ignoreDefault = true;
     }
     else if (strncmp ("Polac", host, 5) == 0)
     {
-        inst = true;
-        numoutputs = 0;
+        inst          = true;
+        numoutputs    = 0;
         ignoreDefault = true;
     }
     else if (strncmp ("Native Instruments", host, 18) == 0
              || strncmp ("Music OS", host, 8) == 0)
     {
-        inst = false;
-        numoutputs = 2;
+        inst          = false;
+        numoutputs    = 2;
         ignoreDefault = true;
     }
     else if (strncmp ("PreSonus", host, 8) == 0)
     {
-        inst = true;
-        numoutputs = 2;
+        inst          = true;
+        numoutputs    = 2;
         ignoreDefault = true;
     }
     else if (strncmp ("Pedalboard 2", host, 12) == 0
@@ -83,8 +83,8 @@ inline void getHostStuff (char* host, bool& inst, int& numoutputs, bool& ignoreD
              || strncmp ("MuTools.com", host, 11) == 0
              || strncmp ("XT Software", host, 11) == 0)
     {
-        inst = false;
-        numoutputs = 0;
+        inst          = false;
+        numoutputs    = 0;
         ignoreDefault = true;
     }
 }
@@ -110,8 +110,8 @@ inline void readIniFile (char* host, bool& inst, int& numinputs, int& numoutputs
     }
     if (file != NULL)
     {
-        char line[128] = " ";
-        bool hostmatch = false;
+        char line[128]     = " ";
+        bool hostmatch     = false;
         char hostname[128] = "host=";
         strcat (hostname, host);
         strcat (hostname, "\n");
@@ -162,18 +162,18 @@ inline void readIniFile (char* host, bool& inst, int& numinputs, int& numoutputs
     {
         if (! strncmp ("_inst.", pch, 6))
         {
-            inst = true;
+            inst       = true;
             numoutputs = 2;
         }
         else if (! strncmp ("_nofx.", pch, 6))
         {
-            inst = true;
+            inst       = true;
             numoutputs = 2;
         }
         else if (! strncmp ("_fx.", pch, 4))
         {
-            inst = false;
-            numinputs = 2;
+            inst       = false;
+            numinputs  = 2;
             numoutputs = 2;
         }
     }
@@ -190,9 +190,9 @@ inline bool readDefaultBank (char* plugName, CFxBank* bank)
     char* path;
     char* adpath;
     char* name;
-    path = new char[512];
+    path   = new char[512];
     adpath = new char[512];
-    name = new char[512];
+    name   = new char[512];
     getInstancePath (path, name, false);
     strcat (name, ".fxb");
     strcat (path, name);

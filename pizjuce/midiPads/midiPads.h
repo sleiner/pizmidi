@@ -23,10 +23,10 @@ enum parameters
     kMono,
     kNoteOnTrig,
     kNumGlobalParams,
-    numPads = 128,
-    xpos = kNumGlobalParams,
-    ypos = xpos + numPads,
-    kNumParams = kNumGlobalParams + 2 * numPads,
+    numPads     = 128,
+    xpos        = kNumGlobalParams,
+    ypos        = xpos + numPads,
+    kNumParams  = kNumGlobalParams + 2 * numPads,
     numPrograms = 32
 };
 

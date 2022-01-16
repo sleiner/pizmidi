@@ -9,21 +9,21 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiConverterProgram::MidiConverterProgram()
 {
     // default Program Values
-    param[kIn] = 0.f; //CC in
-    param[kCCin] = MIDI_TO_FLOAT (2.1); //CC 1
-    param[kNRPNin] = 0.f;
-    param[kChin] = CHANNEL_TO_FLOAT (-1); //Any Channel
-    param[kLowLimit] = 0.f; //
-    param[kHighLimit] = 1.f; //   full
-    param[kLow] = 0.f; //   range
-    param[kHigh] = 1.f; //
+    param[kIn]        = 0.f;                 //CC in
+    param[kCCin]      = MIDI_TO_FLOAT (2.1); //CC 1
+    param[kNRPNin]    = 0.f;
+    param[kChin]      = CHANNEL_TO_FLOAT (-1); //Any Channel
+    param[kLowLimit]  = 0.f;                   //
+    param[kHighLimit] = 1.f;                   //   full
+    param[kLow]       = 0.f;                   //   range
+    param[kHigh]      = 1.f;                   //
     param[kRangeMode] = 0.f;
-    param[kOffset] = MIDI_TO_FLOAT (63.1); //no offset
-    param[kOut] = 0.02f; //CC out
-    param[kCCout] = MIDI_TO_FLOAT2 (2.1); //really 1
-    param[kNRPNout] = 0.f;
-    param[kChout] = CHANNEL_TO_FLOAT (-1); //same channel out
-    param[kThru] = 0.f; //don't pass on original message
+    param[kOffset]    = MIDI_TO_FLOAT (63.1); //no offset
+    param[kOut]       = 0.02f;                //CC out
+    param[kCCout]     = MIDI_TO_FLOAT2 (2.1); //really 1
+    param[kNRPNout]   = 0.f;
+    param[kChout]     = CHANNEL_TO_FLOAT (-1); //same channel out
+    param[kThru]      = 0.f;                   //don't pass on original message
     // default program name
     strcpy (name, "Default");
 }
@@ -33,8 +33,8 @@ MidiConverter::MidiConverter (audioMasterCallback audioMaster)
     : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
 {
     programs = new MidiConverterProgram[numPrograms];
-    outmode = drop;
-    inmode = cc;
+    outmode  = drop;
+    inmode   = cc;
 
     if (programs)
     {
@@ -76,16 +76,16 @@ MidiConverter::MidiConverter (audioMasterCallback audioMaster)
 
     for (int ch = 0; ch < 16; ch++)
     {
-        nrpn[ch] = -1;
+        nrpn[ch]       = -1;
         nrpncoarse[ch] = -1;
-        rpn[ch] = -1;
-        rpncoarse[ch] = -1;
-        datafine[ch] = 0;
+        rpn[ch]        = -1;
+        rpncoarse[ch]  = -1;
+        datafine[ch]   = 0;
         datacoarse[ch] = 0;
-        data[ch] = 0;
-        done[ch] = true;
-        smoothcc[ch] = -1;
-        lastPC[ch] = 0;
+        data[ch]       = 0;
+        done[ch]       = true;
+        smoothcc[ch]   = -1;
+        lastPC[ch]     = 0;
         lastSentPC[ch] = 0;
         for (int i = 0; i < 32; i++)
         {
@@ -95,10 +95,10 @@ MidiConverter::MidiConverter (audioMasterCallback audioMaster)
     }
 
     //smoothing stuff
-    counter = roundToInt (sampleRate * 0.001f);
-    lastpb = 0x2000;
+    counter  = roundToInt (sampleRate * 0.001f);
+    lastpb   = 0x2000;
     targetpb = 0x2000;
-    lastcc = 0;
+    lastcc   = 0;
     targetcc = 0;
 
     init();
@@ -153,9 +153,9 @@ bool MidiConverter::getProgramNameIndexed (VstInt32 category, VstInt32 index, ch
 void MidiConverter::resume()
 {
     AudioEffectX::resume();
-    lastpb = 0x2000;
+    lastpb   = 0x2000;
     targetpb = 0x2000;
-    counter = roundToInt (sampleRate * 0.001f);
+    counter  = roundToInt (sampleRate * 0.001f);
     for (int i = 0; i < 16; i++)
         done[i] = true;
 }
@@ -166,8 +166,8 @@ void MidiConverter::setParameter (VstInt32 index, float value)
     MidiConverterProgram* ap = &programs[curProgram];
 
     int lastoutmode = outmode;
-    int lastinmode = inmode;
-    float inc = 1.f / 18.f;
+    int lastinmode  = inmode;
+    float inc       = 1.f / 18.f;
     switch (index)
     {
         case kIn:
@@ -249,7 +249,7 @@ void MidiConverter::setParameter (VstInt32 index, float value)
             break;
         case kOut:
             param[kOut] = ap->param[kOut] = value;
-            inc = 1.f / 20.f;
+            inc                           = 1.f / 20.f;
             if (param[kOut] < 1 * inc)
                 outmode = drop;
             else if (param[kOut] < 2 * inc)
@@ -789,29 +789,29 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = tomod.midiData[0] & 0x0f; // isolating channel
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short status       = tomod.midiData[0] & 0xf0; // scraping  channel
+        short channel      = tomod.midiData[0] & 0x0f; // isolating channel
+        short data1        = tomod.midiData[1] & 0x7f;
+        short data2        = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;
 
-        int incc1 = FLOAT_TO_MIDI_X (param[kCCin]); //-1 == any
+        int incc1  = FLOAT_TO_MIDI_X (param[kCCin]);  //-1 == any
         int outcc1 = FLOAT_TO_MIDI_X (param[kCCout]); //-1 == no change
 
         int lolimit1 = FLOAT_TO_MIDI (param[kLowLimit]);
         int hilimit1 = FLOAT_TO_MIDI (param[kHighLimit]);
 
-        int low1 = FLOAT_TO_MIDI (param[kLow]);
+        int low1  = FLOAT_TO_MIDI (param[kLow]);
         int high1 = FLOAT_TO_MIDI (param[kHigh]);
 
         int offset1 = FLOAT_TO_MIDI (param[kOffset]) - 63;
 
-        int chin1 = FLOAT_TO_CHANNEL (param[kChin]);
+        int chin1  = FLOAT_TO_CHANNEL (param[kChin]);
         int chout1 = FLOAT_TO_CHANNEL (param[kChout]);
 
-        int inputnrpn1 = FLOAT_TO_MIDI (param[kNRPNin]) | (incc1 << 7);
+        int inputnrpn1  = FLOAT_TO_MIDI (param[kNRPNin]) | (incc1 << 7);
         int outputnrpn1 = FLOAT_TO_MIDI (param[kNRPNout]) | (outcc1 << 7);
 
         if (chout1 == -1)
@@ -824,29 +824,29 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             outcc1 = data1;
         bool discard = false;
 
-        int idata = data2;
-        int odata = data2;
+        int idata    = data2;
+        int odata    = data2;
         bool sendout = false;
-        int send = 1;
+        int send     = 1;
 
-        int idata14 = data1 | (data2 << 7);
-        int odata14 = idata14;
-        int olsb = 0;
+        int idata14    = data1 | (data2 << 7);
+        int odata14    = idata14;
+        int olsb       = 0;
         bool inis14bit = false;
-        bool inisRPN = false;
-        bool inisNRPN = false;
-        bool proginc = false;
-        bool progdec = false;
+        bool inisRPN   = false;
+        bool inisNRPN  = false;
+        bool proginc   = false;
+        bool progdec   = false;
 
         //pre-processing:
         //keep track of all (N)RPNs
         if (inisNRPN || inisRPN)
         {
-            send = 0;
+            send              = 0;
             const int ncoarse = inisNRPN ? 99 : 101;
-            const int nfine = inisNRPN ? 98 : 100;
-            int* c = inisNRPN ? nrpncoarse : rpncoarse;
-            int* n = inisNRPN ? nrpn : rpn;
+            const int nfine   = inisNRPN ? 98 : 100;
+            int* c            = inisNRPN ? nrpncoarse : rpncoarse;
+            int* n            = inisNRPN ? nrpn : rpn;
             // only send nprn stuff through if "thru" is on
             if (param[kThru] < 0.5 && (data1 == nfine || data1 == ncoarse || data1 == 6 || data1 == 38 || data1 == 96 || data1 == 97))
             {
@@ -863,14 +863,14 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (data1 == 6)
                 { //data entry slider (coarse)
                     datacoarse[channel] = data2;
-                    data[channel] = datafine[channel] | (datacoarse[channel] << 7);
-                    send = 1;
+                    data[channel]       = datafine[channel] | (datacoarse[channel] << 7);
+                    send                = 1;
                 }
                 else if (data1 == 38)
                 { //data entry slider (fine)
                     datafine[channel] = data2;
-                    data[channel] = datafine[channel] | (datacoarse[channel] << 7);
-                    send = 2;
+                    data[channel]     = datafine[channel] | (datacoarse[channel] << 7);
+                    send              = 2;
                 }
                 else if (data1 == 96)
                 { //data increment button
@@ -880,7 +880,7 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         if (datacoarse[channel] > 127)
                             datacoarse[channel] = 127;
                         data[channel] = datafine[channel] | (datacoarse[channel] << 7);
-                        send = 1;
+                        send          = 1;
                     }
                     else
                     {
@@ -888,8 +888,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         if (data[channel] > 127)
                             data[channel] = 127;
                         datacoarse[channel] = (data[channel] & 0x3f80) >> 7;
-                        datafine[channel] = data[channel] & 0x007f;
-                        send = 2;
+                        datafine[channel]   = data[channel] & 0x007f;
+                        send                = 2;
                     }
                 }
                 else if (data1 == 97)
@@ -900,7 +900,7 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         if (datacoarse[channel] < 0)
                             datacoarse[channel] = 0;
                         data[channel] = datafine[channel] | (datacoarse[channel] << 7);
-                        send = 1;
+                        send          = 1;
                     }
                     else
                     {
@@ -908,8 +908,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         if (data[channel] < 0)
                             data[channel] = 0;
                         datacoarse[channel] = (data[channel] & 0x3f80) >> 7;
-                        datafine[channel] = data[channel] & 0x007f;
-                        send = 2;
+                        datafine[channel]   = data[channel] & 0x007f;
+                        send                = 2;
                     }
                 }
                 idata14 = data[channel];
@@ -932,7 +932,7 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         odata14 = 0;
                     odata = (odata14 & 0x3f80) >> 7;
                     //odata = roundToInt((double)odata14*0.0077519379844961240310077519379845);
-                    olsb = odata14 & 0x007f;
+                    olsb      = odata14 & 0x007f;
                     inis14bit = true;
                 }
             }
@@ -990,14 +990,14 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     break;
                 case NRPNlsb:
                     inisNRPN = true;
-                    incc1 = data1;
+                    incc1    = data1;
                     break;
                 case RPN:
                     inisRPN = true;
                     break;
                 case RPNlsb:
                     inisRPN = true;
-                    incc1 = data1;
+                    incc1   = data1;
                     break;
                 case clock:
                 case songposition:
@@ -1046,8 +1046,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             odata14 = 16383;
                         else if (odata14 < 0)
                             odata14 = 0;
-                        odata = (odata14 & 0x3f80) >> 7;
-                        olsb = odata14 & 0x007f;
+                        odata     = (odata14 & 0x3f80) >> 7;
+                        olsb      = odata14 & 0x007f;
                         inis14bit = true;
                         // send old message if "thru" is on
                         if (channel == chout1 && outmode == pb)
@@ -1099,9 +1099,9 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             odata14 = 0;
                         odata = (odata14 & 0x3f80) >> 7;
                         //odata = roundToInt((double)odata14*0.0077519379844961240310077519379845);
-                        olsb = odata14 & 0x007f;
+                        olsb      = odata14 & 0x007f;
                         inis14bit = true;
-                        sendout = true;
+                        sendout   = true;
                     }
                     else if (param[kThru] < 0.5f)
                         discard = true; //outside range
@@ -1203,8 +1203,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 }
                 else
                 {
-                    targetcc = odata;
-                    sendout = false;
+                    targetcc         = odata;
+                    sendout          = false;
                     smoothcc[chout1] = outcc1;
                 }
             }
@@ -1239,8 +1239,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 }
                 else
                 {
-                    targetcc = olsb | (odata << 7);
-                    sendout = false;
+                    targetcc         = olsb | (odata << 7);
+                    sendout          = false;
                     smoothcc[chout1] = outcc1 + 1000;
                 }
             }
@@ -1303,8 +1303,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 }
                 else
                 {
-                    targetpb = olsb | (odata << 7);
-                    sendout = false;
+                    targetpb     = olsb | (odata << 7);
+                    sendout      = false;
                     done[chout1] = false;
                 }
             }
@@ -1319,26 +1319,26 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (outcc1 >= 0 && send > 0)
                 {
                     VstMidiEvent ncoarse = inputs[0][i];
-                    ncoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    ncoarse.midiData[1] = 99;
-                    ncoarse.midiData[2] = outcc1;
+                    ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    ncoarse.midiData[1]  = 99;
+                    ncoarse.midiData[2]  = outcc1;
                     outputs[0].push_back (ncoarse);
 
                     VstMidiEvent nfine = inputs[0][i];
-                    nfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    nfine.midiData[1] = 98;
-                    nfine.midiData[2] = outputnrpn1;
+                    nfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    nfine.midiData[1]  = 98;
+                    nfine.midiData[2]  = outputnrpn1;
                     outputs[0].push_back (nfine);
 
                     VstMidiEvent dcoarse = inputs[0][i];
-                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dcoarse.midiData[1] = 6;
-                    dcoarse.midiData[2] = odata;
+                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dcoarse.midiData[1]  = 6;
+                    dcoarse.midiData[2]  = odata;
                     outputs[0].push_back (dcoarse);
 
                     VstMidiEvent dfine = inputs[0][i];
-                    dfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dfine.midiData[1] = 38;
+                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dfine.midiData[1]  = 38;
                     if (! inis14bit)
                     {
                         if (odata > 64)
@@ -1357,21 +1357,21 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (outcc1 >= 0 && send > 0)
                 {
                     VstMidiEvent ncoarse = inputs[0][i];
-                    ncoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    ncoarse.midiData[1] = 99;
-                    ncoarse.midiData[2] = outcc1;
+                    ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    ncoarse.midiData[1]  = 99;
+                    ncoarse.midiData[2]  = outcc1;
                     outputs[0].push_back (ncoarse);
 
                     VstMidiEvent nfine = inputs[0][i];
-                    nfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    nfine.midiData[1] = 98;
-                    nfine.midiData[2] = outputnrpn1;
+                    nfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    nfine.midiData[1]  = 98;
+                    nfine.midiData[2]  = outputnrpn1;
                     outputs[0].push_back (nfine);
 
                     VstMidiEvent dfine = inputs[0][i];
-                    dfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dfine.midiData[1] = 38;
-                    dfine.midiData[2] = odata;
+                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dfine.midiData[1]  = 38;
+                    dfine.midiData[2]  = odata;
                     outputs[0].push_back (dfine);
 
                     sendout = false;
@@ -1382,26 +1382,26 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (outcc1 >= 0 && send > 0)
                 {
                     VstMidiEvent ncoarse = inputs[0][i];
-                    ncoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    ncoarse.midiData[1] = 101;
-                    ncoarse.midiData[2] = outcc1;
+                    ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    ncoarse.midiData[1]  = 101;
+                    ncoarse.midiData[2]  = outcc1;
                     outputs[0].push_back (ncoarse);
 
                     VstMidiEvent nfine = inputs[0][i];
-                    nfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    nfine.midiData[1] = 100;
-                    nfine.midiData[2] = outputnrpn1;
+                    nfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    nfine.midiData[1]  = 100;
+                    nfine.midiData[2]  = outputnrpn1;
                     outputs[0].push_back (nfine);
 
                     VstMidiEvent dcoarse = inputs[0][i];
-                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dcoarse.midiData[1] = 6;
-                    dcoarse.midiData[2] = odata;
+                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dcoarse.midiData[1]  = 6;
+                    dcoarse.midiData[2]  = odata;
                     outputs[0].push_back (dcoarse);
 
                     VstMidiEvent dfine = inputs[0][i];
-                    dfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dfine.midiData[1] = 38;
+                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dfine.midiData[1]  = 38;
                     if (! inis14bit)
                     {
                         if (odata > 64)
@@ -1420,21 +1420,21 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (outcc1 >= 0 && send > 0)
                 {
                     VstMidiEvent ncoarse = inputs[0][i];
-                    ncoarse.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    ncoarse.midiData[1] = 101;
-                    ncoarse.midiData[2] = outcc1;
+                    ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    ncoarse.midiData[1]  = 101;
+                    ncoarse.midiData[2]  = outcc1;
                     outputs[0].push_back (ncoarse);
 
                     VstMidiEvent nfine = inputs[0][i];
-                    nfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    nfine.midiData[1] = 100;
-                    nfine.midiData[2] = outputnrpn1;
+                    nfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    nfine.midiData[1]  = 100;
+                    nfine.midiData[2]  = outputnrpn1;
                     outputs[0].push_back (nfine);
 
                     VstMidiEvent dfine = inputs[0][i];
-                    dfine.midiData[0] = MIDI_CONTROLCHANGE | chout1;
-                    dfine.midiData[1] = 38;
-                    dfine.midiData[2] = odata;
+                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | chout1;
+                    dfine.midiData[1]  = 38;
+                    dfine.midiData[2]  = odata;
                     outputs[0].push_back (dfine);
 
                     sendout = false;
@@ -1449,8 +1449,8 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     //fix this part... queue a noteoff for later
                     VstMidiEvent noteoff = outmsg;
-                    noteoff.midiData[0] = MIDI_NOTEOFF | chout1;
-                    noteoff.midiData[2] = 0;
+                    noteoff.midiData[0]  = MIDI_NOTEOFF | chout1;
+                    noteoff.midiData[2]  = 0;
                     //noteoff.deltaFrames += FLOAT_TO_MIDI(param[kNRPNout]);
                     outputs[0].push_back (outmsg);
                     outputs[0].push_back (noteoff);
@@ -1519,7 +1519,7 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     if (counter == 0)
                     {
                         counter = roundToInt (sampleRate * 0.002f);
-                        lastpb = smooth (targetpb, lastpb, param[kNRPNout]);
+                        lastpb  = smooth (targetpb, lastpb, param[kNRPNout]);
                         int pb2 = (lastpb & 0x3F80) >> 7;
                         int pb1 = (lastpb & 0x007F);
                         VstMidiEvent pb;
@@ -1547,7 +1547,7 @@ void MidiConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     if (counter == 0)
                     {
                         counter = roundToInt (sampleRate * (0.005f + 0.002 * param[kNRPNout]));
-                        lastcc = smooth (targetcc, lastcc, param[kNRPNout], is14bit);
+                        lastcc  = smooth (targetcc, lastcc, param[kNRPNout], is14bit);
                         if (is14bit)
                         {
                             VstMidiEvent msb;

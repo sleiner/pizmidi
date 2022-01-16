@@ -21,7 +21,7 @@ GuitarNeckComponent::GuitarNeckComponent (MidiKeyboardState& state_)
 
     for (int i = 0; i < maxStrings; i++)
     {
-        stringNote[i] = -1;
+        stringNote[i]           = -1;
         currentlyFrettedFret[i] = -1;
     }
     stringNote[0] = 64;
@@ -47,14 +47,14 @@ static const float fretPosition[] = { 0.f, 0.056126f, 0.109101f, 0.159104f, 0.20
 void GuitarNeckComponent::setNumStrings (int n)
 {
     numStrings = jmin (n, maxStrings);
-    dotSize = jmax (15.f, jmin (25.f, (float) getFretWidth (numFrets), (float) getHeight() / (float) numStrings));
+    dotSize    = jmax (15.f, jmin (25.f, (float) getFretWidth (numFrets), (float) getHeight() / (float) numStrings));
     repaint();
 }
 void GuitarNeckComponent::setNumFrets (int n)
 {
     numFrets = jmin (n, maxFrets);
     rangeEnd = n;
-    dotSize = jmax (15.f, jmin (25.f, (float) getFretWidth (numFrets), (float) getHeight() / (float) numStrings));
+    dotSize  = jmax (15.f, jmin (25.f, (float) getFretWidth (numFrets), (float) getHeight() / (float) numStrings));
     repaint();
 }
 
@@ -118,13 +118,13 @@ FrettedNote GuitarNeckComponent::xyToNote (const Point<int>& pos, float& mousePo
         getFretPos (f, x, w);
         if (pos.getX() <= x)
         {
-            fretString.fret = f;
+            fretString.fret     = f;
             float stringSpacing = (float) getHeight() / (float) numStrings;
             for (int s = 0; s < numStrings; s++)
             {
                 if (pos.getY() < roundToInt (stringSpacing * (float) (s + 1)))
                 {
-                    fretString.string = s;
+                    fretString.string     = s;
                     mousePositionVelocity = 1.f;
                     return fretString;
                 }
@@ -349,7 +349,7 @@ void GuitarNeckComponent::resized()
             }
         }
 
-        xOffset = 0;
+        xOffset   = 0;
         firstFret = rangeStart;
 
         timerCallback();
@@ -404,7 +404,7 @@ void GuitarNeckComponent::resetAnyKeysInUse()
 void GuitarNeckComponent::updateNoteUnderMouse (const Point<int>& pos)
 {
     float mousePositionVelocity = 0.0f;
-    const FrettedNote newNote = (mouseDragging || isMouseOver())
+    const FrettedNote newNote   = (mouseDragging || isMouseOver())
                                     ? xyToNote (pos, mousePositionVelocity)
                                     : FrettedNote();
 
@@ -423,7 +423,7 @@ void GuitarNeckComponent::updateNoteUnderMouse (const Point<int>& pos)
             mousePositionVelocity = 1.0f;
 
             //state.noteOn (newNote.string+1, getNote(newNote), mousePositionVelocity * velocity);
-            int oldFret = currentlyFrettedFret[newNote.string];
+            int oldFret                          = currentlyFrettedFret[newNote.string];
             currentlyFrettedFret[newNote.string] = newNote.fret;
             repaintNote (oldFret);
             mouseDownNote = newNote;
@@ -472,7 +472,7 @@ void GuitarNeckComponent::mouseDown (const MouseEvent& e)
 {
     float mousePositionVelocity;
     const FrettedNote newNote = xyToNote (e.getPosition(), mousePositionVelocity);
-    mouseDragging = false;
+    mouseDragging             = false;
 
     if (newNote.isValid() && mouseDownOnKey (newNote.fret, newNote.string, e))
     {

@@ -13,12 +13,12 @@ midiPCGUIProgram::midiPCGUIProgram()
     //default values
     for (int i = 0; i < numParams; i++)
         param[i] = 0.f;
-    param[kMode] = 1.f;
-    param[kThru] = 1.f;
-    param[kTrigger] = 0.4f;
+    param[kMode]        = 1.f;
+    param[kThru]        = 1.f;
+    param[kTrigger]     = 0.4f;
     param[kBankTrigger] = 0.4f;
-    param[kInc] = 0.4f;
-    param[kDec] = 0.4f;
+    param[kInc]         = 0.4f;
+    param[kDec]         = 0.4f;
 
     //program name
     name = "Default";
@@ -40,24 +40,24 @@ midiPCGUI::midiPCGUI()
     init = true;
     setCurrentProgram (0);
 
-    trigger = false;
+    trigger     = false;
     triggerbank = false;
-    inc = false;
-    dec = false;
-    program = 0;
-    bankmsb = 0;
-    banklsb = 0;
-    sentinc = false;
-    sentdec = false;
-    senttrig = false;
-    sentbank = false;
+    inc         = false;
+    dec         = false;
+    program     = 0;
+    bankmsb     = 0;
+    banklsb     = 0;
+    sentinc     = false;
+    sentdec     = false;
+    senttrig    = false;
+    sentbank    = false;
     for (int i = 0; i < numParams; i++)
         automated[i] = false;
     mode = continuous;
 
-    wait = false;
-    delaytime = (int) (getSampleRate() * 0.002f);
-    counter = 0;
+    wait         = false;
+    delaytime    = (int) (getSampleRate() * 0.002f);
+    counter      = 0;
     triggerdelta = 0;
     for (int i = 0; i < 16; i++)
     {
@@ -97,18 +97,18 @@ void midiPCGUI::setParameter (int index, float newValue)
             param[index] = ap->param[index] = newValue;
             break;
         case kPCListen:
-            pclisten = newValue >= 0.5f;
+            pclisten     = newValue >= 0.5f;
             param[index] = ap->param[index] = newValue;
             break;
         case kThru:
-            thru = newValue >= 0.5f;
+            thru         = newValue >= 0.5f;
             param[index] = ap->param[index] = newValue;
             break;
         case kTrigger:
             param[index] = newValue;
             if (newValue == 1.f)
             { // && !senttrig) {
-                trigger = true;
+                trigger  = true;
                 senttrig = true;
             }
             else if (newValue < 1.f && senttrig)
@@ -119,7 +119,7 @@ void midiPCGUI::setParameter (int index, float newValue)
             if (newValue == 1.f)
             { // && !sentbank) {
                 triggerbank = true;
-                sentbank = true;
+                sentbank    = true;
             }
             else if (newValue < 1.f && sentbank)
                 sentbank = false;
@@ -128,7 +128,7 @@ void midiPCGUI::setParameter (int index, float newValue)
             param[index] = newValue;
             if (newValue == 1.f)
             { // && !sentinc) {
-                inc = true;
+                inc     = true;
                 sentinc = true;
             }
             else if (newValue < 1.f && sentinc)
@@ -138,7 +138,7 @@ void midiPCGUI::setParameter (int index, float newValue)
             param[index] = newValue;
             if (newValue == 1.f)
             { // && !sentdec) {
-                dec = true;
+                dec     = true;
                 sentdec = true;
             }
             else if (newValue < 1.f && sentdec)
@@ -323,7 +323,7 @@ bool midiPCGUI::isOutputChannelStereoPair (int index) const
 void midiPCGUI::setCurrentProgram (int index)
 {
     midiPCGUIProgram* ap = &programs[index];
-    curProgram = index;
+    curProgram           = index;
     for (int i = 0; i < getNumParameters(); i++)
     {
         setParameter (i, ap->param[i]);
@@ -381,12 +381,12 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
     {
         auto midi_message = msgMetadata.getMessage();
 
-        bool discard = ! thru;
+        bool discard          = ! thru;
         const uint8* midiData = midi_message.getRawData();
-        unsigned char status = midiData[0] & 0xf0; // scraping  channel
-        char channel = midiData[0] & 0x0f; // isolating channel (0-15)
-        char data1 = midiData[1] & 0x7f;
-        char data2 = midiData[2] & 0x7f;
+        unsigned char status  = midiData[0] & 0xf0; // scraping  channel
+        char channel          = midiData[0] & 0x0f; // isolating channel (0-15)
+        char data1            = midiData[1] & 0x7f;
+        char data2            = midiData[2] & 0x7f;
 
         //only look at the selected channel
         if (channel == listenchannel)
@@ -451,12 +451,12 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
             if (triggerbank)
             {
                 //delay program change if bank was sent
-                wait = true;
+                wait        = true;
                 triggerbank = false;
                 if (buffer.getNumSamples() > delaytime)
                 {
-                    wait = false;
-                    counter = 0;
+                    wait               = false;
+                    counter            = 0;
                     MidiMessage progch = MidiMessage::programChange (listenchannel + 1, program - 1);
                     output.addEvent (progch, delaytime);
                     setParameterNotifyingHost (kTrigger, 0.4f);
@@ -473,7 +473,7 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
     else if (inc)
     {
         //create GUI triggered message
-        inc = false;
+        inc     = false;
         program = actualProgram[listenchannel];
         ++program;
         if (program > 128)
@@ -489,7 +489,7 @@ void midiPCGUI::processBlock (AudioSampleBuffer& buffer,
     else if (dec)
     {
         //create GUI triggered message
-        dec = false;
+        dec     = false;
         program = actualProgram[listenchannel];
         --program;
         if (program < 1)

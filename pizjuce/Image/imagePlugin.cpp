@@ -60,8 +60,8 @@ imagePluginFilter::imagePluginFilter()
     }
 
     //start up with the first program
-    init = true;
-    curBank = 0;
+    init       = true;
+    curBank    = 0;
     curProgram = 0;
     setCurrentBank (0, 0);
 }
@@ -150,16 +150,16 @@ void imagePluginFilter::setCurrentProgram (int index)
     init = false;
 
     //then set the new program
-    curProgram = index;
+    curProgram      = index;
     param[kChannel] = (float) programs->getGlobal ("channel") * 0.0625f;
-    lastUIHeight = programs->get (curBank, curProgram, "h");
-    lastUIWidth = programs->get (curBank, curProgram, "w");
-    icon = programs->get (curBank, curProgram, "icon");
-    text = programs->get (curBank, curProgram, "text");
-    bgcolor = Colour::fromString (programs->get (curBank, curProgram, "bgcolor").toString());
-    textcolor = Colour::fromString (programs->get (curBank, curProgram, "textcolor").toString());
-    noteInput = programs->getGlobal ("noteInput");
-    usePC = programs->getGlobal ("usePC");
+    lastUIHeight    = programs->get (curBank, curProgram, "h");
+    lastUIWidth     = programs->get (curBank, curProgram, "w");
+    icon            = programs->get (curBank, curProgram, "icon");
+    text            = programs->get (curBank, curProgram, "text");
+    bgcolor         = Colour::fromString (programs->get (curBank, curProgram, "bgcolor").toString());
+    textcolor       = Colour::fromString (programs->get (curBank, curProgram, "textcolor").toString());
+    noteInput       = programs->getGlobal ("noteInput");
+    usePC           = programs->getGlobal ("usePC");
 
     sendChangeMessage();
 }
@@ -325,14 +325,14 @@ void imagePluginFilter::setCurrentProgramStateInformation (const void* data, int
             {
                 param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
             }
-            lastUIWidth = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            icon = xmlState->getStringAttribute ("icon", icon);
-            text = xmlState->getStringAttribute ("text", text);
-            bgcolor = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()) | 0x00000000);
-            textcolor = Colour (xmlState->getIntAttribute ("textcolor", bgcolor.contrasting (0.8f).getARGB()) | 0x00000000);
-            noteInput = xmlState->getBoolAttribute ("noteInput", noteInput);
-            usePC = xmlState->getBoolAttribute ("usePC", usePC);
+            icon         = xmlState->getStringAttribute ("icon", icon);
+            text         = xmlState->getStringAttribute ("text", text);
+            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()) | 0x00000000);
+            textcolor    = Colour (xmlState->getIntAttribute ("textcolor", bgcolor.contrasting (0.8f).getARGB()) | 0x00000000);
+            noteInput    = xmlState->getBoolAttribute ("noteInput", noteInput);
+            usePC        = xmlState->getBoolAttribute ("usePC", usePC);
 
             sendChangeMessage();
         }

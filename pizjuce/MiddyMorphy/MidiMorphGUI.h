@@ -6,18 +6,18 @@
 
 namespace juce
 {
-    class AudioProcessor;
+class AudioProcessor;
 }
 class MidiMorph;
 namespace juce
 {
-    class ListBox;
+class ListBox;
 }
 class ControllerList;
 class MorphPaneModel;
 namespace juce
 {
-    class ResizableBorderComponent;
+class ResizableBorderComponent;
 }
 class MidiMorphPlugInInterface;
 class CursorGUI;

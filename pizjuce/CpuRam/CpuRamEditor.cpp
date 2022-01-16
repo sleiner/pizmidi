@@ -141,7 +141,7 @@ void CpuRamEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else
     {
-        ColourSelector* cs = (ColourSelector*) source;
+        ColourSelector* cs   = (ColourSelector*) source;
         getFilter()->bgcolor = (cs->getCurrentColour());
         infoLabel->setColour (Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));
         memLabel2->setColour (Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));

@@ -124,7 +124,7 @@ public:
     void setDisplayLength (int bars)
     {
         int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
-        blankLength = getPpqPerBar() * bars;
+        blankLength        = getPpqPerBar() * bars;
         sequenceChanged();
         setSize ((int) ppqToPixels (jmax (blankLength, seqLengthInPpq)), getHeight());
     }
@@ -157,7 +157,7 @@ public:
     void setPlayTime (double timeInPpq)
     {
         const int lastpixels = ppqToPixelsWithOffset (playTime);
-        const int pixels = ppqToPixelsWithOffset (timeInPpq);
+        const int pixels     = ppqToPixelsWithOffset (timeInPpq);
         if (pixels != lastpixels)
         {
             playTime = timeInPpq;
@@ -243,9 +243,9 @@ private:
         void paint (Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
-            int n = 0;
-            float y = (float) getHeight();
-            float yinc = (float) getHeight() / 128.f;
+            int n                 = 0;
+            float y               = (float) getHeight();
+            float yinc            = (float) getHeight() / 128.f;
 
             while (y > 0)
             {
@@ -337,7 +337,7 @@ private:
 
                                 //dragging note position
                                 const double newTime = (float) ((roll->sequence->getEventTime (i) + roll->draggingNoteTimeDelta));
-                                const float newNote = (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber() + roll->draggingNoteTransposition);
+                                const float newNote  = (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber() + roll->draggingNoteTransposition);
                                 g.setColour (Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
                                 g.fillRect ((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
                                             (float) getHeight() - newNote * roll->yinc - roll->yinc,
@@ -384,7 +384,7 @@ private:
     float seqLength;
     float gridSize; //quantization grid size in pixels
     float beatSize; //number of pixels per beat
-    float barSize; //number of pixels per measure
+    float barSize;  //number of pixels per measure
     int numEvents;
     float xinc;
     float yinc;

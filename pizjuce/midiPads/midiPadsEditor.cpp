@@ -16,8 +16,8 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
 
     container->addAndMakeVisible (padEditor = new Component());
 
-    bool useaft = ownerFilter->getParameter (kSendAft) >= 0.5;
-    dontsend = false;
+    bool useaft  = ownerFilter->getParameter (kSendAft) >= 0.5;
+    dontsend     = false;
     automateHost = false;
 
     bool usex[numPads];
@@ -25,10 +25,10 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
     for (int i = 0; i < numPads; i++)
     {
         //toggled[i] = false;
-        showdots[i] = true;
+        showdots[i]   = true;
         showvalues[i] = true;
-        usex[i] = getFilter()->UseX[i];
-        usey[i] = getFilter()->UseY[i];
+        usex[i]       = getFilter()->UseX[i];
+        usey[i]       = getFilter()->UseY[i];
         container->addAndMakeVisible (midiPad[i] = new MidiPad (i));
         midiPad[i]->setButtonText (String());
         midiPad[i]->setTriggeredOnMouseDown (false);
@@ -239,7 +239,7 @@ midiPadsEditor::~midiPadsEditor()
         container->removeFromDesktop();
     for (int i = 0; i < numPads; i++)
     {
-        getFilter()->icon[i] = midiPad[i]->getIconPath();
+        getFilter()->icon[i]  = midiPad[i]->getIconPath();
         getFilter()->lastx[i] = lastx[i];
         getFilter()->lasty[i] = lasty[i];
         delete midiPad[i];
@@ -281,7 +281,7 @@ void midiPadsEditor::paint (Graphics& g)
 
 void midiPadsEditor::resized()
 {
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
 
     for (int i = 0; i < numPads; i++)
@@ -302,8 +302,8 @@ void midiPadsEditor::resized()
     }
     else
     {
-        float xscale = (float) container->getWidth() / (float) getWidth();
-        float yscale = (float) container->getHeight() / (float) getHeight();
+        float xscale  = (float) container->getWidth() / (float) getWidth();
+        float yscale  = (float) container->getHeight() / (float) getHeight();
         auto* display = Desktop::getInstance().getDisplays().getDisplayForPoint (container->getScreenPosition(), false);
         if (display != nullptr)
         {
@@ -379,9 +379,9 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
         {
             if (midiPad[i]->isMouseButtonDown())
             {
-                bool usex = getFilter()->UseX[i];
-                bool usey = getFilter()->UseY[i];
-                bool useaft = getFilter()->getParameter (kSendAft) >= 0.5;
+                bool usex                = getFilter()->UseX[i];
+                bool usey                = getFilter()->UseY[i];
+                bool useaft              = getFilter()->getParameter (kSendAft) >= 0.5;
                 ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
                 //this->setWantsKeyboardFocus(false);
                 if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown())
@@ -404,12 +404,12 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
                         if (newx > 127)
                         {
                             newx = 127;
-                            fx = 1.0f;
+                            fx   = 1.0f;
                         }
                         else if (newx < 0)
                         {
                             newx = 0;
-                            fx = 0.0f;
+                            fx   = 0.0f;
                         }
                         if (getFilter()->UseXPB[i])
                         {
@@ -417,24 +417,24 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
                             if (newx > 0x3fff)
                             {
                                 newx = 0x3fff;
-                                fx = 1.0f;
+                                fx   = 1.0f;
                             }
                             else if (newx < 0)
                             {
                                 newx = 0;
-                                fx = 0.0f;
+                                fx   = 0.0f;
                             }
                         }
                         int newy = (int) (fy * 127.1);
                         if (newy > 127)
                         {
                             newy = 127;
-                            fy = 1.0f;
+                            fy   = 1.0f;
                         }
                         else if (newy < 0)
                         {
                             newy = 0;
-                            fy = 0.0f;
+                            fy   = 0.0f;
                         }
                         //move the dot
                         if (usex)
@@ -482,22 +482,22 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
                         if (usex && lastx[i] != newx)
                         {
                             getFilter()->buttondown[i] = true;
-                            lastx[i] = newx;
+                            lastx[i]                   = newx;
                         }
                         if ((getFilter()->Ytype[i]) == 1 && usey && lasty[i] != newy)
                         {
                             getFilter()->send[i] = 1.0f;
-                            lasty[i] = newy;
+                            lasty[i]             = newy;
                         }
                         else if ((getFilter()->Ytype[i]) == 0 && useaft && lasty[i] != newy)
                         {
                             getFilter()->buttondown[i] = true;
-                            lasty[i] = newy;
+                            lasty[i]                   = newy;
                         }
                         else if (usey && (getFilter()->Ytype[i]) == 0 && getFilter()->UseYCC[i] && lasty[i] != newy)
                         {
                             getFilter()->buttondown[i] = true;
-                            lasty[i] = newy;
+                            lasty[i]                   = newy;
                         }
                     }
                 }
@@ -572,7 +572,7 @@ void midiPadsEditor::mouseUp (const MouseEvent& e)
              && getFilter()->editmode && ! fullscreen)
     {
         MidiPad* pad = ((MidiPad*) e.eventComponent);
-        int i = pad->getIndex();
+        int i        = pad->getIndex();
         if (pad == midiPad[i] && squares > 1)
         {
             pad->setVisible (false);
@@ -604,9 +604,9 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
     MidiPad* pad = (MidiPad*) buttonThatWasClicked;
     if (pad->isDown())
     {
-        int i = pad->getIndex();
-        bool usex = getFilter()->UseX[i];
-        bool usey = getFilter()->UseY[i];
+        int i       = pad->getIndex();
+        bool usex   = getFilter()->UseX[i];
+        bool usey   = getFilter()->UseY[i];
         bool useycc = getFilter()->UseYCC[i];
         bool useoff = getFilter()->SendOff[i];
         bool usexpb = getFilter()->UseXPB[i];
@@ -632,7 +632,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
             else
             {
                 lastPadMenu = i;
-                bool iscc = getFilter()->Ytype[i] == 1;
+                bool iscc   = getFilter()->Ytype[i] == 1;
                 colourSelector1->setCurrentColour (getFilter()->padcolor[i]);
                 textEditor->setText (getFilter()->text[i], false);
                 vSlider->setValue (getFilter()->Ydata2[i], dontSendNotification);
@@ -789,7 +789,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                         else
                         {
                             getFilter()->UseY[i] = true;
-                            midiPad[i]->showy = true;
+                            midiPad[i]->showy    = true;
                             midiPad[i]->repaint();
                         }
                     }
@@ -809,7 +809,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                         else
                         {
                             getFilter()->UseX[i] = true;
-                            midiPad[i]->showx = true;
+                            midiPad[i]->showx    = true;
                             midiPad[i]->repaint();
                         }
                     }
@@ -848,21 +848,21 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                     else if (result == 9)
                     {
                         getFilter()->toggle[i] = ! toggle;
-                        pad->showdot = toggle;
+                        pad->showdot           = toggle;
                         pad->repaint();
                     }
                     else if (result == 10)
                     {
-                        pad->showdot = ! showdots[i];
+                        pad->showdot             = ! showdots[i];
                         getFilter()->showdots[i] = ! showdots[i];
-                        showdots[i] = ! showdots[i];
+                        showdots[i]              = ! showdots[i];
                         pad->repaint();
                     }
                     else if (result == 11)
                     {
-                        pad->showvalues = ! showvalues[i];
+                        pad->showvalues            = ! showvalues[i];
                         getFilter()->showvalues[i] = ! showvalues[i];
-                        showvalues[i] = ! showvalues[i];
+                        showvalues[i]              = ! showvalues[i];
                         pad->repaint();
                     }
                     else if (result == 12)
@@ -934,7 +934,7 @@ void midiPadsEditor::sendMidi (int i, bool shiftclicked)
     }
     if (getFilter()->toggle[i] || shiftclicked)
     {
-        dontsend = true;
+        dontsend                    = true;
         getFilter()->togglestate[i] = true;
         midiPad[i]->setToggleState (true, dontSendNotification);
     }
@@ -969,14 +969,14 @@ void midiPadsEditor::sendMidi (int i, bool shiftclicked)
             else
                 getFilter()->setParameter (i + xpos, fx);
             getFilter()->buttondown[i] = true;
-            lastx[i] = (int) (fx * 127.1);
+            lastx[i]                   = (int) (fx * 127.1);
         }
         if (automateHost)
             getFilter()->setParameterNotifyingHost (i + ypos, fy);
         else
             getFilter()->setParameter (i + ypos, fy);
         getFilter()->send[i] = 1.0f;
-        lasty[i] = (int) (fy * 127.1);
+        lasty[i]             = (int) (fy * 127.1);
     }
     sending[i] = false;
 }
@@ -989,10 +989,10 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
         File (getFilter()->layoutPath).findChildFiles (layoutFiles, File::findFiles, true, "*.mpadl");
         File (getFilter()->presetPath).findChildFiles (presetFiles, File::findFiles, true, "*.mpads");
         //main menu
-        bool sendoffvalue = true;
-        bool useyvalue = true;
-        bool usexvalue = true;
-        bool showalldots = true;
+        bool sendoffvalue  = true;
+        bool useyvalue     = true;
+        bool usexvalue     = true;
+        bool showalldots   = true;
         bool showallvalues = true;
         bool centeredNames = true;
         for (int i = 0; i < numPads; i++)
@@ -1014,11 +1014,11 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
         }
         bool triggering = getFilter()->getParameter (kUseTrigger) >= 0.5f;
-        bool thru = getFilter()->getParameter (kThru) >= 0.5f;
-        bool useinvel = getFilter()->getParameter (kUseVel) >= 0.5f;
-        bool useaft = getFilter()->getParameter (kSendAft) >= 0.5f;
-        bool monomode = getFilter()->getParameter (kMono) >= 0.5f;
-        bool editmode = getFilter()->editmode;
+        bool thru       = getFilter()->getParameter (kThru) >= 0.5f;
+        bool useinvel   = getFilter()->getParameter (kUseVel) >= 0.5f;
+        bool useaft     = getFilter()->getParameter (kSendAft) >= 0.5f;
+        bool monomode   = getFilter()->getParameter (kMono) >= 0.5f;
+        bool editmode   = getFilter()->editmode;
         bool usemouseup = getFilter()->usemouseup;
         bool noteontrig = getFilter()->getParameter (kNoteOnTrig) >= 0.5f;
 
@@ -1313,7 +1313,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
                     for (int i = 0; i < numPads; i++)
                     {
                         getFilter()->UseY[i] = true;
-                        midiPad[i]->showy = true;
+                        midiPad[i]->showy    = true;
                         midiPad[i]->repaint();
                     }
                 }
@@ -1339,7 +1339,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
                     for (int i = 0; i < numPads; i++)
                     {
                         getFilter()->UseX[i] = false;
-                        midiPad[i]->showx = true;
+                        midiPad[i]->showx    = true;
                         midiPad[i]->repaint();
                     }
                 }
@@ -1358,8 +1358,8 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
                 for (int i = 0; i < numPads; i++)
                 {
                     getFilter()->showdots[i] = ! showalldots;
-                    showdots[i] = ! showalldots;
-                    midiPad[i]->showdot = ! showalldots;
+                    showdots[i]              = ! showalldots;
+                    midiPad[i]->showdot      = ! showalldots;
                     midiPad[i]->repaint();
                 }
             }
@@ -1368,8 +1368,8 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
                 for (int i = 0; i < numPads; i++)
                 {
                     getFilter()->showvalues[i] = ! showallvalues;
-                    showvalues[i] = ! showallvalues;
-                    midiPad[i]->showvalues = ! showallvalues;
+                    showvalues[i]              = ! showallvalues;
+                    midiPad[i]->showvalues     = ! showallvalues;
                     midiPad[i]->repaint();
                 }
             }
@@ -1394,7 +1394,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 18)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 1;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), onepad);
                 squares = 1;
@@ -1402,103 +1402,103 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 17)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 4;
-                squares = 4;
+                squares              = 4;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), fourpads);
                 resized();
             }
             else if (result == 19)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 4;
-                squares = 4;
+                squares              = 4;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), foursliders);
                 resized();
             }
             else if (result == 10)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 10;
-                squares = 10;
+                squares              = 10;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), tenpads);
                 resized();
             }
             else if (result == 14)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 14;
-                squares = 14;
+                squares              = 14;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), twelvepads);
                 resized();
             }
             else if (result == 20)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 16;
-                squares = 16;
+                squares              = 16;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), sixteenpads);
                 resized();
             }
             else if (result == 21)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 16;
-                squares = 16;
+                squares              = 16;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), sixteensliders);
                 resized();
             }
             else if (result == 22)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 64;
-                squares = 64;
+                squares              = 64;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), sixtyfourpads);
                 resized();
             }
             else if (result == 23)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 32;
-                squares = 32;
+                squares              = 32;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), mixerpads);
                 resized();
             }
             else if (result == 24)
             {
-                getFilter()->hex = true;
+                getFilter()->hex     = true;
                 getFilter()->squares = 40;
-                squares = 40;
+                squares              = 40;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), hexagonpads);
                 resized();
             }
             else if (result == 28)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 28;
-                squares = 28;
+                squares              = 28;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit28);
                 resized();
             }
             else if (result == 46)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 39;
-                squares = 39;
+                squares              = 39;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit39);
                 resized();
             }
             else if (result == 52)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 51;
-                squares = 51;
+                squares              = 51;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit51);
                 resized();
             }
             else if (result == 48)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 48;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit48);
                 squares = 48;
@@ -1506,7 +1506,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 64)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 64;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit64);
                 squares = 64;
@@ -1514,7 +1514,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 55)
             {
-                getFilter()->hex = false;
+                getFilter()->hex     = false;
                 getFilter()->squares = 55;
                 getFilter()->setLayout (getFilter()->getCurrentProgram(), arrangeit55);
                 squares = 55;
@@ -1580,7 +1580,7 @@ void midiPadsEditor::sendMidiOff (int i)
     if (midiPad[i]->isPlaying)
     {
         getFilter()->sendoff[i] = 1.0f;
-        midiPad[i]->isPlaying = false;
+        midiPad[i]->isPlaying   = false;
         if ((showdots[i] || showvalues[i]) && getFilter()->SendOff[i])
         {
             if (getFilter()->UseX[i])
@@ -1603,31 +1603,31 @@ void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
 {
     if (sliderThatWasMoved == hueSlider)
     {
-        color = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
-        color2 = color.contrasting ((float) padOpacitySlider->getValue());
+        color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bghue = (float) (hueSlider->getValue());
         repaint();
     }
     else if (sliderThatWasMoved == saturationSlider)
     {
-        color = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
-        color2 = color.contrasting ((float) padOpacitySlider->getValue());
+        color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bgsat = (float) (saturationSlider->getValue());
         repaint();
     }
     else if (sliderThatWasMoved == brigtnessSlider)
     {
-        color = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
-        color2 = color.contrasting ((float) padOpacitySlider->getValue());
+        color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bgbri = (float) brigtnessSlider->getValue();
         repaint();
     }
     else if (sliderThatWasMoved == padOpacitySlider)
     {
-        color2 = color.contrasting ((float) padOpacitySlider->getValue());
+        color2                = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->contrast = (float) padOpacitySlider->getValue();
         repaint();
     }
@@ -1716,13 +1716,13 @@ void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == roundnessSlider)
     {
         getFilter()->roundness[lastPadMenu] = (float) roundnessSlider->getValue();
-        midiPad[lastPadMenu]->roundness = (float) roundnessSlider->getValue();
+        midiPad[lastPadMenu]->roundness     = (float) roundnessSlider->getValue();
         midiPad[lastPadMenu]->repaint();
     }
     else if (sliderThatWasMoved == iconSizeSlider)
     {
         getFilter()->iconsize[lastPadMenu] = (float) iconSizeSlider->getValue();
-        midiPad[lastPadMenu]->imageSize = (float) iconSizeSlider->getValue();
+        midiPad[lastPadMenu]->imageSize    = (float) iconSizeSlider->getValue();
         midiPad[lastPadMenu]->repaint();
     }
 }
@@ -1845,7 +1845,7 @@ void midiPadsEditor::filesDropped (const juce::StringArray& filenames, int mouse
     if (isInterestedInFileDrag (filenames))
     {
         String filename = filenames.joinIntoString (String(), 0, 1);
-        File file = File (filename);
+        File file       = File (filename);
         if (file.hasFileExtension ("mpads"))
         {
             getFilter()->loadXmlPatch (getFilter()->getCurrentProgram(), file);
@@ -1937,25 +1937,25 @@ void midiPadsEditor::updateParametersFromFilter()
     memcpy (showvalues, filter->showvalues, sizeof (showvalues));
     for (int i = 0; i < numPads; i++)
     {
-        t[i] = filter->text[i];
-        icon[i] = filter->icon[i];
+        t[i]        = filter->text[i];
+        icon[i]     = filter->icon[i];
         padcolor[i] = filter->padcolor[i];
-        newX[i] = filter->getParameter (i + xpos);
-        newY[i] = filter->getParameter (i + ypos);
+        newX[i]     = filter->getParameter (i + xpos);
+        newY[i]     = filter->getParameter (i + ypos);
     }
     const float newVelocity = filter->getParameter (kVelOffset);
-    const float newCCValue = filter->getParameter (kCCOffset);
-    const float newInCh = filter->getParameter (kChIn);
-    const float newOutCh = filter->getParameter (kChOut);
-    const float useaft = filter->getParameter (kSendAft);
-    const float hue = filter->bghue;
-    const float sat = filter->bgsat;
-    const float bri = filter->bgbri;
-    const float contrast = filter->contrast;
-    const int newsquares = filter->squares;
-    const bool editmode = filter->editmode;
-    const bool newhex = filter->hex;
-    const bool usemouseup = filter->usemouseup;
+    const float newCCValue  = filter->getParameter (kCCOffset);
+    const float newInCh     = filter->getParameter (kChIn);
+    const float newOutCh    = filter->getParameter (kChOut);
+    const float useaft      = filter->getParameter (kSendAft);
+    const float hue         = filter->bghue;
+    const float sat         = filter->bgsat;
+    const float bri         = filter->bgbri;
+    const float contrast    = filter->contrast;
+    const int newsquares    = filter->squares;
+    const bool editmode     = filter->editmode;
+    const bool newhex       = filter->hex;
+    const bool usemouseup   = filter->usemouseup;
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
@@ -1981,7 +1981,7 @@ void midiPadsEditor::updateParametersFromFilter()
         }
 
         midiPad[i]->setHex (newhex);
-        midiPad[i]->showdot = toggle[i] ? false : showdots[i];
+        midiPad[i]->showdot    = toggle[i] ? false : showdots[i];
         midiPad[i]->showvalues = showvalues[i];
         midiPad[i]->setColour (padcolor[i].withAlpha (contrast));
         midiPad[i]->roundness = roundness[i];
@@ -2032,9 +2032,9 @@ void midiPadsEditor::updateParametersFromFilter()
             midiPad[i]->setButtonText (MidiMessage::getMidiNoteName (newMidiData[i], true, true, 3));
     }
 
-    color = Colour (hue, sat, bri, 1.0f);
+    color              = Colour (hue, sat, bri, 1.0f);
     container->bgcolor = color;
-    color2 = Colour (color.contrasting (contrast));
+    color2             = Colour (color.contrasting (contrast));
 
     hueSlider->setValue (hue, dontSendNotification);
     saturationSlider->setValue (sat, dontSendNotification);

@@ -16,7 +16,7 @@ enum parameters
     kTrigger,
     kProgram,
 
-    kNumParams = kProgram + 16,
+    kNumParams   = kProgram + 16,
     kNumPrograms = 128
 };
 

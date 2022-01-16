@@ -13,17 +13,17 @@ MidiNotesToCCProgram::MidiNotesToCCProgram()
     fNoteLo = 0.f;
     fVeloHi = 1.f;
     fVeloLo = 0.f;
-    fChin = CHANNEL_TO_FLOAT016 (0);
-    fNCC = MIDI_TO_FLOAT2 (74.1 + 1);
+    fChin   = CHANNEL_TO_FLOAT016 (0);
+    fNCC    = MIDI_TO_FLOAT2 (74.1 + 1);
     fNCCoff = MIDI_TO_FLOAT2 (0);
-    fNCCHi = 1.0;
-    fNCCLo = 0.0;
-    fVCC = MIDI_TO_FLOAT2 (75.1 + 1);
+    fNCCHi  = 1.0;
+    fNCCLo  = 0.0;
+    fVCC    = MIDI_TO_FLOAT2 (75.1 + 1);
     fVCCoff = MIDI_TO_FLOAT2 (0);
-    fVCCHi = 1.0;
-    fVCCLo = 0.0;
-    fChout = 0.0;
-    fThru = 0.0;
+    fVCCHi  = 1.0;
+    fVCCLo  = 0.0;
+    fChout  = 0.0;
+    fThru   = 0.0;
     // default program name
     strcpy (name, "Default");
 }
@@ -33,21 +33,21 @@ MidiNotesToCC::MidiNotesToCC (audioMasterCallback audioMaster)
     : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
 {
     programs = new MidiNotesToCCProgram[numPrograms];
-    fNoteHi = 1.f;
-    fNoteLo = 0.f;
-    fVeloHi = 1.f;
-    fVeloLo = 0.f;
-    fChin = CHANNEL_TO_FLOAT016 (0);
-    fNCC = MIDI_TO_FLOAT2 (74.1 + 1);
-    fNCCoff = MIDI_TO_FLOAT2 (0);
-    fNCCHi = 1.0;
-    fNCCLo = 0.0;
-    fVCC = MIDI_TO_FLOAT2 (75.1 + 1);
-    fVCCoff = MIDI_TO_FLOAT2 (0);
-    fVCCHi = 1.0;
-    fVCCLo = 0.0;
-    fChout = 0.0;
-    fThru = 0.0;
+    fNoteHi  = 1.f;
+    fNoteLo  = 0.f;
+    fVeloHi  = 1.f;
+    fVeloLo  = 0.f;
+    fChin    = CHANNEL_TO_FLOAT016 (0);
+    fNCC     = MIDI_TO_FLOAT2 (74.1 + 1);
+    fNCCoff  = MIDI_TO_FLOAT2 (0);
+    fNCCHi   = 1.0;
+    fNCCLo   = 0.0;
+    fVCC     = MIDI_TO_FLOAT2 (75.1 + 1);
+    fVCCoff  = MIDI_TO_FLOAT2 (0);
+    fVCCHi   = 1.0;
+    fVCCLo   = 0.0;
+    fChout   = 0.0;
+    fThru    = 0.0;
 
     if (programs)
     {
@@ -62,17 +62,17 @@ MidiNotesToCC::MidiNotesToCC (audioMasterCallback audioMaster)
                     programs[i].fNoteLo = defaultBank->GetProgParm (i, 1);
                     programs[i].fVeloHi = defaultBank->GetProgParm (i, 2);
                     programs[i].fVeloLo = defaultBank->GetProgParm (i, 3);
-                    programs[i].fChin = defaultBank->GetProgParm (i, 4);
-                    programs[i].fNCC = defaultBank->GetProgParm (i, 5);
+                    programs[i].fChin   = defaultBank->GetProgParm (i, 4);
+                    programs[i].fNCC    = defaultBank->GetProgParm (i, 5);
                     programs[i].fNCCoff = defaultBank->GetProgParm (i, 6);
-                    programs[i].fNCCHi = defaultBank->GetProgParm (i, 7);
-                    programs[i].fNCCLo = defaultBank->GetProgParm (i, 8);
-                    programs[i].fVCC = defaultBank->GetProgParm (i, 9);
+                    programs[i].fNCCHi  = defaultBank->GetProgParm (i, 7);
+                    programs[i].fNCCLo  = defaultBank->GetProgParm (i, 8);
+                    programs[i].fVCC    = defaultBank->GetProgParm (i, 9);
                     programs[i].fVCCoff = defaultBank->GetProgParm (i, 10);
-                    programs[i].fVCCHi = defaultBank->GetProgParm (i, 11);
-                    programs[i].fVCCLo = defaultBank->GetProgParm (i, 12);
-                    programs[i].fChout = defaultBank->GetProgParm (i, 13);
-                    programs[i].fThru = defaultBank->GetProgParm (i, 14);
+                    programs[i].fVCCHi  = defaultBank->GetProgParm (i, 11);
+                    programs[i].fVCCLo  = defaultBank->GetProgParm (i, 12);
+                    programs[i].fChout  = defaultBank->GetProgParm (i, 13);
+                    programs[i].fThru   = defaultBank->GetProgParm (i, 14);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -425,24 +425,24 @@ void MidiNotesToCC::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short status       = tomod.midiData[0] & 0xf0;       // scraping  channel
+        short channel      = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        short data1        = tomod.midiData[1] & 0x7f;
+        short data2        = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;
 
         int lolimit1 = FLOAT_TO_MIDI (fNoteLo);
         int hilimit1 = FLOAT_TO_MIDI (fNoteHi);
-        int low1 = FLOAT_TO_MIDI (fNCCLo);
-        int high1 = FLOAT_TO_MIDI (fNCCHi);
+        int low1     = FLOAT_TO_MIDI (fNCCLo);
+        int high1    = FLOAT_TO_MIDI (fNCCHi);
         int lolimit2 = FLOAT_TO_MIDI (fVeloLo);
         int hilimit2 = FLOAT_TO_MIDI (fVeloHi);
-        int low2 = FLOAT_TO_MIDI (fVCCLo);
-        int high2 = FLOAT_TO_MIDI (fVCCHi);
+        int low2     = FLOAT_TO_MIDI (fVCCLo);
+        int high2    = FLOAT_TO_MIDI (fVCCHi);
 
-        int chin = FLOAT_TO_CHANNEL016 (fChin); //1-16
+        int chin  = FLOAT_TO_CHANNEL016 (fChin);  //1-16
         int chout = FLOAT_TO_CHANNEL016 (fChout); //1-16
         if (chout == 0)
             chout = channel;
@@ -477,9 +477,9 @@ void MidiNotesToCC::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             //if (FLOAT_TO_MIDI2(fNCC)==0) discard=true;
                             // create new message
                             VstMidiEvent NCC = inputs[0][i];
-                            NCC.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                            NCC.midiData[1] = FLOAT_TO_MIDI2 (fNCC) - 1;
-                            NCC.midiData[2] = newdata;
+                            NCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                            NCC.midiData[1]  = FLOAT_TO_MIDI2 (fNCC) - 1;
+                            NCC.midiData[2]  = newdata;
                             outputs[0].push_back (NCC);
                             if (! discard)
                                 notePlaying[data1][channel] = sentBoth;
@@ -503,9 +503,9 @@ void MidiNotesToCC::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                                 newdata = 0;
                             // create new message
                             VstMidiEvent VCC = inputs[0][i];
-                            VCC.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                            VCC.midiData[1] = FLOAT_TO_MIDI2 (fVCC) - 1;
-                            VCC.midiData[2] = newdata;
+                            VCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                            VCC.midiData[1]  = FLOAT_TO_MIDI2 (fVCC) - 1;
+                            VCC.midiData[2]  = newdata;
                             outputs[0].push_back (VCC);
                             if (! discard)
                                 notePlaying[data1][channel] = sentBoth;
@@ -531,9 +531,9 @@ void MidiNotesToCC::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             if (fThru <= 0.6f)
                                 discard = true;
                             VstMidiEvent NCC = inputs[0][i];
-                            NCC.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                            NCC.midiData[1] = FLOAT_TO_MIDI2 (fNCC) - 1;
-                            NCC.midiData[2] = FLOAT_TO_MIDI2 (fNCCoff) - 1;
+                            NCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                            NCC.midiData[1]  = FLOAT_TO_MIDI2 (fNCC) - 1;
+                            NCC.midiData[2]  = FLOAT_TO_MIDI2 (fNCCoff) - 1;
                             outputs[0].push_back (NCC);
                         }
                         if (FLOAT_TO_MIDI2 (fVCCoff) > 0 && FLOAT_TO_MIDI2 (fVCC) > 0)
@@ -541,9 +541,9 @@ void MidiNotesToCC::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             if (fThru <= 0.6f)
                                 discard = true;
                             VstMidiEvent VCC = inputs[0][i];
-                            VCC.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                            VCC.midiData[1] = FLOAT_TO_MIDI2 (fVCC) - 1;
-                            VCC.midiData[2] = FLOAT_TO_MIDI2 (fVCCoff) - 1;
+                            VCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                            VCC.midiData[1]  = FLOAT_TO_MIDI2 (fVCC) - 1;
+                            VCC.midiData[2]  = FLOAT_TO_MIDI2 (fVCCoff) - 1;
                             outputs[0].push_back (VCC);
                         }
                     }

@@ -10,7 +10,7 @@ MidiInvertNotesProgram::MidiInvertNotesProgram()
 {
     // default Program Values
     fMirror = MIDI_TO_FLOAT (60);
-    fPower = 1.0f;
+    fPower  = 1.0f;
     // default program name
     strcpy (name, "Default");
 }
@@ -31,7 +31,7 @@ MidiInvertNotes::MidiInvertNotes (audioMasterCallback audioMaster)
                 for (int i = 0; i < kNumPrograms; i++)
                 {
                     programs[i].fMirror = defaultBank->GetProgParm (i, 0);
-                    programs[i].fPower = defaultBank->GetProgParm (i, 1);
+                    programs[i].fPower  = defaultBank->GetProgParm (i, 1);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -183,10 +183,10 @@ void MidiInvertNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short status       = tomod.midiData[0] & 0xf0;       // scraping  channel
+        short channel      = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        short data1        = tomod.midiData[1] & 0x7f;
+        short data2        = tomod.midiData[2] & 0x7f;
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;
 
@@ -208,7 +208,7 @@ void MidiInvertNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
         if (status == MIDI_NOTEOFF)
         {
             // always transpose noteoff by the same amount as the noteon was transposed
-            tomod.midiData[1] = (char) transposed[data1][channel];
+            tomod.midiData[1]          = (char) transposed[data1][channel];
             transposed[data1][channel] = data1;
         }
         outputs[0].push_back (tomod);

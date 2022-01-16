@@ -10,14 +10,14 @@ class MidiIndicator : public Component
 public:
     MidiIndicator()
     {
-        inmsg = -1;
+        inmsg  = -1;
         outmsg = -1;
     }
     ~MidiIndicator() override {}
 
     void paint (Graphics& g) override
     {
-        const int dotSize = MAX_ENVELOPE_DOT_SIZE;
+        const int dotSize     = MAX_ENVELOPE_DOT_SIZE;
         const int halfDotSize = dotSize / 2;
         g.fillAll (Colours::transparentBlack);
         g.setColour (Colours::darkgoldenrod);
@@ -59,7 +59,7 @@ public:
     float getValue (float input);
     void repaintIndicator (int in, int out)
     {
-        indicator->inmsg = in;
+        indicator->inmsg  = in;
         indicator->outmsg = out;
         indicator->repaint();
     }

@@ -9,25 +9,25 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiForceToKeyProgram::MidiForceToKeyProgram()
 {
     // default Program Values
-    n0 = 1.0f; // C
-    n1 = 1.0f; // C#
-    n2 = 1.0f; // D
-    n3 = 1.0f; // D#
-    n4 = 1.0f; // E
-    n5 = 1.0f; // F
-    n6 = 1.0f; // F#
-    n7 = 1.0f; // G
-    n8 = 1.0f; // G#
-    n9 = 1.0f; // A
-    n10 = 1.0f; // A#
-    n11 = 1.0f; // B
-    fMode = (float) nearest / (float) (numModes - 1);
+    n0         = 1.0f; // C
+    n1         = 1.0f; // C#
+    n2         = 1.0f; // D
+    n3         = 1.0f; // D#
+    n4         = 1.0f; // E
+    n5         = 1.0f; // F
+    n6         = 1.0f; // F#
+    n7         = 1.0f; // G
+    n8         = 1.0f; // G#
+    n9         = 1.0f; // A
+    n10        = 1.0f; // A#
+    n11        = 1.0f; // B
+    fMode      = (float) nearest / (float) (numModes - 1);
     fTranspose = 0.5f;
-    fChannel = CHANNEL_TO_FLOAT (-1);
-    fRoot = MIDI_TO_FLOAT (60);
-    fNChannel = CHANNEL_TO_FLOAT (-1);
-    fNChMode = 0.f;
-    fUsePC = 0.f;
+    fChannel   = CHANNEL_TO_FLOAT (-1);
+    fRoot      = MIDI_TO_FLOAT (60);
+    fNChannel  = CHANNEL_TO_FLOAT (-1);
+    fNChMode   = 0.f;
+    fUsePC     = 0.f;
 
     // default program name
     strcpy (name, "Default");
@@ -48,24 +48,24 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < numPrograms; i++)
                 {
-                    n0 = defaultBank->GetProgParm (i, k0);
-                    n1 = defaultBank->GetProgParm (i, k1);
-                    n2 = defaultBank->GetProgParm (i, k2);
-                    n3 = defaultBank->GetProgParm (i, k3);
-                    n4 = defaultBank->GetProgParm (i, k4);
-                    n5 = defaultBank->GetProgParm (i, k5);
-                    n6 = defaultBank->GetProgParm (i, k6);
-                    n7 = defaultBank->GetProgParm (i, k7);
-                    n8 = defaultBank->GetProgParm (i, k8);
-                    n9 = defaultBank->GetProgParm (i, k9);
-                    n10 = defaultBank->GetProgParm (i, k10);
-                    n11 = defaultBank->GetProgParm (i, k11);
-                    fMode = defaultBank->GetProgParm (i, kMode);
+                    n0         = defaultBank->GetProgParm (i, k0);
+                    n1         = defaultBank->GetProgParm (i, k1);
+                    n2         = defaultBank->GetProgParm (i, k2);
+                    n3         = defaultBank->GetProgParm (i, k3);
+                    n4         = defaultBank->GetProgParm (i, k4);
+                    n5         = defaultBank->GetProgParm (i, k5);
+                    n6         = defaultBank->GetProgParm (i, k6);
+                    n7         = defaultBank->GetProgParm (i, k7);
+                    n8         = defaultBank->GetProgParm (i, k8);
+                    n9         = defaultBank->GetProgParm (i, k9);
+                    n10        = defaultBank->GetProgParm (i, k10);
+                    n11        = defaultBank->GetProgParm (i, k11);
+                    fMode      = defaultBank->GetProgParm (i, kMode);
                     fTranspose = defaultBank->GetProgParm (i, kTranspose);
-                    fChannel = defaultBank->GetProgParm (i, kChannel);
-                    fRoot = defaultBank->GetProgParm (i, kRoot);
-                    fNChannel = defaultBank->GetProgParm (i, kNChannel);
-                    fNChMode = defaultBank->GetProgParm (i, kNChMode);
+                    fChannel   = defaultBank->GetProgParm (i, kChannel);
+                    fRoot      = defaultBank->GetProgParm (i, kRoot);
+                    fNChannel  = defaultBank->GetProgParm (i, kNChannel);
+                    fNChMode   = defaultBank->GetProgParm (i, kNChMode);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -78,181 +78,181 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 0:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 0.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 0.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 0.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 0.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 0.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 0.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 0.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 0.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "C Major");
                         break;
                     case 1:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 0.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 0.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 0.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 0.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 0.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 0.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 0.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
                         sprintf (programs[i].name, "C# Major");
                         break;
                     case 2:
-                        programs[i].n0 = 0.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 0.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 0.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 0.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 0.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 0.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 0.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 0.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "D Major");
                         break;
                     case 3:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 0.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 0.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 0.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 0.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 0.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 0.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 0.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
                         sprintf (programs[i].name, "Eb Major");
                         break;
                     case 4:
-                        programs[i].n0 = 0.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 0.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 0.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 0.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 0.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 0.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 0.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 0.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "E Major");
                         break;
                     case 5:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 0.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 0.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 0.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 0.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 0.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 0.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 0.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 0.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
                         sprintf (programs[i].name, "F Major");
                         break;
                     case 6:
-                        programs[i].n0 = 0.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 0.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 0.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 0.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 0.0f; // A
+                        programs[i].n0  = 0.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 0.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 0.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 0.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "F# Major");
                         break;
                     case 7:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 0.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 0.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 0.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 0.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 0.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 0.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 0.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 0.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "G Major");
                         break;
                     case 8:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 0.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 0.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 0.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 0.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 0.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 0.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 0.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
                         sprintf (programs[i].name, "G# Major");
                         break;
                     case 9:
-                        programs[i].n0 = 0.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 0.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 0.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 0.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 0.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 0.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 0.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 0.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "A Major");
                         break;
                     case 10:
-                        programs[i].n0 = 1.0f; // C
-                        programs[i].n1 = 0.0f; // C#
-                        programs[i].n2 = 1.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 0.0f; // E
-                        programs[i].n5 = 1.0f; // F
-                        programs[i].n6 = 0.0f; // F#
-                        programs[i].n7 = 1.0f; // G
-                        programs[i].n8 = 0.0f; // G#
-                        programs[i].n9 = 1.0f; // A
+                        programs[i].n0  = 1.0f; // C
+                        programs[i].n1  = 0.0f; // C#
+                        programs[i].n2  = 1.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 0.0f; // E
+                        programs[i].n5  = 1.0f; // F
+                        programs[i].n6  = 0.0f; // F#
+                        programs[i].n7  = 1.0f; // G
+                        programs[i].n8  = 0.0f; // G#
+                        programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
                         sprintf (programs[i].name, "Bb Major");
                         break;
                     case 11:
-                        programs[i].n0 = 0.0f; // C
-                        programs[i].n1 = 1.0f; // C#
-                        programs[i].n2 = 0.0f; // D
-                        programs[i].n3 = 1.0f; // D#
-                        programs[i].n4 = 1.0f; // E
-                        programs[i].n5 = 0.0f; // F
-                        programs[i].n6 = 1.0f; // F#
-                        programs[i].n7 = 0.0f; // G
-                        programs[i].n8 = 1.0f; // G#
-                        programs[i].n9 = 0.0f; // A
+                        programs[i].n0  = 0.0f; // C
+                        programs[i].n1  = 1.0f; // C#
+                        programs[i].n2  = 0.0f; // D
+                        programs[i].n3  = 1.0f; // D#
+                        programs[i].n4  = 1.0f; // E
+                        programs[i].n5  = 0.0f; // F
+                        programs[i].n6  = 1.0f; // F#
+                        programs[i].n7  = 0.0f; // G
+                        programs[i].n8  = 1.0f; // G#
+                        programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 1.0f; // B
                         sprintf (programs[i].name, "B Major");
@@ -289,7 +289,7 @@ void MidiForceToKey::setProgram (VstInt32 program)
     MidiForceToKeyProgram* ap = &programs[program];
 
     settingprog = true;
-    curProgram = program;
+    curProgram  = program;
     setParameter (k0, ap->n0);
     setParameter (k1, ap->n1);
     setParameter (k2, ap->n2);
@@ -381,7 +381,7 @@ void MidiForceToKey::setParameter (VstInt32 index, float value)
             break;
         case kMode:
             fMode = ap->fMode = value;
-            mode = roundToInt (fMode * (float) (numModes - 1));
+            mode              = roundToInt (fMode * (float) (numModes - 1));
             break;
         case kTranspose:
             fTranspose = ap->fTranspose = value;
@@ -688,17 +688,17 @@ void MidiForceToKey::getParameterDisplay (VstInt32 index, char* text)
 
 void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int tchannel = FLOAT_TO_CHANNEL (fChannel);
-    const int nchannel = FLOAT_TO_CHANNEL (fNChannel);
-    int transposey = roundToInt (fTranspose * 100.f) - 50;
+    const int tchannel  = FLOAT_TO_CHANNEL (fChannel);
+    const int nchannel  = FLOAT_TO_CHANNEL (fNChannel);
+    int transposey      = roundToInt (fTranspose * 100.f) - 50;
     bool noteswitch[12] = { n0 >= 0.5f, n1 >= 0.5f, n2 >= 0.5f, n3 >= 0.5f, n4 >= 0.5f, n5 >= 0.5f, n6 >= 0.5f, n7 >= 0.5f, n8 >= 0.5f, n9 >= 0.5f, n10 >= 0.5f, n11 >= 0.5f };
 
     for (unsigned int i = 0; i < inputs[0].size(); i++)
     {
         VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
+        const int status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int channel  = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
+        const int data1    = tomod.midiData[1] & 0x7f;
         //int data2	   = tomod.midiData[2] & 0x7f;
         bool discard = false;
 
@@ -730,7 +730,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
             }
             else if (isNoteOff (tomod) && fNChMode < 0.5f)
             {
-                int n = data1 % 12;
+                int n         = data1 % 12;
                 noteswitch[n] = false;
                 setParameterAutomated (k0 + n, 0.f);
             }
@@ -743,7 +743,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 {
                     dbg ("wrong note " << data1);
                     int transpose = 0;
-                    int j = -1;
+                    int j         = -1;
                     switch (mode)
                     {
                             //nearest note, down when tied (same as ndc)
@@ -754,7 +754,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                 if (noteswitch[(data1 + j) % 12])
                                 {
                                     transpose = j;
-                                    discard = false;
+                                    discard   = false;
                                     break;
                                 }
                                 if (j < 0)
@@ -765,14 +765,14 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                             break;
                             //always up
                         case alwaysup:
-                            j = 1;
+                            j       = 1;
                             discard = true;
                             while (j < 12)
                             {
                                 if (noteswitch[(data1 + j) % 12])
                                 {
                                     transpose = j;
-                                    discard = false;
+                                    discard   = false;
                                     break;
                                 }
                                 j++;
@@ -786,7 +786,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                 if (noteswitch[(data1 + j) % 12])
                                 {
                                     transpose = j;
-                                    discard = false;
+                                    discard   = false;
                                     break;
                                 }
                                 j--;
@@ -795,7 +795,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                             //block wrong notes
                         case block:
                             dbg ("block note");
-                            discard = true;
+                            discard                    = true;
                             transposed[data1][channel] = -999;
                             break;
                         case off:
@@ -808,9 +808,9 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 if (channel == tchannel)
                 {
                     dbg ("tchannel");
-                    discard = true;
-                    int root = FLOAT_TO_MIDI (fRoot);
-                    int m = 0;
+                    discard     = true;
+                    int root    = FLOAT_TO_MIDI (fRoot);
+                    int m       = 0;
                     int counter = 0;
                     if (tomod.midiData[1] > root)
                     {
@@ -848,7 +848,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 {
                     //move the note up to the right scale degree
                     int counter = 0;
-                    int m = 0;
+                    int m       = 0;
                     while (counter < transposey)
                     {
                         m++;
@@ -863,7 +863,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 {
                     //move the note down the scale
                     int counter = 0;
-                    int m = 0;
+                    int m       = 0;
                     while (counter > transposey)
                     {
                         m++;

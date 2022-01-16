@@ -121,7 +121,7 @@ void BigClockEditor::resized()
     textBox->setVisible (showtextbox && hosttime);
     cueLabel->setVisible (showtextbox && hosttime);
 
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
 }
 
@@ -454,8 +454,7 @@ void BigClockEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else
     {
-        ColourSelector* cs = 0;
-        cs = (ColourSelector*) source;
+        ColourSelector* cs = (ColourSelector*) source;
         if (cs)
         {
             getFilter()->bgcolor = (cs->getCurrentColour());
@@ -472,10 +471,10 @@ void BigClockEditor::updateParametersFromFilter()
 
     filter->getCallbackLock().enter();
     const AudioPlayHead::CurrentPositionInfo positionInfo (filter->lastPosInfo);
-    barsbeats = filter->getParameter (kBarsBeats) >= 0.5f;
-    const float clockmode = filter->getParameter (kClockMode);
+    barsbeats               = filter->getParameter (kBarsBeats) >= 0.5f;
+    const float clockmode   = filter->getParameter (kClockMode);
     const bool watchrunning = filter->getParameter (kRunWatch) >= 0.5f;
-    showtextbox = filter->showcues;
+    showtextbox             = filter->showcues;
     filter->getCallbackLock().exit();
 
     recording = positionInfo.isRecording;

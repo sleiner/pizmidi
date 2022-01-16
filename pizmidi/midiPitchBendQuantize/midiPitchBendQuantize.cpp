@@ -66,30 +66,30 @@ MidiPitchBendQuantize::MidiPitchBendQuantize (audioMasterCallback audioMaster)
             fillpatch (i++, "Major Scale", 16383, 15700, -1, 14335, -1, 12970, -1, 11605, 10922, -1, 9557, -1, 8192, 7509, -1, 6144, -1, 4778, -1, 3413, 2731, -1, 1365, -1, 0, ANY_CHANNEL);
             fillpatch (i++, "Minor Scale",
                        16383, //+12  A
-                       -1, //+11  G#
+                       -1,    //+11  G#
                        15018, //+10  G
-                       -1, //+9   F#
+                       -1,    //+9   F#
                        13653, //+8   F
                        12970, //+7   E
-                       -1, //+6   D#
+                       -1,    //+6   D#
                        11605, //+5   D
-                       -1, //+4   C#
+                       -1,    //+4   C#
                        10239, //+3   C
-                       9557, //+2   B
-                       -1, //+1   A#
-                       8192, //center A
-                       -1, //-1   G#
-                       6826, //-2   G
-                       -1, //-3   F#
-                       5461, //-4   F
-                       4778, //-5   E
-                       -1, //-6   D#
-                       3413, //-7   D
-                       -1, //-8   C#
-                       2048, //-9   C
-                       1365, //-10  B
-                       -1, //-11  A#
-                       0, //-12  A
+                       9557,  //+2   B
+                       -1,    //+1   A#
+                       8192,  //center A
+                       -1,    //-1   G#
+                       6826,  //-2   G
+                       -1,    //-3   F#
+                       5461,  //-4   F
+                       4778,  //-5   E
+                       -1,    //-6   D#
+                       3413,  //-7   D
+                       -1,    //-8   C#
+                       2048,  //-9   C
+                       1365,  //-10  B
+                       -1,    //-11  A#
+                       0,     //-12  A
                        ANY_CHANNEL);
             setProgram (0);
         }
@@ -229,15 +229,15 @@ void MidiPitchBendQuantize::processMidiEvents (VstMidiEventVec* inputs, VstMidiE
         VstMidiEvent tomod = inputs[0][i];
 
         unsigned char status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const char channel = tomod.midiData[0] & 0x0f; // isolating channel
-        const char data1 = tomod.midiData[1] & 0x7f;
-        const char data2 = tomod.midiData[2] & 0x7f;
+        const char channel   = tomod.midiData[0] & 0x0f; // isolating channel
+        const char data1     = tomod.midiData[1] & 0x7f;
+        const char data2     = tomod.midiData[2] & 0x7f;
 
         if (channel == listenchannel || listenchannel == -1)
         {
             if (status == MIDI_PITCHBEND)
             {
-                int PB = data1 | (data2 << 7);
+                int PB   = data1 | (data2 << 7);
                 int diff = 99999;
                 for (int s = 0; s < kNumSteps; s++)
                 {
@@ -265,16 +265,16 @@ void MidiPitchBendQuantize::processMidiEvents (VstMidiEventVec* inputs, VstMidiE
 void MidiPitchBendQuantize::fillpatch (long p, const char* name, int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9, int p10, int p11, int p12, int p13, int p14, int p15, int p16, int p17, int p18, int p19, int p20, int p21, int p22, int p23, int p24, int p25)
 {
     vst_strncpy (programs[p].name, name, kVstMaxProgNameLen);
-    programs[p].param[0] = pbToParam (p0);
-    programs[p].param[1] = pbToParam (p1);
-    programs[p].param[2] = pbToParam (p2);
-    programs[p].param[3] = pbToParam (p3);
-    programs[p].param[4] = pbToParam (p4);
-    programs[p].param[5] = pbToParam (p5);
-    programs[p].param[6] = pbToParam (p6);
-    programs[p].param[7] = pbToParam (p7);
-    programs[p].param[8] = pbToParam (p8);
-    programs[p].param[9] = pbToParam (p9);
+    programs[p].param[0]  = pbToParam (p0);
+    programs[p].param[1]  = pbToParam (p1);
+    programs[p].param[2]  = pbToParam (p2);
+    programs[p].param[3]  = pbToParam (p3);
+    programs[p].param[4]  = pbToParam (p4);
+    programs[p].param[5]  = pbToParam (p5);
+    programs[p].param[6]  = pbToParam (p6);
+    programs[p].param[7]  = pbToParam (p7);
+    programs[p].param[8]  = pbToParam (p8);
+    programs[p].param[9]  = pbToParam (p9);
     programs[p].param[10] = pbToParam (p10);
     programs[p].param[11] = pbToParam (p11);
     programs[p].param[12] = pbToParam (p12);

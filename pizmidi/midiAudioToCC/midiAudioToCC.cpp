@@ -12,13 +12,13 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiAudioToCCProgram::MidiAudioToCCProgram()
 {
     // default Program Values
-    fGain = 0.1f;
-    fCC = MIDI_TO_FLOAT (1.1);
-    fCC2 = MIDI_TO_FLOAT (2.1);
+    fGain    = 0.1f;
+    fCC      = MIDI_TO_FLOAT (1.1);
+    fCC2     = MIDI_TO_FLOAT (2.1);
     fChannel = 0.0f;
-    fMode = 0.0f;
-    fOffset = 0.1f; //"inertia"
-    fRate = 0.50f;
+    fMode    = 0.0f;
+    fOffset  = 0.1f; //"inertia"
+    fRate    = 0.50f;
     // default program name
     strncpy (name, "Default", kVstMaxProgNameLen);
 }
@@ -37,13 +37,13 @@ MidiAudioToCC::MidiAudioToCC (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fGain = defaultBank->GetProgParm (i, 0);
-                    programs[i].fCC = defaultBank->GetProgParm (i, 1);
-                    programs[i].fCC2 = defaultBank->GetProgParm (i, 2);
+                    programs[i].fGain    = defaultBank->GetProgParm (i, 0);
+                    programs[i].fCC      = defaultBank->GetProgParm (i, 1);
+                    programs[i].fCC2     = defaultBank->GetProgParm (i, 2);
                     programs[i].fChannel = defaultBank->GetProgParm (i, 3);
-                    programs[i].fMode = defaultBank->GetProgParm (i, 4);
-                    programs[i].fOffset = defaultBank->GetProgParm (i, 5);
-                    programs[i].fRate = defaultBank->GetProgParm (i, 6);
+                    programs[i].fMode    = defaultBank->GetProgParm (i, 4);
+                    programs[i].fOffset  = defaultBank->GetProgParm (i, 5);
+                    programs[i].fRate    = defaultBank->GetProgParm (i, 6);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -60,18 +60,18 @@ MidiAudioToCC::MidiAudioToCC (audioMasterCallback audioMaster)
     }
 
     numChannels = 2;
-    oldenv[0] = 0;
+    oldenv[0]   = 0;
     olderenv[0] = 0;
-    oldenv[1] = 0;
+    oldenv[1]   = 0;
     olderenv[1] = 0;
-    fEnvelopeL = 0.f;
-    fEnvelopeR = 0.f;
+    fEnvelopeL  = 0.f;
+    fEnvelopeR  = 0.f;
 
-    samp[0] = 0;
-    continualRMS[0] = 0.0;
+    samp[0]            = 0;
+    continualRMS[0]    = 0.0;
     guiContinualRMS[0] = 0.0;
-    samp[1] = 0;
-    continualRMS[1] = 0.0;
+    samp[1]            = 0;
+    continualRMS[1]    = 0.0;
     guiContinualRMS[1] = 0.0;
 
     init();
@@ -281,7 +281,7 @@ void MidiAudioToCC::preProcess (void)
 {
     // preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (kVstTempoValid);
+    timeInfo              = getTimeInfo (kVstTempoValid);
 
     if (timeInfo)
     {
@@ -324,16 +324,16 @@ void MidiAudioToCC::process (float** inputs, float** outputs, VstInt32 sampleFra
     preProcess();
 
     int channel = FLOAT_TO_CHANNEL015 (fChannel); //outgoing midi channel
-    int data1 = FLOAT_TO_MIDI (fCC);
-    int data1b = FLOAT_TO_MIDI (fCC2);
+    int data1   = FLOAT_TO_MIDI (fCC);
+    int data1b  = FLOAT_TO_MIDI (fCC2);
 
-    float updateRate = (1.0f - fRate) * 0.0025f + 0.001f;
+    float updateRate                   = (1.0f - fRate) * 0.0025f + 0.001f;
     const unsigned int sampleThreshold = roundToInt (getSampleRate() * updateRate);
 
     float gain = 12.f * fGain;
 
-    float* in1 = inputs[0];
-    float* in2 = inputs[1];
+    float* in1  = inputs[0];
+    float* in2  = inputs[1];
     float* out1 = outputs[0];
     float* out2 = outputs[1];
 
@@ -356,8 +356,8 @@ void MidiAudioToCC::process (float** inputs, float** outputs, VstInt32 sampleFra
         {
             guiContinualRMS[0] += continualRMS[0];
             double invGUItotal = 1.0 / (double) samp[0];
-            int data2 = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
-            data2 = smooth (data2, oldenv[0], olderenv[0], fOffset);
+            int data2          = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
+            data2              = smooth (data2, oldenv[0], olderenv[0], fOffset);
             if (data2 != oldenv[0])
             {
                 VstMidiEvent cc;
@@ -367,11 +367,11 @@ void MidiAudioToCC::process (float** inputs, float** outputs, VstInt32 sampleFra
                 cc.midiData[2] = data2;
                 _midiEventsOut[0].push_back (cc);
                 olderenv[0] = oldenv[0];
-                oldenv[0] = data2;
+                oldenv[0]   = data2;
                 setParameterAutomated (kEnvelopeL, MIDI_TO_FLOAT (data2));
             }
-            samp[0] = 0;
-            continualRMS[0] = 0.0;
+            samp[0]            = 0;
+            continualRMS[0]    = 0.0;
             guiContinualRMS[0] = 0.0;
         }
         if (fMode >= 0.5f)
@@ -386,8 +386,8 @@ void MidiAudioToCC::process (float** inputs, float** outputs, VstInt32 sampleFra
             {
                 guiContinualRMS[1] += continualRMS[1];
                 double invGUItotal = 1.0 / (double) samp[1];
-                int data2b = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
-                data2b = smooth (data2b, oldenv[1], olderenv[1], fOffset);
+                int data2b         = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
+                data2b             = smooth (data2b, oldenv[1], olderenv[1], fOffset);
                 if (data2b != oldenv[1])
                 {
                     VstMidiEvent cc;
@@ -397,11 +397,11 @@ void MidiAudioToCC::process (float** inputs, float** outputs, VstInt32 sampleFra
                     cc.midiData[2] = data2b;
                     _midiEventsOut[0].push_back (cc);
                     olderenv[1] = oldenv[1];
-                    oldenv[1] = data2b;
+                    oldenv[1]   = data2b;
                     setParameterAutomated (kEnvelopeR, MIDI_TO_FLOAT (data2b));
                 }
-                samp[1] = 0;
-                continualRMS[1] = 0.0;
+                samp[1]            = 0;
+                continualRMS[1]    = 0.0;
                 guiContinualRMS[1] = 0.0;
             }
         }
@@ -418,24 +418,24 @@ void MidiAudioToCC::processReplacing (float** inputs, float** outputs, VstInt32 
     preProcess();
 
     int channel = FLOAT_TO_CHANNEL015 (fChannel); //outgoing midi channel
-    int data1 = FLOAT_TO_MIDI (fCC);
-    int data1b = FLOAT_TO_MIDI (fCC2);
+    int data1   = FLOAT_TO_MIDI (fCC);
+    int data1b  = FLOAT_TO_MIDI (fCC2);
 
-    float updateRate = (1.0f - fRate) * 0.0025f + 0.001f;
+    float updateRate                   = (1.0f - fRate) * 0.0025f + 0.001f;
     const unsigned int sampleThreshold = roundToInt (getSampleRate() * updateRate);
 
     float gain = 12.f * fGain;
 
-    float* in1 = inputs[0];
-    float* in2 = inputs[1];
+    float* in1  = inputs[0];
+    float* in2  = inputs[1];
     float* out1 = outputs[0];
     float* out2 = outputs[1];
 
     // analyze every sample for this channel
     for (VstInt32 i = 0; i < sampleFrames; i++)
     {
-        out1[i] = in1[i];
-        out2[i] = in2[i];
+        out1[i]  = in1[i];
+        out2[i]  = in2[i];
         float in = in1[i] * gain;
         //if mono mode, sum the left and right channels:
         if (fMode < 0.5f)
@@ -450,8 +450,8 @@ void MidiAudioToCC::processReplacing (float** inputs, float** outputs, VstInt32 
         {
             guiContinualRMS[0] += continualRMS[0];
             double invGUItotal = 1.0 / (double) samp[0];
-            int data2 = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
-            data2 = smooth (data2, oldenv[0], olderenv[0], fOffset);
+            int data2          = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
+            data2              = smooth (data2, oldenv[0], olderenv[0], fOffset);
             if (data2 != oldenv[0])
             {
                 VstMidiEvent cc;
@@ -461,11 +461,11 @@ void MidiAudioToCC::processReplacing (float** inputs, float** outputs, VstInt32 
                 cc.midiData[2] = data2;
                 _midiEventsOut[0].push_back (cc);
                 olderenv[0] = oldenv[0];
-                oldenv[0] = data2;
+                oldenv[0]   = data2;
                 setParameterAutomated (kEnvelopeL, MIDI_TO_FLOAT (data2));
             }
-            samp[0] = 0;
-            continualRMS[0] = 0.0;
+            samp[0]            = 0;
+            continualRMS[0]    = 0.0;
             guiContinualRMS[0] = 0.0;
         }
     }
@@ -484,8 +484,8 @@ void MidiAudioToCC::processReplacing (float** inputs, float** outputs, VstInt32 
             {
                 guiContinualRMS[1] += continualRMS[1];
                 double invGUItotal = 1.0 / (double) samp[1];
-                int data2b = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
-                data2b = smooth (data2b, oldenv[1], olderenv[1], fOffset);
+                int data2b         = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
+                data2b             = smooth (data2b, oldenv[1], olderenv[1], fOffset);
                 if (data2b != oldenv[1])
                 {
                     VstMidiEvent cc;
@@ -495,11 +495,11 @@ void MidiAudioToCC::processReplacing (float** inputs, float** outputs, VstInt32 
                     cc.midiData[2] = data2b;
                     _midiEventsOut[0].push_back (cc);
                     olderenv[1] = oldenv[1];
-                    oldenv[1] = data2b;
+                    oldenv[1]   = data2b;
                     setParameterAutomated (kEnvelopeR, MIDI_TO_FLOAT (data2b));
                 }
-                samp[1] = 0;
-                continualRMS[1] = 0.0;
+                samp[1]            = 0;
+                continualRMS[1]    = 0.0;
                 guiContinualRMS[1] = 0.0;
             }
         }
@@ -516,24 +516,24 @@ void MidiAudioToCC::processDoubleReplacing (double** inputs, double** outputs, V
     preProcess();
 
     int channel = FLOAT_TO_CHANNEL015 (fChannel); //outgoing midi channel
-    int data1 = FLOAT_TO_MIDI (fCC);
-    int data1b = FLOAT_TO_MIDI (fCC2);
+    int data1   = FLOAT_TO_MIDI (fCC);
+    int data1b  = FLOAT_TO_MIDI (fCC2);
 
-    float updateRate = (1.0f - fRate) * 0.0025f + 0.001f;
+    float updateRate                   = (1.0f - fRate) * 0.0025f + 0.001f;
     const unsigned int sampleThreshold = roundToInt (getSampleRate() * updateRate);
 
     float gain = 12.f * fGain;
 
-    double* in1 = inputs[0];
-    double* in2 = inputs[1];
+    double* in1  = inputs[0];
+    double* in2  = inputs[1];
     double* out1 = outputs[0];
     double* out2 = outputs[1];
 
     // analyze every sample for this channel
     for (VstInt32 i = 0; i < sampleFrames; i++)
     {
-        out1[i] = in1[i];
-        out2[i] = in2[i];
+        out1[i]  = in1[i];
+        out2[i]  = in2[i];
         float in = (float) in1[i] * gain;
         //if mono mode, sum the left and right channels:
         if (fMode < 0.5f)
@@ -548,8 +548,8 @@ void MidiAudioToCC::processDoubleReplacing (double** inputs, double** outputs, V
         {
             guiContinualRMS[0] += continualRMS[0];
             double invGUItotal = 1.0 / (double) samp[0];
-            int data2 = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
-            data2 = smooth (data2, oldenv[0], olderenv[0], fOffset);
+            int data2          = (int) (127.0 * (sqrt (guiContinualRMS[0] * invGUItotal)));
+            data2              = smooth (data2, oldenv[0], olderenv[0], fOffset);
             if (data2 != oldenv[0])
             {
                 VstMidiEvent cc;
@@ -559,11 +559,11 @@ void MidiAudioToCC::processDoubleReplacing (double** inputs, double** outputs, V
                 cc.midiData[2] = data2;
                 _midiEventsOut[0].push_back (cc);
                 olderenv[0] = oldenv[0];
-                oldenv[0] = data2;
+                oldenv[0]   = data2;
                 setParameterAutomated (kEnvelopeL, MIDI_TO_FLOAT (data2));
             }
-            samp[0] = 0;
-            continualRMS[0] = 0.0;
+            samp[0]            = 0;
+            continualRMS[0]    = 0.0;
             guiContinualRMS[0] = 0.0;
         }
     }
@@ -582,8 +582,8 @@ void MidiAudioToCC::processDoubleReplacing (double** inputs, double** outputs, V
             {
                 guiContinualRMS[1] += continualRMS[1];
                 double invGUItotal = 1.0 / (double) samp[1];
-                int data2b = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
-                data2b = smooth (data2b, oldenv[1], olderenv[1], fOffset);
+                int data2b         = (int) (127 * (sqrt (guiContinualRMS[1] * invGUItotal)));
+                data2b             = smooth (data2b, oldenv[1], olderenv[1], fOffset);
                 if (data2b != oldenv[1])
                 {
                     VstMidiEvent cc;
@@ -593,11 +593,11 @@ void MidiAudioToCC::processDoubleReplacing (double** inputs, double** outputs, V
                     cc.midiData[2] = data2b;
                     _midiEventsOut[0].push_back (cc);
                     olderenv[1] = oldenv[1];
-                    oldenv[1] = data2b;
+                    oldenv[1]   = data2b;
                     setParameterAutomated (kEnvelopeR, MIDI_TO_FLOAT (data2b));
                 }
-                samp[1] = 0;
-                continualRMS[1] = 0.0;
+                samp[1]            = 0;
+                continualRMS[1]    = 0.0;
                 guiContinualRMS[1] = 0.0;
             }
         }

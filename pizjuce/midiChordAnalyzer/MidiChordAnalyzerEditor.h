@@ -37,7 +37,7 @@ public:
           owner (0)
     {
         owner = ownerFilter;
-        s = &kbstate;
+        s     = &kbstate;
         this->setMidiChannel (1);
         this->setLowestVisibleKey (36);
     }

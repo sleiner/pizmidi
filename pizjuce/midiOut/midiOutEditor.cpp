@@ -145,13 +145,13 @@ MidiOutEditor::~MidiOutEditor()
     getFilter()->icon = imagepad->drawableButton->getName();
     //[/Destructor_pre]
 
-    comboBox = nullptr;
+    comboBox    = nullptr;
     clockButton = nullptr;
-    mtcButton = nullptr;
-    hostButton = nullptr;
-    channelBox = nullptr;
-    imagepad = nullptr;
-    label = nullptr;
+    mtcButton   = nullptr;
+    hostButton  = nullptr;
+    channelBox  = nullptr;
+    imagepad    = nullptr;
+    label       = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -288,11 +288,11 @@ void MidiOutEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
-    const float clock = filter->getParameter (kClock);
-    const float mtc = filter->getParameter (kMTC);
+    const float clock   = filter->getParameter (kClock);
+    const float mtc     = filter->getParameter (kMTC);
     const float hostout = filter->getParameter (kHostOut);
-    const int channel = roundToInt (filter->getParameter (kChannel) * 16.f);
-    const String icon = filter->icon;
+    const int channel   = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const String icon   = filter->icon;
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
@@ -307,7 +307,7 @@ void MidiOutEditor::updateParametersFromFilter()
     String fullpath = icon;
     if (! File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
         fullpath = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                   + File::getSeparatorString() + icon;
+                 + File::getSeparatorString() + icon;
     auto image = Drawable::createFromImageFile (File (fullpath));
     if (image)
     {

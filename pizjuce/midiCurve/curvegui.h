@@ -23,8 +23,8 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 
 #include "../_common/ChannelSlider.h"
-#include "MidiEnvelope.h"
 #include "curve.h"
+#include "MidiEnvelope.h"
 //[/Headers]
 
 //==============================================================================

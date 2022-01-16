@@ -13,16 +13,16 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiSimpleLFOProgram::MidiSimpleLFOProgram()
 {
     // default Program Values
-    fWave = 0.0f;
-    fCC = MIDI_TO_FLOAT (1.1);
+    fWave    = 0.0f;
+    fCC      = MIDI_TO_FLOAT (1.1);
     fChannel = 0.0f;
-    fSync = 0.0f;
-    fFreq = 0.333333333333333f;
-    fPhase = 0.5f;
-    fRange = 1.0f; //0..127
-    fOffset = 0.5f;
+    fSync    = 0.0f;
+    fFreq    = 0.333333333333333f;
+    fPhase   = 0.5f;
+    fRange   = 1.0f; //0..127
+    fOffset  = 0.5f;
     fTrigger = 0.0f;
-    fPower = 1.0f;
+    fPower   = 1.0f;
     // default program name
     strcpy (name, "Default");
 }
@@ -42,16 +42,16 @@ MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fWave = defaultBank->GetProgParm (i, 0);
-                    programs[i].fCC = defaultBank->GetProgParm (i, 1);
+                    programs[i].fWave    = defaultBank->GetProgParm (i, 0);
+                    programs[i].fCC      = defaultBank->GetProgParm (i, 1);
                     programs[i].fChannel = defaultBank->GetProgParm (i, 2);
-                    programs[i].fSync = defaultBank->GetProgParm (i, 3);
-                    programs[i].fFreq = defaultBank->GetProgParm (i, 4);
-                    programs[i].fPhase = defaultBank->GetProgParm (i, 5);
-                    programs[i].fRange = defaultBank->GetProgParm (i, 6);
-                    programs[i].fOffset = defaultBank->GetProgParm (i, 7);
+                    programs[i].fSync    = defaultBank->GetProgParm (i, 3);
+                    programs[i].fFreq    = defaultBank->GetProgParm (i, 4);
+                    programs[i].fPhase   = defaultBank->GetProgParm (i, 5);
+                    programs[i].fRange   = defaultBank->GetProgParm (i, 6);
+                    programs[i].fOffset  = defaultBank->GetProgParm (i, 7);
                     programs[i].fTrigger = defaultBank->GetProgParm (i, 8);
-                    programs[i].fPower = defaultBank->GetProgParm (i, 9);
+                    programs[i].fPower   = defaultBank->GetProgParm (i, 9);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -64,10 +64,10 @@ MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 0:
-                        programs[i].fWave = 0.7f;
-                        programs[i].fSync = 1.0f;
+                        programs[i].fWave    = 0.7f;
+                        programs[i].fSync    = 1.0f;
                         programs[i].fTrigger = 0.9f;
-                        programs[i].fFreq = 0.15f;
+                        programs[i].fFreq    = 0.15f;
                         sprintf (programs[i].name, "1 bar Sine");
                         break;
                     case 1:
@@ -85,23 +85,23 @@ MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
     if (programs)
         setProgram (0);
 
-    oldenv = 0;
-    samp = 0;
-    data2 = 0;
-    on = false;
-    retrigger = false;
-    voices = 0;
-    triggerme = false;
+    oldenv     = 0;
+    samp       = 0;
+    data2      = 0;
+    on         = false;
+    retrigger  = false;
+    voices     = 0;
+    triggerme  = false;
     barstarted = false;
-    beats = 4;
-    ppqPerBar = 4;
-    _ppq = 0;
-    lastppq = 0;
-    _bpm = 120;
-    numerator = 4;
+    beats      = 4;
+    ppqPerBar  = 4;
+    _ppq       = 0;
+    lastppq    = 0;
+    _bpm       = 120;
+    numerator  = 4;
     //modinput=0;
     playing = false;
-    ccsent = false;
+    ccsent  = false;
 
     srand ((unsigned int) time (NULL));
     init();
@@ -444,13 +444,13 @@ void MidiSimpleLFO::getParameterLabel (VstInt32 index, char* label)
 void MidiSimpleLFO::preProcess (void)
 {
     // preparing Proccess
-    sampleRate = getSampleRate();
+    sampleRate            = getSampleRate();
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
-    numerator = 4;
+    numerator       = 4;
     int denominator = 4;
-    lastppq = _ppq;
+    lastppq         = _ppq;
     //playing=false;
     if (timeInfo)
     {
@@ -460,7 +460,7 @@ void MidiSimpleLFO::preProcess (void)
             _ppq = (float) timeInfo->ppqPos;
         if (kVstTimeSigValid & timeInfo->flags)
         {
-            numerator = timeInfo->timeSigNumerator;
+            numerator   = timeInfo->timeSigNumerator;
             denominator = timeInfo->timeSigDenominator;
         }
         if (kVstTransportPlaying & timeInfo->flags)
@@ -519,14 +519,14 @@ void MidiSimpleLFO::preProcess (void)
                 beats = 0.125f;
         }
         double lastbeats = (fmod (lastppq, beats) / beats);
-        _beats = (fmod (_ppq, beats) / beats);
+        _beats           = (fmod (_ppq, beats) / beats);
         //if (_beats<0.01) barstarted=true;
         if (lastbeats > _beats)
             barstarted = true;
     }
     else
     {
-        _bpm = 120.0f;
+        _bpm      = 120.0f;
         ppqPerBar = 4;
     }
     beatsPerSample = _bpm / (beats * 60.0 * sampleRate);
@@ -591,9 +591,9 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             outputs[0].push_back (tomod);
     }
     int channel = FLOAT_TO_CHANNEL015 (fChannel); //outgoing midi channel
-    int data1 = FLOAT_TO_MIDI (fCC);
-    float freq = 27 * fFreq * fFreq * fFreq;
-    int offset = FLOAT_TO_MIDI (fOffset) - 64;
+    int data1   = FLOAT_TO_MIDI (fCC);
+    float freq  = 27 * fFreq * fFreq * fFreq;
+    int offset  = FLOAT_TO_MIDI (fOffset) - 64;
 
     if (fSync >= 0.5f)
     {
@@ -627,13 +627,13 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //find number of samples needed for a whole waveform period
         period = sampleRate / freq; //# of samples per cycle
         //divide that into some pieces (enough to go up and down smoothly)
-        steps = 512.0;
+        steps    = 512.0;
         stepsize = period / steps; //# of samples per step
     }
     else
     {
-        period = 0.0;
-        steps = 1.0;
+        period   = 0.0;
+        steps    = 1.0;
         stepsize = sampleRate / 500.0;
     }
     signed int phase = roundToInt ((fPhase - 0.5) * steps);
@@ -644,7 +644,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
     {
         if (fSync < 0.5 || wave == 5)
             retrigger = true;
-        on = true;
+        on         = true;
         barstarted = false;
     }
 
@@ -664,10 +664,10 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         {
             if (wave < 5)
                 oldenv = 999;
-            ccsent = false;
-            step = 0;
+            ccsent    = false;
+            step      = 0;
             retrigger = false;
-            samp = roundToInt (stepsize) + 1;
+            samp      = roundToInt (stepsize) + 1;
         }
         //for every step, calculate the new value
         if (samp >= roundToInt (stepsize) || (beatsync && fSync >= 0.5))
@@ -741,8 +741,8 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (! ccsent)
                 {
                     int randdata2 = rand() % 128; //random number between 0 and 127
-                    data2 = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
-                    ccsent = true;
+                    data2         = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
+                    ccsent        = true;
                 }
                 else
                     data2 = oldenv;
@@ -752,7 +752,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             else if (wave == 6)
             {
                 int randdata2 = rand() % 128; //random number between 0 and 127
-                data2 = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
+                data2         = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
             }
 
             //for non-random waveforms:

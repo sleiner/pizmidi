@@ -79,8 +79,8 @@ enum
     kCh16Poly,
     kNumParams,
     kNumPrograms = 16,
-    maxPoly = 64,
-    queueSize = 256
+    maxPoly      = 64,
+    queueSize    = 256
 };
 
 struct v
@@ -94,12 +94,12 @@ struct v
     bool sustained;
     void reset()
     {
-        oldness = 0;
-        inch = 0;
-        chan = 0;
-        note = 0;
-        vel = 0;
-        on = false;
+        oldness   = 0;
+        inch      = 0;
+        chan      = 0;
+        note      = 0;
+        vel       = 0;
+        on        = false;
         sustained = false;
     }
     v() { this->reset(); }
@@ -143,7 +143,7 @@ protected:
     virtual void preProcess();
     virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames);
 
-    int voices[16]; //voices per channel
+    int voices[16];       //voices per channel
     v Voice[16][maxPoly]; //
     v Queue[queueSize];
     unsigned int oldness;
@@ -179,8 +179,8 @@ protected:
         midiSort()
         {
             memset (onvelocity, 0, sizeof (onvelocity));
-            centerNote = 60;
-            mode = 0;
+            centerNote   = 60;
+            mode         = 0;
             priorityNote = -1;
         }
     };

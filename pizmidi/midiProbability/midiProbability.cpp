@@ -17,28 +17,28 @@ MidiProbabilityProgram::MidiProbabilityProgram()
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
         param[i] = 0.f;
-    param[kPower] = 0.35f;
-    param[kMode1] = 1.0f;
-    param[kStep1] = 0.5f;
-    param[kOffset1] = 0.0f;
-    param[kProb1] = 0.0f;
-    param[kMode2] = 1.0f;
-    param[kStep2] = 14.5f / 22.f;
-    param[kOffset2] = 0.0f;
-    param[kProb2] = 0.0f;
-    param[kRadius] = 0.5f;
-    param[kRandV] = 0.0f;
-    param[kOctUp] = 0.0f;
-    param[kOctDn] = 0.0f;
-    param[kRandT] = 0.0f;
-    param[kSkip] = 0.0f;
-    param[kChan] = 0.0f;
-    param[kChCh] = 0.0f;
-    param[kTransp] = 0.0f;
-    param[kOffsetV] = 0.0f;
+    param[kPower]     = 0.35f;
+    param[kMode1]     = 1.0f;
+    param[kStep1]     = 0.5f;
+    param[kOffset1]   = 0.0f;
+    param[kProb1]     = 0.0f;
+    param[kMode2]     = 1.0f;
+    param[kStep2]     = 14.5f / 22.f;
+    param[kOffset2]   = 0.0f;
+    param[kProb2]     = 0.0f;
+    param[kRadius]    = 0.5f;
+    param[kRandV]     = 0.0f;
+    param[kOctUp]     = 0.0f;
+    param[kOctDn]     = 0.0f;
+    param[kRandT]     = 0.0f;
+    param[kSkip]      = 0.0f;
+    param[kChan]      = 0.0f;
+    param[kChCh]      = 0.0f;
+    param[kTransp]    = 0.0f;
+    param[kOffsetV]   = 0.0f;
     param[kTranspAmt] = 0.5f;
-    param[kVelAmt] = 0.5f;
-    param[kChannel] = 0.0f;
+    param[kVelAmt]    = 0.5f;
+    param[kChannel]   = 0.0f;
     // default program name
     strcpy (name, "Default");
 }
@@ -93,7 +93,7 @@ void MidiProbability::setProgram (VstInt32 program)
     if (program < numPrograms)
     {
         MidiProbabilityProgram* ap = &programs[program];
-        curProgram = program;
+        curProgram                 = program;
         for (int i = 0; i < kNumParams; i++)
         {
             setParameter (i, ap->param[i]);
@@ -131,7 +131,7 @@ void MidiProbability::setParameter (VstInt32 index, float value)
     {
         MidiProbabilityProgram* ap = &programs[curProgram];
         param[index] = ap->param[index] = value;
-        const float inc = 1.f / 22.f;
+        const float inc                 = 1.f / 22.f;
         if (index == kStep1)
         { //stepsize = "how many fit in half a beat"
             if (param[index] < 1 * inc)
@@ -563,7 +563,7 @@ bool MidiProbability::init (void)
     }
 
     wasplaying = false;
-    isplaying = false;
+    isplaying  = false;
 
     return PizMidi::init();
 }
@@ -572,7 +572,7 @@ void MidiProbability::preProcess (void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -588,7 +588,7 @@ void MidiProbability::preProcess (void)
         for (int i = 0; i < numSlots; i++)
         {
             double offset = (1.0f - 2.0f * param[kOffset1 + numParamsPerSlot * i]) / (stepsize[i] * 2.0f);
-            _beatpos[i] = stepsize[i] * fmod (_ppq + offset, (1.0 / (double) stepsize[i]));
+            _beatpos[i]   = stepsize[i] * fmod (_ppq + offset, (1.0 / (double) stepsize[i]));
         }
     }
 
@@ -613,7 +613,7 @@ void MidiProbability::preProcess (void)
 void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
     char listenchannel = FLOAT_TO_CHANNEL (param[kChannel]);
-    char chch = FLOAT_TO_CHANNEL (param[kChCh]);
+    char chch          = FLOAT_TO_CHANNEL (param[kChCh]);
 
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -621,22 +621,22 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status        = tomod.midiData[0] & 0xf0; // scraping  channel
         const int channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1 = tomod.midiData[1] & 0x7f;
-        const int data2 = tomod.midiData[2] & 0x7f;
+        const int data1   = tomod.midiData[1] & 0x7f;
+        const int data2   = tomod.midiData[2] & 0x7f;
 
         //make 0-velocity notes into "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
         {
-            status = MIDI_NOTEOFF;
+            status            = MIDI_NOTEOFF;
             tomod.midiData[0] = MIDI_NOTEOFF | channel;
         }
 
         bool discard = false;
-        int outch = channel;
-        int outd1 = data1;
-        int outd2 = data2;
+        int outch    = channel;
+        int outd1    = data1;
+        int outd2    = data2;
 
         if (chch == -1)
             chch = rand() % 16;
@@ -697,16 +697,16 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         if (R < p)
                         {
                             char transpose = 0;
-                            char vel = 0;
+                            char vel       = 0;
                             if (mode == chan || mode == multi)
                             {
                                 float r = (float) (rand() % 99);
                                 if (r < p * param[kChan] || mode == chan)
                                 {
-                                    outch = chch;
-                                    tomod.midiData[0] = MIDI_NOTEON | outch;
+                                    outch                              = chch;
+                                    tomod.midiData[0]                  = MIDI_NOTEON | outch;
                                     noteAffected[data1][channel][chan] = outch + 1;
-                                    stop = true;
+                                    stop                               = true;
                                 }
                             }
                             if (mode == disc || mode == multi)
@@ -714,9 +714,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 float r = (float) (rand() % 99);
                                 if (r < p * param[kSkip] || mode == disc)
                                 {
-                                    discard = true;
+                                    discard                            = true;
                                     noteAffected[data1][channel][disc] = 1;
-                                    stop = true;
+                                    stop                               = true;
                                 }
                             }
                             if (mode == octup || mode == multi)
@@ -726,7 +726,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 {
                                     outd1 += 12;
                                     noteAffected[data1][channel][octup] = 12;
-                                    stop = true;
+                                    stop                                = true;
                                 }
                             }
                             if (mode == octdown || mode == multi)
@@ -736,7 +736,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 {
                                     outd1 -= 12;
                                     noteAffected[data1][channel][octdown] = -12;
-                                    stop = true;
+                                    stop                                  = true;
                                 }
                             }
                             if (mode == randtr || mode == multi)
@@ -751,7 +751,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                         transpose = -transpose;
                                     outd1 += transpose;
                                     noteAffected[data1][channel][randtr] = transpose;
-                                    stop = true;
+                                    stop                                 = true;
                                 }
                             }
                             if (mode == transp || mode == multi)
@@ -766,7 +766,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                         transpose = -transpose;
                                     outd1 += transpose;
                                     noteAffected[data1][channel][transp] = transpose;
-                                    stop = true;
+                                    stop                                 = true;
                                 }
                             }
                             if (mode == randvel || mode == multi)
@@ -780,9 +780,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd2 + vel > 127)
                                         vel = -vel;
                                     outd2 += vel;
-                                    tomod.midiData[2] = outd2;
+                                    tomod.midiData[2]                     = outd2;
                                     noteAffected[data1][channel][randvel] = vel;
-                                    stop = true;
+                                    stop                                  = true;
                                 }
                             }
                             if (mode == offsetvel || mode == multi)
@@ -796,9 +796,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd2 + vel > 127)
                                         vel = -vel;
                                     outd2 += vel;
-                                    tomod.midiData[2] = outd2;
+                                    tomod.midiData[2]                       = outd2;
                                     noteAffected[data1][channel][offsetvel] = vel;
-                                    stop = true;
+                                    stop                                    = true;
                                 }
                             }
                             if (outd1 > 127)
@@ -817,13 +817,13 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
             {
                 if (noteAffected[data1][channel][chan] != 0)
                 {
-                    outch = noteAffected[data1][channel][chan] - 1;
-                    tomod.midiData[0] = MIDI_NOTEOFF | outch;
+                    outch                              = noteAffected[data1][channel][chan] - 1;
+                    tomod.midiData[0]                  = MIDI_NOTEOFF | outch;
                     noteAffected[data1][channel][chan] = 0;
                 }
                 if (noteAffected[data1][channel][disc] == 1)
                 {
-                    discard = true;
+                    discard                            = true;
                     noteAffected[data1][channel][disc] = 0;
                 }
                 if (noteAffected[data1][channel][octup] != 0)
@@ -906,15 +906,15 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         if (R < p)
                         {
                             char transpose = 0;
-                            char vel = 0;
+                            char vel       = 0;
                             if (mode == chan || mode == multi)
                             {
                                 float r = (float) (rand() % 99);
                                 if (r < p * param[kChan] || mode == chan)
                                 {
-                                    outch = chch;
+                                    outch             = chch;
                                     tomod.midiData[0] = MIDI_CONTROLCHANGE | outch;
-                                    stop = true;
+                                    stop              = true;
                                 }
                             }
                             if (mode == disc || mode == multi)
@@ -923,7 +923,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 if (r < p * param[kSkip] || mode == disc)
                                 {
                                     discard = true;
-                                    stop = true;
+                                    stop    = true;
                                 }
                             }
                             if (mode == randtr || mode == multi)
@@ -937,9 +937,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd1 + transpose > 127)
                                         transpose = -transpose;
                                     outd1 += transpose;
-                                    tomod.midiData[1] = outd1;
+                                    tomod.midiData[1]                    = outd1;
                                     noteAffected[data1][channel][randtr] = transpose;
-                                    stop = true;
+                                    stop                                 = true;
                                 }
                             }
                             if (mode == randvel || mode == multi)
@@ -953,9 +953,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd2 + vel > 127)
                                         vel = -vel;
                                     outd2 += vel;
-                                    tomod.midiData[2] = outd2;
+                                    tomod.midiData[2]                     = outd2;
                                     noteAffected[data1][channel][randvel] = vel;
-                                    stop = true;
+                                    stop                                  = true;
                                 }
                             }
                         }
@@ -1014,15 +1014,15 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         if (R < p)
                         {
                             char transpose = 0;
-                            char vel = 0;
+                            char vel       = 0;
                             if (mode == chan || mode == multi)
                             {
                                 float r = (float) (rand() % 99);
                                 if (r < p * param[kChan] || mode == chan)
                                 {
-                                    outch = chch;
+                                    outch             = chch;
                                     tomod.midiData[0] = status | outch;
-                                    stop = true;
+                                    stop              = true;
                                 }
                             }
                             if (mode == disc || mode == multi)
@@ -1031,7 +1031,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                 if (r < p * param[kSkip] || mode == disc)
                                 {
                                     discard = true;
-                                    stop = true;
+                                    stop    = true;
                                 }
                             }
                             if (mode == randtr || mode == multi)
@@ -1045,9 +1045,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd1 + transpose > 127)
                                         transpose = -transpose;
                                     outd1 += transpose;
-                                    tomod.midiData[1] = outd1;
+                                    tomod.midiData[1]                    = outd1;
                                     noteAffected[data1][channel][randtr] = transpose;
-                                    stop = true;
+                                    stop                                 = true;
                                 }
                             }
                             if (mode == randvel || mode == multi)
@@ -1061,9 +1061,9 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     else if (outd2 + vel > 127)
                                         vel = -vel;
                                     outd2 += vel;
-                                    tomod.midiData[2] = outd2;
+                                    tomod.midiData[2]                     = outd2;
                                     noteAffected[data1][channel][randvel] = vel;
-                                    stop = true;
+                                    stop                                  = true;
                                 }
                             }
                         }
@@ -1089,7 +1089,7 @@ void MidiProbability::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                     kill.midiData[1] = n;
                     kill.midiData[2] = 0;
                     kill.deltaFrames = samples - 1;
-                    kill.detune = 0;
+                    kill.detune      = 0;
                     outputs[0].push_back (kill);
                     dbg ("stopped, killed note " << n);
                 }

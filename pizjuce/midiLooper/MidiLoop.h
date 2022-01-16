@@ -18,8 +18,8 @@ enum playmodes
 enum hoveringNoteStates
 {
     //if not one of these, it's the index of an existing note
-    No_Note = -1,
-    New_Note = -2,
+    No_Note         = -1,
+    New_Note        = -2,
     Dragging_A_Note = 9999
 };
 
@@ -27,19 +27,19 @@ struct LoopNote
 {
     LoopNote()
     {
-        note = nullptr;
+        note                 = nullptr;
         lastOutputNoteNumber = NOT_PLAYING;
-        lastOutputChannel = NOT_PLAYING;
-        noteOffSample = -1;
-        voice = -1;
+        lastOutputChannel    = NOT_PLAYING;
+        noteOffSample        = -1;
+        voice                = -1;
     }
     LoopNote (PizMidiMessageSequence::mehPtr object, int n, int ch, int offSample, int v)
     {
-        note = object;
+        note                 = object;
         lastOutputNoteNumber = n;
-        lastOutputChannel = ch;
-        noteOffSample = offSample;
-        voice = v;
+        lastOutputChannel    = ch;
+        noteOffSample        = offSample;
+        voice                = v;
     }
     void subtractFromTime (int samples)
     {

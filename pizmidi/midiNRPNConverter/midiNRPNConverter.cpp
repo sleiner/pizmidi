@@ -9,17 +9,17 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiNRPNConverterProgram::MidiNRPNConverterProgram()
 {
     // default Program Values
-    param[kIn] = 0.35f; //NRPN in
-    param[kOut] = 0.25f; //CC out
-    param[kChin] = CHANNEL_TO_FLOAT016 (0); //Any Channel in
-    param[kChout] = CHANNEL_TO_FLOAT016 (0); //same channel out
-    param[kDiscard] = 0.0f; //don't pass on original message
+    param[kIn]      = 0.35f;                   //NRPN in
+    param[kOut]     = 0.25f;                   //CC out
+    param[kChin]    = CHANNEL_TO_FLOAT016 (0); //Any Channel in
+    param[kChout]   = CHANNEL_TO_FLOAT016 (0); //same channel out
+    param[kDiscard] = 0.0f;                    //don't pass on original message
     for (int i = 0; i < kNumSlots; i++)
     {
-        param[i * 4 + 4] = 0.0f; //coarse #
+        param[i * 4 + 4] = 0.0f;                //coarse #
         param[i * 4 + 5] = MIDI_TO_FLOAT_X (0); //fine #
-        param[i * 4 + 6] = 0.0f; //coarse data
-        param[i * 4 + 7] = 0.0f; //fine data
+        param[i * 4 + 6] = 0.0f;                //coarse data
+        param[i * 4 + 7] = 0.0f;                //fine data
     }
     // default program name
     strcpy (name, "Default");
@@ -61,13 +61,13 @@ MidiNRPNConverter::MidiNRPNConverter (audioMasterCallback audioMaster)
 
     for (int ch = 0; ch < 16; ch++)
     {
-        nrpn[ch] = -1;
+        nrpn[ch]       = -1;
         nrpncoarse[ch] = -1;
-        rpn[ch] = -1;
-        rpncoarse[ch] = -1;
-        datafine[ch] = 0;
+        rpn[ch]        = -1;
+        rpncoarse[ch]  = -1;
+        datafine[ch]   = 0;
         datacoarse[ch] = 0;
-        data[ch] = 0;
+        data[ch]       = 0;
     }
 
     init();
@@ -315,10 +315,10 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
 
     for (int j = 0; j < kNumSlots; j++)
     {
-        incc[j] = FLOAT_TO_MIDI2 (param[j * 4 + 4]) - 1;
-        learnIn[j] = FLOAT_TO_MIDI_X (param[j * 4 + 5]) == -1;
-        inputnrpn[j] = FLOAT_TO_MIDI_X (param[j * 4 + 5]) | (incc[j] << 7);
-        outcc[j] = FLOAT_TO_MIDI2 (param[j * 4 + 6]); //1-128 (subtract 1 to use)
+        incc[j]       = FLOAT_TO_MIDI2 (param[j * 4 + 4]) - 1;
+        learnIn[j]    = FLOAT_TO_MIDI_X (param[j * 4 + 5]) == -1;
+        inputnrpn[j]  = FLOAT_TO_MIDI_X (param[j * 4 + 5]) | (incc[j] << 7);
+        outcc[j]      = FLOAT_TO_MIDI2 (param[j * 4 + 6]); //1-128 (subtract 1 to use)
         outputnrpn[j] = FLOAT_TO_MIDI (param[j * 4 + 7]) | ((outcc[j] - 1) << 7);
     }
 
@@ -327,16 +327,16 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short status       = tomod.midiData[0] & 0xf0;       // scraping  channel
+        short channel      = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        short data1        = tomod.midiData[1] & 0x7f;
+        short data2        = tomod.midiData[2] & 0x7f;
 
         bool discard = param[kDiscard] >= 0.3f && param[kDiscard] < 0.7f;
-        bool thru = ! discard;
+        bool thru    = ! discard;
 
-        int chin = FLOAT_TO_CHANNEL016 (param[kChin]); //1-16
-        chout = FLOAT_TO_CHANNEL016 (param[kChout]); //1-16
+        int chin = FLOAT_TO_CHANNEL016 (param[kChin]);  //1-16
+        chout    = FLOAT_TO_CHANNEL016 (param[kChout]); //1-16
         if (chout == 0)
             chout = channel;
 
@@ -372,9 +372,9 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0)
                             {
                                 VstMidiEvent cc = inputs[0][i];
-                                cc.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                cc.midiData[1] = outcc[n] - 1;
-                                cc.midiData[2] = newdata;
+                                cc.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                cc.midiData[1]  = outcc[n] - 1;
+                                cc.midiData[2]  = newdata;
                                 outputs[0].push_back (cc);
                             }
                         }
@@ -383,26 +383,26 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = (outputnrpn[n] & 0x007f);
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = (outputnrpn[n] & 0x007f);
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
                                 if (newdata > 64)
                                     dfine.midiData[2] = newdata;
                                 else
@@ -415,21 +415,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -438,26 +438,26 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
                                 if (newdata > 64)
                                     dfine.midiData[2] = newdata;
                                 else
@@ -470,21 +470,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -522,14 +522,14 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                         if (data1 == 6)
                         { //data entry slider (coarse)
                             datacoarse[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 1;
+                            data[channel - 1]       = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                    = 1;
                         }
                         else if (data1 == 38)
                         { //data entry slider (fine)
                             datafine[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            data[channel - 1]     = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                  = 2;
                         }
                         else if (data1 == 96)
                         { //data increment button
@@ -539,7 +539,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (datacoarse[channel - 1] > 127)
                                     datacoarse[channel - 1] = 127;
                                 data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                                send = 1;
+                                send              = 1;
                             }
                             else
                             {
@@ -547,8 +547,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (data[channel - 1] > 127)
                                     data[channel - 1] = 127;
                                 datacoarse[channel - 1] = (data[channel - 1] & 0x3f80) >> 7;
-                                datafine[channel - 1] = data[channel - 1] & 0x007f;
-                                send = 2;
+                                datafine[channel - 1]   = data[channel - 1] & 0x007f;
+                                send                    = 2;
                             }
                         }
                         else if (data1 == 97)
@@ -559,7 +559,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (datacoarse[channel - 1] < 0)
                                     datacoarse[channel - 1] = 0;
                                 data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                                send = 1;
+                                send              = 1;
                             }
                             else
                             {
@@ -567,8 +567,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (data[channel - 1] < 0)
                                     data[channel - 1] = 0;
                                 datacoarse[channel - 1] = (data[channel - 1] & 0x3f80) >> 7;
-                                datafine[channel - 1] = data[channel - 1] & 0x007f;
-                                send = 2;
+                                datafine[channel - 1]   = data[channel - 1] & 0x007f;
+                                send                    = 2;
                             }
                         }
                         newdata = datacoarse[channel - 1];
@@ -583,9 +583,9 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send == 1)
                             {
                                 VstMidiEvent cc = inputs[0][i];
-                                cc.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                cc.midiData[1] = outcc[n] - 1;
-                                cc.midiData[2] = newdata;
+                                cc.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                cc.midiData[1]  = outcc[n] - 1;
+                                cc.midiData[2]  = newdata;
                                 outputs[0].push_back (cc);
                             }
                         }
@@ -594,31 +594,31 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 if (send == 1)
                                 {
                                     VstMidiEvent dcoarse = inputs[0][i];
-                                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dcoarse.midiData[1] = 6;
-                                    dcoarse.midiData[2] = newdata;
+                                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dcoarse.midiData[1]  = 6;
+                                    dcoarse.midiData[2]  = newdata;
                                     outputs[0].push_back (dcoarse);
                                 }
                                 else if (send == 2)
                                 {
                                     VstMidiEvent dfine = inputs[0][i];
-                                    dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dfine.midiData[1] = 38;
-                                    dfine.midiData[2] = datafine[channel - 1];
+                                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dfine.midiData[1]  = 38;
+                                    dfine.midiData[2]  = datafine[channel - 1];
                                     outputs[0].push_back (dfine);
                                 }
                             }
@@ -628,21 +628,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -651,31 +651,31 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 if (send == 1)
                                 {
                                     VstMidiEvent dcoarse = inputs[0][i];
-                                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dcoarse.midiData[1] = 6;
-                                    dcoarse.midiData[2] = newdata;
+                                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dcoarse.midiData[1]  = 6;
+                                    dcoarse.midiData[2]  = newdata;
                                     outputs[0].push_back (dcoarse);
                                 }
                                 else if (send == 2)
                                 {
                                     VstMidiEvent dfine = inputs[0][i];
-                                    dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dfine.midiData[1] = 38;
-                                    dfine.midiData[2] = datafine[channel - 1];
+                                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dfine.midiData[1]  = 38;
+                                    dfine.midiData[2]  = datafine[channel - 1];
                                     outputs[0].push_back (dfine);
                                 }
                             }
@@ -685,21 +685,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -732,8 +732,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                         if (data1 == 38)
                         { //data entry slider (fine)
                             datafine[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            data[channel - 1]     = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                  = 2;
                         }
                         else if (data1 == 96)
                         { //data increment button
@@ -741,7 +741,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (datafine[channel - 1] > 127)
                                 datafine[channel - 1] = 127;
                             data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            send              = 2;
                         }
                         else if (data1 == 97)
                         { //data decrement button
@@ -749,7 +749,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (datafine[channel - 1] < 0)
                                 datafine[channel - 1] = 0;
                             data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            send              = 2;
                         }
                         newdata = datafine[channel - 1];
 
@@ -763,9 +763,9 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send == 2)
                             {
                                 VstMidiEvent cc = inputs[0][i];
-                                cc.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                cc.midiData[1] = outcc[n] - 1;
-                                cc.midiData[2] = newdata;
+                                cc.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                cc.midiData[1]  = outcc[n] - 1;
+                                cc.midiData[2]  = newdata;
                                 outputs[0].push_back (cc);
                             }
                         }
@@ -774,21 +774,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
                             }
                         }
@@ -797,21 +797,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -820,21 +820,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
                             }
                         }
@@ -843,21 +843,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -890,14 +890,14 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                         if (data1 == 6)
                         { //data entry slider (coarse)
                             datacoarse[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 1;
+                            data[channel - 1]       = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                    = 1;
                         }
                         else if (data1 == 38)
                         { //data entry slider (fine)
                             datafine[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            data[channel - 1]     = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                  = 2;
                         }
                         else if (data1 == 96)
                         { //data increment button
@@ -907,7 +907,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (datacoarse[channel - 1] > 127)
                                     datacoarse[channel - 1] = 127;
                                 data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                                send = 1;
+                                send              = 1;
                             }
                             else
                             {
@@ -915,8 +915,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (data[channel - 1] > 127)
                                     data[channel - 1] = 127;
                                 datacoarse[channel - 1] = (data[channel - 1] & 0x3f80) >> 7;
-                                datafine[channel - 1] = data[channel - 1] & 0x007f;
-                                send = 2;
+                                datafine[channel - 1]   = data[channel - 1] & 0x007f;
+                                send                    = 2;
                             }
                         }
                         else if (data1 == 97)
@@ -927,7 +927,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (datacoarse[channel - 1] < 0)
                                     datacoarse[channel - 1] = 0;
                                 data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                                send = 1;
+                                send              = 1;
                             }
                             else
                             {
@@ -935,8 +935,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                                 if (data[channel - 1] < 0)
                                     data[channel - 1] = 0;
                                 datacoarse[channel - 1] = (data[channel - 1] & 0x3f80) >> 7;
-                                datafine[channel - 1] = data[channel - 1] & 0x007f;
-                                send = 2;
+                                datafine[channel - 1]   = data[channel - 1] & 0x007f;
+                                send                    = 2;
                             }
                         }
                         newdata = datacoarse[channel - 1];
@@ -951,9 +951,9 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send == 1)
                             {
                                 VstMidiEvent cc = inputs[0][i];
-                                cc.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                cc.midiData[1] = outcc[n] - 1;
-                                cc.midiData[2] = newdata;
+                                cc.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                cc.midiData[1]  = outcc[n] - 1;
+                                cc.midiData[2]  = newdata;
                                 outputs[0].push_back (cc);
                             }
                         }
@@ -962,31 +962,31 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 if (send == 1)
                                 {
                                     VstMidiEvent dcoarse = inputs[0][i];
-                                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dcoarse.midiData[1] = 6;
-                                    dcoarse.midiData[2] = newdata;
+                                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dcoarse.midiData[1]  = 6;
+                                    dcoarse.midiData[2]  = newdata;
                                     outputs[0].push_back (dcoarse);
                                 }
                                 else if (send == 2)
                                 {
                                     VstMidiEvent dfine = inputs[0][i];
-                                    dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dfine.midiData[1] = 38;
-                                    dfine.midiData[2] = datafine[channel - 1];
+                                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dfine.midiData[1]  = 38;
+                                    dfine.midiData[2]  = datafine[channel - 1];
                                     outputs[0].push_back (dfine);
                                 }
                             }
@@ -996,21 +996,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -1019,31 +1019,31 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 if (send == 1)
                                 {
                                     VstMidiEvent dcoarse = inputs[0][i];
-                                    dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dcoarse.midiData[1] = 6;
-                                    dcoarse.midiData[2] = newdata;
+                                    dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dcoarse.midiData[1]  = 6;
+                                    dcoarse.midiData[2]  = newdata;
                                     outputs[0].push_back (dcoarse);
                                 }
                                 else if (send == 2)
                                 {
                                     VstMidiEvent dfine = inputs[0][i];
-                                    dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                    dfine.midiData[1] = 38;
-                                    dfine.midiData[2] = datafine[channel - 1];
+                                    dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                    dfine.midiData[1]  = 38;
+                                    dfine.midiData[2]  = datafine[channel - 1];
                                     outputs[0].push_back (dfine);
                                 }
                             }
@@ -1053,21 +1053,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -1100,8 +1100,8 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                         if (data1 == 38)
                         { //data entry slider (fine)
                             datafine[channel - 1] = data2;
-                            data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            data[channel - 1]     = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
+                            send                  = 2;
                         }
                         else if (data1 == 96)
                         { //data increment button
@@ -1109,7 +1109,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (datafine[channel - 1] > 127)
                                 datafine[channel - 1] = 127;
                             data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            send              = 2;
                         }
                         else if (data1 == 97)
                         { //data decrement button
@@ -1117,7 +1117,7 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (datafine[channel - 1] < 0)
                                 datafine[channel - 1] = 0;
                             data[channel - 1] = datafine[channel - 1] | (datacoarse[channel - 1] << 7);
-                            send = 2;
+                            send              = 2;
                         }
                         newdata = datafine[channel - 1];
 
@@ -1131,9 +1131,9 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send == 2)
                             {
                                 VstMidiEvent cc = inputs[0][i];
-                                cc.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                cc.midiData[1] = outcc[n] - 1;
-                                cc.midiData[2] = newdata;
+                                cc.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                cc.midiData[1]  = outcc[n] - 1;
+                                cc.midiData[2]  = newdata;
                                 outputs[0].push_back (cc);
                             }
                         }
@@ -1142,21 +1142,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
                             }
                         }
@@ -1165,21 +1165,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 99;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 99;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 98;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 98;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }
@@ -1188,21 +1188,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dcoarse = inputs[0][i];
-                                dcoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dcoarse.midiData[1] = 6;
-                                dcoarse.midiData[2] = newdata;
+                                dcoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dcoarse.midiData[1]  = 6;
+                                dcoarse.midiData[2]  = newdata;
                                 outputs[0].push_back (dcoarse);
                             }
                         }
@@ -1211,21 +1211,21 @@ void MidiNRPNConverter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                             if (outcc[n] != 0 && send > 0)
                             {
                                 VstMidiEvent ncoarse = inputs[0][i];
-                                ncoarse.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                ncoarse.midiData[1] = 101;
-                                ncoarse.midiData[2] = outcc[n] - 1;
+                                ncoarse.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                ncoarse.midiData[1]  = 101;
+                                ncoarse.midiData[2]  = outcc[n] - 1;
                                 outputs[0].push_back (ncoarse);
 
                                 VstMidiEvent nfine = inputs[0][i];
-                                nfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                nfine.midiData[1] = 100;
-                                nfine.midiData[2] = outputnrpn[n] & 0x007f;
+                                nfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                nfine.midiData[1]  = 100;
+                                nfine.midiData[2]  = outputnrpn[n] & 0x007f;
                                 outputs[0].push_back (nfine);
 
                                 VstMidiEvent dfine = inputs[0][i];
-                                dfine.midiData[0] = MIDI_CONTROLCHANGE | (chout - 1);
-                                dfine.midiData[1] = 38;
-                                dfine.midiData[2] = newdata;
+                                dfine.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
+                                dfine.midiData[1]  = 38;
+                                dfine.midiData[2]  = newdata;
                                 outputs[0].push_back (dfine);
                             }
                         }

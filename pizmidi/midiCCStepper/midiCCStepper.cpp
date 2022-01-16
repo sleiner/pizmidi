@@ -323,13 +323,13 @@ void MidiCCStepper::getParameterDisplay (VstInt32 index, char* text)
 //-----------------------------------------------------------------------------------------
 bool MidiCCStepper::init (void)
 {
-    isplaying = false;
-    wasplaying = false;
-    _bpm = 120;
-    _ppq = 0.;
-    totalSamples = 0;
-    totalSteps = 0;
-    samplesPerStep = 0;
+    isplaying       = false;
+    wasplaying      = false;
+    _bpm            = 120;
+    _ppq            = 0.;
+    totalSamples    = 0;
+    totalSteps      = 0;
+    samplesPerStep  = 0;
     leftOverSamples = 0;
 
     for (int ch = 0; ch < 16; ch++)
@@ -348,7 +348,7 @@ void MidiCCStepper::preProcess()
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo (0xffff); //ALL
 
     if (timeInfo)
     {
@@ -373,21 +373,21 @@ void MidiCCStepper::preProcess()
 
 void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int lowcc = FLOAT_TO_MIDI (param[kLowCC]);
-    const int hicc = FLOAT_TO_MIDI (param[kHighCC]);
+    const int lowcc    = FLOAT_TO_MIDI (param[kLowCC]);
+    const int hicc     = FLOAT_TO_MIDI (param[kHighCC]);
     const int ccoffset = roundToInt (param[kCCOffset] * 254.f) - 127;
-    bool von = param[kValuePower] >= 0.5f;
+    bool von           = param[kValuePower] >= 0.5f;
     if (roundToInt (param[kValueQ] * 63.f))
-        von = false; //128 steps
-    const float vq = (float) (roundToInt (param[kValueQ] * 62.f) + 1); //number of steps (2..64)
-    const float invvq = 127.f / vq;
-    const bool ton = param[kTimePower] >= 0.5f;
-    const bool sync = param[kSync] >= 0.5f;
+        von = false;                                                         //128 steps
+    const float vq       = (float) (roundToInt (param[kValueQ] * 62.f) + 1); //number of steps (2..64)
+    const float invvq    = 127.f / vq;
+    const bool ton       = param[kTimePower] >= 0.5f;
+    const bool sync      = param[kSync] >= 0.5f;
     const bool sendAfter = param[kSendAfter] >= 0.5f;
 
     //const float stepsPerBlock = (float)sampleFrames/(float)samplesPerStep;
     int stepsInThisBlock = 0;
-    int stepsSent = 0;
+    int stepsSent        = 0;
 
     int s = leftOverSamples;
     if (sync)
@@ -416,15 +416,15 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int data1   = tomod.midiData[1] & 0x7f;
+        int data2   = tomod.midiData[2] & 0x7f;
 
         //reset these for every event
         bool discard = false;
-        int outcc = (data1 + ccoffset) & 0x7f;
-        int ch = FLOAT_TO_CHANNEL (param[kChannel]);
+        int outcc    = (data1 + ccoffset) & 0x7f;
+        int ch       = FLOAT_TO_CHANNEL (param[kChannel]);
         if (ch == -1)
             ch = channel; //any channel
 
@@ -463,7 +463,7 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             }
                             if (sendAfter)
                                 expectingCC[channel] = true;
-                            discard = true;
+                            discard           = true;
                             lastcc[data1][ch] = tomod.midiData[2];
                         }
                         else
@@ -471,14 +471,14 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             if (samplesPerStep < tomod.deltaFrames + totalSamples - lastTime)
                             {
                                 //ok, since we got one here...
-                                lastTime = tomod.deltaFrames + totalSamples;
-                                discard = false;
+                                lastTime          = tomod.deltaFrames + totalSamples;
+                                discard           = false;
                                 lastcc[data1][ch] = -1;
                             }
                             else
                             {
-                                discard = true;
-                                expectingCC[ch] = true;
+                                discard           = true;
+                                expectingCC[ch]   = true;
                                 lastcc[data1][ch] = tomod.midiData[2];
                             }
                         }

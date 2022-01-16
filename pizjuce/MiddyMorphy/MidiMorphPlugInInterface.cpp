@@ -10,10 +10,10 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 MidiMorphPlugInInterface::MidiMorphPlugInInterface()
 {
     // Bouml preserved body begin 0003038D
-    this->lastGUIw = 300;
-    this->lastGUIh = 400;
+    this->lastGUIw  = 300;
+    this->lastGUIh  = 400;
     this->samplePos = 0;
-    this->sendPos = 0;
+    this->sendPos   = 0;
     loadDefaultFxb();
     // Bouml preserved body end 0003038D
 }

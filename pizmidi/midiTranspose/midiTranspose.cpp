@@ -74,7 +74,7 @@ MidiTranspose::MidiTranspose (audioMasterCallback audioMaster)
         for (int i = 0; i < 128; i++)
         {
             transposed[c][i] = -999;
-            velocity[c][i] = 0;
+            velocity[c][i]   = 0;
         }
     }
 
@@ -213,11 +213,11 @@ void MidiTranspose::getParameterDisplay (VstInt32 index, char* text)
 
 void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int ch = FLOAT_TO_CHANNEL (param[kInChannel]);
-    const bool split = param[kImmediate] >= 0.5f;
-    const bool usePB = param[kUsePB] >= 0.5f;
+    const int ch       = FLOAT_TO_CHANNEL (param[kInChannel]);
+    const bool split   = param[kImmediate] >= 0.5f;
+    const bool usePB   = param[kUsePB] >= 0.5f;
     const int transpCC = FLOAT_TO_MIDI_X (param[kUseCC]);
-    int transp = getTranspose();
+    int transp         = getTranspose();
 
     if (split && transp != lastTranspose)
     {
@@ -239,7 +239,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     noteon.midiData[1] = midiLimit (n + transp);
                     noteon.midiData[2] = velocity[c][n];
                     noteon.deltaFrames = 0;
-                    transposed[c][n] = transp;
+                    transposed[c][n]   = transp;
                     outputs[0].push_back (noteon);
                 }
             }
@@ -253,10 +253,10 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        int status = tomod.midiData[0] & 0xf0; // scraping  channel
+        int status  = tomod.midiData[0] & 0xf0; // scraping  channel
         int channel = tomod.midiData[0] & 0x0f; // isolating channel
-        int data1 = tomod.midiData[1] & 0x7f;
-        int data2 = tomod.midiData[2] & 0x7f;
+        int data1   = tomod.midiData[1] & 0x7f;
+        int data2   = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
             status = MIDI_NOTEOFF;
@@ -271,7 +271,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     tomod.midiData[1] = data1 + transp;
                     outputs[0].push_back (tomod);
                 }
-                velocity[channel][data1] = tomod.midiData[2];
+                velocity[channel][data1]   = tomod.midiData[2];
                 transposed[channel][data1] = transp;
             }
             else if (status == MIDI_NOTEOFF)
@@ -282,7 +282,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     tomod.midiData[1] = data1 + transposed[channel][data1];
                     outputs[0].push_back (tomod);
                 }
-                velocity[channel][data1] = 0;
+                velocity[channel][data1]   = 0;
                 transposed[channel][data1] = -999;
             }
             else if (status == MIDI_POLYKEYPRESSURE)
@@ -328,7 +328,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                                 noteon.midiData[1] = midiLimit (n + transp);
                                 noteon.midiData[2] = velocity[c][n];
                                 noteon.deltaFrames = tomod.deltaFrames;
-                                transposed[c][n] = transp;
+                                transposed[c][n]   = transp;
                                 outputs[0].push_back (noteon);
                             }
                         }

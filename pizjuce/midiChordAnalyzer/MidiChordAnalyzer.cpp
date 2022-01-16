@@ -50,9 +50,9 @@ MidiChordAnalyzer::MidiChordAnalyzer() : programs (0), curProgram (0)
     programs = new MidiChordAnalyzerPrograms();
     if (! loadDefaultFxb())
     {
-        channel = 0;
-        flats = false;
-        lastUIWidth = 480;
+        channel      = 0;
+        flats        = false;
+        lastUIWidth  = 480;
         lastUIHeight = 200;
     }
 
@@ -89,9 +89,9 @@ void MidiChordAnalyzer::setCurrentProgram (int index)
     curProgram = index;
     programs->setGlobal ("lastProgram", index);
     channel = programs->get (0, index, "Channel");
-    flats = programs->get (0, index, "Flats");
+    flats   = programs->get (0, index, "Flats");
 
-    lastUIWidth = programs->get (0, index, "lastUIWidth");
+    lastUIWidth  = programs->get (0, index, "lastUIWidth");
     lastUIHeight = programs->get (0, index, "lastUIHeight");
 }
 

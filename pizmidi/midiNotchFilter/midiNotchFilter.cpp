@@ -11,11 +11,11 @@ MidiNotchFilterProgram::MidiNotchFilterProgram()
     // default Program Values
     for (int i = 0; i < 4; i++)
     {
-        fmsg[i] = 0;
-        fch[i] = CHANNEL_TO_FLOAT016 (0);
+        fmsg[i]   = 0;
+        fch[i]    = CHANNEL_TO_FLOAT016 (0);
         fvalue[i] = MIDI_TO_FLOAT2 (0);
     }
-    fmode = 0;
+    fmode  = 0;
     foutch = CHANNEL_TO_FLOAT016 (0);
     // default program name
     strcpy (name, "Default");
@@ -36,20 +36,20 @@ MidiNotchFilter::MidiNotchFilter (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fmsg[0] = defaultBank->GetProgParm (i, 0);
-                    programs[i].fch[0] = defaultBank->GetProgParm (i, 1);
+                    programs[i].fmsg[0]   = defaultBank->GetProgParm (i, 0);
+                    programs[i].fch[0]    = defaultBank->GetProgParm (i, 1);
                     programs[i].fvalue[0] = defaultBank->GetProgParm (i, 2);
-                    programs[i].fmsg[1] = defaultBank->GetProgParm (i, 3);
-                    programs[i].fch[1] = defaultBank->GetProgParm (i, 4);
+                    programs[i].fmsg[1]   = defaultBank->GetProgParm (i, 3);
+                    programs[i].fch[1]    = defaultBank->GetProgParm (i, 4);
                     programs[i].fvalue[1] = defaultBank->GetProgParm (i, 5);
-                    programs[i].fmsg[2] = defaultBank->GetProgParm (i, 6);
-                    programs[i].fch[2] = defaultBank->GetProgParm (i, 7);
+                    programs[i].fmsg[2]   = defaultBank->GetProgParm (i, 6);
+                    programs[i].fch[2]    = defaultBank->GetProgParm (i, 7);
                     programs[i].fvalue[2] = defaultBank->GetProgParm (i, 8);
-                    programs[i].fmsg[3] = defaultBank->GetProgParm (i, 9);
-                    programs[i].fch[3] = defaultBank->GetProgParm (i, 10);
+                    programs[i].fmsg[3]   = defaultBank->GetProgParm (i, 9);
+                    programs[i].fch[3]    = defaultBank->GetProgParm (i, 10);
                     programs[i].fvalue[3] = defaultBank->GetProgParm (i, 11);
-                    programs[i].fmode = defaultBank->GetProgParm (i, 12);
-                    programs[i].foutch = defaultBank->GetProgParm (i, 13);
+                    programs[i].fmode     = defaultBank->GetProgParm (i, 12);
+                    programs[i].foutch    = defaultBank->GetProgParm (i, 13);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
             }
@@ -62,115 +62,115 @@ MidiNotchFilter::MidiNotchFilter (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 1:
-                        programs[i].fmsg[0] = 0.15f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.15f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (8.1);
-                        programs[i].fmsg[1] = 0.15f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.15f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (12.1);
-                        programs[i].fmsg[2] = 0.15f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.15f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (74.1);
-                        programs[i].fmsg[3] = 0.15f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.15f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (124.1);
-                        programs[i].fmode = 0.0f;
+                        programs[i].fmode     = 0.0f;
                         sprintf (programs[i].name, "Block Some CCs");
                         break;
                     case 2:
-                        programs[i].fmsg[0] = 0.3f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.3f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.0f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.0f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.0f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.0f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.0f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.0f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.0f;
+                        programs[i].fmode     = 0.0f;
                         sprintf (programs[i].name, "Block All Notes");
                         break;
                     case 3:
-                        programs[i].fmsg[0] = 0.5f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.5f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.6f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.6f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.8f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.8f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.9f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.9f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.0f;
+                        programs[i].fmode     = 0.0f;
                         sprintf (programs[i].name, "Block Other Stuff");
                         break;
                     case 4:
-                        programs[i].fmsg[0] = 0.2f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.2f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.0f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.0f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.0f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.0f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.0f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.0f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.8f;
+                        programs[i].fmode     = 0.8f;
                         sprintf (programs[i].name, "Pass Only CCs");
                         break;
                     case 5:
-                        programs[i].fmsg[0] = 0.3f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.3f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.0f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.0f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.0f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.0f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.0f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.0f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.8f;
+                        programs[i].fmode     = 0.8f;
                         sprintf (programs[i].name, "Pass Only Notes");
                         break;
                     case 6:
-                        programs[i].fmsg[0] = 0.0f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.0f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.0f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.0f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.0f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.0f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.0f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.0f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.0f;
+                        programs[i].fmode     = 0.0f;
                         sprintf (programs[i].name, "Block Nothing");
                         break;
                     case 7:
-                        programs[i].fmsg[0] = 0.0f;
-                        programs[i].fch[0] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[0]   = 0.0f;
+                        programs[i].fch[0]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[0] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[1] = 0.0f;
-                        programs[i].fch[1] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[1]   = 0.0f;
+                        programs[i].fch[1]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[1] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[2] = 0.0f;
-                        programs[i].fch[2] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[2]   = 0.0f;
+                        programs[i].fch[2]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[2] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmsg[3] = 0.0f;
-                        programs[i].fch[3] = CHANNEL_TO_FLOAT016 (0);
+                        programs[i].fmsg[3]   = 0.0f;
+                        programs[i].fch[3]    = CHANNEL_TO_FLOAT016 (0);
                         programs[i].fvalue[3] = MIDI_TO_FLOAT2 (0);
-                        programs[i].fmode = 0.8f;
+                        programs[i].fmode     = 0.8f;
                         sprintf (programs[i].name, "Pass Nothing");
                         break;
                     default:
@@ -690,13 +690,13 @@ void MidiNotchFilter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
-        short data1 = tomod.midiData[1] & 0x7f;
+        short status       = tomod.midiData[0] & 0xf0;       // scraping  channel
+        short channel      = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        short data1        = tomod.midiData[1] & 0x7f;
         //short data2      = tomod.midiData[2] & 0x7f;
 
         bool discard = false;
-        bool match = false;
+        bool match   = false;
 
         int msg[4];
         int ch[4];
@@ -760,7 +760,7 @@ void MidiNotchFilter::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                 if (FLOAT_TO_CHANNEL016 (foutch) > 0)
                 {
                     tomod.midiData[0] = status | ((FLOAT_TO_CHANNEL016 (foutch)) - 1);
-                    discard = false;
+                    discard           = false;
                 }
             }
         }

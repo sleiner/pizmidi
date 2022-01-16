@@ -32,8 +32,8 @@ MidiNoteMapProgram::MidiNoteMapProgram()
         param[kNotes + i] = MIDI_TO_FLOAT_X (i);
     }
     param[kChannel] = 0.f;
-    param[kReset] = 0.4f;
-    param[kClear] = 0.4f;
+    param[kReset]   = 0.4f;
+    param[kClear]   = 0.4f;
     strcpy (name, "Default");
 }
 
@@ -192,9 +192,9 @@ void MidiNoteMap::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        const int status = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int channel = tomod.midiData[0] & 0x0f; // isolating channel (1-16)
-        const int note = tomod.midiData[1] & 0x7f;
+        const int status   = tomod.midiData[0] & 0xf0; // scraping  channel
+        const int channel  = tomod.midiData[0] & 0x0f; // isolating channel (1-16)
+        const int note     = tomod.midiData[1] & 0x7f;
         //const int velocity = tomod.midiData[2] & 0x7f;
 
         bool discard = false;

@@ -122,15 +122,15 @@ WebBrowserPluginEditor::~WebBrowserPluginEditor()
     getFilter()->removeChangeListener (this);
     //[/Destructor_pre]
 
-    reloadButton = nullptr;
-    wb = nullptr;
-    backButton = nullptr;
+    reloadButton  = nullptr;
+    wb            = nullptr;
+    backButton    = nullptr;
     forwardButton = nullptr;
-    homeButton = nullptr;
-    stopButton = nullptr;
-    urlBar = nullptr;
-    goButton = nullptr;
-    resizer = nullptr;
+    homeButton    = nullptr;
+    stopButton    = nullptr;
+    urlBar        = nullptr;
+    goButton      = nullptr;
+    resizer       = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -158,7 +158,7 @@ void WebBrowserPluginEditor::resized()
     goButton->setBounds (getWidth() - 45, 0, 40, 22);
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     //[UserResized] Add your own custom resize handling here..
-    getFilter()->lastUIWidth = getWidth();
+    getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
     //[/UserResized]
 }
@@ -242,7 +242,7 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     const float newGain = filter->getParameter (0);
-    String URL = filter->getURL();
+    String URL          = filter->getURL();
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();

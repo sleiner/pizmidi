@@ -25,8 +25,8 @@ public:
     virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
     virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
 
-    virtual void setProgramName (char* name) = 0;
-    virtual void getProgramName (char* name) = 0;
+    virtual void setProgramName (char* name)                                           = 0;
+    virtual void getProgramName (char* name)                                           = 0;
     virtual bool getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text) = 0;
 
     virtual void setParameter (VstInt32 index, float value) = 0;
@@ -34,7 +34,7 @@ public:
     virtual float getParameter (VstInt32 index) = 0;
     virtual void getParameterLabel (VstInt32 index, char* label);
     virtual void getParameterDisplay (VstInt32 index, char* text) = 0;
-    virtual void getParameterName (VstInt32 index, char* text) = 0;
+    virtual void getParameterName (VstInt32 index, char* text)    = 0;
 
     virtual bool getVendorString (char* text);
     virtual bool getProductString (char* text);

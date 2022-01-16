@@ -10,7 +10,7 @@ class ClickableLabelListener
 {
 public:
     virtual ~ClickableLabelListener(){};
-    virtual void clickableLabelMouseDown (ClickableLabel* label, const MouseEvent& e) = 0;
+    virtual void clickableLabelMouseDown (ClickableLabel* label, const MouseEvent& e)        = 0;
     virtual void clickableLabelMouseDoubleClick (ClickableLabel* label, const MouseEvent& e) = 0;
 };
 
@@ -20,7 +20,7 @@ public:
     ClickableLabel (const String& _name, const String& _text)
         : Label (_name, _text)
     {
-        id = 0;
+        id       = 0;
         listener = 0;
         setRepaintsOnMouseActivity (true);
     }

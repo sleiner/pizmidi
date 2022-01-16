@@ -151,7 +151,7 @@ void PizMidiMessageSequence::addEvent (const MidiMessage& newMessage,
 void PizMidiMessageSequence::addNote (const MidiMessage& noteOn, const MidiMessage& noteOff, double timeAdjustment)
 {
     mehPtr const on = new MidiEventHolder (noteOn);
-    double t = timeAdjustment + noteOn.getTimeStamp();
+    double t        = timeAdjustment + noteOn.getTimeStamp();
     on->message.setTimeStamp (t);
     int i;
     for (i = list.size(); --i >= 0;)
@@ -160,7 +160,7 @@ void PizMidiMessageSequence::addNote (const MidiMessage& noteOn, const MidiMessa
     list.insert (i + 1, on);
 
     mehPtr const off = new MidiEventHolder (noteOff);
-    t = timeAdjustment + noteOff.getTimeStamp();
+    t                = timeAdjustment + noteOff.getTimeStamp();
     off->message.setTimeStamp (t);
     for (i = list.size(); --i >= 0;)
         if (list.getUnchecked (i)->message.getTimeStamp() <= t)
@@ -228,7 +228,7 @@ void PizMidiMessageSequence::addSequence (const PizMidiMessageSequence& other,
     for (int i = 0; i < other.list.size(); ++i)
     {
         const MidiMessage& m = other.list.getUnchecked (i)->message;
-        const double t = m.getTimeStamp();
+        const double t       = m.getTimeStamp();
 
         if (t >= firstAllowableTime && t < endOfAllowableDestTimes)
         {
@@ -247,7 +247,7 @@ void PizMidiMessageSequence::addSequence (const PizMidiMessageSequence& other)
     for (int i = 0; i < other.list.size(); ++i)
     {
         const MidiMessage& m = other.list.getUnchecked (i)->message;
-        const double t = m.getTimeStamp();
+        const double t       = m.getTimeStamp();
 
         mehPtr const newOne = new MidiEventHolder (m);
         newOne->message.setTimeStamp (t);
@@ -263,7 +263,7 @@ int PizMidiMessageSequence::compareElements (const mehPtr first,
                                              const mehPtr second) throw()
 {
     const double diff = first->message.getTimeStamp()
-                        - second->message.getTimeStamp();
+                      - second->message.getTimeStamp();
 
     return (diff > 0) - (diff < 0);
 }
@@ -286,9 +286,9 @@ void PizMidiMessageSequence::updateMatchedPairs (bool sortEvents)
         if (m1.isNoteOn())
         {
             list.getUnchecked (i)->noteOffObject = nullptr;
-            const int note = m1.getNoteNumber();
-            const int chan = m1.getChannel();
-            const int len = list.size();
+            const int note                       = m1.getNoteNumber();
+            const int chan                       = m1.getChannel();
+            const int len                        = list.size();
 
             for (int j = i + 1; j < len; ++j)
             {
@@ -370,7 +370,7 @@ void PizMidiMessageSequence::createControllerUpdatesForTime (const int channelNu
                                                              const double time,
                                                              OwnedArray<MidiMessage>& dest)
 {
-    bool doneProg = false;
+    bool doneProg       = false;
     bool donePitchWheel = false;
     Array<int> doneControllers;
     doneControllers.ensureStorageAllocated (32);

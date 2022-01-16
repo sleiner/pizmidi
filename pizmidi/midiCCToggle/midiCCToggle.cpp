@@ -208,16 +208,16 @@ void MidiCCToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
 
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
+        short status  = tomod.midiData[0] & 0xf0; // scraping  channel
         short channel = tomod.midiData[0] & 0x0f; // isolating channel
-        short data1 = tomod.midiData[1] & 0x7f;
-        short data2 = tomod.midiData[2] & 0x7f;
+        short data1   = tomod.midiData[1] & 0x7f;
+        short data2   = tomod.midiData[2] & 0x7f;
 
-        bool on = fParam01 >= 0.5f;
-        short lownote = FLOAT_TO_MIDI (fParam02);
-        short highnote = FLOAT_TO_MIDI (fParam03);
-        short onvalue = FLOAT_TO_MIDI (fParam05);
-        short offvalue = FLOAT_TO_MIDI (fParam06);
+        bool on          = fParam01 >= 0.5f;
+        short lownote    = FLOAT_TO_MIDI (fParam02);
+        short highnote   = FLOAT_TO_MIDI (fParam03);
+        short onvalue    = FLOAT_TO_MIDI (fParam05);
+        short offvalue   = FLOAT_TO_MIDI (fParam06);
         short outchannel = FLOAT_TO_CHANNEL016 (fParam07) - 1;
 
         if (outchannel == -1)
@@ -232,13 +232,13 @@ void MidiCCToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                 {
                     if (held_notes[data1][channel])
                     {
-                        tomod.midiData[0] = MIDI_CONTROLCHANGE | outchannel;
-                        tomod.midiData[2] = (char) offvalue;
+                        tomod.midiData[0]          = MIDI_CONTROLCHANGE | outchannel;
+                        tomod.midiData[2]          = (char) offvalue;
                         held_notes[data1][channel] = false;
                     }
                     else
                     {
-                        tomod.midiData[2] = (char) onvalue;
+                        tomod.midiData[2]          = (char) onvalue;
                         held_notes[data1][channel] = true;
                     }
                 }

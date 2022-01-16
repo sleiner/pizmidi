@@ -19,11 +19,11 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 MidiVelocityScaleProgram::MidiVelocityScaleProgram()
 {
     // default Program Values
-    fVel1 = MIDI_TO_FLOAT (1);
-    fVel2 = MIDI_TO_FLOAT (127);
-    fOffset = MIDI_TO_FLOAT (63);
-    fOffVel1 = MIDI_TO_FLOAT (0);
-    fOffVel2 = MIDI_TO_FLOAT (127);
+    fVel1      = MIDI_TO_FLOAT (1);
+    fVel2      = MIDI_TO_FLOAT (127);
+    fOffset    = MIDI_TO_FLOAT (63);
+    fOffVel1   = MIDI_TO_FLOAT (0);
+    fOffVel2   = MIDI_TO_FLOAT (127);
     fOffOffset = MIDI_TO_FLOAT (63);
     // default program name
     strcpy (name, "Default");
@@ -44,11 +44,11 @@ MidiVelocityScale::MidiVelocityScale (audioMasterCallback audioMaster)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fVel1 = defaultBank->GetProgParm (i, 0);
-                    programs[i].fVel2 = defaultBank->GetProgParm (i, 1);
-                    programs[i].fOffset = defaultBank->GetProgParm (i, 2);
-                    programs[i].fOffVel1 = defaultBank->GetProgParm (i, 3);
-                    programs[i].fOffVel2 = defaultBank->GetProgParm (i, 4);
+                    programs[i].fVel1      = defaultBank->GetProgParm (i, 0);
+                    programs[i].fVel2      = defaultBank->GetProgParm (i, 1);
+                    programs[i].fOffset    = defaultBank->GetProgParm (i, 2);
+                    programs[i].fOffVel1   = defaultBank->GetProgParm (i, 3);
+                    programs[i].fOffVel2   = defaultBank->GetProgParm (i, 4);
                     programs[i].fOffOffset = defaultBank->GetProgParm (i, 5);
                     strcpy (programs[i].name, defaultBank->GetProgramName (i));
                 }
@@ -242,13 +242,13 @@ void MidiVelocityScale::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
     {
         //copying event "i" from input (with all its fields)
         VstMidiEvent tomod = inputs[0][i];
-        short status = tomod.midiData[0] & 0xf0; // scraping  channel
-        short channel = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
+        short status       = tomod.midiData[0] & 0xf0;       // scraping  channel
+        short channel      = (tomod.midiData[0] & 0x0f) + 1; // isolating channel (1-16)
         //int data1      = tomod.midiData[1] & 0x7f;
         int data2 = tomod.midiData[2] & 0x7f;
         if (status == MIDI_NOTEON && data2 == 0)
         {
-            status = MIDI_NOTEOFF;
+            status            = MIDI_NOTEOFF;
             tomod.midiData[0] = MIDI_NOTEOFF | channel - 1;
         }
 
@@ -272,8 +272,8 @@ void MidiVelocityScale::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
 
         else if (status == MIDI_NOTEOFF)
         {
-            int vel1 = FLOAT_TO_MIDI (fOffVel1);
-            int vel2 = FLOAT_TO_MIDI (fOffVel2);
+            int vel1          = FLOAT_TO_MIDI (fOffVel1);
+            int vel2          = FLOAT_TO_MIDI (fOffVel2);
             signed int offset = FLOAT_TO_MIDI (fOffOffset) - 63;
 
             float newvelocity = (float) (MAP_TO_MIDI (data2, vel1, vel2, 0, 127) + offset);
