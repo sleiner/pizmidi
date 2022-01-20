@@ -14,20 +14,35 @@ target_compile_definitions(
             JUCE_DISPLAY_SPLASH_SCREEN=0 #
             JUCE_VST3_CAN_REPLACE_VST2=0)
 
-function(_piz_set_target_default_property target property default_value)
-  get_target_property(value "${target}" "${property}")
-  if("${value}" STREQUAL "value-NOTFOUND")
-    set_target_properties("${target}" PROPERTIES "${property}"
-                                                 "${default_value}")
-  endif()
-endfunction(_piz_set_target_default_property)
-
+# Add a pizMidi plugin. This is a wrapper around juce_add_plugin which sets up
+# some common properties for all plugins. The arguments are the same as
+# juce_add_plugin except for the following additions/modifications:
+#
+# * NEEDS_WEB_BROWSER defaults to FALSE if not given
+# * NEEDS_CURL will always be the same as NEEDS_WEB_BROWSER
 function(piz_add_plugin target)
+  set(options "")
+  set(oneValueArgs NEEDS_WEB_BROWSER NEEDS_CURL)
+  set(multiValueArgs "")
+  cmake_parse_arguments(PIZ_ARG "${options}" "${oneValueArgs}"
+                        "${multiValueArgs}" ${ARGN})
+
+  # The need for a web browser must be explicitly requested:
+  if(NOT DEFINED PIZ_ARG_NEEDS_WEB_BROWSER)
+    set(PIZ_ARG_NEEDS_WEB_BROWSER FALSE)
+  endif()
+
+  # For now, these are the same
+  set(PIZ_ARG_NEEDS_CURL "${PIZ_ARG_NEEDS_WEB_BROWSER}")
+
   # Set up the plugin with JUCE
   juce_add_plugin(
     "${target}"
     # Plugin specifics:
-    ${ARGN}
+    ${PIZ_ARG_UNPARSED_ARGUMENTS}
+    # Default values set by this wrapper:
+    NEEDS_CURL ${PIZ_ARG_NEEDS_CURL}
+    NEEDS_WEB_BROWSER ${PIZ_ARG_NEEDS_WEB_BROWSER}
     # Common values:
     FORMATS VST3
     COMPANY_NAME "Pizeo"
@@ -50,11 +65,9 @@ function(piz_add_plugin target)
   # Add plugin to installer
   piz_add_to_installer("${target}")
 
-  # Ensure that JUCE_NEEDS_WEB_BROWSER is always defined:
-  _piz_set_target_default_property(${target} JUCE_NEEDS_WEB_BROWSER FALSE)
-
-  # Ensure that JUCE_WEB_BROWSER matches JUCE_NEEDS_WEB_BROWSER
-  get_target_property(has_web_browser ${target} JUCE_NEEDS_WEB_BROWSER)
-  target_compile_definitions("${target}"
-                             PUBLIC JUCE_WEB_BROWSER=$<BOOL:${has_web_browser}>)
+  # Ensure that JUCE_WEB_BROWSER/JUCE_USE_CURL matches
+  # JUCE_NEEDS_WEB_BROWSER/JUCE_NEEDS_CURL
+  target_compile_definitions(
+    "${target}" PUBLIC JUCE_WEB_BROWSER=$<BOOL:${PIZ_ARG_NEEDS_WEB_BROWSER}>
+                       JUCE_USE_CURL=$<BOOL:${PIZ_ARG_NEEDS_CURL}>)
 endfunction(piz_add_plugin)
