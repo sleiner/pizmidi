@@ -48,14 +48,6 @@ function(piz_add_plugin target)
     COMPANY_NAME "Pizeo"
     PLUGIN_MANUFACTURER_CODE "Pzeo")
 
-  # Set language standards
-  set_target_properties(
-    "${target}"
-    PROPERTIES CXX_STANDARD 17
-               CXX_EXTENSIONS OFF
-               C_STANDARD 17
-               C_EXTENSIONS OFF)
-
   # Add common code and options
   target_link_libraries(
     "${target}"
