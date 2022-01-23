@@ -17,8 +17,15 @@ sizeof(void*) = ${CMAKE_SIZEOF_VOID_P} detected! \
 You are trying to configure a non-64 bit build, which is not supported.")
 endif()
 
+option(PIZ_ENABLE_TESTS "If ON, test targets are available" ON)
+
 include(cmake/installer.cmake)
 include(cmake/dependencies.cmake)
 
 add_subdirectory(pizjuce)
 add_subdirectory(pizmidi)
+
+if(${PIZ_ENABLE_TESTS})
+  enable_testing()
+  add_subdirectory(test)
+endif()

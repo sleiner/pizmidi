@@ -38,7 +38,7 @@ jobs:
         env:
             # Unfortunately, Ccache is not available yet for Windows and MSVC
             CCACHE_AVAILABLE: ${{ matrix.config.os == 'macos-11' || matrix.config.os == 'ubuntu-20.04' }}
-            CMAKE_ADDITIONAL_OPTIONS: ""
+            CMAKE_ADDITIONAL_OPTIONS: "-D PIZ_ENABLE_TESTS=OFF"
         steps:
             - name: Install toolchain (macOS)
               if: runner.os == 'macOS'
