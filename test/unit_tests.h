@@ -48,7 +48,7 @@ protected:
     [[nodiscard]] virtual std::unique_ptr<MidiProcessor> generateProcessor() const = 0;
 
     std::unique_ptr<MidiProcessor> processor_;
-    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters_;
+    MidiProcessor::ParamList parameters_;
 };
 
 #define PROCESSOR_TEST_INTERNAL(classname, suffix)                        \

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include <memory>
+#include <utility>
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_core/juce_core.h>
@@ -12,20 +13,47 @@
 namespace piz
 {
 
+using juce::AudioProcessorParameter;
 using juce::AudioProcessorValueTreeState;
 using juce::Identifier;
 using juce::String;
 using juce::ValueTree;
+
+class BypassParam : public juce::AudioParameterChoice
+{
+public:
+    BypassParam (String const& parameterID)
+        : juce::AudioParameterChoice (parameterID,
+
+                                      // We present this as the inverse version of bypass:
+                                      // A switch which turns processing on or off.
+                                      "Processing",
+
+                                      // For a bypass parameter, we have this association:
+                                      //   0 => not bypassed <=> Processing = On
+                                      //   1 =>     bypassed <=> Processing = Off
+                                      // So the order of elements is very important here.
+                                      { "On", "Off" },
+
+                                      // The default value is Processing = On.
+                                      0)
+    {
+    }
+};
 
 class SinglePlugin : public juce::AudioProcessor
 {
 public:
     SinglePlugin (std::unique_ptr<MidiProcessor> processor)
         : juce::AudioProcessor (BusesProperties()), // no audio input or output
-          currentState_ (*this, nullptr, idOfSettings(), createLayout (*processor)),
+          currentState_ (*this,
+                         nullptr,
+                         idOfSettings(),
+                         createLayout (processor.get(), globalParams_)),
           fullState_ (idOfSettings(), processor->getName(), 1, 1),
           processor_ (std::move (processor))
     {
+        jassert (globalParams_.bypassed != nullptr);
         jassert (processor_ != nullptr);
     }
 
@@ -93,18 +121,38 @@ public:
     }
 
 private:
-    static AudioProcessorValueTreeState::ParameterLayout createLayout (MidiProcessor& processor)
+    struct GlobalParameters
     {
-        auto params = processor.createParameters();
+        BypassParam* bypassed = nullptr;
+    };
+
+    static AudioProcessorValueTreeState::ParameterLayout createLayout (
+        MidiProcessor* processor,
+        GlobalParameters& globalParams)
+    {
+        jassert (processor != nullptr);
+
+        MidiProcessor::ParamList params;
+
+        // Global Parameters
+        auto bypassed         = std::make_unique<BypassParam> ("processing");
+        globalParams.bypassed = bypassed.get();
+        params.push_back (std::move (bypassed));
+
+        // Plugin Parameters
+        params.splice (params.end(), processor->createParameters());
+
         return { params.begin(), params.end() };
     }
+
+    AudioProcessorParameter* getBypassParameter() const override { return globalParams_.bypassed; }
 
     bool isBypassed() const
     {
         auto bypassParam = getBypassParameter();
         if (bypassParam != nullptr)
         {
-            return bypassParam->getValue() != 0;
+            return bypassParam->getValue() == 1.0f;
         }
 
         // If no bypass parameter exists, we cannot be bypassed by it.
@@ -118,6 +166,9 @@ private:
     // Number of MIDI banks / programs which can each store a set of plugin settings
     int numBanks() const { return 128; }
     int numPrograms() const { return 128; }
+
+    /// Represents the global (processor-independent) plugin parameters
+    GlobalParameters globalParams_;
 
     /// Represents the AudioProcessorValueTreeState of the currently active program
     AudioProcessorValueTreeState currentState_;

@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include <cstdint>
+#include <list>
 #include <memory>
 #include <utility>
-#include <vector>
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_core/juce_core.h>
@@ -36,6 +36,8 @@ public:
     using RangedParameter = juce::RangedAudioParameter;
     using String          = juce::String;
 
+    using ParamList = std::list<std::unique_ptr<RangedParameter>>;
+
     enum class Status
     {
         kActive,
@@ -49,8 +51,8 @@ public:
     static const int kNumMidiNotes    = 128;
 
     //==============================================================================================
-    [[nodiscard]] virtual String getName() const                                           = 0;
-    [[nodiscard]] virtual std::vector<std::unique_ptr<RangedParameter>> createParameters() = 0;
+    [[nodiscard]] virtual String getName() const       = 0;
+    [[nodiscard]] virtual ParamList createParameters() = 0;
 
     //==============================================================================================
     virtual void processMessages (MidiBuffer& messages, Status status) = 0;
@@ -63,8 +65,8 @@ protected:
     }
 
     template <class ParamType>
-    ParamType* addTo (std::vector<std::unique_ptr<RangedParameter>>& list,
-                      std::unique_ptr<ParamType> param)
+    static ParamType* addTo (ParamList& list,
+                             std::unique_ptr<ParamType> param)
     {
         auto rawPtr = param.get();
         list.push_back (std::move (param));

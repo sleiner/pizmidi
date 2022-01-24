@@ -4,6 +4,7 @@
 #include "piz/MidiProcessor.h"
 
 #include <cstdint>
+#include <list>
 #include <utility>
 
 #include "piz/Array.h"
@@ -18,9 +19,9 @@ class Channelize : public MidiProcessor
     };
 
 public:
-    std::vector<std::unique_ptr<RangedParameter>> createParameters() override
+    std::list<std::unique_ptr<RangedParameter>> createParameters() override
     {
-        std::vector<std::unique_ptr<RangedParameter>> list;
+        std::list<std::unique_ptr<RangedParameter>> list;
         params_.outChannel = addTo (list,
                                     std::make_unique<juce::AudioParameterInt> (
                                         getParamID ("outChannel"), // ID
