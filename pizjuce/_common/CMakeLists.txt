@@ -21,7 +21,8 @@ target_compile_definitions(
   INTERFACE JUCER_ENABLE_GPL_MODE=1 #
             JUCE_DISABLE_JUCE_VERSION_PRINTING=1 #
             JUCE_DISPLAY_SPLASH_SCREEN=0 #
-            JUCE_VST3_CAN_REPLACE_VST2=0)
+            JUCE_VST3_CAN_REPLACE_VST2=0 #
+            JUCE_VST3_EMULATE_MIDI_CC_WITH_PARAMETERS=0)
 
 # Add a pizMidi plugin. This is a wrapper around juce_add_plugin which sets up
 # some common properties for all plugins. The arguments are the same as
