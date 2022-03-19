@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "juce_core/juce_core.h"
 #include "juce_graphics/juce_graphics.h"
 #include "juce_gui_basics/juce_gui_basics.h"
@@ -31,5 +33,5 @@ public:
 
     void drawPopupMenuBackground (Graphics& g, int width, int height) override;
 
-    DropShadower* createDropShadowerForComponent (juce::Component* comp) override;
+    std::unique_ptr<DropShadower> createDropShadowerForComponent (juce::Component& comp) override;
 };

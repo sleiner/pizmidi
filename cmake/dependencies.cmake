@@ -18,7 +18,7 @@ endfunction(piz_makeavailable)
 FetchContent_Declare(
   juce
   GIT_REPOSITORY https://github.com/sleiner/JUCE.git
-  GIT_TAG 5a51ae15aa69a00d50b0a97d5e7a20e7acdfccab # 6.1.4 patched
+  GIT_TAG 1bd2c573f8f73320f2d994cd838a46f85e749ac5 # 6.1.6 patched
 )
 piz_makeavailable(juce)
 
