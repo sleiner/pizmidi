@@ -1,7 +1,7 @@
 #ifndef PizKeyboardPLUGINFILTER_H
 #define PizKeyboardPLUGINFILTER_H
 
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizAudioProcessor.h"
 
 enum parameters
 {

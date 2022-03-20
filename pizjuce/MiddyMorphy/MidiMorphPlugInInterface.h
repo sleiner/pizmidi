@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../_common/PizAudioProcessor.h"
 #include "MidiMorph.h"
+#include "piz/PizAudioProcessor.h"
 
 namespace juce
 {

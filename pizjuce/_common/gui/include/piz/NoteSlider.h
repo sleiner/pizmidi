@@ -4,7 +4,7 @@
 #include "juce_core/juce_core.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/midistuff.h"
+#include "piz/midistuff.h"
 
 class NoteSlider : public juce::Slider
 {

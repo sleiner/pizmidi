@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText:  2021 Simon Leiner
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "BankStorage.h"
+#include "piz/BankStorage.h"
 
 BankStorage::BankStorage (juce::Identifier name, int numBanks, int numPrograms)
     : values_ (name), numBanks_ (numBanks), numPrograms_ (numPrograms)

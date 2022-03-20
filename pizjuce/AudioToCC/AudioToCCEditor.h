@@ -23,8 +23,8 @@
 #include "juce_core/juce_core.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/VSTSlider.h"
 #include "AudioToCC.h"
+#include "piz/VSTSlider.h"
 
 class DecibelMeter : public Slider
 {

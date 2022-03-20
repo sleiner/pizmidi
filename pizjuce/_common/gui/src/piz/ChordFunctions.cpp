@@ -1,4 +1,4 @@
-#include "ChordFunctions.h"
+#include "piz/ChordFunctions.h"
 
 PizChord::PizChord (Array<int> newChord)
 {

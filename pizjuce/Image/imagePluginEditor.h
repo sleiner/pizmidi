@@ -5,9 +5,9 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 #include "juce_gui_extra/juce_gui_extra.h"
 
-#include "../_common/ChannelSlider.h"
 #include "imagePlugin.h"
 #include "MidiPad.h"
+#include "piz/ChannelSlider.h"
 
 class imagePluginEditor : public AudioProcessorEditor,
                           public Button::Listener,

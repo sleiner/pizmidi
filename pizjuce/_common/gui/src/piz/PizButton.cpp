@@ -20,7 +20,7 @@
 //[Headers] You can add your own extra header files here...
 //[/Headers]
 
-#include "PizButton.h"
+#include "piz/PizButton.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]

@@ -1133,7 +1133,7 @@ BEGIN_JUCER_METADATA
               virtualName="" explicitFocusOrder="0" pos="14Rr 333 54 18" buttonText="Export..."
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <JUCERCOMP name="" id="2753f22783a7a3b6" memberName="component" virtualName=""
-             explicitFocusOrder="0" pos="8 5 48 24" sourceFile="../_common/PizButton.cpp"
+             explicitFocusOrder="0" pos="8 5 48 24" sourceFile="../_common/gui/include/piz/PizButton.cpp"
              constructorParams=""/>
   <TOGGLEBUTTON name="new toggle button" id="e334487eca358d4f" memberName="toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="6Rr 49 61 21" buttonText="active"

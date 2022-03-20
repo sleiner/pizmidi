@@ -1,181 +1,107 @@
-#include "midiChannelize.hpp"
+// SPDX-FileCopyrightText:  2011 Reuben Vinal, 2022 Simon Leiner
+// SPDX-License-Identifier: GPL-3.0-only
 
-//-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+#include "piz/MidiProcessor.h"
+
+#include <cstdint>
+#include <list>
+#include <utility>
+
+#include "piz/Array.h"
+
+namespace piz
 {
-    return new MidiChannelize (audioMaster);
-}
-
-MidiChannelizeProgram::MidiChannelizeProgram()
+class Channelize : public MidiProcessor
 {
-    // default Program Values
-    fChannel = CHANNEL_TO_FLOAT016 (1);
-
-    vst_strncpy (name, "MIDI Channeliser", kVstMaxProgNameLen);
-}
-
-//-----------------------------------------------------------------------------
-MidiChannelize::MidiChannelize (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
-{
-    programs = new MidiChannelizeProgram[numPrograms];
-
-    if (programs)
+    struct Parameters
     {
-        CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        juce::AudioParameterInt* outChannel = nullptr;
+    };
+
+public:
+    std::list<std::unique_ptr<RangedParameter>> createParameters() override
+    {
+        std::list<std::unique_ptr<RangedParameter>> list;
+        params_.outChannel = addTo (list,
+                                    std::make_unique<juce::AudioParameterInt> (
+                                        getParamID ("outChannel"), // ID
+                                        "Output Channel",          // name
+                                        1,                         // min value
+                                        16,                        // max value
+                                        1));
+        return list;
+    }
+
+    String getName() const override { return "Channelize"; }
+
+    Channelize()
+    {
+        for (std::uint8_t channel = 1; channel <= kNumMidiChannels; channel++)
         {
-            if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
-            {
-                for (int i = 0; i < numPrograms; i++)
-                {
-                    programs[i].fChannel = defaultBank->GetProgParm (i, 0);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
-                }
-            }
+            lastChannel_[channel].fill (channel);
+        }
+    }
+
+    void processMessages (MidiBuffer& midiEvents, Status status) override
+    {
+        auto outChannelParam = params_.outChannel->get();
+
+        MidiBuffer inEvents;
+        inEvents.swapWith (midiEvents);
+
+        for (auto&& event : inEvents)
+        {
+            auto msgIn = event.getMessage();
+
+            // When bypassed, we still need to process the messages in order to prevent hanging
+            // notes. But of course, theoutput channel is determined by the channel of the
+            // incoming message instead of the outChannel parameter.
+            auto outChannel = (status == Status::kBypassed) ? msgIn.getChannel() : outChannelParam;
+            auto msgOut     = transformMessage (msgIn, static_cast<std::uint8_t> (outChannel));
+
+            midiEvents.addEvent (msgOut, event.samplePosition);
+        }
+    }
+
+    MidiMessage transformMessage (MidiMessage msg, std::uint8_t outChannel)
+    {
+        auto inChannel = msg.getChannel();
+        bool isSysex   = msg.getRawData()[0] >= 0xF0;
+
+        if (isSysex)
+        {
+            // System Exclusive messages are just passed on
         }
         else
         {
-            // built-in programs
-            for (int i = 0; i < numPrograms; i++)
+            if (msg.isNoteOff())
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                msg.setChannel (lastChannel_[inChannel][msg.getNoteNumber()]);
             }
-        }
-        setProgram (0);
-    }
-
-    for (int c = 0; c < 16; c++)
-    {
-        for (int i = 0; i < 128; i++)
-            lastChannel[c][i] = c;
-    }
-
-    init();
-}
-
-//-----------------------------------------------------------------------------------------
-MidiChannelize::~MidiChannelize()
-{
-    if (programs)
-        delete[] programs;
-}
-
-//------------------------------------------------------------------------
-void MidiChannelize::setProgram (VstInt32 program)
-{
-    MidiChannelizeProgram* ap = &programs[program];
-
-    curProgram = program;
-    setParameter (kChannel, ap->fChannel);
-}
-
-//------------------------------------------------------------------------
-void MidiChannelize::setProgramName (char* name)
-{
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
-}
-
-//------------------------------------------------------------------------
-void MidiChannelize::getProgramName (char* name)
-{
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
-}
-
-//-----------------------------------------------------------------------------------------
-bool MidiChannelize::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
-{
-    if (index < numPrograms)
-    {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
-        return true;
-    }
-    return false;
-}
-
-//-----------------------------------------------------------------------------------------
-void MidiChannelize::setParameter (VstInt32 index, float value)
-{
-    MidiChannelizeProgram* ap = &programs[curProgram];
-
-    switch (index)
-    {
-        case kChannel:
-            fChannel = ap->fChannel = value;
-            break;
-        default:
-            break;
-    }
-}
-
-//-----------------------------------------------------------------------------------------
-float MidiChannelize::getParameter (VstInt32 index)
-{
-    switch (index)
-    {
-        case kChannel:
-            return fChannel;
-        default:
-            return 0;
-    }
-}
-
-//-----------------------------------------------------------------------------------------
-void MidiChannelize::getParameterName (VstInt32 index, char* label)
-{
-    switch (index)
-    {
-        case kChannel:
-            vst_strncpy (label, "Channel", kVstMaxParamStrLen);
-            break;
-        default:
-            break;
-    }
-}
-
-//-----------------------------------------------------------------------------------------
-void MidiChannelize::getParameterDisplay (VstInt32 index, char* text)
-{
-    switch (index)
-    {
-        case kChannel:
-            if (FLOAT_TO_CHANNEL016 (fChannel) < 1)
-                vst_strncpy (text, "No Change", kVstMaxParamStrLen);
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (fChannel));
-            break;
-        default:
-            break;
-    }
-}
-
-//-----------------------------------------------------------------------------------------
-void MidiChannelize::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
-{
-    const int out_channel = FLOAT_TO_CHANNEL (fChannel);
-    // process incoming events
-    for (unsigned int i = 0; i < inputs[0].size(); i++)
-    {
-        //copying event "i" from input (with all its fields)
-        VstMidiEvent tomod   = inputs[0][i];
-        const int status     = tomod.midiData[0] & 0xf0; // scraping  channel
-        const int in_channel = tomod.midiData[0] & 0x0f; // isolating channel (0-15)
-        const int data1      = tomod.midiData[1] & 0x7f;
-        //const int data2	 = tomod.midiData[2] & 0x7f;
-        if (tomod.midiData[0] < 0xF0)
-        {
-            if (isNoteOff (tomod))
             {
-                tomod.midiData[0] = status | lastChannel[in_channel][data1];
-            }
-            else if (out_channel >= 0)
-            {
-                tomod.midiData[0] = status | out_channel;
+                msg.setChannel (outChannel);
             }
 
-            if (isNoteOn (tomod))
-                lastChannel[in_channel][data1] = out_channel;
+            if (msg.isNoteOn())
+            {
+                lastChannel_[inChannel][msg.getNoteNumber()] = outChannel;
+            }
         }
-        outputs[0].push_back (tomod);
+
+        return msg;
     }
-}
+
+private:
+    /// The last channel on to which an oncoming note was sent, split by note (128 possible values)
+    /// and input channel (16) possible values. Since JUCE numbers MIDI channels from 1 to 16, we go
+    /// along with the 1-based indexing here.
+    Array<Array<std::uint8_t, 128>, kNumMidiChannels + 1> lastChannel_;
+
+    Parameters params_;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Channelize)
+};
+
+PIZ_REGISTER_MIDI_PROCESSOR (Channelize)
+} // namespace piz

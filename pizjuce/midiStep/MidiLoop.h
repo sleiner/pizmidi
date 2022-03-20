@@ -3,6 +3,8 @@
 
 #include "juce_audio_basics/juce_audio_basics.h"
 
+#include "piz/midistuff.h"
+
 using namespace juce;
 
 enum playmodes

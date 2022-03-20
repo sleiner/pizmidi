@@ -1,17 +1,32 @@
 include(FetchContent)
 
-message(STATUS "Fetching dependency: JUCE")
-list(APPEND CMAKE_MESSAGE_INDENT "  ")
+# Dependencies provide their libraries for installation. But for our own
+# installers, we do not want a JUCE SDK to be included, we add the
+# "EXCLUDE_FROM_ALL" parameter to the JUCE subdirectory being added. This has
+# the notable effect that install commands are ignored.
+function(piz_makeavailable name)
+  message(STATUS "Fetching dependency: ${name}")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+
+  FetchContent_Populate("${name}")
+  add_subdirectory("${${name}_SOURCE_DIR}" "${${name}_BINARY_DIR}"
+                   EXCLUDE_FROM_ALL)
+
+  list(POP_BACK CMAKE_MESSAGE_INDENT)
+endfunction(piz_makeavailable)
+
 FetchContent_Declare(
   juce
-  GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-  GIT_TAG ddaa09110392a4419fecbb6d3022bede89b7e841 # 6.1.4
+  GIT_REPOSITORY https://github.com/sleiner/JUCE.git
+  GIT_TAG 1bd2c573f8f73320f2d994cd838a46f85e749ac5 # 6.1.6 patched
 )
+piz_makeavailable(juce)
 
-# JUCE registers the built SDK for installation. But as for our own installers,
-# we do not want a JUCE SDK to be included, we add the "EXCLUDE_FROM_ALL"
-# parameter to the JUCE subdirectory being added. This has the notable effect
-# that install commands are ignored.
-FetchContent_Populate(juce)
-add_subdirectory(${juce_SOURCE_DIR} ${juce_BINARY_DIR} EXCLUDE_FROM_ALL)
-list(POP_BACK CMAKE_MESSAGE_INDENT)
+if(${PIZ_ENABLE_TESTS})
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG 3d81736c973fbcc938267cb296918bc3266dde12 # main as of 2022-01-21
+  )
+  piz_makeavailable(googletest)
+endif()

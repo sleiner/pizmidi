@@ -1,6 +1,6 @@
 #include "AudioToCC.h"
-#include "../_common/midistuff.h"
 #include "AudioToCCEditor.h"
+#include "piz/midistuff.h"
 
 EnvelopeFollower::EnvelopeFollower()
 {

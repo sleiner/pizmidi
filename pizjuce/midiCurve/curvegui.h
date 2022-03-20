@@ -22,9 +22,9 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/ChannelSlider.h"
 #include "curve.h"
 #include "MidiEnvelope.h"
+#include "piz/ChannelSlider.h"
 //[/Headers]
 
 //==============================================================================

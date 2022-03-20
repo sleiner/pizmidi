@@ -1,5 +1,6 @@
-# Build output
+# Build output and CMake
 build/
+CMakeUserPresets.json
 
 # macOS
 .DS_Store

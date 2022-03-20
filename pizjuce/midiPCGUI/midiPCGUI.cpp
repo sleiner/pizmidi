@@ -1,6 +1,6 @@
 #include "midiPCGUI.h"
-#include "../_common/MIDI.h"
 #include "midiPCGUIEditor.h"
+#include "piz/MIDI.h"
 
 //==============================================================================
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
