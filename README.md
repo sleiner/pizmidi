@@ -22,11 +22,11 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiPBCurve: Help text is never shown
 -   midiPCGUI
 -   midiStep
+-   midiLooper
 
 ### Serious problems are known
 
 -   Middy Morphy: sends nothing, UI looks very weird
--   midiLooper: Does not play back anything
 -   midiMonitor:
     -   serious performance problems when receiving a large amount of data in short time
     -   text of checkboxes is truncated
