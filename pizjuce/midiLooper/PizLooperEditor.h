@@ -130,8 +130,6 @@ private:
     int loopDragStart;
     MidiKeyboardState keySelectorState;
     MidiKeyboardComponent* keyboard;
-    int counter;
-    int demo;
     Path internalPath1;
     Path internalPath2;
 
@@ -229,7 +227,6 @@ private:
     std::unique_ptr<juce::TextButton> b_ZoomIn;
     std::unique_ptr<juce::Label> numerator;
     std::unique_ptr<juce::Label> denominator;
-    std::unique_ptr<juce::Label> loopinfoLabel3;
     std::unique_ptr<juce::ToggleButton> b_UseScaleChannel;
     std::unique_ptr<VSTSlider> s_ScaleChannel;
     std::unique_ptr<juce::Label> label25;

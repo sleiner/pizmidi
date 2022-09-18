@@ -999,18 +999,6 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
 
     denominator->setBounds (584, 64, 29, 18);
 
-    loopinfoLabel3.reset (new juce::Label ("Loop Info 2",
-                                           TRANS ("DEMO VERSION")));
-    addAndMakeVisible (loopinfoLabel3.get());
-    loopinfoLabel3->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    loopinfoLabel3->setJustificationType (juce::Justification::centred);
-    loopinfoLabel3->setEditable (false, false, false);
-    loopinfoLabel3->setColour (juce::Label::textColourId, juce::Colour (0xffdfdfdf));
-    loopinfoLabel3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    loopinfoLabel3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    loopinfoLabel3->setBounds (5, 47, 141, 16);
-
     b_UseScaleChannel.reset (new juce::ToggleButton ("new toggle button"));
     addAndMakeVisible (b_UseScaleChannel.get());
     b_UseScaleChannel->setTooltip (TRANS ("When checked, input notes on \"Scale Ch\" will be used to define the scale"));
@@ -2415,9 +2403,6 @@ PizLooperEditor::PizLooperEditor (PizLooper* const ownerFilter)
     keySelector->setAvailableRange (0, 11);
     keySelector->addChangeListener (this);
     ownerFilter->keySelectorState.addListener (this);
-    demo = ownerFilter->demo ? 1 : 0;
-    loopinfoLabel3->setText (demo ? "DEMO VERSION" : String(), dontSendNotification);
-    counter = 0;
     startTimer (75);
 
 #if 0
@@ -2533,7 +2518,6 @@ PizLooperEditor::~PizLooperEditor()
     b_ZoomIn             = nullptr;
     numerator            = nullptr;
     denominator          = nullptr;
-    loopinfoLabel3       = nullptr;
     b_UseScaleChannel    = nullptr;
     s_ScaleChannel       = nullptr;
     label25              = nullptr;
@@ -4154,16 +4138,6 @@ void PizLooperEditor::filesDropped (const StringArray& filenames, int mouseX, in
 {
     if (File (filenames[0]).hasFileExtension ("mid"))
         getFilter()->loadMidiFile (File (filenames[0]));
-    else if (File (filenames[0]).getFileName() == "midiLooperKey.txt")
-    {
-        getFilter()->readKeyFile (File (filenames[0]));
-        if (! getFilter()->demo)
-        {
-            loopinfoLabel3->setVisible (false);
-            demo    = 0;
-            counter = 0;
-        }
-    }
 }
 
 bool PizLooperEditor::isInterestedInFileDrag (const StringArray& files)
@@ -4179,12 +4153,6 @@ bool PizLooperEditor::isInterestedInFileDrag (const StringArray& files)
 void PizLooperEditor::timerCallback()
 {
     pianoRoll->setPlayTime (960.0 * getFilter()->getPlayPosition (pianoRoll->playing, pianoRoll->recording));
-    counter += demo;
-    if (counter == 500)
-    {
-        loopinfoLabel3->setColour (Label::textColourId, Colour (Random::getSystemRandom().nextInt()).withAlpha (1.f).withMultipliedSaturation (0.7f));
-        counter = 0;
-    }
 }
 
 void PizLooperEditor::handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity)
@@ -5604,12 +5572,6 @@ BEGIN_JUCER_METADATA
          edTextCol="ff000000" edBkgCol="0" labelText="4" editableSingleClick="1"
          editableDoubleClick="1" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="33"/>
-  <LABEL name="Loop Info 2" id="757d30fe4debdfe7" memberName="loopinfoLabel3"
-         virtualName="" explicitFocusOrder="0" pos="5 47 141 16" textCol="ffdfdfdf"
-         edTextCol="ff000000" edBkgCol="0" labelText="DEMO VERSION" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15.0" kerning="0.0" bold="1" italic="0" justification="36"
-         typefaceStyle="Bold"/>
   <TOGGLEBUTTON name="new toggle button" id="5543bd5e8c49a007" memberName="b_UseScaleChannel"
                 virtualName="" explicitFocusOrder="0" pos="11 329 129 17" tooltip="When checked, input notes on &quot;Scale Ch&quot; will be used to define the scale"
                 txtcol="ffffffff" buttonText="Use Scale Channel" connectedEdges="0"
