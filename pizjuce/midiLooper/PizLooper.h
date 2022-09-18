@@ -107,6 +107,7 @@ public:
     {
         ValueTree tree ("PRSettings");
         values_.addChild (tree, 0, undo_manager_);
+        loadDefaults();
     }
 
     ValueTree& set (const Identifier& name, const var& newValue)
