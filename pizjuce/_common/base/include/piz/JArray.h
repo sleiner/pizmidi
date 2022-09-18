@@ -5,12 +5,17 @@
 
 #include <utility>
 
-#include "juce_core/juce_core.h"
+#include <juce_core/juce_core.h>
 
+namespace piz
+{
+
+/// A wrapper around juce::Array with custom extensions.
+/// Note that this class is very different from piz::Array.
 template <typename ElementType,
           typename TypeOfCriticalSectionToUse = juce::DummyCriticalSection,
           int minimumAllocatedSize            = 0>
-class PizArray : public juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>
+class JArray : public juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>
 {
 public:
     using juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>::Array;
@@ -29,3 +34,5 @@ public:
         return ElementType();
     }
 };
+
+} // namespace piz

@@ -1,4 +1,4 @@
-#include "DrawablePad.h"
+#include "piz/DrawablePad.h"
 
 //==============================================================================
 DrawablePad::DrawablePad (const String& name)

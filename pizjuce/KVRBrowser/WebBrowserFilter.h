@@ -1,7 +1,7 @@
 #ifndef DEMOJUCEPLUGINFILTER_H
 #define DEMOJUCEPLUGINFILTER_H
 
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizAudioProcessor.h"
 
 #define denorm 0.000000000000001f
 

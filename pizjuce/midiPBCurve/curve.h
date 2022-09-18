@@ -1,6 +1,6 @@
 #ifndef MidiCurvePLUGINFILTER_H
 #define MidiCurvePLUGINFILTER_H
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizAudioProcessor.h"
 
 #define MAX_ENVELOPE_POINTS   (32)
 #define MAX_ENVELOPE_LENGTH   (127.0f)

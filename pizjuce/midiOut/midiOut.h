@@ -5,8 +5,8 @@
 
 #include "juce_audio_devices/juce_audio_devices.h"
 
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/JArray.h"
+#include "piz/PizAudioProcessor.h"
 
 using namespace juce;
 
@@ -97,7 +97,7 @@ public:
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
 
-    PizArray<MidiDeviceInfo> devices;
+    piz::JArray<MidiDeviceInfo> devices;
     String icon;
 
     void setActiveDevice (String name);

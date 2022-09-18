@@ -4,11 +4,11 @@
 #include "juce_data_structures/juce_data_structures.h"
 #include "juce_events/juce_events.h"
 
-#include "../_common/BankStorage.h"
-#include "../_common/ChordFunctions.h"
-#include "../_common/key.h"
-#include "../_common/midistuff.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/BankStorage.h"
+#include "piz/ChordFunctions.h"
+#include "piz/key.h"
+#include "piz/midistuff.h"
+#include "piz/PizAudioProcessor.h"
 
 enum parameters
 {

@@ -34,8 +34,8 @@
 
 #include <memory>
 
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/JArray.h"
+#include "piz/PizAudioProcessor.h"
 
 #include "juce_audio_devices/juce_audio_devices.h"
 #include "juce_core/juce_core.h"
@@ -176,7 +176,7 @@ public:
     MidiDeviceInfo getActiveDevice() { return activeDevice; }
     MidiDeviceInfo getDeviceByName (String name) const;
 
-    PizArray<MidiDeviceInfo> devices;
+    piz::JArray<MidiDeviceInfo> devices;
     int lastCCL, lastCCR;
     float lastInL, lastInR;
     bool lastGateCCL, lastGateCCR;

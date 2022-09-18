@@ -1,8 +1,0 @@
-midiChannelize
-
-Transforms everything to the selected channel.
-
-
-Parameters:
-
-Channel - Channel to transform everything to. When set to "No Change" the plugin will have no effect.

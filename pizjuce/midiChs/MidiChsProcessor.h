@@ -3,7 +3,7 @@
 
 #include "juce_events/juce_events.h"
 
-#include "../_common/PizAudioProcessor.h"
+#include "piz/PizAudioProcessor.h"
 
 //==============================================================================
 class MidiChsProcessor : public PizAudioProcessor,

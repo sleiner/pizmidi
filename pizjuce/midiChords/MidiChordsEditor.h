@@ -24,9 +24,9 @@
 #include "juce_core/juce_core.h"
 #include "juce_gui_basics/juce_gui_basics.h"
 
-#include "../_common/ChannelSlider.h"
-#include "../_common/NoteSlider.h"
-#include "../_common/VSTSlider.h"
+#include "piz/ChannelSlider.h"
+#include "piz/NoteSlider.h"
+#include "piz/VSTSlider.h"
 
 #include "GuitarNeckComponent.h"
 #include "MidiChords.h"
@@ -498,7 +498,7 @@ private:
 
 //[/Headers]
 
-#include "../_common/PizButton.h"
+#include "piz/PizButton.h"
 
 //==============================================================================
 /**

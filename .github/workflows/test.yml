@@ -1,0 +1,68 @@
+name: Test
+on:
+    pull_request:
+    push:
+        branches:
+            # Release branches
+            - main
+
+permissions:
+    repository-projects: read
+
+jobs:
+    unit:
+        name: Unit
+        runs-on: ${{ matrix.config.os }}
+        strategy:
+            # If the job fails for one config, don't abort the jobs for the other configs
+            fail-fast: false
+            matrix:
+                config:
+                    # The behavior of the unit tests should not vary between platforms.
+                    # So we execute them only on the platform with best performance and
+                    # best availability:
+                    - name: "Ubuntu 20.04 - x86_64"
+                      os: "ubuntu-20.04"
+                      cmake_preset: "linux-native"
+        env:
+            CMAKE_ADDITIONAL_OPTIONS: "-D PIZ_ENABLE_TESTS=ON"
+        steps:
+            - name: Install toolchain (macOS)
+              if: runner.os == 'macOS'
+              run: |
+                  brew update
+                  brew install ninja
+            - name: Install toolchain (Linux)
+              if: runner.os == 'Linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y \
+                    libasound2-dev libjack-jackd2-dev \
+                    ladspa-sdk \
+                    libcurl4-openssl-dev  \
+                    libfreetype6-dev \
+                    libx11-dev libxcomposite-dev libxcursor-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
+                    libwebkit2gtk-4.0-dev \
+                    libglu1-mesa-dev mesa-common-dev \
+                    ninja-build
+            - name: Checkout pizmidi
+              uses: actions/checkout@v2
+            # Because the unit testsuite is a single target that only needs to compile JUCE once,
+            # having Ccache for this job is not super important.
+            - name: "CMake: Configure"
+              run: cmake -S . --preset=${{ matrix.config.cmake_preset }} ${{ env.CMAKE_ADDITIONAL_OPTIONS }}
+            - name: "CMake: Build unit tests"
+              run: cmake --build --preset=${{ matrix.config.cmake_preset }} --parallel --target piz_unit_tests
+            - name: "Execute unit tests"
+              run: |
+                  cd build/${{ matrix.config.cmake_preset }}
+                  ctest                           \
+                    --tests-regex "piz\.unit\..*" \
+                    --output-junit unittest.xml   \
+                    --output-on-failure
+            - name: Store test results
+              uses: actions/upload-artifact@v2
+              with:
+                  name: test results
+                  path: |
+                      build/${{ matrix.config.cmake_preset }}/unittest.xml

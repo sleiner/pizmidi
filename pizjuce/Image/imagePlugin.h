@@ -3,8 +3,8 @@
 
 #include "juce_data_structures/juce_data_structures.h"
 
-#include "../_common/BankStorage.h"
-#include "../_common/PizAudioProcessor.h"
+#include "piz/BankStorage.h"
+#include "piz/PizAudioProcessor.h"
 
 using namespace juce;
 

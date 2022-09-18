@@ -1,4 +1,4 @@
-#include "VSTSlider.h"
+#include "piz/VSTSlider.h"
 
 VSTSlider::VSTSlider (String name) : Slider (name)
 {

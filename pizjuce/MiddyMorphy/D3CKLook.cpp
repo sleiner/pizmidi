@@ -115,7 +115,7 @@ void D3CKLook::drawPopupMenuBackground (Graphics& g, int width, int height)
     // Bouml preserved body end 0004A80D
 }
 
-DropShadower* D3CKLook::createDropShadowerForComponent (juce::Component* comp)
+std::unique_ptr<DropShadower> D3CKLook::createDropShadowerForComponent (juce::Component& comp)
 {
     // Bouml preserved body begin 0004A88D
     return 0;
