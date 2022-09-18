@@ -88,7 +88,6 @@ JuceProgram::~JuceProgram()
 PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
 {
     DBG ("PizLooper()");
-    demo             = ! readKeyFile();
     init             = true;
     newLoop          = false;
     curProgram       = 0;
@@ -205,42 +204,6 @@ PizLooper::~PizLooper()
     {
         midiOutput->stopBackgroundThread();
     }
-}
-
-bool PizLooper::readKeyFile (File file)
-{
-    DBG ("readKeyFile()");
-    bool copy = false;
-    if (file.exists())
-    {
-        copy = true;
-    }
-    else
-    {
-        file = File (getCurrentPath() + File::getSeparatorString() + "midiLooperKey.txt");
-    }
-
-    if (file.exists())
-    {
-        auto xmlKey = decodeEncryptedXml (file.loadFileAsString(), "11,5553b2fa887ad4ef3724f03b763a31ac89385a9591bcd135d34d9b5d3fa325e50e0ab835374d046d3b88447dc1c6ea6ada66142400423d386d31e54138cfab81");
-        if (! xmlKey->getStringAttribute ("product").compare ("midiLooper 1.x")
-            && xmlKey->getStringAttribute ("username").isNotEmpty()
-            && xmlKey->getStringAttribute ("time").isNotEmpty())
-        {
-            demo = false;
-            //infoString = "Registered to " + xmlKey->getStringAttribute("username");
-            if (copy)
-                file.copyFileTo (File (getCurrentPath() + File::getSeparatorString() + "midiLooperKey.txt"));
-            sendChangeMessage();
-        }
-        else
-        {
-            //infoString = "Bad midiLooperKey";
-            sendChangeMessage();
-        }
-        return true;
-    }
-    return false;
 }
 
 //==============================================================================
