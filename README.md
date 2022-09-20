@@ -17,16 +17,18 @@ This project is a reboot of the legendary [pizMidi plugins](https://web.archive.
 -   midiCurve: Help text is never shown
 -   midiIn: Channel selector combobox only shows channel when expanded
 -   midiKeyboard: Toggle mode is not working
+-   midiLooper
 -   midiOut: Channel selector combobox only shows channel when expanded
 -   midiPads
 -   midiPBCurve: Help text is never shown
 -   midiPCGUI
 -   midiStep
--   midiLooper
 
 ### Serious problems are known
 
--   Middy Morphy: sends nothing, UI looks very weird
+-   Middy Morphy:
+    - crashes on controller delete
+    - crashes on delete of last scene (probably with auto or audit enabled)
 -   midiMonitor:
     -   serious performance problems when receiving a large amount of data in short time
     -   text of checkboxes is truncated

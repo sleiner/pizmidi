@@ -6,10 +6,10 @@
 
 using namespace juce;
 
-class D3CKLook : public juce::LookAndFeel_V4
+class D3CKLook : public juce::LookAndFeel_V1
 {
 public:
-    D3CKLook() : juce::LookAndFeel_V4() {}
+    D3CKLook() : juce::LookAndFeel_V1() {}
 
     int getDefaultScrollbarWidth() override;
 
