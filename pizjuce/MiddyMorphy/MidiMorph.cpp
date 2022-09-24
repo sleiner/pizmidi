@@ -448,8 +448,8 @@ void MidiMorph::setFromXml (juce::XmlElement* xmlData)
         this->refreshRate = options->getIntAttribute ("refreshrate", this->refreshRate);
     }
 
-    this->sendSynchronousChangeMessage();
-    this->sendSynchronousChangeMessage();
+    sendChangeMessage(&controllers);
+    sendChangeMessage(&scenes);
 
     // Bouml preserved body end 0004048D
 }
@@ -555,6 +555,7 @@ void MidiMorph::sendChangeMessage (void* ptr)
         MessageManagerLock lock;
         dispatchPendingMessages();
     }
+    currentChangeBroadcastRecipient = ptr;
     ChangeBroadcaster::sendChangeMessage();
     this->lastRecipant = ptr;
     // Bouml preserved body end 00048D0D

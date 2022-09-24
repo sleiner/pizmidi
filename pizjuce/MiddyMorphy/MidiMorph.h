@@ -136,6 +136,8 @@ public:
 
     bool needsOneRefresh();
 
+    void* currentChangeBroadcastRecipient;
+
 private:
     OwnedArray<Controller> controllers;
     Array<Scene*> selectedScenes;

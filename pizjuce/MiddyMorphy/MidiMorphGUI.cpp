@@ -113,20 +113,19 @@ void MidiMorphGUI::changeListenerCallback (ChangeBroadcaster* source)
 {
     // Bouml preserved body begin 0003350D
     void* objectThatHasChanged = source;
-    OwnedArray<Scene>* scenes  = core->getScenes();
-    if (objectThatHasChanged == core->getSelectedScenes())
+    if (core->currentChangeBroadcastRecipient == core->getSelectedScenes())
     {
         this->controllerListModel->scenesSelected();
         //morphPane->setSelectedScenes(
     }
-    else if (objectThatHasChanged == core->getCursor())
+    else if (core->currentChangeBroadcastRecipient == core->getCursor())
     {
         controllerListModel->distancesChanged();
         core->saveGUIState (morphPane->getXml ("morphpanestate"));
         //    	ownerFilter->setParameterNotifyingHost(0,core->getCursorXRatio());
         //    	ownerFilter->setParameterNotifyingHost(1,core->getCursorYRatio());
     }
-    else if (objectThatHasChanged == core->getScenes())
+    else if (core->currentChangeBroadcastRecipient == core->getScenes())
     {
         morphPane->updateContent();
         if (core->scenes.size() > 0)
@@ -134,14 +133,10 @@ void MidiMorphGUI::changeListenerCallback (ChangeBroadcaster* source)
             morphPane->selectModule (core->scenes.size() - 1, true);
         }
     }
-    else if (objectThatHasChanged == core->getControllers())
+    else if (core->currentChangeBroadcastRecipient == core->getControllers())
     {
         controllerList->updateContent();
     }
-    //	else
-    //	{
-    //		repaint();
-    //	}
     else if (objectThatHasChanged == morphPaneModel)
     {
         this->resized();
