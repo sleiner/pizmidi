@@ -10,6 +10,7 @@ additional_commands:
             DESCRIPTION: 1
             FORMATS: "*"
             IS_SYNTH: 1
+            NEEDS_CURL: 1
             PLUGIN_CODE: 1
             PLUGIN_MANUFACTURER_CODE: 1
             PRODUCT_NAME: 1

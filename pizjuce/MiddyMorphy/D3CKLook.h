@@ -31,5 +31,5 @@ public:
 
     void drawPopupMenuBackground (Graphics& g, int width, int height) override;
 
-    DropShadower* createDropShadowerForComponent (juce::Component* comp) override;
+    std::unique_ptr<DropShadower> createDropShadowerForComponent (juce::Component& comp) override;
 };

@@ -60,6 +60,7 @@ function(piz_add_plugin target)
     ${ARGN}
     # Common values:
     FORMATS VST3
+    NEEDS_CURL TRUE
     COMPANY_NAME "Pizeo"
     PLUGIN_MANUFACTURER_CODE "Pzeo")
 

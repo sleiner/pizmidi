@@ -5,7 +5,7 @@ list(APPEND CMAKE_MESSAGE_INDENT "  ")
 FetchContent_Declare(
   juce
   GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-  GIT_TAG ddaa09110392a4419fecbb6d3022bede89b7e841 # 6.1.4
+  GIT_TAG 965d0ca4be178c4a0000b116d460e15c30311992 # 7.0.2
 )
 
 # JUCE registers the built SDK for installation. But as for our own installers,
