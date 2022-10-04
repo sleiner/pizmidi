@@ -266,8 +266,8 @@ void midiPads::setCurrentProgram (int index)
     lastUIHeight = programs->get (index, "lastUIHeight");
     for (int i = 0; i < numPads; i++)
     {
-        param[xpos + i] = programs->x[index][xpos + i];
-        param[ypos + i] = programs->y[index][ypos + i];
+        param[xpos + i] = programs->x[index][i];
+        param[ypos + i] = programs->y[index][i];
         icon[i]         = programs->getForPad (index, i, "icon");
         text[i]         = programs->getForPad (index, i, "text");
         padcolor[i]     = Colour::fromString (programs->getForPad (index, i, "padcolor").toString());
