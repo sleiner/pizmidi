@@ -84,7 +84,7 @@ jobs:
             - name: Store packages
               uses: actions/upload-artifact@v2
               with:
-                  name: packages
+                  name: packages-${{ matrix.config.os }}
                   path: |
                       build/${{ matrix.config.cmake_preset }}/packages
                       !build/${{ matrix.config.cmake_preset }}/packages/_CPack_Packages

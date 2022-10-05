@@ -22,7 +22,7 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 else() # Linux
   # For Linux, there does not seem to exist a common standard for where to put
   # VST plugins. So, we just pick a default path that suits us.
-  set(GLOBAL_PLUGIN_INSTALL_PREFIX "/usr/lib/pizmidi")
+  set(GLOBAL_PLUGIN_INSTALL_PREFIX "/usr/lib")
 endif()
 
 set(CPACK_PACKAGING_INSTALL_PREFIX
@@ -72,10 +72,27 @@ function(piz_add_to_installer target)
   get_target_property(formats "${target}" JUCE_FORMATS)
 
   foreach(format IN LISTS formats)
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND format STREQUAL "VST3")
+      # VST3 plugins on Linux are special since, as far as CMake is concerned,
+      # only the ".so" file is to be installed. So we need to build the VST3
+      # folder structure around it. This is also done internally by JUCE, but I
+      # currently do not see a good way to access it and separate it from the
+      # build-cache dependent path.
+      get_target_property(destination "${target}_${format}"
+                          LIBRARY_OUTPUT_DIRECTORY)
+      set(dst_folder "vst3/${CPACK_PACKAGE_VENDOR}")
+      set(vst3_name "$<TARGET_PROPERTY:${target},JUCE_PRODUCT_NAME>.vst3")
+      set(destination
+          "${dst_folder}/${vst3_name}/Contents/${JUCE_TARGET_ARCHITECTURE}-linux"
+      )
+    else()
+      set(destination "${format}/${CPACK_PACKAGE_VENDOR}")
+    endif()
+
     install(
       TARGETS "${target}_${format}" #
       BUNDLE
-      LIBRARY DESTINATION "${format}/${CPACK_PACKAGE_VENDOR}" #
+      LIBRARY DESTINATION "${destination}" #
               COMPONENT "${target}_${format}")
 
     # The installer structure will contain top-level nodes for each plugin
