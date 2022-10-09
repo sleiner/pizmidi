@@ -448,8 +448,8 @@ void MidiMorph::setFromXml (juce::XmlElement* xmlData)
         this->refreshRate = options->getIntAttribute ("refreshrate", this->refreshRate);
     }
 
-    sendChangeMessage(&controllers);
-    sendChangeMessage(&scenes);
+    sendChangeMessage (&controllers);
+    sendChangeMessage (&scenes);
 
     // Bouml preserved body end 0004048D
 }
