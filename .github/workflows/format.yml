@@ -22,31 +22,14 @@ jobs:
 
     cpp:
         name: C/C++
-        runs-on: ubuntu-20.04
-        container:
-            image: ubuntu:20.04
+        runs-on: ubuntu-latest
         steps:
-            - name: Install clang-format
-              run: |
-                  export DEBIAN_FRONTEND=noninteractive
-
-                  # Set up LLVM repo
-                  apt-get update
-                  apt-get install -yq gnupg wget
-                  wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-                  cat > /etc/apt/sources.list.d/llvm.list <<EOF
-                  deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
-                  deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
-                  EOF
-
-                  apt-get update
-                  apt-get install -yq clang-format-13 git
-                  ln -s $(which clang-format-13) /usr/bin/clang-format
-                  ln -s /usr/lib/llvm-13/bin/git-clang-format /usr/bin/git-clang-format
             - name: Checkout pizmidi
               uses: actions/checkout@v2
               with:
                   fetch-depth: 0
                   ref: ${{ github.event.pull_request.head.sha }}
+            - name: Install clang-format
+              run: sudo ./.github/scripts/install-clang-format.sh 14
             - name: Check formatting
               run: ./.github/scripts/checkfmt-cpp.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}

@@ -21,16 +21,9 @@ TO_REF=$2
 # Get commit hashes from ref names
 from_sha=$(git rev-parse -q --verify "${FROM_REF}") || echo "Git revision \"${FROM_REF}\" was not found"
 to_sha=$(git rev-parse -q --verify "${TO_REF}") || echo "Git revision \"${TO_REF}\" was not found"
-head=$(git rev-parse -q --verify HEAD)
-
-# git stash --include-untracked
 
 for commit in $(git rev-list --reverse "${from_sha}..${to_sha}"); do
     # echo "${commit}"
     git checkout "${commit}" >/dev/null
     find . \( -name "*.cmake" -or -name "CMakeLists.txt" \) -print0 | xargs -0 cmake-format --check
 done
-
-# Recover previous state
-# git stash pop
-# git checkout "${head}"

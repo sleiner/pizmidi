@@ -23,7 +23,7 @@ public:
     Array<int> getPattern() const { return pattern; }
     String getStringPattern() const;
 
-    bool operator< (const PizChord& other)
+    bool operator<(const PizChord& other)
     {
         return this->getSum() < other.getSum();
     }
@@ -49,7 +49,7 @@ private:
     void makeIntervalPattern();
 };
 
-bool operator< (const PizChord& first, const PizChord& second);
+bool operator<(const PizChord& first, const PizChord& second);
 
 class ChordName
 {

@@ -44,7 +44,7 @@ void PizChord::makeIntervalPattern()
     }
 }
 
-bool operator< (const PizChord& first, const PizChord& second)
+bool operator<(const PizChord& first, const PizChord& second)
 {
     int f = first.getSum();
     int s = second.getSum();
