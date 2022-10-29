@@ -101,7 +101,9 @@ void PianoRoll::mouseUp(const juce::MouseEvent& e)
     if (hoveringNote != -1)
     {
         if (hoveringNote < -2)
+        {
             hoveringNote += 9999;
+        }
         if (e.mods.isPopupMenu() && hoveringNote != -2)
         {
             sequence->deleteEvent(hoveringNote, true);
@@ -142,11 +144,17 @@ void PianoRoll::paint(juce::Graphics& g)
     while (y > 0)
     {
         if (getNoteNameWithoutOctave(n).contains("#"))
+        {
             g.setColour(juce::Colours::lightgrey);
+        }
         else if (n == 60)
+        {
             g.setColour(juce::Colours::yellow);
+        }
         else
+        {
             g.setColour(juce::Colours::white);
+        }
         g.fillRect(0.f, y - yinc, (float) getWidth(), yinc);
         if (getNoteNameWithoutOctave(n).contains("F") && ! getNoteNameWithoutOctave(n).contains("#"))
         {
@@ -165,11 +173,17 @@ void PianoRoll::paint(juce::Graphics& g)
     while (x < getWidth())
     {
         if (b % bar == 0)
+        {
             g.setColour(juce::Colours::black);
+        }
         else if (b % beat == 0)
+        {
             g.setColour(juce::Colours::grey);
+        }
         else
+        {
             g.setColour(juce::Colours::lightgrey);
+        }
         g.drawLine(x, 0.f, x, (float) getHeight());
         x += gridSize;
         b++;
@@ -188,17 +202,25 @@ void PianoRoll::paint(juce::Graphics& g)
                 float noteLength = (float) jmax(1.0, (sequence->getEventTime(sequence->getIndexOfMatchingKeyUp(i)) - sequence->getEventTime(i))) * (float) getWidth() / seqLengthInPpq;
                 if (i == sequence->indexOfLastNoteOn
                     || abs(sequence->getEventTime(i) - sequence->getEventTime(sequence->indexOfLastNoteOn)) < sequence->chordTolerance)
+                {
                     g.setColour(juce::Colours::blue);
+                }
                 else
+                {
                     g.setColour(juce::Colours::darkgoldenrod.withAlpha(sequence->getEventPointer(i)->message.getFloatVelocity()));
+                }
                 g.fillRect((float) getWidth() * (float) sequence->getEventTime(i) / seqLengthInPpq,
                            (float) getHeight() - (float) (sequence->getEventPointer(i)->message.getNoteNumber()) * yinc - yinc,
                            noteLength,
                            yinc);
                 if (i == hoveringNote)
+                {
                     g.setColour(juce::Colours::red);
+                }
                 else
+                {
                     g.setColour(juce::Colours::black);
+                }
                 g.drawRect((float) getWidth() * (float) sequence->getEventTime(i) / seqLengthInPpq,
                            (float) getHeight() - (float) (sequence->getEventPointer(i)->message.getNoteNumber()) * yinc - yinc,
                            noteLength,
@@ -256,9 +278,13 @@ void PianoRoll::setNoteLength(int beatDiv)
 double PianoRoll::pixelsToPpq(float pixels, bool snap)
 {
     if (snap)
+    {
         return stepLengthInPpq * floor((double) pixels * seqLength / (double) getWidth());
+    }
     else
+    {
         return stepLengthInPpq * (double) pixels * seqLength / (double) getWidth();
+    }
 }
 
 float PianoRoll::ppqToPixels(double ppq)

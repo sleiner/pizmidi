@@ -110,7 +110,9 @@ void PianoRoll::mouseDown(const juce::MouseEvent& e)
         draggingNoteTransposition                   = 0;
         lastDragTime                                = snap ? t : accurateTime;
         if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
+        {
             timeline->setLoop(0, quarterNotesPerBar * ceil((lastDragTime + 1) / (timebase * quarterNotesPerBar)));
+        }
         plugin->getCallbackLock().enter();
         sequence->addNote(juce::MidiMessage(MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
                           juce::MidiMessage(MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
@@ -121,7 +123,9 @@ void PianoRoll::mouseDown(const juce::MouseEvent& e)
         sendChangeMessage();
     }
     else
+    {
         clearSelection();
+    }
     noteLayer->repaint();
 }
 
@@ -188,7 +192,9 @@ void PianoRoll::mouseUp(const juce::MouseEvent& e)
         lownote  = (int) ((float) (getHeight() - lasso.getY()) * 128.f / (float) getHeight());
         highnote = (int) ((float) (getHeight() - (lasso.getY() + lasso.getHeight())) * 128.f / (float) getHeight());
         if (lownote > highnote)
+        {
             std::swap(lownote, highnote);
+        }
         for (int index = 0; index < (sequence->getNumEvents()); index++)
         {
             juce::MidiMessage m = sequence->getEventPointer(index)->message;
@@ -215,13 +221,17 @@ void PianoRoll::mouseUp(const juce::MouseEvent& e)
     if (hoveringNoteIndex != No_Note)
     {
         if (hoveringNoteIndex < -2)
+        {
             hoveringNoteIndex += 9999;
+        }
         if (e.mods.isPopupMenu() && hoveringNoteIndex != -2)
         {
             //right click, delete notes
             plugin->getCallbackLock().enter();
             for (int i = selectedNotes.size(); --i >= 0;)
+            {
                 sequence->deleteEvent(sequence->getIndexOf(selectedNotes.getUnchecked(i)), true);
+            }
             sequence->updateMatchedPairs();
             plugin->getCallbackLock().exit();
             clearSelection();
@@ -244,7 +254,9 @@ void PianoRoll::mouseUp(const juce::MouseEvent& e)
                 if (draggingNoteTransposition != 0)
                 {
                     for (int i = 0; i < selectedNotes.size(); i++)
+                    {
                         sequence->transposeEvent(sequence->getIndexOf(selectedNotes.getUnchecked(i)), draggingNoteTransposition);
+                    }
                     draggingNoteTransposition = 0;
                 }
                 sequence->updateMatchedPairs(true);
@@ -304,7 +316,9 @@ void PianoRoll::mouseDoubleClick(const juce::MouseEvent& e)
         if (hoveringNoteIndex == No_Note)
         {
             if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
+            {
                 timeline->setLoop(0, quarterNotesPerBar * ceil((lastDragTime + 1) / (timebase * quarterNotesPerBar)));
+            }
             sequence->addNote(juce::MidiMessage(MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
                               juce::MidiMessage(MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
             //sequence->updateMatchedPairs();
@@ -380,7 +394,9 @@ double PianoRoll::pixelsToPpq(float pixels, bool snap, bool round)
     if (snap)
     {
         if (round)
+        {
             return stepLengthInPpq * (double) roundToInt(((double) pixels * seqLength / (double) getWidth()));
+        }
         return stepLengthInPpq * floor((double) pixels * seqLength / (double) getWidth());
     }
     //snap to last tick (1/timebase of a quarter note)
@@ -400,7 +416,9 @@ int PianoRoll::ppqToPixelsWithOffset(double ppq)
 double PianoRoll::snapPpqToGrid(double ppq, bool round)
 {
     if (round)
+    {
         return stepLengthInPpq * (double) roundToInt((ppq / stepLengthInPpq));
+    }
     return stepLengthInPpq * floor(ppq / stepLengthInPpq);
 }
 

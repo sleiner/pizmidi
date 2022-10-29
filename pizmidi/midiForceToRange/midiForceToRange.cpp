@@ -70,7 +70,9 @@ ForceToRange::ForceToRange(audioMasterCallback audioMaster)
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     init();
@@ -80,7 +82,9 @@ ForceToRange::ForceToRange(audioMasterCallback audioMaster)
 ForceToRange::~ForceToRange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -133,12 +137,16 @@ void ForceToRange::setParameter(VstInt32 index, float value)
         if (index == kHighNote)
         {
             if (value < param[kLowNote])
+            {
                 setParameterAutomated(kLowNote, value);
+            }
         }
         else if (index == kLowNote)
         {
             if (value > param[kHighNote])
+            {
                 setParameterAutomated(kHighNote, value);
+            }
         }
     }
 }
@@ -147,7 +155,9 @@ void ForceToRange::setParameter(VstInt32 index, float value)
 float ForceToRange::getParameter(VstInt32 index)
 {
     if (index < numParams)
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -181,9 +191,13 @@ void ForceToRange::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 vst_strncpy(text, "Any", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         default:
             break;
@@ -209,7 +223,9 @@ void ForceToRange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
 
         // make zero-velocity noteons look like "real" noteoffs
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         bool discard = false;
 
@@ -224,7 +240,9 @@ void ForceToRange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         newnote += 12;
                         if (newnote > highlimit)
+                        {
                             discard = true;
+                        }
                     }
                     tomod.midiData[1] = newnote;
                 }
@@ -234,12 +252,16 @@ void ForceToRange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         newnote -= 12;
                         if (newnote < lowlimit)
+                        {
                             discard = true;
+                        }
                     }
                     tomod.midiData[1] = newnote;
                 }
                 if (status == MIDI_NOTEON)
+                {
                     transposed[data1][channel] = tomod.midiData[1];
+                }
             }
             else if (status == MIDI_NOTEOFF)
             {
@@ -249,6 +271,8 @@ void ForceToRange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

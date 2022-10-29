@@ -100,7 +100,9 @@ MidiChs::MidiChs(audioMasterCallback audioMaster)
                         break;
                     case 1:
                         for (int j = 0; j < 16; j++)
+                        {
                             programs[i].param[j] = 0;
+                        }
                         sprintf(programs[i].name, "--");
                 }
             }
@@ -115,7 +117,9 @@ MidiChs::MidiChs(audioMasterCallback audioMaster)
 MidiChs::~MidiChs()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -125,7 +129,9 @@ void MidiChs::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -165,7 +171,9 @@ void MidiChs::setParameter(VstInt32 index, float value)
 float MidiChs::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
+    {
         return param[index];
+    }
     return 0;
 }
 
@@ -255,13 +263,19 @@ void MidiChs::getParameterDisplay(VstInt32 index, char* text)
         case kChannel15:
         case kChannel16:
             if (FLOAT_TO_CHANNEL(param[index]) < 0)
+            {
                 strcpy(text, "--");
+            }
             else
+            {
                 sprintf(text, "%d", 1 + FLOAT_TO_CHANNEL(param[index]));
+            }
             break;
         case kReset:
             if (param[index] < 1.0f)
+            {
                 strcpy(text, "Reset");
+            }
             else
             {
                 strcpy(text, "!");
@@ -270,7 +284,9 @@ void MidiChs::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kClear:
             if (param[index] < 1.0f)
+            {
                 strcpy(text, "Clear");
+            }
             else
             {
                 strcpy(text, "!");
@@ -304,13 +320,19 @@ void MidiChs::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* output
                 {
                     const int newch = FLOAT_TO_CHANNEL(param[ch]);
                     if (newch > -1)
+                    {
                         tomod.midiData[0] = status | newch;
+                    }
                     else
+                    {
                         discard = true;
+                    }
                 }
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

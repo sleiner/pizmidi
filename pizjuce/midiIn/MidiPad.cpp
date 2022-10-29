@@ -45,9 +45,13 @@ bool MidiPad::isInterestedInFileDrag(const juce::StringArray& files)
 {
     juce::File file = juce::File(files.joinIntoString(juce::String(), 0, 1));
     if (file.hasFileExtension("png") || file.hasFileExtension("gif") || file.hasFileExtension("jpg") || file.hasFileExtension("svg"))
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void MidiPad::filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY)

@@ -37,7 +37,9 @@ static std::unique_ptr<juce::XmlElement> decodeEncryptedXml(const juce::String& 
                                                             const juce::String& rsaPublicKey)
 {
     if (hexData.isEmpty())
+    {
         return nullptr;
+    }
 
     juce::BigInteger val;
     val.parseString(hexData, 16);

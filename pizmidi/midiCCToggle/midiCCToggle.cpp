@@ -31,7 +31,9 @@ MidiCCToggle::MidiCCToggle(audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
     }
 
     init();
@@ -41,7 +43,9 @@ MidiCCToggle::MidiCCToggle(audioMasterCallback audioMaster)
 MidiCCToggle::~MidiCCToggle()
 {
     if (programs)
+    {
         delete programs;
+    }
 }
 
 void MidiCCToggle::setProgram(VstInt32 program)
@@ -85,12 +89,16 @@ void MidiCCToggle::setParameter(VstInt32 index, float value)
             break;
         case kParam02:
             if (value > fParam03)
+            {
                 setParameterAutomated(kParam03, value);
+            }
             fParam02 = value;
             break;
         case kParam03:
             if (value < fParam02)
+            {
                 setParameterAutomated(kParam02, value);
+            }
             fParam03 = value;
             break;
         case kParam05:
@@ -173,9 +181,13 @@ void MidiCCToggle::getParameterDisplay(VstInt32 index, char* text)
     {
         case kParam01:
             if (fParam01 < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kParam02:
             sprintf(text, "%d", FLOAT_TO_MIDI(fParam02));
@@ -191,9 +203,13 @@ void MidiCCToggle::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kParam07:
             if (FLOAT_TO_CHANNEL016(fParam07) == 0)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fParam07));
+            }
             break;
         default:
             break;
@@ -221,7 +237,9 @@ void MidiCCToggle::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
         short outchannel = FLOAT_TO_CHANNEL016(fParam07) - 1;
 
         if (outchannel == -1)
+        {
             outchannel = channel;
+        }
         bool discard = false;
 
         if (on && channel == outchannel)
@@ -249,6 +267,8 @@ void MidiCCToggle::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

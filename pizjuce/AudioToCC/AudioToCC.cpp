@@ -24,9 +24,13 @@ float EnvelopeFollower::process(float v)
 {
     //double v=fabs(L+R);
     if (v > envelope)
+    {
         envelope = a * (envelope - v) + v;
+    }
     else
+    {
         envelope = r * (envelope - v) + v;
+    }
     if (envelope <= 0.00001f)
     {
         envelope = 0;
@@ -135,13 +139,21 @@ AudioToCC::~AudioToCC()
         midiOutput.reset();
     }
     if (envL)
+    {
         delete envL;
+    }
     if (envR)
+    {
         delete envR;
+    }
     if (peakenvL)
+    {
         delete peakenvL;
+    }
     if (peakenvR)
+    {
         delete peakenvR;
+    }
 }
 
 //==============================================================================
@@ -185,7 +197,9 @@ void AudioToCC::setParameter(int index, float newValue)
         else
         {
             if (midiOutput)
+            {
                 midiOutput->stopBackgroundThread();
+            }
             midiOutput = NULL;
         }
     }
@@ -212,14 +226,18 @@ void AudioToCC::setActiveDevice(juce::MidiDeviceInfo const& device)
     {
         param[kDevice] = programs[curProgram].param[kDevice] = 0.f;
         if (midiOutput)
+        {
             midiOutput->stopBackgroundThread();
+        }
         midiOutput = NULL;
     }
     else
     {
         param[kDevice] = programs[curProgram].param[kDevice] = (float) index / (float) (devices.size() - 1);
         if (midiOutput)
+        {
             midiOutput->stopBackgroundThread();
+        }
         midiOutput = juce::MidiOutput::openDevice(device.identifier);
         midiOutput->startBackgroundThread();
     }
@@ -234,76 +252,140 @@ juce::MidiDeviceInfo AudioToCC::getDeviceByName(juce::String name) const
 const juce::String AudioToCC::getParameterName(int index)
 {
     if (index == kGain)
+    {
         return "RMSGain";
+    }
     else if (index == kPeakGain)
+    {
         return "PeakGain";
+    }
     else if (index == kDevice)
+    {
         return "Device";
+    }
     else if (index == kCCL)
+    {
         return "L CC";
+    }
     else if (index == kCCR)
+    {
         return "R CC";
+    }
     else if (index == kStereo)
+    {
         return "Mono/Stereo";
+    }
     else if (index == kRate)
+    {
         return "Rate";
+    }
     else if (index == kChannel)
+    {
         return "Channe";
+    }
     else if (index == kSmooth)
+    {
         return "Inertia";
+    }
     else if (index == kAutomateHost)
+    {
         return "AutomateHost";
+    }
     else if (index == kMidiToHost)
+    {
         return "MidiToHost";
+    }
     else if (index == kLOut)
+    {
         return "Envelope";
+    }
     else if (index == kROut)
+    {
         return "EnvelopeR";
+    }
     else if (index == kLClip)
+    {
         return "GateEnv";
+    }
     else if (index == kRClip)
+    {
         return "GateEnvR";
+    }
     else if (index == kMode)
+    {
         return "EnvScale";
+    }
     else if (index == kAttack)
+    {
         return "Attack";
+    }
     else if (index == kRelease)
+    {
         return "Release";
+    }
     else if (index == kGateThreshold)
+    {
         return "Gate Thresh";
+    }
     else if (index == kGateCCL)
+    {
         return "L Gate CC";
+    }
     else if (index == kGateCCR)
+    {
         return "R Gate CC";
+    }
     else if (index == kGateOnValueCCL)
+    {
         return "L On Value";
+    }
     else if (index == kGateOnValueCCR)
+    {
         return "R On Value";
+    }
     else if (index == kGateOffValueCCL)
+    {
         return "L Off Value";
+    }
     else if (index == kGateOffValueCCR)
+    {
         return "R Off Value";
+    }
     else if (index == kGateResetL)
+    {
         return "L Gate Reset";
+    }
     else if (index == kGateResetR)
+    {
         return "R Gate Reset";
+    }
     return juce::String();
 }
 
 const juce::String AudioToCC::getParameterText(int index)
 {
     if (index == kGain || index == kPeakGain)
+    {
         return param[index] == 0.f ? juce::String("-inf") : juce::String(20.f * log10(param[index] * maxGain), 1) + " dB";
+    }
     else if (index == kAttack)
+    {
         return juce::String(roundToInt(param[kAttack] * 100.f));
+    }
     else if (index == kRelease)
+    {
         return juce::String(roundToInt(param[kRelease] * 100.f));
+    }
     else if (index == kDevice)
     {
         if (param[kDevice] > 0.0)
+        {
             return devices[roundToInt(param[kDevice] * (devices.size() - 1))].name;
+        }
         else
+        {
             return juce::String("--");
+        }
     }
     else if (index == kCCL || index == kCCR)
     {
@@ -313,37 +395,57 @@ const juce::String AudioToCC::getParameterText(int index)
     else if (index == kStereo)
     {
         if (param[kStereo] < 0.5f)
+        {
             return juce::String("Mono (L+R)");
+        }
         else
+        {
             return juce::String("Stereo");
+        }
     }
     else if (index == kChannel)
+    {
         return juce::String(roundToInt(param[index] * 15.0) + 1);
+    }
     else if (index == kAutomateHost)
     {
         if (param[kAutomateHost] < 0.5f)
+        {
             return juce::String("Off");
+        }
         else
+        {
             return juce::String("On");
+        }
     }
     else if (index == kMode)
     {
         if (param[kMode] >= 0.5f)
+        {
             return juce::String("Logarithmic");
+        }
         else
+        {
             return juce::String("Linear");
+        }
     }
     else if (index == kMidiToHost)
     {
         if (param[kMidiToHost] < 0.5f)
+        {
             return juce::String("Off");
+        }
         else
+        {
             return juce::String("On");
+        }
     }
     else if (index == kGateThreshold)
     {
         if (param[index] == 0.f)
+        {
             return "Off";
+        }
         return juce::String(20.f * log10(param[index]), 1) + " dB";
     }
     else if (index == kGateCCL || index == kGateCCR)
@@ -366,7 +468,9 @@ const juce::String AudioToCC::getParameterText(int index)
         return juce::String((param[index] == 1.f ? 1.0 / getSampleRate() : (1.0f - param[index]) * 0.0025f + 0.001f) * 1000, 1) + " ms";
     }
     else
+    {
         return juce::String(roundToInt(param[index] * 100.f));
+    }
 }
 
 const juce::String AudioToCC::getInputChannelName(const int channelIndex) const
@@ -382,17 +486,25 @@ const juce::String AudioToCC::getOutputChannelName(const int channelIndex) const
 bool AudioToCC::isInputChannelStereoPair(int index) const
 {
     if (getNumInputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool AudioToCC::isOutputChannelStereoPair(int index) const
 {
     if (getNumOutputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void AudioToCC::setCurrentProgram(int index)
@@ -446,14 +558,22 @@ int AudioToCC::smooth(int data, int old, int older, float inertia)
     //if (data>old) data=data-roundToInt((float)(data-old)*inertia*0.9f);
     float change = (float) (data - old) * (1.0f - inertia * 0.95f);
     if (change < 1.0f && change > 0.0f)
+    {
         change = 1.0f;
+    }
     else if (change < 0.0f && change > -1.0f)
+    {
         change = -1.0f;
+    }
     data = old + roundToInt(change);
     if (data < 1)
+    {
         data = 0;
+    }
     if (data > 127)
+    {
         data = 127;
+    }
     return data;
 }
 
@@ -495,11 +615,17 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
         {
             juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccL, gateOffValueL);
             if (midiOutput)
+            {
                 midiOutput->sendMessageNow(cc);
+            }
             if (param[kMidiToHost] >= 0.5f)
+            {
                 midiMessages.addEvent(cc, 0);
+            }
             if (param[kAutomateHost] >= 0.5f)
+            {
                 setParameterNotifyingHost(kLClip, 0.f);
+            }
         }
         lastGateCCL = false;
         resetGateL  = false;
@@ -511,11 +637,17 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
         {
             juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccR, gateOffValueR);
             if (midiOutput)
+            {
                 midiOutput->sendMessageNow(cc);
+            }
             if (param[kMidiToHost] >= 0.5f)
+            {
                 midiMessages.addEvent(cc, 0);
+            }
             if (param[kAutomateHost] >= 0.5f)
+            {
                 setParameterNotifyingHost(kRClip, 0.f);
+            }
         }
         lastGateCCR = false;
         resetGateR  = false;
@@ -541,12 +673,18 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                 {
                     juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccL, gateOnValueL);
                     if (midiOutput)
+                    {
                         midiOutput->sendMessageNow(cc);
+                    }
                     if (param[kMidiToHost] >= 0.5f)
+                    {
                         midiMessages.addEvent(cc, i);
+                    }
                 }
                 if (param[kAutomateHost] >= 0.5f)
+                {
                     setParameterNotifyingHost(kLClip, 1.f);
+                }
                 lastGateCCL = true;
             }
             else if (lastInL < thresh && lastGateCCL)
@@ -555,12 +693,18 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                 {
                     juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccL, gateOffValueL);
                     if (midiOutput)
+                    {
                         midiOutput->sendMessageNow(cc);
+                    }
                     if (param[kMidiToHost] >= 0.5f)
+                    {
                         midiMessages.addEvent(cc, i);
+                    }
                 }
                 if (param[kAutomateHost] >= 0.5f)
+                {
                     setParameterNotifyingHost(kLClip, 0.f);
+                }
                 lastGateCCL = false;
             }
         }
@@ -608,11 +752,17 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                 {
                     juce::MidiMessage cc(0xB0 | Ch, ccL, data2);
                     if (midiOutput)
+                    {
                         midiOutput->sendMessageNow(cc);
+                    }
                     if (param[kMidiToHost] >= 0.5f)
+                    {
                         midiMessages.addEvent(cc, i);
+                    }
                     if (param[kAutomateHost] >= 0.5f)
+                    {
                         setParameterNotifyingHost(kLOut, midiToFloat(data2, false));
+                    }
                 }
                 olderenv[0] = oldenv[0];
                 oldenv[0]   = data2;
@@ -637,12 +787,18 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                     {
                         juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccR, gateOnValueR);
                         if (midiOutput)
+                        {
                             midiOutput->sendMessageNow(cc);
+                        }
                         if (param[kMidiToHost] >= 0.5f)
+                        {
                             midiMessages.addEvent(cc, i);
+                        }
                     }
                     if (param[kAutomateHost] >= 0.5f && ! lastGateCCR)
+                    {
                         setParameterNotifyingHost(kRClip, 1.f);
+                    }
                     lastGateCCR = true;
                 }
                 else if (lastInR < thresh && lastGateCCR)
@@ -651,12 +807,18 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                     {
                         juce::MidiMessage cc = juce::MidiMessage::controllerEvent(Ch + 1, gateccR, gateOffValueR);
                         if (midiOutput)
+                        {
                             midiOutput->sendMessageNow(cc);
+                        }
                         if (param[kMidiToHost] >= 0.5f)
+                        {
                             midiMessages.addEvent(cc, i);
+                        }
                     }
                     if (param[kAutomateHost] >= 0.5f && lastGateCCR)
+                    {
                         setParameterNotifyingHost(kRClip, 0.f);
+                    }
                     lastGateCCR = false;
                 }
             }
@@ -700,11 +862,17 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
                     {
                         juce::MidiMessage cc(0xB0 | Ch, ccR, data2);
                         if (midiOutput)
+                        {
                             midiOutput->sendMessageNow(cc);
+                        }
                         if (param[kMidiToHost] >= 0.5f)
+                        {
                             midiMessages.addEvent(cc, i);
+                        }
                         if (param[kAutomateHost] >= 0.5f)
+                        {
                             setParameterNotifyingHost(kROut, midiToFloat(data2, false));
+                        }
                     }
                     olderenv[1] = oldenv[1];
                     oldenv[1]   = data2;
@@ -713,7 +881,9 @@ void AudioToCC::processBlock(juce::AudioSampleBuffer& buffer,
             }
         }
         if (rateCounter >= sampleThreshold)
+        {
             rateCounter = 0;
+        }
     }
 }
 

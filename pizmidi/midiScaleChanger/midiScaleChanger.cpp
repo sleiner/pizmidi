@@ -103,7 +103,9 @@ MidiScaleChanger::MidiScaleChanger(audioMasterCallback audioMaster)
 MidiScaleChanger::~MidiScaleChanger()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -340,7 +342,9 @@ void MidiScaleChanger::getParameterDisplay(VstInt32 index, char* text)
         case k10:
         case k11:
             if (notetable[index] == -13)
+            {
                 strcpy(text, "--");
+            }
             else if (notetable[index] < 0)
             {
                 sprintf(text, "%d (%s)", notetable[index], getNoteNameWithoutOctave(midiNoteWrap(root + index + notetable[index])));
@@ -352,27 +356,43 @@ void MidiScaleChanger::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kRoot:
             if (root < 0)
+            {
                 sprintf(text, "%d (%s)", root, getNoteNameWithoutOctave(midiNoteWrap(root)));
+            }
             else
+            {
                 sprintf(text, "+%d (%s)", root, getNoteNameWithoutOctave(midiNoteWrap(root)));
+            }
             break;
         case kWrap:
             if (wrap)
+            {
                 strcpy(text, "On");
+            }
             else
+            {
                 strcpy(text, "Off");
+            }
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL016(fChannel) == 0)
+            {
                 strcpy(text, "As Input");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChannel));
+            }
             break;
         case kAltChannel:
             if (FLOAT_TO_CHANNEL016(fAltChannel) == 0)
+            {
                 strcpy(text, "None");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fAltChannel));
+            }
             break;
         case kProg:
             getProgramNameIndexed(0, roundToInt(fProg * (kNumPrograms - 1)), text);
@@ -395,7 +415,9 @@ void MidiScaleChanger::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVe
         bool discard       = false;
         int tchannel       = FLOAT_TO_CHANNEL(fChannel);
         if (tchannel == -1)
+        {
             tchannel = channel;
+        }
 
         if (isNoteOn(tomod))
         {
@@ -443,7 +465,9 @@ void MidiScaleChanger::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVe
         {
             // always transpose noteoff by the same amount that the noteon was transposed by (and send on the same channel)
             if (transposed[data1][channel] == -999)
+            {
                 discard = true;
+            }
             else
             {
                 tomod.midiData[0] = MIDI_NOTEOFF | noteOnChannel[data1][channel];
@@ -476,6 +500,8 @@ void MidiScaleChanger::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVe
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

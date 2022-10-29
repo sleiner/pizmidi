@@ -253,7 +253,9 @@ private:
         if (note->message.isNoteOn())
         {
             if (note->noteOffObject == nullptr)
+            {
                 sequence->updateMatchedPairs();
+            }
             selectedNotes.addIfNotAlreadyThere(note);
             selectedNoteLengths.add(PizNote(note));
         }
@@ -316,11 +318,17 @@ private:
             while (y > 0)
             {
                 if (getNoteNameWithoutOctave(n).contains("#"))
+                {
                     g.setColour(juce::Colours::lightgrey);
+                }
                 else if (n == 60)
+                {
                     g.setColour(juce::Colours::yellow);
+                }
                 else
+                {
                     g.setColour(juce::Colours::white);
+                }
                 g.fillRect(0.f, y - yinc, (float) getWidth(), yinc);
                 if (getNoteNameWithoutOctave(n).contains("F") && ! getNoteNameWithoutOctave(n).contains("#"))
                 {

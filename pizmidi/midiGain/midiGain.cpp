@@ -39,7 +39,9 @@ MidiGain::MidiGain(audioMasterCallback audioMaster)
     programs = new MidiGainProgram[numPrograms];
 
     if (programs)
+    {
         setProgram(0);
+    }
 
     init();
 }
@@ -54,11 +56,17 @@ MidiGain::~MidiGain()
     delete[] _midiEventsOut;
 
     if (_vstEventsToHost)
+    {
         delete _vstEventsToHost;
+    }
     if (_vstMidiEventsToHost)
+    {
         delete[] _vstMidiEventsToHost;
+    }
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -69,7 +77,9 @@ void MidiGain::setProgram(VstInt32 program)
         MidiGainProgram* ap = &programs[program];
         curProgram          = program;
         for (int i = 0; i < numParams; i++)
+        {
             setParameter(i, ap->param[i]);
+        }
     }
 }
 
@@ -145,14 +155,18 @@ void MidiGain::resume()
 void MidiGain::setParameter(VstInt32 index, float value)
 {
     if (index < numParams)
+    {
         param[index] = programs[curProgram].param[index] = value;
+    }
 }
 
 //-----------------------------------------------------------------------------------------
 float MidiGain::getParameter(VstInt32 index)
 {
     if (index < numParams)
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -201,21 +215,31 @@ VstInt32 MidiGain::canDo(char* text)
     if (PLUG_MIDI_OUTPUTS)
     {
         if (! strcmp(text, "sendVstMidiEvent"))
+        {
             return 1;
+        }
         if (! strcmp(text, "sendVstEvents"))
+        {
             return 1;
+        }
     }
     if (PLUG_MIDI_INPUTS)
     {
         if (! strcmp(text, "receiveVstEvents"))
+        {
             return 1;
+        }
         if (! strcmp(text, "receiveVstMidiEvent"))
+        {
             return 1;
+        }
     }
 
     // VstTimeInfo
     if (! strcmp(text, "receiveVstTimeInfo"))
+    {
         return 1;
+    }
 
     return -1; // -1 => explicitly can't do; 0 => don't know
 }
@@ -258,14 +282,18 @@ bool MidiGain::init()
 void MidiGain::_cleanMidiInBuffers()
 {
     for (int i = 0; i < PLUG_MIDI_INPUTS; i++)
+    {
         _midiEventsIn[i].clear();
+    }
 }
 
 //DONT MODIFY THIS METHOD EITHER!!!!
 void MidiGain::_cleanMidiOutBuffers()
 {
     for (int i = 0; i < PLUG_MIDI_OUTPUTS; i++)
+    {
         _midiEventsOut[i].clear();
+    }
 }
 
 void MidiGain::preProcess()
@@ -307,7 +335,9 @@ void MidiGain::postProcess()
         }
         _vstEventsToHost->reserved = 0;
         if (_midiEventsOut[0].size() > 0)
+        {
             sendVstEventsToHost((VstEvents*) _vstEventsToHost);
+        }
     }
     else
     {
@@ -316,9 +346,13 @@ void MidiGain::postProcess()
         while (left > 0)
         {
             if (left > MAX_EVENTS_PER_TIMESLICE)
+            {
                 _vstEventsToHost->numEvents = MAX_EVENTS_PER_TIMESLICE;
+            }
             else
+            {
                 _vstEventsToHost->numEvents = left;
+            }
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
                 VstInt32 j                          = i + count;
@@ -357,7 +391,9 @@ VstInt32 MidiGain::processEvents(VstEvents* ev)
     for (int i = 0; i < evts->numEvents; i++)
     {
         if ((evts->events[i])->type != kVstMidiType)
+        {
             continue;
+        }
         VstMidiEvent* event = (VstMidiEvent*) evts->events[i];
         _midiEventsIn[0].push_back(*event);
     }

@@ -105,7 +105,9 @@ MidiKeySplit4::MidiKeySplit4(audioMasterCallback audioMaster)
 MidiKeySplit4::~MidiKeySplit4()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -115,7 +117,9 @@ void MidiKeySplit4::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -223,9 +227,13 @@ void MidiKeySplit4::getParameterDisplay(VstInt32 index, char* text)
         case kOutChannel3:
         case kOutChannel4:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "As Input");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kInChannel:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
@@ -240,9 +248,13 @@ void MidiKeySplit4::getParameterDisplay(VstInt32 index, char* text)
         case kSplit2:
         case kSplit3:
             if (FLOAT_TO_MIDI_X(param[index]) == learn)
+            {
                 strcpy(text, "Learn...");
+            }
             else
+            {
                 sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI_X(param[index]), bottomOctave), FLOAT_TO_MIDI_X(param[index]));
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -276,16 +288,26 @@ void MidiKeySplit4::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         int data2   = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (ch1 == -1)
+        {
             ch1 = channel;
+        }
         if (ch2 == -1)
+        {
             ch2 = channel;
+        }
         if (ch3 == -1)
+        {
             ch3 = channel;
+        }
         if (ch4 == -1)
+        {
             ch4 = channel;
+        }
 
         if (channel == ch)
         {

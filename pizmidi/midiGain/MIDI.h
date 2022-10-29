@@ -289,27 +289,39 @@ inline bool isBlackKey(int noteNumber)
 inline int midiLimit(int data)
 {
     if (data < 0)
+    {
         return 0;
+    }
     if (data > 127)
+    {
         return 127;
+    }
     return data;
 }
 
 inline int midiNoteWrap(int n)
 {
     while (n < 0)
+    {
         n += 12;
+    }
     while (n > 127)
+    {
         n -= 12;
+    }
     return n;
 }
 
 inline int velocityLimit(int data)
 {
     if (data < 1)
+    {
         return 1;
+    }
     if (data > 127)
+    {
         return 127;
+    }
     return data;
 }
 

@@ -189,7 +189,9 @@ MidiNotchFilter::MidiNotchFilter(audioMasterCallback audioMaster)
 MidiNotchFilter::~MidiNotchFilter()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -228,9 +230,13 @@ void MidiNotchFilter::setProgramName(char* name)
 void MidiNotchFilter::getProgramName(char* name)
 {
     if (! strcmp(programs[curProgram].name, "Init"))
+    {
         sprintf(name, "%s %d", programs[curProgram].name, curProgram + 1);
+    }
     else
+    {
         strcpy(name, programs[curProgram].name);
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -418,265 +424,435 @@ void MidiNotchFilter::getParameterDisplay(VstInt32 index, char* text)
     {
         case kmsg1:
             if (fmsg[0] < 1 * inc)
+            {
                 strcpy(text, "None");
+            }
             else if (fmsg[0] < 2 * inc)
+            {
                 strcpy(text, "CC");
+            }
             else if (fmsg[0] < 3 * inc)
+            {
                 strcpy(text, "Note");
+            }
             else if (fmsg[0] < 4 * inc)
+            {
                 strcpy(text, "Pitch Bend");
+            }
             else if (fmsg[0] < 5 * inc)
+            {
                 strcpy(text, "Chan.Pressure");
+            }
             else if (fmsg[0] < 6 * inc)
+            {
                 strcpy(text, "Aftertouch");
+            }
             else
+            {
                 strcpy(text, "Prog.Change");
+            }
             break;
 
         case kch1:
             if (fmsg[0] < 1 * inc)
+            {
                 strcpy(text, " ");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL016(fch[0]) < 1)
+                {
                     strcpy(text, "Any");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL016(fch[0]));
+                }
             }
             break;
 
         case kvalue1:
             if (fmsg[0] < 1 * inc)
+            {
                 strcpy(text, " ");
+            }
             else if (fmsg[0] < 2 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[0]) == 0.0f)
+                {
                     strcpy(text, "All CCs");
+                }
                 else
+                {
                     sprintf(text, "CC %d", (FLOAT_TO_MIDI2(fvalue[0])) - 1);
+                }
             }
             else if (fmsg[0] < 3 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[0]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[0])) - 1, bottomOctave));
+                }
             }
             else if (fmsg[0] < 4 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[0] < 5 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[0] < 6 * inc)
             {
                 if FLOAT_TO_MIDI2 (fvalue[0] == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[0])) - 1, bottomOctave));
+                }
             }
             else
+            {
                 strcpy(text, "All");
+            }
             break;
 
         case kmsg2:
             if (fmsg[1] < 1 * inc)
+            {
                 strcpy(text, "None");
+            }
             else if (fmsg[1] < 2 * inc)
+            {
                 strcpy(text, "CC");
+            }
             else if (fmsg[1] < 3 * inc)
+            {
                 strcpy(text, "Note");
+            }
             else if (fmsg[1] < 4 * inc)
+            {
                 strcpy(text, "Pitch Bend");
+            }
             else if (fmsg[1] < 5 * inc)
+            {
                 strcpy(text, "Chan.Pressure");
+            }
             else if (fmsg[1] < 6 * inc)
+            {
                 strcpy(text, "Aftertouch");
+            }
             else
+            {
                 strcpy(text, "Prog.Change");
+            }
             break;
 
         case kch2:
             if (fmsg[1] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL016(fch[1]) < 1)
+                {
                     strcpy(text, "Any");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL016(fch[1]));
+                }
             }
             break;
 
         case kvalue2:
             if (fmsg[1] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else if (fmsg[1] < 2 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[1]) == 0.0f)
+                {
                     strcpy(text, "All CCs");
+                }
                 else
+                {
                     sprintf(text, "CC %d", (FLOAT_TO_MIDI2(fvalue[1])) - 1);
+                }
             }
             else if (fmsg[1] < 3 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[1]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[1])) - 1, bottomOctave));
+                }
             }
             else if (fmsg[1] < 4 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[1] < 5 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[1] < 6 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[1]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[1])) - 1, bottomOctave));
+                }
             }
             else
+            {
                 strcpy(text, "All");
+            }
             break;
 
         case kmsg3:
             if (fmsg[2] < 1 * inc)
+            {
                 strcpy(text, "None");
+            }
             else if (fmsg[2] < 2 * inc)
+            {
                 strcpy(text, "CC");
+            }
             else if (fmsg[2] < 3 * inc)
+            {
                 strcpy(text, "Note");
+            }
             else if (fmsg[2] < 4 * inc)
+            {
                 strcpy(text, "Pitch Bend");
+            }
             else if (fmsg[2] < 5 * inc)
+            {
                 strcpy(text, "Chan.Pressure");
+            }
             else if (fmsg[2] < 6 * inc)
+            {
                 strcpy(text, "Aftertouch");
+            }
             else
+            {
                 strcpy(text, "Prog.Change");
+            }
             break;
 
         case kch3:
             if (fmsg[2] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL016(fch[2]) < 1)
+                {
                     strcpy(text, "Any");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL016(fch[2]));
+                }
             }
             break;
 
         case kvalue3:
             if (fmsg[2] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else if (fmsg[2] < 2 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[2]) == 0.0f)
+                {
                     strcpy(text, "All CCs");
+                }
                 else
+                {
                     sprintf(text, "CC %d", (FLOAT_TO_MIDI2(fvalue[2])) - 1);
+                }
             }
             else if (fmsg[2] < 3 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[2]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[2])) - 1, bottomOctave));
+                }
             }
             else if (fmsg[2] < 4 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[2] < 5 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[2] < 6 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[2]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[2])) - 1, bottomOctave));
+                }
             }
             else
+            {
                 strcpy(text, "All");
+            }
             break;
 
         case kmsg4:
             if (fmsg[3] < 1 * inc)
+            {
                 strcpy(text, "None");
+            }
             else if (fmsg[3] < 2 * inc)
+            {
                 strcpy(text, "CC");
+            }
             else if (fmsg[3] < 3 * inc)
+            {
                 strcpy(text, "Note");
+            }
             else if (fmsg[3] < 4 * inc)
+            {
                 strcpy(text, "Pitch Bend");
+            }
             else if (fmsg[3] < 5 * inc)
+            {
                 strcpy(text, "Chan.Pressure");
+            }
             else if (fmsg[3] < 6 * inc)
+            {
                 strcpy(text, "Aftertouch");
+            }
             else
+            {
                 strcpy(text, "Prog.Change");
+            }
             break;
 
         case kch4:
             if (fmsg[3] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL016(fch[3]) < 1)
+                {
                     strcpy(text, "Any");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL016(fch[3]));
+                }
             }
             break;
 
         case kvalue4:
             if (fmsg[3] < 1 * inc)
+            {
                 strcpy(text, "");
+            }
             else if (fmsg[3] < 2 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[3]) == 0.0f)
+                {
                     strcpy(text, "All CCs");
+                }
                 else
+                {
                     sprintf(text, "CC %d", (FLOAT_TO_MIDI2(fvalue[3])) - 1);
+                }
             }
             else if (fmsg[3] < 3 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[3]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[3])) - 1, bottomOctave));
+                }
             }
             else if (fmsg[3] < 4 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[3] < 5 * inc)
+            {
                 strcpy(text, "All");
+            }
             else if (fmsg[3] < 6 * inc)
             {
                 if (FLOAT_TO_MIDI2(fvalue[3]) == 0.0f)
+                {
                     strcpy(text, "All Notes");
+                }
                 else
+                {
                     strcpy(text, getNoteName((FLOAT_TO_MIDI2(fvalue[3])) - 1, bottomOctave));
+                }
             }
             else
+            {
                 strcpy(text, "All");
+            }
             break;
 
         case kmode:
             if (fmode < 0.5)
             {
                 if (FLOAT_TO_CHANNEL016(foutch) > 0)
+                {
                     strcpy(text, "Channelize");
+                }
                 else
+                {
                     strcpy(text, "Block");
+                }
             }
             else
+            {
                 strcpy(text, "Pass");
+            }
             break;
 
         case koutch:
             if (FLOAT_TO_CHANNEL016(foutch) > 0)
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(foutch));
+            }
             else
+            {
                 strcpy(text, "");
+            }
             break;
         default:
             break;
@@ -709,26 +885,44 @@ void MidiNotchFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                 break;
             }
             else if (fmsg[n] < 2 * inc)
+            {
                 msg[n] = MIDI_CONTROLCHANGE;
+            }
             else if (fmsg[n] < 3 * inc)
+            {
                 msg[n] = MIDI_NOTEON;
+            }
             else if (fmsg[n] < 4 * inc)
+            {
                 msg[n] = MIDI_PITCHBEND;
+            }
             else if (fmsg[n] < 5 * inc)
+            {
                 msg[n] = MIDI_CHANNELPRESSURE;
+            }
             else if (fmsg[n] < 6 * inc)
+            {
                 msg[n] = MIDI_POLYKEYPRESSURE;
+            }
             else
+            {
                 msg[n] = MIDI_PROGRAMCHANGE;
+            }
 
             ch[n] = FLOAT_TO_CHANNEL016(fch[n]);
             if (ch[n] == 0)
+            {
                 ch[n] = channel;
+            }
             value[n] = FLOAT_TO_MIDI2(fvalue[n]); // 1-128, 0=all
             if (value[n] == 0)
+            {
                 value[n] = data1;
+            }
             else
+            {
                 value[n] = value[n] - 1;
+            }
 
             if (channel == ch[n])
             {
@@ -737,7 +931,9 @@ void MidiNotchFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                     if (msg[n] == MIDI_CONTROLCHANGE || msg[n] == MIDI_NOTEON || msg[n] == MIDI_POLYKEYPRESSURE)
                     {
                         if (data1 == value[n])
+                        {
                             match = true;
+                        }
                     }
                     else if (msg[n] == MIDI_PITCHBEND || msg[n] == MIDI_CHANNELPRESSURE || msg[n] == MIDI_PROGRAMCHANGE)
                     {
@@ -747,7 +943,9 @@ void MidiNotchFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                 else if (msg[n] == MIDI_NOTEON && status == MIDI_NOTEOFF)
                 {
                     if (data1 == value[n])
+                    {
                         match = true;
+                    }
                 }
             }
         }
@@ -767,13 +965,17 @@ void MidiNotchFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
         else if (fmode >= 0.5f)
         {
             if (! match)
+            {
                 discard = true;
+            }
             if (match && FLOAT_TO_CHANNEL016(foutch) > 0)
             {
                 tomod.midiData[0] = status | ((FLOAT_TO_CHANNEL016(foutch)) - 1);
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

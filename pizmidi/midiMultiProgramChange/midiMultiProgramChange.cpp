@@ -19,7 +19,9 @@ MidiProgramChangeProgram::MidiProgramChangeProgram()
 {
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kThru]    = 1.f;
     param[kTrigger] = 0.4f;
     // default program name
@@ -65,7 +67,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
     memset(trig, 0, sizeof(trig));
     senttrig = false;
     for (int i = 0; i < kNumParams; i++)
+    {
         automated[i] = false;
+    }
 
     wait         = false;
     delaytime    = (int) (sampleRate * 0.002f);
@@ -73,7 +77,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
     triggerdelta = 0;
 
     if (programs)
+    {
         setProgram(0);
+    }
 
     init();
 }
@@ -82,7 +88,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
 MidiProgramChange::~MidiProgramChange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -142,13 +150,17 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
         thru         = value >= 0.5f;
         param[index] = value;
         for (int i = 0; i < kNumPrograms; i++)
+        {
             programs[i].param[index] = value;
+        }
     }
     else if (index == kChannel)
     {
         param[index] = value;
         for (int i = 0; i < kNumPrograms; i++)
+        {
             programs[i].param[index] = value;
+        }
     }
     else if (index == kTrigger)
     {
@@ -157,11 +169,15 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
         { // && !senttrig) {
             trigger = true;
             for (int ch = 0; ch < 16; ch++)
+            {
                 trig[ch] = true;
+            }
             senttrig = true;
         }
         else if (value < 1.f && senttrig)
+        {
             senttrig = false;
+        }
     }
     else if (index >= kProgram && index < kProgram + 16)
     {
@@ -209,16 +225,24 @@ void MidiProgramChange::getParameterDisplay(VstInt32 index, char* text)
     if (index == kThru)
     {
         if (thru)
+        {
             strcpy(text, "Yes");
+        }
         else
+        {
             strcpy(text, "No");
+        }
     }
     else if (index >= kProgram && index < kProgram + 16)
     {
         if (program[index - kProgram] == 0)
+        {
             strcpy(text, "Off");
+        }
         else
+        {
             sprintf(text, "%d", program[index - kProgram]);
+        }
     }
     else if (index == kChannel)
     {
@@ -227,9 +251,13 @@ void MidiProgramChange::getParameterDisplay(VstInt32 index, char* text)
     else if (index == kTrigger)
     {
         if (param[index] == 1.f)
+        {
             strcpy(text, "Triggered!");
+        }
         else
+        {
             strcpy(text, "Trigger-->");
+        }
     }
     else if (index == kCurrentProgram)
     {
@@ -265,7 +293,9 @@ void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
             }
         } // if listenchannel==channel
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     if (trigger)

@@ -34,7 +34,9 @@ MidiChordHold::MidiChordHold(audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
     }
 
     holding     = false;
@@ -54,14 +56,18 @@ MidiChordHold::~MidiChordHold()
 void MidiChordHold::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
+    {
         param[index] = value;
+    }
 }
 
 //-----------------------------------------------------------------------------------------
 float MidiChordHold::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
+    {
         return param[index];
+    }
     return 0;
 }
 
@@ -88,9 +94,13 @@ void MidiChordHold::getParameterDisplay(VstInt32 index, char* text)
     {
         case kParam01:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kChannel:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[kChannel]) + 1);
@@ -145,7 +155,9 @@ void MidiChordHold::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         bool discard = false;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (status == MIDI_NOTEON)
         {
@@ -197,7 +209,9 @@ void MidiChordHold::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 }
             }
             else
+            {
                 held_notes[data1][channel] = false;
+            }
         }
         else if (status == MIDI_CONTROLCHANGE)
         {
@@ -224,7 +238,9 @@ void MidiChordHold::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
     wasOn = on;
 }

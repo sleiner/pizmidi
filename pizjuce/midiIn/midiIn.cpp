@@ -67,7 +67,9 @@ void MidiInFilter::setParameter(int index, float newValue)
             else
             {
                 if (midiInput)
+                {
                     midiInput->stop();
+                }
                 midiInput = nullptr;
             }
         }
@@ -103,9 +105,13 @@ juce::MidiDeviceInfo MidiInFilter::getDeviceByName(juce::String name) const
 const juce::String MidiInFilter::getParameterName(int index)
 {
     if (index == kPower)
+    {
         return "Power";
+    }
     if (index == kHostIn)
+    {
         return "HostIn";
+    }
     return juce::String();
 }
 
@@ -114,16 +120,24 @@ const juce::String MidiInFilter::getParameterText(int index)
     if (index == kPower)
     {
         if (param[kPower] > 0.f)
+        {
             return juce::String("On");
+        }
         else
+        {
             return juce::String("Off");
+        }
     }
     if (index == kHostIn)
     {
         if (param[kHostIn] >= 0.5)
+        {
             return juce::String("On");
+        }
         else
+        {
             return juce::String("Off");
+        }
     }
     return juce::String();
 }
@@ -141,17 +155,25 @@ const juce::String MidiInFilter::getOutputChannelName(const int channelIndex) co
 bool MidiInFilter::isInputChannelStereoPair(int index) const
 {
     if (getNumInputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool MidiInFilter::isOutputChannelStereoPair(int index) const
 {
     if (getNumOutputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void MidiInFilter::setCurrentProgram(int index)
@@ -198,13 +220,17 @@ void MidiInFilter::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     this->collector.reset(sampleRate);
     if (midiInput)
+    {
         midiInput->start();
+    }
 }
 
 void MidiInFilter::releaseResources()
 {
     if (midiInput)
+    {
         midiInput->stop();
+    }
     this->collector.reset(44100);
 }
 
@@ -218,7 +244,9 @@ void MidiInFilter::processBlock(juce::AudioSampleBuffer& buffer,
 
     const int channel = roundToInt(param[kChannel] * 16.f);
     if (param[kHostIn] < 0.5f)
+    {
         midiMessages.clear();
+    }
     collector.removeNextBlockOfMessages(midiMessages, buffer.getNumSamples());
     if (channel > 0)
     {

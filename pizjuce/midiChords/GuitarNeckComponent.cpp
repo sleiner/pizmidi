@@ -114,7 +114,9 @@ FrettedNote GuitarNeckComponent::xyToNote(const juce::Point<int>& pos, float& mo
     FrettedNote fretString;
 
     if (! reallyContains(pos, false))
+    {
         return fretString;
+    }
 
     juce::Point<int> p(pos);
 
@@ -149,7 +151,9 @@ void GuitarNeckComponent::repaintNote(const int fret)
         int x = 0;
         int w = getFretWidth(fret);
         if (fret > 0)
+        {
             x = getFretPos(fret - 1);
+        }
         repaint(x - 10, 0, w + 20, getHeight());
     }
 }
@@ -247,10 +251,14 @@ void GuitarNeckComponent::drawFretString(int fret, int string, juce::Graphics& g
     juce::Colour c(juce::Colours::transparentWhite);
 
     if (isDown)
+    {
         c = findColour(keyDownOverlayColourId);
+    }
 
     if (isOver)
+    {
         c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+    }
 
     g.setColour(c);
     g.fillRect(x, y, w, h);
@@ -274,7 +282,9 @@ void GuitarNeckComponent::drawFretString(int fret, int string, juce::Graphics& g
     g.fillRect(x, y, 1, h);
 
     if (fret == rangeEnd)
+    {
         g.fillRect(x + w, y, 1, h);
+    }
 }
 
 void GuitarNeckComponent::setOctaveForMiddleC(const int octaveNumForMiddleC_)
@@ -459,7 +469,9 @@ void GuitarNeckComponent::mouseDrag(const juce::MouseEvent& e)
     const FrettedNote newNote = xyToNote(e.getPosition(), mousePositionVelocity);
 
     if (newNote.isValid())
+    {
         mouseDraggedToKey(newNote.fret, newNote.string, e);
+    }
 
     updateNoteUnderMouse(e.getPosition());
     repaint();

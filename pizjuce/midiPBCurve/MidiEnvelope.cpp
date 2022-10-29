@@ -150,9 +150,13 @@ void MidiEnvelope::paint(juce::Graphics& g)
             {
                 g.setColour(juce::Colours::black);
                 if (i == 0 || i == (MAX_ENVELOPE_POINTS - 1))
+                {
                     g.drawEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 3);
+                }
                 else
+                {
                     g.drawEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 1);
+                }
             }
             if (isPointControl(i))
             {
@@ -205,7 +209,9 @@ void MidiEnvelope::mouseDown(const juce::MouseEvent& e)
         else if (e.mods.isMiddleButtonDown() || e.mods.isAltDown())
         {
             if (draggingPoint > 0 && draggingPoint < (MAX_ENVELOPE_POINTS - 1))
+            {
                 setPointControl(draggingPoint, ! isPointControl(draggingPoint));
+            }
         }
         else if (e.mods.isShiftDown())
         {
@@ -228,7 +234,9 @@ void MidiEnvelope::mouseDown(const juce::MouseEvent& e)
             float pbrange  = plugin->getParameter(kPBRange) * 48.f;
             float pbrange2 = plugin->getParameter(kPBRange2) * 48.f;
             if (pbrange2 == 0.f)
+            {
                 pbrange2 = pbrange;
+            }
             if (p.getX() > 0.5f)
             {
                 labelX->setText("x: "
@@ -291,7 +299,9 @@ int MidiEnvelope::findInactivePoint()
     for (int i = 1; i < MAX_ENVELOPE_POINTS - 1; i++)
     {
         if (! plugin->isPointActive(i))
+        {
             return i;
+        }
     }
     return -1;
 }
@@ -309,12 +319,18 @@ void MidiEnvelope::mouseDoubleClick(const juce::MouseEvent& e)
         if (e.mods.isShiftDown())
         {
             if (e.mods.isCommandDown())
+            {
                 addPoint((float) e.x, 0.5f * getHeight(), false);
+            }
             else
+            {
                 addPoint((float) e.x, (getWidth() - (float) e.x) * getHeight() / getWidth(), false);
+            }
         }
         else
+        {
             addPoint((float) e.x, (float) e.y, false);
+        }
     }
     repaint();
 }
@@ -329,7 +345,9 @@ void MidiEnvelope::mouseDrag(const juce::MouseEvent& e)
             restrict = -1;
         }
         else
+        {
             restrict = 1;
+        }
     }
 
     if (draggingPoint != -1)
@@ -359,12 +377,18 @@ void MidiEnvelope::mouseDrag(const juce::MouseEvent& e)
         if (e.mods.isShiftDown())
         {
             if (e.mods.isCommandDown())
+            {
                 points[draggingPoint][1] = 0.5f;
+            }
             else
+            {
                 points[draggingPoint][1] = 1.f - points[draggingPoint][0];
+            }
         }
         else
+        {
             points[draggingPoint][1] = restrict == 1 ? oldpoints[draggingPoint][1] : (jmax(0.f, jmin(snapy, (float) getHeight()))) / (float) getHeight();
+        }
 
         plugin->setParameterNotifyingHost((paramNumber + 1), (1.f - points[draggingPoint][1]));
         labelX->setColour(juce::Label::textColourId, juce::Colours::red);
@@ -373,7 +397,9 @@ void MidiEnvelope::mouseDrag(const juce::MouseEvent& e)
         float pbrange  = plugin->getParameter(kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter(kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
+        {
             pbrange2 = pbrange;
+        }
         if (p.getX() > 0.5f)
         {
             labelX->setText("x: "
@@ -463,7 +489,9 @@ void MidiEnvelope::mouseMove(const juce::MouseEvent& e)
         float pbrange  = plugin->getParameter(kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter(kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
+        {
             pbrange2 = pbrange;
+        }
         if (p.getX() > 0.5f)
         {
             labelX->setText("x: "
@@ -504,7 +532,9 @@ void MidiEnvelope::mouseMove(const juce::MouseEvent& e)
         float pbrange  = plugin->getParameter(kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter(kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
+        {
             pbrange2 = pbrange;
+        }
         if (p.getX() > 0.5f)
         {
             labelX->setText("x: "
@@ -558,30 +588,42 @@ int MidiEnvelope::addPoint(float x, float y, bool control)
 void MidiEnvelope::setPointActive(int point, bool active)
 {
     if (isPointControl(point))
+    {
         plugin->setParameter(point + kActive, active ? 0.75f : 0.25f);
+    }
     else
+    {
         plugin->setParameter(point + kActive, active ? 1.f : 0.f);
+    }
 }
 
 void MidiEnvelope::setPointControl(int point, bool control)
 {
     if (isPointActive(point))
+    {
         plugin->setParameter(point + kActive, control ? 0.75f : 1.f);
+    }
     else
+    {
         plugin->setParameter(point + kActive, control ? 0.25f : 0.f);
+    }
 }
 
 bool MidiEnvelope::isPointActive(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return plugin->getParameter(point + kActive) > 0.5f;
 }
 
 bool MidiEnvelope::isPointControl(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return plugin->getParameter(point + kActive) > 0.1f && plugin->getParameter(point + kActive) < 0.9f;
 }
 
@@ -596,7 +638,9 @@ int MidiEnvelope::findPointByMousePos(const int x, const int y)
             && (y >= (points[i][1] * getHeight() - pixelSnap) && y <= (points[i][1] * getHeight() + pixelSnap)))
         {
             if (isPointActive(i))
+            {
                 return i;
+            }
         }
     }
     return -1;
@@ -611,5 +655,7 @@ void MidiEnvelope::updateParameters(const bool repaintComponent)
     }
 
     if (repaintComponent)
+    {
         repaint();
+    }
 }

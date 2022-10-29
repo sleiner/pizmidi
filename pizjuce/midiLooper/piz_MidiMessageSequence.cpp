@@ -10,7 +10,9 @@ PizMidiMessageSequence::PizMidiMessageSequence(const PizMidiMessageSequence& oth
     //list.ensureStorageAllocated (other.list.size());
 
     for (int i = 0; i < other.list.size(); ++i)
+    {
         list.add(new MidiEventHolder(other.list.getUnchecked(i)->message));
+    }
 }
 
 PizMidiMessageSequence::PizMidiMessageSequence(const juce::MidiMessageSequence& other)
@@ -18,7 +20,9 @@ PizMidiMessageSequence::PizMidiMessageSequence(const juce::MidiMessageSequence& 
     //list.ensureStorageAllocated (other.getNumEvents());
 
     for (int i = 0; i < other.getNumEvents(); ++i)
+    {
         list.add(new MidiEventHolder(other.getEventPointer(i)->message));
+    }
 }
 
 PizMidiMessageSequence& PizMidiMessageSequence::operator=(const PizMidiMessageSequence& other)
@@ -39,7 +43,9 @@ juce::MidiMessageSequence PizMidiMessageSequence::getAsJuceSequence()
 {
     juce::MidiMessageSequence copy;
     for (int i = 0; i < list.size(); ++i)
+    {
         copy.addEvent(list.getUnchecked(i)->message);
+    }
 
     return copy;
 }
@@ -78,7 +84,9 @@ double PizMidiMessageSequence::getTimeOfMatchingKeyUp(const int index) const
         return meh->noteOffObject->message.getTimeStamp();
     }
     else if (meh != nullptr && meh->message.isNoteOn())
+    {
         return meh->message.getTimeStamp() + 1;
+    }
     return 0.0;
 }
 
@@ -100,8 +108,12 @@ int PizMidiMessageSequence::getNextIndexAtTime(const double timeStamp) const
 
     int i;
     for (i = 0; i < numEvents; ++i)
+    {
         if (list.getUnchecked(i)->message.getTimeStamp() >= timeStamp)
+        {
             break;
+        }
+    }
 
     return i;
 }
@@ -110,23 +122,33 @@ int PizMidiMessageSequence::getNextIndexAtTime(const double timeStamp) const
 double PizMidiMessageSequence::getStartTime() const
 {
     if (list.size() > 0)
+    {
         return list.getUnchecked(0)->message.getTimeStamp();
+    }
     else
+    {
         return 0;
+    }
 }
 
 double PizMidiMessageSequence::getEndTime() const
 {
     if (list.size() > 0)
+    {
         return list.getLast()->message.getTimeStamp();
+    }
     else
+    {
         return 0;
+    }
 }
 
 double PizMidiMessageSequence::getEventTime(const int index) const
 {
     if (((unsigned int) index) < (unsigned int) list.size())
+    {
         return list.getUnchecked(index)->message.getTimeStamp();
+    }
 
     return 0.0;
 }
@@ -142,8 +164,12 @@ void PizMidiMessageSequence::addEvent(const juce::MidiMessage& newMessage,
 
     int i;
     for (i = list.size(); --i >= 0;)
+    {
         if (list.getUnchecked(i)->message.getTimeStamp() <= timeAdjustment)
+        {
             break;
+        }
+    }
 
     list.insert(i + 1, newOne);
 }
@@ -155,16 +181,24 @@ void PizMidiMessageSequence::addNote(const juce::MidiMessage& noteOn, const juce
     on->message.setTimeStamp(t);
     int i;
     for (i = list.size(); --i >= 0;)
+    {
         if (list.getUnchecked(i)->message.getTimeStamp() <= t)
+        {
             break;
+        }
+    }
     list.insert(i + 1, on);
 
     mehPtr const off = new MidiEventHolder(noteOff);
     t                = timeAdjustment + noteOff.getTimeStamp();
     off->message.setTimeStamp(t);
     for (i = list.size(); --i >= 0;)
+    {
         if (list.getUnchecked(i)->message.getTimeStamp() <= t)
+        {
             break;
+        }
+    }
     list.insert(i + 1, off);
 
     on->noteOffObject = off;
@@ -211,7 +245,9 @@ void PizMidiMessageSequence::deleteEvent(const int index,
     if (((unsigned int) index) < (unsigned int) list.size())
     {
         if (deleteMatchingNoteUp)
+        {
             deleteEvent(getIndexOfMatchingKeyUp(index), false);
+        }
 
         list.remove(index);
     }
@@ -278,7 +314,9 @@ void PizMidiMessageSequence::updateMatchedPairs(bool sortEvents)
 {
     //DBG("start updateMatchedPairs()");
     if (sortEvents)
+    {
         sort();
+    }
     for (int i = 0; i < list.size(); ++i)
     {
         const juce::MidiMessage& m1 = list.getUnchecked(i)->message;
@@ -319,8 +357,10 @@ void PizMidiMessageSequence::updateMatchedPairs(bool sortEvents)
 void PizMidiMessageSequence::addTimeToMessages(const double delta)
 {
     for (int i = list.size(); --i >= 0;)
+    {
         list.getUnchecked(i)->message.setTimeStamp(list.getUnchecked(i)->message.getTimeStamp()
                                                    + delta);
+    }
 }
 
 //==============================================================================
@@ -347,22 +387,32 @@ void PizMidiMessageSequence::extractSysExMessages(PizMidiMessageSequence& destSe
         const juce::MidiMessage& mm = list.getUnchecked(i)->message;
 
         if (mm.isSysEx())
+        {
             destSequence.addEvent(mm);
+        }
     }
 }
 
 void PizMidiMessageSequence::deleteMidiChannelMessages(const int channelNumberToRemove)
 {
     for (int i = list.size(); --i >= 0;)
+    {
         if (list.getUnchecked(i)->message.isForChannel(channelNumberToRemove))
+        {
             list.remove(i);
+        }
+    }
 }
 
 void PizMidiMessageSequence::deleteSysExMessages()
 {
     for (int i = list.size(); --i >= 0;)
+    {
         if (list.getUnchecked(i)->message.isSysEx())
+        {
             list.remove(i);
+        }
+    }
 }
 
 //==============================================================================

@@ -248,7 +248,9 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
     filter->getCallbackLock().exit();
 
     if (URL.isNotEmpty())
+    {
         wb->goToURL(URL);
+    }
 
     setSize(filter->lastUIWidth, filter->lastUIHeight);
 }

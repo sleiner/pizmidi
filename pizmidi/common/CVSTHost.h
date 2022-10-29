@@ -308,74 +308,102 @@ public:
     long GetVersion()
     {
         if (! bBank)
+        {
             return 0;
+        }
         return ((SFxBase*) bBank)->version;
     }
 
     long GetFxID()
     {
         if (! bBank)
+        {
             return 0;
+        }
         return ((SFxBase*) bBank)->fxID;
     }
 
     void SetFxID(long id)
     {
         if (bBank)
+        {
             ((SFxBase*) bBank)->fxID = id;
+        }
         if (! bChunk)
+        {
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
+            {
                 GetProgram(i)->fxID = id;
+            }
+        }
     }
 
     long GetFxVersion()
     {
         if (! bBank)
+        {
             return 0;
+        }
         return ((SFxBase*) bBank)->fxVersion;
     }
 
     void SetFxVersion(long v)
     {
         if (bBank)
+        {
             ((SFxBase*) bBank)->fxVersion = v;
+        }
         if (! bChunk)
+        {
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
+            {
                 GetProgram(i)->fxVersion = v;
+            }
+        }
     }
 
     long GetNumPrograms()
     {
         if (! bBank)
+        {
             return 0;
+        }
         return ((SFxBankBase*) bBank)->numPrograms;
     }
 
     long GetNumParams()
     {
         if (bChunk)
+        {
             return 0;
+        }
         return GetProgram(0)->numParams;
     }
 
     long GetChunkSize()
     {
         if (! bChunk)
+        {
             return 0;
+        }
         return ((SFxBankChunk*) bBank)->size;
     }
 
     void* GetChunk()
     {
         if (! bChunk)
+        {
             return 0;
+        }
         return ((SFxBankChunk*) bBank)->chunk;
     }
 
     bool SetChunk(void* chunk)
     {
         if (! bChunk)
+        {
             return false;
+        }
         memcpy(((SFxBankChunk*) bBank)->chunk, chunk, ((SFxBankChunk*) bBank)->size);
         return true;
     }
@@ -386,7 +414,9 @@ public:
     {
         SFxProgram* p = GetProgram(nProgram);
         if (! p)
+        {
             return NULL;
+        }
         return p->prgName;
     }
 
@@ -394,7 +424,9 @@ public:
     {
         SFxProgram* p = GetProgram(nProgram);
         if (! p)
+        {
             return;
+        }
         strncpy(p->prgName, name, sizeof(p->prgName));
         p->prgName[sizeof(p->prgName) - 1] = '\0';
     }
@@ -403,7 +435,9 @@ public:
     {
         SFxProgram* p = GetProgram(nProgram);
         if (! p || nParm > p->numParams)
+        {
             return 0;
+        }
 #ifndef chunkGlobalMagic /* VST SDK 2.4 rev2?                 */
         return p->content.params[nParm];
 #else
@@ -415,11 +449,17 @@ public:
     {
         SFxProgram* p = GetProgram(nProgram);
         if (! p || nParm > p->numParams)
+        {
             return false;
+        }
         if (val < 0.0)
+        {
             val = 0.0;
+        }
         if (val > 1.0)
+        {
             val = 1.0;
+        }
 #ifndef chunkGlobalMagic /* VST SDK 2.4 rev2?                 */
         p->content.params[nParm] = val;
 #else

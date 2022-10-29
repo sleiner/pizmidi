@@ -19,7 +19,9 @@ MidiProgramChangeProgram::MidiProgramChangeProgram()
 {
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kMode]        = 1.f;
     param[kThru]        = 1.f;
     param[kTrigger]     = 0.4f;
@@ -76,7 +78,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
     senttrig    = false;
     sentbank    = false;
     for (int i = 0; i < kNumParams; i++)
+    {
         automated[i] = false;
+    }
     mode = continuous;
 
     wait         = false;
@@ -85,7 +89,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
     triggerdelta = 0;
 
     if (programs)
+    {
         setProgram(0);
+    }
 
     init();
 }
@@ -94,7 +100,9 @@ MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
 MidiProgramChange::~MidiProgramChange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -107,9 +115,13 @@ void MidiProgramChange::setProgram(VstInt32 prog)
         setParameter(i, ap->param[i]);
     }
     if (program > 0)
+    {
         trigger = true;
+    }
     if (banklsb > 0 || bankmsb > 0)
+    {
         triggerbank = true;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -150,9 +162,13 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
     {
         case kMode:
             if (value < 0.5f)
+            {
                 mode = continuous;
+            }
             else
+            {
                 mode = triggered;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kPCListen:
@@ -171,7 +187,9 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
                 senttrig = true;
             }
             else if (value < 1.f && senttrig)
+            {
                 senttrig = false;
+            }
             break;
         case kBankTrigger:
             param[index] = value;
@@ -181,7 +199,9 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
                 sentbank    = true;
             }
             else if (value < 1.f && sentbank)
+            {
                 sentbank = false;
+            }
             break;
         case kInc:
             param[index] = value;
@@ -191,7 +211,9 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
                 sentinc = true;
             }
             else if (value < 1.f && sentinc)
+            {
                 sentinc = false;
+            }
             break;
         case kDec:
             param[index] = value;
@@ -201,24 +223,32 @@ void MidiProgramChange::setParameter(VstInt32 index, float value)
                 sentdec = true;
             }
             else if (value < 1.f && sentdec)
+            {
                 sentdec = false;
+            }
             break;
         case kProgram:
             program = FLOAT_TO_MIDI2(value);
             if (mode == continuous && ! automated[index])
+            {
                 trigger = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kBankMSB:
             bankmsb = FLOAT_TO_MIDI2(value);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kBankLSB:
             banklsb = FLOAT_TO_MIDI2(value);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         default:
@@ -291,66 +321,106 @@ void MidiProgramChange::getParameterDisplay(VstInt32 index, char* text)
     {
         case kMode:
             if (mode == continuous)
+            {
                 strcpy(text, "Direct");
+            }
             else
+            {
                 strcpy(text, "Triggered");
+            }
             break;
         case kPCListen:
             if (pclisten)
+            {
                 strcpy(text, "Yes");
+            }
             else
+            {
                 strcpy(text, "No");
+            }
             break;
         case kThru:
             if (thru)
+            {
                 strcpy(text, "Yes");
+            }
             else
+            {
                 strcpy(text, "No");
+            }
             break;
         case kProgram:
             if (program == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", program);
+            }
             break;
         case kBankMSB:
             if (bankmsb == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", bankmsb);
+            }
             break;
         case kBankLSB:
             if (banklsb == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", banklsb);
+            }
             break;
         case kChannel:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kTrigger:
             if (param[index] == 1.f)
+            {
                 strcpy(text, "Triggered!");
+            }
             else
+            {
                 strcpy(text, "Trigger-->");
+            }
             break;
         case kBankTrigger:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         case kInc:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         case kDec:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         default:
             sprintf(text, "%d", roundToInt(param[index] * 100.0f));
@@ -389,13 +459,17 @@ void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
             }
         } // if listenchannel==channel
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     if (triggerbank)
     {
         if (! (trigger && program != 0))
+        {
             triggerbank = false;
+        }
         //create GUI triggered message
         if (bankmsb != 0)
         {
@@ -459,7 +533,9 @@ void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
         inc = false;
         ++program;
         if (program > 128)
+        {
             program = 0;
+        }
         if (program != 0)
         {
             VstMidiEvent progch;
@@ -478,7 +554,9 @@ void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
         dec = false;
         --program;
         if (program < 0)
+        {
             program = 128;
+        }
         if (program != 0)
         {
             VstMidiEvent progch;

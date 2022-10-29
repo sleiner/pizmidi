@@ -741,7 +741,9 @@ MidiChordsEditor::MidiChordsEditor(MidiChords* const ownerFilter)
     versionLabel->setText(JucePlugin_VersionString, juce::dontSendNotification);
     ownerFilter->addChangeListener(this);
     if (! ownerFilter->demo)
+    {
         demoLabel->setVisible(false);
+    }
     updateParametersFromFilter();
     //[/Constructor]
 }
@@ -820,7 +822,9 @@ MidiChordsEditor::~MidiChordsEditor()
     deleteAndZero(fretsSlider);
     deleteAndZero(stringsSlider);
     for (int i = 0; i < maxStrings; i++)
+    {
         deleteAndZero(stringSlider[i]);
+    }
     //[/Destructor]
 }
 
@@ -1062,18 +1066,26 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_chordLearnButton] -- add your button handler code here..
         if (getFilter()->getParameter(kLearnChord) > 0)
+        {
             getFilter()->setParameterNotifyingHost(kLearnChord, 0.f);
+        }
         else
+        {
             getFilter()->setParameterNotifyingHost(kLearnChord, 1.f);
+        }
         //[/UserButtonCode_chordLearnButton]
     }
     else if (buttonThatWasClicked == triggerLearnButton.get())
     {
         //[UserButtonCode_triggerLearnButton] -- add your button handler code here..
         if (getFilter()->getParameter(kFollowInput) > 0)
+        {
             getFilter()->setParameterNotifyingHost(kFollowInput, 0.f);
+        }
         else
+        {
             getFilter()->setParameterNotifyingHost(kFollowInput, 1.f);
+        }
         //[/UserButtonCode_triggerLearnButton]
     }
     else if (buttonThatWasClicked == clearChordButton.get())
@@ -1173,11 +1185,17 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
             if (list[i].isNotEmpty())
             {
                 if (list[i].startsWith("--"))
+                {
                     menu.addSeparator();
+                }
                 else if (list[i].startsWithChar('#'))
+                {
                     menu.addSectionHeader(list[i].fromFirstOccurrenceOf("#", false, false));
+                }
                 else
+                {
                     menu.addItem(i + 1, list[i].upToFirstOccurrenceOf(":", false, false));
+                }
             }
         }
         //menu.showMenuAsync (PopupMenu::Options().withTargetComponent (chordMenuButton),
@@ -1217,7 +1235,9 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
             //if (result>0)
             //	loadPreset(list[result-1]);
             if (result == -1)
+            {
                 getFilter()->savePreset(presetNameLabel->getText());
+            }
         }
         //[/UserButtonCode_presetMenuButton]
     }
@@ -1231,7 +1251,9 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
             for (int c = 1; c <= 16; c++)
             {
                 if (getFilter()->progKbState[getFilter()->getCurrentProgram()][t].isNoteOn(c, n))
+                {
                     chordString += " " + juce::String(n - t) + "." + juce::String(c);
+                }
             }
         }
         juce::SystemClipboard::copyTextToClipboard(chordString);
@@ -1278,9 +1300,13 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         //[UserButtonCode_infoButton] -- add your button handler code here..
         infoBox->moveCaretToTop(false);
         if (infoButton->getToggleState())
+        {
             juce::Desktop::getInstance().getAnimator().fadeOut(infoBox.get(), 150);
+        }
         else
+        {
             juce::Desktop::getInstance().getAnimator().fadeIn(infoBox.get(), 100);
+        }
         //infoBox->setVisible(!infoBox->isVisible());
         infoButton->setToggleState(! infoButton->getToggleState(), juce::dontSendNotification);
         //[/UserButtonCode_infoButton]
@@ -1299,17 +1325,29 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         if (result != 0)
         {
             if (result == 1)
+            {
                 getFilter()->clearAllChords();
+            }
             else if (result == 2)
+            {
                 getFilter()->resetAllChords();
+            }
             else if (result == 3)
+            {
                 getFilter()->copyChordToAllTriggers(true);
+            }
             else if (result == 4)
+            {
                 getFilter()->copyChordToAllTriggers(false);
+            }
             else if (result == 5)
+            {
                 getFilter()->transposeAll(true);
+            }
             else if (result == 6)
+            {
                 getFilter()->transposeAll(false);
+            }
         }
         //[/UserButtonCode_specialMenuButton]
     }
@@ -1333,7 +1371,9 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         getFilter()->fillGuitarPresetList();
         juce::PopupMenu m, custom, chordfiles;
         for (int i = 0; i < getFilter()->guitarPresets.size(); i++)
+        {
             m.addItem(i + 1, getFilter()->guitarPresets[i].guitarName, true, isGuitarPreset(i));
+        }
 
         m.addSeparator();
         custom.addCustomItem(-1, *tuningSaveEditor, 160, 18, false);
@@ -1353,7 +1393,9 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         custom.addCustomItem(-1, *fretsSlider, 150, 18, false);
         custom.addCustomItem(-1, *stringsSlider, 150, 18, false);
         for (int i = 0; i < maxStrings; i++)
+        {
             custom.addCustomItem(-1, *stringSlider[i], 150, 18, false);
+        }
         m.addSubMenu("Customize", custom);
 
         int result = m.showAt(setupButton.get());
@@ -1364,7 +1406,9 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
                 ;
             }
             else
+            {
                 setUpGuitar(result - 1);
+            }
         }
         //[/UserButtonCode_setupButton]
     }
@@ -1598,7 +1642,9 @@ void MidiChordsEditor::chordMenuCallback(int result, MidiChordsEditor* editor)
 void MidiChordsEditor::mouseDown(const juce::MouseEvent& e)
 {
     if (e.eventComponent == previewButton.get() && ! e.mods.isPopupMenu())
+    {
         getFilter()->playCurrentChord(true);
+    }
     if (e.eventComponent != infoBox.get() && infoBox->isVisible())
     {
         infoBox->setVisible(false);
@@ -1611,7 +1657,9 @@ void MidiChordsEditor::mouseDoubleClick(const juce::MouseEvent& e)
     if (e.eventComponent == triggerKeyboard.get() && (e.mods.isShiftDown() || e.mods.isPopupMenu()))
     {
         for (int i = 0; i < 128; i++)
+        {
             getFilter()->setNoteBypassed(i, false);
+        }
         triggerKeyboard->repaint();
     }
 }
@@ -1647,13 +1695,19 @@ void MidiChordsEditor::chordFromString(juce::String chordString)
     const int t    = getFilter()->getCurrentTrigger();
     juce::StringArray sa;
     if (chordString.contains(":"))
+    {
         chordString = chordString.fromLastOccurrenceOf(":", false, false);
+    }
     if (chordString.containsAnyOf("abcdefgABCDEFGmMrRopP#+") /* || !chordString.contains("0")*/)
+    {
         chordString = getIntervalStringFromNoteNames(t, chordString, getFilter()->bottomOctave);
+    }
 
     sa.addTokens(chordString, " ,", juce::String());
     if (sa.size() > 0)
+    {
         getFilter()->clearChord(t);
+    }
     if (juce::ModifierKeys::getCurrentModifiers().isCommandDown())
     {
         //absolute
@@ -1663,9 +1717,13 @@ void MidiChordsEditor::chordFromString(juce::String chordString)
             if (s.isNotEmpty())
             {
                 if (s.contains("."))
+                {
                     getFilter()->selectChordNote(t, root + s.upToFirstOccurrenceOf(".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf(".", false, true).getIntValue());
+                }
                 else
+                {
                     getFilter()->selectChordNote(t, root + s.getIntValue(), true);
+                }
             }
         }
     }
@@ -1678,20 +1736,28 @@ void MidiChordsEditor::chordFromString(juce::String chordString)
             if (s.isNotEmpty())
             {
                 if (s.contains("."))
+                {
                     getFilter()->selectChordNote(t, t + s.upToFirstOccurrenceOf(".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf(".", false, true).getIntValue());
+                }
                 else
+                {
                     getFilter()->selectChordNote(t, t + s.getIntValue(), true);
+                }
             }
         }
     }
     if (guitar->isVisible())
+    {
         getFilter()->translateToGuitarChord();
+    }
 }
 
 void MidiChordsEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParametersFromFilter();
+    }
 }
 
 void MidiChordsEditor::updateParametersFromFilter()
@@ -1756,14 +1822,22 @@ void MidiChordsEditor::updateParametersFromFilter()
     speedSlider->setEnabled(strumButton->getToggleState());
     maxTimeSlider->setEnabled(strumButton->getToggleState());
     if (filter->getStrumDirection())
+    {
         strumDirectionButton->setButtonText("Up");
+    }
     else
+    {
         strumDirectionButton->setButtonText("Down");
+    }
 
     if (chordChan == 0)
+    {
         chordKeyboard->setMidiChannelsToDisplay(0xffff);
+    }
     else
+    {
         chordKeyboard->setMidiChannelsToDisplay(1 << (chordChan - 1));
+    }
 
     normalButton->setToggleState(newMode == Normal, juce::dontSendNotification);
     octaveButton->setToggleState(newMode == Octave, juce::dontSendNotification);
@@ -1772,7 +1846,9 @@ void MidiChordsEditor::updateParametersFromFilter()
     chordNameLabel->setText(getCurrentChordName(), juce::dontSendNotification);
 
     if (guitar->isVisible())
+    {
         guitar->handleAsyncUpdate();
+    }
 
     const int t = getFilter()->getCurrentTrigger();
     juce::String chordString; // = String(t) + ":";
@@ -1781,7 +1857,9 @@ void MidiChordsEditor::updateParametersFromFilter()
         for (int c = 1; c <= 16; c++)
         {
             if (getFilter()->progKbState[p][t].isNoteOn(c, n))
+            {
                 chordString += juce::String(n - t) /*+"."+String(c)*/ + " ";
+            }
         }
     }
     chordEditor->setText(chordString.trimEnd(), juce::dontSendNotification);
@@ -1816,13 +1894,19 @@ void MidiChordsEditor::updateParametersFromFilter()
     else
     {
         if (newMode != Octave)
+        {
             triggerNoteLabel->setText(getNoteName(t, getFilter()->bottomOctave) + " (" + juce::String(t) + ")", juce::dontSendNotification);
+        }
         else
+        {
             triggerNoteLabel->setText(getNoteNameWithoutOctave(t), juce::dontSendNotification);
+        }
     }
 
     if (presetNameLabel->getText() != getFilter()->getProgramName(p))
+    {
         presetNameLabel->setText(getFilter()->getProgramName(p), juce::dontSendNotification);
+    }
 
     triggerKeyboard->repaint();
     chordKeyboard->repaint();
@@ -1831,7 +1915,9 @@ void MidiChordsEditor::updateParametersFromFilter()
 juce::String const MidiChordsEditor::getCurrentChordName()
 {
     if (getFilter()->getParameter(kGuess) == 0.f)
+    {
         return juce::String();
+    }
 
     juce::Array<int> chord;
     for (int n = 0; n < 128; n++)
@@ -1839,7 +1925,9 @@ juce::String const MidiChordsEditor::getCurrentChordName()
         for (int c = 1; c <= 16; c++)
         {
             if (getFilter()->progKbState[getFilter()->getCurrentProgram()][getFilter()->getCurrentTrigger()].isNoteOn(c, n))
+            {
                 chord.add(n);
+            }
         }
     }
     return getFirstRecognizedChord(chord, getFilter()->getParameter(kFlats) > 0.f);
@@ -1850,20 +1938,28 @@ void MidiChordsEditor::listChordFiles(juce::StringArray& list)
     juce::String chordPath = getFilter()->dataPath + juce::File::getSeparatorString() + "chords";
 
     if (guitarPreset >= 0 && guitar->isVisible())
+    {
         chordPath += juce::File::getSeparatorString() + getFilter()->guitarPresets[guitarPreset].chordFile;
+    }
     else
+    {
         chordPath += juce::File::getSeparatorString() + "Chords.txt";
+    }
 
     juce::File chordFile = juce::File(chordPath);
     if (! chordFile.exists())
+    {
         chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "Chords.txt";
+    }
 
     juce::StringArray s;
     s.addLines(chordFile.loadFileAsString());
     for (int line = 0; line < s.size(); line++)
     {
         if (! s[line].startsWithChar(';'))
+        {
             list.add(s[line]);
+        }
     }
 
     chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt";
@@ -1872,7 +1968,9 @@ void MidiChordsEditor::listChordFiles(juce::StringArray& list)
     for (int line = 0; line < s.size(); line++)
     {
         if (! s[line].startsWithChar(';'))
+        {
             list.add(s[line]);
+        }
     }
 }
 
@@ -1884,7 +1982,9 @@ void MidiChordsEditor::listPresetFiles(juce::Array<juce::File>& list)
     for (int i = 0; i < files.size(); i++)
     {
         if (files[i].hasFileExtension("chords") || files[i].hasFileExtension("fxp") || files[i].hasFileExtension("xml"))
+        {
             list.add(files[i]);
+        }
     }
 }
 
@@ -1899,23 +1999,35 @@ void MidiChordsEditor::loadChord(juce::String chorddef)
         if (sa[i].trim().isNotEmpty())
         {
             if (sa[i].contains("."))
+            {
                 getFilter()->selectChordNote(t, t + sa[i].upToFirstOccurrenceOf(".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf(".", false, true).getIntValue());
+            }
             else
+            {
                 getFilter()->selectChordNote(t, t + sa[i].getIntValue(), true);
+            }
         }
     }
     if (guitar->isVisible())
+    {
         getFilter()->translateToGuitarChord();
+    }
 }
 
 void MidiChordsEditor::loadPreset(juce::File file)
 {
     if (file.hasFileExtension("fxp"))
+    {
         getFilter()->loadFxpFile(file);
+    }
     else if (file.hasFileExtension("fxb"))
+    {
         getFilter()->loadFxbFile(file);
+    }
     else if (file.hasFileExtension("xml"))
+    {
         getFilter()->readChorderPreset(file);
+    }
     else
     {
         //const int t = getFilter()->getCurrentTrigger();
@@ -1932,11 +2044,17 @@ void MidiChordsEditor::loadPreset(juce::File file)
                 {
                     juce::String s = lines[ln].fromLastOccurrenceOf(":", false, true);
                     if (s.equalsIgnoreCase("Full"))
+                    {
                         getFilter()->setParameterNotifyingHost(kMode, ((float) Normal) / (float) (numModes - 1));
+                    }
                     if (s.equalsIgnoreCase("Octave"))
+                    {
                         getFilter()->setParameterNotifyingHost(kMode, ((float) Octave) / (float) (numModes - 1));
+                    }
                     if (s.equalsIgnoreCase("Global"))
+                    {
                         getFilter()->setParameterNotifyingHost(kMode, ((float) Global) / (float) (numModes - 1));
+                    }
                 }
                 else
                 {
@@ -1949,9 +2067,13 @@ void MidiChordsEditor::loadPreset(juce::File file)
                         if (sa[i].trim().isNotEmpty())
                         {
                             if (sa[i].contains("."))
+                            {
                                 getFilter()->selectChordNote(t, t + sa[i].upToFirstOccurrenceOf(".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf(".", false, true).getIntValue());
+                            }
                             else
+                            {
                                 getFilter()->selectChordNote(t, t + sa[i].getIntValue(), true);
+                            }
                         }
                     }
                 }
@@ -1973,12 +2095,16 @@ void MidiChordsEditor::saveChord(juce::String name)
         for (int n = 0; n < 128; n++)
         {
             if (getFilter()->progKbState[curProgram][t].isNoteOn(c, n))
+            {
                 chordString += " " + juce::String(n - t) + "." + juce::String(c);
+            }
         }
     }
     juce::File chordFile(getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt");
     if (chordFile.create())
+    {
         chordFile.appendText(chordString + "\n");
+    }
 }
 
 void MidiChordsEditor::textEditorTextChanged(juce::TextEditor& editor)
@@ -2001,12 +2127,16 @@ void MidiChordsEditor::textEditorReturnKeyPressed(juce::TextEditor& editor)
         for (int i = 0; i < roundToInt(stringsSlider->getValue()); i++)
         {
             if (i > 0)
+            {
                 tuningString += ",";
+            }
             tuningString += juce::String(roundToInt(stringSlider[i]->getValue()));
         }
         juce::File tuningFile(getFilter()->dataPath + juce::File::getSeparatorString() + "guitars" + juce::File::getSeparatorString() + "GuitarPresets.txt");
         if (tuningFile.create())
+        {
             tuningFile.appendText(tuningString + "\n");
+        }
 
         getFilter()->fillGuitarPresetList();
         juce::PopupMenu::dismissAllActiveMenus();
@@ -2028,7 +2158,9 @@ void MidiChordsEditor::filesDropped(const juce::StringArray& filenames, int mous
     juce::File file = juce::File(filenames[0]);
     if (file.hasFileExtension("chords") || file.hasFileExtension("fxp") || file.hasFileExtension("fxb")
         || file.hasFileExtension("xml"))
+    {
         loadPreset(file);
+    }
     else if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
     {
         getFilter()->readKeyFile(juce::File(filenames[0]));
@@ -2043,16 +2175,22 @@ bool MidiChordsEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
     juce::File file = juce::File(files[0]);
     if (file.hasFileExtension("chords") || file.hasFileExtension("fxp") || file.hasFileExtension("fxb") || file.hasFileExtension("xml"))
+    {
         return true;
+    }
     if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
+    {
         return true;
+    }
     return false;
 }
 
 void MidiChordsEditor::fileClicked(const juce::File& file, const juce::MouseEvent&)
 {
     if (file.existsAsFile())
+    {
         loadPreset(file);
+    }
 }
 
 void MidiChordsEditor::fileDoubleClicked(const juce::File& file)

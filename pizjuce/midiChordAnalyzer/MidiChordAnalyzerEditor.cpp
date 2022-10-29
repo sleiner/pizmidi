@@ -691,7 +691,9 @@ void MidiChordAnalyzerEditor::mouseUp(const juce::MouseEvent& e)
 void MidiChordAnalyzerEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParametersFromFilter();
+    }
 }
 
 void MidiChordAnalyzerEditor::updateParametersFromFilter()
@@ -703,9 +705,13 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
     learnChanSlider->setValue(chordChan, juce::dontSendNotification);
     flatsButton->setToggleState(flats, juce::dontSendNotification);
     if (chordChan == 0)
+    {
         chordKeyboard->setMidiChannelsToDisplay(0xffff);
+    }
     else
+    {
         chordKeyboard->setMidiChannelsToDisplay(1 << (chordChan - 1));
+    }
 
     if (numHeldNotes < chordKeyboard->getNumHeldNotes(chordChan))
     {
@@ -717,7 +723,9 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
         juce::Desktop::getInstance().getAnimator().animateComponent(chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
     }
     else
+    {
         startTimer(100);
+    }
     numHeldNotes = chordKeyboard->getNumHeldNotes(chordChan);
 }
 
@@ -744,7 +752,9 @@ juce::String const MidiChordAnalyzerEditor::getCurrentChordName(int channel)
         for (int c = 1; c <= 16; c++)
         {
             if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn(c, n))
+            {
                 chord.add(n);
+            }
         }
     }
     return getFirstRecognizedChord(chord, getFilter()->getParameter(kFlats) > 0.f);

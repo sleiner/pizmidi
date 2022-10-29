@@ -67,14 +67,18 @@ MidiCurve::MidiCurve()
 MidiCurve::~MidiCurve()
 {
     if (programs)
+    {
         delete programs;
+    }
 }
 
 //==============================================================================
 float MidiCurve::getParameter(int index)
 {
     if (index < getNumParameters())
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -85,9 +89,13 @@ void MidiCurve::setParameter(int index, float newValue)
         if (param[index] != newValue)
         {
             if (index == 0)
+            {
                 param[index] = 0.f;
+            }
             else if (index == (MAX_ENVELOPE_POINTS * 2 - 2))
+            {
                 param[index] = 1.f;
+            }
             else
             {
                 param[index] = newValue;
@@ -104,7 +112,9 @@ const juce::String MidiCurve::getParameterName(int index)
     if (index < kNumPointParams)
     {
         if (index % 2 == 0)
+        {
             return "x" + juce::String(index / 2);
+        }
         return "y" + juce::String(index / 2);
     }
     if (index < kNumPointParams + MAX_ENVELOPE_POINTS)
@@ -112,19 +122,33 @@ const juce::String MidiCurve::getParameterName(int index)
         return "PointType" + juce::String(index - kActive);
     }
     if (index == kCC)
+    {
         return "CC";
+    }
     if (index == kCCNumber)
+    {
         return "CCNumber";
+    }
     if (index == kVelocity)
+    {
         return "Velocity";
+    }
     if (index == kChannelPressure)
+    {
         return "ChannelPressure";
+    }
     if (index == kAftertouch)
+    {
         return "AfterTouch";
+    }
     if (index == kChannel)
+    {
         return "Channel";
+    }
     if (index == kPitchBend)
+    {
         return "PitchBend";
+    }
 
     return "param" + juce::String(index);
 }
@@ -138,9 +162,13 @@ const juce::String MidiCurve::getParameterText(int index)
     if (index < kNumPointParams + MAX_ENVELOPE_POINTS)
     {
         if (param[index] < 0.5f)
+        {
             return "Off";
+        }
         if (param[index] < 1.f)
+        {
             return "Control";
+        }
         return "Corner";
     }
     if (index == kCC || index == kVelocity || index == kPitchBend
@@ -155,7 +183,9 @@ const juce::String MidiCurve::getParameterText(int index)
     if (index == kChannel)
     {
         if (roundToInt(param[kChannel] * 16.0f) == 0)
+        {
             return juce::String("Any");
+        }
         return juce::String(roundToInt(param[kChannel] * 16.0f));
     }
     return juce::String();
@@ -164,14 +194,18 @@ const juce::String MidiCurve::getParameterText(int index)
 const juce::String MidiCurve::getInputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
 const juce::String MidiCurve::getOutputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
@@ -219,13 +253,17 @@ void MidiCurve::setCurrentProgram(int index)
 void MidiCurve::changeProgramName(int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
+    {
         programs->set(index, "Name", newName);
+    }
 }
 
 const juce::String MidiCurve::getProgramName(int index)
 {
     if (index < getNumPrograms())
+    {
         return programs->get(index, "Name");
+    }
     return juce::String();
 }
 
@@ -251,9 +289,13 @@ float MidiCurve::getPointValue(int n, int y)
     if (n < MAX_ENVELOPE_POINTS)
     {
         if (! y)
+        {
             return points[n].p.getX();
+        }
         else
+        {
             return 1.f - points[n].p.getY();
+        }
     }
     return -1.f;
 }
@@ -264,7 +306,9 @@ float MidiCurve::findValue(float input)
     while (it.next())
     {
         if (it.x1 == input)
+        {
             return 1.f - it.y1;
+        }
         if (it.x2 >= input)
         {
             return 1.f - (float) linearInterpolate(input, it.y1, it.y2, it.x1, it.x2);
@@ -315,7 +359,9 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     lastMsg.sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             else if (midi_message.isNoteOn())
             {
@@ -331,7 +377,9 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     lastMsg.sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             else if (midi_message.isChannelPressure())
             {
@@ -347,7 +395,9 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     lastMsg.sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             else if (midi_message.isAftertouch())
             {
@@ -363,7 +413,9 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     lastMsg.sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             else if (midi_message.isPitchWheel())
             {
@@ -379,13 +431,19 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     lastMsg.sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             else
+            {
                 output.addEvent(midi_message, sample_number);
+            }
         }
         else
+        {
             output.addEvent(midi_message, sample_number);
+        }
     }
     midiMessages = output;
 }
@@ -397,7 +455,9 @@ int MidiCurve::findPBValue(int input)
     while (it.next())
     {
         if (it.x1 == v)
+        {
             return roundToInt(16383.f * (1.f - it.y1));
+        }
         if (it.x2 >= v)
         {
             return roundToInt(16383.f * (1.f - (float) linearInterpolate(v, it.y1, it.y2, it.x1, it.x2)));
@@ -460,7 +520,9 @@ int MidiCurve::getPrevActivePoint(int currentPoint)
     for (int i = currentPoint - 1; i > 0; i--)
     {
         if (points[i].isActive)
+        {
             return i;
+        }
     }
     return 0;
 }
@@ -470,7 +532,9 @@ int MidiCurve::getNextActivePoint(int currentPoint)
     for (int i = currentPoint + 1; i < MAX_ENVELOPE_POINTS; i++)
     {
         if (points[i].isActive)
+        {
             return i;
+        }
     }
     return MAX_ENVELOPE_POINTS - 1;
 }
@@ -492,7 +556,9 @@ void MidiCurve::resetPoints(bool copyToProgram)
     if (copyToProgram)
     {
         for (int i = 0; i < getNumParameters(); i++)
+        {
             programs->set(curProgram, getParameterName(i), param[i]);
+        }
     }
     updatePath();
     sendChangeMessage();
@@ -501,14 +567,18 @@ void MidiCurve::resetPoints(bool copyToProgram)
 bool MidiCurve::isPointActive(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return getParameter(point + kActive) > 0.5f;
 }
 
 bool MidiCurve::isPointControl(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return getParameter(point + kActive) > 0.1f && getParameter(point + kActive) < 0.9f;
 }
 
@@ -521,7 +591,9 @@ juce::AudioProcessorEditor* MidiCurve::createEditor()
 void MidiCurve::copySettingsToProgram(int index)
 {
     for (int i = 0; i < getNumParameters(); i++)
+    {
         programs->set(index, getParameterName(i), param[i]);
+    }
     programs->set(index, "Name", getProgramName(index));
     programs->set(index, "lastUIHeight", lastUIHeight);
     programs->set(index, "lastUIWidth", lastUIWidth);

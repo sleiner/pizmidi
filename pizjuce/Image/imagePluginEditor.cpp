@@ -100,25 +100,45 @@ imagePluginEditor::~imagePluginEditor()
     getFilter()->removeChangeListener(this);
     getFilter()->icon = imagepad->getIconPath();
     if (container->isOnDesktop())
+    {
         container->removeFromDesktop();
+    }
     if (label)
+    {
         deleteAndZero(label);
+    }
     if (textEditor)
+    {
         deleteAndZero(textEditor);
+    }
     if (bankSlider)
+    {
         deleteAndZero(bankSlider);
+    }
     if (progSlider)
+    {
         deleteAndZero(progSlider);
+    }
     if (imagepad)
+    {
         deleteAndZero(imagepad);
+    }
     if (colourSelector)
+    {
         deleteAndZero(colourSelector);
+    }
     if (textColourSelector)
+    {
         deleteAndZero(textColourSelector);
+    }
     if (resizer)
+    {
         deleteAndZero(resizer);
+    }
     if (container)
+    {
         deleteAndZero(container);
+    }
 }
 
 //==============================================================================
@@ -154,7 +174,9 @@ void imagePluginEditor::resized()
 
     int resizersize = jmin(container->proportionOfWidth(0.05f), container->proportionOfHeight(0.05f));
     if (resizersize < 12)
+    {
         resizersize = 12;
+    }
     resizer->setBounds(container->getWidth() - resizersize, container->getHeight() - resizersize, resizersize, resizersize);
 
     getFilter()->lastUIWidth  = getWidth();
@@ -172,7 +194,9 @@ bool imagePluginEditor::keyPressed(const juce::KeyPress& key, Component* origina
     {
         prog++;
         if (prog == getFilter()->getNumPrograms())
+        {
             prog = 0;
+        }
         getFilter()->setCurrentProgram(prog);
         getFilter()->updateHostDisplay();
         return true;
@@ -180,7 +204,9 @@ bool imagePluginEditor::keyPressed(const juce::KeyPress& key, Component* origina
     else if (key.isKeyCode(juce::KeyPress::pageDownKey))
     {
         if (prog == 0)
+        {
             prog = getFilter()->getNumPrograms();
+        }
         prog--;
         getFilter()->setCurrentProgram(prog);
         getFilter()->updateHostDisplay();
@@ -306,7 +332,9 @@ void imagePluginEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 void imagePluginEditor::mouseDown(const juce::MouseEvent& e)
 {
     if (e.eventComponent == label)
+    {
         label->setVisible(false);
+    }
 }
 
 void imagePluginEditor::mouseDoubleClick(const juce::MouseEvent& e)
@@ -368,7 +396,9 @@ bool imagePluginEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
     juce::File file = juce::File(files.joinIntoString(juce::String(), 0, 1));
     if (file.hasFileExtension("png") || file.hasFileExtension("gif") || file.hasFileExtension("jpg") || file.hasFileExtension("svg"))
+    {
         return true;
+    }
     return false;
 }
 
@@ -446,9 +476,13 @@ void imagePluginEditor::updateParametersFromFilter()
     {
         juce::String fullpath = icon;
         if (! juce::File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
+        {
             fullpath = getFilter()->iconPath + juce::File::getSeparatorString() + icon;
+        }
         if (! imagepad->setImageFromFile(juce::File::getCurrentWorkingDirectory().getChildFile(fullpath)))
+        {
             imagepad->setImages(nullptr);
+        }
         imagepad->setIconPath(icon);
     }
 

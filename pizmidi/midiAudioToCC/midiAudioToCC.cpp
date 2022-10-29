@@ -82,7 +82,9 @@ MidiAudioToCC::MidiAudioToCC(audioMasterCallback audioMaster)
 MidiAudioToCC::~MidiAudioToCC()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -110,9 +112,13 @@ void MidiAudioToCC::setProgramName(char* name)
 void MidiAudioToCC::getProgramName(char* name)
 {
     if (! strcmp(programs[curProgram].name, "Init"))
+    {
         sprintf(name, "%s %d", programs[curProgram].name, curProgram + 1);
+    }
     else
+    {
         strcpy(name, programs[curProgram].name);
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -249,9 +255,13 @@ void MidiAudioToCC::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kMode:
             if (fMode >= 0.5f)
+            {
                 strcpy(text, "Stereo");
+            }
             else
+            {
                 strcpy(text, "Mono (L+R)");
+            }
             break;
         case kOffset:
             sprintf(text, "%f", fOffset);
@@ -287,7 +297,9 @@ void MidiAudioToCC::preProcess(void)
     if (timeInfo)
     {
         if (kVstTempoValid & timeInfo->flags)
+        {
             _bpm = (float) timeInfo->tempo;
+        }
     }
     else
     {
@@ -303,18 +315,30 @@ int MidiAudioToCC::smooth(int data, int old, int older, float inertia)
 
     //make sure change isn't smaller than 1
     if (change < 1.0f && change > 0.0f)
+    {
         change = 1.0f;
+    }
     else if (change < 0.0f && change > -1.0f)
+    {
         change = -1.0f;
+    }
 
     if (change < 0.f)
+    {
         data = old - roundToInt(-change);
+    }
     else
+    {
         data = old + roundToInt(change);
+    }
     if (data < 1)
+    {
         data = 0;
+    }
     if (data > 127)
+    {
         data = 127;
+    }
     return data;
 }
 

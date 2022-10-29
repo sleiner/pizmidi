@@ -13,7 +13,9 @@ midiPCGUIProgram::midiPCGUIProgram()
 {
     //default values
     for (int i = 0; i < numParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kMode]        = 1.f;
     param[kThru]        = 1.f;
     param[kTrigger]     = 0.4f;
@@ -53,7 +55,9 @@ midiPCGUI::midiPCGUI()
     senttrig    = false;
     sentbank    = false;
     for (int i = 0; i < numParams; i++)
+    {
         automated[i] = false;
+    }
     mode = continuous;
 
     wait         = false;
@@ -71,7 +75,9 @@ midiPCGUI::midiPCGUI()
 midiPCGUI::~midiPCGUI()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //==============================================================================
@@ -92,9 +98,13 @@ void midiPCGUI::setParameter(int index, float newValue)
     {
         case kMode:
             if (newValue < 0.5f)
+            {
                 mode = continuous;
+            }
             else
+            {
                 mode = triggered;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kPCListen:
@@ -113,7 +123,9 @@ void midiPCGUI::setParameter(int index, float newValue)
                 senttrig = true;
             }
             else if (newValue < 1.f && senttrig)
+            {
                 senttrig = false;
+            }
             break;
         case kBankTrigger:
             param[index] = newValue;
@@ -123,7 +135,9 @@ void midiPCGUI::setParameter(int index, float newValue)
                 sentbank    = true;
             }
             else if (newValue < 1.f && sentbank)
+            {
                 sentbank = false;
+            }
             break;
         case kInc:
             param[index] = newValue;
@@ -133,7 +147,9 @@ void midiPCGUI::setParameter(int index, float newValue)
                 sentinc = true;
             }
             else if (newValue < 1.f && sentinc)
+            {
                 sentinc = false;
+            }
             break;
         case kDec:
             param[index] = newValue;
@@ -143,24 +159,32 @@ void midiPCGUI::setParameter(int index, float newValue)
                 sentdec = true;
             }
             else if (newValue < 1.f && sentdec)
+            {
                 sentdec = false;
+            }
             break;
         case kProgram:
             program = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous && ! automated[index])
+            {
                 trigger = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kBankMSB:
             bankmsb = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kBankLSB:
             banklsb = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         default:
@@ -228,66 +252,106 @@ const juce::String midiPCGUI::getParameterText(int index)
     {
         case kMode:
             if (mode == continuous)
+            {
                 strcpy(text, "Direct");
+            }
             else
+            {
                 strcpy(text, "Triggered");
+            }
             break;
         case kPCListen:
             if (pclisten)
+            {
                 strcpy(text, "Yes");
+            }
             else
+            {
                 strcpy(text, "No");
+            }
             break;
         case kThru:
             if (thru)
+            {
                 strcpy(text, "Yes");
+            }
             else
+            {
                 strcpy(text, "No");
+            }
             break;
         case kProgram:
             if (program == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", program);
+            }
             break;
         case kBankMSB:
             if (bankmsb == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", bankmsb);
+            }
             break;
         case kBankLSB:
             if (banklsb == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", banklsb);
+            }
             break;
         case kChannel:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kTrigger:
             if (param[index] == 1.f)
+            {
                 strcpy(text, "Triggered!");
+            }
             else
+            {
                 strcpy(text, "Trigger-->");
+            }
             break;
         case kBankTrigger:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         case kInc:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         case kDec:
             if (param[index] < 1.f)
+            {
                 strcpy(text, "Trigger-->");
+            }
             else
+            {
                 strcpy(text, "Triggered!");
+            }
             break;
         default:
             sprintf(text, "%d", roundToInt(param[index] * 100.0f));
@@ -309,17 +373,25 @@ const juce::String midiPCGUI::getOutputChannelName(const int channelIndex) const
 bool midiPCGUI::isInputChannelStereoPair(int index) const
 {
     if (getNumInputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool midiPCGUI::isOutputChannelStereoPair(int index) const
 {
     if (getNumOutputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void midiPCGUI::setCurrentProgram(int index)
@@ -331,9 +403,13 @@ void midiPCGUI::setCurrentProgram(int index)
         setParameter(i, ap->param[i]);
     }
     if (program > 0)
+    {
         trigger = true;
+    }
     if (banklsb > 0 || bankmsb > 0)
+    {
         triggerbank = true;
+    }
 }
 
 void midiPCGUI::changeProgramName(int index, const juce::String& newName)
@@ -424,13 +500,17 @@ void midiPCGUI::processBlock(juce::AudioSampleBuffer& buffer,
             }
         } // if listenchannel==channel
         if (! discard)
+        {
             output.addEvent(midi_message, msgMetadata.samplePosition);
+        }
     } //for() inputs loop
 
     if (triggerbank)
     {
         if (! (trigger && program != 0))
+        {
             triggerbank = false;
+        }
         //create GUI triggered message
         if (bankmsb != 0)
         {
@@ -481,7 +561,9 @@ void midiPCGUI::processBlock(juce::AudioSampleBuffer& buffer,
         program = actualProgram[listenchannel];
         ++program;
         if (program > 128)
+        {
             program = 1;
+        }
         if (program != 0)
         {
             output.addEvent(juce::MidiMessage::programChange(listenchannel + 1, program - 1), 0);
@@ -497,7 +579,9 @@ void midiPCGUI::processBlock(juce::AudioSampleBuffer& buffer,
         program = actualProgram[listenchannel];
         --program;
         if (program < 1)
+        {
             program = 128;
+        }
         if (program != 0)
         {
             output.addEvent(juce::MidiMessage::programChange(listenchannel + 1, program - 1), 0);
@@ -528,7 +612,9 @@ void midiPCGUI::getCurrentProgramStateInformation(juce::MemoryBlock& destData)
     xmlState.setAttribute("program", getCurrentProgram());
     xmlState.setAttribute("progname", getProgramName(getCurrentProgram()));
     for (int i = 0; i < getNumParameters(); i++)
+    {
         xmlState.setAttribute(juce::String(i), param[i]);
+    }
 
     auto* names = new juce::XmlElement("names");
     for (int i = 0; i < progNames.names.size(); i++)
@@ -622,9 +708,13 @@ void midiPCGUI::setStateInformation(const void* data, int sizeInBytes)
             {
                 juce::String prefix;
                 if (xmlState->getIntAttribute("pluginVersion") < 2)
+                {
                     prefix = "P" + juce::String(p) + ".";
+                }
                 else
+                {
                     prefix = "P" + juce::String(p) + "_";
+                }
                 for (int i = 0; i < getNumParameters(); i++)
                 {
                     programs[p].param[i] = (float) xmlState->getDoubleAttribute(prefix + juce::String(i), programs[p].param[i]);

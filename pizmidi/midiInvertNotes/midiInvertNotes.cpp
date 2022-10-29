@@ -58,7 +58,9 @@ MidiInvertNotes::MidiInvertNotes(audioMasterCallback audioMaster)
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     init();
@@ -68,7 +70,9 @@ MidiInvertNotes::MidiInvertNotes(audioMasterCallback audioMaster)
 MidiInvertNotes::~MidiInvertNotes()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -167,9 +171,13 @@ void MidiInvertNotes::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kPower:
             if (fPower < 0.5f)
+            {
                 strcpy(text, "off");
+            }
             else
+            {
                 strcpy(text, "on");
+            }
             break;
         default:
             break;
@@ -188,7 +196,9 @@ void MidiInvertNotes::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
         short data1        = tomod.midiData[1] & 0x7f;
         short data2        = tomod.midiData[2] & 0x7f;
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         short mirror = FLOAT_TO_MIDI(fMirror);
         if (fPower >= 0.5f)
@@ -197,12 +207,18 @@ void MidiInvertNotes::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
             {
                 int newnote = data1 + 2 * (mirror - data1);
                 if (newnote > 127)
+                {
                     newnote = 127;
+                }
                 if (newnote < 0)
+                {
                     newnote = 0;
+                }
                 tomod.midiData[1] = newnote;
                 if (status == MIDI_NOTEON)
+                {
                     transposed[data1][channel] = newnote;
+                }
             }
         }
         if (status == MIDI_NOTEOFF)

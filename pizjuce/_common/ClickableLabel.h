@@ -44,7 +44,9 @@ public:
     {
         juce::TextEditor* ed = new juce::TextEditor();
         if (ed == nullptr)
+        {
             return;
+        }
         ed->setFont(getFont());
         const int cols[] = { juce::TextEditor::backgroundColourId,
                              juce::TextEditor::textColourId,
@@ -55,7 +57,9 @@ public:
                              juce::TextEditor::shadowColourId };
 
         for (int i = 0; i < juce::numElementsInArray(cols); ++i)
+        {
             ed->setColour(cols[i], findColour(cols[i]));
+        }
         ed->setBounds(0, 0, getWidth(), getHeight());
         ed->setText(getText(), false);
         ed->setHighlightedRegion(juce::Range<int>(0, getText().length()));
@@ -73,13 +77,17 @@ private:
     void mouseDown(const juce::MouseEvent& e) override
     {
         if (listener != nullptr)
+        {
             listener->clickableLabelMouseDown(this, e);
+        }
     }
 
     void mouseDoubleClick(const juce::MouseEvent& e) override
     {
         if (listener != nullptr)
+        {
             listener->clickableLabelMouseDoubleClick(this, e);
+        }
     }
 
     void textEditorTextChanged(juce::TextEditor& editor) override

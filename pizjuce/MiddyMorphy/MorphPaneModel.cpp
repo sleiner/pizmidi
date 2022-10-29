@@ -106,9 +106,13 @@ void MorphPaneModel::mouseUp(const juce::MouseEvent& e)
         else if (result == 8)
         {
             if (core->controllerListWidth == 0)
+            {
                 core->controllerListWidth = 120;
+            }
             else
+            {
                 core->controllerListWidth = 0;
+            }
             core->sendChangeMessage(this);
         }
     }

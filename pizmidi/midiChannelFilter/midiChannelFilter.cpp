@@ -58,7 +58,9 @@ MidiChannelFilter::MidiChannelFilter(audioMasterCallback audioMaster)
 MidiChannelFilter::~MidiChannelFilter()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -144,9 +146,13 @@ void MidiChannelFilter::getParameterDisplay(VstInt32 index, char* text)
     {
         case kChannel:
             if (FLOAT_TO_CHANNEL016(fChannel) < 1)
+            {
                 vst_strncpy(text, "All", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChannel));
+            }
             break;
         default:
             break;
@@ -171,6 +177,8 @@ void MidiChannelFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
             }
         }
         else
+        {
             outputs[0].push_back(*it);
+        }
     }
 }

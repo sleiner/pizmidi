@@ -135,7 +135,9 @@ midiPads::midiPads()
     //initialize temporary parameters
     triggervel = 0;
     for (int i = 0; i < 128; i++)
+    {
         isplaying[i] = false;
+    }
     for (int i = 0; i < numPads; i++)
     {
         buttondown[i]   = false;
@@ -154,9 +156,13 @@ midiPads::midiPads()
 midiPads::~midiPads()
 {
     if (programs)
+    {
         juce::deleteAndZero(programs);
+    }
     if (layouts)
+    {
         juce::deleteAndZero(layouts);
+    }
 }
 
 //==============================================================================
@@ -170,7 +176,9 @@ void midiPads::setParameter(int index, float newValue)
     //if (param[index] != newValue) {
     param[index] = newValue;
     if (index < kNumGlobalParams)
+    {
         programs->set(curProgram, getGlobalParamValueName(index), newValue);
+    }
     else if (index >= ypos)
     {
         programs->y[curProgram][index - ypos] = newValue;
@@ -192,52 +200,84 @@ const juce::String midiPads::getParameterName(int index)
     for (int i = 0; i < numPads; i++)
     {
         if (index == i + xpos)
+        {
             return "x pos " + juce::String(i + 1);
+        }
         else if (index == i + ypos)
+        {
             return "y pos " + juce::String(i + 1);
+        }
     }
     if (index == kVelOffset)
+    {
         return "velocity";
+    }
     else if (index == kCCOffset)
+    {
         return "ccvalue";
+    }
     else if (index == kChOut)
+    {
         return "out channel";
+    }
     else if (index == kMono)
+    {
         return "mono mode";
+    }
     else if (index == kUseTrigger)
+    {
         return "use trigger";
+    }
     else if (index == kNoteOnTrig)
+    {
         return "ext noteon trig";
+    }
     else if (index == kUseVel)
+    {
         return "use trig vel";
+    }
     else if (index == kChIn)
+    {
         return "in channel";
+    }
     else if (index == kThru)
+    {
         return "midi thru";
+    }
     else if (index == kSendAft)
+    {
         return "send aftertouch";
+    }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String midiPads::getParameterText(int index)
 {
     if (index < getNumParameters())
+    {
         return juce::String(param[index], 3);
+    }
     return juce::String();
 }
 
 const juce::String midiPads::getInputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
 const juce::String midiPads::getOutputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
@@ -256,9 +296,13 @@ void midiPads::setCurrentProgram(int index)
 {
     //save non-parameter info to the old program, except the first time
     if (! init)
+    {
         copySettingsToProgram(curProgram);
+    }
     else
+    {
         init = false;
+    }
 
     //then set the new program
     curProgram = index;
@@ -360,7 +404,9 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
         if (midi_message.isProgramChange())
         { // && (midi_message.isForChannel(channel) || channel==0)) {
             if (midi_message.getProgramChangeNumber() < getNumPrograms())
+            {
                 setCurrentProgram(midi_message.getProgramChangeNumber());
+            }
         }
         for (int i = 0; i < numPads; i++)
         {
@@ -463,9 +509,13 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
                                 // note on
                                 int vel;
                                 if (param[kUseVel] >= 0.5f)
+                                {
                                     vel = (int) ((float) ((midi_message.getVelocity()) * (getParameter(kVelOffset) * 2)));
+                                }
                                 else
+                                {
                                     vel = jlimit(1, 127, (int) (Ydata2[i] * (getParameter(kVelOffset) * 2)));
+                                }
                                 if (toggle[i])
                                 {
                                     if (togglestate[i])
@@ -562,7 +612,9 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
         }
         //if thru is on, copy original message
         if (! discard)
+        {
             midiout.addEvent(midi_message, sample_number);
+        }
     }
     //midi sending part
     for (int i = 0; i < numPads; i++)
@@ -631,11 +683,17 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
                 }
                 int vel;
                 if (param[kNoteOnTrig] >= 0.5f)
+                {
                     vel = jlimit(0, 127, (int) (triggervel * (getParameter(kVelOffset) * 2)));
+                }
                 else if (UseY[i])
+                {
                     vel = jlimit(0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter(kVelOffset) * 2)));
+                }
                 else
+                {
                     vel = jlimit(0, 127, (int) (Ydata2[i] * (getParameter(kVelOffset) * 2)));
+                }
                 midiout.addEvent(juce::MidiMessage(0x90 | outch, note, vel, 0), 1); //noteon
                 isplaying[note] = true;
                 if (param[kSendAft] >= 0.5f)
@@ -646,9 +704,13 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
                 {
                     int val;
                     if (UseY[i])
+                    {
                         val = jlimit(0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter(kCCOffset) * 2)));
+                    }
                     else
+                    {
                         val = jlimit(0, 127, (int) ((float) Ydata2[i] * (getParameter(kCCOffset) * 2)));
+                    }
                     if (val != lastyccvalue[i])
                     {
                         lastyccvalue[i] = val;
@@ -681,24 +743,34 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
             {
                 //x-off value
                 if (UseXPB[i])
+                {
                     midiout.addEvent(juce::MidiMessage(0xE0 | outch, 0, Xoff[i], 0), 0);
+                }
                 else
+                {
                     midiout.addEvent(juce::MidiMessage(0xB0 | outch, Xcc[i], Xoff[i], 0), 0);
+                }
             }
             if (Ytype[i] == 0)
             {
                 int note = Ydata1[i];
                 if (param[kSendAft] >= 0.5f)
+                {
                     midiout.addEvent(juce::MidiMessage(0xA0 | outch, note, 0, 0), 0);
+                }
                 if (UseYCC[i] && SendOff[i])
+                {
                     midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
-                midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0);       //noteoff
+                }
+                midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0); //noteoff
                 isplaying[note] = false;
             }
             else
             {
                 if ((SendOff[i] || toggle[i]) && ((! UseX[i]) || UseY[i]))
+                {
                     midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
+                }
             }
         }
     }
@@ -797,7 +869,9 @@ void midiPads::setCurrentProgramStateInformation(const void* data, int sizeInByt
             hex          = xmlState->getBoolAttribute("hex", hex);
             usemouseup   = xmlState->getBoolAttribute("usemouseup", usemouseup);
             if (hex)
+            {
                 setLayout(curProgram, hexagonpads);
+            }
             else
             {
                 switch (squares)
@@ -919,7 +993,9 @@ void midiPads::setStateInformation(const void* data, int sizeInBytes)
                 programs->set(p, "hex", xmlState->getBoolAttribute(prefix + "hex", programs->get(p, "hex")));
                 programs->set(p, "usemouseup", xmlState->getBoolAttribute(prefix + "usemouseup", programs->get(p, "usemouseup")));
                 if (programs->get(p, "hex"))
+                {
                     setLayout(p, hexagonpads);
+                }
                 else
                 {
                     switch ((int) programs->get(p, "squares"))
@@ -1040,7 +1116,9 @@ void midiPads::saveXmlBank(juce::File file)
 bool midiPads::loadXmlPatch(int index, juce::File file)
 {
     if (! file.exists())
+    {
         return false;
+    }
     juce::XmlDocument xmldoc(file.loadFileAsString());
     auto xmlState(xmldoc.getDocumentElement());
     programs->values_.removeChild(programs->values_.getChild(index), nullptr);
@@ -1057,7 +1135,9 @@ bool midiPads::loadXmlPatch(int index, juce::File file)
 bool midiPads::loadXmlBank(juce::File file)
 {
     if (! file.exists())
+    {
         return false;
+    }
     juce::String xml = file.loadFileAsString();
     juce::XmlDocument xmldoc(xml);
     auto xmlState(xmldoc.getDocumentElement());
@@ -1078,7 +1158,9 @@ bool midiPads::loadXmlBank(juce::File file)
 bool midiPads::loadFxb(juce::File file)
 {
     if (! file.exists())
+    {
         return false;
+    }
     juce::MemoryBlock bank = juce::MemoryBlock(0, true);
     file.loadFileAsData(bank);
     bank.removeSection(0, 16);
@@ -1095,7 +1177,9 @@ bool midiPads::loadFxb(juce::File file)
 bool midiPads::loadFxp(juce::File file)
 {
     if (! file.exists())
+    {
         return false;
+    }
     juce::MemoryBlock data = juce::MemoryBlock(0, true);
     file.loadFileAsData(data);
     data.removeSection(0, 16);
@@ -2043,13 +2127,21 @@ void midiPads::loadDefaultPrograms()
                     programs->setForPad(i, pad, "icon", juce::String("hihi.svg"));
                     programs->setForPad(i, pad, "text", juce::String());
                     if (pad < 4)
+                    {
                         programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304050).toString());
+                    }
                     else if (pad < 8)
+                    {
                         programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304060).toString());
+                    }
                     else if (pad < 12)
+                    {
                         programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304050).toString());
+                    }
                     else
+                    {
                         programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304060).toString());
+                    }
                 }
                 setLayout(i, sixteenpads);
                 break;

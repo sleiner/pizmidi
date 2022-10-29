@@ -980,9 +980,13 @@ void midiPCGUIEditor::labelTextChanged(juce::Label* labelThatHasChanged)
         //[UserLabelCode_PCDisplay] -- add your label text handling code here..
         int v = PCDisplay->getText().getIntValue();
         if (PCDisplay->getText().equalsIgnoreCase("off"))
+        {
             getFilter()->setParameterNotifyingHost(kProgram, 0.f);
+        }
         else if (v >= 0 && v <= 128)
+        {
             getFilter()->setParameterNotifyingHost(kProgram, (float) v / 128.f);
+        }
         getFilter()->setParameter(kTrigger, 1.f);
         //[/UserLabelCode_PCDisplay]
     }
@@ -991,9 +995,13 @@ void midiPCGUIEditor::labelTextChanged(juce::Label* labelThatHasChanged)
         //[UserLabelCode_PCDisplay2] -- add your label text handling code here..
         int v = PCDisplay2->getText().getIntValue();
         if (PCDisplay2->getText().equalsIgnoreCase("off"))
+        {
             getFilter()->setParameterNotifyingHost(kBankMSB, 0.f);
+        }
         else if (v >= 0 && v <= 128)
+        {
             getFilter()->setParameterNotifyingHost(kBankMSB, (float) v / 128.f);
+        }
         getFilter()->setParameter(kBankTrigger, 1.f);
         //[/UserLabelCode_PCDisplay2]
     }
@@ -1002,9 +1010,13 @@ void midiPCGUIEditor::labelTextChanged(juce::Label* labelThatHasChanged)
         //[UserLabelCode_PCDisplay3] -- add your label text handling code here..
         int v = PCDisplay3->getText().getIntValue();
         if (PCDisplay3->getText().equalsIgnoreCase("off"))
+        {
             getFilter()->setParameterNotifyingHost(kBankLSB, 0.f);
+        }
         else if (v >= 0 && v <= 128)
+        {
             getFilter()->setParameterNotifyingHost(kBankLSB, (float) v / 128.f);
+        }
         getFilter()->setParameter(kBankTrigger, 1.f);
         //[/UserLabelCode_PCDisplay3]
     }
@@ -1046,7 +1058,9 @@ void midiPCGUIEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     for (int i = 0; i < numParams; i++)
+    {
         param[i] = filter->getParameter(i);
+    }
     const int channel       = roundToInt(param[kChannel] * 15.0f);
     const int p             = filter->actualProgram[channel];
     const int msb           = filter->actualBankMSB[channel];

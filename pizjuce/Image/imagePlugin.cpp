@@ -73,7 +73,9 @@ imagePluginFilter::imagePluginFilter()
 imagePluginFilter::~imagePluginFilter()
 {
     if (programs)
+    {
         delete programs;
+    }
 }
 
 //==============================================================================
@@ -102,7 +104,9 @@ void imagePluginFilter::setParameter(int index, float newValue)
 const juce::String imagePluginFilter::getParameterName(int index)
 {
     if (index == kChannel)
+    {
         return "Channel";
+    }
     return juce::String();
 }
 
@@ -111,9 +115,13 @@ const juce::String imagePluginFilter::getParameterText(int index)
     if (index == kChannel)
     {
         if (roundToInt(param[kChannel] * 16.0f) == 0)
+        {
             return juce::String("Any");
+        }
         else
+        {
             return juce::String(roundToInt(param[kChannel] * 16.0f));
+        }
     }
     return juce::String();
 }
@@ -183,7 +191,9 @@ void imagePluginFilter::setCurrentBank(int index, int program)
 
     curBank = index;
     if (program == -1)
+    {
         program = curProgram;
+    }
     updateHostDisplay();
     setCurrentProgram(program);
 }
@@ -427,5 +437,7 @@ void imagePluginFilter::applySizeToBank(int h, int w)
 void imagePluginFilter::clearAllImages()
 {
     for (int i = 0; i < getNumPrograms(); i++)
+    {
         programs->set(curBank, i, "icon", juce::String(""));
+    }
 }

@@ -85,7 +85,9 @@ MidiTranspose::MidiTranspose(audioMasterCallback audioMaster)
 MidiTranspose::~MidiTranspose()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -95,7 +97,9 @@ void MidiTranspose::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -173,37 +177,57 @@ void MidiTranspose::getParameterDisplay(VstInt32 index, char* text)
     {
         case kInChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kTranspose:
             sprintf(text, "%d", getTranspose());
             if (getTranspose() > 0)
+            {
                 sprintf(text, "+%d", getTranspose());
+            }
             else
+            {
                 sprintf(text, "%d", getTranspose());
+            }
             break;
         case kRange:
             sprintf(text, "± %d", roundToInt(MAX_TRANSPOSE * param[index]));
             break;
         case kUsePB:
             if (param[index] < 0.5f)
+            {
                 strcpy(text, "Thru");
+            }
             else
+            {
                 strcpy(text, "Use");
+            }
             break;
         case kImmediate:
             if (param[index] < 0.5f)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kUseCC:
             if (FLOAT_TO_MIDI_X(param[index]) == -1)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI_X(param[index]));
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -259,7 +283,9 @@ void MidiTranspose::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         int data2   = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (channel == ch || ch == ANY_CHANNEL)
         {
@@ -337,7 +363,9 @@ void MidiTranspose::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 lastTranspose = transp;
             }
             else
+            {
                 outputs[0].push_back(tomod);
+            }
         }
     }
 }

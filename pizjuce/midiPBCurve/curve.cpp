@@ -63,14 +63,18 @@ MidiCurve::MidiCurve()
 MidiCurve::~MidiCurve()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //==============================================================================
 float MidiCurve::getParameter(int index)
 {
     if (index < getNumParameters())
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -83,11 +87,17 @@ void MidiCurve::setParameter(int index, float newValue)
         if (param[index] != newValue)
         {
             if (index == 0)
+            {
                 param[index] = 0.f;
+            }
             else if (index == (MAX_ENVELOPE_POINTS * 2 - 2))
+            {
                 param[index] = 1.f;
+            }
             else
+            {
                 param[index] = ap->param[index] = newValue;
+            }
             updatePath();
             sendChangeMessage();
         }
@@ -97,7 +107,9 @@ void MidiCurve::setParameter(int index, float newValue)
 const juce::String MidiCurve::getParameterName(int index)
 {
     if (index == kChannel)
+    {
         return "Channel";
+    }
     return "param" + juce::String(index);
 }
 
@@ -106,27 +118,39 @@ const juce::String MidiCurve::getParameterText(int index)
     if (index == kChannel)
     {
         if (roundToInt(param[kChannel] * 16.0f) == 0)
+        {
             return juce::String("Any");
+        }
         else
+        {
             return juce::String(roundToInt(param[kChannel] * 16.0f));
+        }
     }
     else if (index < getNumParameters())
+    {
         return juce::String(roundToInt(127.f * param[index]));
+    }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String MidiCurve::getInputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
 const juce::String MidiCurve::getOutputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
@@ -168,13 +192,17 @@ void MidiCurve::setCurrentProgram(int index)
 void MidiCurve::changeProgramName(int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
+    {
         programs[index].name = newName;
+    }
 }
 
 const juce::String MidiCurve::getProgramName(int index)
 {
     if (index < getNumPrograms())
+    {
         return programs[index].name;
+    }
     return juce::String();
 }
 
@@ -200,9 +228,13 @@ float MidiCurve::getPointValue(int n, int y)
     if (n < MAX_ENVELOPE_POINTS)
     {
         if (! y)
+        {
             return points[n].p.getX();
+        }
         else
+        {
             return 1.f - points[n].p.getY();
+        }
     }
     return -1.f;
 }
@@ -213,7 +245,9 @@ float MidiCurve::findValue(float input)
     while (it.next())
     {
         if (it.x1 == input)
+        {
             return 1.f - it.y1;
+        }
         if (it.x2 >= input)
         {
             return 1.f - (float) linearInterpolate(input, it.y1, it.y2, it.x1, it.x2);
@@ -260,16 +294,22 @@ void MidiCurve::processBlock(juce::AudioSampleBuffer& buffer,
                     sendChangeMessage();
                 }
                 else
+                {
                     output.addEvent(midi_message, sample_number);
+                }
             }
             //else if (midi_message.isProgramChange()) {
             //setCurrentProgram(midi_message.getProgramChangeNumber());
             //}
             else
+            {
                 output.addEvent(midi_message, sample_number);
+            }
         }
         else
+        {
             output.addEvent(midi_message, sample_number);
+        }
     }
     midiMessages = output;
 }
@@ -327,7 +367,9 @@ int MidiCurve::getPrevActivePoint(int currentPoint)
     for (int i = currentPoint - 1; i > 0; i--)
     {
         if (points[i].isActive)
+        {
             return i;
+        }
     }
     return 0;
 }
@@ -337,7 +379,9 @@ int MidiCurve::getNextActivePoint(int currentPoint)
     for (int i = currentPoint + 1; i < MAX_ENVELOPE_POINTS; i++)
     {
         if (points[i].isActive)
+        {
             return i;
+        }
     }
     return MAX_ENVELOPE_POINTS - 1;
 }
@@ -361,14 +405,18 @@ void MidiCurve::resetPoints()
 bool MidiCurve::isPointActive(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return getParameter(point + kActive) > 0.5f;
 }
 
 bool MidiCurve::isPointControl(int point)
 {
     if (point < 0)
+    {
         return false;
+    }
     return getParameter(point + kActive) > 0.1f && getParameter(point + kActive) < 0.9f;
 }
 

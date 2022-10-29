@@ -40,10 +40,14 @@ bool MidiPolyphony::midiSort::operator()(const VstMidiEvent& first, const VstMid
 {
     unsigned int r = rand();
     if (this->mode == random)
+    {
         return (r < (int) (RAND_MAX / 2)) ? true : false;
+    }
     bool result = false;
     if (first.deltaFrames < second.deltaFrames)
+    {
         result = true;
+    }
     else if (first.deltaFrames == second.deltaFrames
              && isNoteOnOrOff(first) && isNoteOnOrOff(second))
     {
@@ -56,37 +60,57 @@ bool MidiPolyphony::midiSort::operator()(const VstMidiEvent& first, const VstMid
         {
             case quietest:
                 if (bothOff)
+                {
                     result = onvelocity[first.midiData[0] & 0x0f][first.midiData[1]]
                            < onvelocity[second.midiData[0] & 0x0f][second.midiData[1]];
+                }
                 else
+                {
                     result = first.midiData[2] > second.midiData[2];
+                }
                 break;
             case lowest:
                 if (bothOff)
+                {
                     result = first.midiData[1] < second.midiData[1];
+                }
                 else
+                {
                     result = first.midiData[1] > second.midiData[1];
+                }
                 break;
             case highest:
                 if (bothOff)
+                {
                     result = first.midiData[1] > second.midiData[1];
+                }
                 else
+                {
                     result = first.midiData[1] < second.midiData[1];
+                }
                 break;
             case centered:
                 if (abs(first.midiData[1] - centerNote) == abs(second.midiData[1] - centerNote))
                 {
                     if (bothOff)
+                    {
                         result = first.midiData[1] > second.midiData[1];
+                    }
                     else
+                    {
                         result = first.midiData[1] < second.midiData[1];
+                    }
                 }
                 else
                 {
                     if (bothOff)
+                    {
                         result = (abs(first.midiData[1] - centerNote) > abs(second.midiData[1] - centerNote));
+                    }
                     else
+                    {
                         result = (abs(first.midiData[1] - centerNote) < abs(second.midiData[1] - centerNote));
+                    }
                 }
                 break;
             case random:
@@ -97,7 +121,9 @@ bool MidiPolyphony::midiSort::operator()(const VstMidiEvent& first, const VstMid
         } // /switch
     }
     if (isNoteOn(first))
+    {
         priorityNote = first.midiData[1];
+    }
     return result;
 }
 
@@ -145,7 +171,9 @@ MidiPolyphony::MidiPolyphony(audioMasterCallback audioMaster)
 MidiPolyphony::~MidiPolyphony()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -156,7 +184,9 @@ void MidiPolyphony::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -195,19 +225,33 @@ void MidiPolyphony::setParameter(VstInt32 index, float value)
     {
         case kSteal:
             if (param[index] < 1.f / (float) (numStealModes))
+            {
                 stealmode = oldest;
+            }
             else if (param[index] < 2.f / (float) (numStealModes))
+            {
                 stealmode = newest;
+            }
             else if (param[index] < 3.f / (float) (numStealModes))
+            {
                 stealmode = quietest;
+            }
             else if (param[index] < 4.f / (float) (numStealModes))
+            {
                 stealmode = lowest;
+            }
             else if (param[index] < 5.f / (float) (numStealModes))
+            {
                 stealmode = highest;
+            }
             else if (param[index] < 6.f / (float) (numStealModes))
+            {
                 stealmode = centered;
+            }
             else
+            {
                 stealmode = random;
+            }
 
             sorter.mode = stealmode;
             break;
@@ -216,11 +260,15 @@ void MidiPolyphony::setParameter(VstInt32 index, float value)
             break;
         case kLowCh:
             if (value > param[kHighCh])
+            {
                 setParameterAutomated(kHighCh, value);
+            }
             break;
         case kHighCh:
             if (value < param[kLowCh])
+            {
                 setParameterAutomated(kLowCh, value);
+            }
             break;
         default:
             break;
@@ -279,15 +327,23 @@ void MidiPolyphony::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPower:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off (Bypass)");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kRetrig:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kLowCh:
             sprintf(text, "Ch %d", roundToInt(15.f * param[index]) + 1);
@@ -297,45 +353,75 @@ void MidiPolyphony::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kInCh:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "Any");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kSteal:
             if (stealmode == oldest)
+            {
                 strcpy(text, "Steal Oldest");
+            }
             else if (stealmode == newest)
+            {
                 strcpy(text, "Steal Last");
+            }
             else if (stealmode == quietest)
+            {
                 strcpy(text, "Steal Quietest");
+            }
             else if (stealmode == lowest)
+            {
                 strcpy(text, "High");
+            }
             else if (stealmode == highest)
+            {
                 strcpy(text, "Low");
+            }
             else if (stealmode == centered)
+            {
                 strcpy(text, "Centered");
+            }
             else if (stealmode == random)
+            {
                 strcpy(text, "Random");
+            }
             break;
         case kMaxPoly:
             int p;
             p = roundToInt(((float) maxPoly - 1) * param[index]) + 1;
             if (p == 1)
+            {
                 sprintf(text, "%d Note", p);
+            }
             else
+            {
                 sprintf(text, "%d Notes", p);
+            }
             break;
         case kSustain:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Pass Thru");
+            }
             else
+            {
                 strcpy(text, "Use");
+            }
             break;
         case kMode:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Reuse");
+            }
             else
+            {
                 strcpy(text, "Prefer New");
+            }
             break;
         default:
             break;
@@ -393,7 +479,9 @@ void MidiPolyphony::preProcess(void)
         }
     }
     else
+    {
         playing = true;
+    }
 
     _cleanMidiOutBuffers();
 }
@@ -405,7 +493,9 @@ VstInt32 MidiPolyphony::processEvents(VstEvents* ev)
     for (int i = 0; i < evts->numEvents; i++)
     {
         if ((evts->events[i])->type != kVstMidiType)
+        {
             continue;
+        }
         VstMidiEvent* event = (VstMidiEvent*) evts->events[i];
         _midiEventsIn[0].push_back(*event);
     }
@@ -422,7 +512,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
     const char lowch         = roundToInt(15.f * param[kLowCh]);
     char highch              = roundToInt(15.f * param[kHighCh]);
     if (lowch > highch)
+    {
         highch = lowch;
+    }
     int newpoly = roundToInt(((float) maxPoly - 1) * param[kMaxPoly]) + 1;
     //int numchans = highch-lowch+1;
     if (newpoly < poly)
@@ -451,7 +543,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
 
             //make 0-velocity notes look like "real" noteoffs for simplicity
             if (status == MIDI_NOTEON && data2 == 0)
+            {
                 status = MIDI_NOTEOFF;
+            }
             if (status == MIDI_NOTEON)
             {
                 held2[channel][data1] = true;
@@ -473,9 +567,13 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 {
                     heldNotes.push_back(n);
                     if (n < bottom)
+                    {
                         bottom = n;
+                    }
                     if (n > top)
+                    {
                         top = n;
+                    }
                 }
             }
         }
@@ -510,7 +608,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
 
         //make 0-velocity notes look like "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         bool discard = false;
 
@@ -526,22 +626,34 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 //start with the low channel, but use input channel if possible
                 char outch = lowch;
                 if (channel > lowch && channel <= highch)
+                {
                     outch = channel;
+                }
                 dbg("noteon n" << (int) data1 << " ch" << (int) channel << ", " << voices[outch] << " voices");
                 char outn = voices[outch] - 1;
                 v stealme;
                 //oldness: older==smaller
                 if (stealmode == oldest)
+                {
                     stealme.oldness = 0xFFFFFFFF;
+                }
                 else
+                {
                     stealme.oldness = 0;
+                }
                 stealme.inch = outch;
                 if (stealmode == highest)
+                {
                     stealme.note = -1;
+                }
                 else if (stealmode == centered)
+                {
                     stealme.note = centerNote;
+                }
                 else
+                {
                     stealme.note = 128;
+                }
                 stealme.vel = 128;
                 stealme.on  = true;
 
@@ -552,17 +664,23 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 {
                     //always prefer a new channel
                     if (lastoutch == -1)
+                    {
                         outch = lowch;
+                    }
                     else
                     {
                         outch = lastoutch + 1;
                         if (outch > highch)
+                        {
                             outch = lowch;
+                        }
                         while (voices[outch] >= poly)
                         {
                             outch++;
                             if (outch > highch)
+                            {
                                 outch = lowch;
+                            }
                             if (outch == lastoutch)
                             {
                                 //need voice stealing below
@@ -598,7 +716,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     for (int n = 0; n < poly; n++)
                     {
                         if (stop)
+                        {
                             break;
+                        }
                         if (Voice[outch][n].on == false)
                         {
                             dbg("found empty voice " << n);
@@ -617,7 +737,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         for (int ch = lowch; ch <= highch; ch++)
                         {
                             if (stop)
+                            {
                                 break;
+                            }
                             if (voices[ch] < poly)
                             {
                                 dbg("found empty channel " << ch);
@@ -625,7 +747,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                 for (int n = 0; n < poly; n++)
                                 {
                                     if (stop)
+                                    {
                                         break;
+                                    }
                                     if (Voice[ch][n].on == false)
                                     {
                                         dbg("found empty voice " << n);
@@ -723,7 +847,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                                 nosteal      = false;
                                             }
                                             else
+                                            {
                                                 nosteal = true;
+                                            }
 
                                     } //switch(stealmode)
                                 }     //if voice on
@@ -731,13 +857,21 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         }             //for ch
                         //if (retrig) {
                         if (stealmode == lowest && stealme.note > data1)
+                        {
                             nosteal = true;
+                        }
                         else if (stealmode == highest && stealme.note < data1)
+                        {
                             nosteal = true;
+                        }
                         else if (stealmode == centered && abs(stealme.note - centerNote) < abs(data1 - centerNote))
+                        {
                             nosteal = true;
-                        //else if (ntime[stealme.note][stealme.chan]==tomod.deltaFrames)
-                        //	nosteal=true;
+                        }
+                        // else if (ntime[stealme.note][stealme.chan] == tomod.deltaFrames)
+                        // {
+                        //     nosteal = true;
+                        // }
                         stealme = copyVoice(Voice[outch][outn]);
                         dbg("stealme n=" << stealme.note << " v=" << stealme.vel);
                         //}
@@ -753,7 +887,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                 for (int q = 0; q < queueSize; q++)
                                 {
                                     if (gotq)
+                                    {
                                         break;
+                                    }
                                     if (Queue[q].on && Queue[q].note == stealme.note && Queue[q].chan == outch)
                                     {
                                         dbg("same note already queued q=" << q);
@@ -766,14 +902,18 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                     else
                                     {
                                         if (Queue[q].on || Queue[q].note)
+                                        {
                                             dbg("no match q[" << q << "] on=" << Queue[q].on << " n=" << Queue[q].note << " ch=" << (int) Queue[q].chan);
+                                        }
                                     }
 #endif
                                 }
                                 for (int q = 0; q < queueSize; q++)
                                 {
                                     if (gotq)
+                                    {
                                         break;
+                                    }
                                     if (! Queue[q].on)
                                     {
                                         dbg("found empty queue slot q=" << q);
@@ -787,7 +927,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                 dbg("voice [" << (int) outch << "][" << (int) outn << "]." << Voice[outch][outn].note << " stolen, queued");
                             }
                             else
+                            {
                                 discard = true;
+                            }
                             VstMidiEvent kill;
                             kill.midiData[0] = MIDI_NOTEOFF + outch;
                             kill.midiData[1] = (char) stealme.note;
@@ -799,7 +941,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             --voices[outch];
                             Voice[outch][outn].on = false;
                             if (! sustain)
+                            {
                                 Voice[outch][outn].sustained = false;
+                            }
                             dbg("voice [" << (int) outch << "][" << (int) outn << "]." << Voice[outch][outn].note << " killed, " << voices[outch] << " voices");
                         }
                     } //voice-stealing
@@ -815,7 +959,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         for (int q = 0; q < queueSize; q++)
                         {
                             if (gotq)
+                            {
                                 break;
+                            }
                             if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                             {
                                 Queue[q].oldness   = ++oldness;
@@ -831,7 +977,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         for (int q = 0; q < queueSize; q++)
                         {
                             if (gotq)
+                            {
                                 break;
+                            }
                             if (! Queue[q].on)
                             {
                                 Queue[q].oldness   = ++oldness;
@@ -871,7 +1019,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     for (int q = 0; q < queueSize; q++)
                     {
                         if (gotq)
+                        {
                             break;
+                        }
                         if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                         {
                             dbg("playing note already queued q=" << q);
@@ -884,7 +1034,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         else
                         {
                             if (Queue[q].on || Queue[q].note)
+                            {
                                 dbg("no match q[" << q << "] on=" << Queue[q].on << " n=" << Queue[q].note << " ch=" << (int) Queue[q].chan);
+                            }
                         }
 #endif
                     }
@@ -900,7 +1052,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 {
 #ifdef _DEBUG
                     if (! sustain)
+                    {
                         dbg("sustain on");
+                    }
 #endif
                     sustain = true;
                 }
@@ -995,7 +1149,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     queuednoteoff = true;
                 }
                 if (queuednoteoff)
+                {
                     break;
+                }
             }
             //see if the note is playing
             if (! queuednoteoff)
@@ -1003,11 +1159,15 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 for (int ch = 0; ch < MIDI_MAX_CHANNELS; ch++)
                 {
                     if (done)
+                    {
                         break;
+                    }
                     for (int n = 0; n < maxPoly; n++)
                     {
                         if (done)
+                        {
                             break;
+                        }
                         if (Voice[ch][n].inch == channel && Voice[ch][n].note == data1 && Voice[ch][n].on)
                         {
                             //got match
@@ -1038,14 +1198,22 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                                     v useme;
                                     //oldness: older==smaller
                                     if (stealmode == oldest)
+                                    {
                                         useme.oldness = 0;
+                                    }
                                     else
+                                    {
                                         useme.oldness = 0xFFFFFFFF;
+                                    }
                                     useme.inch = 0;
                                     if (stealmode == highest)
+                                    {
                                         useme.note = 128;
+                                    }
                                     else
+                                    {
                                         useme.note = -1;
+                                    }
                                     useme.vel = 1;
                                     useme.on  = true;
                                     int useq  = 0;
@@ -1162,7 +1330,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 }         //for ch
             }             //if(!done)
             if (done)
+            {
                 discard = true;
+            }
             else if (! queuednoteoff)
             {
                 discard = false;
@@ -1192,7 +1362,9 @@ void MidiPolyphony::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 
     if (wasplaying && ! playing)
@@ -1270,9 +1442,13 @@ void MidiPolyphony::findCenterNote()
             {
                 heldNotes.push_back(n);
                 if (n < bottom)
+                {
                     bottom = n;
+                }
                 if (n > top)
+                {
                     top = n;
+                }
             }
         }
     }

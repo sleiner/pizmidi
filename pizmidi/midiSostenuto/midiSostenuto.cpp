@@ -71,7 +71,9 @@ MidiSostenuto::MidiSostenuto(audioMasterCallback audioMaster)
 MidiSostenuto::~MidiSostenuto()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -204,9 +206,13 @@ void MidiSostenuto::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kParam04:
             if (FLOAT_TO_MIDI(fParam04) >= PEDAL_THRESHOLD)
+            {
                 strcpy(text, "on");
+            }
             else
+            {
                 strcpy(text, "off");
+            }
             break;
         case kParam05:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(fParam05) + 1);
@@ -350,8 +356,13 @@ void MidiSostenuto::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
 
         //pushing back our copied midi event from input, modified or not!
         if (discard != 1)
+        {
             outputs[0].push_back(tomod);
-        //else discard = 0;
+        }
+        // else
+        // {
+        //     discard = 0;
+        // }
 
         //create queued events
         for (n = 0; n < 128; n++)

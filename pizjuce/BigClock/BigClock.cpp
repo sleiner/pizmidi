@@ -63,29 +63,53 @@ int BigClockFilter::getNumParameters()
 float BigClockFilter::getParameter(int index)
 {
     if (index == kBarsBeats)
+    {
         return barsbeats;
+    }
     else if (index == kLook)
+    {
         return look;
+    }
     else if (index == kShowms)
+    {
         return showms;
+    }
     else if (index == kShowhrs)
+    {
         return showhrs;
+    }
     else if (index == kTicks)
+    {
         return ticks;
+    }
     else if (index == kFrames)
+    {
         return frames;
+    }
     else if (index == kSamples)
+    {
         return samples;
+    }
     else if (index == kShowsubfr)
+    {
         return showsubfr;
+    }
     else if (index == kClockMode)
+    {
         return (float) mode / (float) (numModes - 1);
+    }
     else if (index == kRunWatch)
+    {
         return runwatch ? 1.f : 0.f;
+    }
     else if (index == kClearWatch)
+    {
         return 0.f;
+    }
     else
+    {
         return 0.0f;
+    }
 }
 
 void BigClockFilter::setParameter(int index, float newValue)
@@ -183,27 +207,49 @@ void BigClockFilter::setParameter(int index, float newValue)
 const juce::String BigClockFilter::getParameterName(int index)
 {
     if (index == 0)
+    {
         return L"mode";
+    }
     if (index == 1)
+    {
         return L"contrast";
+    }
     if (index == 2)
+    {
         return L"show ms/frames";
+    }
     if (index == 3)
+    {
         return L"show hours";
+    }
     if (index == 4)
+    {
         return L"ppqn";
+    }
     if (index == 5)
+    {
         return L"fps";
+    }
     if (index == 6)
+    {
         return L"samples";
+    }
     if (index == 7)
+    {
         return L"subframes";
+    }
     if (index == 8)
+    {
         return L"clockmode";
+    }
     if (index == 9)
+    {
         return L"runwatch";
+    }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String BigClockFilter::getParameterText(int index)
@@ -211,84 +257,150 @@ const juce::String BigClockFilter::getParameterText(int index)
     if (index == 0)
     {
         if (barsbeats >= 0.5f)
+        {
             return juce::String(L"bar/beat/tick");
+        }
         else
+        {
             return juce::String(L"hour/min/sec");
+        }
     }
     else if (index == 1)
+    {
         return juce::String(look, 2);
+    }
     else if (index == 2)
     {
         if (showms >= 0.5f)
+        {
             return juce::String(L"yes");
+        }
         else
+        {
             return juce::String(L"no");
+        }
     }
     else if (index == 3)
     {
         if (showhrs >= 0.5f)
+        {
             return juce::String(L"yes");
+        }
         else
+        {
             return juce::String(L"no");
+        }
     }
     else if (index == 4)
     {
         if (ticks == 0.0)
+        {
             return juce::String(L"960");
+        }
         else if (ticks < 0.1)
+        {
             return juce::String(L"768");
+        }
         else if (ticks < 0.2)
+        {
             return juce::String(L"480");
+        }
         else if (ticks < 0.3)
+        {
             return juce::String(L"384");
+        }
         else if (ticks < 0.4)
+        {
             return juce::String(L"240");
+        }
         else if (ticks < 0.5)
+        {
             return juce::String(L"192");
+        }
         else if (ticks < 0.6)
+        {
             return juce::String(L"120");
+        }
         else if (ticks < 0.65)
+        {
             return juce::String(L"100");
+        }
         else if (ticks < 0.7)
+        {
             return juce::String(L"96");
+        }
         else if (ticks < 0.8)
+        {
             return juce::String(L"48");
+        }
         else if (ticks < 0.9)
+        {
             return juce::String(L"16");
+        }
         else if (ticks < 1.0)
+        {
             return juce::String(L"4");
+        }
         else
+        {
             return juce::String(L"hide ticks");
+        }
     }
     else if (index == 5)
     {
         if (frames == 0.0)
+        {
             return juce::String(L"ms (1000)");
+        }
         else if (frames < 0.1)
+        {
             return juce::String(L"10");
+        }
         else if (frames < 0.2)
+        {
             return juce::String(L"15");
+        }
         else if (frames < 0.3)
+        {
             return juce::String(L"24");
+        }
         else if (frames < 0.4)
+        {
             return juce::String(L"25");
+        }
         else if (frames < 0.5)
+        {
             return juce::String(L"29.97 Drop");
+        }
         else if (frames < 0.6)
+        {
             return juce::String(L"30");
+        }
         else if (frames < 0.7)
+        {
             return juce::String(L"50");
+        }
         else if (frames < 0.8)
+        {
             return juce::String(L"60");
+        }
         else if (frames < 0.9)
+        {
             return juce::String(L"75");
+        }
         else if (frames < 1.0)
+        {
             return juce::String(L"100");
+        }
         else
+        {
             return juce::String(L"120");
+        }
     }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String BigClockFilter::getInputChannelName(const int channelIndex) const
@@ -342,9 +454,13 @@ void BigClockFilter::processBlock(juce::AudioSampleBuffer& buffer,
             if (reaper)
             {
                 if (lastPosInfo.isPlaying)
+                {
                     lastPosInfo.ppqPosition = TimeMap2_timeToBeats(0, GetPlayPosition(), 0, 0, 0, 0);
+                }
                 else
+                {
                     lastPosInfo.ppqPosition = TimeMap2_timeToBeats(0, GetCursorPosition(), 0, 0, 0, 0);
+                }
             }
             recording = lastPosInfo.isRecording;
             sendChangeMessage();
@@ -359,7 +475,9 @@ void BigClockFilter::processBlock(juce::AudioSampleBuffer& buffer,
     }
 
     if (recording)
+    {
         rectime += (double) buffer.getNumSamples() / getSampleRate();
+    }
 }
 
 //==============================================================================
@@ -459,36 +577,64 @@ void BigClockFilter::saveCues(juce::File cuefile)
 
     double fps;
     if (getParameter(kFrames) == 0.0)
+    {
         fps = 1000.0;
+    }
     else if (getParameter(kFrames) < 0.1)
+    {
         fps = 10.0;
+    }
     else if (getParameter(kFrames) < 0.2)
+    {
         fps = 15.0;
+    }
     else if (getParameter(kFrames) < 0.3)
+    {
         fps = 24.0;
+    }
     else if (getParameter(kFrames) < 0.4)
+    {
         fps = 25.0;
+    }
     else if (getParameter(kFrames) < 0.5)
+    {
         fps = 29.97;
+    }
     else if (getParameter(kFrames) < 0.6)
+    {
         fps = 30.0;
+    }
     else if (getParameter(kFrames) < 0.7)
+    {
         fps = 50.0;
+    }
     else if (getParameter(kFrames) < 0.8)
+    {
         fps = 60.0;
+    }
     else if (getParameter(kFrames) < 0.9)
+    {
         fps = 75.0;
+    }
     else if (getParameter(kFrames) < 1.0)
+    {
         fps = 100.0;
+    }
     else
+    {
         fps = 120.0;
+    }
     for (int i = 0; i < cues.size(); i++)
     {
         auto* xmlCue = new juce::XmlElement("Cue");
         if (getParameter(kBarsBeats) < 0.5f)
+        {
             xmlCue->setAttribute("time", secondsToSmpteString(cues[i]->time, fps));
+        }
         else
+        {
             xmlCue->setAttribute("barsbeats", ppqToBarsbeatsString(cues[i]->ppq, lastPosInfo.timeSigNumerator, lastPosInfo.timeSigDenominator));
+        }
         xmlCue->setAttribute("text", cues[i]->text);
         xmlCue->setAttribute("enabled", cues[i]->enabled);
         xmlState.addChildElement(xmlCue);
@@ -508,31 +654,57 @@ void BigClockFilter::saveCues(juce::File cuefile)
 
         double tpb;
         if (getParameter(kTicks) == 0.0)
+        {
             tpb = 960.0;
+        }
         else if (getParameter(kTicks) < 0.1)
+        {
             tpb = 768.0;
+        }
         else if (getParameter(kTicks) < 0.2)
+        {
             tpb = 480.0;
+        }
         else if (getParameter(kTicks) < 0.3)
+        {
             tpb = 384.0;
+        }
         else if (getParameter(kTicks) < 0.4)
+        {
             tpb = 240.0;
+        }
         else if (getParameter(kTicks) < 0.5)
+        {
             tpb = 192.0;
+        }
         else if (getParameter(kTicks) < 0.6)
+        {
             tpb = 120.0;
+        }
         else if (getParameter(kTicks) < 0.65)
+        {
             tpb = 100.0;
+        }
         else if (getParameter(kTicks) < 0.7)
+        {
             tpb = 96.0;
+        }
         else if (getParameter(kTicks) < 0.8)
+        {
             tpb = 48.0;
+        }
         else if (getParameter(kTicks) < 0.9)
+        {
             tpb = 16.0;
+        }
         else if (getParameter(kTicks) < 1.0)
+        {
             tpb = 4.0;
+        }
         else
+        {
             tpb = 0.0;
+        }
         auto* ticks = new juce::XmlElement("TicksPerBeat");
         ticks->setAttribute("value", tpb);
         xmlState.addChildElement(ticks);
@@ -561,29 +733,53 @@ void BigClockFilter::loadCues(juce::File cuefile)
                 {
                     fps = e->getDoubleAttribute("rate");
                     if (fps == 1000.0)
+                    {
                         setParameter(kFrames, 0.0f);
+                    }
                     else if (fps == 10.0)
+                    {
                         setParameter(kFrames, 0.09f);
+                    }
                     else if (fps == 15.0)
+                    {
                         setParameter(kFrames, 0.19f);
+                    }
                     else if (fps == 24.0)
+                    {
                         setParameter(kFrames, 0.29f);
+                    }
                     else if (fps == 25.0)
+                    {
                         setParameter(kFrames, 0.39f);
+                    }
                     else if (fps == 29.97)
+                    {
                         setParameter(kFrames, 0.49f);
+                    }
                     else if (fps == 30.0)
+                    {
                         setParameter(kFrames, 0.59f);
+                    }
                     else if (fps == 50.0)
+                    {
                         setParameter(kFrames, 0.69f);
+                    }
                     else if (fps == 60.0)
+                    {
                         setParameter(kFrames, 0.79f);
+                    }
                     else if (fps == 75.0)
+                    {
                         setParameter(kFrames, 0.89f);
+                    }
                     else if (fps == 100.0)
+                    {
                         setParameter(kFrames, 0.99f);
+                    }
                     else
+                    {
                         setParameter(kFrames, 1.0f);
+                    }
                 }
                 if (e->hasTagName("TimeSig"))
                 {
@@ -594,31 +790,57 @@ void BigClockFilter::loadCues(juce::File cuefile)
                 {
                     double tpb = e->getDoubleAttribute("value");
                     if (tpb == 960.0)
+                    {
                         setParameter(kTicks, 0.0f);
+                    }
                     else if (tpb == 768.0)
+                    {
                         setParameter(kTicks, 0.09f);
+                    }
                     else if (tpb == 480.0)
+                    {
                         setParameter(kTicks, 0.19f);
+                    }
                     else if (tpb == 384.0)
+                    {
                         setParameter(kTicks, 0.29f);
+                    }
                     else if (tpb == 240.0)
+                    {
                         setParameter(kTicks, 0.39f);
+                    }
                     else if (tpb == 192.0)
+                    {
                         setParameter(kTicks, 0.49f);
+                    }
                     else if (tpb == 120.0)
+                    {
                         setParameter(kTicks, 0.59f);
+                    }
                     else if (tpb == 100.0)
+                    {
                         setParameter(kTicks, 0.64f);
+                    }
                     else if (tpb == 96.0)
+                    {
                         setParameter(kTicks, 0.69f);
+                    }
                     else if (tpb == 48.0)
+                    {
                         setParameter(kTicks, 0.79f);
+                    }
                     else if (tpb == 16.0)
+                    {
                         setParameter(kTicks, 0.89f);
+                    }
                     else if (tpb == 4.0)
+                    {
                         setParameter(kTicks, 0.99f);
+                    }
                     else
+                    {
                         setParameter(kTicks, 1.0f);
+                    }
                 }
                 else if (e->hasTagName("Cue"))
                 {
@@ -696,7 +918,9 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
                                                const bool mode)
 {
     if (numerator == 0 || denominator == 0)
+    {
         return L"1|1|0";
+    }
     const wchar_t* const sign = (sppq < 0) ? L"-" : L"";
 
     const double ppq       = fabs(sppq);
@@ -705,61 +929,109 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
 
     float tpb;
     if (getParameter(kTicks) == 0.0)
+    {
         tpb = 960.0;
+    }
     else if (getParameter(kTicks) < 0.1)
+    {
         tpb = 768.0;
+    }
     else if (getParameter(kTicks) < 0.2)
+    {
         tpb = 480.0;
+    }
     else if (getParameter(kTicks) < 0.3)
+    {
         tpb = 384.0;
+    }
     else if (getParameter(kTicks) < 0.4)
+    {
         tpb = 240.0;
+    }
     else if (getParameter(kTicks) < 0.5)
+    {
         tpb = 192.0;
+    }
     else if (getParameter(kTicks) < 0.6)
+    {
         tpb = 120.0;
+    }
     else if (getParameter(kTicks) < 0.65)
+    {
         tpb = 100.0;
+    }
     else if (getParameter(kTicks) < 0.7)
+    {
         tpb = 96.0;
+    }
     else if (getParameter(kTicks) < 0.8)
+    {
         tpb = 48.0;
+    }
     else if (getParameter(kTicks) < 0.9)
+    {
         tpb = 16.0;
+    }
     else if (getParameter(kTicks) < 1.0)
+    {
         tpb = 4.0;
+    }
     else
+    {
         tpb = 0.0;
+    }
 
     bool dropframe = false;
     float fps;
     if (getParameter(kFrames) == 0.0)
+    {
         fps = 1000.0;
+    }
     else if (getParameter(kFrames) < 0.1)
+    {
         fps = 10.0;
+    }
     else if (getParameter(kFrames) < 0.2)
+    {
         fps = 15.0;
+    }
     else if (getParameter(kFrames) < 0.3)
+    {
         fps = 24.0;
+    }
     else if (getParameter(kFrames) < 0.4)
+    {
         fps = 25.0;
+    }
     else if (getParameter(kFrames) < 0.5)
     {
         fps       = 29.97f;
         dropframe = true;
     }
     else if (getParameter(kFrames) < 0.6)
+    {
         fps = 30.0;
+    }
     else if (getParameter(kFrames) < 0.7)
+    {
         fps = 50.0;
+    }
     else if (getParameter(kFrames) < 0.8)
+    {
         fps = 60.0;
+    }
     else if (getParameter(kFrames) < 0.9)
+    {
         fps = 75.0;
+    }
     else if (getParameter(kFrames) < 1.0)
+    {
         fps = 100.0;
+    }
     else
+    {
         fps = 120.0;
+    }
 
     int bar   = (int) (ppq / ppqPerBar) + 1;
     int beat  = ((int) beats) + 1;
@@ -780,7 +1052,9 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
     const juce::uint64 samples = roundToInt(sampleRate * absSecs);
 
     if (getParameter(kSamples))
+    {
         return sign + juce::String(samples);
+    }
     else
     {
         int hours;
@@ -794,7 +1068,9 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
             mins  = ((int) (absSecs / 60.0)) % 60;
         }
         else
+        {
             mins = (int) (absSecs / 60.0);
+        }
         const int secs = ((int) absSecs) % 60;
 
         juce::String s1;
@@ -803,19 +1079,23 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
             if (showms)
             {
                 if (fps == 1000.0)
+                {
                     s1 = juce::String::formatted(L"%s%02d:%02d:%02d.%03d",
                                                  sign,
                                                  hours,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * 1000) % 1000);
+                }
                 else if (fps <= 10.0)
+                {
                     s1 = juce::String::formatted(L"%s%02d:%02d:%02d:%.1d",
                                                  sign,
                                                  hours,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * fps) % (int) fps);
+                }
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
@@ -835,22 +1115,28 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
                                                      frames);
                     }
                     else
+                    {
                         s1 = juce::String::formatted(L"%s%02d:%02d:%02d:%.2d",
                                                      sign,
                                                      hours,
                                                      mins,
                                                      secs,
                                                      juce::int64(absSecs * fps) % (int) fps);
+                    }
                 }
                 else
+                {
                     s1 = juce::String::formatted(L"%s%02d:%02d:%02d:%03d",
                                                  sign,
                                                  hours,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * fps) % (int) fps);
+                }
                 if (showsubfr >= 0.5f)
+                {
                     s1 += juce::String(L"::") + juce::String::formatted(L"%02d", (juce::int64(absSecs * fps * 100.0) % 100));
+                }
             }
             else
             {
@@ -866,17 +1152,21 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
             if (showms)
             {
                 if (fps == 1000.0)
+                {
                     s1 = juce::String::formatted(L"%s%d:%02d.%03d",
                                                  sign,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * 1000) % 1000);
+                }
                 else if (fps <= 10.0)
+                {
                     s1 = juce::String::formatted(L"%s%d:%02d:%.1d",
                                                  sign,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * fps) % (int) fps);
+                }
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
@@ -894,20 +1184,26 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
                                                      frames);
                     }
                     else
+                    {
                         s1 = juce::String::formatted(L"%s%d:%02d:%.2d",
                                                      sign,
                                                      mins,
                                                      secs,
                                                      juce::int64(absSecs * fps) % (int) fps);
+                    }
                 }
                 else
+                {
                     s1 = juce::String::formatted(L"%s%d:%02d:%03d",
                                                  sign,
                                                  mins,
                                                  secs,
                                                  juce::int64(absSecs * fps) % (int) fps);
+                }
                 if (showsubfr >= 0.5f)
+                {
                     s1 += juce::String(L"::") + juce::String::formatted(L"%02d", (juce::int64(absSecs * fps * 100.0) % 100));
+                }
             }
             else
             {
@@ -920,21 +1216,35 @@ const juce::String BigClockFilter::ppqToString(const double sppq,
 
         juce::String padding = juce::String();
         if (ticks < 10 && tpb > 100.0)
+        {
             padding = L"00";
+        }
         else if (ticks < 100 && tpb > 100.0)
+        {
             padding = L"0";
+        }
         else if (ticks < 10 && tpb >= 10.0)
+        {
             padding = L"0";
+        }
 
         juce::String s;
         if (tpb > 0.0)
+        {
             s << (bar == 0 ? L"" : sign) << bar << L"|" << beat << L"|" << padding << ticks;
+        }
         else
+        {
             s << (bar == 0 ? L"" : sign) << bar << L" | " << beat;
+        }
         if (mode)
+        {
             return s;
+        }
         else
+        {
             return s1;
+        }
     }
 }
 
@@ -954,32 +1264,54 @@ juce::String BigClockFilter::secondsToSmpteString(double seconds, double fps)
     {
         bool dropframe = false;
         if (getParameter(kFrames) == 0.0)
+        {
             fps = 1000.0;
+        }
         else if (getParameter(kFrames) < 0.1)
+        {
             fps = 10.0;
+        }
         else if (getParameter(kFrames) < 0.2)
+        {
             fps = 15.0;
+        }
         else if (getParameter(kFrames) < 0.3)
+        {
             fps = 24.0;
+        }
         else if (getParameter(kFrames) < 0.4)
+        {
             fps = 25.0;
+        }
         else if (getParameter(kFrames) < 0.5)
         {
             fps       = 29.97f;
             dropframe = true;
         }
         else if (getParameter(kFrames) < 0.6)
+        {
             fps = 30.0;
+        }
         else if (getParameter(kFrames) < 0.7)
+        {
             fps = 50.0;
+        }
         else if (getParameter(kFrames) < 0.8)
+        {
             fps = 60.0;
+        }
         else if (getParameter(kFrames) < 0.9)
+        {
             fps = 75.0;
+        }
         else if (getParameter(kFrames) < 1.0)
+        {
             fps = 100.0;
+        }
         else
+        {
             fps = 120.0;
+        }
     }
     const double absSecs      = fabs(seconds);
     const wchar_t* const sign = (seconds < 0) ? L"-" : L"";
@@ -1005,51 +1337,81 @@ juce::String BigClockFilter::secondsToSmpteString(double seconds, double fps)
                                            frames);
         }
         else
+        {
             return juce::String::formatted(L"%s%02d:%02d:%02d:%.2d",
                                            sign,
                                            hours,
                                            mins,
                                            secs,
                                            juce::int64(absSecs * fps) % (int) fps);
+        }
     }
     else
+    {
         return juce::String::formatted(L"%s%02d:%02d:%02d:%03d",
                                        sign,
                                        hours,
                                        mins,
                                        secs,
                                        juce::int64(absSecs * fps) % (int) fps);
+    }
 }
 
 double BigClockFilter::barsbeatsStringToPpq(juce::String barsbeats, int n, int d)
 {
     float tpb;
     if (getParameter(kTicks) == 0.0)
+    {
         tpb = 960.0;
+    }
     else if (getParameter(kTicks) < 0.1)
+    {
         tpb = 768.0;
+    }
     else if (getParameter(kTicks) < 0.2)
+    {
         tpb = 480.0;
+    }
     else if (getParameter(kTicks) < 0.3)
+    {
         tpb = 384.0;
+    }
     else if (getParameter(kTicks) < 0.4)
+    {
         tpb = 240.0;
+    }
     else if (getParameter(kTicks) < 0.5)
+    {
         tpb = 192.0;
+    }
     else if (getParameter(kTicks) < 0.6)
+    {
         tpb = 120.0;
+    }
     else if (getParameter(kTicks) < 0.65)
+    {
         tpb = 100.0;
+    }
     else if (getParameter(kTicks) < 0.7)
+    {
         tpb = 96.0;
+    }
     else if (getParameter(kTicks) < 0.8)
+    {
         tpb = 48.0;
+    }
     else if (getParameter(kTicks) < 0.9)
+    {
         tpb = 16.0;
+    }
     else if (getParameter(kTicks) < 1.0)
+    {
         tpb = 4.0;
+    }
     else
+    {
         tpb = 0.0;
+    }
 
     juce::StringArray smpteArray;
     smpteArray.addTokens(barsbeats, ":", "");
@@ -1065,31 +1427,57 @@ juce::String BigClockFilter::ppqToBarsbeatsString(double ppq, int n, int d)
 
     float tpb;
     if (getParameter(kTicks) == 0.0)
+    {
         tpb = 960.0;
+    }
     else if (getParameter(kTicks) < 0.1)
+    {
         tpb = 768.0;
+    }
     else if (getParameter(kTicks) < 0.2)
+    {
         tpb = 480.0;
+    }
     else if (getParameter(kTicks) < 0.3)
+    {
         tpb = 384.0;
+    }
     else if (getParameter(kTicks) < 0.4)
+    {
         tpb = 240.0;
+    }
     else if (getParameter(kTicks) < 0.5)
+    {
         tpb = 192.0;
+    }
     else if (getParameter(kTicks) < 0.6)
+    {
         tpb = 120.0;
+    }
     else if (getParameter(kTicks) < 0.65)
+    {
         tpb = 100.0;
+    }
     else if (getParameter(kTicks) < 0.7)
+    {
         tpb = 96.0;
+    }
     else if (getParameter(kTicks) < 0.8)
+    {
         tpb = 48.0;
+    }
     else if (getParameter(kTicks) < 0.9)
+    {
         tpb = 16.0;
+    }
     else if (getParameter(kTicks) < 1.0)
+    {
         tpb = 4.0;
+    }
     else
+    {
         tpb = 0.0;
+    }
 
     const int bar   = (int) (ppq / ppqPerBar) + 1;
     const int beat  = ((int) beats) + 1;
@@ -1097,23 +1485,35 @@ juce::String BigClockFilter::ppqToBarsbeatsString(double ppq, int n, int d)
 
     juce::String padding = juce::String();
     if (ticks < 10 && tpb > 100.0)
+    {
         padding = L"00";
+    }
     else if (ticks < 100 && tpb > 100.0)
+    {
         padding = L"0";
+    }
     else if (ticks < 10 && tpb >= 10.0)
+    {
         padding = L"0";
+    }
 
     juce::String s;
     if (tpb > 0.0)
+    {
         s << bar << L":" << beat << L":" << padding << ticks;
+    }
     else
+    {
         s << bar << L":" << beat;
+    }
     return s;
 }
 
 void BigClockFilter::timerCallback()
 {
     if (runwatch)
+    {
         watchtime += juce::Time::getMillisecondCounter() - lastTimerTime;
+    }
     lastTimerTime = juce::Time::getMillisecondCounter();
 }

@@ -17,7 +17,9 @@ int PizChord::getSum() const
 {
     int sum = 0;
     for (int i = 0; i < pattern.size(); i++)
+    {
         sum += pattern[i];
+    }
     return sum;
 }
 
@@ -43,7 +45,9 @@ void PizChord::makeIntervalPattern()
     {
         interval = chord[i + 1] - chord[i];
         while (interval < 0)
+        {
             interval += 12;
+        }
         pattern.add(interval);
     }
 }
@@ -53,7 +57,9 @@ bool operator<(const PizChord& first, const PizChord& second)
     int f = first.getSum();
     int s = second.getSum();
     if (f != s)
+    {
         return f < s;
+    }
 
     return first.getStringPattern() < second.getStringPattern();
 }
@@ -67,10 +73,14 @@ ChordName::ChordName(juce::String chordName, juce::String noteString)
 juce::String ChordName::getName(int rootNote, int bassNote, bool flats)
 {
     if (name == "dim7" || name == "+")
+    {
         rootNote = bassNote;
+    }
     juce::String chordName = getNoteNameWithoutOctave(rootNote, ! flats) + name;
     if (bassNote % 12 != rootNote % 12)
+    {
         chordName += "/" + getNoteNameWithoutOctave(bassNote, ! flats);
+    }
     return chordName;
 }
 
@@ -105,12 +115,16 @@ juce::String ChordName::getIntervalString(juce::String noteString)
     for (int i = 0; i < stacked.size(); i++)
     {
         if (stacked[i] == root)
+        {
             rootIndex = i;
+        }
         if (i < stacked.size() - 1)
         {
             int interval = stacked[i + 1] - stacked[i];
             while (interval < 0)
+            {
                 interval += 12;
+            }
             p += juce::String(interval) + ",";
         }
     }
@@ -125,7 +139,9 @@ juce::String ChordName::getIntervalString(juce::Array<int> chord)
     {
         int interval = chord[i + 1] - chord[i];
         while (interval < 0)
+        {
             interval += 12;
+        }
         p += juce::String(interval) + ",";
     }
     return p;
@@ -142,10 +158,14 @@ juce::Array<int> getAsStackedChord(juce::Array<int>& chord, bool reduce)
             temp.addIfNotAlreadyThere(chord[i] % 12);
         }
         if (temp.size() == 1)
+        {
             return temp;
+        }
     }
     else
+    {
         temp.addArray(chord);
+    }
 
     //sort
     juce::DefaultElementComparator<int> intsorter;
@@ -193,7 +213,9 @@ juce::Array<int> getAsStackedChord(juce::Array<int>& chord, bool reduce)
 void fillChordDatabase()
 {
     if (ChordNames.size() > 0)
+    {
         return;
+    }
     ChordNames.add(ChordName("", "c,e,g"));
     ChordNames.add(ChordName("5", "c,g"));
     ChordNames.add(ChordName("6(no3)", "c,g,a"));
@@ -310,7 +332,9 @@ void fillChordDatabase()
 juce::String getIntervalName(int semitones)
 {
     while (semitones > 21)
+    {
         semitones -= 12;
+    }
 
     switch (semitones)
     {
@@ -367,7 +391,9 @@ juce::String listNoteNames(juce::Array<int> chord, bool flats)
 {
     juce::String s;
     for (int i = 0; i < chord.size() - 1; i++)
+    {
         s += getNoteNameWithoutOctave(chord[i], ! flats) + ", ";
+    }
     s += getNoteNameWithoutOctave(chord[chord.size() - 1], ! flats);
     return s;
 }
@@ -375,9 +401,13 @@ juce::String listNoteNames(juce::Array<int> chord, bool flats)
 juce::String getFirstRecognizedChord(juce::Array<int> chord, bool flats)
 {
     if (chord.size() == 0)
+    {
         return " ";
+    }
     if (chord.size() == 2)
+    {
         return getIntervalName(chord[1] - chord[0]) + " (" + listNoteNames(chord, flats) + ")";
+    }
 
     juce::Array<int> temp;
     for (int i = 0; i < chord.size(); i++)
@@ -386,11 +416,15 @@ juce::String getFirstRecognizedChord(juce::Array<int> chord, bool flats)
     }
 
     if (temp.size() >= 9)
+    {
         return getNoteNameWithoutOctave(chord[0], ! flats) + " Note Soup";
+    }
 
     juce::Array<int> stackedChord = getAsStackedChord(temp, false);
     if (stackedChord.size() == 1)
+    {
         return "(" + getNoteNameWithoutOctave(stackedChord[0], ! flats) + ")";
+    }
 
     juce::String s = ChordName::getIntervalString(stackedChord);
     for (int i = 0; i < ChordNames.size(); i++)
@@ -420,12 +454,18 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
         {
             root %= 12;
             if (bass > root)
+            {
                 bass -= 12;
+            }
             last = bass - root;
             if (channel > 0)
+            {
                 string += juce::String(last) + "." + juce::String(channel);
+            }
             else
+            {
                 string += juce::String(last);
+            }
             for (int i = 1; i < sa.size(); i++)
             {
                 const int note = getNoteValue(sa[i].upToFirstOccurrenceOf(".", false, false));
@@ -433,12 +473,18 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
                 {
                     int step = note - root;
                     while (step - last < 0)
+                    {
                         step += 12;
+                    }
                     channel = sa[i].fromFirstOccurrenceOf(".", false, false).getIntValue();
                     if (channel > 0)
+                    {
                         string += " " + juce::String(step) + "." + juce::String(channel);
+                    }
                     else
+                    {
                         string += " " + juce::String(step);
+                    }
                     last = step;
                 }
             }
@@ -447,9 +493,13 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
         {
             last = bass - root;
             if (channel > 0)
+            {
                 string += juce::String(last) + "." + juce::String(channel);
+            }
             else
+            {
                 string += juce::String(last);
+            }
             for (int i = 1; i < sa.size(); i++)
             {
                 const int note = getNoteValue(sa[i].upToFirstOccurrenceOf(".", false, false), bottomOctave, absolute);
@@ -457,12 +507,18 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
                 {
                     int step = note - root;
                     while (step - last < 0)
+                    {
                         step += 12;
+                    }
                     channel = sa[i].fromFirstOccurrenceOf(".", false, false).getIntValue();
                     if (channel > 0)
+                    {
                         string += " " + juce::String(step) + "." + juce::String(channel);
+                    }
                     else
+                    {
                         string += " " + juce::String(step);
+                    }
                     last = step;
                 }
             }
@@ -473,13 +529,19 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
         root %= 12;
         bass = getIntervalValue(sa[0].upToFirstOccurrenceOf(".", false, false));
         if (bass > root)
+        {
             bass -= 12;
+        }
         last        = bass - root;
         int channel = multichannel ? sa[0].fromFirstOccurrenceOf(".", false, false).getIntValue() : 0;
         if (channel > 0)
+        {
             string += juce::String(last) + "." + juce::String(channel);
+        }
         else
+        {
             string += juce::String(last);
+        }
         for (int i = 1; i < sa.size(); i++)
         {
             const int note = getIntervalValue(sa[i].upToFirstOccurrenceOf(".", false, false));
@@ -487,11 +549,17 @@ juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, i
             {
                 int step = note - root;
                 while (step - last < 0)
+                {
                     step += 12;
+                }
                 if (channel > 0)
+                {
                     string += " " + juce::String(step) + "." + juce::String(channel);
+                }
                 else
+                {
                     string += " " + juce::String(step);
+                }
                 last = step;
             }
         }

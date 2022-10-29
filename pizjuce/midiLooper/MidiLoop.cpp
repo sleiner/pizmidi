@@ -56,7 +56,9 @@ void Loop::startRecording()
 bool Loop::findNextNote()
 {
     if (currentIndex >= getNumEvents())
+    {
         currentIndex = 0;
+    }
     if (this->getEventPointer(currentIndex)->message.isNoteOn())
     {
         return true;
@@ -93,7 +95,9 @@ void Loop::playAllNotesAtCurrentTime(juce::MidiBuffer& buffer, int sample_number
         while (abs(getCurrentTime() - time) < chordTolerance)
         {
             if (this->getEventPointer(currentIndex)->message.isNoteOn())
+            {
                 sendCurrentNoteToBuffer(buffer, sample_number, velocity);
+            }
             ++currentIndex;
         }
     }
@@ -106,7 +110,9 @@ void Loop::sendCurrentNoteToBuffer(juce::MidiBuffer& buffer, int sample_number, 
     m.setNoteNumber(jlimit(0, 127, m.getNoteNumber() + getTransposition()));
     m.setVelocity((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
     if (outChannel > 0)
+    {
         m.setChannel(outChannel);
+    }
     buffer.addEvent(m, sample_number);
     indexOfLastNoteOn = currentIndex;
 }
@@ -117,7 +123,9 @@ bool Loop::isNotePlaying(PizMidiMessageSequence::mehPtr note, int p)
     {
         if (playingNotes[p].getReference(i).note == note
             || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
             return true;
+        }
     }
     return false;
 }
@@ -129,7 +137,9 @@ bool Loop::isNotePlaying(PizMidiMessageSequence::mehPtr note)
         for (int i = 0; i < playingNotes[p].size(); i++)
         {
             if (playingNotes[p].getReference(i).voice == p && (playingNotes[p].getReference(i).note == note || playingNotes[p].getReference(i).note->noteOffObject == note))
+            {
                 return true;
+            }
         }
     }
     return false;
@@ -183,7 +193,9 @@ void Loop::sendNoteOffMessagesToBuffer(juce::MidiBuffer& buffer, int sample_numb
 juce::MidiMessage Loop::getCurrentMessage()
 {
     if (currentIndex >= this->getNumEvents())
+    {
         currentIndex = 0;
+    }
     return this->getEventPointer(currentIndex)->message;
 }
 
@@ -210,7 +222,9 @@ void Loop::cleanZeroLengthNotes()
     for (int i = 0; i < getNumEvents(); i++)
     {
         if (getEventPointer(i)->message.isNoteOn() && getIndexOfMatchingKeyUp(i) != -1)
+        {
             matchedNoteOffs.add(getIndexOfMatchingKeyUp(i));
+        }
     }
     for (int i = 0; i < getNumEvents(); i++)
     {
@@ -298,27 +312,39 @@ void Loop::setOctaves(int octaves)
 int Loop::getTranspositionOfNote(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
+    {
         if (playingNotes[p].getReference(i).note == note
             || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
             return playingNotes[p].getReference(i).lastOutputNoteNumber;
+        }
+    }
     return NOT_PLAYING;
 }
 
 int Loop::getChannelOfNote(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
+    {
         if (playingNotes[p].getReference(i).note == note
             || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
             return playingNotes[p].getReference(i).lastOutputChannel;
+        }
+    }
     return NOT_PLAYING;
 }
 
 void Loop::setNoteOff(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
+    {
         if (playingNotes[p].getReference(i).note == note
             || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
             playingNotes[p].remove(i);
+        }
+    }
 }
 
 void Loop::setNoteOff(PizMidiMessageSequence::mehPtr note)
@@ -326,8 +352,12 @@ void Loop::setNoteOff(PizMidiMessageSequence::mehPtr note)
     for (int p = 0; p < polyphony; p++)
     {
         for (int i = 0; i < playingNotes[p].size(); i++)
+        {
             if (playingNotes[p].getReference(i).voice == p && (playingNotes[p].getReference(i).note == note || playingNotes[p].getReference(i).note->noteOffObject == note))
+            {
                 playingNotes[p].remove(i);
+            }
+        }
     }
 }
 
@@ -338,7 +368,9 @@ void Loop::sentNoteAs(PizMidiMessageSequence::mehPtr note, int p, int sentNoteNu
     {
         if (playingNotes[p].getReference(i).note == note
             || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
             playingNotes[p].remove(i);
+        }
     }
     playingNotes[p].add(LoopNote(note, sentNoteNumber, sentNoteChannel, offSample, p));
 }

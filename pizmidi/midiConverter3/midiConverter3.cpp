@@ -108,7 +108,9 @@ MidiConverter::MidiConverter(audioMasterCallback audioMaster)
 MidiConverter::~MidiConverter()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -133,9 +135,13 @@ void MidiConverter::setProgramName(char* name)
 void MidiConverter::getProgramName(char* name)
 {
     if (! strcmp(programs[curProgram].name, "Init"))
+    {
         sprintf(name, "%s %d", programs[curProgram].name, curProgram + 1);
+    }
     else
+    {
         strcpy(name, programs[curProgram].name);
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -157,7 +163,9 @@ void MidiConverter::resume()
     targetpb = 0x2000;
     counter  = roundToInt(sampleRate * 0.001f);
     for (int i = 0; i < 16; i++)
+    {
         done[i] = true;
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -173,47 +181,85 @@ void MidiConverter::setParameter(VstInt32 index, float value)
         case kIn:
             param[kIn] = ap->param[kIn] = value;
             if (param[kIn] < 1 * inc)
+            {
                 inmode = cc;
+            }
             else if (param[kIn] < 2 * inc)
+            {
                 inmode = cc14;
+            }
             else if (param[kIn] < 3 * inc)
+            {
                 inmode = pc;
+            }
             else if (param[kIn] < 4 * inc)
+            {
                 inmode = pcdec;
+            }
             else if (param[kIn] < 5 * inc)
+            {
                 inmode = pcinc;
+            }
             else if (param[kIn] < 6 * inc)
+            {
                 inmode = cp;
+            }
             else if (param[kIn] < 7 * inc)
+            {
                 inmode = pa;
+            }
             else if (param[kIn] < 8 * inc)
+            {
                 inmode = pb;
+            }
             else if (param[kIn] < 9 * inc)
+            {
                 inmode = pblsb;
+            }
             else if (param[kIn] < 10 * inc)
+            {
                 inmode = NRPN;
+            }
             else if (param[kIn] < 11 * inc)
+            {
                 inmode = NRPNlsb;
+            }
             else if (param[kIn] < 12 * inc)
+            {
                 inmode = RPN;
+            }
             else if (param[kIn] < 13 * inc)
+            {
                 inmode = RPNlsb;
+            }
             else if (param[kIn] < 14 * inc)
+            {
                 inmode = nonn;
+            }
             else if (param[kIn] < 15 * inc)
+            {
                 inmode = nonv;
+            }
             else if (param[kIn] < 16 * inc)
+            {
                 inmode = noffn;
+            }
             else if (param[kIn] < 17 * inc)
+            {
                 inmode = noffv;
+            }
             else
+            {
                 inmode = clock;
+            }
             //else if (param[kIn]<0.9f)  inmode=undefined;
             //else if (param[kIn]<0.96f) inmode=undefined;
             //else if (param[kIn]<1.0f)  inmode=undefined;
             //else                       inmode=undefined;
             if (lastinmode != inmode)
+            {
                 updateDisplay();
+            }
             break;
         case kCCin:
             param[kCCin] = ap->param[kCCin] = value;
@@ -227,12 +273,16 @@ void MidiConverter::setParameter(VstInt32 index, float value)
             break;
         case kLowLimit:
             if (value > param[kHighLimit])
+            {
                 setParameterAutomated(kHighLimit, value);
+            }
             param[kLowLimit] = ap->param[kLowLimit] = value;
             break;
         case kHighLimit:
             if (param[kLowLimit] > value)
+            {
                 setParameterAutomated(kLowLimit, value);
+            }
             param[kHighLimit] = ap->param[kHighLimit] = value;
             break;
         case kLow:
@@ -251,49 +301,91 @@ void MidiConverter::setParameter(VstInt32 index, float value)
             param[kOut] = ap->param[kOut] = value;
             inc                           = 1.f / 20.f;
             if (param[kOut] < 1 * inc)
+            {
                 outmode = drop;
+            }
             else if (param[kOut] < 2 * inc)
+            {
                 outmode = cc;
+            }
             else if (param[kOut] < 3 * inc)
+            {
                 outmode = cc14;
+            }
             else if (param[kOut] < 4 * inc)
+            {
                 outmode = pc;
+            }
             else if (param[kOut] < 5 * inc)
+            {
                 outmode = pcdec;
+            }
             else if (param[kOut] < 6 * inc)
+            {
                 outmode = pcinc;
+            }
             else if (param[kOut] < 7 * inc)
+            {
                 outmode = cp;
+            }
             else if (param[kOut] < 8 * inc)
+            {
                 outmode = pa;
+            }
             else if (param[kOut] < 9 * inc)
+            {
                 outmode = pb;
+            }
             else if (param[kOut] < 10 * inc)
+            {
                 outmode = pblsb;
+            }
             else if (param[kOut] < 11 * inc)
+            {
                 outmode = NRPN;
+            }
             else if (param[kOut] < 12 * inc)
+            {
                 outmode = NRPNlsb;
+            }
             else if (param[kOut] < 13 * inc)
+            {
                 outmode = RPN;
+            }
             else if (param[kOut] < 14 * inc)
+            {
                 outmode = RPNlsb;
+            }
             else if (param[kOut] < 15 * inc)
+            {
                 outmode = nonn;
+            }
             else if (param[kOut] < 16 * inc)
+            {
                 outmode = nonv;
+            }
             else if (param[kOut] < 17 * inc)
+            {
                 outmode = noffn;
+            }
             else if (param[kOut] < 18 * inc)
+            {
                 outmode = noffv;
+            }
             else if (param[kOut] < 19 * inc)
+            {
                 outmode = clock;
+            }
             else
+            {
                 outmode = songselect;
+            }
             //else if (param[kOut]<1.0f)  outmode=undefined;
             //else                        outmode=undefined;
             if (lastoutmode != outmode)
+            {
                 updateDisplay();
+            }
             break;
         case kCCout:
             param[kCCout] = ap->param[kCCout] = value;
@@ -317,7 +409,9 @@ void MidiConverter::setParameter(VstInt32 index, float value)
 float MidiConverter::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -449,67 +543,107 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
             if (inmode == cc)
             {
                 if (FLOAT_TO_MIDI_X(param[kCCin]) == -1)
+                {
                     strcpy(text, "Any CC");
+                }
                 else
+                {
                     sprintf(text, "CC %d", FLOAT_TO_MIDI_X(param[kCCin]));
+                }
             }
             else if (inmode == cc14)
             {
                 if (FLOAT_TO_MIDI_X(param[kCCin]) == -1)
+                {
                     strcpy(text, "Any CC");
+                }
                 else if (FLOAT_TO_MIDI_X(param[kCCin]) < 32)
+                {
                     sprintf(text, "CC %d / %d", FLOAT_TO_MIDI_X(param[kCCin]), FLOAT_TO_MIDI_X(param[kCCin]) + 32);
+                }
                 else
+                {
                     sprintf(text, "CC %d", FLOAT_TO_MIDI_X(param[kCCin]));
+                }
             }
             else if (inmode == pa || inmode == nonv || inmode == noffv)
             {
                 if (FLOAT_TO_MIDI_X(param[kCCin]) == -1)
+                {
                     strcpy(text, "Any Note");
+                }
                 else
+                {
                     sprintf(text, "Note %d (%s)", FLOAT_TO_MIDI_X(param[kCCin]), getNoteName(FLOAT_TO_MIDI_X(param[kCCin]), bottomOctave));
+                }
             }
             else if (inmode == NRPN || inmode == NRPNlsb || inmode == RPN || inmode == RPNlsb)
             {
                 if (FLOAT_TO_MIDI_X(param[kCCin]) == -1)
+                {
                     strcpy(text, "?");
+                }
                 else if (FLOAT_TO_MIDI_X(param[kCCin]) == 0)
+                {
                     strcpy(text, "0x0000");
+                }
                 else
+                {
                     sprintf(text, "%#.4x", (FLOAT_TO_MIDI_X(param[kCCin])) << 7);
+                }
             }
             else
+            {
                 strcpy(text, " ");
+            }
             break;
         case kNRPNin:
             if (FLOAT_TO_MIDI_X(param[kCCin]) == -1)
+            {
                 strcpy(text, " ");
+            }
             else if (inmode == NRPN || inmode == NRPNlsb)
             {
                 if (((FLOAT_TO_MIDI(param[kNRPNin])) | ((FLOAT_TO_MIDI_X(param[kCCin])) << 7)) == 0)
+                {
                     strcpy(text, "NRPN 0x0000");
+                }
                 else
+                {
                     sprintf(text, "NRPN %#.4x", (FLOAT_TO_MIDI(param[kNRPNin])) | ((FLOAT_TO_MIDI_X(param[kCCin])) << 7));
+                }
             }
             else if (inmode == RPN || inmode == RPNlsb)
             {
                 if ((FLOAT_TO_MIDI(param[kNRPNin]) | ((FLOAT_TO_MIDI_X(param[kCCin])) << 7)) == 0)
+                {
                     strcpy(text, "RPN 0x0000");
+                }
                 else
+                {
                     sprintf(text, "RPN %#.4x", (FLOAT_TO_MIDI(param[kNRPNin])) | ((FLOAT_TO_MIDI_X(param[kCCin])) << 7));
+                }
             }
             else
+            {
                 strcpy(text, " ");
+            }
             break;
         case kChin:
             if (inmode == clock || inmode == songposition || inmode == songselect)
+            {
                 strcpy(text, " ");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL(param[kChin]) == -1)
+                {
                     strcpy(text, "Any");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL(param[kChin]) + 1);
+                }
                 break;
             }
         case kLowLimit:
@@ -526,9 +660,13 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
                 sprintf(text, "%d", (FLOAT_TO_MIDI(param[kLowLimit]) << 7) & 0x3f80 | FLOAT_TO_MIDI(param[kLowLimit]) & 0x007f);
             }
             else if (inmode == clock || inmode == pcinc || inmode == pcdec)
+            {
                 strcpy(text, " ");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(param[kLowLimit]));
+            }
             break;
         case kHighLimit:
             if (inmode == pb)
@@ -536,15 +674,21 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
                 sprintf(text, "%d", (FLOAT_TO_MIDI(param[kHighLimit]) << 7) + FLOAT_TO_MIDI(param[kHighLimit]) - 0x2000);
             }
             else if (inmode == nonn || inmode == noffn)
+            {
                 sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[kHighLimit]), getNoteName(FLOAT_TO_MIDI(param[kHighLimit]), bottomOctave));
+            }
             else if (inmode == NRPN || inmode == RPN || inmode == cc14)
             {
                 sprintf(text, "%d", (FLOAT_TO_MIDI(param[kHighLimit]) << 7) & 0x3f80 | FLOAT_TO_MIDI(param[kHighLimit]) & 0x007f);
             }
             else if (inmode == clock || inmode == pcinc || inmode == pcdec)
+            {
                 strcpy(text, " ");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(param[kHighLimit]));
+            }
             break;
         case kLow:
             if (outmode == pb)
@@ -556,11 +700,17 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
                 sprintf(text, "%d", (FLOAT_TO_MIDI(param[kLow]) << 7));
             }
             else if (outmode == clock)
+            {
                 strcpy(text, " ");
+            }
             else if (outmode == nonn || outmode == noffn)
+            {
                 sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[kLow]), getNoteName(FLOAT_TO_MIDI(param[kLow]), bottomOctave));
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(param[kLow]));
+            }
             break;
         case kHigh:
             if (outmode == pb)
@@ -572,27 +722,45 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
                 sprintf(text, "%d", (FLOAT_TO_MIDI(param[kHigh]) << 7) & 0x3f80 | FLOAT_TO_MIDI(param[kHigh]) & 0x007f);
             }
             else if (outmode == clock)
+            {
                 strcpy(text, " ");
+            }
             else if (outmode == nonn || outmode == noffn)
+            {
                 sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[kHigh]), getNoteName(FLOAT_TO_MIDI(param[kHigh]), bottomOctave));
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(param[kHigh]));
+            }
             break;
         case kRangeMode:
             if (param[kRangeMode] < 0.3f)
+            {
                 strcpy(text, "Clip/Stretch/Limit");
+            }
             else if (param[kRangeMode] < 0.5)
+            {
                 strcpy(text, "Clip/Stretch");
+            }
             else if (param[kRangeMode] < 0.8)
+            {
                 strcpy(text, "Stretch/Stretch");
+            }
             else
+            {
                 strcpy(text, "Clip/Limit");
+            }
             break;
         case kOffset:
             if (outmode == clock)
+            {
                 strcpy(text, " ");
+            }
             else
+            {
                 sprintf(text, "%d", (signed int) FLOAT_TO_MIDI(param[kOffset]) - 63);
+            }
             break;
         case kOut:
             switch (outmode)
@@ -664,55 +832,87 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
             {
                 case cc:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else
+                    {
                         sprintf(text, "CC %d", FLOAT_TO_MIDI_X(param[kCCout]));
+                    }
                     break;
                 case cc14:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else if (FLOAT_TO_MIDI_X(param[kCCout]) < 32)
+                    {
                         sprintf(text, "CC %d / %d", FLOAT_TO_MIDI_X(param[kCCout]), FLOAT_TO_MIDI_X(param[kCCout]) + 32);
+                    }
                     else
+                    {
                         sprintf(text, "CC %d", FLOAT_TO_MIDI_X(param[kCCout]));
+                    }
                     break;
                 case pa:
                 case nonv:
                 case noffv:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else
+                    {
                         sprintf(text, "Note %d (%s)", FLOAT_TO_MIDI_X(param[kCCout]), getNoteName(FLOAT_TO_MIDI_X(param[kCCout]), bottomOctave));
+                    }
                     break;
                 case pb:
                     if (param[kCCout] < 0.5f)
+                    {
                         strcpy(text, "Rough");
+                    }
                     else
+                    {
                         strcpy(text, "Smooth");
+                    }
                     break;
                 case pblsb:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else
+                    {
                         sprintf(text, "MSB: %d", (FLOAT_TO_MIDI_X(param[kCCout]) << 7) - 0x2000);
+                    }
                     break;
                 case NRPN:
                 case NRPNlsb:
                 case RPN:
                 case RPNlsb:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else if (FLOAT_TO_MIDI_X(param[kCCout]) == 0)
+                    {
                         strcpy(text, "0x0000");
+                    }
                     else
+                    {
                         sprintf(text, "%#.4x", (FLOAT_TO_MIDI_X(param[kCCout])) << 7);
+                    }
                     break;
                 case nonn:
                 case noffn:
                     if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+                    {
                         strcpy(text, "As Input");
+                    }
                     else
+                    {
                         sprintf(text, "Vel %d", FLOAT_TO_MIDI_X(param[kCCout]));
+                    }
                     break;
                 default:
                     strcpy(text, " ");
@@ -729,27 +929,41 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
                 sprintf(text, "Inertia: %d", roundToInt(param[kNRPNout] * 100.f));
             }
             else if (FLOAT_TO_MIDI_X(param[kCCout]) == -1)
+            {
                 strcpy(text, " ");
+            }
             else if (outmode == NRPN || outmode == NRPNlsb)
             {
                 if ((FLOAT_TO_MIDI(param[kNRPNout]) | ((FLOAT_TO_MIDI_X(param[kCCout])) << 7)) == 0)
+                {
                     strcpy(text, "NRPN 0x0000");
+                }
                 else
+                {
                     sprintf(text, "NRPN %#.4x", FLOAT_TO_MIDI(param[kNRPNout]) | ((FLOAT_TO_MIDI_X(param[kCCout])) << 7));
+                }
             }
             else if (outmode == RPN || outmode == RPNlsb)
             {
                 if ((FLOAT_TO_MIDI(param[kNRPNout]) | ((FLOAT_TO_MIDI_X(param[kCCout])) << 7)) == 0)
+                {
                     strcpy(text, "RPN 0x0000");
+                }
                 else
+                {
                     sprintf(text, "RPN %#.4x", FLOAT_TO_MIDI(param[kNRPNout]) | ((FLOAT_TO_MIDI_X(param[kCCout])) << 7));
+                }
             }
             else if (outmode == nonn)
             {
                 if (FLOAT_TO_MIDI(param[kNRPNout]) == 0)
+                {
                     strcpy(text, "NoteOn only");
+                }
                 else
+                {
                     strcpy(text, "Add NoteOff");
+                }
             }
             else
             {
@@ -758,24 +972,38 @@ void MidiConverter::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChout:
             if (outmode == drop || outmode == clock || outmode == songposition || outmode == songselect)
+            {
                 strcpy(text, " ");
+            }
             else
             {
                 if (FLOAT_TO_CHANNEL(param[kChout]) == -1)
+                {
                     strcpy(text, "No Change");
+                }
                 else
+                {
                     sprintf(text, "Channel %d", FLOAT_TO_CHANNEL(param[kChout]) + 1);
+                }
             }
             break;
         case kThru:
             if (param[kThru] == 0.f)
+            {
                 strcpy(text, "Block All");
+            }
             else if (param[kThru] < 0.5f)
+            {
                 strcpy(text, "Block Converted");
+            }
             else if (param[kThru] < 1.0f)
+            {
                 strcpy(text, "Thru All");
+            }
             else
+            {
                 strcpy(text, "Converted Only");
+            }
             break;
         default:
             break;
@@ -795,7 +1023,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         short data2        = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         int incc1  = FLOAT_TO_MIDI_X(param[kCCin]);  //-1 == any
         int outcc1 = FLOAT_TO_MIDI_X(param[kCCout]); //-1 == no change
@@ -815,13 +1045,21 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         int outputnrpn1 = FLOAT_TO_MIDI(param[kNRPNout]) | (outcc1 << 7);
 
         if (chout1 == -1)
+        {
             chout1 = channel;
+        }
         if (chin1 == -1)
+        {
             chin1 = channel;
+        }
         if (incc1 == -1)
+        {
             incc1 = data1;
+        }
         if (outcc1 == -1)
+        {
             outcc1 = data1;
+        }
         bool discard = false;
 
         int idata    = data2;
@@ -853,7 +1091,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 discard = true;
             }
             if (data1 == ncoarse)
+            {
                 c[channel] = data2;
+            }
             else if (data1 == nfine && c[channel] >= 0)
             {
                 n[channel] = data2 | (c[channel] << 7);
@@ -878,7 +1118,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         datacoarse[channel] += 1;
                         if (datacoarse[channel] > 127)
+                        {
                             datacoarse[channel] = 127;
+                        }
                         data[channel] = datafine[channel] | (datacoarse[channel] << 7);
                         send          = 1;
                     }
@@ -886,7 +1128,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         data[channel] += 1;
                         if (data[channel] > 127)
+                        {
                             data[channel] = 127;
+                        }
                         datacoarse[channel] = (data[channel] & 0x3f80) >> 7;
                         datafine[channel]   = data[channel] & 0x007f;
                         send                = 2;
@@ -898,7 +1142,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         datacoarse[channel] -= 1;
                         if (datacoarse[channel] < 0)
+                        {
                             datacoarse[channel] = 0;
+                        }
                         data[channel] = datafine[channel] | (datacoarse[channel] << 7);
                         send          = 1;
                     }
@@ -906,7 +1152,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         data[channel] -= 1;
                         if (data[channel] < 0)
+                        {
                             data[channel] = 0;
+                        }
                         datacoarse[channel] = (data[channel] & 0x3f80) >> 7;
                         datafine[channel]   = data[channel] & 0x007f;
                         send                = 2;
@@ -916,20 +1164,30 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 if ((idata14 >= (lolimit1 << 7) && idata14 <= (hilimit1 | (hilimit1 << 7))) || param[kRangeMode] >= 0.5f && param[kRangeMode] < 0.8f)
                 {
                     if (lolimit1 == hilimit1)
+                    {
                         odata14 = (low1 | (low1 << 7) + high1 | (high1 << 7)) / 2 + offset1 | (offset1 << 7);
+                    }
                     else if (param[kRangeMode] < 0.3f)
+                    {
                         odata14 = MAP_TO_MIDI(idata14, low1 | (low1 << 7), high1 | (high1 << 7), 0, 16383) + offset1 | (offset1 << 7);
+                    }
                     else if (param[kRangeMode] < 0.5f)
+                    {
                         odata14 = MAP_TO_MIDI(idata14, low1 | (low1 << 7), high1 | (high1 << 7), lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
+                    }
                     else if (param[kRangeMode] < 0.8f)
                     {
                         odata14 = MAP_TO_MIDI(idata14, 0, 16383, low1 | (low1 << 7), high1 | (high1 << 7));
                         odata14 = MAP_TO_MIDI(odata14, low1 | (low1 << 7), high1 | (high1 << 7), lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
                     }
                     if (odata14 > 16383)
+                    {
                         odata14 = 16383;
+                    }
                     else if (odata14 < 0)
+                    {
                         odata14 = 0;
+                    }
                     odata = (odata14 & 0x3f80) >> 7;
                     //odata = roundToInt((double)odata14*0.0077519379844961240310077519379845);
                     olsb      = odata14 & 0x007f;
@@ -937,7 +1195,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 }
             }
             if (inmode == NRPNlsb || inmode == RPNlsb)
+            {
                 idata = roundToInt((double) (data[channel]) * 0.0077519379844961240310077519379845);
+            }
         }
         //keep track of program changes
         else if (status == MIDI_PROGRAMCHANGE)
@@ -945,12 +1205,16 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             if ((lastPC[channel] == 127 && data1 == 0) || (data1 == lastPC[channel] + 1))
             {
                 if (channel == chin1)
+                {
                     proginc = true;
+                }
             }
             else if ((lastPC[channel] == 0 && data1 == 127) || (data1 == lastPC[channel] - 1))
             {
                 if (channel == chin1)
+                {
                     progdec = true;
+                }
             }
             lastPC[channel] = data1;
         }
@@ -983,7 +1247,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     break;
                 case nonv:
                     if (status == MIDI_NOTEOFF)
+                    {
                         data2 = 0;
+                    }
                     break;
                 case NRPN:
                     inisNRPN = true;
@@ -1017,19 +1283,27 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         odata14 = idata14;
                         if (lolimit1 == hilimit1)
+                        {
                             odata14 = (low1 | (low1 << 7) + high1 | (high1 << 7)) / 2 + offset1 | (offset1 << 7);
+                        }
                         else if (param[kRangeMode] < 0.3f)
                         {
                             //stretch clipped input to full range
                             odata14 = MAP_TO_MIDI(idata14, 0, 16383, lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
                             //then limit output
                             if (odata14 > (high1 | (high1 << 7)))
+                            {
                                 odata14 = (high1 | (high1 << 7));
+                            }
                             else if (odata14 < (low1 | (low1 << 7)))
+                            {
                                 odata14 = (low1 | (low1 << 7));
+                            }
                         }
                         else if (param[kRangeMode] < 0.5f)
+                        {
                             odata14 = MAP_TO_MIDI(idata14, low1 | (low1 << 7), high1 | (high1 << 7), lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
+                        }
                         else if (param[kRangeMode] < 0.8f)
                         {
                             odata14 = MAP_TO_MIDI(idata14, 0, 16383, low1 | (low1 << 7), high1 | (high1 << 7));
@@ -1038,65 +1312,99 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         else
                         {
                             if (odata14 > (high1 | (high1 << 7)))
+                            {
                                 odata14 = (high1 | (high1 << 7));
+                            }
                             else if (odata14 < (low1 | (low1 << 7)))
+                            {
                                 odata14 = (low1 | (low1 << 7));
+                            }
                         }
                         if (odata14 > 16383)
+                        {
                             odata14 = 16383;
+                        }
                         else if (odata14 < 0)
+                        {
                             odata14 = 0;
+                        }
                         odata     = (odata14 & 0x3f80) >> 7;
                         olsb      = odata14 & 0x007f;
                         inis14bit = true;
                         // send old message if "thru" is on
                         if (channel == chout1 && outmode == pb)
+                        {
                             discard = true;
+                        }
                         sendout = true;
                     }
                     else if (param[kThru] < 0.5f)
+                    {
                         discard = true; //outside range
+                    }
                 }
                 else if (inmode == pcinc && proginc)
+                {
                     sendout = true;
+                }
                 else if (inmode == pcdec && progdec)
+                {
                     sendout = true;
+                }
                 else if (inmode == cc14 && incc1 < 32 && (data1 == incc1 || data1 == (incc1 + 32)))
                 {
                     int finecc = incc1 + 32;
                     if (param[kThru] < 0.5)
+                    {
                         discard = true;
+                    }
                     if (data1 == incc1)
+                    {
                         cc14msb[incc1][channel] = data2;
+                    }
                     else if (data1 == finecc)
+                    {
                         cc14lsb[incc1][channel] = data2;
+                    }
 
                     idata14 = (cc14lsb[incc1][channel]) | (cc14msb[incc1][channel] << 7);
                     if ((idata14 >= (lolimit1 << 7) && idata14 <= (hilimit1 | (hilimit1 << 7))) || param[kRangeMode] >= 0.5f && param[kRangeMode] < 0.8f)
                     {
                         if (lolimit1 == hilimit1)
+                        {
                             odata14 = (low1 | (low1 << 7) + high1 | (high1 << 7)) / 2 + offset1 | (offset1 << 7);
+                        }
                         else if (param[kRangeMode] < 0.3f)
                         {
                             //stretch clipped input to full range
                             odata14 = MAP_TO_MIDI(idata14, 0, 16383, lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
                             //then limit output
                             if (odata14 > (high1 | (high1 << 7)))
+                            {
                                 odata14 = (high1 | (high1 << 7));
+                            }
                             else if (odata14 < (low1 | (low1 << 7)))
+                            {
                                 odata14 = (low1 | (low1 << 7));
+                            }
                         }
                         else if (param[kRangeMode] < 0.5f)
+                        {
                             odata14 = MAP_TO_MIDI(idata14, low1 | (low1 << 7), high1 | (high1 << 7), lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
+                        }
                         else if (param[kRangeMode] < 0.8f)
                         {
                             odata14 = MAP_TO_MIDI(idata14, 0, 16383, low1 | (low1 << 7), high1 | (high1 << 7));
                             odata14 = MAP_TO_MIDI(odata14, low1 | (low1 << 7), high1 | (high1 << 7), lolimit1 | (lolimit1 << 7), hilimit1 | (hilimit1 << 7)) + offset1 | (offset1 << 7);
                         }
                         if (odata14 > 16383)
+                        {
                             odata14 = 16383;
+                        }
                         else if (odata14 < 0)
+                        {
                             odata14 = 0;
+                        }
                         odata = (odata14 & 0x3f80) >> 7;
                         //odata = roundToInt((double)odata14*0.0077519379844961240310077519379845);
                         olsb      = odata14 & 0x007f;
@@ -1104,28 +1412,40 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         sendout   = true;
                     }
                     else if (param[kThru] < 0.5f)
+                    {
                         discard = true; //outside range
+                    }
                 }
                 else if (inmode == clock)
+                {
                     sendout = true;
+                }
                 else if (data1 == incc1)
                 {
                     //clip input here, unless stretching input to fit in input range
                     if ((idata >= lolimit1 && idata <= hilimit1) || param[kRangeMode] >= 0.5f && param[kRangeMode] < 0.8f)
                     {
                         if (inmode == NRPNlsb)
+                        {
                             idata = data1;
+                        }
                         if (lolimit1 == hilimit1)
+                        {
                             odata = (low1 + high1) / 2 + offset1;
+                        }
                         else if (param[kRangeMode] < 0.3f) //clip/limit
                         {
                             //stretch clipped input to full range
                             odata = MAP_TO_MIDI(idata, 0, 127, lolimit1, hilimit1) + offset1;
                             //then limit output
                             if (odata > high1)
+                            {
                                 odata = high1;
+                            }
                             else if (odata < low1)
+                            {
                                 odata = low1;
+                            }
                         }
                         else if (param[kRangeMode] < 0.5f) //clip/stretch
                         {
@@ -1142,36 +1462,54 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         else
                         {
                             if (odata > high1)
+                            {
                                 odata = high1;
+                            }
                             else if (odata < low1)
+                            {
                                 odata = low1;
+                            }
                         }
                         if (odata > 127)
+                        {
                             odata = 127;
+                        }
                         else if (odata < 0)
+                        {
                             odata = 0;
+                        }
                         if (inmode == nonv && status == MIDI_NOTEOFF)
+                        {
                             odata = 0;
+                        }
                         // send old message if "thru" is on
                         switch (inmode)
                         {
                             case cc:
                             case pa:
                                 if (channel == chout1 && data1 == outcc1 && outmode == inmode)
+                                {
                                     discard = true;
+                                }
                                 break;
                             case pc:
                             case cp:
                                 if (channel == chout1 && outmode == inmode)
+                                {
                                     discard = true;
+                                }
                                 break;
                             case pblsb:
                                 if (channel == chout1 && (outmode == pb || outmode == pblsb))
+                                {
                                     discard = true;
+                                }
                                 break;
                             case NRPNlsb:
                                 if (channel == chout1 && (outmode == NRPN || outmode == NRPNlsb))
+                                {
                                     discard = true;
+                                }
                                 break;
                             default:
                                 break;
@@ -1180,7 +1518,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         sendout = true;
                     }
                     else if (param[kThru] < 0.5f)
+                    {
                         discard = true; //outside range
+                    }
                 }
             }
         }
@@ -1222,9 +1562,13 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         if (! inis14bit)
                         {
                             if (odata > 64)
+                            {
                                 olsb = odata;
+                            }
                             else
+                            {
                                 olsb = 0;
+                            }
                         }
                         outmsg.midiData[2] = olsb;
                         outputs[0].push_back(outmsg);
@@ -1260,7 +1604,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             { //program change++
                 odata = lastSentPC[chout1] + 1;
                 if (odata > high1)
+                {
                     odata = low1;
+                }
                 outmsg.midiData[0] = MIDI_PROGRAMCHANGE | chout1;
                 outmsg.midiData[1] = odata;
                 outmsg.midiData[2] = 0;
@@ -1269,7 +1615,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             { //program change--
                 odata = lastSentPC[chout1] - 1;
                 if (odata < low1)
+                {
                     odata = high1;
+                }
                 outmsg.midiData[0] = MIDI_PROGRAMCHANGE | chout1;
                 outmsg.midiData[1] = odata;
                 outmsg.midiData[2] = 0;
@@ -1291,9 +1639,13 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                 if (! inis14bit)
                 {
                     if (odata > 64)
+                    {
                         olsb = odata;
+                    }
                     else
+                    {
                         olsb = 0;
+                    }
                 }
                 if (param[kCCout] < 0.5f)
                 {
@@ -1342,9 +1694,13 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     if (! inis14bit)
                     {
                         if (odata > 64)
+                        {
                             olsb = odata;
+                        }
                         else
+                        {
                             olsb = 0;
+                        }
                     }
                     dfine.midiData[2] = olsb;
                     outputs[0].push_back(dfine);
@@ -1405,9 +1761,13 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                     if (! inis14bit)
                     {
                         if (odata > 64)
+                        {
                             olsb = odata;
+                        }
                         else
+                        {
                             olsb = 0;
+                        }
                     }
                     dfine.midiData[2] = olsb;
                     outputs[0].push_back(dfine);
@@ -1460,7 +1820,9 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             else if (outmode == nonv)
             { //Note On Vel
                 if (status == MIDI_NOTEOFF && inmode == nonv)
+                {
                     odata = 0;
+                }
                 outmsg.midiData[0] = MIDI_NOTEON | chout1;
                 outmsg.midiData[1] = outcc1;
                 outmsg.midiData[2] = odata;
@@ -1499,17 +1861,26 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
             }
 
             if (param[kThru] < 0.5f)
+            {
                 discard = true; //block converted
+            }
         }
         else if (param[kThru] == 1.0f)
+        {
             discard = true; //thru converted only
+        }
         if (param[kThru] == 0.f)
+        {
             discard = true; //block all
+        }
         //send the original message
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
     if (outmode == pb)
+    {
         for (int ch = 0; ch < 16; ch++)
         {
             if (! done[ch])
@@ -1528,15 +1899,21 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         pb.midiData[1] = pb1;
                         pb.midiData[2] = pb2;
                         if (! done[ch])
+                        {
                             outputs[0].push_back(pb);
+                        }
                         if (lastpb == targetpb)
+                        {
                             done[ch] = true;
+                        }
                     }
                     counter--;
                 }
             }
         }
+    }
     else if (outmode == cc || outmode == cc14)
+    {
         for (int ch = 0; ch < 16; ch++)
         {
             if (smoothcc[ch] > -1)
@@ -1574,15 +1951,20 @@ void MidiConverter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             cc.midiData[1] = smoothcc[ch];
                             cc.midiData[2] = lastcc & 0x007f;
                             if (smoothcc[ch] > -1)
+                            {
                                 outputs[0].push_back(cc);
+                            }
                         }
                         if (lastcc == targetcc)
+                        {
                             smoothcc[ch] = -1;
+                        }
                     }
                     counter--;
                 }
             }
         }
+    }
 }
 
 int MidiConverter::smooth(int newvalue, int oldvalue, float inertia, bool is14bit)
@@ -1591,25 +1973,39 @@ int MidiConverter::smooth(int newvalue, int oldvalue, float inertia, bool is14bi
 
     //make sure change isn't smaller than 1
     if (change < 1.0f && change > 0.0f)
+    {
         change = 1.0f;
+    }
     else if (change < 0.0f && change > -1.0f)
+    {
         change = -1.0f;
+    }
 
     if (change < 0.f)
+    {
         newvalue = oldvalue - roundToInt(-change);
+    }
     else
+    {
         newvalue = oldvalue + roundToInt(change);
+    }
     if (is14bit)
     {
         if (newvalue > 0x7fff)
+        {
             newvalue = 0x7fff;
+        }
     }
     else
     {
         if (newvalue > 0x7f)
+        {
             newvalue = 0x7f;
+        }
     }
     if (newvalue < 0)
+    {
         newvalue = 0;
+    }
     return newvalue;
 }

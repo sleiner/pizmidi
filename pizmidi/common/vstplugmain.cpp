@@ -30,12 +30,16 @@ extern "C"
     {
         // Get VST Version of the Host
         if (! audioMaster(0, audioMasterVersion, 0, 0, 0, 0))
+        {
             return 0; // old version
+        }
 
         // Create the AudioEffect
         AudioEffect* effect = createEffectInstance(audioMaster);
         if (! effect)
+        {
             return 0;
+        }
 
         // Return the VST AEffect structur
         return effect->getAeffect();
@@ -78,7 +82,9 @@ extern "C"
 bool getAppDataPath(char* path, const char* name)
 {
     if (path == NULL || name == NULL)
+    {
         return false;
+    }
 
     char temp[256];
     if (SHGetSpecialFolderPathA(0, temp, CSIDL_APPDATA, 0))
@@ -100,21 +106,31 @@ bool getAppDataPath(char* path, const char* name)
 bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
 {
     if (outInstancePath == NULL || fileName == NULL)
+    {
         return false;
+    }
 
     WCHAR filename[256];
     memset(filename, 0, 256 * sizeof(WCHAR));
 
     DWORD success = 0;
     if (hostpath)
+    {
         success = GetModuleFileNameW(NULL, filename, 255);
+    }
     else
+    {
         success = GetModuleFileNameW((HMODULE) hInstance, filename, 255);
+    }
 
     if (success)
+    {
         int err = WideCharToMultiByte(0, 0, filename, success, outInstancePath, 511, NULL, NULL);
+    }
     else
+    {
         success = GetModuleFileNameA((HMODULE) hInstance, outInstancePath, 255);
+    }
     if (! success)
     {
         dbg("Failed to get filename");
@@ -130,10 +146,14 @@ bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
         if (outInstancePath[i] == checkString[foundloc++])
         {
             if (foundloc == 4)
+            {
                 break;
+            }
         }
         else
+        {
             foundloc = 0;
+        }
 
         countloc++;
     }
@@ -177,7 +197,9 @@ bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
 bool getAppDataPath(char* path, const char* name)
 {
     if (path == NULL || name == NULL)
+    {
         return false;
+    }
 
     sprintf(path, "~/.%s/", name);
     return true;
@@ -186,7 +208,9 @@ bool getAppDataPath(char* path, const char* name)
 bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
 {
     if (outInstancePath == NULL || fileName == NULL)
+    {
         return;
+    }
 
     strcpy(outInstancePath, "~/.pizmidi/");
     strcpy(fileName, "?");
@@ -196,7 +220,9 @@ bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
 bool getAppDataPath(char* path, const char* name)
 {
     if (path == NULL || name == NULL)
+    {
         return false;
+    }
 
     sprintf(path, "~/Library/%s/", name);
     return true;
@@ -205,7 +231,9 @@ bool getAppDataPath(char* path, const char* name)
 bool getInstancePath(char* outInstancePath, char* fileName, bool hostpath)
 {
     if (outInstancePath == NULL || fileName == NULL)
+    {
         return false;
+    }
 
     strcpy(outInstancePath, "~/Library/pizmidi/");
     strcpy(fileName, "?");

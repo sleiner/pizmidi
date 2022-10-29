@@ -18,14 +18,18 @@ public:
     juce::String getTextFromValue(double value)
     {
         if (value < 0.5)
+        {
             return allText;
+        }
         return juce::String((int) value);
     }
 
     double getValueFromText(const juce::String& text)
     {
         if (! text.compareIgnoreCase(allText))
+        {
             return 0;
+        }
         return text.getDoubleValue();
     }
 

@@ -25,7 +25,9 @@ void ModuleGUI::mouseDrag(const juce::MouseEvent& e)
             }
         }
         else
+        {
             pane->mouseDrag(e.getEventRelativeTo(pane));
+        }
     }
 }
 

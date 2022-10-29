@@ -69,7 +69,9 @@ MidiChordAnalyzer::~MidiChordAnalyzer()
 {
     DBG("~MidiChordAnalyzer()");
     if (programs)
+    {
         juce::deleteAndZero(programs);
+    }
 }
 
 //==============================================================================
@@ -87,7 +89,9 @@ void MidiChordAnalyzer::setCurrentProgram(int index)
 {
     //save non-parameter info to the old program, except the first time
     if (! init)
+    {
         copySettingsToProgram(curProgram);
+    }
     init = false;
 
     //then set the new program
@@ -131,18 +135,26 @@ void MidiChordAnalyzer::setParameter(int index, float newValue)
 const juce::String MidiChordAnalyzer::getParameterName(int index)
 {
     if (index == kChannel)
+    {
         return "Channel";
+    }
     if (index == kFlats)
+    {
         return "Flats";
+    }
     return juce::String();
 }
 
 const juce::String MidiChordAnalyzer::getParameterText(int index)
 {
     if (index == kChannel)
+    {
         return channel == 0 ? "Any" : juce::String(channel);
+    }
     if (index == kFlats)
+    {
         return flats ? "Yes" : "No";
+    }
     return juce::String();
 }
 

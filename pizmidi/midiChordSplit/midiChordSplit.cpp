@@ -104,7 +104,9 @@ bool MidiChordSplit::midiSort::operator()(const VstMidiEvent& first, const VstMi
 {
     unsigned int r = rand();
     if (this->mode == random)
+    {
         return (r < (int) (RAND_MAX / 2)) ? true : false;
+    }
     bool result = false;
     if (first.deltaFrames == second.deltaFrames
         && isNoteOnOrOff(first) && isNoteOnOrOff(second))
@@ -112,46 +114,70 @@ bool MidiChordSplit::midiSort::operator()(const VstMidiEvent& first, const VstMi
         if (first.midiData[1] == second.midiData[1])
         {
             if (isNoteOn(first) && isNoteOff(second))
+            {
                 return false;
+            }
             if (isNoteOff(first) && isNoteOn(second))
+            {
                 return true;
+            }
         }
         bool bothOff = isNoteOff(first) && isNoteOff(second);
         switch (mode)
         {
             case quietest:
                 if (bothOff)
+                {
                     result = onvelocity[first.midiData[0] & 0x0f][first.midiData[1]]
                            < onvelocity[second.midiData[0] & 0x0f][second.midiData[1]];
+                }
                 else
+                {
                     result = first.midiData[2] > second.midiData[2];
+                }
                 break;
             case lowest:
                 if (bothOff)
+                {
                     result = first.midiData[1] < second.midiData[1];
+                }
                 else
+                {
                     result = first.midiData[1] > second.midiData[1];
+                }
                 break;
             case highest:
                 if (bothOff)
+                {
                     result = first.midiData[1] > second.midiData[1];
+                }
                 else
+                {
                     result = first.midiData[1] < second.midiData[1];
+                }
                 break;
             case centered:
                 if (abs(first.midiData[1] - centerNote) == abs(second.midiData[1] - centerNote))
                 {
                     if (bothOff)
+                    {
                         result = first.midiData[1] > second.midiData[1];
+                    }
                     else
+                    {
                         result = first.midiData[1] < second.midiData[1];
+                    }
                 }
                 else
                 {
                     if (bothOff)
+                    {
                         result = (abs(first.midiData[1] - centerNote) > abs(second.midiData[1] - centerNote));
+                    }
                     else
+                    {
                         result = (abs(first.midiData[1] - centerNote) < abs(second.midiData[1] - centerNote));
+                    }
                 }
                 break;
             case random:
@@ -159,16 +185,24 @@ bool MidiChordSplit::midiSort::operator()(const VstMidiEvent& first, const VstMi
                 break;
             default:
                 if (bothOff)
+                {
                     result = first.midiData[1] > second.midiData[1];
+                }
                 else
+                {
                     result = first.midiData[1] < second.midiData[1];
+                }
                 break;
         }
     }
     else if (first.deltaFrames < second.deltaFrames)
+    {
         result = true;
+    }
     if (isNoteOn(first))
+    {
         priorityNote = first.midiData[1];
+    }
     return result;
 }
 
@@ -219,7 +253,9 @@ MidiChordSplit::~MidiChordSplit()
 {
     dbg("destructor start");
     if (programs)
+    {
         delete[] programs;
+    }
     dbg("destructor end");
 }
 
@@ -231,7 +267,9 @@ void MidiChordSplit::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -270,19 +308,33 @@ void MidiChordSplit::setParameter(VstInt32 index, float value)
     {
         case kSteal:
             if (param[index] < 1.f / (float) (numStealModes))
+            {
                 stealmode = oldest;
+            }
             else if (param[index] < 2.f / (float) (numStealModes))
+            {
                 stealmode = newest;
+            }
             else if (param[index] < 3.f / (float) (numStealModes))
+            {
                 stealmode = quietest;
+            }
             else if (param[index] < 4.f / (float) (numStealModes))
+            {
                 stealmode = lowest;
+            }
             else if (param[index] < 5.f / (float) (numStealModes))
+            {
                 stealmode = highest;
+            }
             else if (param[index] < 6.f / (float) (numStealModes))
+            {
                 stealmode = centered;
+            }
             else
+            {
                 stealmode = random;
+            }
 
             sorter.mode = stealmode;
             break;
@@ -303,7 +355,9 @@ void MidiChordSplit::setParameter(VstInt32 index, float value)
         case kCh15Low:
         case kCh16Low:
             if (value > param[index + 1])
+            {
                 setParameterAutomated(index + 1, value);
+            }
             break;
         case kCh1High:
         case kCh2High:
@@ -322,7 +376,9 @@ void MidiChordSplit::setParameter(VstInt32 index, float value)
         case kCh15High:
         case kCh16High:
             if (value < param[index - 1])
+            {
                 setParameterAutomated(index - 1, value);
+            }
             break;
         default:
             break;
@@ -435,31 +491,53 @@ void MidiChordSplit::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPower:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off (Bypass)");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kInCh:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "Any");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kSteal:
             if (stealmode == oldest)
+            {
                 strcpy(text, "Steal Oldest");
+            }
             else if (stealmode == newest)
+            {
                 strcpy(text, "Steal Last");
+            }
             else if (stealmode == quietest)
+            {
                 strcpy(text, "Steal Quietest");
+            }
             else if (stealmode == lowest)
+            {
                 strcpy(text, "High");
+            }
             else if (stealmode == highest)
+            {
                 strcpy(text, "Low");
+            }
             else if (stealmode == centered)
+            {
                 strcpy(text, "Centered");
+            }
             else if (stealmode == random)
+            {
                 strcpy(text, "Random");
+            }
             break;
         case kCh1Power:
         case kCh2Power:
@@ -478,9 +556,13 @@ void MidiChordSplit::getParameterDisplay(VstInt32 index, char* text)
         case kCh15Power:
         case kCh16Power:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kCh1Poly:
         case kCh2Poly:
@@ -501,9 +583,13 @@ void MidiChordSplit::getParameterDisplay(VstInt32 index, char* text)
             int p;
             p = roundToInt(((float) maxPoly - 1) * param[index]) + 1;
             if (p == 1)
+            {
                 sprintf(text, "%d Note", p);
+            }
             else
+            {
                 sprintf(text, "%d Notes", p);
+            }
             break;
         case kCh1Low:
         case kCh2Low:
@@ -598,7 +684,9 @@ void MidiChordSplit::preProcess(void)
         }
     }
     else
+    {
         playing = true;
+    }
 
     _cleanMidiOutBuffers();
 }
@@ -610,7 +698,9 @@ VstInt32 MidiChordSplit::processEvents(VstEvents* ev)
     for (int i = 0; i < evts->numEvents; i++)
     {
         if ((evts->events[i])->type != kVstMidiType)
+        {
             continue;
+        }
         VstMidiEvent* event = (VstMidiEvent*) evts->events[i];
         _midiEventsIn[0].push_back(*event);
     }
@@ -730,8 +820,12 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
 
     unsigned int totalPoly = 0;
     for (int i = 0; i < 16; i++)
+    {
         if (useChan[i])
+        {
             totalPoly += newpoly[i];
+        }
+    }
     memcpy(poly, newpoly, sizeof(poly));
     bool retrig = false; //param[kRetrig]>=0.5f;
     //bool mono=lowch==highch && poly==1;
@@ -749,9 +843,13 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
             int channel    = m.midiData[0] & 0x0f;
             int note       = m.midiData[1] & 0x7f;
             if (isNoteOn(m))
+            {
                 held2[channel][note] = true;
+            }
             else if (isNoteOff(m))
+            {
                 held2[channel][note] = false;
+            }
         }
         //find center note
         int top    = -1;
@@ -764,9 +862,13 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     heldNotesInBlock.push_back(n);
                     if (n < bottom)
+                    {
                         bottom = n;
+                    }
                     if (n > top)
+                    {
                         top = n;
+                    }
                 }
             }
         }
@@ -841,16 +943,26 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     v stealme;
                     //oldness: older==smaller number
                     if (stealmode == oldest)
+                    {
                         stealme.oldness = 0xFFFFFFFF;
+                    }
                     else
+                    {
                         stealme.oldness = 0;
+                    }
                     stealme.inch = outch;
                     if (stealmode == highest)
+                    {
                         stealme.note = -1;
+                    }
                     else if (stealmode == centered)
+                    {
                         stealme.note = centerNote;
+                    }
                     else
+                    {
                         stealme.note = 128;
+                    }
                     stealme.vel = 128;
                     stealme.on  = true;
 
@@ -903,7 +1015,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                             for (int n = 0; n < poly[outch]; n++)
                             {
                                 if (stop)
+                                {
                                     break;
+                                }
                                 if (Voice[outch][n].on == false)
                                 {
                                     outn                   = n;
@@ -991,22 +1105,32 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                                 nosteal      = false;
                                             }
                                             else
+                                            {
                                                 nosteal = true;
+                                            }
 
                                     } //switch(stealmode)
                                 }     //if voice on
                             }         //for n
                             //if (retrig) {
                             if (stealmode == lowest && stealme.note > data1)
+                            {
                                 nosteal = true;
+                            }
                             else if (stealmode == highest && stealme.note < data1)
+                            {
                                 nosteal = true;
+                            }
                             else if (stealmode == centered && abs(stealme.note - centerNote) < abs(data1 - centerNote))
+                            {
                                 nosteal = true;
+                            }
                             //else if (ntime[stealme.note][stealme.chan]==tomod.deltaFrames)
                             //	nosteal=true;
                             if (outn == -1)
+                            {
                                 break;
+                            }
                             stealme = copyVoice(Voice[outch][outn]);
                             dbg("stealme n=" << stealme.note << " v=" << stealme.vel);
                             //}
@@ -1022,7 +1146,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                     for (int q = 0; q < queueSize; q++)
                                     {
                                         if (gotq)
+                                        {
                                             break;
+                                        }
                                         if (Queue[q].on && Queue[q].note == stealme.note && Queue[q].chan == outch)
                                         {
                                             dbg("same note already queued q=" << q);
@@ -1035,14 +1161,18 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                         else
                                         {
                                             if (Queue[q].on || Queue[q].note)
+                                            {
                                                 dbg("no match q[" << q << "] on=" << Queue[q].on << " n=" << Queue[q].note << " ch=" << (int) Queue[q].chan);
+                                            }
                                         }
 #endif
                                     }
                                     for (int q = 0; q < queueSize; q++)
                                     {
                                         if (gotq)
+                                        {
                                             break;
+                                        }
                                         if (! Queue[q].on)
                                         {
                                             dbg("found empty queue slot q=" << q);
@@ -1056,7 +1186,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                     dbg("voice [" << (int) outch << "][" << (int) outn << "]." << Voice[outch][outn].note << " stolen, queued");
                                 }
                                 else
+                                {
                                     discard = true;
+                                }
                                 VstMidiEvent kill;
                                 kill.midiData[0] = MIDI_NOTEOFF + outch;
                                 kill.midiData[1] = (char) stealme.note;
@@ -1068,7 +1200,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                 --voices[outch];
                                 Voice[outch][outn].on = false;
                                 if (! sustain)
+                                {
                                     Voice[outch][outn].sustained = false;
+                                }
                                 dbg("voice [" << (int) outch << "][" << (int) outn << "]." << Voice[outch][outn].note << " killed, " << voices[outch] << " voices");
                             }
                         } //voices[channel]>=poly
@@ -1083,7 +1217,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                 for (int q = 0; q < queueSize; q++)
                                 {
                                     if (gotq)
+                                    {
                                         break;
+                                    }
                                     if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                                     {
                                         Queue[q].oldness   = ++oldness;
@@ -1099,7 +1235,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                 for (int q = 0; q < queueSize; q++)
                                 {
                                     if (gotq)
+                                    {
                                         break;
+                                    }
                                     if (! Queue[q].on)
                                     {
                                         Queue[q].oldness   = ++oldness;
@@ -1140,7 +1278,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                             for (int q = 0; q < queueSize; q++)
                             {
                                 if (gotq)
+                                {
                                     break;
+                                }
                                 if (Queue[q].on && Queue[q].note == data1 && Queue[q].chan == outch)
                                 {
                                     dbg("playing note already queued q=" << q);
@@ -1153,7 +1293,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                 else
                                 {
                                     if (Queue[q].on || Queue[q].note)
+                                    {
                                         dbg("no match q[" << q << "] on=" << Queue[q].on << " n=" << Queue[q].note << " ch=" << (int) Queue[q].chan);
+                                    }
                                 }
 #endif
                             }
@@ -1170,7 +1312,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     {
 #ifdef _DEBUG
                         if (! sustain)
+                        {
                             dbg("sustain on");
+                        }
 #endif
                         sustain = true;
                     }
@@ -1265,7 +1409,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                         queuednoteoff = true;
                     }
                     if (queuednoteoff)
+                    {
                         break;
+                    }
                 }
                 //see if the note is playing
                 if (! queuednoteoff)
@@ -1273,11 +1419,15 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     for (int ch = 0; ch < 16; ch++)
                     {
                         if (done)
+                        {
                             break;
+                        }
                         for (int n = 0; n < maxPoly; n++)
                         {
                             if (done)
+                            {
                                 break;
+                            }
                             if (Voice[ch][n].inch == channel && Voice[ch][n].note == data1 && Voice[ch][n].on)
                             {
                                 //got match
@@ -1308,14 +1458,22 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                                         v useme;
                                         //oldness: older==smaller
                                         if (stealmode == oldest)
+                                        {
                                             useme.oldness = 0;
+                                        }
                                         else
+                                        {
                                             useme.oldness = 0xFFFFFFFF;
+                                        }
                                         useme.inch = 0;
                                         if (stealmode == highest)
+                                        {
                                             useme.note = 128;
+                                        }
                                         else
+                                        {
                                             useme.note = -1;
+                                        }
                                         useme.vel = 1;
                                         useme.on  = true;
                                         int useq  = 0;
@@ -1433,7 +1591,9 @@ void MidiChordSplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     }         //for ch
                 }             //if(!done)
                 if (done)
+                {
                     discard = true;
+                }
                 else if (! queuednoteoff)
                 {
                     discard = false;
@@ -1544,9 +1704,13 @@ void MidiChordSplit::findCenterNote()
             {
                 heldNoteNumbers.push_back(n);
                 if (n < bottom)
+                {
                     bottom = n;
+                }
                 if (n > top)
+                {
                     top = n;
+                }
             }
         }
     }

@@ -29,7 +29,9 @@ juce::Component* ControllerList::refreshComponentForRow(int rowNumber, bool isRo
         return gui;
     }
     else
+    {
         return 0;
+    }
 }
 
 void ControllerList::paintListBoxItem(int rowNumber, juce::Graphics& g, int width, int height, bool rowIsSelected)

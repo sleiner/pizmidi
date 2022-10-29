@@ -307,7 +307,9 @@ void CurveEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 void CurveEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParameters();
+    }
 }
 
 void CurveEditor::updateParameters()
@@ -320,21 +322,33 @@ void CurveEditor::updateParameters()
     {
         label->setText("In: " + juce::String(lastin), juce::sendNotification);
         if (lastin == 8192)
+        {
             label6->setText("(center)", juce::sendNotification);
+        }
         else if (lastin > 8192)
+        {
             label6->setText("(+" + juce::String(pbrange * ((float) lastin / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
+        }
         else if (lastin < 8192)
+        {
             label6->setText("(" + juce::String(pbrange2 * ((float) lastin / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
+        }
     }
     if (lastout != -1)
     {
         label2->setText("Out: " + juce::String(lastout), juce::sendNotification);
         if (lastout == 8192)
+        {
             label7->setText("(center)", juce::sendNotification);
+        }
         else if (lastout > 8192)
+        {
             label7->setText("(+" + juce::String(pbrange * ((float) lastout / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
+        }
         else if (lastout < 8192)
+        {
             label7->setText("(" + juce::String(pbrange2 * ((float) lastout / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
+        }
     }
 
     channelSlider->setValue(getFilter()->getParameter(kChannel) * channelSlider->getMaximum(), juce::dontSendNotification);

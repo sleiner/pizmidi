@@ -778,7 +778,9 @@ void StepEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         {
             juce::File midiFile(myChooser.getResult());
             if (! midiFile.hasFileExtension("mid"))
+            {
                 midiFile = midiFile.withFileExtension("mid");
+            }
 
             getFilter()->writeMidiFile(getFilter()->activeLoop, midiFile);
         }
@@ -803,7 +805,9 @@ void StepEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         //[UserButtonCode_deleteBarButton] -- add your button handler code here..
         pianoRoll->blankLength -= 960.0 * 4.0;
         if (pianoRoll->blankLength < 960.0 * 4.0)
+        {
             pianoRoll->blankLength = 960.0 * 4.0;
+        }
         pianoRoll->setSize(roundToInt(pianoRoll->ppqToPixels(pianoRoll->blankLength)), pianoRoll->getHeight());
         pianoRoll->sequenceChanged();
         //[/UserButtonCode_deleteBarButton]
@@ -912,7 +916,9 @@ void StepEditor::recArmButtonClicked(juce::Button* buttonThatWasClicked)
         {
             getButtonByIndex(i)->setToggleState(i == index ? true : false, juce::dontSendNotification);
             if (toggleButton->getToggleState())
+            {
                 getFilter()->setParameterNotifyingHost(kRecArm + i, i == index ? 1.f : 0.f);
+            }
         }
     }
 }
@@ -921,7 +927,9 @@ bool StepEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
     juce::File file = juce::File(files[0]);
     if (file.hasFileExtension("mid"))
+    {
         return true;
+    }
     return false;
 }
 
@@ -929,7 +937,9 @@ void StepEditor::filesDropped(const juce::StringArray& filenames, int mouseX, in
 {
     juce::File file(filenames[0]);
     if (getFilter()->readMidiFile(getFilter()->activeLoop, file))
+    {
         updateParameters(true);
+    }
 }
 
 void StepEditor::mouseWheelMove(const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
@@ -937,9 +947,13 @@ void StepEditor::mouseWheelMove(const juce::MouseEvent& e, float wheelIncrementX
     if (e.eventComponent == viewport.get())
     {
         if (wheelIncrementY > 0.f)
+        {
             zoomIn(e.getEventRelativeTo(pianoRoll).x);
+        }
         else if (wheelIncrementY < 0.f)
+        {
             zoomOut(e.getEventRelativeTo(pianoRoll).x);
+        }
     }
 }
 
@@ -965,7 +979,9 @@ void StepEditor::timerCallback()
 void StepEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParameters();
+    }
 }
 
 void StepEditor::updateParameters(bool updateLoop)
@@ -1002,7 +1018,9 @@ void StepEditor::updateParameters(bool updateLoop)
         activeLoopLabel->setText(juce::String(activeLoop + 1));
     }
     else
+    {
         repaint();
+    }
     setSize(w, h);
 }
 

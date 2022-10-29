@@ -74,7 +74,9 @@ XT2TransportControl::XT2TransportControl(audioMasterCallback audioMaster)
     }
 
     if (programs)
+    {
         setProgram(0);
+    }
 
     init();
 }
@@ -90,11 +92,17 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 {
     char String[255];
     if (! hWnd)
+    {
         return TRUE; // Not a window
+    }
     if (! ::IsWindowVisible(hWnd))
+    {
         return TRUE; // Not visible
+    }
     if (! SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM) String))
+    {
         return TRUE; // No window title
+    }
     else if (strncmp(String, (char*) lParam, strlen((char*) lParam)) == 0)
     {
         //window has correct name; check if it's from "energyXT.exe"
@@ -128,13 +136,21 @@ void XT2TransportControl::XT2_Transport(int button)
     {
         //transport buttons:
         if (button == 0)
+        {
             SendMessage(xtWindow, WM_KEYDOWN, VK_RETURN, 0); //play/pause
+        }
         else if (button == 1)
+        {
             SendMessage(xtWindow, WM_KEYDOWN, '0', 0); //stop
+        }
         else if (button == 2)
+        {
             SendMessage(xtWindow, WM_KEYDOWN, '3', 0); //rewind
+        }
         else if (button == 3)
+        {
             SendMessage(xtWindow, WM_KEYDOWN, 'R', 0); //record
+        }
     }
 }
 
@@ -176,7 +192,9 @@ void XT2TransportControl::XT2_Transport(int button)
 XT2TransportControl::~XT2TransportControl()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -343,81 +361,133 @@ void XT2TransportControl::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPauseNote:
             if (FLOAT_TO_MIDI_X(fPauseNote) == -1)
+            {
                 strcpy(text, "Learn...");
+            }
             else if (fPauseMsg >= 0.33)
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI_X(fPauseNote));
+            }
             else
+            {
                 strcpy(text, getNoteName(FLOAT_TO_MIDI_X(fPauseNote), bottomOctave));
+            }
             break;
 
         case kPauseMsg:
             if (fPauseMsg < 0.33)
+            {
                 strcpy(text, "Note");
+            }
             else if (fPauseMsg < 0.66)
+            {
                 strcpy(text, "Prog");
+            }
             else
+            {
                 strcpy(text, "CC");
+            }
             break;
 
         case kStopNote:
             if (FLOAT_TO_MIDI_X(fStopNote) == -1)
+            {
                 strcpy(text, "Learn...");
+            }
             else if (fStopMsg >= 0.33)
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI_X(fStopNote));
+            }
             else
+            {
                 strcpy(text, getNoteName(FLOAT_TO_MIDI_X(fStopNote), bottomOctave));
+            }
             break;
 
         case kStopMsg:
             if (fStopMsg < 0.33)
+            {
                 strcpy(text, "Note");
+            }
             else if (fStopMsg < 0.66)
+            {
                 strcpy(text, "Prog");
+            }
             else
+            {
                 strcpy(text, "CC");
+            }
             break;
 
         case kRewindNote:
             if (FLOAT_TO_MIDI_X(fRewindNote) == -1)
+            {
                 strcpy(text, "Learn...");
+            }
             else if (fRewindMsg >= 0.33)
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI_X(fRewindNote));
+            }
             else
+            {
                 strcpy(text, getNoteName(FLOAT_TO_MIDI_X(fRewindNote), bottomOctave));
+            }
             break;
 
         case kRewindMsg:
             if (fRewindMsg < 0.33)
+            {
                 strcpy(text, "Note");
+            }
             else if (fRewindMsg < 0.66)
+            {
                 strcpy(text, "Prog");
+            }
             else
+            {
                 strcpy(text, "CC");
+            }
             break;
 
         case kRecordNote:
             if (FLOAT_TO_MIDI_X(fRecordNote) == -1)
+            {
                 strcpy(text, "Learn...");
+            }
             else if (fRecordMsg >= 0.33)
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI_X(fRecordNote));
+            }
             else
+            {
                 strcpy(text, getNoteName(FLOAT_TO_MIDI_X(fRecordNote), bottomOctave));
+            }
             break;
 
         case kRecordMsg:
             if (fRecordMsg < 0.33)
+            {
                 strcpy(text, "Note");
+            }
             else if (fRecordMsg < 0.66)
+            {
                 strcpy(text, "Prog");
+            }
             else
+            {
                 strcpy(text, "CC");
+            }
             break;
 
         case kChannel:
             if (FLOAT_TO_CHANNEL(fChannel) < 1)
+            {
                 strcpy(text, "Any");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(fChannel));
+            }
             break;
 
         default:
@@ -449,13 +519,21 @@ void XT2TransportControl::processMidiEvents(VstMidiEventVec* inputs, VstMidiEven
             if (status == MIDI_NOTEON && data2 > 0)
             {
                 if (data1 == pausenote && fPauseMsg < 0.33)
+                {
                     XT2_Transport(0);
+                }
                 if (data1 == stopnote && fStopMsg < 0.33)
+                {
                     XT2_Transport(1);
+                }
                 if (data1 == rewnote && fRewindMsg < 0.33)
+                {
                     XT2_Transport(2);
+                }
                 if (data1 == recnote && fRecordMsg < 0.33)
+                {
                     XT2_Transport(3);
+                }
 
                 //midi learn
                 if (pausenote == -1)
@@ -482,13 +560,21 @@ void XT2TransportControl::processMidiEvents(VstMidiEventVec* inputs, VstMidiEven
             else if (status == MIDI_CONTROLCHANGE && data2 == 127)
             {
                 if (data1 == pausenote && fPauseMsg >= 0.66)
+                {
                     XT2_Transport(0);
+                }
                 if (data1 == stopnote && fStopMsg >= 0.66)
+                {
                     XT2_Transport(1);
+                }
                 if (data1 == rewnote && fRewindMsg >= 0.66)
+                {
                     XT2_Transport(2);
+                }
                 if (data1 == recnote && fRecordMsg >= 0.66)
+                {
                     XT2_Transport(3);
+                }
 
                 //midi learn
                 if (pausenote == -1)
@@ -515,13 +601,21 @@ void XT2TransportControl::processMidiEvents(VstMidiEventVec* inputs, VstMidiEven
             else if (status == MIDI_PROGRAMCHANGE)
             {
                 if (data1 == pausenote && fPauseMsg >= 0.33 && fPauseMsg < 0.66)
+                {
                     XT2_Transport(0);
+                }
                 if (data1 == stopnote && fStopMsg >= 0.33 && fStopMsg < 0.66)
+                {
                     XT2_Transport(1);
+                }
                 if (data1 == rewnote && fRewindMsg >= 0.33 && fRewindMsg < 0.66)
+                {
                     XT2_Transport(2);
+                }
                 if (data1 == recnote && fRecordMsg >= 0.33 && fRecordMsg < 0.66)
+                {
                     XT2_Transport(3);
+                }
 
                 //midi learn
                 if (pausenote == -1)

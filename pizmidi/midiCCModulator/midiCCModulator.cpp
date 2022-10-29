@@ -87,7 +87,9 @@ MidiCCModulator::MidiCCModulator(audioMasterCallback audioMaster)
 MidiCCModulator::~MidiCCModulator()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -97,7 +99,9 @@ void MidiCCModulator::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -146,59 +150,113 @@ void MidiCCModulator::setParameter(VstInt32 index, float value)
             break;
         case kMode:
             if (param[index] == 0.0f)
+            {
                 mode = bNOT;
+            }
             else if (param[index] < 0.04f)
+            {
                 mode = uniadd;
+            }
             else if (param[index] < 0.08f)
+            {
                 mode = average;
+            }
             else if (param[index] < 0.12f)
+            {
                 mode = wrap;
+            }
             else if (param[index] < 0.16f)
+            {
                 mode = sub;
+            }
             else if (param[index] < 0.20f)
+            {
                 mode = biadd;
+            }
             else if (param[index] < 0.24f)
+            {
                 mode = mult;
+            }
             else if (param[index] < 0.28f)
+            {
                 mode = comp;
+            }
             else if (param[index] < 0.32f)
+            {
                 mode = invcomp;
+            }
             else if (param[index] < 0.36f)
+            {
                 mode = bite;
+            }
             else if (param[index] < 0.40f)
+            {
                 mode = invbite;
+            }
             else if (param[index] < 0.44f)
+            {
                 mode = gate;
+            }
             else if (param[index] < 0.48f)
+            {
                 mode = block;
+            }
             else if (param[index] < 0.52f)
+            {
                 mode = AND;
+            }
             else if (param[index] < 0.56f)
+            {
                 mode = NAND;
+            }
             else if (param[index] < 0.60f)
+            {
                 mode = OR;
+            }
             else if (param[index] < 0.64f)
+            {
                 mode = NOR;
+            }
             else if (param[index] < 0.68f)
+            {
                 mode = XOR;
+            }
             else if (param[index] < 0.72f)
+            {
                 mode = XNOR;
+            }
             else if (param[index] < 0.76f)
+            {
                 mode = equal;
+            }
             else if (param[index] < 0.80f)
+            {
                 mode = bOR;
+            }
             else if (param[index] < 0.84f)
+            {
                 mode = bAND;
+            }
             else if (param[index] < 0.88f)
+            {
                 mode = bXOR;
+            }
             else if (param[index] < 0.92f)
+            {
                 mode = lshift;
+            }
             else if (param[index] < 0.96f)
+            {
                 mode = rshift;
+            }
             else if (param[index] < 1.00f)
+            {
                 mode = random;
+            }
             else
+            {
                 mode = random;
+            }
             break;
         case kThru:
             thru = param[index] >= 0.5f;
@@ -283,37 +341,57 @@ void MidiCCModulator::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPower:
             if (param[index] < 0.33f)
+            {
                 strcpy(text, "Off");
+            }
             else if (param[index] < 0.67f)
+            {
                 strcpy(text, "CC -> CC");
+            }
             else
+            {
                 strcpy(text, "CC -> Velocity");
+            }
             break;
         case kInCC:
             if (! modnotes)
             {
                 if (cc == -1)
+                {
                     strcpy(text, "Any CC");
+                }
                 else
+                {
                     sprintf(text, "CC %d", cc);
+                }
             }
             else
             {
                 if (cc == -1)
+                {
                     strcpy(text, "Any Note");
+                }
                 else
+                {
                     sprintf(text, "Note %d (%s)", cc, getNoteName(cc, bottomOctave));
+                }
             }
             break;
         case kModCC:
             if (cc == -1)
+            {
                 strcpy(text, "Manual");
+            }
             else
+            {
                 sprintf(text, "CC %d", cc);
+            }
             break;
         case kOutCC:
             if (cc == -1 || modnotes)
+            {
                 strcpy(text, "Same as Input");
+            }
             else
             {
                 sprintf(text, "CC %d", cc);
@@ -327,9 +405,13 @@ void MidiCCModulator::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "Any");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kMode:
             switch (mode)
@@ -419,11 +501,17 @@ void MidiCCModulator::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kThru:
             if (param[index] < 0.5f)
+            {
                 strcpy(text, "Off");
+            }
             else if (param[index] < 1.f)
+            {
                 strcpy(text, "Block ModCC");
+            }
             else
+            {
                 strcpy(text, "All Thru");
+            }
             break;
         case kOutput:
             sprintf(text, "%d%%", roundToInt(param[index] * 200.f));
@@ -456,12 +544,18 @@ void MidiCCModulator::preProcess()
     if (timeInfo)
     {
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             playing = true;
+        }
         else
+        {
             playing = false;
+        }
     }
     else
+    {
         playing = true;
+    }
 
     _cleanMidiOutBuffers();
 }
@@ -475,17 +569,25 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
     {
         slidermoved = false;
         if (outcc == -1)
+        {
             outcc = incc;
+        }
         if (outcc != -1 && ch != -1 && ! modnotes)
         {
             if (lastin == -1)
+            {
                 lastin = 0;
+            }
             VstInt32 o = modulate(lastin, lastmod);
             o          = roundToInt(2.f * param[kOutput] * (float) o);
             if (o > 127)
+            {
                 o = 127;
+            }
             else if (o < 0)
+            {
                 o = 0;
+            }
             if (lastout != o)
             {
                 VstMidiEvent manual;
@@ -516,18 +618,26 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
         outcc        = FLOAT_TO_MIDI_X(param[kOutCC]);
         ch           = FLOAT_TO_CHANNEL(param[kChannel]);
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (ch == -1)
+        {
             ch = channel; //any channel
+        }
         if (on && channel == ch)
         {
             if (status == MIDI_CONTROLCHANGE)
             {
                 if (incc == -1)
+                {
                     incc = data1; //any cc
+                }
                 if (outcc == -1)
+                {
                     outcc = incc; //same as input cc
+                }
                 if (data1 == modcc)
                 {
                     lastmod = data2;
@@ -543,12 +653,18 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                             VstInt32 o = modulate(lastin, lastmod);
                             o          = roundToInt(2.f * param[kOutput] * (float) o);
                             if (o > 127)
+                            {
                                 o = 127;
+                            }
                             else if (o < 0)
+                            {
                                 o = 0;
+                            }
                             tomod.midiData[2] = o;
                             if (lastout == tomod.midiData[2])
+                            {
                                 discard = true;
+                            }
                             lastout           = tomod.midiData[2];
                             tomod.midiData[1] = outcc;
                             tomod.midiData[0] = status | ch;
@@ -564,12 +680,18 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                         VstInt32 o = modulate(lastin, lastmod);
                         o          = roundToInt(2.f * param[kOutput] * (float) o);
                         if (o > 127)
+                        {
                             o = 127;
+                        }
                         else if (o < 0)
+                        {
                             o = 0;
+                        }
                         tomod.midiData[2] = o;
                         if (lastout == tomod.midiData[2])
+                        {
                             discard = true;
+                        }
                     }
                     lastout           = tomod.midiData[2];
                     tomod.midiData[1] = outcc;
@@ -581,7 +703,9 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                 if (modnotes)
                 {
                     if (incc == -1)
+                    {
                         incc = data1; //any note
+                    }
                     if (data1 == incc)
                     {
                         //modulate velocity
@@ -591,14 +715,20 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                         { //bNOT is unary, so we don't need a real mod input
                             VstInt32 o = modulate(lastin, lastmod, true);
                             if (o == 0)
+                            {
                                 discard = true;
+                            }
                             else
                             {
                                 o = roundToInt(2.f * param[kOutput] * (float) o);
                                 if (o > 127)
+                                {
                                     o = 127;
+                                }
                                 else if (o < 1)
+                                {
                                     o = 1;
+                                }
                                 tomod.midiData[2] = o;
                             }
                         }
@@ -613,9 +743,13 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
                 if (modnotes)
                 {
                     if (incc == -1)
+                    {
                         incc = data1; //any note
+                    }
                     if (outcc == -1)
+                    {
                         outcc = incc; //same as input note
+                    }
                     if (data1 == incc)
                     {
                         //modulate velocity
@@ -626,7 +760,9 @@ void MidiCCModulator::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec
         }
 
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
     if (wasplaying && ! playing)
     { //just stopped
@@ -648,9 +784,13 @@ VstInt32 MidiCCModulator::modulate(char input, char mod, bool notes)
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
@@ -659,9 +799,13 @@ VstInt32 MidiCCModulator::modulate(char input, char mod, bool notes)
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
@@ -670,9 +814,13 @@ VstInt32 MidiCCModulator::modulate(char input, char mod, bool notes)
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
@@ -681,122 +829,190 @@ VstInt32 MidiCCModulator::modulate(char input, char mod, bool notes)
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
         case comp:
             if (input < mod)
+            {
                 output = mod;
+            }
             else
+            {
                 output = input;
+            }
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
         case bite:
             if (input > mod)
+            {
                 output = roundToInt((float) input - (param[kAmount] * (float) (mod)));
+            }
             else
+            {
                 output = input;
+            }
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
         case invbite:
             if (input < mod)
+            {
                 output = roundToInt((float) input - (param[kAmount] * 2.f * (float) (mod - 64)));
+            }
             else
+            {
                 output = input;
+            }
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
         case invcomp:
             if (input > mod)
+            {
                 output = mod;
+            }
             else
+            {
                 output = input;
+            }
             if (output <= 0)
             {
                 if (notes)
+                {
                     output = 1;
+                }
                 else
+                {
                     output = 0;
+                }
             }
             break;
 
         case gate:
             if (mod >= threshold)
+            {
                 output = input;
+            }
             else
+            {
                 output = 0;
+            }
             break;
 
         case block:
             if (mod >= threshold)
+            {
                 output = 0;
+            }
             else
+            {
                 output = input;
+            }
             break;
 
         case AND:
             if (input >= threshold && mod >= threshold)
+            {
                 output = 127;
+            }
             else
+            {
                 output = 0;
+            }
             break;
 
         case OR:
             if (input >= threshold || mod >= threshold)
+            {
                 output = 127;
+            }
             else
+            {
                 output = 0;
+            }
             break;
 
         case XOR:
             if (input >= threshold != mod >= threshold)
+            {
                 output = 127;
+            }
             else
+            {
                 output = 0;
+            }
             break;
 
         case NAND:
             if (input >= threshold && mod >= threshold)
+            {
                 output = 0;
+            }
             else
+            {
                 output = 127;
+            }
             break;
 
         case NOR:
             if (input >= threshold || mod >= threshold)
+            {
                 output = 0;
+            }
             else
+            {
                 output = 127;
+            }
             break;
 
         case XNOR:
             if (input >= threshold == mod >= threshold)
+            {
                 output = 127;
+            }
             else
+            {
                 output = 0;
+            }
             break;
 
         case bNOT:

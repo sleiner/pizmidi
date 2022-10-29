@@ -62,7 +62,9 @@ MidiMonitorPlugin::MidiMonitorPlugin()
     programName = "midiMonitor " + juce::String(JucePlugin_VersionString);
 
     if (! loadDefaultFxb())
+    {
         loadDefaultFxp();
+    }
 }
 
 MidiMonitorPlugin::~MidiMonitorPlugin()
@@ -375,9 +377,13 @@ void MidiMonitorPlugin::processBlock(juce::AudioSampleBuffer& buffer,
                 if (getActiveEditor() != 0)
                 {
                     if (getParameter(kTimeMode) == 1.f)
+                    {
                         messages->addEvent(message, (double) iter + (double) samplePos * 0.000001);
+                    }
                     else
+                    {
                         messages->addEvent(message, lastPosInfo.ppqPosition + ((double) samplePos) * ppqPerSample);
+                    }
                 }
                 loop->addEvent(message, roundToInt((samples + (double) samplePos) * ppqPerSample * 960.0));
                 if (message.isNoteOnOrOff())
@@ -388,7 +394,9 @@ void MidiMonitorPlugin::processBlock(juce::AudioSampleBuffer& buffer,
         }
     }
     if (thru < 0.5f)
+    {
         midiMessages.clear();
+    }
     samples += buffer.getNumSamples();
 }
 
@@ -504,7 +512,9 @@ bool MidiMonitorPlugin::writeMidiFile(juce::File mid)
     midifile.addTrack(*loop);
 
     if (mid.exists())
+    {
         mid.deleteFile();
+    }
     if (mid.create())
     {
         juce::FileOutputStream file(mid);

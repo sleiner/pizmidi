@@ -119,7 +119,9 @@ private:
             {
                 owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
                 if (oldNoteOnString >= 0)
+                {
                     owner->selectChordNote(owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
+                }
             }
         }
         lastDraggedNote = n;
@@ -139,7 +141,9 @@ private:
         {
             owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
             if (oldNoteOnString >= 0)
+            {
                 owner->selectChordNote(owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
+            }
             erasing = false;
         }
         lastDraggedNote = n;
@@ -166,12 +170,18 @@ public:
         const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels(0xffff, midiNoteNumber);
 
         if (isReallyReallyDown)
+        {
             c = c.overlaidWith(findColour(keyDownOverlayColourId));
+        }
         else if (s->isNoteOnForChannels(0xffff, midiNoteNumber))
+        {
             c = c.overlaidWith(juce::Colours::brown.withAlpha(0.4f));
+        }
 
         if (isOver)
+        {
             c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        }
 
         g.setColour(c);
         g.fillRect(x, y, w, h);
@@ -202,9 +212,13 @@ public:
         const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels(0xffff, midiNoteNumber);
 
         if (isReallyReallyDown)
+        {
             c = findColour(keyDownOverlayColourId);
+        }
         if (isOver)
+        {
             c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        }
 
         g.setColour(c);
         g.fillRect(x, y, w, h);
@@ -221,7 +235,9 @@ public:
 
         const juce::String text(getWhiteNoteText(midiNoteNumber));
         if (! text.isEmpty())
+        {
             g.drawFittedText(text, x + 2, y + 2, w - 4, h - 4, justification, 1);
+        }
         g.setColour(lineColour);
         g.fillRect(x, y, 1, h);
 
@@ -292,8 +308,10 @@ protected:
                     for (int c = 1; c <= 16; c++)
                     {
                         if (s->isNoteOn(c, midiNoteNumber))
+                        {
                             //s->noteOff(c, midiNoteNumber);
                             owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, c);
+                        }
                     }
                 }
                 else
@@ -349,13 +367,19 @@ public:
         juce::Colour c(textColour);
 
         if (isDown || owner->getCurrentTrigger() == midiNoteNumber)
+        {
             c = c.overlaidWith(findColour(keyDownOverlayColourId));
+        }
 
         if (isOver)
+        {
             c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        }
 
         if (owner->isNoteBypassed(midiNoteNumber))
+        {
             c = c.overlaidWith(juce::Colours::orange.withAlpha(0.6f));
+        }
 
         if (mode == Octave)
         {
@@ -363,14 +387,18 @@ public:
             while (n < 128)
             {
                 if (owner->isTriggerNotePlaying(n))
+                {
                     c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
+                }
                 n += 12;
             }
         }
         else
         {
             if (owner->isTriggerNotePlaying(midiNoteNumber))
+            {
                 c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
+            }
         }
 
         g.setColour(c);
@@ -404,25 +432,35 @@ public:
         juce::Colour c(juce::Colours::transparentWhite);
 
         if (isDown || owner->getCurrentTrigger() == midiNoteNumber)
+        {
             c = findColour(keyDownOverlayColourId);
+        }
         if (isOver)
+        {
             c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        }
         if (owner->isNoteBypassed(midiNoteNumber))
+        {
             c = c.overlaidWith(juce::Colours::orange.withAlpha(0.6f));
+        }
         if (mode == Octave)
         {
             int n = midiNoteNumber % 12;
             while (n < 128)
             {
                 if (owner->isTriggerNotePlaying(n))
+                {
                     c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
+                }
                 n += 12;
             }
         }
         else
         {
             if (owner->isTriggerNotePlaying(midiNoteNumber))
+            {
                 c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
+            }
         }
 
         g.setColour(c);
@@ -442,13 +480,19 @@ public:
 
             const juce::String text(getWhiteNoteText(midiNoteNumber));
             if (! text.isEmpty())
+            {
                 g.drawFittedText(text, x + 2, y + 2, w - 4, h - 4, justification, 1);
+            }
         }
 
         if (mode == Global)
+        {
             g.setColour(juce::Colours::red);
+        }
         else
+        {
             g.setColour(lineColour);
+        }
 
         g.fillRect(x, y, 1, h);
 
@@ -474,9 +518,13 @@ private:
         else
         {
             if (juce::roundToInt(owner->getParameter(kMode) * (numModes - 1)) == Global)
+            {
                 owner->setParameterNotifyingHost(kRoot, midiNoteNumber / 127.f);
+            }
             else
+            {
                 owner->selectTrigger(midiNoteNumber);
+            }
         }
         return false;
     }
@@ -501,9 +549,13 @@ private:
         else
         {
             if (juce::roundToInt(owner->getParameter(kMode) * (numModes - 1)) == Global)
+            {
                 owner->setParameterNotifyingHost(kRoot, midiNoteNumber / 127.f);
+            }
             else
+            {
                 owner->selectTrigger(midiNoteNumber);
+            }
         }
 
         return true;
@@ -582,11 +634,15 @@ private:
     bool isGuitarPreset(int index)
     {
         if (getFilter()->getNumStrings() != getFilter()->guitarPresets[index].numStrings)
+        {
             return false;
+        }
         for (int i = 0; i < getFilter()->getNumStrings(); i++)
         {
             if (getFilter()->getStringValue(i) != getFilter()->guitarPresets[index].stringNotes[i])
+            {
                 return false;
+            }
         }
         return true;
     }

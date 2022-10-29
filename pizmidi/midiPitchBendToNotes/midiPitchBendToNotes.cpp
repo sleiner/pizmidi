@@ -54,7 +54,9 @@ MidiPitchBendToNotes::MidiPitchBendToNotes(audioMasterCallback audioMaster)
         rpn[ch]       = -999;
         rpncoarse[ch] = -999;
         for (int n = 0; n < 128; n++)
+        {
             lastTranspose[n][ch] = NOT_PLAYING;
+        }
     }
 
     init();
@@ -64,7 +66,9 @@ MidiPitchBendToNotes::MidiPitchBendToNotes(audioMasterCallback audioMaster)
 MidiPitchBendToNotes::~MidiPitchBendToNotes()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -160,15 +164,23 @@ void MidiPitchBendToNotes::getParameterDisplay(VstInt32 index, char* text)
     {
         case kChannel:
             if (FLOAT_TO_CHANNEL(fChannel) == ANY_CHANNEL)
+            {
                 vst_strncpy(text, "No Change", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(fChannel) + 1);
+            }
             break;
         case kPower:
             if (fPower < 0.5f)
+            {
                 vst_strncpy(text, "Off", kVstMaxParamStrLen);
+            }
             else
+            {
                 vst_strncpy(text, "On", kVstMaxParamStrLen);
+            }
             break;
         default:
             break;
@@ -191,7 +203,9 @@ void MidiPitchBendToNotes::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
             const char out_channel = (char) FLOAT_TO_CHANNEL(fChannel);
 
             if ((status == MIDI_NOTEON) && (data2 == 0))
+            {
                 status = MIDI_NOTEOFF;
+            }
 
             if (status == MIDI_PITCHBEND)
             {
@@ -243,10 +257,14 @@ void MidiPitchBendToNotes::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
                 if (data1 == MIDI_ALL_NOTES_OFF)
                 {
                     for (int n = 0; n < 128; n++)
+                    {
                         lastTranspose[n][in_channel] = NOT_PLAYING;
+                    }
                 }
                 else if (data1 == 101)
+                {
                     rpncoarse[in_channel] = data2;
+                }
                 else if (data1 == 100 && rpncoarse[in_channel] >= 0)
                 {
                     rpn[in_channel] = data2 | (rpncoarse[in_channel] << 7);

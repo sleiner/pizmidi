@@ -178,7 +178,9 @@ private:
                 if (names.getUnchecked(i).bank == b
                     && names.getUnchecked(i).channel == c
                     && names.getUnchecked(i).program == p)
+                {
                     return names.getUnchecked(i).name;
+                }
             }
             return "Program " + juce::String(p + 1);
         }

@@ -57,7 +57,9 @@ midiPadsEditor::midiPadsEditor(midiPads* const ownerFilter)
             midiPad[i]->setYInt(getFilter()->Ydata2[i]);
         }
         else
+        {
             midiPad[i]->setYFloat(getFilter()->getParameter(i + ypos));
+        }
 
         midiPad[i]->setHex(getFilter()->hex);
         lastx[i] = 0;
@@ -240,7 +242,9 @@ midiPadsEditor::~midiPadsEditor()
 {
     getFilter()->removeChangeListener(this);
     if (container->isOnDesktop())
+    {
         container->removeFromDesktop();
+    }
     for (int i = 0; i < numPads; i++)
     {
         getFilter()->icon[i]  = midiPad[i]->getIconPath();
@@ -280,7 +284,9 @@ void midiPadsEditor::paint(juce::Graphics& g)
 {
     g.fillAll(color);
     for (int i = 0; i < numPads; i++)
+    {
         midiPad[i]->setColour(getFilter()->padcolor[i].withAlpha(getFilter()->contrast));
+    }
 }
 
 void midiPadsEditor::resized()
@@ -300,7 +306,9 @@ void midiPadsEditor::resized()
         container->setBounds(0, 0, proportionOfWidth(1.0f), proportionOfHeight(1.0f));
         int resizersize = jmin(container->proportionOfWidth(0.05f), container->proportionOfHeight(0.05f));
         if (resizersize < 12)
+        {
             resizersize = 12;
+        }
         resizer->setBounds(container->getWidth() - resizersize, container->getHeight() - resizersize, resizersize, resizersize);
         resizer->setVisible(true);
     }
@@ -335,7 +343,9 @@ void midiPadsEditor::resized()
 void midiPadsEditor::mouseDrag(const juce::MouseEvent& e)
 {
     if (e.eventComponent->getName().compare("MidiPad"))
+    {
         return;
+    }
     if (e.mods.isAltDown() && ! e.mods.isCommandDown() && getFilter()->editmode && ! fullscreen)
     {
         if (e.mods.isShiftDown())
@@ -445,9 +455,13 @@ void midiPadsEditor::mouseDrag(const juce::MouseEvent& e)
                         {
                             midiPad[i]->setXFloat(fx);
                             if (automateHost)
+                            {
                                 getFilter()->setParameterNotifyingHost(i + xpos, fx);
+                            }
                             else
+                            {
                                 getFilter()->setParameter(i + xpos, fx);
+                            }
                         }
                         else
                         {
@@ -459,9 +473,13 @@ void midiPadsEditor::mouseDrag(const juce::MouseEvent& e)
                             {
                                 midiPad[i]->setYFloat(fy);
                                 if (automateHost)
+                                {
                                     getFilter()->setParameterNotifyingHost(i + ypos, fy);
+                                }
                                 else
+                                {
                                     getFilter()->setParameter(i + ypos, fy);
+                                }
                             }
                         }
                         else
@@ -470,9 +488,13 @@ void midiPadsEditor::mouseDrag(const juce::MouseEvent& e)
                             {
                                 midiPad[i]->setYFloat(fy);
                                 if (automateHost)
+                                {
                                     getFilter()->setParameterNotifyingHost(i + ypos, fy);
+                                }
                                 else
+                                {
                                     getFilter()->setParameter(i + ypos, fy);
+                                }
                             }
                             else if (usex)
                             {
@@ -482,7 +504,9 @@ void midiPadsEditor::mouseDrag(const juce::MouseEvent& e)
                             }
                         }
                         if (showdots[i] || showvalues[i])
+                        {
                             midiPad[i]->repaint();
+                        }
                         if (usex && lastx[i] != newx)
                         {
                             getFilter()->buttondown[i] = true;
@@ -533,7 +557,9 @@ void midiPadsEditor::mouseDoubleClick(const juce::MouseEvent& e)
                         getFilter()->copyPadSettings(lastTouchedPad, i);
                     }
                     if (midiPad[i]->getWidth() < 1 || midiPad[i]->getHeight() < 1)
+                    {
                         midiPad[i]->setBounds(e.x, e.y, getWidth() / 8, getHeight() / 8);
+                    }
                     midiPad[i]->setVisible(true);
                     midiPad[i]->setTopLeftPosition(
                         e.x - midiPad[i]->getWidth() / 2,
@@ -557,7 +583,9 @@ void midiPadsEditor::mouseDoubleClick(const juce::MouseEvent& e)
 void midiPadsEditor::mouseUp(const juce::MouseEvent& e)
 {
     if (e.eventComponent->getName().compare("MidiPad"))
+    {
         return;
+    }
     if (dragging)
     {
         dragging = false;
@@ -604,7 +632,9 @@ void midiPadsEditor::mouseUp(const juce::MouseEvent& e)
 void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mousedown
 {
     if (buttonThatWasClicked->getName().compare("MidiPad"))
+    {
         return;
+    }
     MidiPad* pad = (MidiPad*) buttonThatWasClicked;
     if (pad->isDown())
     {
@@ -620,19 +650,29 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
         if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown())
         {
             if (mousebutton.isAltDown() && mousebutton.isShiftDown())
+            {
                 getFilter()->midilisten[i] = 0.5f; //learn x trigger (not implemented!)
+            }
             else if (mousebutton.isShiftDown())
+            {
                 getFilter()->midilisten[i] = 0.6f; //learn y trigger
+            }
             else if (mousebutton.isAltDown())
+            {
                 getFilter()->midilisten[i] = 0.8f; //learn x
+            }
             else
+            {
                 getFilter()->midilisten[i] = 1.0f;
+            }
         }
         //pad menu
         else if (mousebutton.isPopupMenu() && ! mousebutton.isAltDown())
         {
             if (! getFilter()->editmode)
+            {
                 dontsend = true;
+            }
             else
             {
                 lastPadMenu = i;
@@ -759,9 +799,13 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
                         {
                             getFilter()->Ytype[i] = 1;
                             if (getFilter()->SendOff[i])
+                            {
                                 midiPad[i]->setYInt(getFilter()->Yoff[i]);
+                            }
                             else
+                            {
                                 midiPad[i]->setYInt(getFilter()->Ydata2[i]);
+                            }
                             midiPad[i]->setButtonText(juce::MidiMessage::getMidiNoteName(getFilter()->Ydata1[i], true, true, 3));
                         }
                     }
@@ -774,11 +818,15 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
                             if (showdots[i] || showvalues[i])
                             {
                                 if (usex)
+                                {
                                     midiPad[i]->setYFloat(0.5f); //"horizontal slider" mode
+                                }
                                 if (getFilter()->SendOff[i])
                                 {
                                     if (getFilter()->Ytype[i] == 0)
+                                    {
                                         midiPad[i]->setYInt(getFilter()->Yoff[i]);
+                                    }
                                     midiPad[i]->showy = false;
                                     midiPad[i]->repaint();
                                 }
@@ -882,15 +930,25 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
                         pad->setIconPath(juce::String());
                     }
                     else if (result == 88)
+                    {
                         getFilter()->midilisten[i] = 1.0f;
+                    }
                     else if (result == 89)
+                    {
                         getFilter()->midilisten[i] = 0.9f;
+                    }
                     else if (result == 90)
+                    {
                         getFilter()->midilisten[i] = 0.8f;
+                    }
                     else if (result == 91)
+                    {
                         getFilter()->midilisten[i] = 0.7f;
+                    }
                     else if (result == 92)
+                    {
                         getFilter()->midilisten[i] = 0.6f;
+                    }
                 }
             }
         }
@@ -909,7 +967,9 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
                 getFilter()->lastyccvalue[i] = -1;
                 if (! (getFilter()->getParameter(kNoteOnTrig) >= 0.5f
                        && getFilter()->getParameter(kUseTrigger) >= 0.5f))
+                {
                     sendMidi(i);
+                }
             }
         }
     }
@@ -918,7 +978,9 @@ void midiPadsEditor::buttonStateChanged(juce::Button* buttonThatWasClicked) //mo
 void midiPadsEditor::sendMidi(int i, bool shiftclicked)
 {
     if (sending[i])
+    {
         return;
+    }
     sending[i] = true;
     if (getFilter()->togglestate[i])
     {
@@ -952,33 +1014,51 @@ void midiPadsEditor::sendMidi(int i, bool shiftclicked)
         if (showdots[i] || showvalues[i])
         {
             if (getFilter()->UseX[i])
+            {
                 midiPad[i]->setXFloat(fx);
+            }
             else
+            {
                 midiPad[i]->setXFloat(0.5f);
+            }
             if (getFilter()->UseY[i])
+            {
                 midiPad[i]->setYFloat(fy);
+            }
             else
             {
                 if (getFilter()->UseX[i])
+                {
                     midiPad[i]->setYFloat(0.5f);
+                }
                 else
+                {
                     midiPad[i]->setYInt(getFilter()->Ydata2[i]);
+                }
             }
             midiPad[i]->repaint();
         }
         if (getFilter()->UseX[i])
         {
             if (automateHost)
+            {
                 getFilter()->setParameterNotifyingHost(i + xpos, fx);
+            }
             else
+            {
                 getFilter()->setParameter(i + xpos, fx);
+            }
             getFilter()->buttondown[i] = true;
             lastx[i]                   = (int) (fx * 127.1);
         }
         if (automateHost)
+        {
             getFilter()->setParameterNotifyingHost(i + ypos, fy);
+        }
         else
+        {
             getFilter()->setParameter(i + ypos, fy);
+        }
         getFilter()->send[i] = 1.0f;
         lasty[i]             = (int) (fy * 127.1);
     }
@@ -1004,17 +1084,29 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
             if (midiPad[i]->isVisible())
             {
                 if (! getFilter()->SendOff[i])
+                {
                     sendoffvalue = false;
+                }
                 if (! getFilter()->UseY[i])
+                {
                     useyvalue = false;
+                }
                 if (! getFilter()->UseX[i])
+                {
                     usexvalue = false;
+                }
                 if (! getFilter()->centeredText[i])
+                {
                     centeredNames = false;
+                }
                 if (! showdots[i])
+                {
                     showalldots = false;
+                }
                 if (! showvalues[i])
+                {
                     showallvalues = false;
+                }
             }
         }
         bool triggering = getFilter()->getParameter(kUseTrigger) >= 0.5f;
@@ -1035,7 +1127,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
         m.addItem(33, juce::String("Edit Mode"), true, editmode);
         m.addSeparator();
         for (int i = 0; i < layoutFiles.size(); i++)
+        {
             layout.addItem(100000 + i, layoutFiles[i].getFileNameWithoutExtension());
+        }
 #ifdef _DEBUG
         layout.addItem(18, juce::String("1 Pad"), true);
         layout.addItem(17, juce::String("4 Pads"), true);
@@ -1085,7 +1179,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
         m.addCustomItem(-1, *cSlider, 64, 16, false);
         m.addSeparator();
         for (int i = 0; i < presetFiles.size(); i++)
+        {
             presets.addItem(200000 + i, presetFiles[i].getFileNameWithoutExtension());
+        }
         m.addSubMenu("Presets", presets);
         fileMenu.addItem(5473, juce::String("Save Bank..."));
         fileMenu.addItem(54731, juce::String("Save Patch..."));
@@ -1101,16 +1197,22 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
             {
                 result -= 200000;
                 if (presetFiles[result].hasFileExtension("mpads"))
+                {
                     getFilter()->loadXmlPatch(getFilter()->getCurrentProgram(), presetFiles[result]);
+                }
                 else if (presetFiles[result].hasFileExtension("mpadb"))
+                {
                     getFilter()->loadXmlBank(presetFiles[result]);
+                }
                 resized();
             }
             else if (result >= 100000)
             {
                 result -= 100000;
                 if (layoutFiles[result].hasFileExtension("mpadl"))
+                {
                     getFilter()->loadXmlLayout(layoutFiles[result]);
+                }
                 resized();
             }
             else if (result == 33333)
@@ -1134,7 +1236,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     juce::File file(myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension("mpadl"))
+                    {
                         file = file.withFileExtension("mpadl");
+                    }
 
                     getFilter()->saveXmlLayout(file);
                 }
@@ -1163,7 +1267,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     juce::File file(myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension("mpadb"))
+                    {
                         file = file.withFileExtension("mpadb");
+                    }
 
                     getFilter()->saveXmlBank(file);
                 }
@@ -1182,7 +1288,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     juce::File file(myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension("mpads"))
+                    {
                         file = file.withFileExtension("mpads");
+                    }
 
                     getFilter()->saveXmlPatch(getFilter()->getCurrentProgram(), file);
                 }
@@ -1197,15 +1305,25 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                 {
                     juce::File file(myChooser.getResult());
                     if (file.hasFileExtension("mpadb"))
+                    {
                         getFilter()->loadXmlBank(file);
+                    }
                     else if (file.hasFileExtension("mpads"))
+                    {
                         getFilter()->loadXmlPatch(getFilter()->getCurrentProgram(), file);
+                    }
                     else if (file.hasFileExtension("fxb"))
+                    {
                         getFilter()->loadFxb(file);
+                    }
                     else if (file.hasFileExtension("fxp"))
+                    {
                         getFilter()->loadFxp(file);
+                    }
                     else if (file.hasFileExtension("mpadl"))
+                    {
                         getFilter()->loadXmlLayout(file);
+                    }
                 }
             }
             else if (result == 1)
@@ -1266,7 +1384,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kUseTrigger, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kUseTrigger, 1.0f);
+                }
             }
             else if (result == 222)
             {
@@ -1275,7 +1395,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kNoteOnTrig, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kNoteOnTrig, 1.0f);
+                }
             }
             else if (result == 3)
             {
@@ -1284,7 +1406,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kUseVel, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kUseVel, 1.0f);
+                }
             }
             else if (result == 4)
             {
@@ -1299,7 +1423,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                             if (getFilter()->SendOff[i])
                             {
                                 if (getFilter()->Ytype[i] == 1)
+                                {
                                     midiPad[i]->setYInt(getFilter()->Yoff[i]);
+                                }
                                 midiPad[i]->showy = false;
                                 midiPad[i]->repaint();
                             }
@@ -1355,7 +1481,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kSendAft, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kSendAft, 1.0f);
+                }
             }
             else if (result == 7)
             {
@@ -1384,7 +1512,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kMono, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kMono, 1.0f);
+                }
             }
 
             else if (result == 50)
@@ -1394,7 +1524,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
                     getFilter()->setParameterNotifyingHost(kThru, 0.0f);
                 }
                 else
+                {
                     getFilter()->setParameterNotifyingHost(kThru, 1.0f);
+                }
             }
             else if (result == 18)
             {
@@ -1563,7 +1695,9 @@ void midiPadsEditor::buttonClicked(juce::Button* buttonThatWasClicked) //mouseup
         if (! dontsend)
         {
             if (buttonThatWasClicked->getName().compare("MidiPad"))
+            {
                 return;
+            }
             int i = ((MidiPad*) buttonThatWasClicked)->getIndex();
             if (getFilter()->midilisten[i] < 0.5f && ! getFilter()->toggle[i])
             {
@@ -1775,7 +1909,9 @@ void midiPadsEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
     if (source == getFilter())
     {
         if (getFilter()->trig)
+        {
             padTriggered();
+        }
         else
         {
             for (int i = 0; i < numPads; i++)
@@ -1806,14 +1942,18 @@ void midiPadsEditor::padTriggered()
         memcpy(triggered, getFilter()->triggered, sizeof(triggered));
         getFilter()->getCallbackLock().exit();
         for (int i = 0; i < numPads; i++)
+        {
             midiPad[i]->setState(triggered[i] ? juce::Button::buttonDown : juce::Button::buttonNormal);
+        }
     }
     else
     {
         for (int i = 0; i < numPads; i++)
         {
             if (midiPad[i]->isMouseOver())
+            {
                 sendMidi(i);
+            }
         }
     }
     getFilter()->trig = false;
@@ -1840,7 +1980,9 @@ bool midiPadsEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
     juce::File file = juce::File(files.joinIntoString(juce::String(), 0, 1));
     if (file.hasFileExtension("png") || file.hasFileExtension("gif") || file.hasFileExtension("jpg") || file.hasFileExtension("svg") || file.hasFileExtension("mpads") || file.hasFileExtension("mpadb") || file.hasFileExtension("fxb") || file.hasFileExtension("fxp"))
+    {
         return true;
+    }
     return false;
 }
 
@@ -1977,10 +2119,14 @@ void midiPadsEditor::updateParametersFromFilter()
         {
             juce::String fullpath = icon[i];
             if (! juce::File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
+            {
                 fullpath = getFilter()->iconPath + juce::File::getSeparatorString() + icon[i];
+            }
             //Drawable* image = Drawable::createFromImageFile(File(fullpath));
             if (! midiPad[i]->setImageFromFile(juce::File(fullpath)))
+            {
                 midiPad[i]->setImages(0);
+            }
             midiPad[i]->setIconPath(icon[i]);
         }
 
@@ -2005,22 +2151,32 @@ void midiPadsEditor::updateParametersFromFilter()
             {
                 midiPad[i]->showx = true;
                 if (useoff[i])
+                {
                     midiPad[i]->setXInt(newXOff[i]);
+                }
                 else
+                {
                     midiPad[i]->setXFloat(newX[i]);
+                }
                 lastx[i] = (int) (newX[i] * 127.1);
             }
             if (! usey[i])
             {
                 midiPad[i]->showy = false;
                 if (newMidiType[i] == 1 && useoff[i])
+                {
                     midiPad[i]->setYInt(newMidiValue[i]);
+                }
                 else
                 {
-                    if (usex[i]) //"horizontal slider" mode
+                    if (usex[i])
+                    { //"horizontal slider" mode
                         midiPad[i]->setYFloat(0.5f);
+                    }
                     else
+                    {
                         midiPad[i]->setYInt(newMidiValue[i]);
+                    }
                 }
             }
             else
@@ -2031,9 +2187,13 @@ void midiPadsEditor::updateParametersFromFilter()
             }
         }
         if (newMidiType[i] == 1)
+        {
             midiPad[i]->setButtonText("CC " + juce::String(newMidiData[i]));
+        }
         else
+        {
             midiPad[i]->setButtonText(juce::MidiMessage::getMidiNoteName(newMidiData[i], true, true, 3));
+        }
     }
 
     color              = juce::Colour(hue, sat, bri, 1.0f);
@@ -2070,7 +2230,9 @@ void midiPadsEditor::updateParametersFromFilter()
     cSlider->setValue((float) (1 + (int) (newOutCh * 15.1)), juce::dontSendNotification);
 
     if (getWidth() != filter->lastUIWidth || getHeight() != filter->lastUIHeight)
+    {
         setSize(filter->lastUIWidth, filter->lastUIHeight);
+    }
     if (squares != newsquares)
     {
         squares = newsquares;

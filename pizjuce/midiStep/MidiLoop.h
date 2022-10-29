@@ -77,7 +77,9 @@ public:
     bool findNextNote()
     {
         if (currentIndex >= getNumEvents())
+        {
             currentIndex = 0;
+        }
         if (this->getEventPointer(currentIndex)->message.isNoteOn())
         {
             return true;
@@ -114,7 +116,9 @@ public:
             while (abs(getCurrentTime() - time) < chordTolerance)
             {
                 if (this->getEventPointer(currentIndex)->message.isNoteOn())
+                {
                     sendCurrentNoteToBuffer(buffer, sample_number, velocity);
+                }
                 ++currentIndex;
             }
         }
@@ -127,7 +131,9 @@ public:
         m.setNoteNumber(juce::jlimit(0, 127, m.getNoteNumber() + transpose));
         m.setVelocity((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
         if (outChannel > 0)
+        {
             m.setChannel(outChannel);
+        }
         buffer.addEvent(m, sample_number);
         indexOfLastNoteOn = currentIndex;
     }
@@ -152,7 +158,9 @@ public:
         for (int n = 0; n < 128; n++)
         {
             for (int ch = 0; ch < 16; ch++)
+            {
                 playingNote[n][ch] = NOT_PLAYING;
+            }
         }
     }
 
@@ -175,7 +183,9 @@ public:
     juce::MidiMessage getCurrentMessage()
     {
         if (currentIndex >= this->getNumEvents())
+        {
             currentIndex = 0;
+        }
         return this->getEventPointer(currentIndex)->message;
     }
 

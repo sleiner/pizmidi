@@ -48,7 +48,9 @@ MidiChannelize::MidiChannelize(audioMasterCallback audioMaster)
     for (int c = 0; c < 16; c++)
     {
         for (int i = 0; i < 128; i++)
+        {
             lastChannel[c][i] = c;
+        }
     }
 
     init();
@@ -58,7 +60,9 @@ MidiChannelize::MidiChannelize(audioMasterCallback audioMaster)
 MidiChannelize::~MidiChannelize()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -140,9 +144,13 @@ void MidiChannelize::getParameterDisplay(VstInt32 index, char* text)
     {
         case kChannel:
             if (FLOAT_TO_CHANNEL016(fChannel) < 1)
+            {
                 vst_strncpy(text, "No Change", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChannel));
+            }
             break;
         default:
             break;
@@ -174,7 +182,9 @@ void MidiChannelize::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
             }
 
             if (isNoteOn(tomod))
+            {
                 lastChannel[in_channel][data1] = out_channel;
+            }
         }
         outputs[0].push_back(tomod);
     }

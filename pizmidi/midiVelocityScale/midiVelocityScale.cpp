@@ -73,7 +73,9 @@ MidiVelocityScale::MidiVelocityScale(audioMasterCallback audioMaster)
 MidiVelocityScale::~MidiVelocityScale()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -209,15 +211,23 @@ void MidiVelocityScale::getParameterDisplay(VstInt32 index, char* text)
     {
         case kVel1:
             if (FLOAT_TO_MIDI(fVel1) == 0)
+            {
                 sprintf(text, "%d", 1);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVel1));
+            }
             break;
         case kVel2:
             if (FLOAT_TO_MIDI(fVel2) == 0)
+            {
                 sprintf(text, "%d", 1);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVel2));
+            }
             break;
         case kOffset:
             sprintf(text, "%d", (signed int) FLOAT_TO_MIDI(fOffset) - 63);
@@ -257,17 +267,25 @@ void MidiVelocityScale::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
         {
             int vel1 = FLOAT_TO_MIDI(fVel1);
             if (vel1 == 0)
+            {
                 vel1 = 1;
+            }
             int vel2 = FLOAT_TO_MIDI(fVel2);
             if (vel2 == 0)
+            {
                 vel2 = 1;
+            }
             signed int offset = FLOAT_TO_MIDI(fOffset) - 63;
 
             float newvelocity = ((float) data2) * (((float) (vel2 - vel1)) / 126) + ((float) vel1 - ((float) (vel2 - vel1)) / 126) + offset;
             if (newvelocity > 127)
+            {
                 newvelocity = 127;
+            }
             if (newvelocity < 1)
+            {
                 newvelocity = 1;
+            }
             tomod.midiData[2] = roundToInt(newvelocity);
         }
 
@@ -279,9 +297,13 @@ void MidiVelocityScale::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventV
 
             float newvelocity = (float) (MAP_TO_MIDI(data2, vel1, vel2, 0, 127) + offset);
             if (newvelocity > 127)
+            {
                 newvelocity = 127;
+            }
             if (newvelocity < 0)
+            {
                 newvelocity = 0;
+            }
             tomod.midiData[2] = roundToInt(newvelocity);
         }
         outputs[0].push_back(tomod);

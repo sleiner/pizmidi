@@ -38,10 +38,14 @@ bool getAppDataPath(char* path, const char* name);
 inline void removeExtension(char* filename)
 {
     if (! filename)
+    {
         return;
+    }
     char* lastdot = strrchr(filename, '.');
     if (lastdot)
+    {
         *lastdot = '\0';
+    }
 }
 
 inline void getHostStuff(char* host, bool& inst, int& numoutputs, bool& ignoreDefault)
@@ -99,7 +103,9 @@ inline void readIniFile(char* host, bool& inst, int& numinputs, int& numoutputs,
     name = new char[512];
     getInstancePath(path, name, false);
     if (! strncmp(name, "midiAudioToCC", 13))
+    {
         inst = false;
+    }
 
     strcat(path, "pizmidi.ini");
     FILE* file = fopen(path, "r");
@@ -137,17 +143,29 @@ inline void readIniFile(char* host, bool& inst, int& numinputs, int& numoutputs,
                 if (hostmatch)
                 {
                     if (strncmp("force effect", line, 12) == 0)
+                    {
                         inst = false;
+                    }
                     if (strncmp("force inst", line, 10) == 0)
+                    {
                         inst = true;
+                    }
                     if (strncmp("audio outs", line, 10) == 0)
+                    {
                         numoutputs = 2;
+                    }
                     if (strncmp("no audio outs", line, 13) == 0)
+                    {
                         numoutputs = 0;
+                    }
                     if (strncmp("audio ins", line, 9) == 0)
+                    {
                         numinputs = 2;
+                    }
                     if (strncmp("no audio ins", line, 12) == 0)
+                    {
                         numinputs = 0;
+                    }
                     if (strncmp("bottom octave=", line, 14) == 0)
                     {
                         bottomOctave = atoi((const char*) (&line[14]));
@@ -208,7 +226,9 @@ inline bool readDefaultBank(char* plugName, CFxBank* bank)
     }
     bank->LoadBank(path);
     if (bank->LoadBank(path))
+    {
         return true;
+    }
     return false;
 }
 
@@ -219,7 +239,9 @@ inline bool readDefaultBank(char* plugName, CFxBank* bank, VstInt32 ID)
     path = new char[512];
     name = new char[512];
     if (! getAppDataPath(path, "pizmidi"))
+    {
         getInstancePath(path, name, false);
+    }
     strcat(path, plugName);
     strcat(path, ".fxb");
     bank->LoadBank(path);

@@ -67,7 +67,9 @@ public:
     double getValueFromText(const juce::String& text) override
     {
         if (text.equalsIgnoreCase("-inf"))
+        {
             return 0.0;
+        }
         double dB = text.getDoubleValue();
         return pow(10, dB / 20.0);
     }

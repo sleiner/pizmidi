@@ -63,7 +63,9 @@ PizKeyboard::PizKeyboard()
     ccState[0]       = false;
     ccState[1]       = false;
     for (int i = keymapLength; --i >= 0;)
+    {
         qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown(keymap[i]);
+    }
 }
 
 PizKeyboard::~PizKeyboard()
@@ -168,12 +170,16 @@ void PizKeyboard::setParameter(int index, float newValue)
     else if (index == kSendHeldNotes)
     {
         if (newValue)
+        {
             sendHeldNotes = true;
+        }
     }
     else if (index == kClearHeldNotes)
     {
         if (newValue)
+        {
             clearHeldNotes = true;
+        }
     }
     else if (index == kShowNumbers)
     {
@@ -185,58 +191,106 @@ void PizKeyboard::setParameter(int index, float newValue)
 const juce::String PizKeyboard::getParameterName(int index)
 {
     if (index == kWidth)
+    {
         return "KeyWidth";
+    }
     else if (index == kChannel)
+    {
         return "Channel";
+    }
     if (index == kVelocity)
+    {
         return "Velocity";
+    }
     if (index == kUseY)
+    {
         return "Use Y";
+    }
     if (index == kToggleInput)
+    {
         return "Toggle";
+    }
     if (index == kHidePanel)
+    {
         return "HidePanel";
+    }
     if (index == kQwertyAnywhere)
+    {
         return "QwertyAnywhere";
+    }
     if (index == kCapsLock)
+    {
         return "UseCapsLock";
+    }
     if (index == kUseProgCh)
+    {
         return "UseProgCh";
+    }
     if (index == kSendHeldNotes)
+    {
         return "SendHeldNotes";
+    }
     if (index == kClearHeldNotes)
+    {
         return "Reset";
+    }
     if (index == kShowNumbers)
+    {
         return "ShowNumbers";
+    }
     return juce::String();
 }
 
 const juce::String PizKeyboard::getParameterText(int index)
 {
     if (index == kWidth)
+    {
         return juce::String(width, 2);
+    }
     if (index == kChannel)
+    {
         return juce::String(channel + 1);
+    }
     if (index == kVelocity)
+    {
         return juce::String(roundToInt(velocity * 127.f));
+    }
     if (index == kUseY)
+    {
         return useY ? "Yes" : "No";
+    }
     if (index == kToggleInput)
+    {
         return toggle ? "On" : "Off";
+    }
     if (index == kHidePanel)
+    {
         return toggle ? "Hidden" : "Showing";
+    }
     if (index == kQwertyAnywhere)
+    {
         return toggle ? "On" : "Off";
+    }
     if (index == kCapsLock)
+    {
         return capslock ? "On" : "Off";
+    }
     if (index == kUseProgCh)
+    {
         return usepc ? "Yes" : "No";
+    }
     if (index == kSendHeldNotes)
+    {
         return "--->";
+    }
     if (index == kClearHeldNotes)
+    {
         return "--->";
+    }
     if (index == kShowNumbers)
+    {
         return showNumbers ? "Yes" : "No";
+    }
     return juce::String();
 }
 
@@ -319,7 +373,9 @@ void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
             for (int n = 0; n < 128; n++)
             {
                 if (progKbState[curProgram].isNoteOn(ch, n))
+                {
                     output.addEvent(juce::MidiMessage::noteOff(ch, n), 0);
+                }
             }
         }
         progKbState[curProgram].reset();
@@ -383,9 +439,13 @@ void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
                 {
                     skip = true;
                     if (progKbState[curProgram].isNoteOn(m.getChannel(), m.getNoteNumber()))
+                    {
                         output.addEvent(juce::MidiMessage::noteOff(m.getChannel(), m.getNoteNumber()), sample);
+                    }
                     else
+                    {
                         output.addEvent(m, sample);
+                    }
                 }
                 else if (m.isNoteOff())
                 {
@@ -402,7 +462,9 @@ void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
                         for (int n = 0; n < 128; n++)
                         {
                             if (progKbState[lastProgram].isNoteOn(ch, n))
+                            {
                                 output.addEvent(juce::MidiMessage::noteOff(ch, n), sample);
+                            }
                         }
                     }
                     editorKbState.reset();
@@ -423,7 +485,9 @@ void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
             }
         }
         if (! skip)
+        {
             output.addEvent(m, sample);
+        }
     }
     //if (!toggle)
     //	output = midiMessages;
@@ -436,7 +500,9 @@ void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
             for (int n = 0; n < 128; n++)
             {
                 if (progKbState[curProgram].isNoteOn(ch, n))
+                {
                     output.addEvent(juce::MidiMessage::noteOn(ch, n, velocity), 0);
+                }
             }
         }
     }

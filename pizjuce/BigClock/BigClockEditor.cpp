@@ -209,16 +209,24 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
                 if (result == 1)
                 {
                     if (getFilter()->getParameter(kShowms) >= 0.5)
+                    {
                         getFilter()->setParameter(kShowms, 0.0);
+                    }
                     else
+                    {
                         getFilter()->setParameter(kShowms, 1.0);
+                    }
                 }
                 else if (result == 2)
                 {
                     if (getFilter()->getParameter(kShowhrs) >= 0.5f)
+                    {
                         getFilter()->setParameter(kShowhrs, 0.0f);
+                    }
                     else
+                    {
                         getFilter()->setParameter(kShowhrs, 1.0f);
+                    }
                 }
                 else if (result == 3)
                 {
@@ -234,31 +242,57 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
                 else if (result >= 30 && result < 50)
                 {
                     if (result == 30)
+                    {
                         getFilter()->setParameter(kTicks, 1.0f);
+                    }
                     else if (result == 31)
+                    {
                         getFilter()->setParameter(kTicks, 0.91f);
+                    }
                     else if (result == 32)
+                    {
                         getFilter()->setParameter(kTicks, 0.81f);
+                    }
                     else if (result == 33)
+                    {
                         getFilter()->setParameter(kTicks, 0.71f);
+                    }
                     else if (result == 34)
+                    {
                         getFilter()->setParameter(kTicks, 0.65f);
+                    }
                     else if (result == 35)
+                    {
                         getFilter()->setParameter(kTicks, 0.61f);
+                    }
                     else if (result == 36)
+                    {
                         getFilter()->setParameter(kTicks, 0.51f);
+                    }
                     else if (result == 37)
+                    {
                         getFilter()->setParameter(kTicks, 0.41f);
+                    }
                     else if (result == 38)
+                    {
                         getFilter()->setParameter(kTicks, 0.31f);
+                    }
                     else if (result == 39)
+                    {
                         getFilter()->setParameter(kTicks, 0.21f);
+                    }
                     else if (result == 40)
+                    {
                         getFilter()->setParameter(kTicks, 0.11f);
+                    }
                     else if (result == 41)
+                    {
                         getFilter()->setParameter(kTicks, 0.051f);
+                    }
                     else if (result == 42)
+                    {
                         getFilter()->setParameter(kTicks, 0.0f);
+                    }
                 }
                 else if (result == 4)
                 {
@@ -274,34 +308,60 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
                 else if (result >= 50 && result < 70)
                 {
                     if (result == 50)
+                    {
                         getFilter()->setParameter(kFrames, 0.0f);
+                    }
                     else if (result == 51)
+                    {
                         getFilter()->setParameter(kFrames, 1.0f);
+                    }
                     else if (result == 52)
+                    {
                         getFilter()->setParameter(kFrames, 0.9f);
+                    }
                     else if (result == 53)
+                    {
                         getFilter()->setParameter(kFrames, 0.8f);
+                    }
                     else if (result == 54)
+                    {
                         getFilter()->setParameter(kFrames, 0.7f);
+                    }
                     else if (result == 55)
+                    {
                         getFilter()->setParameter(kFrames, 0.6f);
+                    }
                     else if (result == 56)
+                    {
                         getFilter()->setParameter(kFrames, 0.5f);
+                    }
                     else if (result == 61)
+                    {
                         getFilter()->setParameter(kFrames, 0.4f);
+                    }
                     else if (result == 57)
+                    {
                         getFilter()->setParameter(kFrames, 0.3f);
+                    }
                     else if (result == 58)
+                    {
                         getFilter()->setParameter(kFrames, 0.2f);
+                    }
                     else if (result == 59)
+                    {
                         getFilter()->setParameter(kFrames, 0.1f);
+                    }
                     else if (result == 60)
+                    {
                         getFilter()->setParameter(kFrames, 0.05f);
+                    }
                 }
                 else if (result == 5)
                 {
                     if (! samplemode)
+                    {
                         getFilter()->setParameter(kSamples, 1.0f);
+                    }
                 }
                 else if (result == 6)
                 {
@@ -331,11 +391,17 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
                 else if (result == 120)
                 {
                     if (getFilter()->mode == StopwatchMode)
+                    {
                         getFilter()->setParameter(kClearWatch, 1.f);
+                    }
                     else if (getFilter()->mode == RecTimeMode)
+                    {
                         getFilter()->rectime = 0;
+                    }
                     else if (getFilter()->mode == PluginTimeMode)
+                    {
                         getFilter()->plugintime = juce::Time::getMillisecondCounter();
+                    }
                 }
 
                 else if (result == 998)
@@ -366,7 +432,9 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
                     {
                         juce::File cuefile(myChooser.getResult());
                         if (! cuefile.hasFileExtension("xml"))
+                        {
                             cuefile = cuefile.withFileExtension("xml");
+                        }
 
                         getFilter()->saveCues(cuefile);
                     }
@@ -437,7 +505,9 @@ void BigClockEditor::textEditorReturnKeyPressed(juce::TextEditor& editor)
 void BigClockEditor::timerCallback()
 {
     if (getFilter()->mode == ActualTimeMode || getFilter()->mode == PluginTimeMode || getFilter()->mode == StopwatchMode)
+    {
         updateParametersFromFilter();
+    }
 }
 
 void BigClockEditor::mouseEnter(const juce::MouseEvent& e)

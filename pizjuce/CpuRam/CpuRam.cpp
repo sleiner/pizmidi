@@ -16,7 +16,9 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 CpuRam::CpuRam()
 {
     if (! loadDefaultFxb())
+    {
         resetToDefaultSettings();
+    }
 }
 
 void CpuRam::resetToDefaultSettings()
@@ -42,13 +44,21 @@ int CpuRam::getNumParameters()
 float CpuRam::getParameter(int index)
 {
     if (index == 0)
+    {
         return interval;
+    }
     if (index == 1)
+    {
         return minimize;
+    }
     if (index == 2)
+    {
         return showGraph ? 1.f : 0.f;
+    }
     else
+    {
         return 0.0f;
+    }
 }
 
 void CpuRam::setParameter(int index, float newValue)
@@ -67,9 +77,13 @@ void CpuRam::setParameter(int index, float newValue)
         {
             minimize = newValue;
             if (minimize >= 0.5f)
+            {
                 lastUIHeight = 0;
+            }
             else
+            {
                 lastUIHeight = 30;
+            }
             sendChangeMessage();
         }
     }
@@ -79,9 +93,13 @@ void CpuRam::setParameter(int index, float newValue)
         {
             showGraph = newValue >= 0.5f;
             if (showGraph)
+            {
                 lastUIHeight = 30;
+            }
             else
+            {
                 lastUIHeight = 15;
+            }
             sendChangeMessage();
         }
     }
@@ -90,13 +108,21 @@ void CpuRam::setParameter(int index, float newValue)
 const juce::String CpuRam::getParameterName(int index)
 {
     if (index == 0)
+    {
         return "interval";
+    }
     if (index == 1)
+    {
         return "minimize";
+    }
     if (index == 2)
+    {
         return "show graph";
+    }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String CpuRam::getParameterText(int index)
@@ -108,16 +134,22 @@ const juce::String CpuRam::getParameterText(int index)
     if (index == 1)
     {
         if (minimize >= 0.5f)
+        {
             return juce::String("yes");
+        }
         else
+        {
             return juce::String("no");
+        }
     }
     if (index == 2)
     {
         return showGraph ? juce::String("yes") : juce::String("no");
     }
     else
+    {
         return juce::String();
+    }
 }
 
 const juce::String CpuRam::getInputChannelName(const int channelIndex) const

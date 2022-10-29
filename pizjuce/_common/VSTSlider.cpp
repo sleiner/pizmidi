@@ -13,9 +13,13 @@ VSTSlider::~VSTSlider(){};
 juce::String VSTSlider::getTextFromValue(double value)
 {
     if (ownerPlugin && vstIndex > -1)
+    {
         return ownerPlugin->getParameterText(vstIndex);
+    }
     else
+    {
         return juce::String(value) + "?";
+    }
 };
 
 void VSTSlider::setOwner(juce::AudioProcessor* owner, int index)

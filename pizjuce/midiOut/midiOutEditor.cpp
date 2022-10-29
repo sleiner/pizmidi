@@ -276,7 +276,9 @@ void MidiOutEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
 void MidiOutEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParametersFromFilter();
+    }
 }
 
 void MidiOutEditor::updateParametersFromFilter()
@@ -308,8 +310,10 @@ void MidiOutEditor::updateParametersFromFilter()
 
     juce::String fullpath = icon;
     if (! juce::File::getCurrentWorkingDirectory().getChildFile(fullpath).existsAsFile())
+    {
         fullpath = ((juce::File::getSpecialLocation(juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
                  + juce::File::getSeparatorString() + icon;
+    }
     auto image = juce::Drawable::createFromImageFile(juce::File(fullpath));
     if (image)
     {
@@ -318,7 +322,9 @@ void MidiOutEditor::updateParametersFromFilter()
         imagepad->setButtonText(juce::String());
     }
     else
+    {
         imagepad->setButtonText("IPH\nmidiOut\n1.3");
+    }
 }
 
 //[/MiscUserCode]

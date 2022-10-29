@@ -87,7 +87,9 @@ MidiKeySplit::MidiKeySplit(audioMasterCallback audioMaster)
 MidiKeySplit::~MidiKeySplit()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -97,7 +99,9 @@ void MidiKeySplit::setProgram(VstInt32 program)
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
+    {
         setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -175,9 +179,13 @@ void MidiKeySplit::getParameterDisplay(VstInt32 index, char* text)
         case kOutChannel1:
         case kOutChannel2:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "As Input");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kInChannel:
             sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
@@ -188,9 +196,13 @@ void MidiKeySplit::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kSplit1:
             if (param[index] == 0.f)
+            {
                 strcpy(text, "Learn...");
+            }
             else
+            {
                 sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave), FLOAT_TO_MIDI(param[index]));
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -218,12 +230,18 @@ void MidiKeySplit::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
         unsigned char data2   = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (ch1 == -1)
+        {
             ch1 = channel;
+        }
         if (ch2 == -1)
+        {
             ch2 = channel;
+        }
 
         if (channel == ch)
         {

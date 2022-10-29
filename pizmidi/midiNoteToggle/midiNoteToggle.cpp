@@ -26,7 +26,9 @@ MidiNoteToggle::MidiNoteToggle(audioMasterCallback audioMaster)
     }
 
     for (int i = 0; i < 128; i++)
+    {
         held_notes[i] = false;
+    }
 
     init();
 }
@@ -35,7 +37,9 @@ MidiNoteToggle::MidiNoteToggle(audioMasterCallback audioMaster)
 MidiNoteToggle::~MidiNoteToggle()
 {
     if (programs)
+    {
         delete programs;
+    }
 }
 
 void MidiNoteToggle::setProgram(VstInt32 program)
@@ -81,12 +85,16 @@ void MidiNoteToggle::setParameter(VstInt32 index, float value)
                 break;
             case kLowNote:
                 if (value > param[kHighNote])
+                {
                     setParameterAutomated(kHighNote, value);
+                }
                 param[kLowNote] = value;
                 break;
             case kHighNote:
                 if (value < param[kLowNote])
+                {
                     setParameterAutomated(kLowNote, value);
+                }
                 param[kHighNote] = value;
                 break;
             case kChannel:
@@ -96,7 +104,9 @@ void MidiNoteToggle::setParameter(VstInt32 index, float value)
                 break;
         }
         for (int i = 0; i < numPrograms; i++)
+        {
             programs->SetProgParm(i, index, value);
+        }
     }
 }
 
@@ -104,7 +114,9 @@ void MidiNoteToggle::setParameter(VstInt32 index, float value)
 float MidiNoteToggle::getParameter(VstInt32 index)
 {
     if (index < numParams)
+    {
         return param[index];
+    }
     return 0;
 }
 
@@ -137,9 +149,13 @@ void MidiNoteToggle::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPower:
             if (param[index] < 0.5f)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kLowNote:
             sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[index]), getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave));
@@ -149,9 +165,13 @@ void MidiNoteToggle::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL016(param[index]) == 0)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+            }
             break;
         default:
             break;
@@ -190,13 +210,17 @@ void MidiNoteToggle::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                         held_notes[data1] = false;
                     }
                     else
+                    {
                         held_notes[data1] = true;
+                    }
                 }
             }
             else if ((status == MIDI_NOTEOFF) || (status == MIDI_NOTEON && data2 == 0))
             {
                 if (data1 >= lownote && data1 <= highnote)
+                {
                     discard = true;
+                }
             }
             //else if (status==MIDI_PROGRAMCHANGE)
             //{
@@ -204,6 +228,8 @@ void MidiNoteToggle::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
             //}
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

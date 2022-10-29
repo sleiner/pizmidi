@@ -50,7 +50,9 @@ MidiStep::MidiStep()
       activeLoop(0)
 {
     for (int i = 0; i < numLoops; i++)
+    {
         loop.add(new Loop());
+    }
 
     loopDir = ((juce::File::getSpecialLocation(juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
             + juce::File::getSeparatorString() + "midiStep";
@@ -64,7 +66,9 @@ MidiStep::MidiStep()
         setStateInformation(bank.getData(), (int) bank.getSize());
     }
     else
+    {
         (loadDefaultFxb());
+    }
 
     if (juce::File(loopDir).findChildFiles(midiFiles, juce::File::findFiles, true, "*.mid"))
     {
@@ -80,14 +84,18 @@ MidiStep::MidiStep()
 MidiStep::~MidiStep()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //==============================================================================
 float MidiStep::getParameter(int index)
 {
     if (index < getNumParameters())
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -115,26 +123,44 @@ void MidiStep::setParameter(int index, float newValue)
 const juce::String MidiStep::getParameterName(int index)
 {
     if (index == kRecord)
+    {
         return "Record";
+    }
     if (index == kRecActive)
+    {
         return "RecActive";
+    }
     if (index == kActiveLoop)
+    {
         return "ActiveLoop";
+    }
     if (index == kThru)
+    {
         return "Thru";
+    }
     else
     {
         juce::String loopnum = juce::String((index - kNumGlobalParams) % 16 + 1);
         if (index < kChannel)
+        {
             return "RecArm" + loopnum;
+        }
         if (index < kTriggerKey)
+        {
             return "InChannel" + loopnum;
+        }
         if (index < kTranspose)
+        {
             return "TriggerKey" + loopnum;
+        }
         if (index < kOutChannel)
+        {
             return "Transpose" + loopnum;
+        }
         if (index < kNumParams)
+        {
             return "OutChannel" + loopnum;
+        }
     }
     return juce::String();
 }
@@ -152,9 +178,13 @@ const juce::String MidiStep::getParameterText(int index)
     if (index == kActiveLoop)
     {
         if (roundToInt(param[kActiveLoop] * 16.0f) == 0)
+        {
             return juce::String("Any");
+        }
         else
+        {
             return juce::String(roundToInt(param[kActiveLoop] * 16.0f));
+        }
     }
     if (index == kThru)
     {
@@ -169,14 +199,20 @@ const juce::String MidiStep::getParameterText(int index)
         if (index < kTriggerKey)
         { //in channel
             if (roundToInt(param[index] * 16.0f) == 0)
+            {
                 return juce::String("Any");
+            }
             else
+            {
                 return juce::String(roundToInt(param[index] * 16.0f));
+            }
         }
         if (index < kTranspose)
         { //trigger key
             if (floatToMidi(param[index], true) < 0)
+            {
                 return juce::String("Learn...");
+            }
             return juce::String(floatToMidi(param[index], true));
         }
         if (index < kOutChannel)
@@ -186,9 +222,13 @@ const juce::String MidiStep::getParameterText(int index)
         if (index < kNumParams)
         { //out channel
             if (roundToInt(param[index] * 16.0f) == 0)
+            {
                 return juce::String("No Change");
+            }
             else
+            {
                 return juce::String(roundToInt(param[index] * 16.0f));
+            }
         }
     }
     return juce::String();
@@ -197,14 +237,18 @@ const juce::String MidiStep::getParameterText(int index)
 const juce::String MidiStep::getInputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
 const juce::String MidiStep::getOutputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
+    {
         return juce::String(JucePlugin_Name) + juce::String(" ") + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
@@ -245,13 +289,17 @@ void MidiStep::setCurrentProgram(int index)
 void MidiStep::changeProgramName(int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
+    {
         programs[index].name = newName;
+    }
 }
 
 const juce::String MidiStep::getProgramName(int index)
 {
     if (index < getNumPrograms())
+    {
         return programs[index].name;
+    }
     return juce::String();
 }
 
@@ -393,15 +441,21 @@ void MidiStep::processBlock(juce::AudioSampleBuffer& buffer,
                 }
             }
             if (thru)
+            {
                 output.addEvent(msg, sample_number);
+            }
         }
         else if (msg.isProgramChange())
         {
             if (msg.getProgramChangeNumber() < numLoops)
+            {
                 setParameterNotifyingHost(kActiveLoop, (float) msg.getProgramChangeNumber() / (float) (numLoops - 1));
+            }
         }
         else
+        {
             output.addEvent(msg, sample_number);
+        }
     }
 
     midiMessages = output;
@@ -410,7 +464,9 @@ void MidiStep::processBlock(juce::AudioSampleBuffer& buffer,
     for (int i = 0; i < numLoops; i++)
     {
         if (loop[i]->isRecording)
+        {
             loop[i]->recTime += (sampleFrames * 960.0 * lastPosInfo.bpm / (60.0 * getSampleRate()));
+        }
     }
 }
 
@@ -524,13 +580,19 @@ bool MidiStep::writeMidiFile(int index, juce::File& file)
     midifile.addTrack(midi);
 
     if (file.existsAsFile())
+    {
         if (! file.deleteFile())
+        {
             return false;
+        }
+    }
     if (file.create())
     {
         juce::FileOutputStream fo(file);
         if (midifile.writeTo(fo))
+        {
             return true;
+        }
     }
     return false;
 }

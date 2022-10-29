@@ -85,7 +85,9 @@ MidiExactDelay::~MidiExactDelay()
 {
     cleanMidiDelayBuffer();
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -138,60 +140,110 @@ void MidiExactDelay::setParameter(VstInt32 index, float value)
     if (index == kSync)
     {
         if (param[index] < 0.3f)
+        {
             timebase = sec;
+        }
         else if (param[index] < 0.6f)
+        {
             timebase = beat;
+        }
         else
+        {
             timebase = samp;
+        }
         updateDisplay();
     }
     else if (index == kBeatDiv)
     {
         const float inc = 1.f / 22.f;
         if (param[kBeatDiv] < 1 * inc)
+        {
             Ticks = 0.f; //None
+        }
         else if (param[kBeatDiv] < 2 * inc)
+        {
             Ticks = 30.f; //128
+        }
         else if (param[kBeatDiv] < 3 * inc)
+        {
             Ticks = 40.f; //64T
+        }
         else if (param[kBeatDiv] < 4 * inc)
+        {
             Ticks = 45.f; //128.
+        }
         else if (param[kBeatDiv] < 5 * inc)
+        {
             Ticks = 60.f; //64
+        }
         else if (param[kBeatDiv] < 6 * inc)
+        {
             Ticks = 80.f; //32T
+        }
         else if (param[kBeatDiv] < 7 * inc)
+        {
             Ticks = 90.f; //64.
+        }
         else if (param[kBeatDiv] < 8 * inc)
+        {
             Ticks = 120.f; //32
+        }
         else if (param[kBeatDiv] < 9 * inc)
+        {
             Ticks = 160.f; //16T
+        }
         else if (param[kBeatDiv] < 10 * inc)
+        {
             Ticks = 180.f; //32.
+        }
         else if (param[kBeatDiv] < 11 * inc)
+        {
             Ticks = 240.f; //16
+        }
         else if (param[kBeatDiv] < 12 * inc)
+        {
             Ticks = 320.f; //8T
+        }
         else if (param[kBeatDiv] < 13 * inc)
+        {
             Ticks = 360.f; //16.
+        }
         else if (param[kBeatDiv] < 14 * inc)
+        {
             Ticks = 480.f; //8
+        }
         else if (param[kBeatDiv] < 15 * inc)
+        {
             Ticks = 640.f; //4T
+        }
         else if (param[kBeatDiv] < 16 * inc)
+        {
             Ticks = 720.f; //8.
+        }
         else if (param[kBeatDiv] < 17 * inc)
+        {
             Ticks = 960.f; //4
+        }
         else if (param[kBeatDiv] < 18 * inc)
+        {
             Ticks = 1280.f; //2T
+        }
         else if (param[kBeatDiv] < 19 * inc)
+        {
             Ticks = 1440.f; //4.
+        }
         else if (param[kBeatDiv] < 20 * inc)
+        {
             Ticks = 1920.f; //2 (half note)
+        }
         else if (param[kBeatDiv] < 21 * inc)
+        {
             Ticks = 2560.f; //whole triplet
+        }
         else
+        {
             Ticks = 2880.f; //1.5 dotted half
+        }
     }
 }
 
@@ -271,67 +323,125 @@ void MidiExactDelay::getParameterDisplay(VstInt32 index, char* text)
     {
         case kMode:
             if (param[index] == 0.0f)
+            {
                 strcpy(text, "Off");
+            }
             else if (param[index] < 0.5f)
+            {
                 strcpy(text, "Notes Only");
+            }
             else if (param[index] < 1.0f)
+            {
                 strcpy(text, "Notes & CCs");
+            }
             else
+            {
                 strcpy(text, "Everything");
+            }
             break;
         case kSync:
             if (timebase == sec)
+            {
                 strcpy(text, "Seconds");
+            }
             else if (timebase == beat)
+            {
                 strcpy(text, "NoteValue");
+            }
             else
+            {
                 strcpy(text, "Samples");
+            }
             break;
         case kBeatDiv:
             if (Ticks == 2880.f)
+            {
                 strcpy(text, "dotted 2");
+            }
             else if (Ticks == 2560.f)
+            {
                 strcpy(text, "whole triplet");
+            }
             else if (Ticks == 1920.f)
+            {
                 strcpy(text, "2");
+            }
             else if (Ticks == 1440.f)
+            {
                 strcpy(text, "Dotted 4");
+            }
             else if (Ticks == 1280.f)
+            {
                 strcpy(text, "2 Triplet");
+            }
             else if (Ticks == 960.f)
+            {
                 strcpy(text, "4");
+            }
             else if (Ticks == 720.f)
+            {
                 strcpy(text, "Dotted 8");
+            }
             else if (Ticks == 640.f)
+            {
                 strcpy(text, "4 Triplet");
+            }
             else if (Ticks == 480.f)
+            {
                 strcpy(text, "8");
+            }
             else if (Ticks == 360.f)
+            {
                 strcpy(text, "Dotted 16");
+            }
             else if (Ticks == 320.f)
+            {
                 strcpy(text, "8 Triplet");
+            }
             else if (Ticks == 240.f)
+            {
                 strcpy(text, "16");
+            }
             else if (Ticks == 180.f)
+            {
                 strcpy(text, "Dotted 32");
+            }
             else if (Ticks == 160.f)
+            {
                 strcpy(text, "16 Triplet");
+            }
             else if (Ticks == 120.f)
+            {
                 strcpy(text, "32");
+            }
             else if (Ticks == 90.f)
+            {
                 strcpy(text, "Dotted 64");
+            }
             else if (Ticks == 80.f)
+            {
                 strcpy(text, "32 Triplet");
+            }
             else if (Ticks == 60.f)
+            {
                 strcpy(text, "64");
+            }
             else if (Ticks == 45.f)
+            {
                 strcpy(text, "Dotted 128");
+            }
             else if (Ticks == 40.f)
+            {
                 strcpy(text, "64 Triplet");
+            }
             else if (Ticks == 30.f)
+            {
                 strcpy(text, "128");
+            }
             else
+            {
                 strcpy(text, "--");
+            }
             break;
         case kBars:
             sprintf(text, "%d", roundToInt(param[index] * 32.f));
@@ -371,9 +481,13 @@ void MidiExactDelay::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -400,7 +514,9 @@ void MidiExactDelay::preProcess(void)
     {
         //if (kVstPpqPosValid & timeInfo->flags) _ppq = timeInfo->ppqPos;
         if (kVstTempoValid & timeInfo->flags)
+        {
             bpm = (float) timeInfo->tempo;
+        }
         if (kVstTimeSigValid & timeInfo->flags)
         {
             numerator   = timeInfo->timeSigNumerator;
@@ -408,9 +524,13 @@ void MidiExactDelay::preProcess(void)
         }
 
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             isplaying = true;
+        }
         else
+        {
             isplaying = false;
+        }
     }
     ppqPerBar           = ((float) numerator * 4.f / (float) denominator);
     samplesPerBeat      = roundToInt(60.0f * sampleRate / bpm);
@@ -461,7 +581,9 @@ void MidiExactDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
         short data2 = event.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (event.deltaFrames < samples && param[kWet] > 0.f)
         {
@@ -471,7 +593,9 @@ void MidiExactDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
             if (status == MIDI_NOTEON && param[kMode] > 0.0f)
             {
                 if (out.midiData[2] < 1)
+                {
                     out.midiData[2] = 1;
+                }
                 outputs[0].push_back(out);
             }
             else if (status == MIDI_NOTEOFF && param[kMode] > 0.0f)
@@ -510,7 +634,9 @@ void MidiExactDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
         short data2 = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         //only look at the selected channel
         if (channel == listenchannel || listenchannel == -1 && param[kMode] > 0.f)
@@ -526,19 +652,25 @@ void MidiExactDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     if (param[kMode] > 0.0f)
                     {
                         if (delayed.midiData[2] < 1)
+                        {
                             delayed.midiData[2] = 1;
+                        }
                         outputs[0].push_back(delayed);
                     }
                 }
                 else if (status == MIDI_NOTEOFF)
                 {
                     if (param[kMode] > 0.0f)
+                    {
                         outputs[0].push_back(delayed);
+                    }
                 }
                 else if (status == MIDI_CONTROLCHANGE)
                 {
                     if (param[kMode] >= 0.5f)
+                    {
                         outputs[0].push_back(delayed);
+                    }
                 }
                 else if (param[kMode] == 1.0f)
                 {

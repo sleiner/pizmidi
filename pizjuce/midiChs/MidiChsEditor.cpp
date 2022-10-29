@@ -138,7 +138,9 @@ void MidiChsEditor::updateParametersFromFilter()
     // take a local copy of the info we need while we've got the lock..
     float ch[16];
     for (int i = 0; i < 16; i++)
+    {
         ch[i] = filter->getParameter(i);
+    }
     const float reset    = filter->getParameter(16);
     const float clear    = filter->getParameter(17);
     const float hue      = filter->getParameter(18);

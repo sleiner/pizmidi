@@ -312,7 +312,9 @@ void CurveEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 void CurveEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParameters();
+    }
     else if (source == &getFilter()->lastMsg)
     {
         getFilter()->getCallbackLock().enter();
@@ -320,9 +322,13 @@ void CurveEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
         const int lastout = getFilter()->lastMsg.lastCCOut;
         getFilter()->getCallbackLock().exit();
         if (lastin != -1)
+        {
             label->setText("In: " + juce::String(lastin), juce::dontSendNotification);
+        }
         if (lastout != -1)
+        {
             label2->setText("Out: " + juce::String(lastout), juce::dontSendNotification);
+        }
         curve->repaintIndicator(lastin, lastout);
     }
 }

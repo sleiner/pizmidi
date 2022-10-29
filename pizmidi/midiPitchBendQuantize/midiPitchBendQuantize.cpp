@@ -3,7 +3,9 @@
 inline float pbToParam(int pb)
 {
     if (pb < 0)
+    {
         return 0.f;
+    }
     return (0.99f / 16383.f) * (float) pb + 0.01f;
 }
 
@@ -102,7 +104,9 @@ MidiPitchBendQuantize::MidiPitchBendQuantize(audioMasterCallback audioMaster)
 MidiPitchBendQuantize::~MidiPitchBendQuantize()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -150,7 +154,9 @@ void MidiPitchBendQuantize::setParameter(VstInt32 index, float value)
         if (index < kNumSteps)
         {
             if (value < 0.01f)
+            {
                 step[index] = -99;
+            }
             else
             {
                 float slope = 1.f / 0.99f;
@@ -160,7 +166,9 @@ void MidiPitchBendQuantize::setParameter(VstInt32 index, float value)
         else if (index == kChannel)
         {
             for (int p = 0; p < kNumPrograms; p++)
+            {
                 programs[p].param[kChannel] = value;
+            }
         }
     }
 }
@@ -181,9 +189,13 @@ void MidiPitchBendQuantize::getParameterName(VstInt32 index, char* label)
             break;
         default:
             if (index < 12)
+            {
                 sprintf(label, "q+%d", 12 - index);
+            }
             else
+            {
                 sprintf(label, "q%d", 12 - index);
+            }
             break;
     }
 }
@@ -194,28 +206,44 @@ void MidiPitchBendQuantize::getParameterDisplay(VstInt32 index, char* text)
     if (index < kNumSteps)
     {
         if (step[index] < 0)
+        {
             vst_strncpy(text, "Off", kVstMaxParamStrLen);
+        }
         else
         {
             if (step[index] == 8192)
+            {
                 sprintf(text, "%d (center)", step[index]);
+            }
             else if (step[index] == 0)
+            {
                 sprintf(text, "%d (min)", step[index]);
+            }
             else if (step[index] == 16383)
+            {
                 sprintf(text, "%d (max)", step[index]);
+            }
             else
+            {
                 sprintf(text, "%d", step[index]);
+            }
         }
     }
     else if (index == kChannel)
     {
         if (FLOAT_TO_CHANNEL(param[index]) == -1)
+        {
             vst_strncpy(text, "Any", kVstMaxParamStrLen);
+        }
         else
+        {
             sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+        }
     }
     else
+    {
         sprintf(text, "%f", param[index]);
+    }
 }
 
 void MidiPitchBendQuantize::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
@@ -245,7 +273,9 @@ void MidiPitchBendQuantize::processMidiEvents(VstMidiEventVec* inputs, VstMidiEv
                     {
                         int d = step[s] - PB;
                         if (abs(d) < abs(diff))
+                        {
                             diff = d;
+                        }
                     }
                 }
                 if (diff < 99999)
@@ -257,7 +287,9 @@ void MidiPitchBendQuantize::processMidiEvents(VstMidiEventVec* inputs, VstMidiEv
                 }
             }
             else
+            {
                 outputs[0].push_back(tomod);
+            }
         }
     }
 }

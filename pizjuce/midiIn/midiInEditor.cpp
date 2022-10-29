@@ -267,8 +267,10 @@ void MidiInEditor::updateParametersFromFilter()
 
     juce::String fullpath = icon;
     if (! juce::File(fullpath).existsAsFile())
+    {
         fullpath = ((juce::File::getSpecialLocation(juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
                  + juce::File::getSeparatorString() + icon;
+    }
     auto image = juce::Drawable::createFromImageFile(juce::File(fullpath));
     if (image != nullptr)
     {
@@ -277,7 +279,9 @@ void MidiInEditor::updateParametersFromFilter()
         imagepad->setButtonText(juce::String());
     }
     else
+    {
         imagepad->setButtonText("IPH\nmidiIn\n1.2");
+    }
 }
 
 //[/MiscUserCode]

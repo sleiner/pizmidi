@@ -53,7 +53,9 @@ public:
                 for (int n = 0; n < 128; n++)
                 {
                     if (s->isNoteOn(i, n))
+                    {
                         ++num;
+                    }
                 }
             }
         }

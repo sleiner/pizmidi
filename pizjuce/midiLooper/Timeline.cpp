@@ -66,9 +66,13 @@ void Timeline::mouseDown(const juce::MouseEvent& e)
 {
     bool snap = roll->getSnap() != e.mods.isShiftDown();
     if (e.mods.isPopupMenu())
+    {
         loopEnd = jmax(loopStart, roll->pixelsToPpq((float) e.x + scrollOffset, snap, true));
+    }
     else
+    {
         loopStart = jlimit(0.0, loopEnd, roll->pixelsToPpq((float) e.x + scrollOffset, snap, true));
+    }
     repaint();
     sendChangeMessage();
 }
@@ -77,9 +81,13 @@ void Timeline::mouseDrag(const juce::MouseEvent& e)
 {
     bool snap = roll->getSnap() != e.mods.isShiftDown();
     if (e.mods.isPopupMenu())
+    {
         loopEnd = jlimit(loopStart, (double) roll->seqLengthInPpq, (roll->pixelsToPpq((float) e.x + scrollOffset, snap, true)));
+    }
     else
+    {
         loopStart = jlimit(0.0, loopEnd, roll->pixelsToPpq((float) e.x + scrollOffset, snap, true));
+    }
     repaint();
     sendChangeMessage();
 }

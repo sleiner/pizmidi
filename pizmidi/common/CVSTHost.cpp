@@ -76,8 +76,10 @@ void CFxBase::SwapBytes(VstInt32& vi)
 CFxBank::CFxBank(char* pszFile)
 {
     Init();                /* initialize data areas             */
-    if (pszFile)           /* if a file name has been passed    */
+    if (pszFile)           /*                                   */
+    {                      /* if a file name has been passed    */
         LoadBank(pszFile); /* load the corresponding bank       */
+    }
 }
 
 CFxBank::CFxBank(int nPrograms, int nParams)
@@ -122,7 +124,9 @@ CFxBank& CFxBank::DoCopy(const CFxBank& org)
     {
         unsigned char* nBank = new unsigned char[org.nBankLen];
         if (! nBank)
+        {
             throw(int) 1;
+        }
         memcpy(nBank, org.bBank, org.nBankLen);
     }
     Unload();         /* remove previous data              */
@@ -144,7 +148,9 @@ bool CFxBank::SetSize(int nPrograms, int nParams)
     nTotLen += nPrograms * nProgLen;
     unsigned char* nBank = new unsigned char[nTotLen];
     if (! nBank)
+    {
         return false;
+    }
 
     Unload();
     bBank    = nBank;
@@ -169,7 +175,9 @@ bool CFxBank::SetSize(int nPrograms, int nParams)
         pProg->version    = 1;
         pProg->numParams  = nParams;
         for (int j = 0; j < nParams; j++)
+        {
             pProg->params[j] = 0.f;
+        }
     }
     return true;
 }
@@ -180,7 +188,9 @@ bool CFxBank::SetSize(int nChunkSize)
     //int nTotLen = ((size_t)((SFxBankChunk *)0)->chunk) + nChunkSize;
     unsigned char* nBank = new unsigned char[nTotLen];
     if (! nBank)
+    {
         return false;
+    }
 
     Unload();
     bBank    = nBank;
@@ -205,9 +215,11 @@ bool CFxBank::SetSize(int nChunkSize)
 bool CFxBank::LoadBank(char* pszFile)
 {
     FILE* fp = fopen(pszFile, "rb"); /* try to open the file              */
-    if (! fp)                        /* upon error                        */
+    if (! fp)                        /*                                   */
+    {                                /* upon error                        */
         return false;                /* return an error                   */
-    bool brc             = true;     /* default to OK                     */
+    }
+    bool brc             = true; /* default to OK                     */
     unsigned char* nBank = NULL;
     try
     {
@@ -217,10 +229,14 @@ bool CFxBank::LoadBank(char* pszFile)
 
         nBank = new unsigned char[tLen]; /* allocate storage                  */
         if (! nBank)
+        {
             throw(int) 1;
+        }
         /* read chunk set to determine cnt.  */
         if (fread(nBank, 1, tLen, fp) != tLen)
+        {
             throw(int) 1;
+        }
         /* position on bank                  */
         SFxBankBase* pBank = (SFxBankBase*) nBank;
         if (NeedsBSwap) /* eventually swap necessary bytes   */
@@ -235,7 +251,9 @@ bool CFxBank::LoadBank(char* pszFile)
         }
         if ((pBank->chunkMagic != cMagic) || /* if erroneous data in there        */
             (pBank->version > MyVersion) || ((pBank->fxMagic != bankMagic) && (pBank->fxMagic != chunkBankMagic)))
+        {
             throw(int) 1; /* get out                           */
+        }
 
         if (pBank->fxMagic == bankMagic) /* if this is a bank of parameters   */
         {
@@ -256,19 +274,26 @@ bool CFxBank::LoadBank(char* pszFile)
                 }
                 /* if erroneous data                 */
                 if ((pProg->chunkMagic != cMagic) || (pProg->fxMagic != fMagic))
+                {
                     throw(int) 1; /* get out                           */
-                if (NeedsBSwap)   /* if necessary                      */
-                {                 /* swap all parameter bytes          */
+                }
+                if (NeedsBSwap) /* if necessary                      */
+                {               /* swap all parameter bytes          */
                     int j;
                     for (j = 0; j < pProg->numParams; j++)
+                    {
                         SwapBytes(pProg->params[j]);
+                    }
                 }
 
                 unsigned char* pNext = (unsigned char*) pProg;
                 pNext += sizeof(SFxProgramBase);
                 pNext += (sizeof(float) * pProg->numParams);
-                if (pNext > nBank + tLen) /* VERY simple fuse                  */
+                if (pNext > nBank + tLen)
+                {
+                    /* VERY simple fuse                  */
                     throw(int) 1;
+                }
 
                 pProg = (SFxProgram*) pNext;
                 nProg++;
@@ -282,8 +307,10 @@ bool CFxBank::LoadBank(char* pszFile)
                 SFxBankChunk* pChunk = (SFxBankChunk*) pBank;
                 SwapBytes(pChunk->size);
                 /* size check - must not be too large*/
-                if (pChunk->size + sizeof(VstInt32) > tLen) //((size_t)((SFxBankChunk *)0)->chunk)
+                if (pChunk->size + sizeof(VstInt32) > tLen)
+                {
                     throw(int) 1;
+                }
             }
         }
 
@@ -295,8 +322,10 @@ bool CFxBank::LoadBank(char* pszFile)
     catch (...)
     {
         brc = false; /* if any error occured, say NOPE    */
-        if (nBank)   /* and remove loaded data            */
+        if (nBank)   /*                                   */
+        {            /* and remove loaded data            */
             delete[] nBank;
+        }
     }
 
     fclose(fp); /* close the file                    */
@@ -310,11 +339,15 @@ bool CFxBank::LoadBank(char* pszFile)
 bool CFxBank::SaveBank(char* pszFile)
 {
     if (! IsLoaded())
+    {
         return false;
+    }
     /* create internal copy for mod      */
     unsigned char* nBank = new unsigned char[nBankLen];
     if (! nBank) /* if impossible                     */
+    {
         return false;
+    }
     memcpy(nBank, bBank, nBankLen);
     /* position on bank                  */
     SFxBankBase* pBank = (SFxBankBase*) nBank;
@@ -332,7 +365,9 @@ bool CFxBank::SaveBank(char* pszFile)
     if (bChunk)
     {
         if (NeedsBSwap) /* if byte-swapping needed           */
+        {
             SwapBytes(((SFxBankChunk*) pBank)->size);
+        }
     }
     else
     {
@@ -352,13 +387,18 @@ bool CFxBank::SaveBank(char* pszFile)
                 SwapBytes(pProg->fxVersion);
                 SwapBytes(pProg->numParams);
                 for (int j = 0; j < numParams; j++)
+                {
                     SwapBytes(pProg->params[j]);
+                }
             }
             unsigned char* pNext = (unsigned char*) pProg;
             pNext += sizeof(SFxProgramBase);
             pNext += (sizeof(float) * numParams);
-            if (pNext > nBank + nBankLen) /* VERY simple fuse                  */
+            if (pNext > nBank + nBankLen)
+            {
+                /* VERY simple fuse                  */
                 break;
+            }
 
             pProg = (SFxProgram*) pNext;
             nProg++;
@@ -370,17 +410,23 @@ bool CFxBank::SaveBank(char* pszFile)
     try
     {
         fp = fopen(pszFile, "wb"); /* try to open the file              */
-        if (! fp)                  /* upon error                        */
+        if (! fp)                  /*                                   */
+        {                          /* upon error                        */
             throw(int) 1;          /* return an error                   */
+        }
         if (fwrite(nBank, 1, nBankLen, fp) != (size_t) nBankLen)
+        {
             throw(int) 1;
+        }
     }
     catch (...)
     {
         brc = false;
     }
     if (fp)
+    {
         fclose(fp);
+    }
     delete[] nBank;
 
     return brc;
@@ -393,7 +439,9 @@ bool CFxBank::SaveBank(char* pszFile)
 void CFxBank::Unload()
 {
     if (bBank)
+    {
         delete[] bBank;
+    }
     *szFileName = '\0';  /* reset file name                   */
     bBank       = NULL;  /* reset bank pointer                */
     nBankLen    = 0;     /* reset bank length                 */
@@ -407,7 +455,9 @@ void CFxBank::Unload()
 SFxProgram* CFxBank::GetProgram(int nProgNum)
 {
     if ((! IsLoaded()) || (bChunk)) /* if nothing loaded or chunk file   */
+    {                               /*                                   */
         return NULL;                /* return OUCH                       */
+    }
 
     SFxBank* pBank    = (SFxBank*) bBank; /* position on 1st program           */
     SFxProgram* pProg = pBank->programs;

@@ -46,21 +46,37 @@ void DrawablePad::setImages(const juce::Drawable* normal,
     jassert(normal != nullptr); // you really need to give it at least a normal image..
 
     if (normal != nullptr)
+    {
         normalImage = normal->createCopy();
+    }
     if (over != nullptr)
+    {
         overImage = over->createCopy();
+    }
     if (down != nullptr)
+    {
         downImage = down->createCopy();
+    }
     if (disabled != nullptr)
+    {
         disabledImage = disabled->createCopy();
+    }
     if (normalOn != nullptr)
+    {
         normalImageOn = normalOn->createCopy();
+    }
     if (overOn != nullptr)
+    {
         overImageOn = overOn->createCopy();
+    }
     if (downOn != nullptr)
+    {
         downImageOn = downOn->createCopy();
+    }
     if (disabledOn != nullptr)
+    {
         disabledImageOn = disabledOn->createCopy();
+    }
 
     repaint();
 }
@@ -175,10 +191,14 @@ void DrawablePad::resized()
 const juce::Drawable* DrawablePad::getCurrentImage() const throw()
 {
     if (isDown())
+    {
         return getDownImage();
+    }
 
     if (isOver())
+    {
         return getOverImage();
+    }
 
     return getNormalImage();
 }
@@ -196,16 +216,24 @@ const juce::Drawable* DrawablePad::getOverImage() const throw()
     if (getToggleState())
     {
         if (overImageOn != nullptr)
+        {
             d = overImageOn.get();
+        }
         else if (normalImageOn != nullptr)
+        {
             d = normalImageOn.get();
+        }
         else if (overImage != nullptr)
+        {
             d = overImage.get();
+        }
     }
     else
     {
         if (overImage != nullptr)
+        {
             d = overImage.get();
+        }
     }
 
     return d;
@@ -218,22 +246,36 @@ const juce::Drawable* DrawablePad::getDownImage() const throw()
     if (getToggleState())
     {
         if (downImageOn != nullptr)
+        {
             d = downImageOn.get();
+        }
         else if (overImageOn != nullptr)
+        {
             d = overImageOn.get();
+        }
         else if (normalImageOn != nullptr)
+        {
             d = normalImageOn.get();
+        }
         else if (downImage != nullptr)
+        {
             d = downImage.get();
+        }
         else
+        {
             d = getOverImage();
+        }
     }
     else
     {
         if (downImage != nullptr)
+        {
             d = downImage.get();
+        }
         else
+        {
             d = getOverImage();
+        }
     }
 
     return d;

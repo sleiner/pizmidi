@@ -105,7 +105,9 @@ public:
     void clickableLabelMouseDoubleClick(ClickableLabel* label, const juce::MouseEvent& e) override
     {
         if (label == nameLabel.get())
+        {
             label->edit();
+        }
     }
 
     void handleNoteOn(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;

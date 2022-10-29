@@ -64,7 +64,9 @@ Midi16CCRouter::Midi16CCRouter(audioMasterCallback audioMaster)
 Midi16CCRouter::~Midi16CCRouter()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -122,7 +124,9 @@ void Midi16CCRouter::setParameter(VstInt32 index, float value)
     if (index == kPC)
     {
         for (int i = 0; i < kNumPrograms; i++)
+        {
             programs[i].param[kPC] = value;
+        }
     }
 }
 
@@ -136,15 +140,25 @@ float Midi16CCRouter::getParameter(VstInt32 index)
 void Midi16CCRouter::getParameterName(VstInt32 index, char* label)
 {
     if (index == kChi)
+    {
         vst_strncpy(label, "Ch. In", kVstMaxParamStrLen);
+    }
     else if (index == kCho)
+    {
         vst_strncpy(label, "Ch. Out", kVstMaxParamStrLen);
+    }
     else if (index == kPC)
+    {
         sprintf(label, "PC Channel");
+    }
     else if (index % 2 == 0)
+    {
         sprintf(label, "CC In %d", index / 2 + 1);
+    }
     else if (index % 2 == 1)
+    {
         sprintf(label, "CC Out %d", index / 2 + 1);
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -153,34 +167,54 @@ void Midi16CCRouter::getParameterDisplay(VstInt32 index, char* text)
     if (index == kChi)
     {
         if (FLOAT_TO_CHANNEL016(param[index]) < 1)
+        {
             strcpy(text, "Any");
+        }
         else
+        {
             sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+        }
     }
     else if (index == kCho)
     {
         if (FLOAT_TO_CHANNEL016(param[index]) < 1)
+        {
             strcpy(text, "No Change");
+        }
         else
+        {
             sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+        }
     }
     else if (index == kPC)
     {
         if (FLOAT_TO_CHANNEL016(param[index]) < 1)
+        {
             strcpy(text, "Any");
+        }
         else if (param[index] < 1.0f)
+        {
             sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+        }
         else
+        {
             strcpy(text, "None");
+        }
     }
     else if (index % 2 == 0)
+    {
         sprintf(text, "%d", FLOAT_TO_MIDI(param[index]));
+    }
     else if (index % 2 == 1)
     {
         if (FLOAT_TO_MIDI2(param[index]) == 0)
+        {
             strcpy(text, "No Change");
+        }
         else
+        {
             sprintf(text, "%d", FLOAT_TO_MIDI2(param[index]) - 1);
+        }
     }
 }
 
@@ -211,10 +245,14 @@ void Midi16CCRouter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
         int chi = FLOAT_TO_CHANNEL016(param[kChi]);
         int cho = FLOAT_TO_CHANNEL016(param[kCho]);
         if (cho == 0)
+        {
             cho = channel;
+        }
         int chipc = FLOAT_TO_CHANNEL016(param[kPC]);
         if (param[kPC] == 1.0f)
+        {
             chipc = -1;
+        }
 
         //only look at the selected channel
         if (channel == chipc || chipc == 0)
@@ -234,7 +272,9 @@ void Midi16CCRouter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     if (data1 == cci[i] /* && cco[i]>0*/)
                     {
                         if (cco[i] != 0)
+                        {
                             tomod.midiData[1] = cco[i] - 1;
+                        }
                         tomod.midiData[0] = status | (cho - 1);
                         outputs[0].push_back(tomod);
                         discard = true;
@@ -243,6 +283,8 @@ void Midi16CCRouter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

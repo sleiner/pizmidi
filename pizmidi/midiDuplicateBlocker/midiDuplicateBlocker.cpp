@@ -80,7 +80,9 @@ MidiDuplicateBlocker::MidiDuplicateBlocker(audioMasterCallback audioMaster)
 MidiDuplicateBlocker::~MidiDuplicateBlocker()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -133,21 +135,37 @@ void MidiDuplicateBlocker::setParameter(VstInt32 index, float value)
     if (index == kPower)
     {
         if (value == 0.f)
+        {
             mode = off;
+        }
         else if (value < 0.15f)
+        {
             mode = cc;
+        }
         else if (value < 0.3f)
+        {
             mode = note;
+        }
         else if (value < 0.45f)
+        {
             mode = pb;
+        }
         else if (value < 0.6f)
+        {
             mode = pc;
+        }
         else if (value < 0.75f)
+        {
             mode = cp;
+        }
         else if (value < 0.9f)
+        {
             mode = aft;
+        }
         else
+        {
             mode = all;
+        }
     }
     else if (index == kTimer)
     {
@@ -187,9 +205,13 @@ void MidiDuplicateBlocker::getParameterDisplay(VstInt32 index, char* text)
     {
         case kChannel:
             if (FLOAT_TO_CHANNEL016(param[index]) < 1)
+            {
                 vst_strncpy(text, "All", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+            }
             break;
         case kPower:
             switch (mode)
@@ -222,9 +244,13 @@ void MidiDuplicateBlocker::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kTimer:
             if (time == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%f sec", (float) time / sampleRate);
+            }
             break;
         default:
             break;
@@ -257,9 +283,13 @@ void MidiDuplicateBlocker::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
                 if (lastCC[channel - 1][data1] == data2 && (mode == cc || mode == all))
                 {
                     if (time == 0 || (totalTime + delta < CCtimer[channel - 1][data1]))
+                    {
                         discard = true;
+                    }
                     else
+                    {
                         CCtimer[channel - 1][data1] = totalTime + delta + time;
+                    }
                 }
                 lastCC[channel - 1][data1] = data2;
             }
@@ -268,7 +298,9 @@ void MidiDuplicateBlocker::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
                 if (lastNote[channel - 1] == data1 && (mode == note || mode == all))
                 {
                     if (time == 0 || (totalTime + delta < Notetimer[channel - 1]))
+                    {
                         discard = true;
+                    }
                     else
                     {
                         Notetimer[channel - 1]  = totalTime + delta + time;
@@ -276,7 +308,9 @@ void MidiDuplicateBlocker::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
                     }
                 }
                 else
+                {
                     playing[channel][data1] = true;
+                }
                 lastNote[channel - 1] = data1;
             }
             else if (status == MIDI_NOTEOFF || (status == MIDI_NOTEON && data2 == 0))
@@ -284,9 +318,13 @@ void MidiDuplicateBlocker::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
                 if (mode == note || mode == all)
                 {
                     if (playing[channel][data1])
+                    {
                         playing[channel][data1] = false;
+                    }
                     else
+                    {
                         discard = true;
+                    }
                 }
             }
             else if (status == MIDI_PROGRAMCHANGE)
@@ -323,7 +361,9 @@ void MidiDuplicateBlocker::processMidiEvents(VstMidiEventVec* inputs, VstMidiEve
             }
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 
     totalTime += sampleFrames;

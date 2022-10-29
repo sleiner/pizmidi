@@ -19,11 +19,15 @@ MidiNoteGroupsProgram::MidiNoteGroupsProgram()
 {
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
+    {
         param[i] = 0.f; //just in case
+    }
     param[kChannel] = 0.f;
     param[kThru]    = 1.f;
     for (int s = 0; s < kNumSlots; s++)
+    {
         param[kNote + s * 3] = MIDI_TO_FLOAT3(off);
+    }
 
     // default program name
     strcpy(name, "Default");
@@ -65,7 +69,9 @@ MidiNoteGroups::MidiNoteGroups(audioMasterCallback audioMaster)
     wasplaying = false;
     isplaying  = false;
     if (programs)
+    {
         setProgram(0);
+    }
 
     init();
 }
@@ -74,7 +80,9 @@ MidiNoteGroups::MidiNoteGroups(audioMasterCallback audioMaster)
 MidiNoteGroups::~MidiNoteGroups()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -124,7 +132,9 @@ void MidiNoteGroups::setParameter(VstInt32 index, float value)
             case kProgCh:
             case kChannel:
                 for (int i = 0; i < kNumPrograms; i++)
+                {
                     (ap++)->param[index] = value;
+                }
                 param[index] = value;
                 break;
             default:
@@ -139,7 +149,9 @@ void MidiNoteGroups::setParameter(VstInt32 index, float value)
 float MidiNoteGroups::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
+    {
         return param[index];
+    }
     return 0.f;
 }
 
@@ -149,22 +161,34 @@ void MidiNoteGroups::getParameterName(VstInt32 index, char* label)
     if (index < kNumParams)
     {
         if (index == kProgCh)
+        {
             strcpy(label, "Use ProgCh");
+        }
         else if (index == kChannel)
+        {
             strcpy(label, "Channel");
+        }
         else if (index == kThru)
+        {
             strcpy(label, "Thru");
+        }
 
         else
         {
             for (int i = 0; i < kNumSlots; i++)
             {
                 if (index == kNote + i * 3)
+                {
                     sprintf(label, "Note %d", i + 1);
+                }
                 else if (index == kPlay + i * 3)
+                {
                     sprintf(label, " %d: PlayGroup", i + 1);
+                }
                 else if (index == kChoke + i * 3)
+                {
                     sprintf(label, " %d: ChokeGroup", i + 1);
+                }
             }
         }
     }
@@ -179,9 +203,13 @@ void MidiNoteGroups::getParameterDisplay(VstInt32 index, char* text)
         if (index == kProgCh)
         {
             if (v < 0.5f)
+            {
                 strcpy(text, "No");
+            }
             else
+            {
                 strcpy(text, "Yes");
+            }
         }
         else if (index == kChannel)
         {
@@ -190,9 +218,13 @@ void MidiNoteGroups::getParameterDisplay(VstInt32 index, char* text)
         else if (index == kThru)
         {
             if (v < 0.5f)
+            {
                 strcpy(text, "No");
+            }
             else
+            {
                 strcpy(text, "Yes");
+            }
         }
 
         else
@@ -202,25 +234,39 @@ void MidiNoteGroups::getParameterDisplay(VstInt32 index, char* text)
                 if (index == kNote + i * 3)
                 {
                     if (FLOAT_TO_MIDI3(v) == off)
+                    {
                         strcpy(text, "Off");
+                    }
                     else if (FLOAT_TO_MIDI3(v) == learn)
+                    {
                         strcpy(text, "Learn Next");
+                    }
                     else
+                    {
                         sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI3(v), bottomOctave), FLOAT_TO_MIDI3(v));
+                    }
                 }
                 else if (index == kPlay + i * 3)
                 {
                     if (FLOAT_TO_GROUP(v) == -1)
+                    {
                         strcpy(text, "None");
+                    }
                     else
+                    {
                         sprintf(text, "%d", FLOAT_TO_GROUP(v));
+                    }
                 }
                 else if (index == kChoke + i * 3)
                 {
                     if (FLOAT_TO_GROUP(v) == -1)
+                    {
                         strcpy(text, "None");
+                    }
                     else
+                    {
                         sprintf(text, "%d", FLOAT_TO_GROUP(v));
+                    }
                 }
             }
         }
@@ -238,9 +284,13 @@ void MidiNoteGroups::preProcess(void)
         //        if (kVstTempoValid & timeInfo->flags) _bpm = (float)timeInfo->tempo;
         //        if (kVstPpqPosValid & timeInfo->flags) _ppq = timeInfo->ppqPos;
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             isplaying = true;
+        }
         else
+        {
             isplaying = false;
+        }
     }
 
     _cleanMidiOutBuffers();
@@ -325,9 +375,13 @@ void MidiNoteGroups::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     }
                 }
                 if (notesPlaying[data1])
+                {
                     discard = true;
+                }
                 if (! discard)
+                {
                     notesPlaying[data1] = true;
+                }
             }
             else if (status == MIDI_NOTEOFF)
             {
@@ -358,9 +412,13 @@ void MidiNoteGroups::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     }
                 }
                 if (! notesPlaying[data1])
+                {
                     discard = true;
+                }
                 if (! discard)
+                {
                     notesPlaying[data1] = false;
+                }
             }
             else if (status == MIDI_PROGRAMCHANGE)
             {
@@ -377,12 +435,16 @@ void MidiNoteGroups::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec*
                     }
                 }
                 if (param[kProgCh] >= 0.5f)
+                {
                     setProgram(data1);
+                }
             }
         }
 
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
 
     } //for() inputs loop
 

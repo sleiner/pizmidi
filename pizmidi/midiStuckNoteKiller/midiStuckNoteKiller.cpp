@@ -29,7 +29,9 @@ midiStuckNoteKiller::midiStuckNoteKiller(audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
     }
 
     trigger = false;
@@ -90,9 +92,13 @@ void midiStuckNoteKiller::getParameterDisplay(VstInt32 index, char* text)
     {
         case kParam01:
             if (fParam01 < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         default:
             break;
@@ -109,7 +115,9 @@ void midiStuckNoteKiller::preProcess(void)
     {
         if ((kVstTransportChanged & timeInfo->flags)
             && ! (kVstTransportPlaying & timeInfo->flags))
+        {
             trigger = true;
+        }
     }
 
     PizMidi::preProcess();
@@ -179,6 +187,8 @@ void midiStuckNoteKiller::processMidiEvents(VstMidiEventVec* inputs, VstMidiEven
             held_notes[data1][channel] = false;
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

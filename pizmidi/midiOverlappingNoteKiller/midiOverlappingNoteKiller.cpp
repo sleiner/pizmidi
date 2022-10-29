@@ -29,7 +29,9 @@ MidiOverlappingNoteKiller::MidiOverlappingNoteKiller(audioMasterCallback audioMa
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
     }
 
     init();
@@ -89,9 +91,13 @@ void MidiOverlappingNoteKiller::getParameterDisplay(VstInt32 index, char* text)
     {
         case kParam01:
             if (fParam01 < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         default:
             break;
@@ -116,7 +122,9 @@ void MidiOverlappingNoteKiller::processMidiEvents(VstMidiEventVec* inputs, VstMi
         bool discard = false;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (status == MIDI_NOTEON)
         {
@@ -141,6 +149,8 @@ void MidiOverlappingNoteKiller::processMidiEvents(VstMidiEventVec* inputs, VstMi
             held_notes[data1][channel] = false;
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

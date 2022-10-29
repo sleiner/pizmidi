@@ -131,15 +131,25 @@ juce::MidiDeviceInfo MidiOutFilter::getDeviceByName(juce::String name) const
 const juce::String MidiOutFilter::getParameterName(int index)
 {
     if (index == kPower)
+    {
         return L"Power";
+    }
     if (index == kClock)
+    {
         return L"Clock";
+    }
     if (index == kMTC)
+    {
         return L"MTC";
+    }
     if (index == kHostOut)
+    {
         return L"HostOut";
+    }
     if (index == kStamped)
+    {
         return L"Out Mode";
+    }
     return juce::String();
 }
 
@@ -148,44 +158,68 @@ const juce::String MidiOutFilter::getParameterText(int index)
     if (index == kPower)
     {
         if (param[kPower] > 0.f)
+        {
             return juce::String(L"On");
+        }
         else
+        {
             return juce::String(L"Off");
+        }
     }
     if (index == kClock)
     {
         if (param[kClock] >= 0.5)
+        {
             return juce::String(L"On");
+        }
         else
+        {
             return juce::String(L"Off");
+        }
     }
     if (index == kMTC)
     {
         if (param[kMTC] >= 0.5)
+        {
             return juce::String(L"On");
+        }
         else
+        {
             return juce::String(L"Off");
+        }
     }
     if (index == kHostOut)
     {
         if (param[kHostOut] >= 0.5)
+        {
             return juce::String(L"On");
+        }
         else
+        {
             return juce::String(L"Off");
+        }
     }
     if (index == kStamped)
     {
         if (param[kStamped] >= 0.5)
+        {
             return juce::String(L"Immediate");
+        }
         else
+        {
             return juce::String(L"Stamped");
+        }
     }
     if (index == kChannel)
     {
         if (roundToInt(param[kChannel] * 16.f) == 0)
+        {
             return juce::String(L"All");
+        }
         else
+        {
             return juce::String(roundToInt(param[kChannel] * 16.f));
+        }
     }
     return juce::String();
 }
@@ -203,17 +237,25 @@ const juce::String MidiOutFilter::getOutputChannelName(const int channelIndex) c
 bool MidiOutFilter::isInputChannelStereoPair(int index) const
 {
     if (getNumInputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 bool MidiOutFilter::isOutputChannelStereoPair(int index) const
 {
     if (getNumOutputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 void MidiOutFilter::setCurrentProgram(int index)
@@ -601,11 +643,15 @@ void MidiOutFilter::processBlock(juce::AudioSampleBuffer& buffer,
                 }
             }
             else
+            {
                 midiOutput->sendBlockOfMessages(midiMessages, juce::Time::getMillisecondCounterHiRes() + 1.0, SR);
+            }
         }
 
         if (param[kHostOut] < 0.5f)
+        {
             midiMessages.clear();
+        }
     }
     else
     {
@@ -618,17 +664,25 @@ void MidiOutFilter::processBlock(juce::AudioSampleBuffer& buffer,
             {
                 output.addEvent(midi_message, msgMetadata.samplePosition);
                 if (midiOutput && param[kStamped] >= 0.5f)
+                {
                     midiOutput->sendMessageNow(midi_message);
+                }
             }
         }
 
         if (midiOutput && param[kStamped] < 0.5f)
+        {
             midiOutput->sendBlockOfMessages(output, juce::Time::getMillisecondCounterHiRes() + 1.0, SR);
+        }
 
         if (param[kHostOut] < 0.5f)
+        {
             midiMessages.clear();
+        }
         else
+        {
             midiMessages = output;
+        }
     }
 }
 
@@ -643,7 +697,9 @@ void MidiOutFilter::getCurrentProgramStateInformation(juce::MemoryBlock& destDat
     xmlState.setAttribute("program", getCurrentProgram());
     xmlState.setAttribute("progname", getProgramName(getCurrentProgram()));
     for (int i = 0; i < getNumParameters(); i++)
+    {
         xmlState.setAttribute(juce::String(i), param[i]);
+    }
     xmlState.setAttribute("icon", icon);
     xmlState.setAttribute("device", activeDevice.name);
     copyXmlToBinary(xmlState, destData);
@@ -662,7 +718,9 @@ void MidiOutFilter::getStateInformation(juce::MemoryBlock& destData)
         juce::String prefix = "P" + juce::String(p) + ".";
         xmlState.setAttribute(prefix + "progname", programs[p].name);
         for (int i = 0; i < getNumParameters(); i++)
+        {
             xmlState.setAttribute(prefix + juce::String(i), programs[p].param[i]);
+        }
         xmlState.setAttribute(prefix + "icon", programs[p].icon);
         xmlState.setAttribute(prefix + "device", programs[p].device.name);
     }

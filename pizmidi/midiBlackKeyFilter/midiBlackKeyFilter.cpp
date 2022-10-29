@@ -56,7 +56,9 @@ MidiBlackKeyFilter::MidiBlackKeyFilter(audioMasterCallback audioMaster)
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             playingOnChannel[n][c] = -1;
+        }
     }
 
     init();
@@ -66,7 +68,9 @@ MidiBlackKeyFilter::MidiBlackKeyFilter(audioMasterCallback audioMaster)
 MidiBlackKeyFilter::~MidiBlackKeyFilter()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -160,16 +164,24 @@ void MidiBlackKeyFilter::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kInChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == ANY_CHANNEL)
+            {
                 vst_strncpy(text, "Any", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kWhiteChannel:
         case kBlackChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == ANY_CHANNEL)
+            {
                 vst_strncpy(text, "NoChange", kVstMaxParamStrLen);
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -196,7 +208,9 @@ void MidiBlackKeyFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEvent
 
         // make zero-velocity noteons look like "real" noteoffs
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (channel == listenchannel || listenchannel == -1)
         {
@@ -205,32 +219,42 @@ void MidiBlackKeyFilter::processMidiEvents(VstMidiEventVec* inputs, VstMidiEvent
                 if (isBlackKey(data1))
                 {
                     if (BlackChannel == ANY_CHANNEL)
+                    {
                         BlackChannel = channel;
+                    }
                     tomod.midiData[0] = MIDI_NOTEON | BlackChannel;
                     tomod.midiData[2] = midiLimit(roundToInt((float) data2 * 2.f * param[kBlackVelocity]));
                 }
                 else
                 {
                     if (WhiteChannel == ANY_CHANNEL)
+                    {
                         WhiteChannel = channel;
+                    }
                     tomod.midiData[0] = MIDI_NOTEON | WhiteChannel;
                     tomod.midiData[2] = midiLimit(roundToInt((float) data2 * 2.f * param[kWhiteVelocity]));
                 }
                 if (tomod.midiData[2] > 0)
+                {
                     playingOnChannel[data1][channel] = tomod.midiData[0] & 0x0f;
+                }
             }
             else if (status == MIDI_NOTEOFF)
             {
                 if (isBlackKey(data1))
                 {
                     if (BlackChannel == ANY_CHANNEL)
+                    {
                         BlackChannel = channel;
+                    }
                     tomod.midiData[0] = MIDI_NOTEOFF | BlackChannel;
                 }
                 else
                 {
                     if (WhiteChannel == ANY_CHANNEL)
+                    {
                         WhiteChannel = channel;
+                    }
                     tomod.midiData[0] = MIDI_NOTEOFF | WhiteChannel;
                 }
                 playingOnChannel[data1][channel] = -1;

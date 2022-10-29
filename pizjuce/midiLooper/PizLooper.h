@@ -217,14 +217,18 @@ public:
     inline float getParameterForSlot(int parameter, int slot)
     {
         if (parameter < numGlobalParams)
+        {
             return getParameter(parameter);
+        }
         return getParameter(parameter + slot * numParamsPerSlot);
     }
 
     inline float getParamForActiveSlot(int parameter)
     {
         if (parameter < numGlobalParams)
+        {
             return getParameter(parameter);
+        }
         return getParameter(parameter + curProgram * numParamsPerSlot);
     }
 
@@ -257,33 +261,49 @@ public:
     void setParameterNotifyingHost(int parameterIndex, float newValue)
     {
         if (getParameter(kParamsToHost) >= 0.5f)
+        {
             AudioProcessor::setParameterNotifyingHost(parameterIndex, newValue);
+        }
         else
+        {
             setParameter(parameterIndex, newValue);
+        }
     }
 
     void notifyHost(int parameter, int slot, float value)
     {
         if (parameter < numGlobalParams)
+        {
             setParameterNotifyingHost(parameter, value);
+        }
         else
+        {
             setParameterNotifyingHost(parameter + slot * numParamsPerSlot, value);
+        }
     }
 
     void setParameterForSlot(int parameter, int slot, float value)
     {
         if (parameter < numGlobalParams)
+        {
             setParameter(parameter, value);
+        }
         else
+        {
             setParameter(parameter + slot * numParamsPerSlot, value);
+        }
     }
 
     void notifyHostForActiveSlot(int parameter, float value)
     {
         if (parameter < numGlobalParams)
+        {
             setParameterNotifyingHost(parameter, value);
+        }
         else
+        {
             setParameterNotifyingHost(parameter + curProgram * numParamsPerSlot, value);
+        }
     }
 
     const juce::String getParameterName(int index) override;
@@ -292,7 +312,9 @@ public:
     const juce::String getCurrentSlotParameterText(int parameter)
     {
         if (parameter < numGlobalParams)
+        {
             return getParameterText(parameter);
+        }
         return getParameterText(parameter + curProgram * numParamsPerSlot);
     }
 
@@ -398,7 +420,9 @@ public:
     {
         programs[slot].looplength = newLength;
         if (slot == curProgram)
+        {
             currentLength = newLength;
+        }
     }
 
     double getLoopLength(int slot)
@@ -410,7 +434,9 @@ public:
     {
         programs[slot].loopstart = newStart;
         for (int instance = 0; instance < polyphony; instance++)
+        {
             lastPlayedIndex[slot][instance] = -1;
+        }
     }
 
     double getLoopStart(int slot)
@@ -462,7 +488,9 @@ public:
     {
         programs[curProgram].PRSettings.set(name, value);
         if (updateEditor)
+        {
             sendChangeMessage();
+        }
     }
 
     const juce::var getPRSetting(const juce::Identifier& name)
@@ -528,7 +556,9 @@ private:
         {
             plugin = _plugin;
             for (int i = 0; i < polyphony; i++)
+            {
                 trignote[i] = -1;
+            }
             update(true);
         }
 
@@ -572,9 +602,13 @@ private:
         bool update(bool initialize = false) //return true if changed
         {
             if (! initialize)
+            {
                 memcpy(&oldrules, &rules, sizeof(Rules));
+            }
             else if (memcmp(&rules, &oldrules, sizeof(Rules)) == 0)
+            {
                 return false;
+            }
             rules.semitones         = juce::roundToInt(plugin->getParameterForSlot(kTranspose, slot) * 24.f) - 12;
             rules.octaves           = juce::roundToInt(plugin->getParameterForSlot(kOctave, slot) * 8.f) - 4;
             rules.forceToScale      = plugin->getParameterForSlot(kForceToKey, slot) >= 0.5f;
@@ -598,7 +632,9 @@ private:
             rules.mode            = juce::roundToInt(plugin->getParameterForSlot(kForceToScaleMode, slot) * (float) (numForceToKeyModes - 1));
             rules.transpose10     = plugin->getParameterForSlot(kTranspose10, slot) >= 0.5f;
             if (initialize)
+            {
                 memcpy(&oldrules, &rules, sizeof(Rules));
+            }
             return memcmp(&rules, &oldrules, sizeof(Rules)) != 0;
         }
 
@@ -610,7 +646,9 @@ private:
         int getTransposedNote(int note, int voice, bool& killNote, int channel, bool isInputNote = false)
         {
             if (channel == 10 && ! rules.transpose10)
+            {
                 return note;
+            }
             int transposey = 0;
             int interval   = (! isInputNote && rules.transposedTrigger) ? (trignote[voice] - rules.root) : 0;
             if (interval != 0 && rules.forceToScale)
@@ -634,9 +672,13 @@ private:
                                     break;
                                 }
                                 if (j < 0)
+                                {
                                     j = -j;
+                                }
                                 else
+                                {
                                     j = -j - 1;
+                                }
                             }
                             break;
                         //always up
@@ -686,9 +728,13 @@ private:
                     {
                         m++;
                         if (rules.noteswitch[(rules.root + m) % 12])
+                        {
                             counter++;
+                        }
                         if (trignote[voice] - m == rules.root)
+                        {
                             break;
+                        }
                     }
                 }
                 else if (trignote[voice] < rules.root)
@@ -697,9 +743,13 @@ private:
                     {
                         m++;
                         if (rules.noteswitch[(rules.root - m) % 12])
+                        {
                             counter--;
+                        }
                         if (trignote[voice] + m == rules.root)
+                        {
                             break;
+                        }
                     }
                 }
                 transposey = counter;
@@ -726,9 +776,13 @@ private:
                                     break;
                                 }
                                 if (j < 0)
+                                {
                                     j = -j;
+                                }
                                 else
+                                {
                                     j = -j - 1;
+                                }
                             }
                             break;
                         //always up
@@ -778,9 +832,13 @@ private:
                     {
                         m++;
                         if (rules.noteswitch[(newNote + m) % 12])
+                        {
                             counter++;
+                        }
                         if (newNote + m == 127)
+                        {
                             break;
+                        }
                     }
                     newNote += m;
                 }
@@ -793,9 +851,13 @@ private:
                     {
                         m++;
                         if (rules.noteswitch[(newNote - m) % 12])
+                        {
                             counter--;
+                        }
                         if (newNote - m == 0)
+                        {
                             break;
+                        }
                     }
                     newNote -= m;
                 }
@@ -803,7 +865,9 @@ private:
             }
             newNote += interval + rules.masterTranspose;
             if (newNote > 127 || newNote < 0)
+            {
                 killNote = true;
+            }
             return newNote;
         }
 
@@ -822,19 +886,29 @@ private:
         if (mgroup != -1 && getParameterForSlot(kPlay, slot) >= 0.5f)
         {
             for (int i = 0; i < numSlots; i++)
+            {
                 if (i != slot && mgroup == (juce::roundToInt(getParameterForSlot(kMuteGroup, i) * 16.f) - 1))
                 {
                     for (int v = 0; v < polyphony; v++)
+                    {
                         if (slot != i)
+                        {
                             polytrigger[i][v] = -1;
+                        }
+                    }
                     notifyHost(kPlay, i, 0.f);
                 }
+            }
         }
         if (pgroup != -1)
         {
             for (int i = 0; i < numSlots; i++)
+            {
                 if (i != slot && pgroup == (juce::roundToInt(getParameterForSlot(kPlayGroup, i) * 16.f) - 1))
+                {
                     notifyHost(kPlay, i, getParameterForSlot(kPlay, slot));
+                }
+            }
         }
     }
 
@@ -860,7 +934,9 @@ private:
             if ((noteOffBuffer[slot].getUnchecked(i).note->noteOffObject.get() == n
                  || noteOffBuffer[slot].getUnchecked(i).note.get() == n)
                 && noteOffBuffer[slot].getUnchecked(i).voice == v)
+            {
                 return i;
+            }
         }
         return -1;
     }

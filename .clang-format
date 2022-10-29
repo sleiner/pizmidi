@@ -37,6 +37,7 @@ IncludeBlocks: Regroup
 IndentCaseLabels: true
 IndentWidth: 4
 IndentWrappedFunctionNames: true
+InsertBraces: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
 MaxEmptyLinesToKeep: 1

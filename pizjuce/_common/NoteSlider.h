@@ -21,20 +21,26 @@ public:
     {
         const int n = juce::roundToInt(value);
         if (n < 0)
+        {
             return allText;
+        }
         return getNoteName(n, bottomOctave) + " (" + juce::String((int) value) + ")";
     }
 
     double getValueFromText(const juce::String& text)
     {
         if (! text.compareIgnoreCase(allText))
+        {
             return -1;
+        }
         if (text.containsAnyOf("abcdefgABCDEFG"))
         {
             bool hasOctave;
             int n = getNoteValue(text, bottomOctave, hasOctave);
             if (n != NOT_A_NOTE)
+            {
                 return n;
+            }
             return getValue();
         }
         return text.getDoubleValue();

@@ -37,7 +37,9 @@ MidiFingered::MidiFingered(audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
         voices[ch] = 0;
     }
 
@@ -101,15 +103,23 @@ void MidiFingered::getParameterDisplay(VstInt32 index, char* text)
     {
         case kPower:
             if (param[index] < 0.5)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL016(param[index]) == 0)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+            }
             break;
         default:
             break;
@@ -131,16 +141,22 @@ void MidiFingered::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
 
         //make 0-velocity notes look like "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         short outchannel = FLOAT_TO_CHANNEL016(param[kChannel]) - 1;
         if (outchannel == -1)
+        {
             outchannel = channel;
+        }
         bool discard = false;
 
         bool on = param[kPower] >= 0.5f;
         if (channel != outchannel)
+        {
             on = false;
+        }
 
         if (status == MIDI_NOTEOFF)
         {
@@ -156,7 +172,9 @@ void MidiFingered::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
                 portaOff.midiData[1]  = 65;
                 portaOff.midiData[2]  = 0;
                 if (on)
+                {
                     outputs[0].push_back(portaOff);
+                }
             }
         }
         else if (status == MIDI_NOTEON)
@@ -170,7 +188,9 @@ void MidiFingered::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
                 portaOn.midiData[1]  = 65;
                 portaOn.midiData[2]  = 127;
                 if (on)
+                {
                     outputs[0].push_back(portaOn);
+                }
             }
         }
 
@@ -200,14 +220,20 @@ void MidiFingered::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* o
             {
                 discard = true;
                 if (data2 < 64)
+                {
                     setParameter(kPower, 0.0f);
+                }
                 else
+                {
                     setParameter(kPower, 1.0f);
+                }
                 updateDisplay();
             }
         }
 
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

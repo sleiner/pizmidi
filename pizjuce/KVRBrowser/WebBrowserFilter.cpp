@@ -63,7 +63,9 @@ void WebBrowserFilter::setParameter(int index, float newValue)
 const juce::String WebBrowserFilter::getParameterName(int index)
 {
     if (index == 0)
+    {
         return " ";
+    }
 
     return juce::String();
 }
@@ -71,7 +73,9 @@ const juce::String WebBrowserFilter::getParameterName(int index)
 const juce::String WebBrowserFilter::getParameterText(int index)
 {
     if (index == 0)
+    {
         return juce::String(gain, 2);
+    }
 
     return juce::String();
 }
@@ -127,7 +131,9 @@ void WebBrowserFilter::processBlock(juce::AudioSampleBuffer& buffer,
                                     juce::MidiBuffer& midiMessages)
 {
     if (! initialPageLoaded)
+    {
         sendChangeMessage();
+    }
 
     juce::int16 mask1 = URL.hashCode() & 0xffff;
     juce::int16 mask2 = URL.hashCode() / 0x10000;

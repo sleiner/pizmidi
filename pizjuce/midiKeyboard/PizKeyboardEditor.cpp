@@ -239,7 +239,9 @@ void midiKeyboardEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     if (getFilter()->getParameter(kHidePanel))
+    {
         g.fillAll(juce::Colour(0xff8c8c8c));
+    }
     else
     {
         //[/UserPrePaint]
@@ -288,7 +290,9 @@ void midiKeyboardEditor::resized()
     //[UserResized] Add your own custom resize handling here..
     //int topbar = jmax(14,getHeight()/20);
     if (getFilter()->getParameter(kHidePanel) >= 0.5f)
+    {
         midiKeyboard->setBounds(4, 4, getWidth() - 8, getHeight() - 8);
+    }
     midiKeyboard->setKeyWidth(jmax((float) getWidth() / 76.f, getFilter()->getParameter(kWidth) * 150.0f + 5.0f));
     getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
@@ -392,7 +396,9 @@ void midiKeyboardEditor::mouseUp(const juce::MouseEvent& e)
     if (e.eventComponent == this)
     {
         if (e.mods.isPopupMenu())
+        {
             getFilter()->setParameter(kHidePanel, 0.f);
+        }
     }
     else if (e.eventComponent == aboutBox.get())
     {
@@ -405,7 +411,9 @@ void midiKeyboardEditor::mouseUp(const juce::MouseEvent& e)
     else if (e.eventComponent == grabQwertyButton.get())
     {
         if (grabQwertyButton->getToggleState())
+        {
             getFilter()->setParameter(kQwertyAnywhere, 0.f);
+        }
         else if (e.mods.isRightButtonDown())
         {
             getFilter()->setParameter(kQwertyAnywhere, 1.f - getFilter()->getParameter(kQwertyAnywhere));
@@ -426,7 +434,9 @@ void midiKeyboardEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
         getFilter()->octave      = midiKeyboard->getKeyPressBaseOctave();
     }
     else if (source == getFilter())
+    {
         updateParametersFromFilter();
+    }
 }
 
 //==============================================================================
@@ -459,7 +469,9 @@ void midiKeyboardEditor::updateParametersFromFilter()
     midiKeyboard->setDrawNoteNumber(showNumbers);
     midiKeyboard->setDrawQwerty(qwerty);
     if (qwerty)
+    {
         midiKeyboard->grabKeyboardFocus();
+    }
     midiKeyboard->setMidiChannelsToDisplay(1 << ch);
     midiKeyboard->setMidiChannel(ch + 1);
     chSlider->setValue(ch + 1, juce::dontSendNotification);

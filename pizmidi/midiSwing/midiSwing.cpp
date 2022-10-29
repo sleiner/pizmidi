@@ -168,7 +168,9 @@ MidiSwing::MidiSwing(audioMasterCallback audioMaster)
 MidiSwing::~MidiSwing()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -215,63 +217,113 @@ void MidiSwing::setParameter(VstInt32 index, float value)
     { //stepsize = "how many fit in half a beat"
         const float inc = 1.f / 21.f;
         if (param[kValue] < 1 * inc)
+        {
             stepsize = 0.0416666667f; //0.3333333 (3 bars)
+        }
         else if (param[kValue] < 2 * inc)
+        {
             stepsize = 0.0625f; //0.5 (2 whole notes)
+        }
         else if (param[kValue] < 3 * inc)
+        {
             stepsize = 0.0833333333f; //0.75 (dotted whole)
+        }
         else if (param[kValue] < 4 * inc)
+        {
             stepsize = 0.125f; //1 (whole note)
+        }
         else if (param[kValue] < 5 * inc)
+        {
             stepsize = 0.166666667f; //1.5 dotted half
+        }
         else if (param[kValue] < 6 * inc)
+        {
             stepsize = 0.25f; //2 (half note)
+        }
         else if (param[kValue] < 7 * inc)
+        {
             stepsize = 0.333333333f; //4.
+        }
         else if (param[kValue] < 8 * inc)
+        {
             stepsize = 0.375f; //2T
+        }
         else if (param[kValue] < 9 * inc)
+        {
             stepsize = 0.5f; //4
+        }
         else if (param[kValue] < 10 * inc)
+        {
             stepsize = 0.666666667f; //8.
+        }
         else if (param[kValue] < 11 * inc)
+        {
             stepsize = 0.75f; //4T
+        }
         else if (param[kValue] < 12 * inc)
+        {
             stepsize = 1.0f; //8
+        }
         else if (param[kValue] < 13 * inc)
+        {
             stepsize = 1.333333333f; //16.
+        }
         else if (param[kValue] < 14 * inc)
+        {
             stepsize = 1.5f; //8T
+        }
         else if (param[kValue] < 15 * inc)
+        {
             stepsize = 2.0f; //16
+        }
         else if (param[kValue] < 16 * inc)
+        {
             stepsize = 2.666666667f; //32.
+        }
         else if (param[kValue] < 17 * inc)
+        {
             stepsize = 3.0f; //16T
+        }
         else if (param[kValue] < 18 * inc)
+        {
             stepsize = 4.0f; //32
+        }
         else if (param[kValue] < 19 * inc)
+        {
             stepsize = 5.333333333f; //64.
+        }
         else if (param[kValue] < 20 * inc)
+        {
             stepsize = 6.0f; //32T
+        }
         else
+        {
             stepsize = 8.0f; //64
+        }
     }
     else if (index == kProb)
     {
         //force top & bottom values to be what they say they are
         if (roundToInt(param[kProb] * 100.0f) == 0)
+        {
             param[kProb] = 0.0f;
+        }
         else if (roundToInt(param[kProb] * 100.0f) == 100)
+        {
             param[kProb] = 1.0f;
+        }
     }
     else if (index == kOffset)
     {
         if (abs(2.0f * param[index] - 1.0f) < 0.01f)
+        {
             param[index] = 0.5f;
+        }
     }
     else if (index == kMaxAmount)
+    {
         updateDisplay();
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -335,68 +387,126 @@ void MidiSwing::getParameterDisplay(VstInt32 index, char* text)
     {
         case kMode:
             if (param[index] < 0.33333f)
+            {
                 strcpy(text, "Off");
+            }
             else if (param[index] < 0.66667)
+            {
                 strcpy(text, "Notes Only");
+            }
             else
+            {
                 strcpy(text, "Notes & CCs");
+            }
             break;
         case kValue:
             if (param[index] < 1 * inc)
+            {
                 strcpy(text, "3bars");
+            }
             else if (param[index] < 2 * inc)
+            {
                 strcpy(text, "2bars");
+            }
             else if (param[index] < 3 * inc)
+            {
                 strcpy(text, "dotted1");
+            }
             else if (param[index] < 4 * inc)
+            {
                 strcpy(text, "1");
+            }
             else if (param[index] < 5 * inc)
+            {
                 strcpy(text, "dotted2");
+            }
             else if (param[index] < 6 * inc)
+            {
                 strcpy(text, "2");
+            }
             else if (param[index] < 7 * inc)
+            {
                 strcpy(text, "dotted4");
+            }
             else if (param[index] < 8 * inc)
+            {
                 strcpy(text, "2T");
+            }
             else if (param[index] < 9 * inc)
+            {
                 strcpy(text, "4");
+            }
             else if (param[index] < 10 * inc)
+            {
                 strcpy(text, "dotted8");
+            }
             else if (param[index] < 11 * inc)
+            {
                 strcpy(text, "4T");
+            }
             else if (param[index] < 12 * inc)
+            {
                 strcpy(text, "8");
+            }
             else if (param[index] < 13 * inc)
+            {
                 strcpy(text, "dotted16");
+            }
             else if (param[index] < 14 * inc)
+            {
                 strcpy(text, "8T");
+            }
             else if (param[index] < 15 * inc)
+            {
                 strcpy(text, "16");
+            }
             else if (param[index] < 16 * inc)
+            {
                 strcpy(text, "dotted32");
+            }
             else if (param[index] < 17 * inc)
+            {
                 strcpy(text, "16T");
+            }
             else if (param[index] < 18 * inc)
+            {
                 strcpy(text, "32");
+            }
             else if (param[index] < 19 * inc)
+            {
                 strcpy(text, "dotted64");
+            }
             else if (param[index] < 20 * inc)
+            {
                 strcpy(text, "32T");
+            }
             else
+            {
                 strcpy(text, "64");
+            }
             break;
         case kAmount:
             float m;
             if (param[kMaxAmount] < 0.2f)
+            {
                 m = 1.0f;
+            }
             else if (param[kMaxAmount] < 0.4f)
+            {
                 m = 1.5f;
+            }
             else if (param[kMaxAmount] < 0.6f)
+            {
                 m = 2.0f;
+            }
             else if (param[kMaxAmount] < 0.8)
+            {
                 m = 2.5f;
+            }
             else
+            {
                 m = 3.0f;
+            }
             sprintf(text, "%d", roundToInt(param[index] * 100.0f * m));
             break;
         case kRadius:
@@ -404,23 +514,37 @@ void MidiSwing::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kShape:
             if (param[index] < 0.25f)
+            {
                 strcpy(text, "Parabolic");
+            }
             else if (param[index] < 0.5f)
+            {
                 strcpy(text, "Flat");
+            }
             else if (param[index] < 0.75f)
+            {
                 strcpy(text, "Linear Up");
+            }
             else
+            {
                 strcpy(text, "Linear Down");
+            }
             break;
         case kVelocity:
             signed char v;
             v = roundToInt(127.0f * (2.0f * param[index] - 1.0f));
             if (v == 0)
+            {
                 strcpy(text, "No Change");
+            }
             else if (v > 0)
+            {
                 sprintf(text, "+%d", roundToInt(127.0f * (2.0f * param[index] - 1.0f)));
+            }
             else
+            {
                 sprintf(text, "%d", roundToInt(127.0f * (2.0f * param[index] - 1.0f)));
+            }
             break;
         case kProb:
             sprintf(text, "%d", roundToInt(param[index] * 100.0f));
@@ -430,32 +554,52 @@ void MidiSwing::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kMaxAmount:
             if (param[index] < 0.2f)
+            {
                 strcpy(text, "100"); //2:1
+            }
             else if (param[index] < 0.4f)
+            {
                 strcpy(text, "150"); //3:1
+            }
             else if (param[index] < 0.6f)
+            {
                 strcpy(text, "200"); //5:1
+            }
             else if (param[index] < 0.8f)
+            {
                 strcpy(text, "250"); //11:1
+            }
             else
+            {
                 strcpy(text, "300"); //oo:1
+            }
             break;
         case kOffset:
             sprintf(text, "%.2f", 2.0f * param[index] - 1.0f);
             break;
         case kOverlap:
             if (param[index] < 0.33333f)
+            {
                 strcpy(text, "Equal Delay");
+            }
             else if (param[index] < 0.66667f)
+            {
                 strcpy(text, "Stingy Delay");
+            }
             else
+            {
                 strcpy(text, "Legato");
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -539,13 +683,21 @@ void MidiSwing::preProcess()
     if (timeInfo)
     {
         if (kVstTempoValid & timeInfo->flags)
+        {
             _bpm = (float) timeInfo->tempo;
+        }
         if (kVstPpqPosValid & timeInfo->flags)
+        {
             _ppq = timeInfo->ppqPos;
+        }
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             isplaying = true;
+        }
         else
+        {
             isplaying = false;
+        }
         dbg("tempo=" << _bpm);
 
         _ppq += (1.0f - 2.0f * param[kOffset]) / (stepsize * 2.0f);
@@ -567,19 +719,31 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
 
     float amount = param[kAmount];
     if (! on)
+    {
         amount = 0;
+    }
 
     float delaymult = 4.0f; //6=100%, 4=150%, 3=200%
     if (param[kMaxAmount] < 0.2f)
+    {
         delaymult = 6.0f;
+    }
     else if (param[kMaxAmount] < 0.4f)
+    {
         delaymult = 4.0f;
+    }
     else if (param[kMaxAmount] < 0.6f)
+    {
         delaymult = 3.0f;
+    }
     else if (param[kMaxAmount] < 0.8)
+    {
         delaymult = 2.4f;
+    }
     else
+    {
         delaymult = 2.0f;
+    }
 
     bool overlap   = param[kOverlap] < 0.33333f;
     bool swingoffs = param[kOverlap] >= 0.66667f;
@@ -604,9 +768,13 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             dbg("-------- ");
                             VstInt32 delta = CCDelay[n][ch] - CCCounter[n][ch];
                             if (delta < 0)
+                            {
                                 delta = 0;
+                            }
                             else if (delta > samples)
+                            {
                                 delta = samples;
+                            }
                             VstMidiEvent cc;
                             cc.midiData[0] = MIDI_CONTROLCHANGE + ch;
                             cc.midiData[1] = n;
@@ -639,9 +807,13 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                                     << " v=" << v);
                                 VstInt32 delta = noteOffDelay[n][ch][v] - noteOffCounter[n][ch][v];
                                 if (delta < 0)
+                                {
                                     delta = 0;
+                                }
                                 else if (delta > samples)
+                                {
                                     delta = samples;
+                                }
                                 if (! noteKilled[n][ch])
                                 {
                                     VstMidiEvent noteoff;
@@ -683,9 +855,13 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                                     << " v=" << v);
                                 VstInt32 delta = noteDelay[n][ch][v] - noteOnCounter[n][ch][v];
                                 if (delta < 0)
+                                {
                                     delta = 0;
+                                }
                                 else if (delta > samples)
+                                {
                                     delta = samples;
+                                }
                                 // if note is already playing, send a noteoff first
                                 if (notePlaying[n][ch][v - 1])
                                 {
@@ -907,7 +1083,9 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
             {
                 voices[data1][channel]++;
                 if (voices[data1][channel] >= MAX_VOICES_PER_NOTE)
+                {
                     voices[data1][channel] = 1;
+                }
                 char v = voices[data1][channel];
                 // find the location of the note within the beat, in samples:
                 VstInt32 beatpos_samples = roundToInt(_beatpos * samplesPerBeat) + tomod.deltaFrames;
@@ -931,9 +1109,13 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                     float v = 127.0f * (2.0f * param[kVelocity] - 1.0f); //max velocity offset
                     velocity += roundToInt(c * v * random);              //new (offset) velocity
                     if (velocity < 1)
+                    {
                         velocity = 1;
+                    }
                     else if (velocity > 127)
+                    {
                         velocity = 127;
+                    }
 
                     //probability
                     //don't do anything unless prob < 100%, and mode is not "off"
@@ -1030,15 +1212,25 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                         //determine delay amount, in samples:
                         float delaymult = 4.0f; //6=100%, 4=150%, 3=200%
                         if (param[kMaxAmount] < 0.25f)
+                        {
                             delaymult = 6.0f;
+                        }
                         else if (param[kMaxAmount] < 0.5f)
+                        {
                             delaymult = 4.0f;
+                        }
                         else if (param[kMaxAmount] < 0.75f)
+                        {
                             delaymult = 3.0f;
+                        }
                         else if (param[kMaxAmount] < 1.0)
+                        {
                             delaymult = 2.4f;
+                        }
                         else
+                        {
                             delaymult = 2.0f;
+                        }
                         delay = roundToInt((float) samplesPerBeat * (c * amount * random / (delaymult * stepsize)))
                             //+ roundToInt(250.0f*amount*c)
                             ;
@@ -1087,7 +1279,9 @@ void MidiSwing::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
             }
         } // if listenchannel==channel
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     sortMidiEvents(outputs[0]);
@@ -1126,18 +1320,34 @@ inline float MidiSwing::closeness(long int samplepos)
     float x = (float) samplepos / (float) samplesPerBeat;
     float r = 1.5f + 14.5f * getParameter(kRadius);
     float result;
-    if (param[kShape] < 0.25f) //parabola
+    if (param[kShape] < 0.25f)
+    {
+        // parabola
         result = 1 - (2 * r * x - r) * (2 * r * x - r);
-    else if (param[kShape] < 0.5f) //square
+    }
+    else if (param[kShape] < 0.5f)
+    {
+        // square
         result = 1.0f;
-    else if (param[kShape] < 0.75f) //linear up
+    }
+    else if (param[kShape] < 0.75f)
+    {
+        // linear up
         result = (r + 2.0f) * x - (r + 1.0f) * 0.5f;
-    else //linear down
+    }
+    else
+    {
+        // linear down
         result = r * 0.5f + 1.5f - (r + 2.0f) * x;
+    }
     if (result < 0.0001f)
+    {
         result = 0.f;
+    }
     else if (result > 0.95f)
+    {
         result = 1.f;
+    }
     return result;
 }
 

@@ -41,7 +41,9 @@ MidiPad::MidiPad(int _index)
 MidiPad::~MidiPad()
 {
     if (text)
+    {
         delete text;
+    }
     deleteImages();
 }
 
@@ -62,7 +64,9 @@ bool MidiPad::setImageFromFile(juce::File file)
             repaint();
         }
         else
+        {
             return false;
+        }
         return true;
     }
     return false;
@@ -123,11 +127,17 @@ void MidiPad::drawButtonBackground(juce::Graphics& g,
     if (isMouseOverButton)
     {
         if (isButtonDown)
+        {
             bc = bc.brighter();
+        }
         else if (bc.getBrightness() > 0.5f)
+        {
             bc = bc.darker(0.1f);
+        }
         else
+        {
             bc = bc.brighter(0.1f);
+        }
     }
 
     if (hex)
@@ -192,11 +202,17 @@ void MidiPad::paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButt
         g.setColour(getBackgroundColour().contrasting(0.8f));
         juce::String xy = juce::String();
         if (showx && showy)
+        {
             xy = "x:" + juce::String((int) (x * 127.1)) + " y:" + juce::String((int) (y * 127.1));
+        }
         else if (showx)
+        {
             xy = "x:" + juce::String((int) (x * 127.1));
+        }
         else if (showy)
+        {
             xy = "y:" + juce::String((int) (y * 127.1));
+        }
         g.drawFittedText(xy,
                          proportionOfWidth(0.0447f),
                          proportionOfHeight(0.8057f),
@@ -291,26 +307,42 @@ bool MidiPad::hitTest(int x, int y)
         if (xnorm < 0.25)
         {
             if (ynorm < (0.5 - 2 * xnorm))
+            {
                 return false;
+            }
             else if (ynorm > (0.5 + 2 * xnorm))
+            {
                 return false;
+            }
             else
+            {
                 return true;
+            }
         }
         else if (xnorm > 0.75)
         {
             if (ynorm > (2.5 - 2 * xnorm))
+            {
                 return false;
+            }
             else if (ynorm < (-1.5 + 2 * xnorm))
+            {
                 return false;
+            }
             else
+            {
                 return true;
+            }
         }
         else
+        {
             return true;
+        }
     }
     else
+    {
         return true;
+    }
 }
 
 void MidiPad::setText(const juce::String& name)

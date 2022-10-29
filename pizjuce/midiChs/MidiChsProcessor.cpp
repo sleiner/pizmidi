@@ -438,14 +438,20 @@ void MidiChsProcessor::processBlock(juce::AudioSampleBuffer& buffer,
                 if (midi_message.isForChannel(i + 1))
                 {
                     if (ch[i] > 0)
+                    {
                         out_message.setChannel(ch[i]);
+                    }
                     else
+                    {
                         discard = true;
+                    }
                 }
             }
         }
         if (! discard)
+        {
             midiout.addEvent(out_message, sample_number);
+        }
     }
     midiMessages.clear();
     midiMessages = midiout;

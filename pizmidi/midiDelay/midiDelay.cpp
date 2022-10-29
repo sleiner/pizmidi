@@ -106,7 +106,9 @@ MidiDelay::~MidiDelay()
 {
     cleanMidiDelayBuffer();
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -162,50 +164,94 @@ void MidiDelay::setParameter(VstInt32 index, float value)
         {
             const float inc = 1.f / 21.f;
             if (param[kTime] < 1 * inc)
+            {
                 stepsize = 12.0f; //0.3333333 (3 bars)
+            }
             else if (param[kTime] < 2 * inc)
+            {
                 stepsize = 8.0f; //0.5 (2 whole notes)
+            }
             else if (param[kTime] < 3 * inc)
+            {
                 stepsize = 6.0f; //0.75 (dotted whole)
+            }
             else if (param[kTime] < 4 * inc)
+            {
                 stepsize = 4.0f; //1 (whole note)
+            }
             else if (param[kTime] < 5 * inc)
+            {
                 stepsize = 3.0f; //1.5 dotted half
+            }
             else if (param[kTime] < 6 * inc)
+            {
                 stepsize = 2.0f; //2 (half note)
+            }
             else if (param[kTime] < 7 * inc)
+            {
                 stepsize = 1.5f; //4.
+            }
             else if (param[kTime] < 8 * inc)
+            {
                 stepsize = 1.333333333f; //2T
+            }
             else if (param[kTime] < 9 * inc)
+            {
                 stepsize = 1.0f; //4
+            }
             else if (param[kTime] < 10 * inc)
+            {
                 stepsize = 0.75f; //8.
+            }
             else if (param[kTime] < 11 * inc)
+            {
                 stepsize = 0.666666667f; //4T
+            }
             else if (param[kTime] < 12 * inc)
+            {
                 stepsize = 0.5f; //8
+            }
             else if (param[kTime] < 13 * inc)
+            {
                 stepsize = 0.375; //16.
+            }
             else if (param[kTime] < 14 * inc)
+            {
                 stepsize = 0.333333333f; //8T
+            }
             else if (param[kTime] < 15 * inc)
+            {
                 stepsize = 0.25f; //16
+            }
             else if (param[kTime] < 16 * inc)
+            {
                 stepsize = 0.1875f; //32.
+            }
             else if (param[kTime] < 17 * inc)
+            {
                 stepsize = 0.166666667f; //16T
+            }
             else if (param[kTime] < 18 * inc)
+            {
                 stepsize = 0.125f; //32
+            }
             else if (param[kTime] < 19 * inc)
+            {
                 stepsize = 0.09375f; //64.
+            }
             else if (param[kTime] < 20 * inc)
+            {
                 stepsize = 0.083333333f; //32T
+            }
             else
+            {
                 stepsize = 0.0625f; //64
+            }
         }
         else if (index == kSync)
+        {
             updateDisplay();
+        }
     }
 }
 
@@ -263,70 +309,126 @@ void MidiDelay::getParameterDisplay(VstInt32 index, char* text)
 
         case kMode:
             if (param[index] == 0.0)
+            {
                 strcpy(text, "Off");
+            }
             else if (param[index] < 0.5)
+            {
                 strcpy(text, "Notes Only");
+            }
             else
+            {
                 strcpy(text, "Notes & CCs");
+            }
             break;
         case kLimit:
             if (param[index] == 0.0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", roundToInt(param[index] * 15.f) + 1);
+            }
             break;
         case kSync:
             if (param[index] < 0.5f)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         case kTime:
             if (param[kSync] >= 0.5f)
             {
                 const float inc = 1.f / 21.f;
                 if (param[index] < 1 * inc)
+                {
                     strcpy(text, "3bars");
+                }
                 else if (param[index] < 2 * inc)
+                {
                     strcpy(text, "2bars");
+                }
                 else if (param[index] < 3 * inc)
+                {
                     strcpy(text, "dotted1");
+                }
                 else if (param[index] < 4 * inc)
+                {
                     strcpy(text, "1");
+                }
                 else if (param[index] < 5 * inc)
+                {
                     strcpy(text, "dotted2");
+                }
                 else if (param[index] < 6 * inc)
+                {
                     strcpy(text, "2");
+                }
                 else if (param[index] < 7 * inc)
+                {
                     strcpy(text, "dotted4");
+                }
                 else if (param[index] < 8 * inc)
+                {
                     strcpy(text, "2T");
+                }
                 else if (param[index] < 9 * inc)
+                {
                     strcpy(text, "4");
+                }
                 else if (param[index] < 10 * inc)
+                {
                     strcpy(text, "dotted8");
+                }
                 else if (param[index] < 11 * inc)
+                {
                     strcpy(text, "4T");
+                }
                 else if (param[index] < 12 * inc)
+                {
                     strcpy(text, "8");
+                }
                 else if (param[index] < 13 * inc)
+                {
                     strcpy(text, "dotted16");
+                }
                 else if (param[index] < 14 * inc)
+                {
                     strcpy(text, "8T");
+                }
                 else if (param[index] < 15 * inc)
+                {
                     strcpy(text, "16");
+                }
                 else if (param[index] < 16 * inc)
+                {
                     strcpy(text, "dotted32");
+                }
                 else if (param[index] < 17 * inc)
+                {
                     strcpy(text, "16T");
+                }
                 else if (param[index] < 18 * inc)
+                {
                     strcpy(text, "32");
+                }
                 else if (param[index] < 19 * inc)
+                {
                     strcpy(text, "dotted64");
+                }
                 else if (param[index] < 20 * inc)
+                {
                     strcpy(text, "32T");
+                }
                 else
+                {
                     strcpy(text, "64");
+                }
             }
             else
             {
@@ -335,9 +437,13 @@ void MidiDelay::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kChannel:
             if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
                 strcpy(text, "All");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         default:
             sprintf(text, "%f", param[index]);
@@ -360,13 +466,21 @@ void MidiDelay::preProcess(void)
     if (timeInfo)
     {
         if (kVstTempoValid & timeInfo->flags)
+        {
             _bpm = (float) timeInfo->tempo;
+        }
         if (kVstPpqPosValid & timeInfo->flags)
+        {
             _ppq = timeInfo->ppqPos;
+        }
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             isplaying = true;
+        }
         else
+        {
             isplaying = false;
+        }
         //dbg("tempo=" << _bpm);
 
         //        _ppq += (1.0f-2.0f*param[kOffset])/(stepsize*2.0f);
@@ -388,7 +502,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
 
     VstInt32 delay = roundToInt((float) samplesPerBeat * stepsize);
     if (param[kSync] < 0.5f)
+    {
         delay = roundToInt(((1.f - param[kTime]) * 1.98f + 0.02f) * sampleRate);
+    }
 
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -433,14 +549,18 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             notePlaying[data1][channel] = false;
                         }
                         else
+                        {
                             noteKilled[data1][channel] = false;
+                        }
                         delayed.deltaFrames = (delay - (samples - tomod.deltaFrames));
                         if (samples - delayed.deltaFrames - delay <= 0)
                         {
                             delayed.midiData[3] = 127;
                             delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                             if (param[kLimit] == 0.0f)
+                            {
                                 delayed.flags = 127;
+                            }
                             midiDelayBuffer.push_back(delayed);
                         }
                     }
@@ -453,7 +573,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                         delayed.midiData[3] = 127;
                         delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                         if (param[kLimit] == 0.0f)
+                        {
                             delayed.flags = 127;
+                        }
                         midiDelayBuffer.push_back(delayed);
                         dbg("delay noteoff in later block, counter=" << delayed.deltaFrames);
                     }
@@ -470,10 +592,14 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                         notePlaying[data1][channel] = false;
                     }
                     else
+                    {
                         noteKilled[data1][channel] = false;
+                    }
                 }
                 else
+                {
                     discard = true;
+                }
             }
             //Incoming NoteOn---------------------------------------------------------------
             else if (status == MIDI_NOTEON)
@@ -508,7 +634,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             delayed.midiData[3] = 127;
                             delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                             if (param[kLimit] == 0.0f)
+                            {
                                 delayed.flags = 127;
+                            }
                             midiDelayBuffer.push_back(delayed);
                             //}
                         }
@@ -521,7 +649,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             delayed.midiData[3] = 127;
                             delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                             if (param[kLimit] == 0.0f)
+                            {
                                 delayed.flags = 127;
+                            }
                             midiDelayBuffer.push_back(delayed);
                             dbg("delay noteoff in later block, counter=" << delayed.deltaFrames);
                         }
@@ -531,7 +661,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                 {
                     int dryvel = roundToInt((float) data2 * param[kDry]);
                     if (dryvel == 0)
+                    {
                         dryvel = 1;
+                    }
                     if (notePlaying[data1][channel])
                     {
                         VstMidiEvent kill;
@@ -565,7 +697,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                     lastout[data1][channel] = -1;
                 }
                 else
+                {
                     discard = true;
+                }
                 if (param[kWet] > 0.f)
                 {
                     VstMidiEvent delayed = tomod;
@@ -581,7 +715,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                         delayed.midiData[3] = 127;
                         delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                         if (param[kLimit] == 0.0f)
+                        {
                             delayed.flags = 127;
+                        }
                         midiDelayBuffer.push_back(delayed);
                         //}
                     }
@@ -592,14 +728,18 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                         delayed.midiData[3] = 127;
                         delayed.flags       = roundToInt(param[kLimit] * 15.f) + 1;
                         if (param[kLimit] == 0.0f)
+                        {
                             delayed.flags = 127;
+                        }
                         midiDelayBuffer.push_back(delayed);
                     }
                 }
             }
         } // if listenchannel==channel
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     //process delay buffer----------------------------------------------------------
@@ -675,7 +815,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                 discard                 = true;
             }
             else
+            {
                 discard = true;
+            }
             if (! discard)
             {
                 VstMidiEvent out = event;
@@ -690,9 +832,13 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                 {
                     event.midiData[2] = roundToInt((float) data2 * param[kFeedback]) - 1;
                     if (status == MIDI_NOTEON && event.midiData[2] < 1)
+                    {
                         event.midiData[2] = 1;
+                    }
                     else if (event.midiData[2] < 0)
+                    {
                         event.midiData[2] = 0;
+                    }
                 }
                 if (samples - event.deltaFrames - delay > 0)
                 {
@@ -708,7 +854,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             event.flags--;
                         }
                         else
+                        {
                             noteKilled[data1][channel] = false;
+                        }
                     }
                     else if (status == MIDI_NOTEON)
                     {
@@ -732,7 +880,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                             outputs[0].push_back(out1);
                         }
                         else
+                        {
                             notePlaying[data1][channel] = false;
+                        }
                         event.flags--;
                     }
                     else if (status == MIDI_CONTROLCHANGE && param[kMode] >= 0.5f)
@@ -748,20 +898,28 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                     {
                         event.midiData[3] = roundToInt((float) event.midiData[3] * param[kFeedback]) - 1;
                         if (event.midiData[3] < 0)
+                        {
                             event.midiData[3] = 0;
+                        }
                     }
                     if (event.midiData[3] > 0 && event.flags > 0)
                     {
                         if (status == MIDI_NOTEOFF)
+                        {
                             expectingDelayedNoteOff[data1][channel]++;
+                        }
                         else if (status == MIDI_NOTEON)
+                        {
                             expectingDelayedNoteOn[data1][channel]++;
+                        }
                         event.deltaFrames = (delay - (samples - event.deltaFrames));
                         if (param[kFeedback] < 1.f)
                         {
                             event.midiData[3] = roundToInt((float) event.midiData[3] * param[kFeedback]) - 1;
                             if (event.midiData[3] < 0)
+                            {
                                 event.midiData[3] = 0;
+                            }
                         }
                         midiDelayBuffer.push_back(event);
                     }
@@ -771,15 +929,21 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                     if (event.midiData[3] > 0 && event.flags > 0)
                     {
                         if (status == MIDI_NOTEOFF)
+                        {
                             expectingDelayedNoteOff[data1][channel]++;
+                        }
                         else if (status == MIDI_NOTEON)
+                        {
                             expectingDelayedNoteOn[data1][channel]++;
+                        }
                         event.deltaFrames = (delay - (samples - event.deltaFrames));
                         if (param[kFeedback] < 1.f)
                         {
                             event.midiData[3] = roundToInt((float) event.midiData[3] * param[kFeedback]) - 1;
                             if (event.midiData[3] < 0)
+                            {
                                 event.midiData[3] = 0;
+                            }
                         }
                         newBuffer.push_back(event);
                     }
@@ -805,7 +969,9 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
         for (unsigned int i = 0; i < temp.size(); i++)
         {
             if (i == 0)
+            {
                 outputs[0].push_back(temp[i]);
+            }
             else
             {
                 int what = modulate(temp[i], temp[i - 1]);
@@ -829,13 +995,19 @@ void MidiDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
 int MidiDelay::modulate(VstMidiEvent input, VstMidiEvent mod)
 {
     if (input.midiData[0] != mod.midiData[0])
+    {
         return 0;
+    }
     if (input.midiData[1] != mod.midiData[1])
+    {
         return 0;
+    }
     if (abs(input.deltaFrames - mod.deltaFrames) <= 20)
     {
         if (input.midiData[2] >= mod.midiData[2])
+        {
             return 1;
+        }
         return 2;
     }
     return 0;

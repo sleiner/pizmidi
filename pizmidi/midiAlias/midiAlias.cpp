@@ -53,7 +53,9 @@ MidiAlias::MidiAlias(audioMasterCallback audioMaster)
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     init();
@@ -63,7 +65,9 @@ MidiAlias::MidiAlias(audioMasterCallback audioMaster)
 MidiAlias::~MidiAlias()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -111,12 +115,16 @@ void MidiAlias::setParameter(VstInt32 index, float value)
         case kMirror:
             fMirror = ap->fMirror = value;
             if (fZero > fMirror)
+            {
                 setParameterAutomated(kZero, fMirror);
+            }
             break;
         case kZero:
             fZero = ap->fZero = value;
             if (fZero > fMirror)
+            {
                 setParameterAutomated(kMirror, fZero);
+            }
             break;
         case kShift:
             fShift = ap->fShift = value;
@@ -192,9 +200,13 @@ void MidiAlias::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kPower:
             if (fPower < 0.5f)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 strcpy(text, "On");
+            }
             break;
         default:
             break;
@@ -223,7 +235,9 @@ void MidiAlias::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
             if (fPower >= 0.5f)
             {
                 if (nyquist == zero)
+                {
                     newnote = zero;
+                }
                 else
                 {
                     newnote += shift;
@@ -232,7 +246,9 @@ void MidiAlias::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                     {
                         newnote += 2 * (nyquist - newnote);
                         if (newnote < zero)
+                        {
                             newnote -= 2 * (newnote - zero);
+                        }
                         counter--;
                         if (counter == 0)
                         {
@@ -244,7 +260,9 @@ void MidiAlias::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
                 tomod.midiData[1] = (char) newnote;
             }
             if (isNoteOn(tomod))
+            {
                 transposed[data1][channel] = newnote;
+            }
         }
         else if (isNoteOff(tomod))
         {
@@ -253,6 +271,8 @@ void MidiAlias::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outp
             transposed[data1][channel] = data1;
         }
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

@@ -13,7 +13,9 @@ public:
     CpuGraph()
     {
         for (int i = 0; i < numPoints; i++)
+        {
             points[i] = 0.f;
+        }
         setMouseClickGrabsKeyboardFocus(false);
     }
 
@@ -22,7 +24,9 @@ public:
     void addPoint(float value)
     {
         for (int i = 1; i < numPoints; i++)
+        {
             points[i - 1] = points[i];
+        }
         points[numPoints - 1] = value;
         this->repaint();
     }

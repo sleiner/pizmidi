@@ -1017,7 +1017,9 @@ void AudioToCCEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)
 void AudioToCCEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParametersFromFilter();
+    }
 }
 
 void AudioToCCEditor::updateParametersFromFilter()
@@ -1028,7 +1030,9 @@ void AudioToCCEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
     const int newDevice = filter->devices.indexOf(filter->getActiveDevice());
     for (int i = 0; i < numParams; i++)
+    {
         p[i] = filter->getParameter(i);
+    }
     const int ccL = filter->lastCCL;
     const int ccR = filter->lastCCR;
     filter->getCallbackLock().exit();
@@ -1084,9 +1088,13 @@ void AudioToCCEditor::timerCallback()
     else
     {
         if (gateL)
+        {
             clipL->setToggleState(true, juce::dontSendNotification);
+        }
         if (gateR)
+        {
             clipR->setToggleState(true, juce::dontSendNotification);
+        }
     }
 }
 

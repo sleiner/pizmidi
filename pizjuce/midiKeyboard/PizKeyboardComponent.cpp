@@ -9,14 +9,18 @@ PizKeyboardComponent::PizKeyboardComponent(juce::MidiKeyboardState& state, const
 {
     s = &state;
     for (int i = juce::String(keymap).length(); --i >= 0;)
+    {
         setKeyPressForNote(juce::KeyPress(keymap[i], 0, 0), i);
+    }
     setKeyPressBaseOctave(4);
 }
 
 bool PizKeyboardComponent::keyStateChanged(bool isKeyDown)
 {
     if (drawQwerty)
+    {
         return true;
+    }
     if (toggle)
     {
         bool keyPressUsed = false;
@@ -76,7 +80,9 @@ bool PizKeyboardComponent::mouseDownOnKey(int midiNoteNumber, const juce::MouseE
     else if (e.mods.isShiftDown())
     {
         if (! e.mods.isPopupMenu())
+        {
             setKeyPressBaseOctave(midiNoteNumber / 12);
+        }
         grabKeyboardFocus();
         repaint();
         return false;

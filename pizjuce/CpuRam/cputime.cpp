@@ -30,7 +30,9 @@ CProcessorUsage::CProcessorUsage()
 
     HMODULE hModule = ::GetModuleHandle(TEXT("kernel32.dll"));
     if (hModule)
+    {
         s_pfnGetSystemTimes = (pfnGetSystemTimes)::GetProcAddress(hModule, "GetSystemTimes");
+    }
 
     if (! s_pfnGetSystemTimes)
     {
@@ -51,7 +53,9 @@ CProcessorUsage::CProcessorUsage()
 CProcessorUsage::~CProcessorUsage()
 {
     if (m_pInfo)
+    {
         delete m_pInfo;
+    }
 
     ::DeleteCriticalSection(&m_cs);
 }
@@ -59,7 +63,9 @@ CProcessorUsage::~CProcessorUsage()
 void CProcessorUsage::GetSysTimes(__int64& idleTime, __int64& kernelTime, __int64& userTime)
 {
     if (s_pfnGetSystemTimes)
+    {
         s_pfnGetSystemTimes((LPFILETIME) &idleTime, (LPFILETIME) &kernelTime, (LPFILETIME) &userTime);
+    }
     else
     {
         idleTime   = 0;
@@ -98,7 +104,9 @@ float CProcessorUsage::GetUsage(bool processOnly)
     sLastCpu = s_lastCpu;
 
     if (((::GetTickCount() - s_TickMark) & 0x7FFFFFFF) <= interval && ! firstTime)
+    {
         return sLastCpu;
+    }
 
     firstTime = false;
     __int64 time;
@@ -145,9 +153,13 @@ float CProcessorUsage::GetUsage(bool processOnly)
     __int64 sys = (usr + ker);
 
     if (sys)
+    {
         cpu = float((sys - idl) * 100 / sys); // System Idle take 100 % of cpu;
+    }
     else
+    {
         cpu = 0;
+    }
 
     cpuProcess = float((((userTimeProcess - s_userTimeProcess) + (kernelTimeProcess - s_kernelTimeProcess)) * 100) / div);
 
@@ -162,16 +174,22 @@ float CProcessorUsage::GetUsage(bool processOnly)
     s_count++;
 
     if (s_count > 5)
+    {
         s_count = 5;
+    }
 
     cpu = 0;
     int i;
     for (i = 0; i < s_count; i++)
+    {
         cpu += s_cpu[i];
+    }
 
     cpuProcess = 0;
     for (i = 0; i < s_count; i++)
+    {
         cpuProcess += s_cpuProcess[i];
+    }
 
     cpu /= s_count;
     cpuProcess /= s_count;

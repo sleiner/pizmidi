@@ -102,7 +102,9 @@ MidiNotesToCC::MidiNotesToCC(audioMasterCallback audioMaster)
 MidiNotesToCC::~MidiNotesToCC()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -160,22 +162,30 @@ void MidiNotesToCC::setParameter(VstInt32 index, float value)
     {
         case kNoteHi:
             if (value < fNoteLo)
+            {
                 setParameterAutomated(kNoteLo, value);
+            }
             fNoteHi = ap->fNoteHi = value;
             break;
         case kNoteLo:
             if (value > fNoteHi)
+            {
                 setParameterAutomated(kNoteHi, value);
+            }
             fNoteLo = ap->fNoteLo = value;
             break;
         case kVeloHi:
             if (value < fVeloLo)
+            {
                 setParameterAutomated(kVeloLo, value);
+            }
             fVeloHi = ap->fVeloHi = value;
             break;
         case kVeloLo:
             if (value > fVeloHi)
+            {
                 setParameterAutomated(kVeloHi, value);
+            }
             fVeloLo = ap->fVeloLo = value;
             break;
         case kChin:
@@ -342,33 +352,53 @@ void MidiNotesToCC::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kVeloHi:
             if (FLOAT_TO_MIDI(fVeloHi) == 0)
+            {
                 strcpy(text, "1");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVeloHi));
+            }
             break;
         case kVeloLo:
             if (FLOAT_TO_MIDI(fVeloLo) == 0)
+            {
                 strcpy(text, "1");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVeloLo));
+            }
             break;
         case kChin:
             if (FLOAT_TO_CHANNEL016(fChin) == 0)
+            {
                 strcpy(text, "Any");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChin));
+            }
             break;
         case kNCC:
             if (FLOAT_TO_MIDI2(fNCC) == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI2(fNCC) - 1);
+            }
             break;
         case kNCCoff:
             if (FLOAT_TO_MIDI2(fNCCoff) == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI2(fNCCoff) - 1);
+            }
             break;
         case kNCCHi:
             sprintf(text, "%d", FLOAT_TO_MIDI(fNCCHi));
@@ -378,41 +408,67 @@ void MidiNotesToCC::getParameterDisplay(VstInt32 index, char* text)
             break;
         case kVCC:
             if (FLOAT_TO_MIDI2(fVCC) == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI2(fVCC) - 1);
+            }
             break;
         case kVCCoff:
             if (FLOAT_TO_MIDI2(fVCCoff) == 0)
+            {
                 strcpy(text, "Off");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI2(fVCCoff) - 1);
+            }
             break;
         case kVCCHi:
             if (FLOAT_TO_MIDI(fVCCHi) == 0)
+            {
                 strcpy(text, "1");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVCCHi));
+            }
             break;
         case kVCCLo:
             if (FLOAT_TO_MIDI(fVCCLo) == 0)
+            {
                 strcpy(text, "1");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_MIDI(fVCCLo));
+            }
             break;
         case kChout:
             if (FLOAT_TO_CHANNEL016(fChout) == 0)
+            {
                 strcpy(text, "Same as input");
+            }
             else
+            {
                 sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChout));
+            }
             break;
         case kThru:
             if (fThru < 0.3f)
+            {
                 strcpy(text, "Off");
+            }
             else if (fThru <= 0.6f)
+            {
                 strcpy(text, "Unconverted");
+            }
             else
+            {
                 strcpy(text, "All");
+            }
         default:
             break;
     }
@@ -431,7 +487,9 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         short data2        = tomod.midiData[2] & 0x7f;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         int lolimit1 = FLOAT_TO_MIDI(fNoteLo);
         int hilimit1 = FLOAT_TO_MIDI(fNoteHi);
@@ -445,7 +503,9 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         int chin  = FLOAT_TO_CHANNEL016(fChin);  //1-16
         int chout = FLOAT_TO_CHANNEL016(fChout); //1-16
         if (chout == 0)
+        {
             chout = channel;
+        }
 
         bool discard = (fThru < 0.3f); //Thru==No --> discard=true
 
@@ -462,18 +522,28 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         if (FLOAT_TO_MIDI2(fNCC) > 0)
                         {
                             if (fThru <= 0.6f)
+                            {
                                 discard = true; //Thru!=Yes --> discard=true
+                            }
                             int newdata = data1;
                             if (lolimit1 == hilimit1)
+                            {
                                 newdata = (low1 + high1) / 2;
+                            }
                             //else if (fRangeMode1<0.3f)
                             //else newdata = MAP_TO_MIDI(data1,low1,high1,0,127);
                             else
+                            {
                                 newdata = MAP_TO_MIDI(data1, low1, high1, lolimit1, hilimit1);
+                            }
                             if (newdata > 127)
+                            {
                                 newdata = 127;
+                            }
                             else if (newdata < 0)
+                            {
                                 newdata = 0;
+                            }
                             //if (FLOAT_TO_MIDI2(fNCC)==0) discard=true;
                             // create new message
                             VstMidiEvent NCC = inputs[0][i];
@@ -482,25 +552,39 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             NCC.midiData[2]  = newdata;
                             outputs[0].push_back(NCC);
                             if (! discard)
+                            {
                                 notePlaying[data1][channel] = sentBoth;
+                            }
                             else
+                            {
                                 notePlaying[data1][channel] = sentCC;
+                            }
                         }
                         if (FLOAT_TO_MIDI2(fVCC) > 0)
                         {
                             if (fThru <= 0.6f)
+                            {
                                 discard = true; //Thru!=Yes --> discard=true
+                            }
                             int newdata = data2;
                             if (lolimit2 == hilimit2)
+                            {
                                 newdata = (low2 + high2) / 2;
+                            }
                             //else if (fRangeMode1<0.3f)
                             //else newdata = MAP_TO_MIDI(data2,low1,high1,0,127);
                             else
+                            {
                                 newdata = MAP_TO_MIDI(data2, low2, high2, lolimit2, hilimit2);
+                            }
                             if (newdata > 127)
+                            {
                                 newdata = 127;
+                            }
                             else if (newdata < 0)
+                            {
                                 newdata = 0;
+                            }
                             // create new message
                             VstMidiEvent VCC = inputs[0][i];
                             VCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
@@ -508,16 +592,24 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             VCC.midiData[2]  = newdata;
                             outputs[0].push_back(VCC);
                             if (! discard)
+                            {
                                 notePlaying[data1][channel] = sentBoth;
+                            }
                             else
+                            {
                                 notePlaying[data1][channel] = sentCC;
+                            }
                         }
                     }
                     else if (discard)
+                    {
                         notePlaying[data1][channel] = 0;
+                    }
                 }
                 else if (discard)
+                {
                     notePlaying[data1][channel] = 0;
+                }
             }
             else if (status == MIDI_NOTEOFF)
             {
@@ -529,7 +621,9 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         if (FLOAT_TO_MIDI2(fNCCoff) > 0 && FLOAT_TO_MIDI2(fVCC) > 0)
                         {
                             if (fThru <= 0.6f)
+                            {
                                 discard = true;
+                            }
                             VstMidiEvent NCC = inputs[0][i];
                             NCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
                             NCC.midiData[1]  = FLOAT_TO_MIDI2(fNCC) - 1;
@@ -539,7 +633,9 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                         if (FLOAT_TO_MIDI2(fVCCoff) > 0 && FLOAT_TO_MIDI2(fVCC) > 0)
                         {
                             if (fThru <= 0.6f)
+                            {
                                 discard = true;
+                            }
                             VstMidiEvent VCC = inputs[0][i];
                             VCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
                             VCC.midiData[1]  = FLOAT_TO_MIDI2(fVCC) - 1;
@@ -554,6 +650,8 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
         //------------------------------------------------------------------------------
         //send thru the original message
         if (! discard)
+        {
             outputs[0].push_back(tomod);
+        }
     }
 }

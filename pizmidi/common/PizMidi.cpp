@@ -22,15 +22,21 @@ PizMidi::PizMidi(audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt32
         getHostStuff(host, inst, numoutputs, ignoreDefault);
     }
     if (! inst && numoutputs)
+    {
         numinputs = numoutputs;
+    }
     if (! getHostProductString(host))
+    {
         strcpy(host, "unknown");
+    }
     readIniFile(host, inst, numinputs, numoutputs, bottomOctave, ignoreDefault);
     delete[] host;
 
 #if ! PLUG_FORCE_EFFECT
     if (inst)
+    {
         isSynth();
+    }
 #elif PLUG_FORCE_INST
     isSynth();
 #endif
@@ -56,33 +62,51 @@ PizMidi::~PizMidi()
     _cleanMidiOutBuffers();
 
     if (_midiEventsIn)
+    {
         delete[] _midiEventsIn;
+    }
     if (_midiEventsOut)
+    {
         delete[] _midiEventsOut;
+    }
     if (_midiSysexEventsIn)
+    {
         delete[] _midiSysexEventsIn;
+    }
     if (_midiSysexEventsOut)
+    {
         delete[] _midiSysexEventsOut;
+    }
     if (_vstEventsToHost)
+    {
         delete _vstEventsToHost;
+    }
     if (_vstMidiEventsToHost)
+    {
         delete[] _vstMidiEventsToHost;
+    }
     if (_vstSysexEventsToHost)
+    {
         delete[] _vstSysexEventsToHost;
+    }
 }
 
 //-----------------------------------------------------------------------------------------
 void PizMidi::getParameterLabel(VstInt32 index, char* label)
 {
     if (index < numParams)
+    {
         vst_strncpy(label, " ", kVstMaxParamStrLen);
+    }
 }
 
 void PizMidi::setParameterAutomated(VstInt32 index, float value)
 {
     setParameter(index, value);
     if (audioMaster)
+    {
         audioMaster(&cEffect, audioMasterAutomate, index, 0, 0, value); // value is in opt
+    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -205,22 +229,32 @@ VstInt32 PizMidi::canDo(char* text)
     if (PLUG_MIDI_OUTPUTS)
     {
         if (! strcmp(text, "sendVstMidiEvent"))
+        {
             result = 1;
+        }
         else if (! strcmp(text, "sendVstEvents"))
+        {
             result = 1;
+        }
     }
 
     if (PLUG_MIDI_INPUTS)
     {
         if (! strcmp(text, "receiveVstEvents"))
+        {
             result = 1;
+        }
         else if (! strcmp(text, "receiveVstMidiEvent"))
+        {
             result = 1;
+        }
     }
 
     // VstTimeInfo
     if (! strcmp(text, "receiveVstTimeInfo"))
+    {
         result = 1;
+    }
 
     dbg("canDo(" << text << "), => " << result);
     return result; // 0 => don't know
@@ -235,7 +269,9 @@ bool PizMidi::getInputProperties(VstInt32 index, VstPinProperties* properties)
         strcpy(properties->label, PLUG_NAME);
         properties->flags |= kVstPinIsActive;
         if (index % 2 == 0)
+        {
             properties->flags |= kVstPinIsStereo;
+        }
         return true;
     }
     return false;
@@ -250,7 +286,9 @@ bool PizMidi::getOutputProperties(VstInt32 index, VstPinProperties* properties)
         strcpy(properties->label, PLUG_NAME);
         properties->flags |= kVstPinIsActive;
         if (index % 2 == 0)
+        {
             properties->flags |= kVstPinIsStereo;
+        }
         return true;
     }
     return false;
@@ -286,9 +324,13 @@ void PizMidi::postProcess(void)
         while (left > 0)
         {
             if (left < MAX_EVENTS_PER_TIMESLICE)
+            {
                 _vstEventsToHost->numEvents = left;
+            }
             else
+            {
                 _vstEventsToHost->numEvents = MAX_EVENTS_PER_TIMESLICE;
+            }
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
                 VstInt32 j                          = i + count;
@@ -308,7 +350,9 @@ void PizMidi::postProcess(void)
             }
             _vstEventsToHost->reserved = 0;
             if (_vstEventsToHost->numEvents > 0)
+            {
                 sendVstEventsToHost((VstEvents*) _vstEventsToHost);
+            }
             left -= _vstEventsToHost->numEvents;
             count += _vstEventsToHost->numEvents;
         }
@@ -318,9 +362,13 @@ void PizMidi::postProcess(void)
         while (left > 0)
         {
             if (left < MAX_EVENTS_PER_TIMESLICE)
+            {
                 _vstEventsToHost->numEvents = left;
+            }
             else
+            {
                 _vstEventsToHost->numEvents = MAX_EVENTS_PER_TIMESLICE;
+            }
             for (int i = 0; i < _vstEventsToHost->numEvents; i++)
             {
                 VstInt32 j                           = i + count;
@@ -337,7 +385,9 @@ void PizMidi::postProcess(void)
             }
             _vstEventsToHost->reserved = 0;
             if (_midiSysexEventsOut[0].size() > 0)
+            {
                 sendVstEventsToHost((VstEvents*) _vstEventsToHost);
+            }
             left -= _vstEventsToHost->numEvents;
             count += _vstEventsToHost->numEvents;
         }

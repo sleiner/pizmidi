@@ -160,9 +160,13 @@ void CpuRamEditor::updateParametersFromFilter()
     float cpu = CPULoad();
     graph->addPoint(cpu * 0.01f);
     if (getFilter()->showGraph)
+    {
         infoLabel->setText(juce::String("CPU Load: ") + juce::String(cpu, 1) + juce::String("%"), juce::dontSendNotification);
+    }
     else
+    {
         infoLabel->setText(juce::String("CPU: ") + juce::String(cpu, 1) + juce::String("%"), juce::dontSendNotification);
+    }
 
     memLabel2->setText(juce::String("Free RAM: ") + juce::String((int) RAMLoad().ullAvailPhys / 1048576) + juce::String("MB"), juce::dontSendNotification);
 
@@ -176,5 +180,7 @@ void CpuRamEditor::updateParametersFromFilter()
     pu.setInterval((int) interval);
 
     if (! lastMinimize)
+    {
         repaint();
+    }
 }

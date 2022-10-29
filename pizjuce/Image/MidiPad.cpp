@@ -28,7 +28,9 @@ MidiPad::MidiPad()
 MidiPad::~MidiPad()
 {
     if (text)
+    {
         delete text;
+    }
     deleteImages();
 }
 
@@ -49,7 +51,9 @@ bool MidiPad::setImageFromFile(juce::File file)
             repaint();
         }
         else
+        {
             return false;
+        }
         return true;
     }
     return false;

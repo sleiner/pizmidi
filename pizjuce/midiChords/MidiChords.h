@@ -113,7 +113,9 @@ public:
     {
         auto noteMatrix = values_.getChild(0).getChild(prog).getChild(trigger);
         if (noteMatrix.isValid())
+        {
             noteMatrix.removeAllProperties(nullptr);
+        }
     }
 
     void setChordNote(int prog, int trigger, int channel, int note, const bool& newValue)
@@ -130,9 +132,13 @@ public:
         {
             int state = triggerProp.getProperty("Ch" + juce::String(channel) + "_0-31", 0);
             if (newValue)
+            {
                 state |= 1 << note;
+            }
             else
+            {
                 state &= ~(1 << note);
+            }
             triggerProp.setProperty("Ch" + juce::String(channel) + "_0-31", state, nullptr);
         }
         else if (note < 64)
@@ -140,9 +146,13 @@ public:
             note -= 32;
             int state = triggerProp.getProperty("Ch" + juce::String(channel) + "_32-63", 0);
             if (newValue)
+            {
                 state |= 1 << note;
+            }
             else
+            {
                 state &= ~(1 << note);
+            }
             triggerProp.setProperty("Ch" + juce::String(channel) + "_32-63", state, nullptr);
         }
         else if (note < 96)
@@ -150,9 +160,13 @@ public:
             note -= 64;
             int state = triggerProp.getProperty("Ch" + juce::String(channel) + "_64-95", 0);
             if (newValue)
+            {
                 state |= 1 << note;
+            }
             else
+            {
                 state &= ~(1 << note);
+            }
             triggerProp.setProperty("Ch" + juce::String(channel) + "_64-95", state, nullptr);
         }
         else if (note < 128)
@@ -160,9 +174,13 @@ public:
             note -= 96;
             int state = triggerProp.getProperty("Ch" + juce::String(channel) + "_96-127", 0);
             if (newValue)
+            {
                 state |= 1 << note;
+            }
             else
+            {
                 state &= ~(1 << note);
+            }
             triggerProp.setProperty("Ch" + juce::String(channel) + "_96-127", state, nullptr);
         }
     }
@@ -178,7 +196,9 @@ public:
         auto triggerProp = values_.getChild(0).getChild(prog).getChild(trigger);
 
         if (! triggerProp.isValid())
+        {
             return false;
+        }
         if (note < 32)
         {
             int state = triggerProp.getProperty("Ch" + juce::String(ch) + "_0-31", 0);
@@ -334,8 +354,12 @@ public:
     bool isTriggerNotePlaying(int note)
     {
         for (int i = 0; i < 16; i++)
+        {
             if (notePlaying[i][note])
+            {
                 return true;
+            }
+        }
         return false;
     }
 
@@ -369,9 +393,13 @@ public:
     void playCurrentChord(bool on)
     {
         if (on)
+        {
             playFromGUI = true;
+        }
         else
+        {
             stopPlayingFromGUI = true;
+        }
     }
 
     bool isPreviewChordPlaying()
@@ -384,7 +412,9 @@ public:
     void setGuitarView(bool on)
     {
         if (getGuitarView())
+        {
             savedGuitarVoicing[curTrigger] = true;
+        }
         programs->set(curProgram, "GuitarView", on);
         if (on /* && !savedGuitarVoicing[curTrigger]*/)
         {
@@ -406,7 +436,9 @@ public:
     {
         programs->set(curProgram, "String" + juce::String(string), note);
         if (translate)
+        {
             translateToGuitarChord();
+        }
     }
 
     int getStringValue(int string)
@@ -418,7 +450,9 @@ public:
     {
         programs->set(curProgram, "NumFrets", frets);
         if (translate)
+        {
             translateToGuitarChord();
+        }
     }
 
     int getNumFrets()
@@ -430,7 +464,9 @@ public:
     {
         int n = getNumStrings();
         if (n == strings)
+        {
             return;
+        }
         while (n < strings)
         {
             setStringValue(n, 0, false);
@@ -443,7 +479,9 @@ public:
         }
         programs->set(curProgram, "NumStrings", strings);
         if (translate)
+        {
             translateToGuitarChord();
+        }
     }
 
     int getNumStrings()
