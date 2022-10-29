@@ -1,4 +1,4 @@
-//#include "CpuRam.h"
+#include "CpuRam.h"
 #include "CpuRamEditor.h"
 
 //==============================================================================
