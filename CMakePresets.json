@@ -10,6 +10,7 @@
             "name": "common",
             "description": "All builds will inherit from this configuration",
             "hidden": true,
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/build/${presetName}"
         },
         {
@@ -19,7 +20,6 @@
             "inherits": [
                 "common"
             ],
-            "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CPACK_GENERATOR": "productbuild;ZIP"
             },
@@ -45,7 +45,6 @@
             "inherits": [
                 "common"
             ],
-            "generator": "Ninja Multi-Config",
             "cacheVariables": {
                 "CPACK_GENERATOR": "ZIP"
             }
