@@ -39,7 +39,7 @@ typedef double ReaSample;
 #ifdef _WIN32
 #include <windows.h>
 
-#define REAPER_PLUGIN_DLL_EXPORT __declspec(dllexport)
+#define REAPER_PLUGIN_DLL_EXPORT __declspec (dllexport)
 #define REAPER_PLUGIN_HINSTANCE  HINSTANCE
 
 #else

@@ -30,6 +30,6 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ github.event.pull_request.head.sha }}
             - name: Install clang-format
-              run: sudo ./.github/scripts/install-clang-format.sh 14
+              run: sudo ./.github/scripts/install-clang-format.sh 15
             - name: Check formatting
               run: ./.github/scripts/checkfmt-cpp.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
