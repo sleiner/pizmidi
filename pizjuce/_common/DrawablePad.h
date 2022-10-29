@@ -3,41 +3,39 @@
 
 #include <memory>
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
-using namespace juce;
-
-class DrawablePad : public Button
+class DrawablePad : public juce::Button
 {
 public:
     //==============================================================================
-    DrawablePad (const String& buttonName);
+    DrawablePad (const juce::String& buttonName);
 
     //==============================================================================
-    void setImages (File normalImage,
-                    File overImage       = File(),
-                    File downImage       = File(),
-                    File disabledImage   = File(),
-                    File normalImageOn   = File(),
-                    File overImageOn     = File(),
-                    File downImageOn     = File(),
-                    File disabledImageOn = File());
-    void setImages (const Drawable* normalImage,
-                    const Drawable* overImage       = 0,
-                    const Drawable* downImage       = 0,
-                    const Drawable* disabledImage   = 0,
-                    const Drawable* normalImageOn   = 0,
-                    const Drawable* overImageOn     = 0,
-                    const Drawable* downImageOn     = 0,
-                    const Drawable* disabledImageOn = 0);
-    void setImagesFromUptr (std::unique_ptr<Drawable> normalImage,
-                            std::unique_ptr<Drawable> overImage       = nullptr,
-                            std::unique_ptr<Drawable> downImage       = nullptr,
-                            std::unique_ptr<Drawable> disabledImage   = nullptr,
-                            std::unique_ptr<Drawable> normalImageOn   = nullptr,
-                            std::unique_ptr<Drawable> overImageOn     = nullptr,
-                            std::unique_ptr<Drawable> downImageOn     = nullptr,
-                            std::unique_ptr<Drawable> disabledImageOn = nullptr)
+    void setImages (juce::File normalImage,
+                    juce::File overImage       = juce::File(),
+                    juce::File downImage       = juce::File(),
+                    juce::File disabledImage   = juce::File(),
+                    juce::File normalImageOn   = juce::File(),
+                    juce::File overImageOn     = juce::File(),
+                    juce::File downImageOn     = juce::File(),
+                    juce::File disabledImageOn = juce::File());
+    void setImages (const juce::Drawable* normalImage,
+                    const juce::Drawable* overImage       = 0,
+                    const juce::Drawable* downImage       = 0,
+                    const juce::Drawable* disabledImage   = 0,
+                    const juce::Drawable* normalImageOn   = 0,
+                    const juce::Drawable* overImageOn     = 0,
+                    const juce::Drawable* downImageOn     = 0,
+                    const juce::Drawable* disabledImageOn = 0);
+    void setImagesFromUptr (std::unique_ptr<juce::Drawable> normalImage,
+                            std::unique_ptr<juce::Drawable> overImage       = nullptr,
+                            std::unique_ptr<juce::Drawable> downImage       = nullptr,
+                            std::unique_ptr<juce::Drawable> disabledImage   = nullptr,
+                            std::unique_ptr<juce::Drawable> normalImageOn   = nullptr,
+                            std::unique_ptr<juce::Drawable> overImageOn     = nullptr,
+                            std::unique_ptr<juce::Drawable> downImageOn     = nullptr,
+                            std::unique_ptr<juce::Drawable> disabledImageOn = nullptr)
     {
         // TODO: Remove the raw-pointer function, then the additional copies
         //       can easily be eliminated.
@@ -53,49 +51,47 @@ public:
     void deleteImages();
 
     //==============================================================================
-    void setBackgroundColours (const Colour& toggledOffColour,
-                               const Colour& toggledOnColour);
+    void setBackgroundColours (const juce::Colour& toggledOffColour,
+                               const juce::Colour& toggledOnColour);
 
-    const Colour& getBackgroundColour() const throw();
+    const juce::Colour& getBackgroundColour() const throw();
 
     //==============================================================================
     /** Returns the image that the button is currently displaying. */
-    const Drawable* getCurrentImage() const throw();
-    const Drawable* getNormalImage() const throw();
-    const Drawable* getOverImage() const throw();
-    const Drawable* getDownImage() const throw();
+    const juce::Drawable* getCurrentImage() const throw();
+    const juce::Drawable* getNormalImage() const throw();
+    const juce::Drawable* getOverImage() const throw();
+    const juce::Drawable* getDownImage() const throw();
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        String Label;
+    juce::String Label;
 
 protected:
     /** @internal */
-    void drawButtonBackground (Graphics& g,
+    void drawButtonBackground (juce::Graphics& g,
                                Button& button,
-                               const Colour& backgroundColour,
+                               const juce::Colour& backgroundColour,
                                bool isMouseOverButton,
                                bool isButtonDown);
 
-    void paintButton (Graphics& g,
+    void paintButton (juce::Graphics& g,
                       bool isMouseOverButton,
                       bool isButtonDown) override;
     void resized() override;
 
 private:
-    //==============================================================================
-    std::unique_ptr<Drawable> normalImage;
-    std::unique_ptr<Drawable> overImage;
-    std::unique_ptr<Drawable> downImage;
-    std::unique_ptr<Drawable> disabledImage;
-    std::unique_ptr<Drawable> normalImageOn;
-    std::unique_ptr<Drawable> overImageOn;
-    std::unique_ptr<Drawable> downImageOn;
-    std::unique_ptr<Drawable> disabledImageOn;
-    Colour backgroundOff, backgroundOn;
+    std::unique_ptr<juce::Drawable> normalImage;
+    std::unique_ptr<juce::Drawable> overImage;
+    std::unique_ptr<juce::Drawable> downImage;
+    std::unique_ptr<juce::Drawable> disabledImage;
+    std::unique_ptr<juce::Drawable> normalImageOn;
+    std::unique_ptr<juce::Drawable> overImageOn;
+    std::unique_ptr<juce::Drawable> downImageOn;
+    std::unique_ptr<juce::Drawable> disabledImageOn;
+    juce::Colour backgroundOff, backgroundOn;
     DrawablePad (const DrawablePad&);
     const DrawablePad& operator= (const DrawablePad&);
+
+    JUCE_LEAK_DETECTOR (DrawablePad)
 };
 
 #endif

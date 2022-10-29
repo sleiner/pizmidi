@@ -12,7 +12,7 @@
 
 */
 class WebBrowserFilter : public PizAudioProcessor,
-                         public ChangeBroadcaster
+                         public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -23,14 +23,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override;
+    const juce::String getName() const override;
     bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
@@ -38,11 +38,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -54,11 +54,11 @@ public:
     int getNumPrograms() override { return 0; }
     int getCurrentProgram() override { return 0; }
     void setCurrentProgram (int index) override {}
-    const String getProgramName (int index) override { return String(); }
-    void changeProgramName (int index, const String& newName) override {}
+    const juce::String getProgramName (int index) override { return juce::String(); }
+    void changeProgramName (int index, const juce::String& newName) override {}
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
@@ -70,23 +70,22 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
 
-    String getURL() { return URL; }
-    void setURL (const String& newURL) { URL = newURL; }
+    juce::String getURL() { return URL; }
+    void setURL (const juce::String& newURL) { URL = newURL; }
     bool initialPageLoaded;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private :
-        // this is our gain - the UI and the host can access this by getting/setting
-        // parameter 0.
-        float gain;
-    String URL;
+private:
+    // this is our gain - the UI and the host can access this by getting/setting
+    // parameter 0.
+    float gain;
+    juce::String URL;
     float lastinL;
     float lastoutL;
     float lastinR;
     float lastoutR;
     float R;
+
+    JUCE_LEAK_DETECTOR (WebBrowserFilter)
 };
 
 #endif

@@ -210,167 +210,167 @@ void MidiChsProcessor::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-const String MidiChsProcessor::getParameterName (int index)
+const juce::String MidiChsProcessor::getParameterName (int index)
 {
     switch (index)
     {
         case 0:
-            return String ("1");
+            return juce::String ("1");
             break;
         case 1:
-            return String ("2");
+            return juce::String ("2");
             break;
         case 2:
-            return String ("3");
+            return juce::String ("3");
             break;
         case 3:
-            return String ("4");
+            return juce::String ("4");
             break;
         case 4:
-            return String ("5");
+            return juce::String ("5");
             break;
         case 5:
-            return String ("6");
+            return juce::String ("6");
             break;
         case 6:
-            return String ("7");
+            return juce::String ("7");
             break;
         case 7:
-            return String ("8");
+            return juce::String ("8");
             break;
         case 8:
-            return String ("9");
+            return juce::String ("9");
             break;
         case 9:
-            return String ("10");
+            return juce::String ("10");
             break;
         case 10:
-            return String ("11");
+            return juce::String ("11");
             break;
         case 11:
-            return String ("12");
+            return juce::String ("12");
             break;
         case 12:
-            return String ("13");
+            return juce::String ("13");
             break;
         case 13:
-            return String ("14");
+            return juce::String ("14");
             break;
         case 14:
-            return String ("15");
+            return juce::String ("15");
             break;
         case 15:
-            return String ("16");
+            return juce::String ("16");
             break;
         case 16:
-            return String ("Reset");
+            return juce::String ("Reset");
             break;
         case 17:
-            return String ("Clear");
+            return juce::String ("Clear");
             break;
         case 18:
-            return String ("Hue");
+            return juce::String ("Hue");
             break;
         case 19:
-            return String ("Saturation");
+            return juce::String ("Saturation");
             break;
         case 20:
-            return String ("Brightness");
+            return juce::String ("Brightness");
             break;
         case 21:
-            return String ("Contrast");
+            return juce::String ("Contrast");
             break;
 
         default:
-            return String();
+            return juce::String();
             break;
     }
 }
 
-const String MidiChsProcessor::getParameterText (int index)
+const juce::String MidiChsProcessor::getParameterText (int index)
 {
     switch (index)
     {
         case 0:
-            return String ((int) (fChannel1 * 16.0));
+            return juce::String ((int) (fChannel1 * 16.0));
             break;
         case 1:
-            return String ((int) (fChannel2 * 16.0));
+            return juce::String ((int) (fChannel2 * 16.0));
             break;
         case 2:
-            return String ((int) (fChannel3 * 16.0));
+            return juce::String ((int) (fChannel3 * 16.0));
             break;
         case 3:
-            return String ((int) (fChannel4 * 16.0));
+            return juce::String ((int) (fChannel4 * 16.0));
             break;
         case 4:
-            return String ((int) (fChannel5 * 16.0));
+            return juce::String ((int) (fChannel5 * 16.0));
             break;
         case 5:
-            return String ((int) (fChannel6 * 16.0));
+            return juce::String ((int) (fChannel6 * 16.0));
             break;
         case 6:
-            return String ((int) (fChannel7 * 16.0));
+            return juce::String ((int) (fChannel7 * 16.0));
             break;
         case 7:
-            return String ((int) (fChannel8 * 16.0));
+            return juce::String ((int) (fChannel8 * 16.0));
             break;
         case 8:
-            return String ((int) (fChannel9 * 16.0));
+            return juce::String ((int) (fChannel9 * 16.0));
             break;
         case 9:
-            return String ((int) (fChannel10 * 16.0));
+            return juce::String ((int) (fChannel10 * 16.0));
             break;
         case 10:
-            return String ((int) (fChannel11 * 16.0));
+            return juce::String ((int) (fChannel11 * 16.0));
             break;
         case 11:
-            return String ((int) (fChannel12 * 16.0));
+            return juce::String ((int) (fChannel12 * 16.0));
             break;
         case 12:
-            return String ((int) (fChannel13 * 16.0));
+            return juce::String ((int) (fChannel13 * 16.0));
             break;
         case 13:
-            return String ((int) (fChannel14 * 16.0));
+            return juce::String ((int) (fChannel14 * 16.0));
             break;
         case 14:
-            return String ((int) (fChannel15 * 16.0));
+            return juce::String ((int) (fChannel15 * 16.0));
             break;
         case 15:
-            return String ((int) (fChannel16 * 16.0));
+            return juce::String ((int) (fChannel16 * 16.0));
             break;
         case 16:
-            return String (fReset);
+            return juce::String (fReset);
             break;
         case 17:
-            return String (fClear);
+            return juce::String (fClear);
             break;
         case 18:
-            return String (bghue);
+            return juce::String (bghue);
             break;
         case 19:
-            return String (bgsat);
+            return juce::String (bgsat);
             break;
         case 20:
-            return String (bgbri);
+            return juce::String (bgbri);
             break;
         case 21:
-            return String (contrast);
+            return juce::String (contrast);
             break;
 
         default:
-            return String();
+            return juce::String();
             break;
     }
 }
-const String MidiChsProcessor::getInputChannelName (const int channelIndex) const
+const juce::String MidiChsProcessor::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String MidiChsProcessor::getOutputChannelName (const int channelIndex) const
+const juce::String MidiChsProcessor::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool MidiChsProcessor::isInputChannelStereoPair (int index) const
@@ -395,22 +395,22 @@ void MidiChsProcessor::releaseResources()
     // spare memory, etc.
 }
 
-void MidiChsProcessor::processBlock (AudioSampleBuffer& buffer,
-                                     MidiBuffer& midiMessages)
+void MidiChsProcessor::processBlock (juce::AudioSampleBuffer& buffer,
+                                     juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
 
-    MidiBuffer midiout;
+    juce::MidiBuffer midiout;
     bool discard = false;
     for (auto&& msgMetadata : midiMessages)
     {
         auto midi_message  = msgMetadata.getMessage();
         auto sample_number = msgMetadata.samplePosition;
 
-        MidiMessage out_message = midi_message;
+        juce::MidiMessage out_message = midi_message;
         short ch[16];
         ch[0]  = (short int) (fChannel1 * 16);
         ch[1]  = (short int) (fChannel2 * 16);
@@ -450,13 +450,13 @@ void MidiChsProcessor::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiChsProcessor::createEditor()
+juce::AudioProcessorEditor* MidiChsProcessor::createEditor()
 {
     return new MidiChsEditor (this);
 }
 
 //==============================================================================
-void MidiChsProcessor::getStateInformation (MemoryBlock& destData)
+void MidiChsProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -464,7 +464,7 @@ void MidiChsProcessor::getStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     // add some attributes to it..
     xmlState.setAttribute ("1", fChannel1);

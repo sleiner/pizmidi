@@ -1,23 +1,23 @@
 #include "VSTSlider.h"
 
-VSTSlider::VSTSlider (String name) : Slider (name)
+VSTSlider::VSTSlider (juce::String name) : Slider (name)
 {
-    this->ownerPlugin = 0;
+    this->ownerPlugin = nullptr;
     this->vstIndex    = -1;
     this->setMouseClickGrabsKeyboardFocus (false);
 };
 
 VSTSlider::~VSTSlider(){};
 
-String VSTSlider::getTextFromValue (double value)
+juce::String VSTSlider::getTextFromValue (double value)
 {
     if (ownerPlugin && vstIndex > -1)
         return ownerPlugin->getParameterText (vstIndex);
     else
-        return String (value) + "?";
+        return juce::String (value) + "?";
 };
 
-void VSTSlider::setOwner (AudioProcessor* owner, int index)
+void VSTSlider::setOwner (juce::AudioProcessor* owner, int index)
 {
     this->ownerPlugin = owner;
     this->vstIndex    = index;
@@ -48,7 +48,7 @@ void VSTSlider::setVSTSlider (float x)
         double min   = this->getMinimum();
         double max   = this->getMaximum();
         double value = min + (double) x * (max - min);
-        this->setValue (value, dontSendNotification);
+        this->setValue (value, juce::dontSendNotification);
     }
     this->updateText();
 };
@@ -62,7 +62,7 @@ void VSTSlider::setVSTSlider()
         double min   = this->getMinimum();
         double max   = this->getMaximum();
         double value = min + (double) x * (max - min);
-        this->setValue (value, dontSendNotification);
+        this->setValue (value, juce::dontSendNotification);
     }
     this->updateText();
 };

@@ -1,8 +1,13 @@
-#include "PianoRoll.h"
 
+#include "PianoRoll.h"
 #include <utility>
 
-PianoRoll::PianoRoll (AudioProcessor* _plugin, AudioProcessorEditor* _owner, Timeline* _timeline)
+using juce::jlimit;
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
+
+PianoRoll::PianoRoll (juce::AudioProcessor* _plugin, juce::AudioProcessorEditor* _owner, Timeline* _timeline)
     : sequence (0),
       hoveringNoteIndex (-1),
       hoveringNote (nullptr),
@@ -59,7 +64,7 @@ int PianoRoll::getTimeInPixels()
     return roundToInt (sequence->getCurrentTime() * (double) noteLayer->getWidth() / seqLengthInPpq);
 }
 
-void PianoRoll::mouseDown (const MouseEvent& e)
+void PianoRoll::mouseDown (const juce::MouseEvent& e)
 {
     bool snap           = snapToGrid != e.mods.isShiftDown();
     int n               = (int) ((float) (getHeight() - e.y) * 128.f / (float) getHeight());
@@ -85,7 +90,7 @@ void PianoRoll::mouseDown (const MouseEvent& e)
             clearSelection();
             addToSelection (hoveringNote);
             jassert (hoveringNote->noteOffObject != nullptr);
-            DBG ("n=" + String (n) + "v=" + String (draggingNoteVelocity));
+            DBG ("n=" + juce::String (n) + "v=" + juce::String (draggingNoteVelocity));
         }
         hoveringNoteIndex -= Dragging_A_Note;
     }
@@ -106,8 +111,8 @@ void PianoRoll::mouseDown (const MouseEvent& e)
         if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
             timeline->setLoop (0, quarterNotesPerBar * ceil ((lastDragTime + 1) / (timebase * quarterNotesPerBar)));
         plugin->getCallbackLock().enter();
-        sequence->addNote (MidiMessage (MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
-                           MidiMessage (MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
+        sequence->addNote (juce::MidiMessage (MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
+                           juce::MidiMessage (MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
         plugin->getCallbackLock().exit();
         sequence->updateMatchedPairs();
         hoveringNote = sequence->getEventPointer (sequence->getIndexOfNote (draggingNoteNumber, draggingNoteStartTime, true));
@@ -119,7 +124,7 @@ void PianoRoll::mouseDown (const MouseEvent& e)
     noteLayer->repaint();
 }
 
-void PianoRoll::mouseDrag (const MouseEvent& e)
+void PianoRoll::mouseDrag (const juce::MouseEvent& e)
 {
     bool snap = snapToGrid != e.mods.isShiftDown();
     double x  = pixelsToPpq ((float) e.x, false);
@@ -174,7 +179,7 @@ void PianoRoll::mouseDrag (const MouseEvent& e)
     }
 }
 
-void PianoRoll::mouseUp (const MouseEvent& e)
+void PianoRoll::mouseUp (const juce::MouseEvent& e)
 {
     int highnote, lownote;
     if (lasso.getWidth() > 0)
@@ -185,14 +190,14 @@ void PianoRoll::mouseUp (const MouseEvent& e)
             std::swap (lownote, highnote);
         for (int index = 0; index < (sequence->getNumEvents()); index++)
         {
-            MidiMessage m = sequence->getEventPointer (index)->message;
-            DBG ("eventtime=" + String (sequence->getEventTime (index)));
+            juce::MidiMessage m = sequence->getEventPointer (index)->message;
+            DBG ("eventtime=" + juce::String (sequence->getEventTime (index)));
             if (m.isNoteOn())
             {
-                DBG ("note=" + String (m.getNoteNumber()));
+                DBG ("note=" + juce::String (m.getNoteNumber()));
             }
-            DBG ("lassostart=" + String (pixelsToPpq ((float) lasso.getX(), false)));
-            DBG ("lassoend=" + String (pixelsToPpq ((float) (lasso.getX() + lasso.getWidth()), false)));
+            DBG ("lassostart=" + juce::String (pixelsToPpq ((float) lasso.getX(), false)));
+            DBG ("lassoend=" + juce::String (pixelsToPpq ((float) (lasso.getX() + lasso.getWidth()), false)));
             if (m.isNoteOn()
                 && sequence->getEventTime (index) >= pixelsToPpq ((float) lasso.getX(), false)
                 && sequence->getEventTime (index) <= pixelsToPpq ((float) (lasso.getX() + lasso.getWidth()), false)
@@ -277,7 +282,7 @@ void PianoRoll::mouseUp (const MouseEvent& e)
 //
 //}
 
-void PianoRoll::mouseDoubleClick (const MouseEvent& e)
+void PianoRoll::mouseDoubleClick (const juce::MouseEvent& e)
 {
     if (e.mods.isLeftButtonDown())
     {
@@ -299,8 +304,8 @@ void PianoRoll::mouseDoubleClick (const MouseEvent& e)
         {
             if (sequence->getNumEvents() == 0 && timeline->getLength() == 0)
                 timeline->setLoop (0, quarterNotesPerBar * ceil ((lastDragTime + 1) / (timebase * quarterNotesPerBar)));
-            sequence->addNote (MidiMessage (MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
-                               MidiMessage (MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
+            sequence->addNote (juce::MidiMessage (MIDI_NOTEON | draggingNoteChannel, draggingNoteNumber, draggingNoteVelocity, draggingNoteStartTime),
+                               juce::MidiMessage (MIDI_NOTEOFF | draggingNoteChannel, draggingNoteNumber, 0, draggingNoteStartTime + draggingNoteLength));
             //sequence->updateMatchedPairs();
             addToSelection (sequence->getEventPointer (sequence->getIndexOfNote (n, draggingNoteStartTime, true)));
             sendChangeMessage();
@@ -309,12 +314,12 @@ void PianoRoll::mouseDoubleClick (const MouseEvent& e)
     }
 }
 
-void PianoRoll::paintOverChildren (Graphics& g)
+void PianoRoll::paintOverChildren (juce::Graphics& g)
 {
-    g.fillAll (Colours::transparentBlack);
+    g.fillAll (juce::Colours::transparentBlack);
     if (lasso.getWidth() > 0)
     {
-        g.setColour (Colours::green.withAlpha (0.3f));
+        g.setColour (juce::Colours::green.withAlpha (0.3f));
         g.fillRect (lasso);
     }
 }

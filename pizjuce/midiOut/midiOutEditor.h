@@ -20,7 +20,7 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "midiOut.h"
 #include "MidiPad.h"
@@ -46,8 +46,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void buttonStateChanged (Button* buttonThatWasClicked) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;

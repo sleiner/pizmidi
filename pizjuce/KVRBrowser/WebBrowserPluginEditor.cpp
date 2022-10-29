@@ -24,7 +24,7 @@
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //==============================================================================
-bool MyBrowser::pageAboutToLoad (const String& newURL)
+bool MyBrowser::pageAboutToLoad (const juce::String& newURL)
 {
     if (! newURL.contains ("googleads"))
     {
@@ -34,7 +34,7 @@ bool MyBrowser::pageAboutToLoad (const String& newURL)
     return true;
 }
 
-String MyBrowser::getCurrentURL()
+juce::String MyBrowser::getCurrentURL()
 {
     return lastURL;
 }
@@ -96,7 +96,7 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
     addAndMakeVisible (goButton.get());
     goButton->addListener (this);
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
     //[UserPreSize]
@@ -212,7 +212,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
-void WebBrowserPluginEditor::changeListenerCallback (ChangeBroadcaster* source)
+void WebBrowserPluginEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -226,9 +226,9 @@ void WebBrowserPluginEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
 }
 
-void WebBrowserPluginEditor::textEditorReturnKeyPressed (TextEditor& editor)
+void WebBrowserPluginEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
-    wb->goToURL ((const String) (editor.getText()));
+    wb->goToURL ((const juce::String) (editor.getText()));
 }
 
 void WebBrowserPluginEditor::updateParametersFromFilter()
@@ -237,14 +237,14 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
 
     // we use this lock to make sure the processBlock() method isn't writing to the
     // lastMidiMessage variable while we're trying to read it, but be extra-careful to
-    // only hold the lock for a minimum amount of time..
+    // only hold the lock for a minimum amount of time
     filter->getCallbackLock().enter();
 
-    // take a local copy of the info we need while we've got the lock..
+    // take a local copy of the info we need while we've got the lock
     const float newGain = filter->getParameter (0);
-    String URL          = filter->getURL();
+    juce::String URL    = filter->getURL();
 
-    // ..release the lock ASAP
+    // release the lock ASAP
     filter->getCallbackLock().exit();
 
     if (URL.isNotEmpty())

@@ -1,11 +1,11 @@
 #include "ChordFunctions.h"
 
-PizChord::PizChord (Array<int> newChord)
+PizChord::PizChord (juce::Array<int> newChord)
 {
     chord.addArray (newChord);
     makeIntervalPattern();
 }
-void PizChord::setChord (Array<int> newChord)
+void PizChord::setChord (juce::Array<int> newChord)
 {
     chord.clear();
     chord.addArray (newChord);
@@ -18,12 +18,12 @@ int PizChord::getSum() const
         sum += pattern[i];
     return sum;
 }
-String PizChord::getStringPattern() const
+juce::String PizChord::getStringPattern() const
 {
-    String p;
+    juce::String p;
     for (int i = 0; i < pattern.size(); i++)
     {
-        p += String (pattern[i]) + ",";
+        p += juce::String (pattern[i]) + ",";
     }
     return p;
 }
@@ -54,47 +54,47 @@ bool operator<(const PizChord& first, const PizChord& second)
     return first.getStringPattern() < second.getStringPattern();
 }
 
-ChordName::ChordName (String chordName, String noteString)
+ChordName::ChordName (juce::String chordName, juce::String noteString)
 {
     name    = chordName;
     pattern = getIntervalString (noteString);
 }
 
-String ChordName::getName (int rootNote, int bassNote, bool flats)
+juce::String ChordName::getName (int rootNote, int bassNote, bool flats)
 {
     if (name == "dim7" || name == "+")
         rootNote = bassNote;
-    String chordName = getNoteNameWithoutOctave (rootNote, ! flats) + name;
+    juce::String chordName = getNoteNameWithoutOctave (rootNote, ! flats) + name;
     if (bassNote % 12 != rootNote % 12)
         chordName += "/" + getNoteNameWithoutOctave (bassNote, ! flats);
     return chordName;
 }
 
-bool ChordName::equals (String& noteString)
+bool ChordName::equals (juce::String& noteString)
 {
     return getIntervalString (noteString) == pattern;
 }
-bool ChordName::equals (Array<int>& chord)
+bool ChordName::equals (juce::Array<int>& chord)
 {
     return getIntervalString (chord).equalsIgnoreCase (pattern);
 }
-bool ChordName::equals2 (String& intervalString)
+bool ChordName::equals2 (juce::String& intervalString)
 {
     return intervalString.equalsIgnoreCase (pattern);
 }
-String ChordName::getIntervalString (String noteString)
+juce::String ChordName::getIntervalString (juce::String noteString)
 {
-    String p;
-    StringArray a;
-    a.addTokens (noteString, ",", String());
+    juce::String p;
+    juce::StringArray a;
+    a.addTokens (noteString, ",", juce::String());
 
-    Array<int> temp;
+    juce::Array<int> temp;
     for (int i = 0; i < a.size(); i++)
     {
         temp.add (getNoteValue (a[i]));
     }
-    root               = temp[0];
-    Array<int> stacked = getAsStackedChord (temp);
+    root                     = temp[0];
+    juce::Array<int> stacked = getAsStackedChord (temp);
     for (int i = 0; i < stacked.size(); i++)
     {
         if (stacked[i] == root)
@@ -104,29 +104,29 @@ String ChordName::getIntervalString (String noteString)
             int interval = stacked[i + 1] - stacked[i];
             while (interval < 0)
                 interval += 12;
-            p += String (interval) + ",";
+            p += juce::String (interval) + ",";
         }
     }
     return p;
 }
 
-String ChordName::getIntervalString (Array<int> chord)
+juce::String ChordName::getIntervalString (juce::Array<int> chord)
 {
-    Array<int> newChord = getAsStackedChord (chord);
-    String p;
+    juce::Array<int> newChord = getAsStackedChord (chord);
+    juce::String p;
     for (int i = 0; i < chord.size() - 1; i++)
     {
         int interval = chord[i + 1] - chord[i];
         while (interval < 0)
             interval += 12;
-        p += String (interval) + ",";
+        p += juce::String (interval) + ",";
     }
     return p;
 }
 
-Array<int> getAsStackedChord (Array<int>& chord, bool reduce)
+juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
 {
-    Array<int> temp;
+    juce::Array<int> temp;
     if (reduce)
     {
         //remove duplicate notes
@@ -141,14 +141,14 @@ Array<int> getAsStackedChord (Array<int>& chord, bool reduce)
         temp.addArray (chord);
 
     //sort
-    DefaultElementComparator<int> intsorter;
+    juce::DefaultElementComparator<int> intsorter;
     temp.sort (intsorter);
 
     int Minimum = -1;
     //the base chord is the one with the minimal energy function
     //the energy function is the sum of the number of half steps between successive notes in the chord
     //hence, the canonic chord is the chord in which the notes lie as closely spaced as possible
-    Array<PizChord> MinimumEnergyChordList;
+    juce::Array<PizChord> MinimumEnergyChordList;
 
     PizChord tempChord0 (temp);
     //DBG("permutation: " + tempChord0.getStringPattern());
@@ -177,7 +177,7 @@ Array<int> getAsStackedChord (Array<int>& chord, bool reduce)
     //we need a way of picking one chord that will always lead to the same interval pattern, no matter
     //what note names are used. Normal "sort" will sort alphabetically. This is unusable.
     //We need to sort on the interval patterns instead, but return the chord that corresponds to the pattern.
-    DefaultElementComparator<PizChord> sorter;
+    juce::DefaultElementComparator<PizChord> sorter;
     MinimumEnergyChordList.sort (sorter);
     //DBG("picked" + MinimumEnergyChordList.getFirst().getStringPattern());
     return MinimumEnergyChordList.getFirst().getChord();
@@ -300,7 +300,7 @@ void fillChordDatabase()
     //ChordNames.add(ChordName("m7(no5)"      , "c,eb,bb"));
 }
 
-String getIntervalName (int semitones)
+juce::String getIntervalName (int semitones)
 {
     while (semitones > 21)
         semitones -= 12;
@@ -352,27 +352,27 @@ String getIntervalName (int semitones)
         case 21:
             return "13th";
         default:
-            return String();
+            return juce::String();
     }
 }
 
-String listNoteNames (Array<int> chord, bool flats)
+juce::String listNoteNames (juce::Array<int> chord, bool flats)
 {
-    String s;
+    juce::String s;
     for (int i = 0; i < chord.size() - 1; i++)
         s += getNoteNameWithoutOctave (chord[i], ! flats) + ", ";
     s += getNoteNameWithoutOctave (chord[chord.size() - 1], ! flats);
     return s;
 }
 
-String getFirstRecognizedChord (Array<int> chord, bool flats)
+juce::String getFirstRecognizedChord (juce::Array<int> chord, bool flats)
 {
     if (chord.size() == 0)
         return " ";
     if (chord.size() == 2)
         return getIntervalName (chord[1] - chord[0]) + " (" + listNoteNames (chord, flats) + ")";
 
-    Array<int> temp;
+    juce::Array<int> temp;
     for (int i = 0; i < chord.size(); i++)
     {
         temp.addIfNotAlreadyThere (chord[i] % 12);
@@ -381,11 +381,11 @@ String getFirstRecognizedChord (Array<int> chord, bool flats)
     if (temp.size() >= 9)
         return getNoteNameWithoutOctave (chord[0], ! flats) + " Note Soup";
 
-    Array<int> stackedChord = getAsStackedChord (temp, false);
+    juce::Array<int> stackedChord = getAsStackedChord (temp, false);
     if (stackedChord.size() == 1)
         return "(" + getNoteNameWithoutOctave (stackedChord[0], ! flats) + ")";
 
-    String s = ChordName::getIntervalString (stackedChord);
+    juce::String s = ChordName::getIntervalString (stackedChord);
     for (int i = 0; i < ChordNames.size(); i++)
     {
         if (ChordNames.getReference (i).equals2 (s))
@@ -396,15 +396,15 @@ String getFirstRecognizedChord (Array<int> chord, bool flats)
     return "(" + listNoteNames (temp, flats) + ")"; // "Unknown chord";
 }
 
-String getIntervalStringFromNoteNames (int root, String noteString, int bottomOctave)
+juce::String getIntervalStringFromNoteNames (int root, juce::String noteString, int bottomOctave)
 {
     bool multichannel = noteString.contains (".");
-    StringArray sa;
-    sa.addTokens (noteString, " ,", String());
+    juce::StringArray sa;
+    sa.addTokens (noteString, " ,", juce::String());
     bool absolute;
     int bass = getNoteValue (sa[0].upToFirstOccurrenceOf (".", false, false), bottomOctave, absolute);
     int last = 0;
-    String string;
+    juce::String string;
     if (bass != NOT_A_NOTE)
     {
         int channel = multichannel ? sa[0].fromFirstOccurrenceOf (".", false, false).getIntValue() : 0;
@@ -416,9 +416,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
                 bass -= 12;
             last = bass - root;
             if (channel > 0)
-                string += String (last) + "." + String (channel);
+                string += juce::String (last) + "." + juce::String (channel);
             else
-                string += String (last);
+                string += juce::String (last);
             for (int i = 1; i < sa.size(); i++)
             {
                 const int note = getNoteValue (sa[i].upToFirstOccurrenceOf (".", false, false));
@@ -429,9 +429,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
                         step += 12;
                     channel = sa[i].fromFirstOccurrenceOf (".", false, false).getIntValue();
                     if (channel > 0)
-                        string += " " + String (step) + "." + String (channel);
+                        string += " " + juce::String (step) + "." + juce::String (channel);
                     else
-                        string += " " + String (step);
+                        string += " " + juce::String (step);
                     last = step;
                 }
             }
@@ -440,9 +440,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
         {
             last = bass - root;
             if (channel > 0)
-                string += String (last) + "." + String (channel);
+                string += juce::String (last) + "." + juce::String (channel);
             else
-                string += String (last);
+                string += juce::String (last);
             for (int i = 1; i < sa.size(); i++)
             {
                 const int note = getNoteValue (sa[i].upToFirstOccurrenceOf (".", false, false), bottomOctave, absolute);
@@ -453,9 +453,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
                         step += 12;
                     channel = sa[i].fromFirstOccurrenceOf (".", false, false).getIntValue();
                     if (channel > 0)
-                        string += " " + String (step) + "." + String (channel);
+                        string += " " + juce::String (step) + "." + juce::String (channel);
                     else
-                        string += " " + String (step);
+                        string += " " + juce::String (step);
                     last = step;
                 }
             }
@@ -470,9 +470,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
         last        = bass - root;
         int channel = multichannel ? sa[0].fromFirstOccurrenceOf (".", false, false).getIntValue() : 0;
         if (channel > 0)
-            string += String (last) + "." + String (channel);
+            string += juce::String (last) + "." + juce::String (channel);
         else
-            string += String (last);
+            string += juce::String (last);
         for (int i = 1; i < sa.size(); i++)
         {
             const int note = getIntervalValue (sa[i].upToFirstOccurrenceOf (".", false, false));
@@ -482,9 +482,9 @@ String getIntervalStringFromNoteNames (int root, String noteString, int bottomOc
                 while (step - last < 0)
                     step += 12;
                 if (channel > 0)
-                    string += " " + String (step) + "." + String (channel);
+                    string += " " + juce::String (step) + "." + juce::String (channel);
                 else
-                    string += " " + String (step);
+                    string += " " + juce::String (step);
                 last = step;
             }
         }

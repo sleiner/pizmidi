@@ -1,6 +1,8 @@
 #include "imagePlugin.h"
 #include "imagePluginEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /*
     This function must be implemented to create the actual plugin object that
@@ -24,11 +26,11 @@ void ImageBank::loadDefaultValues()
         for (int p = 0; p < getNumPrograms(); p++)
         {
             set (b, p, "progIndex", p);
-            set (b, p, "name", "Bank " + String (b) + " Image " + String (p + 1));
-            set (b, p, "icon", String ("Images") + File::getSeparatorString() + "Bank " + String (b) + File::getSeparatorString() + String (p + 1) + ".svg");
-            set (b, p, "text", String());
-            set (b, p, "bgcolor", Colour (0xFFFFFFFF).toString());
-            set (b, p, "textcolor", Colour (0xFF000000).toString());
+            set (b, p, "name", "Bank " + juce::String (b) + " Image " + juce::String (p + 1));
+            set (b, p, "icon", juce::String ("Images") + juce::File::getSeparatorString() + "Bank " + juce::String (b) + juce::File::getSeparatorString() + juce::String (p + 1) + ".svg");
+            set (b, p, "text", juce::String());
+            set (b, p, "bgcolor", juce::Colour (0xFFFFFFFF).toString());
+            set (b, p, "textcolor", juce::Colour (0xFF000000).toString());
             set (b, p, "h", 400);
             set (b, p, "w", 400);
         }
@@ -44,7 +46,7 @@ void ImageBank::loadDefaultValues()
 //==============================================================================
 imagePluginFilter::imagePluginFilter()
 {
-    iconPath = getCurrentPath() + File::getSeparatorString() + "images";
+    iconPath = getCurrentPath() + juce::File::getSeparatorString() + "images";
 
     // create built-in programs
     programs = new ImageBank(); //new JuceProgram[16384];
@@ -95,33 +97,33 @@ void imagePluginFilter::setParameter (int index, float newValue)
     }
 }
 
-const String imagePluginFilter::getParameterName (int index)
+const juce::String imagePluginFilter::getParameterName (int index)
 {
     if (index == kChannel)
         return "Channel";
-    return String();
+    return juce::String();
 }
 
-const String imagePluginFilter::getParameterText (int index)
+const juce::String imagePluginFilter::getParameterText (int index)
 {
     if (index == kChannel)
     {
         if (roundToInt (param[kChannel] * 16.0f) == 0)
-            return String ("Any");
+            return juce::String ("Any");
         else
-            return String (roundToInt (param[kChannel] * 16.0f));
+            return juce::String (roundToInt (param[kChannel] * 16.0f));
     }
-    return String();
+    return juce::String();
 }
 
-const String imagePluginFilter::getInputChannelName (const int channelIndex) const
+const juce::String imagePluginFilter::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String imagePluginFilter::getOutputChannelName (const int channelIndex) const
+const juce::String imagePluginFilter::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool imagePluginFilter::isInputChannelStereoPair (int index) const
@@ -156,8 +158,8 @@ void imagePluginFilter::setCurrentProgram (int index)
     lastUIWidth     = programs->get (curBank, curProgram, "w");
     icon            = programs->get (curBank, curProgram, "icon");
     text            = programs->get (curBank, curProgram, "text");
-    bgcolor         = Colour::fromString (programs->get (curBank, curProgram, "bgcolor").toString());
-    textcolor       = Colour::fromString (programs->get (curBank, curProgram, "textcolor").toString());
+    bgcolor         = juce::Colour::fromString (programs->get (curBank, curProgram, "bgcolor").toString());
+    textcolor       = juce::Colour::fromString (programs->get (curBank, curProgram, "textcolor").toString());
     noteInput       = programs->getGlobal ("noteInput");
     usePC           = programs->getGlobal ("usePC");
 
@@ -184,12 +186,12 @@ void imagePluginFilter::setCurrentBank (int index, int program)
     setCurrentProgram (program);
 }
 
-void imagePluginFilter::changeProgramName (int index, const String& newName)
+void imagePluginFilter::changeProgramName (int index, const juce::String& newName)
 {
     programs->set (curBank, index, "name", newName);
 }
 
-const String imagePluginFilter::getProgramName (int index)
+const juce::String imagePluginFilter::getProgramName (int index)
 {
     return programs->get (curBank, index, "name");
 }
@@ -211,8 +213,8 @@ void imagePluginFilter::releaseResources()
     // spare memory, etc.
 }
 
-void imagePluginFilter::processBlock (AudioSampleBuffer& buffer,
-                                      MidiBuffer& midiMessages)
+void imagePluginFilter::processBlock (juce::AudioSampleBuffer& buffer,
+                                      juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -245,13 +247,13 @@ void imagePluginFilter::processBlock (AudioSampleBuffer& buffer,
     midiMessages.clear();
 }
 //==============================================================================
-AudioProcessorEditor* imagePluginFilter::createEditor()
+juce::AudioProcessorEditor* imagePluginFilter::createEditor()
 {
     return new imagePluginEditor (this);
 }
 
 //==============================================================================
-void imagePluginFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
+void imagePluginFilter::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs->set (curBank, curProgram, "h", lastUIHeight);
@@ -263,12 +265,12 @@ void imagePluginFilter::getCurrentProgramStateInformation (MemoryBlock& destData
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
     // XML is a much cleaner way of doing it - here's an example of how to store your
-    // params as XML..
+    // params as XML
 
-    // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    // create an outer XML element
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
-    // add some attributes to it..
+    // add some attributes to it
     xmlState.setAttribute ("pluginVersion", 1);
 
     xmlState.setAttribute ("bank", getCurrentBank());
@@ -277,7 +279,7 @@ void imagePluginFilter::getCurrentProgramStateInformation (MemoryBlock& destData
 
     for (int i = 0; i < kNumParams; i++)
     {
-        xmlState.setAttribute (String (i), param[i]);
+        xmlState.setAttribute (juce::String (i), param[i]);
     }
 
     xmlState.setAttribute ("uiWidth", lastUIWidth);
@@ -292,7 +294,7 @@ void imagePluginFilter::getCurrentProgramStateInformation (MemoryBlock& destData
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
 }
-void imagePluginFilter::getStateInformation (MemoryBlock& destData)
+void imagePluginFilter::getStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs->set (curBank, curProgram, "h", lastUIHeight);
@@ -323,14 +325,14 @@ void imagePluginFilter::setCurrentProgramStateInformation (const void* data, int
             changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
             for (int i = 0; i < kNumParams; i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
             }
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
             icon         = xmlState->getStringAttribute ("icon", icon);
             text         = xmlState->getStringAttribute ("text", text);
-            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()) | 0x00000000);
-            textcolor    = Colour (xmlState->getIntAttribute ("textcolor", bgcolor.contrasting (0.8f).getARGB()) | 0x00000000);
+            bgcolor      = juce::Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()) | 0x00000000);
+            textcolor    = juce::Colour (xmlState->getIntAttribute ("textcolor", bgcolor.contrasting (0.8f).getARGB()) | 0x00000000);
             noteInput    = xmlState->getBoolAttribute ("noteInput", noteInput);
             usePC        = xmlState->getBoolAttribute ("usePC", usePC);
 
@@ -343,10 +345,10 @@ void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes)
 {
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState == 0)
+    if (xmlState == nullptr)
     {
-        MemoryInputStream input (data, sizeInBytes, false);
-        ValueTree vt = ValueTree::readFromStream (input);
+        juce::MemoryInputStream input (data, sizeInBytes, false);
+        juce::ValueTree vt = juce::ValueTree::readFromStream (input);
         programs->loadFrom (vt);
         init = true;
         setCurrentBank (vt.getChild (128).getProperty ("lastBank", 0), vt.getChild (128).getProperty ("lastProgram", 0));
@@ -360,15 +362,15 @@ void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes)
                 fullscreen = xmlState->getBoolAttribute ("fullscreen", false);
                 for (int p = 0; p < getNumPrograms(); p++)
                 {
-                    String prefix = "P" + String (p) + ".";
-                    programs->set (0, p, "channel", (float) xmlState->getDoubleAttribute (prefix + String (0), 0));
+                    juce::String prefix = "P" + juce::String (p) + ".";
+                    programs->set (0, p, "channel", (float) xmlState->getDoubleAttribute (prefix + juce::String (0), 0));
                     programs->set (0, p, "w", xmlState->getIntAttribute (prefix + "uiWidth", 400));
                     programs->set (0, p, "h", xmlState->getIntAttribute (prefix + "uiHeight", 400));
-                    programs->set (0, p, "icon", xmlState->getStringAttribute (prefix + "icon", String()));
-                    programs->set (0, p, "text", xmlState->getStringAttribute (prefix + "text", String()));
-                    programs->set (0, p, "bgcolor", Colour (xmlState->getIntAttribute (prefix + "bgcolor")).toString());
-                    programs->set (0, p, "textcolor", Colour (xmlState->getIntAttribute ("textcolor")).toString());
-                    programs->set (0, p, "name", xmlState->getStringAttribute (prefix + "progname", String()));
+                    programs->set (0, p, "icon", xmlState->getStringAttribute (prefix + "icon", juce::String()));
+                    programs->set (0, p, "text", xmlState->getStringAttribute (prefix + "text", juce::String()));
+                    programs->set (0, p, "bgcolor", juce::Colour (xmlState->getIntAttribute (prefix + "bgcolor")).toString());
+                    programs->set (0, p, "textcolor", juce::Colour (xmlState->getIntAttribute ("textcolor")).toString());
+                    programs->set (0, p, "name", xmlState->getStringAttribute (prefix + "progname", juce::String()));
                 }
                 init = true;
                 setCurrentBank (0, xmlState->getIntAttribute ("program", 0));
@@ -400,7 +402,7 @@ void imagePluginFilter::setStateInformation (const void* data, int sizeInBytes)
     }
 }
 
-void imagePluginFilter::setBankColours (Colour colour, Colour text)
+void imagePluginFilter::setBankColours (juce::Colour colour, juce::Colour text)
 {
     for (int i = 0; i < getNumPrograms(); i++)
     {
@@ -421,5 +423,5 @@ void imagePluginFilter::applySizeToBank (int h, int w)
 void imagePluginFilter::clearAllImages()
 {
     for (int i = 0; i < getNumPrograms(); i++)
-        programs->set (curBank, i, "icon", String (""));
+        programs->set (curBank, i, "icon", juce::String (""));
 }

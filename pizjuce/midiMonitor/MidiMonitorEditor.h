@@ -20,9 +20,9 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "MidiMonitor.h"
 //[/Headers]
@@ -48,8 +48,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void mouseDown (const MouseEvent& e) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void mouseDown (const juce::MouseEvent& e) override;
     void timerCallback() override;
     //[/UserMethods]
 
@@ -60,10 +60,10 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    Slider* maxLinesEditor;
-    ComponentBoundsConstrainer resizeLimits;
-    TooltipWindow tooltipWindow;
-    Colour bgcolor, fgcolor;
+    juce::Slider* maxLinesEditor;
+    juce::ComponentBoundsConstrainer resizeLimits;
+    juce::TooltipWindow tooltipWindow;
+    juce::Colour bgcolor, fgcolor;
     bool showbytes;
     bool showtime;
     int timemode;
@@ -76,7 +76,7 @@ private:
         return (MidiMonitorPlugin*) getAudioProcessor();
     }
 
-    const String ppqToString (const double sppq, const int numerator, const int denominator, const double bpm);
+    const juce::String ppqToString (const double sppq, const int numerator, const int denominator, const double bpm);
     //[/UserVariables]
 
     //==============================================================================
@@ -87,7 +87,7 @@ private:
     std::unique_ptr<juce::Slider> hueSlider;
     std::unique_ptr<juce::Slider> saturationSlider;
     std::unique_ptr<juce::Slider> lightnessSlider;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<juce::TextButton> saveButton;
     std::unique_ptr<juce::TextButton> menuButton;
     std::unique_ptr<juce::TextEditor> midiOutputEditor;

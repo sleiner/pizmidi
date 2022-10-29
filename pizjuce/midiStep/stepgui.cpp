@@ -23,6 +23,8 @@
 #include "stepgui.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::jlimit;
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -37,7 +39,7 @@ StepEditor::StepEditor (MidiStep* const ownerFilter)
     addAndMakeVisible (activeLoopLabel.get());
     activeLoopLabel->setColour (juce::GroupComponent::outlineColourId, juce::Colour (0x66000000));
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
     viewport.reset (new PianoPort ("new viewport"));
@@ -665,7 +667,7 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
         getFilter()->setParameterNotifyingHost (kRecord, recordButton->getToggleState() ? 0.f : 1.f);
-        recordButton->setToggleState (! recordButton->getToggleState(), dontSendNotification);
+        recordButton->setToggleState (! recordButton->getToggleState(), juce::dontSendNotification);
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == recArmButton1.get())
@@ -767,13 +769,13 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == saveButton.get())
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
-        FileChooser myChooser ("Export MIDI...",
-                               File (getFilter()->loopDir + File::getSeparatorString() + "Untitled.mid"),
-                               "*.mid");
+        juce::FileChooser myChooser ("Export MIDI...",
+                                     juce::File (getFilter()->loopDir + juce::File::getSeparatorString() + "Untitled.mid"),
+                                     "*.mid");
 
         if (myChooser.browseForFileToSave (true))
         {
-            File midiFile (myChooser.getResult());
+            juce::File midiFile (myChooser.getResult());
             if (! midiFile.hasFileExtension ("mid"))
                 midiFile = midiFile.withFileExtension ("mid");
 
@@ -851,7 +853,7 @@ void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-TextButton* StepEditor::getButtonByIndex (int i)
+juce::TextButton* StepEditor::getButtonByIndex (int i)
 {
     switch (i)
     {
@@ -892,44 +894,44 @@ TextButton* StepEditor::getButtonByIndex (int i)
     }
 }
 
-void StepEditor::recArmButtonClicked (Button* buttonThatWasClicked)
+void StepEditor::recArmButtonClicked (juce::Button* buttonThatWasClicked)
 {
     int index = buttonThatWasClicked->getButtonText().getIntValue() - 1;
-    if (ModifierKeys::getCurrentModifiers().isCommandDown())
+    if (juce::ModifierKeys::getCurrentModifiers().isCommandDown())
     {
-        buttonThatWasClicked->setToggleState (! buttonThatWasClicked->getToggleState(), dontSendNotification);
+        buttonThatWasClicked->setToggleState (! buttonThatWasClicked->getToggleState(), juce::dontSendNotification);
         getFilter()->setParameterNotifyingHost (kRecArm + index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
     }
     else
     {
         getFilter()->setParameterNotifyingHost (kActiveLoop, (float) index / (float) (numLoops - 1));
         pianoRoll->setSequence (getFilter()->getActiveLoop());
-        activeLoopLabel->setText (String (getFilter()->activeLoop + 1));
+        activeLoopLabel->setText (juce::String (getFilter()->activeLoop + 1));
         for (int i = 0; i < numLoops; i++)
         {
-            getButtonByIndex (i)->setToggleState (i == index ? true : false, dontSendNotification);
+            getButtonByIndex (i)->setToggleState (i == index ? true : false, juce::dontSendNotification);
             if (toggleButton->getToggleState())
                 getFilter()->setParameterNotifyingHost (kRecArm + i, i == index ? 1.f : 0.f);
         }
     }
 }
 
-bool StepEditor::isInterestedInFileDrag (const StringArray& files)
+bool StepEditor::isInterestedInFileDrag (const juce::StringArray& files)
 {
-    File file = File (files[0]);
+    juce::File file = juce::File (files[0]);
     if (file.hasFileExtension ("mid"))
         return true;
     return false;
 }
 
-void StepEditor::filesDropped (const StringArray& filenames, int mouseX, int mouseY)
+void StepEditor::filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY)
 {
-    File file (filenames[0]);
+    juce::File file (filenames[0]);
     if (getFilter()->readMidiFile (getFilter()->activeLoop, file))
         updateParameters (true);
 }
 
-void StepEditor::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
+void StepEditor::mouseWheelMove (const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
 {
     if (e.eventComponent == viewport.get())
     {
@@ -959,7 +961,7 @@ void StepEditor::timerCallback()
     }
 }
 
-void StepEditor::changeListenerCallback (ChangeBroadcaster* source)
+void StepEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParameters();
@@ -982,21 +984,21 @@ void StepEditor::updateParameters (bool updateLoop)
 
     for (int i = 0; i < numLoops; i++)
     {
-        getButtonByIndex (i)->setColour (TextButton::textColourOnId, i == activeLoop ? Colours::red : Colours::black);
-        getButtonByIndex (i)->setToggleState (param[kRecArm + i] >= 0.5f, dontSendNotification);
+        getButtonByIndex (i)->setColour (juce::TextButton::textColourOnId, i == activeLoop ? juce::Colours::red : juce::Colours::black);
+        getButtonByIndex (i)->setToggleState (param[kRecArm + i] >= 0.5f, juce::dontSendNotification);
     }
-    thruButton->setToggleState (param[kThru] >= 0.5f, dontSendNotification);
-    toggleButton->setToggleState (param[kRecActive] >= 0.5f, dontSendNotification);
-    recordButton->setToggleState (param[kRecord] >= 0.5f, dontSendNotification);
-    keySlider->setValue (floatToMidi (param[kTriggerKey + activeLoop], true), dontSendNotification);
-    transposeSlider->setValue (param[kTranspose + activeLoop] * 96.f - 48.f, dontSendNotification);
-    recChannelSlider->setValue (floatToChannel (param[kChannel + activeLoop]), dontSendNotification);
-    outChannelSlider->setValue (floatToChannel (param[kOutChannel + activeLoop]), dontSendNotification);
+    thruButton->setToggleState (param[kThru] >= 0.5f, juce::dontSendNotification);
+    toggleButton->setToggleState (param[kRecActive] >= 0.5f, juce::dontSendNotification);
+    recordButton->setToggleState (param[kRecord] >= 0.5f, juce::dontSendNotification);
+    keySlider->setValue (floatToMidi (param[kTriggerKey + activeLoop], true), juce::dontSendNotification);
+    transposeSlider->setValue (param[kTranspose + activeLoop] * 96.f - 48.f, juce::dontSendNotification);
+    recChannelSlider->setValue (floatToChannel (param[kChannel + activeLoop]), juce::dontSendNotification);
+    outChannelSlider->setValue (floatToChannel (param[kOutChannel + activeLoop]), juce::dontSendNotification);
     if (updateLoop || lastActiveLoop != activeLoop)
     {
         lastActiveLoop = activeLoop;
         pianoRoll->setSequence (getFilter()->getActiveLoop());
-        activeLoopLabel->setText (String (activeLoop + 1));
+        activeLoopLabel->setText (juce::String (activeLoop + 1));
     }
     else
         repaint();

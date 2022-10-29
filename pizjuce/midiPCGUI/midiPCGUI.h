@@ -1,8 +1,8 @@
 #ifndef MIDIOUTPLUGINFILTER_H
 #define MIDIOUTPLUGINFILTER_H
 
-#include "juce_core/juce_core.h"
-#include "juce_events/juce_events.h"
+#include <juce_core/juce_core.h>
+#include <juce_events/juce_events.h>
 
 #include "../_common/PizAudioProcessor.h"
 
@@ -30,16 +30,16 @@ class midiPCGUIProgram
 public:
     midiPCGUIProgram();
     ~midiPCGUIProgram(){};
-    void setName (String newName) { name = newName; }
+    void setName (juce::String newName) { name = newName; }
 
 private:
     float param[numParams];
-    String name;
+    juce::String name;
 };
 
 //==============================================================================
 class midiPCGUI : public PizAudioProcessor,
-                  public ChangeBroadcaster
+                  public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -50,15 +50,15 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
     double getTailLengthSeconds() const override { return 0; }
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool hasEditor() const override { return true; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return true; }
@@ -68,11 +68,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -80,21 +80,21 @@ public:
     int getNumPrograms() override { return 128; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
-    void setMidiProgName (int channel, int bank, int prog, const String& newName)
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
+    void setMidiProgName (int channel, int bank, int prog, const juce::String& newName)
     {
         progNames.setNameFor (channel, bank, prog, newName);
     }
-    String getMidiProgName (int channel, int bank, int prog)
+    juce::String getMidiProgName (int channel, int bank, int prog)
     {
         return progNames.getNameFor (channel, bank, prog);
     }
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
@@ -104,13 +104,10 @@ public:
     int actualBankMSB[16];
     int actualBankLSB[16];
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private :
-        // this is our gain - the UI and the host can access this by getting/setting
-        // parameter 0.
-        float param[numParams];
+private:
+    // this is our gain - the UI and the host can access this by getting/setting
+    // parameter 0.
+    float param[numParams];
     struct MidiProgName
     {
         MidiProgName()
@@ -118,9 +115,9 @@ public:
             channel = -1;
             bank    = -1;
             program = -1;
-            name    = String();
+            name    = juce::String();
         }
-        MidiProgName (int c, int b, int p, const String& n)
+        MidiProgName (int c, int b, int p, const juce::String& n)
         {
             channel = c;
             bank    = b;
@@ -131,7 +128,7 @@ public:
         int channel;
         int bank;
         int program;
-        String name;
+        juce::String name;
     };
 
     class ProgNames
@@ -141,7 +138,7 @@ public:
     public:
         ProgNames(){};
         ~ProgNames(){};
-        String getNameFor (int c, int b, int p)
+        juce::String getNameFor (int c, int b, int p)
         {
             for (int i = 0; i < names.size(); i++)
             {
@@ -150,10 +147,10 @@ public:
                     && names.getUnchecked (i).program == p)
                     return names.getUnchecked (i).name;
             }
-            return "Program " + String (p + 1);
+            return "Program " + juce::String (p + 1);
         }
 
-        bool getNameIfSet (int c, int b, int p, String& name)
+        bool getNameIfSet (int c, int b, int p, juce::String& name)
         {
             for (int i = 0; i < names.size(); i++)
             {
@@ -168,7 +165,7 @@ public:
             return false;
         }
 
-        void setNameFor (int c, int b, int p, String newName)
+        void setNameFor (int c, int b, int p, juce::String newName)
         {
             for (int i = 0; i < names.size(); i++)
             {
@@ -184,12 +181,12 @@ public:
         }
 
     private:
-        Array<MidiProgName> names;
+        juce::Array<MidiProgName> names;
     };
 
     ProgNames progNames;
 
-    String pluginPath;
+    juce::String pluginPath;
 
     midiPCGUIProgram* programs;
     int curProgram;
@@ -212,6 +209,8 @@ public:
     int delaytime;
     int counter;
     int triggerdelta;
+
+    JUCE_LEAK_DETECTOR (midiPCGUI)
 };
 
 #endif

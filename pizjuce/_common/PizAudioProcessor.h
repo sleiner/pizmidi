@@ -7,17 +7,15 @@
 
 class ReaProject;
 
-#include "juce_audio_processors/juce_audio_processors.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
-using namespace juce;
-
-class PizAudioProcessor : public AudioProcessor
+class PizAudioProcessor : public juce::AudioProcessor
 {
 public:
     PizAudioProcessor() : AudioProcessor(),
                           bottomOctave (-2),
                           reaper (false),
-                          currentPath (((File::getSpecialLocation (File::currentApplicationFile)).getParentDirectory()).getFullPathName())
+                          currentPath (((juce::File::getSpecialLocation (juce::File::currentApplicationFile)).getParentDirectory()).getFullPathName())
     {
     }
 
@@ -27,7 +25,7 @@ public:
         {
             int szout        = 0;
             int reaperOctave = 0;
-            void* p          = 0;
+            void* p          = nullptr;
             p                = get_config_var ("midioctoffs", &szout);
             if (p)
             {
@@ -41,12 +39,12 @@ public:
     bool loadDefaultFxb()
     {
         //look for a default bank
-        String defaultBank = currentPath + File::getSeparatorString()
-                           + File::getSpecialLocation (File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
-        if (File (defaultBank).exists())
+        juce::String defaultBank = currentPath + juce::File::getSeparatorString()
+                                 + juce::File::getSpecialLocation (juce::File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
+        if (juce::File (defaultBank).exists())
         {
             juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            File (defaultBank).loadFileAsData (bank);
+            juce::File (defaultBank).loadFileAsData (bank);
             bank.removeSection (0, 0xA0);
             setStateInformation (bank.getData(), (int) bank.getSize());
             return true;
@@ -54,7 +52,7 @@ public:
         return false;
     }
 
-    bool loadFxbFile (File file)
+    bool loadFxbFile (juce::File file)
     {
         if (file.existsAsFile())
         {
@@ -70,12 +68,12 @@ public:
     bool loadDefaultFxp()
     {
         //look for a default patch
-        String defaultBank = currentPath + File::getSeparatorString()
-                           + File::getSpecialLocation (File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
-        if (File (defaultBank).exists())
+        juce::String defaultBank = currentPath + juce::File::getSeparatorString()
+                                 + juce::File::getSpecialLocation (juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
+        if (juce::File (defaultBank).exists())
         {
             juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            File (defaultBank).loadFileAsData (bank);
+            juce::File (defaultBank).loadFileAsData (bank);
             bank.removeSection (0, 0x3C);
             setCurrentProgramStateInformation (bank.getData(), (int) bank.getSize());
             return true;
@@ -83,7 +81,7 @@ public:
         return false;
     }
 
-    bool loadFxpFile (File file)
+    bool loadFxpFile (juce::File file)
     {
         if (file.existsAsFile())
         {
@@ -97,7 +95,7 @@ public:
     }
 
     int bottomOctave;
-    String getCurrentPath() { return currentPath; }
+    juce::String getCurrentPath() { return currentPath; }
 
     double (*TimeMap2_timeToBeats) (ReaProject* proj, double tpos, int* measures, int* cml, double* fullbeats, int* cdenom);
     double (*GetPlayPosition)();
@@ -105,10 +103,10 @@ public:
     double (*GetCursorPosition)();
     void* (*get_config_var) (const char* name, int* szout);
     bool reaper;
-    String hostInfo;
+    juce::String hostInfo;
 
 private:
-    String currentPath;
+    juce::String currentPath;
 };
 
 #endif

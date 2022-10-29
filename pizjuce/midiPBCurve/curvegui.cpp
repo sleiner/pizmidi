@@ -54,7 +54,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
     channelSlider.reset (new ChannelSlider ("new slider"));
@@ -304,7 +304,7 @@ void CurveEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
+void CurveEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParameters();
@@ -318,28 +318,28 @@ void CurveEditor::updateParameters()
     const float pbrange2 = getFilter()->getParameter (kPBRange2) * 48.f;
     if (lastin != -1)
     {
-        label->setText ("In: " + String (lastin), sendNotification);
+        label->setText ("In: " + juce::String (lastin), juce::sendNotification);
         if (lastin == 8192)
-            label6->setText ("(center)", sendNotification);
+            label6->setText ("(center)", juce::sendNotification);
         else if (lastin > 8192)
-            label6->setText ("(+" + String (pbrange * ((float) lastin / 16383.f - 0.5f), 2) + ")", sendNotification);
+            label6->setText ("(+" + juce::String (pbrange * ((float) lastin / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
         else if (lastin < 8192)
-            label6->setText ("(" + String (pbrange2 * ((float) lastin / 16383.f - 0.5f), 2) + ")", sendNotification);
+            label6->setText ("(" + juce::String (pbrange2 * ((float) lastin / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
     }
     if (lastout != -1)
     {
-        label2->setText ("Out: " + String (lastout), sendNotification);
+        label2->setText ("Out: " + juce::String (lastout), juce::sendNotification);
         if (lastout == 8192)
-            label7->setText ("(center)", sendNotification);
+            label7->setText ("(center)", juce::sendNotification);
         else if (lastout > 8192)
-            label7->setText ("(+" + String (pbrange * ((float) lastout / 16383.f - 0.5f), 2) + ")", sendNotification);
+            label7->setText ("(+" + juce::String (pbrange * ((float) lastout / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
         else if (lastout < 8192)
-            label7->setText ("(" + String (pbrange2 * ((float) lastout / 16383.f - 0.5f), 2) + ")", sendNotification);
+            label7->setText ("(" + juce::String (pbrange2 * ((float) lastout / 16383.f - 0.5f), 2) + ")", juce::sendNotification);
     }
 
-    channelSlider->setValue (getFilter()->getParameter (kChannel) * channelSlider->getMaximum(), dontSendNotification);
-    rangeSlider->setValue (getFilter()->getParameter (kPBRange) * rangeSlider->getMaximum(), dontSendNotification);
-    rangeSlider2->setValue (getFilter()->getParameter (kPBRange2) * rangeSlider2->getMaximum(), dontSendNotification);
+    channelSlider->setValue (getFilter()->getParameter (kChannel) * channelSlider->getMaximum(), juce::dontSendNotification);
+    rangeSlider->setValue (getFilter()->getParameter (kPBRange) * rangeSlider->getMaximum(), juce::dontSendNotification);
+    rangeSlider2->setValue (getFilter()->getParameter (kPBRange2) * rangeSlider2->getMaximum(), juce::dontSendNotification);
 
     curve->updateParameters (true);
 

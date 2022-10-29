@@ -20,8 +20,8 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_utils/juce_audio_utils.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_utils/juce_audio_utils.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/ClickableLabel.h"
 #include "../_common/VSTSlider.h"
@@ -29,19 +29,19 @@
 #include "PianoRoll.h"
 #include "PizLooper.h"
 
-class KeySelector : public MidiKeyboardComponent
+class KeySelector : public juce::MidiKeyboardComponent
 {
 public:
-    KeySelector (MidiKeyboardState& state)
+    KeySelector (juce::MidiKeyboardState& state)
         : MidiKeyboardComponent (state, MidiKeyboardComponent::horizontalKeyboard)
     {
         s = &state;
-        this->setColour (MidiKeyboardComponent::textLabelColourId, Colours::transparentBlack);
+        this->setColour (MidiKeyboardComponent::textLabelColourId, juce::Colours::transparentBlack);
     }
     ~KeySelector() override {}
 
 private:
-    bool mouseDownOnKey (int midiNoteNumber, const MouseEvent& e) override
+    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
     {
         if (s->isNoteOn (this->getMidiChannel(), midiNoteNumber))
         {
@@ -53,7 +53,7 @@ private:
         }
         return false;
     }
-    MidiKeyboardState* s;
+    juce::MidiKeyboardState* s;
 };
 
 //[/Headers]
@@ -66,12 +66,12 @@ private:
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class PizLooperEditor : public AudioProcessorEditor,
-                        public ChangeListener,
-                        public FileDragAndDropTarget,
+class PizLooperEditor : public juce::AudioProcessorEditor,
+                        public juce::ChangeListener,
+                        public juce::FileDragAndDropTarget,
                         public ClickableLabelListener,
-                        public Timer,
-                        public MidiKeyboardStateListener,
+                        public juce::Timer,
+                        public juce::MidiKeyboardStateListener,
                         public juce::Button::Listener,
                         public juce::ComboBox::Listener,
                         public juce::Slider::Listener,
@@ -84,24 +84,24 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    bool isInterestedInFileDrag (const StringArray& files) override;
-    void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag (const juce::StringArray& files) override;
+    void filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY) override;
     //    void sliderDragStarted (Slider* slider); //slider mousedown
     //    void sliderDragEnded (Slider* slider); //slider mouseup
     void timerCallback() override;
-    void buttonStateChanged (Button* button) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseDown (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const MouseEvent& e) override {}
-    void clickableLabelMouseDoubleClick (ClickableLabel* label, const MouseEvent& e) override
+    void buttonStateChanged (juce::Button* button) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override {}
+    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override
     {
         if (label == nameLabel.get())
             label->edit();
     }
-    void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
-    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -117,21 +117,21 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    TooltipWindow tooltipWindow;
+    juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
     void updateControls (int param, float value, bool forCurProgram);
     void updateSlotButtons();
-    ComponentBoundsConstrainer resizeLimits;
-    TextButton* getButtonForSlot (int slot);
+    juce::ComponentBoundsConstrainer resizeLimits;
+    juce::TextButton* getButtonForSlot (int slot);
     int getButtonIndex (Component* button);
     int lastActiveLoop;
     PianoRoll* pianoRoll;
     bool noSnap;
     int loopDragStart;
-    MidiKeyboardState keySelectorState;
-    MidiKeyboardComponent* keyboard;
-    Path internalPath1;
-    Path internalPath2;
+    juce::MidiKeyboardState keySelectorState;
+    juce::MidiKeyboardComponent* keyboard;
+    juce::Path internalPath1;
+    juce::Path internalPath2;
 
     // handy wrapper method to avoid having to cast the filter to a PizLooper
     // every time we need it..
@@ -205,7 +205,7 @@ private:
     std::unique_ptr<VSTSlider> s_FixedLength;
     std::unique_ptr<juce::TextButton> b_Filt;
     std::unique_ptr<PianoPort> viewport;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<juce::TextButton> b_NoteToggle;
     std::unique_ptr<VSTSlider> s_PlayGroup;
     std::unique_ptr<juce::Label> label13;

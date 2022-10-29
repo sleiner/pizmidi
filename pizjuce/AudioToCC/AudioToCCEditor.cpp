@@ -1014,7 +1014,7 @@ void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void AudioToCCEditor::changeListenerCallback (ChangeBroadcaster* source)
+void AudioToCCEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -1050,12 +1050,12 @@ void AudioToCCEditor::updateParametersFromFilter()
     s_OffValueR->setVSTSlider (p[kGateOffValueCCR]);
     s_Thresh->setValue (p[kGateThreshold]);
 
-    comboBox->setSelectedItemIndex (newDevice + 1, dontSendNotification);
-    toggleButton->setToggleState (p[kAutomateHost] >= 0.5f, dontSendNotification);
-    toggleButton2->setToggleState (p[kMidiToHost] >= 0.5f, dontSendNotification);
-    b_Stereo->setToggleState (p[kStereo] >= 0.5f, dontSendNotification);
+    comboBox->setSelectedItemIndex (newDevice + 1, juce::dontSendNotification);
+    toggleButton->setToggleState (p[kAutomateHost] >= 0.5f, juce::dontSendNotification);
+    toggleButton2->setToggleState (p[kMidiToHost] >= 0.5f, juce::dontSendNotification);
+    b_Stereo->setToggleState (p[kStereo] >= 0.5f, juce::dontSendNotification);
     b_Stereo->setButtonText (p[kStereo] >= 0.5f ? "Stereo" : "Mono (L+R)");
-    b_Mode->setToggleState (p[kMode] >= 0.5f, dontSendNotification);
+    b_Mode->setToggleState (p[kMode] >= 0.5f, juce::dontSendNotification);
     b_Mode->setButtonText (p[kMode] >= 0.5f ? "Logarithmic" : "Linear");
 }
 
@@ -1070,23 +1070,23 @@ void AudioToCCEditor::timerCallback()
     const bool gateR = getFilter()->lastGateCCR;
     getFilter()->getCallbackLock().exit();
 
-    s_IndicatorL->setValue (ccL, dontSendNotification);
-    s_IndicatorR->setValue (ccR, dontSendNotification);
-    s_IndicatorLIn->setValue (inL, dontSendNotification);
-    s_IndicatorRIn->setValue (inR, dontSendNotification);
+    s_IndicatorL->setValue (ccL, juce::dontSendNotification);
+    s_IndicatorR->setValue (ccR, juce::dontSendNotification);
+    s_IndicatorLIn->setValue (inL, juce::dontSendNotification);
+    s_IndicatorRIn->setValue (inR, juce::dontSendNotification);
     ++peakcounter;
     if (peakcounter == 2)
     {
         peakcounter = 0;
-        clipL->setToggleState (gateL, dontSendNotification);
-        clipR->setToggleState (gateR, dontSendNotification);
+        clipL->setToggleState (gateL, juce::dontSendNotification);
+        clipR->setToggleState (gateR, juce::dontSendNotification);
     }
     else
     {
         if (gateL)
-            clipL->setToggleState (true, dontSendNotification);
+            clipL->setToggleState (true, juce::dontSendNotification);
         if (gateR)
-            clipR->setToggleState (true, dontSendNotification);
+            clipR->setToggleState (true, juce::dontSendNotification);
     }
 }
 //[/MiscUserCode]

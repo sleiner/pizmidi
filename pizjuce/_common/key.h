@@ -2,54 +2,52 @@
 
 #include <memory>
 
-#include "juce_core/juce_core.h"
-#include "juce_cryptography/juce_cryptography.h"
-
-using namespace juce;
+#include <juce_core/juce_core.h>
+#include <juce_cryptography/juce_cryptography.h>
 
 #ifndef MRALIASPRO
 
-static XmlElement::TextFormat getXmlFormat()
+static juce::XmlElement::TextFormat getXmlFormat()
 {
-    XmlElement::TextFormat format{};
+    juce::XmlElement::TextFormat format{};
     format.newLineChars = nullptr; // fit everything on one line
     return format;
 }
 
-static const String encryptXml (const XmlElement* xml,
-                                const String& rsaPrivateKey)
+static const juce::String encryptXml (const juce::XmlElement* xml,
+                                      const juce::String& rsaPrivateKey)
 {
-    BigInteger val;
+    juce::BigInteger val;
 
-    if (xml != 0)
+    if (xml != nullptr)
     {
-        const String s (xml->toString (getXmlFormat()));
-        const MemoryBlock mb (s.toUTF8(), s.length());
+        const juce::String s (xml->toString (getXmlFormat()));
+        const juce::MemoryBlock mb (s.toUTF8(), s.length());
 
         val.loadFromMemoryBlock (mb);
     }
 
-    RSAKey key (rsaPrivateKey);
+    juce::RSAKey key (rsaPrivateKey);
     key.applyToValue (val);
 
     return val.toString (16);
 }
 #endif
 
-static std::unique_ptr<XmlElement> decodeEncryptedXml (const String& hexData,
-                                                       const String& rsaPublicKey)
+static std::unique_ptr<juce::XmlElement> decodeEncryptedXml (const juce::String& hexData,
+                                                             const juce::String& rsaPublicKey)
 {
     if (hexData.isEmpty())
-        return 0;
+        return nullptr;
 
-    BigInteger val;
+    juce::BigInteger val;
     val.parseString (hexData, 16);
 
-    RSAKey key (rsaPublicKey);
+    juce::RSAKey key (rsaPublicKey);
     key.applyToValue (val);
 
-    const MemoryBlock mb (val.toMemoryBlock());
-    XmlDocument doc (mb.toString());
+    const juce::MemoryBlock mb (val.toMemoryBlock());
+    juce::XmlDocument doc (mb.toString());
 
     auto xml = doc.getDocumentElement();
 

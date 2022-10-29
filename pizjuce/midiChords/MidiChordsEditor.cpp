@@ -23,6 +23,7 @@
 #include "MidiChordsEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -613,15 +614,15 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
 
     fretsSlider = new FretsSlider (L"new slider");
     fretsSlider->setRange (5, maxFrets, 1);
-    fretsSlider->setSliderStyle (Slider::LinearHorizontal);
-    fretsSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    fretsSlider->setSliderStyle (juce::Slider::LinearHorizontal);
+    fretsSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     fretsSlider->addListener (this);
     fretsSlider->setMouseClickGrabsKeyboardFocus (false);
 
     stringsSlider = new StringsSlider (L"new slider");
     stringsSlider->setRange (1, maxStrings, 1);
-    stringsSlider->setSliderStyle (Slider::LinearHorizontal);
-    stringsSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    stringsSlider->setSliderStyle (juce::Slider::LinearHorizontal);
+    stringsSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     stringsSlider->addListener (this);
     stringsSlider->setMouseClickGrabsKeyboardFocus (false);
 
@@ -629,8 +630,8 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
     {
         stringSlider[i] = new NoteSlider (L"new slider");
         stringSlider[i]->setRange (-1, 127, 1);
-        stringSlider[i]->setSliderStyle (Slider::LinearHorizontal);
-        stringSlider[i]->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+        stringSlider[i]->setSliderStyle (juce::Slider::LinearHorizontal);
+        stringSlider[i]->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
         stringSlider[i]->addListener (this);
         stringSlider[i]->setBottomOctave (ownerFilter->bottomOctave);
         stringSlider[i]->setMouseClickGrabsKeyboardFocus (false);
@@ -682,17 +683,17 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
     speedSlider->setOwner (ownerFilter, kSpeed);
     maxTimeSlider->setOwner (ownerFilter, kMaxDelay);
 
-    guitar->setMouseCursor (MouseCursor::PointingHandCursor);
-    chordKeyboard->setMouseCursor (MouseCursor::PointingHandCursor);
-    triggerKeyboard->setMouseCursor (MouseCursor::PointingHandCursor);
+    guitar->setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    chordKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    triggerKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
 
     //channelSlider->setAllText("Any");
     learnChanSlider->setAllText ("All");
     outputChannelSlider->setAllText ("Multi");
     chordSaveEditor->addListener (this);
-    chordSaveEditor->setTextToShowWhenEmpty ("Save chord (type a name)", Colours::grey);
+    chordSaveEditor->setTextToShowWhenEmpty ("Save chord (type a name)", juce::Colours::grey);
     tuningSaveEditor->addListener (this);
-    tuningSaveEditor->setTextToShowWhenEmpty ("Save tuning (type name)", Colours::grey);
+    tuningSaveEditor->setTextToShowWhenEmpty ("Save tuning (type name)", juce::Colours::grey);
     pizButton->addListener (this);
     pizButton->setTooltip ("http://thepiz.org/plugins");
     previewButton->addMouseListener (this, false);
@@ -705,17 +706,17 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
     transposeUpButton->setVisible (false);
     guitar->setVisible (false);
 
-    File chordPath (getFilter()->dataPath + File::getSeparatorString() + "mappings");
-    browser = new FileBrowserComponent (FileBrowserComponent::openMode | FileBrowserComponent::useTreeView | FileBrowserComponent::canSelectFiles,
-                                        chordPath,
-                                        &fileFilter,
-                                        0);
+    juce::File chordPath (getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
+    browser = new juce::FileBrowserComponent (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::useTreeView | juce::FileBrowserComponent::canSelectFiles,
+                                              chordPath,
+                                              &fileFilter,
+                                              0);
     browser->addListener (this);
 
-    Font const defaultFont = infoBox->getFont();
+    juce::Font const defaultFont = infoBox->getFont();
     infoBox->setVisible (false);
-    infoBox->setFont (Font (18.f, Font::bold));
-    infoBox->insertTextAtCaret ("Insert Piz Here-> midiChords v." + String (JucePlugin_VersionString) + "\n\n");
+    infoBox->setFont (juce::Font (18.f, juce::Font::bold));
+    infoBox->insertTextAtCaret ("Insert Piz Here-> midiChords v." + juce::String (JucePlugin_VersionString) + "\n\n");
     infoBox->setFont (defaultFont.boldened());
     infoBox->insertTextAtCaret ("== Host Info ==\n");
     infoBox->setFont (defaultFont);
@@ -723,7 +724,7 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
     infoBox->setFont (defaultFont.boldened());
     infoBox->insertTextAtCaret ("== Documentation ==\n");
     infoBox->setFont (defaultFont);
-    infoBox->insertTextAtCaret (File (getFilter()->dataPath + File::getSeparatorString() + "readme.txt").loadFileAsString());
+    infoBox->insertTextAtCaret (juce::File (getFilter()->dataPath + juce::File::getSeparatorString() + "readme.txt").loadFileAsString());
 
     const int middleC = getFilter()->getBottomOctave() + 5;
     chordKeyboard->setOctaveForMiddleC (middleC);
@@ -736,7 +737,7 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
     setSize (640, 420);
 
     //[Constructor] You can add your own custom stuff here..
-    versionLabel->setText (JucePlugin_VersionString, dontSendNotification);
+    versionLabel->setText (JucePlugin_VersionString, juce::dontSendNotification);
     ownerFilter->addChangeListener (this);
     if (! ownerFilter->demo)
         demoLabel->setVisible (false);
@@ -1161,9 +1162,9 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == chordMenuButton.get())
     {
         //[UserButtonCode_chordMenuButton] -- add your button handler code here..
-        StringArray list;
+        juce::StringArray list;
         listChordFiles (list);
-        PopupMenu menu;
+        juce::PopupMenu menu;
         menu.addCustomItem (-1, *chordSaveEditor, 150, 24, false);
         menu.addSeparator();
         for (int i = 0; i < list.size(); i++)
@@ -1198,7 +1199,7 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //listPresetFiles(list);
         browser->refresh();
 
-        PopupMenu menu;
+        juce::PopupMenu menu;
         menu.addItem (-1, "Save...");
         menu.addSeparator();
         menu.addCustomItem (-2, *browser, 250, 300, false);
@@ -1222,23 +1223,23 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == copyButton.get())
     {
         //[UserButtonCode_copyButton] -- add your button handler code here..
-        const int t        = getFilter()->getCurrentTrigger();
-        String chordString = String (t) + ":";
+        const int t              = getFilter()->getCurrentTrigger();
+        juce::String chordString = juce::String (t) + ":";
         for (int n = 0; n < 128; n++)
         {
             for (int c = 1; c <= 16; c++)
             {
                 if (getFilter()->progKbState[getFilter()->getCurrentProgram()][t].isNoteOn (c, n))
-                    chordString += " " + String (n - t) + "." + String (c);
+                    chordString += " " + juce::String (n - t) + "." + juce::String (c);
             }
         }
-        SystemClipboard::copyTextToClipboard (chordString);
+        juce::SystemClipboard::copyTextToClipboard (chordString);
         //[/UserButtonCode_copyButton]
     }
     else if (buttonThatWasClicked == pasteButton.get())
     {
         //[UserButtonCode_pasteButton] -- add your button handler code here..
-        chordFromString (SystemClipboard::getTextFromClipboard());
+        chordFromString (juce::SystemClipboard::getTextFromClipboard());
         //[/UserButtonCode_pasteButton]
     }
     else if (buttonThatWasClicked == pcButton.get())
@@ -1276,17 +1277,17 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //[UserButtonCode_infoButton] -- add your button handler code here..
         infoBox->moveCaretToTop (false);
         if (infoButton->getToggleState())
-            Desktop::getInstance().getAnimator().fadeOut (infoBox.get(), 150);
+            juce::Desktop::getInstance().getAnimator().fadeOut (infoBox.get(), 150);
         else
-            Desktop::getInstance().getAnimator().fadeIn (infoBox.get(), 100);
+            juce::Desktop::getInstance().getAnimator().fadeIn (infoBox.get(), 100);
         //infoBox->setVisible(!infoBox->isVisible());
-        infoButton->setToggleState (! infoButton->getToggleState(), dontSendNotification);
+        infoButton->setToggleState (! infoButton->getToggleState(), juce::dontSendNotification);
         //[/UserButtonCode_infoButton]
     }
     else if (buttonThatWasClicked == specialMenuButton.get())
     {
         //[UserButtonCode_specialMenuButton] -- add your button handler code here..
-        PopupMenu m;
+        juce::PopupMenu m;
         m.addItem (1, "Clear all chords");
         m.addItem (2, "Reset all chords");
         m.addItem (3, "Copy to all triggers (absolute)");
@@ -1329,7 +1330,7 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_setupButton] -- add your button handler code here..
         getFilter()->fillGuitarPresetList();
-        PopupMenu m, custom, chordfiles;
+        juce::PopupMenu m, custom, chordfiles;
         for (int i = 0; i < getFilter()->guitarPresets.size(); i++)
             m.addItem (i + 1, getFilter()->guitarPresets[i].guitarName, true, isGuitarPreset (i));
 
@@ -1382,7 +1383,7 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        URL ("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
+        juce::URL ("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
@@ -1593,18 +1594,18 @@ void MidiChordsEditor::chordMenuCallback (int result, MidiChordsEditor* editor)
     }
 }
 
-void MidiChordsEditor::mouseDown (const MouseEvent& e)
+void MidiChordsEditor::mouseDown (const juce::MouseEvent& e)
 {
     if (e.eventComponent == previewButton.get() && ! e.mods.isPopupMenu())
         getFilter()->playCurrentChord (true);
     if (e.eventComponent != infoBox.get() && infoBox->isVisible())
     {
         infoBox->setVisible (false);
-        infoButton->setToggleState (false, dontSendNotification);
+        infoButton->setToggleState (false, juce::dontSendNotification);
     }
 }
 
-void MidiChordsEditor::mouseDoubleClick (const MouseEvent& e)
+void MidiChordsEditor::mouseDoubleClick (const juce::MouseEvent& e)
 {
     if (e.eventComponent == triggerKeyboard.get() && (e.mods.isShiftDown() || e.mods.isPopupMenu()))
     {
@@ -1614,7 +1615,7 @@ void MidiChordsEditor::mouseDoubleClick (const MouseEvent& e)
     }
 }
 
-void MidiChordsEditor::mouseUp (const MouseEvent& e)
+void MidiChordsEditor::mouseUp (const juce::MouseEvent& e)
 {
     if (e.eventComponent == previewButton.get())
     {
@@ -1623,41 +1624,41 @@ void MidiChordsEditor::mouseUp (const MouseEvent& e)
             if (getFilter()->isPreviewChordPlaying())
             {
                 getFilter()->playCurrentChord (false);
-                previewButton->setToggleState (false, dontSendNotification);
+                previewButton->setToggleState (false, juce::dontSendNotification);
             }
             else
             {
                 getFilter()->playCurrentChord (true);
-                previewButton->setToggleState (true, dontSendNotification);
+                previewButton->setToggleState (true, juce::dontSendNotification);
             }
         }
         else
         {
             getFilter()->playCurrentChord (false);
-            previewButton->setToggleState (false, dontSendNotification);
+            previewButton->setToggleState (false, juce::dontSendNotification);
         }
     }
 }
 
-void MidiChordsEditor::chordFromString (String chordString)
+void MidiChordsEditor::chordFromString (juce::String chordString)
 {
     const int root = chordString.upToFirstOccurrenceOf (":", false, false).getIntValue();
     const int t    = getFilter()->getCurrentTrigger();
-    StringArray sa;
+    juce::StringArray sa;
     if (chordString.contains (":"))
         chordString = chordString.fromLastOccurrenceOf (":", false, false);
     if (chordString.containsAnyOf ("abcdefgABCDEFGmMrRopP#+") /* || !chordString.contains("0")*/)
         chordString = getIntervalStringFromNoteNames (t, chordString, getFilter()->bottomOctave);
 
-    sa.addTokens (chordString, " ,", String());
+    sa.addTokens (chordString, " ,", juce::String());
     if (sa.size() > 0)
         getFilter()->clearChord (t);
-    if (ModifierKeys::getCurrentModifiers().isCommandDown())
+    if (juce::ModifierKeys::getCurrentModifiers().isCommandDown())
     {
         //absolute
         for (int i = 0; i < sa.size(); i++)
         {
-            String s = sa[i].trim();
+            juce::String s = sa[i].trim();
             if (s.isNotEmpty())
             {
                 if (s.contains ("."))
@@ -1672,7 +1673,7 @@ void MidiChordsEditor::chordFromString (String chordString)
         //relative
         for (int i = 0; i < sa.size(); i++)
         {
-            String s = sa[i].trim();
+            juce::String s = sa[i].trim();
             if (s.isNotEmpty())
             {
                 if (s.contains ("."))
@@ -1686,7 +1687,7 @@ void MidiChordsEditor::chordFromString (String chordString)
         getFilter()->translateToGuitarChord();
 }
 
-void MidiChordsEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiChordsEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -1706,10 +1707,10 @@ void MidiChordsEditor::updateParametersFromFilter()
 
     guitar->setVisible (filter->getGuitarView());
     setupButton->setEnabled (filter->getGuitarView());
-    fretsSlider->setValue (filter->getNumFrets(), dontSendNotification);
+    fretsSlider->setValue (filter->getNumFrets(), juce::dontSendNotification);
     guitar->setNumFrets (filter->getNumFrets());
 
-    stringsSlider->setValue (s, dontSendNotification);
+    stringsSlider->setValue (s, juce::dontSendNotification);
     guitar->setNumStrings (s);
 
     guitarPreset = -1;
@@ -1725,29 +1726,29 @@ void MidiChordsEditor::updateParametersFromFilter()
     for (int i = 0; i < maxStrings; i++)
     {
         stringSlider[i]->setEnabled (i < s);
-        stringSlider[i]->setValue (filter->getStringValue (i), dontSendNotification);
+        stringSlider[i]->setValue (filter->getStringValue (i), juce::dontSendNotification);
         guitar->setStringNote (i, filter->getStringValue (i));
     }
 
-    channelSlider->setValue (filter->getParameter (kChannel) * 16.f, dontSendNotification);
-    learnChanSlider->setValue (chordChan, dontSendNotification);
-    outputChannelSlider->setValue (outChan, dontSendNotification);
-    velocitySlider->setValue (previewVel, dontSendNotification);
-    transposeSlider->setValue (transpose, dontSendNotification);
-    chordLearnButton->setToggleState (filter->getParameter (kLearnChord) > 0, dontSendNotification);
-    triggerLearnButton->setToggleState (filter->getParameter (kFollowInput) > 0, dontSendNotification);
-    toggleButton->setToggleState (filter->getParameter (kGuess) > 0, dontSendNotification);
-    flatsButton->setToggleState (flats, dontSendNotification);
+    channelSlider->setValue (filter->getParameter (kChannel) * 16.f, juce::dontSendNotification);
+    learnChanSlider->setValue (chordChan, juce::dontSendNotification);
+    outputChannelSlider->setValue (outChan, juce::dontSendNotification);
+    velocitySlider->setValue (previewVel, juce::dontSendNotification);
+    transposeSlider->setValue (transpose, juce::dontSendNotification);
+    chordLearnButton->setToggleState (filter->getParameter (kLearnChord) > 0, juce::dontSendNotification);
+    triggerLearnButton->setToggleState (filter->getParameter (kFollowInput) > 0, juce::dontSendNotification);
+    toggleButton->setToggleState (filter->getParameter (kGuess) > 0, juce::dontSendNotification);
+    flatsButton->setToggleState (flats, juce::dontSendNotification);
     guitar->setFlats (flats);
-    pcButton->setToggleState (filter->getParameter (kUseProgCh) > 0, dontSendNotification);
-    transposeInputButton->setToggleState (filter->getParameter (kInputTranspose) > 0, dontSendNotification);
-    toAllChannelsButton->setToggleState (filter->getParameter (kToAllChannels) > 0, dontSendNotification);
+    pcButton->setToggleState (filter->getParameter (kUseProgCh) > 0, juce::dontSendNotification);
+    transposeInputButton->setToggleState (filter->getParameter (kInputTranspose) > 0, juce::dontSendNotification);
+    toAllChannelsButton->setToggleState (filter->getParameter (kToAllChannels) > 0, juce::dontSendNotification);
 
     accelSlider->setVSTSlider();
     velRampSlider->setVSTSlider();
     speedSlider->setVSTSlider();
     maxTimeSlider->setVSTSlider();
-    strumButton->setToggleState (filter->getParameter (kStrum) > 0, dontSendNotification);
+    strumButton->setToggleState (filter->getParameter (kStrum) > 0, juce::dontSendNotification);
     strumDirectionButton->setEnabled (strumButton->getToggleState());
     accelSlider->setEnabled (strumButton->getToggleState());
     velRampSlider->setEnabled (strumButton->getToggleState());
@@ -1763,75 +1764,75 @@ void MidiChordsEditor::updateParametersFromFilter()
     else
         chordKeyboard->setMidiChannelsToDisplay (1 << (chordChan - 1));
 
-    normalButton->setToggleState (newMode == Normal, dontSendNotification);
-    octaveButton->setToggleState (newMode == Octave, dontSendNotification);
-    globalButton->setToggleState (newMode == Global, dontSendNotification);
+    normalButton->setToggleState (newMode == Normal, juce::dontSendNotification);
+    octaveButton->setToggleState (newMode == Octave, juce::dontSendNotification);
+    globalButton->setToggleState (newMode == Global, juce::dontSendNotification);
 
-    chordNameLabel->setText (getCurrentChordName(), dontSendNotification);
+    chordNameLabel->setText (getCurrentChordName(), juce::dontSendNotification);
 
     if (guitar->isVisible())
         guitar->handleAsyncUpdate();
 
     const int t = getFilter()->getCurrentTrigger();
-    String chordString; // = String(t) + ":";
+    juce::String chordString; // = String(t) + ":";
     for (int n = 0; n < 128; n++)
     {
         for (int c = 1; c <= 16; c++)
         {
             if (getFilter()->progKbState[p][t].isNoteOn (c, n))
-                chordString += String (n - t) /*+"."+String(c)*/ + " ";
+                chordString += juce::String (n - t) /*+"."+String(c)*/ + " ";
         }
     }
-    chordEditor->setText (chordString.trimEnd(), dontSendNotification);
+    chordEditor->setText (chordString.trimEnd(), juce::dontSendNotification);
 
     if (mode != newMode)
     {
         if (newMode == Global)
         {
-            triggerLabel->setText ("Root Note:", dontSendNotification);
+            triggerLabel->setText ("Root Note:", juce::dontSendNotification);
             triggerKeyboard->setKeyWidth (16.f);
             triggerKeyboard->setAvailableRange (0, 127);
             triggerKeyboard->setLowestVisibleKey (36);
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + String (t) + ")", dontSendNotification);
+            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
         }
         else if (newMode == Octave)
         {
-            triggerLabel->setText ("Trigger Note:", dontSendNotification);
+            triggerLabel->setText ("Trigger Note:", juce::dontSendNotification);
             triggerKeyboard->setAvailableRange (60, 71);
             triggerKeyboard->setKeyWidth ((float) triggerKeyboard->getWidth() / 7.f);
-            triggerNoteLabel->setText (getNoteNameWithoutOctave (t, ! flats), dontSendNotification);
+            triggerNoteLabel->setText (getNoteNameWithoutOctave (t, ! flats), juce::dontSendNotification);
         }
         else
         {
-            triggerLabel->setText ("Trigger Note:", dontSendNotification);
+            triggerLabel->setText ("Trigger Note:", juce::dontSendNotification);
             triggerKeyboard->setKeyWidth (16.f);
             triggerKeyboard->setAvailableRange (0, 127);
             triggerKeyboard->setLowestVisibleKey (36);
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + String (t) + ")", dontSendNotification);
+            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
         }
         mode = newMode;
     }
     else
     {
         if (newMode != Octave)
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + String (t) + ")", dontSendNotification);
+            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
         else
-            triggerNoteLabel->setText (getNoteNameWithoutOctave (t), dontSendNotification);
+            triggerNoteLabel->setText (getNoteNameWithoutOctave (t), juce::dontSendNotification);
     }
 
     if (presetNameLabel->getText() != getFilter()->getProgramName (p))
-        presetNameLabel->setText (getFilter()->getProgramName (p), dontSendNotification);
+        presetNameLabel->setText (getFilter()->getProgramName (p), juce::dontSendNotification);
 
     triggerKeyboard->repaint();
     chordKeyboard->repaint();
 }
 
-String const MidiChordsEditor::getCurrentChordName()
+juce::String const MidiChordsEditor::getCurrentChordName()
 {
     if (getFilter()->getParameter (kGuess) == 0.f)
-        return String();
+        return juce::String();
 
-    Array<int> chord;
+    juce::Array<int> chord;
     for (int n = 0; n < 128; n++)
     {
         for (int c = 1; c <= 16; c++)
@@ -1843,20 +1844,20 @@ String const MidiChordsEditor::getCurrentChordName()
     return getFirstRecognizedChord (chord, getFilter()->getParameter (kFlats) > 0.f);
 }
 
-void MidiChordsEditor::listChordFiles (StringArray& list)
+void MidiChordsEditor::listChordFiles (juce::StringArray& list)
 {
-    String chordPath = getFilter()->dataPath + File::getSeparatorString() + "chords";
+    juce::String chordPath = getFilter()->dataPath + juce::File::getSeparatorString() + "chords";
 
     if (guitarPreset >= 0 && guitar->isVisible())
-        chordPath += File::getSeparatorString() + getFilter()->guitarPresets[guitarPreset].chordFile;
+        chordPath += juce::File::getSeparatorString() + getFilter()->guitarPresets[guitarPreset].chordFile;
     else
-        chordPath += File::getSeparatorString() + "Chords.txt";
+        chordPath += juce::File::getSeparatorString() + "Chords.txt";
 
-    File chordFile = File (chordPath);
+    juce::File chordFile = juce::File (chordPath);
     if (! chordFile.exists())
-        chordFile = getFilter()->dataPath + File::getSeparatorString() + "chords" + File::getSeparatorString() + "Chords.txt";
+        chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "Chords.txt";
 
-    StringArray s;
+    juce::StringArray s;
     s.addLines (chordFile.loadFileAsString());
     for (int line = 0; line < s.size(); line++)
     {
@@ -1864,7 +1865,7 @@ void MidiChordsEditor::listChordFiles (StringArray& list)
             list.add (s[line]);
     }
 
-    chordFile = getFilter()->dataPath + File::getSeparatorString() + "chords" + File::getSeparatorString() + "User.txt";
+    chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt";
     s.clear();
     s.addLines (chordFile.loadFileAsString());
     for (int line = 0; line < s.size(); line++)
@@ -1874,11 +1875,11 @@ void MidiChordsEditor::listChordFiles (StringArray& list)
     }
 }
 
-void MidiChordsEditor::listPresetFiles (Array<File>& list)
+void MidiChordsEditor::listPresetFiles (juce::Array<juce::File>& list)
 {
-    File mappingsPath (getFilter()->dataPath + File::getSeparatorString() + "mappings");
-    Array<File> files;
-    mappingsPath.findChildFiles (files, File::findFiles, true);
+    juce::File mappingsPath (getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
+    juce::Array<juce::File> files;
+    mappingsPath.findChildFiles (files, juce::File::findFiles, true);
     for (int i = 0; i < files.size(); i++)
     {
         if (files[i].hasFileExtension ("chords") || files[i].hasFileExtension ("fxp") || files[i].hasFileExtension ("xml"))
@@ -1886,12 +1887,12 @@ void MidiChordsEditor::listPresetFiles (Array<File>& list)
     }
 }
 
-void MidiChordsEditor::loadChord (String chorddef)
+void MidiChordsEditor::loadChord (juce::String chorddef)
 {
     const int t = getFilter()->getCurrentTrigger();
     getFilter()->clearChord (t);
-    StringArray sa;
-    sa.addTokens (chorddef.fromLastOccurrenceOf (":", false, true), " ", String());
+    juce::StringArray sa;
+    sa.addTokens (chorddef.fromLastOccurrenceOf (":", false, true), " ", juce::String());
     for (int i = 0; i < sa.size(); i++)
     {
         if (sa[i].trim().isNotEmpty())
@@ -1906,7 +1907,7 @@ void MidiChordsEditor::loadChord (String chorddef)
         getFilter()->translateToGuitarChord();
 }
 
-void MidiChordsEditor::loadPreset (File file)
+void MidiChordsEditor::loadPreset (juce::File file)
 {
     if (file.hasFileExtension ("fxp"))
         getFilter()->loadFxpFile (file);
@@ -1920,7 +1921,7 @@ void MidiChordsEditor::loadPreset (File file)
 
         getFilter()->clearAllChords();
 
-        StringArray lines;
+        juce::StringArray lines;
         lines.addLines (file.loadFileAsString());
         for (int ln = 0; ln < lines.size(); ln++)
         {
@@ -1928,7 +1929,7 @@ void MidiChordsEditor::loadPreset (File file)
             {
                 if (lines[ln].upToFirstOccurrenceOf (":", false, false).equalsIgnoreCase ("Mode"))
                 {
-                    String s = lines[ln].fromLastOccurrenceOf (":", false, true);
+                    juce::String s = lines[ln].fromLastOccurrenceOf (":", false, true);
                     if (s.equalsIgnoreCase ("Full"))
                         getFilter()->setParameterNotifyingHost (kMode, ((float) Normal) / (float) (numModes - 1));
                     if (s.equalsIgnoreCase ("Octave"))
@@ -1940,8 +1941,8 @@ void MidiChordsEditor::loadPreset (File file)
                 {
                     int t = lines[ln].upToFirstOccurrenceOf (":", false, false).getIntValue();
                     //getFilter()->clearChord(t);
-                    StringArray sa;
-                    sa.addTokens (lines[ln].fromLastOccurrenceOf (":", false, true), " ", String());
+                    juce::StringArray sa;
+                    sa.addTokens (lines[ln].fromLastOccurrenceOf (":", false, true), " ", juce::String());
                     for (int i = 0; i < sa.size(); i++)
                     {
                         if (sa[i].trim().isNotEmpty())
@@ -1955,81 +1956,81 @@ void MidiChordsEditor::loadPreset (File file)
                 }
             }
         }
-        presetNameLabel->setText (file.getFileNameWithoutExtension(), dontSendNotification);
+        presetNameLabel->setText (file.getFileNameWithoutExtension(), juce::dontSendNotification);
         getFilter()->changeProgramName (getFilter()->getCurrentProgram(), file.getFileNameWithoutExtension());
         getFilter()->updateHostDisplay();
     }
 }
 
-void MidiChordsEditor::saveChord (String name)
+void MidiChordsEditor::saveChord (juce::String name)
 {
-    const int curProgram = getFilter()->getCurrentProgram();
-    const int t          = getFilter()->getCurrentTrigger();
-    String chordString   = name + ":";
+    const int curProgram     = getFilter()->getCurrentProgram();
+    const int t              = getFilter()->getCurrentTrigger();
+    juce::String chordString = name + ":";
     for (int c = 1; c <= 16; c++)
     {
         for (int n = 0; n < 128; n++)
         {
             if (getFilter()->progKbState[curProgram][t].isNoteOn (c, n))
-                chordString += " " + String (n - t) + "." + String (c);
+                chordString += " " + juce::String (n - t) + "." + juce::String (c);
         }
     }
-    File chordFile (getFilter()->dataPath + File::getSeparatorString() + "chords" + File::getSeparatorString() + "User.txt");
+    juce::File chordFile (getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt");
     if (chordFile.create())
         chordFile.appendText (chordString + "\n");
 }
 
-void MidiChordsEditor::textEditorTextChanged (TextEditor& editor)
+void MidiChordsEditor::textEditorTextChanged (juce::TextEditor& editor)
 {
 }
 
-void MidiChordsEditor::textEditorReturnKeyPressed (TextEditor& editor)
+void MidiChordsEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
     if (&editor == chordSaveEditor.get())
     {
         saveChord (chordSaveEditor->getText());
-        PopupMenu::dismissAllActiveMenus();
+        juce::PopupMenu::dismissAllActiveMenus();
         chordSaveEditor->clear();
     }
     else if (&editor == tuningSaveEditor.get())
     {
-        String tuningString = "\"" + tuningSaveEditor->getText() + "\", "
-                            + String ("Chords.txt, ")
-                            + String (roundToInt (fretsSlider->getValue())) + " frets, ";
+        juce::String tuningString = "\"" + tuningSaveEditor->getText() + "\", "
+                                  + juce::String ("Chords.txt, ")
+                                  + juce::String (roundToInt (fretsSlider->getValue())) + " frets, ";
         for (int i = 0; i < roundToInt (stringsSlider->getValue()); i++)
         {
             if (i > 0)
                 tuningString += ",";
-            tuningString += String (roundToInt (stringSlider[i]->getValue()));
+            tuningString += juce::String (roundToInt (stringSlider[i]->getValue()));
         }
-        File tuningFile (getFilter()->dataPath + File::getSeparatorString() + "guitars" + File::getSeparatorString() + "GuitarPresets.txt");
+        juce::File tuningFile (getFilter()->dataPath + juce::File::getSeparatorString() + "guitars" + juce::File::getSeparatorString() + "GuitarPresets.txt");
         if (tuningFile.create())
             tuningFile.appendText (tuningString + "\n");
 
         getFilter()->fillGuitarPresetList();
-        PopupMenu::dismissAllActiveMenus();
+        juce::PopupMenu::dismissAllActiveMenus();
         tuningSaveEditor->clear();
     }
 }
 
-void MidiChordsEditor::textEditorEscapeKeyPressed (TextEditor& editor)
+void MidiChordsEditor::textEditorEscapeKeyPressed (juce::TextEditor& editor)
 {
-    PopupMenu::dismissAllActiveMenus();
+    juce::PopupMenu::dismissAllActiveMenus();
 }
 
-void MidiChordsEditor::textEditorFocusLost (TextEditor& editor)
+void MidiChordsEditor::textEditorFocusLost (juce::TextEditor& editor)
 {
 }
 
-void MidiChordsEditor::filesDropped (const StringArray& filenames, int mouseX, int mouseY)
+void MidiChordsEditor::filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY)
 {
-    File file = File (filenames[0]);
+    juce::File file = juce::File (filenames[0]);
     if (file.hasFileExtension ("chords") || file.hasFileExtension ("fxp") || file.hasFileExtension ("fxb")
         || file.hasFileExtension ("xml"))
         loadPreset (file);
     else if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
     {
-        getFilter()->readKeyFile (File (filenames[0]));
+        getFilter()->readKeyFile (juce::File (filenames[0]));
         if (! getFilter()->demo)
         {
             demoLabel->setVisible (false);
@@ -2037,9 +2038,9 @@ void MidiChordsEditor::filesDropped (const StringArray& filenames, int mouseX, i
     }
 }
 
-bool MidiChordsEditor::isInterestedInFileDrag (const StringArray& files)
+bool MidiChordsEditor::isInterestedInFileDrag (const juce::StringArray& files)
 {
-    File file = File (files[0]);
+    juce::File file = juce::File (files[0]);
     if (file.hasFileExtension ("chords") || file.hasFileExtension ("fxp") || file.hasFileExtension ("fxb") || file.hasFileExtension ("xml"))
         return true;
     if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
@@ -2053,16 +2054,16 @@ void MidiChordsEditor::fileClicked (const juce::File& file, const juce::MouseEve
         loadPreset (file);
 }
 
-void MidiChordsEditor::fileDoubleClicked (const File& file)
+void MidiChordsEditor::fileDoubleClicked (const juce::File& file)
 {
     if (file.existsAsFile())
     {
         //loadPreset(file);
-        PopupMenu::dismissAllActiveMenus();
+        juce::PopupMenu::dismissAllActiveMenus();
     }
 }
 
-void MidiChordsEditor::browserRootChanged (const File& newRoot)
+void MidiChordsEditor::browserRootChanged (const juce::File& newRoot)
 {
 }
 

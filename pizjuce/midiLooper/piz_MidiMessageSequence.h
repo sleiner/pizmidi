@@ -1,10 +1,8 @@
 #ifndef __PIZ_MIDIMESSAGESEQUENCE_JUCEHEADER__
 #define __PIZ_MIDIMESSAGESEQUENCE_JUCEHEADER__
 
-#include "juce_audio_basics/juce_audio_basics.h"
-#include "juce_core/juce_core.h"
-
-using namespace juce;
+#include <juce_audio_basics/juce_audio_basics.h>
+#include <juce_core/juce_core.h>
 
 //==============================================================================
 /**
@@ -24,13 +22,13 @@ public:
 
     /** Creates a copy of another sequence. */
     PizMidiMessageSequence (const PizMidiMessageSequence& other);
-    PizMidiMessageSequence (const MidiMessageSequence& other);
+    PizMidiMessageSequence (const juce::MidiMessageSequence& other);
 
     /** Replaces this sequence with another one. */
     PizMidiMessageSequence& operator= (const PizMidiMessageSequence& other);
-    PizMidiMessageSequence& operator= (const MidiMessageSequence& other);
+    PizMidiMessageSequence& operator= (const juce::MidiMessageSequence& other);
 
-    MidiMessageSequence getAsJuceSequence();
+    juce::MidiMessageSequence getAsJuceSequence();
 
     /** Destructor. */
     ~PizMidiMessageSequence();
@@ -44,7 +42,7 @@ public:
         @see PizMidiMessageSequence::getEventPointer
     */
 
-    class MidiEventHolder : public ReferenceCountedObject
+    class MidiEventHolder : public juce::ReferenceCountedObject
     {
     public:
         //==============================================================================
@@ -53,7 +51,7 @@ public:
 
         /** The message itself, whose timestamp is used to specify the event's time.
         */
-        MidiMessage message;
+        juce::MidiMessage message;
 
         /** The matching note-off event (if this is a note-on event).
 
@@ -63,16 +61,16 @@ public:
             note-offs up-to-date after events have been moved around in the sequence
             or deleted.
         */
-        ReferenceCountedObjectPtr<MidiEventHolder> noteOffObject;
+        juce::ReferenceCountedObjectPtr<MidiEventHolder> noteOffObject;
 
-        //==============================================================================
-        juce_UseDebuggingNewOperator
+    private:
+        friend class PizMidiMessageSequence;
+        MidiEventHolder (const juce::MidiMessage& message);
 
-            private : friend class PizMidiMessageSequence;
-        MidiEventHolder (const MidiMessage& message);
+        JUCE_LEAK_DETECTOR (MidiEventHolder)
     };
 
-    typedef ReferenceCountedObjectPtr<MidiEventHolder> mehPtr;
+    typedef juce::ReferenceCountedObjectPtr<MidiEventHolder> mehPtr;
     //==============================================================================
     /** Clears the sequence. */
     void clear();
@@ -141,8 +139,8 @@ public:
                                 that will be inserted
         @see updateMatchedPairs
     */
-    void addEvent (const MidiMessage& newMessage, double timeAdjustment = 0);
-    void addNote (const MidiMessage& noteOn, const MidiMessage& noteOff, double timeAdjustment = 0);
+    void addEvent (const juce::MidiMessage& newMessage, double timeAdjustment = 0);
+    void addNote (const juce::MidiMessage& noteOn, const juce::MidiMessage& noteOff, double timeAdjustment = 0);
 
     void moveEvent (int index, double timeAdjustment, bool moveMatchingNoteUp);
     void transposeEvent (int index, int semitones);
@@ -244,7 +242,7 @@ public:
                                 will be the minimum number of controller changes to recreate the
                                 state at the required time.
     */
-    void createControllerUpdatesForTime (int channelNumber, double time, OwnedArray<MidiMessage>& resultMessages);
+    void createControllerUpdatesForTime (int channelNumber, double time, juce::OwnedArray<juce::MidiMessage>& resultMessages);
 
     //==============================================================================
     /** Swaps this sequence with another one. */
@@ -252,18 +250,17 @@ public:
 
     void sort();
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        /** @internal */
-        static int
+    /** @internal */
+    static int
         compareElements (const mehPtr first,
                          const mehPtr second) throw();
 
 private:
     //==============================================================================
     friend class MidiFile;
-    ReferenceCountedArray<MidiEventHolder> list;
+    juce::ReferenceCountedArray<MidiEventHolder> list;
+
+    JUCE_LEAK_DETECTOR (PizMidiMessageSequence)
 };
 
 #endif // __JUCE_MIDIMESSAGESEQUENCE_JUCEHEADER__

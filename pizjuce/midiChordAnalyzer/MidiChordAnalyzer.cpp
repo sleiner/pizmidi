@@ -1,6 +1,8 @@
 #include "MidiChordAnalyzer.h"
 #include "MidiChordAnalyzerEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /**
     This function must be implemented to create a new instance of your
@@ -17,7 +19,7 @@ MidiChordAnalyzerPrograms::MidiChordAnalyzerPrograms()
 {
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        ValueTree progv ("ProgValues");
+        juce::ValueTree progv ("ProgValues");
     }
 }
 void MidiChordAnalyzerPrograms::loadDefaultValues()
@@ -34,7 +36,7 @@ void MidiChordAnalyzerPrograms::loadDefaultValues()
             set (b, p, "Channel", 0);
             set (b, p, "Flats", false);
 
-            set (b, p, "Name", "Program " + String (p + 1));
+            set (b, p, "Name", "Program " + juce::String (p + 1));
             set (b, p, "lastUIWidth", 600);
             set (b, p, "lastUIHeight", 400);
         }
@@ -64,11 +66,11 @@ MidiChordAnalyzer::~MidiChordAnalyzer()
 {
     DBG ("~MidiChordAnalyzer()");
     if (programs)
-        deleteAndZero (programs);
+        juce::deleteAndZero (programs);
 }
 
 //==============================================================================
-const String MidiChordAnalyzer::getName() const
+const juce::String MidiChordAnalyzer::getName() const
 {
     return JucePlugin_Name;
 }
@@ -123,32 +125,32 @@ void MidiChordAnalyzer::setParameter (int index, float newValue)
     }
 }
 
-const String MidiChordAnalyzer::getParameterName (int index)
+const juce::String MidiChordAnalyzer::getParameterName (int index)
 {
     if (index == kChannel)
         return "Channel";
     if (index == kFlats)
         return "Flats";
-    return String();
+    return juce::String();
 }
 
-const String MidiChordAnalyzer::getParameterText (int index)
+const juce::String MidiChordAnalyzer::getParameterText (int index)
 {
     if (index == kChannel)
-        return channel == 0 ? "Any" : String (channel);
+        return channel == 0 ? "Any" : juce::String (channel);
     if (index == kFlats)
         return flats ? "Yes" : "No";
-    return String();
+    return juce::String();
 }
 
-const String MidiChordAnalyzer::getInputChannelName (const int channelIndex) const
+const juce::String MidiChordAnalyzer::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String MidiChordAnalyzer::getOutputChannelName (const int channelIndex) const
+const juce::String MidiChordAnalyzer::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool MidiChordAnalyzer::isInputChannelStereoPair (int index) const
@@ -170,8 +172,8 @@ void MidiChordAnalyzer::releaseResources()
 {
 }
 
-void MidiChordAnalyzer::processBlock (AudioSampleBuffer& buffer,
-                                      MidiBuffer& midiMessages)
+void MidiChordAnalyzer::processBlock (juce::AudioSampleBuffer& buffer,
+                                      juce::MidiBuffer& midiMessages)
 {
     chordKbState.processNextMidiBuffer (midiMessages, 0, buffer.getNumSamples(), true);
 
@@ -199,19 +201,19 @@ void MidiChordAnalyzer::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiChordAnalyzer::createEditor()
+juce::AudioProcessorEditor* MidiChordAnalyzer::createEditor()
 {
     return new MidiChordAnalyzerEditor (this);
 }
 
 //==============================================================================
-void MidiChordAnalyzer::getStateInformation (MemoryBlock& destData)
+void MidiChordAnalyzer::getStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpTo (destData);
 }
 
-void MidiChordAnalyzer::getCurrentProgramStateInformation (MemoryBlock& destData)
+void MidiChordAnalyzer::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpProgramTo (0, curProgram, destData);
@@ -219,8 +221,8 @@ void MidiChordAnalyzer::getCurrentProgramStateInformation (MemoryBlock& destData
 
 void MidiChordAnalyzer::setStateInformation (const void* data, int sizeInBytes)
 {
-    MemoryInputStream m (data, sizeInBytes, false);
-    ValueTree vt = ValueTree::readFromStream (m);
+    juce::MemoryInputStream m (data, sizeInBytes, false);
+    juce::ValueTree vt = juce::ValueTree::readFromStream (m);
 
     programs->loadFrom (vt);
     init = true;
@@ -229,8 +231,8 @@ void MidiChordAnalyzer::setStateInformation (const void* data, int sizeInBytes)
 
 void MidiChordAnalyzer::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
-    MemoryInputStream m (data, sizeInBytes, false);
-    ValueTree vt = ValueTree::readFromStream (m);
+    juce::MemoryInputStream m (data, sizeInBytes, false);
+    juce::ValueTree vt = juce::ValueTree::readFromStream (m);
 
     programs->loadNoteMatrixFrom (vt, curProgram);
     init = true;

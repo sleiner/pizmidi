@@ -3,14 +3,12 @@
 
 #include <memory>
 
-#include "juce_audio_devices/juce_audio_devices.h"
-#include "juce_core/juce_core.h"
-#include "juce_events/juce_events.h"
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <juce_core/juce_core.h>
+#include <juce_events/juce_events.h>
 
 #include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
-
-using namespace juce;
 
 enum
 {
@@ -30,14 +28,14 @@ public:
 
 private:
     float param[numParams];
-    String icon;
-    MidiDeviceInfo device;
-    String name;
+    juce::String icon;
+    juce::MidiDeviceInfo device;
+    juce::String name;
 };
 
 //==============================================================================
 class MidiInFilter : public PizAudioProcessor,
-                     public ChangeBroadcaster
+                     public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -47,14 +45,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool hasEditor() const override { return true; }
     bool acceptsMidi() const override { return true; }
     bool producesMidi() const override { return true; }
@@ -65,11 +63,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -77,45 +75,44 @@ public:
     int getNumPrograms() override { return 1; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
     // These properties are public so that our editor component can access them
     //  - a bit of a hacky way to do it, but it's only a demo!
 
-    PizArray<MidiDeviceInfo> devices;
-    String icon;
+    PizArray<juce::MidiDeviceInfo> devices;
+    juce::String icon;
 
-    void setActiveDevice (String name);
-    void setActiveDevice (MidiDeviceInfo device);
-    MidiDeviceInfo getActiveDevice() { return activeDevice; }
-    MidiDeviceInfo getDeviceByName (String name) const;
+    void setActiveDevice (juce::String name);
+    void setActiveDevice (juce::MidiDeviceInfo device);
+    juce::MidiDeviceInfo getActiveDevice() { return activeDevice; }
+    juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private :
-        // this is our gain - the UI and the host can access this by getting/setting
-        // parameter 0.
-        float param[numParams];
-    MidiDeviceInfo activeDevice;
+private:
+    // this is our gain - the UI and the host can access this by getting/setting
+    // parameter 0.
+    float param[numParams];
+    juce::MidiDeviceInfo activeDevice;
 
     JuceProgram* programs;
     int curProgram;
     bool init;
-    std::unique_ptr<MidiInput> midiInput;
-    MidiMessageCollector collector;
+    std::unique_ptr<juce::MidiInput> midiInput;
+    juce::MidiMessageCollector collector;
 
     bool wasPlaying;
 
-    AudioPlayHead::CurrentPositionInfo lastPosInfo;
+    juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
+
+    JUCE_LEAK_DETECTOR (MidiInFilter)
 };
 
 #endif

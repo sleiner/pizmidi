@@ -1,20 +1,12 @@
 #pragma once
 
-#include "juce_core/juce_core.h"
-#include "juce_events/juce_events.h"
+#include <juce_audio_basics/juce_audio_basics.h>
+#include <juce_core/juce_core.h>
+#include <juce_events/juce_events.h>
 
 class MidiMorph;
 class ControllerValue;
 class Scene;
-namespace juce
-{
-class MidiBuffer;
-}
-namespace juce
-{
-class MidiMessage;
-}
-using namespace juce;
 
 class Controller : public juce::ChangeBroadcaster
 {
@@ -23,20 +15,6 @@ public:
 
     ~Controller() override;
 
-private:
-    bool newMidi;
-
-    bool valueChanged;
-
-    int ccNo;
-
-    int channel;
-
-    int value;
-
-    String name;
-
-public:
     enum states
     {
         undefined = 0,
@@ -45,23 +23,12 @@ public:
 
     };
 
-private:
-    Array<ControllerValue*> values;
-
-    MidiMorph* core;
-
-    friend class ControllerValue;
-    friend class ControllerGUI;
-
-public:
     ControllerValue* getValue (int index);
 
     ControllerValue* getValue (const Scene* scene);
 
-    //set value for particular scene
     void setValue (int newValue, Scene* scene);
 
-    //refresh value of selected scenes
     void controllerChanged();
 
     int getState();
@@ -82,27 +49,37 @@ public:
 
     bool hasNewMidi();
 
-    int getCcNo();
+    int getCcNo() const;
 
     void setCcNo (int val);
 
-    int getChannel();
+    int getChannel() const;
 
     void setChannel (int channel);
 
-    String getName();
+    juce::String getName();
 
-    void setName (String name);
+    void setName (juce::String name);
 
-    //set value for selected Scenes
-    void setValue (int newValue);
+    void setValueInSelectedScenes (int newValue);
 
 private:
+    bool newMidi;
+
+    bool valueChanged;
+
+    int ccNo;
+    int channel;
+    int value;
+
+    juce::String name;
+
+    juce::Array<ControllerValue*> values;
+
+    MidiMorph* core;
+
+    friend class ControllerValue;
+    friend class ControllerGUI;
+
     juce::MidiMessage* midiMessage;
-
-    int lastSentCcNo;
-
-    int lastSentChannel;
-
-    int lastSentValue;
 };

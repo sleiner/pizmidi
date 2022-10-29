@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "juce_core/juce_core.h"
-#include "juce_data_structures/juce_data_structures.h"
+#include <juce_core/juce_core.h>
+#include <juce_data_structures/juce_data_structures.h>
 
 class BankStorage
 {

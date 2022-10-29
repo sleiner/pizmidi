@@ -1,13 +1,11 @@
 #ifndef PIZ_PIANO_ROLL_HEADER
 #define PIZ_PIANO_ROLL_HEADER
 
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "MidiLoop.h"
-
-using namespace juce;
 
 class PianoRoll;
 
@@ -37,7 +35,7 @@ struct PizNote
     PizMidiMessageSequence::mehPtr object;
 };
 
-class Timeline : public Component, public ChangeBroadcaster
+class Timeline : public juce::Component, public juce::ChangeBroadcaster
 {
     friend class PianoRoll;
 
@@ -47,7 +45,7 @@ public:
 
     void setPianoRoll (PianoRoll* pr);
 
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     float getStartPixel();
     float getEndPixel();
     double getLength();
@@ -55,8 +53,8 @@ public:
 
     void setLoop (double start, double length);
 
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
 
     int scrollOffset;
 
@@ -66,15 +64,15 @@ private:
     PianoRoll* roll;
 };
 
-class PianoPort : public Viewport, public ChangeBroadcaster
+class PianoPort : public juce::Viewport, public juce::ChangeBroadcaster
 {
 public:
-    PianoPort (String name) : Viewport (name){};
+    PianoPort (juce::String name) : Viewport (name){};
     ~PianoPort() override { dispatchPendingMessages(); }
     void setTimeline (Timeline* t) { timeline = t; }
     void setPlayline (Component* p) { playline = p; }
     void setKeyboard (Viewport* kb) { keyboard = kb; }
-    void mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& wheel) override
+    void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override
     {
         this->getParentComponent()->mouseWheelMove (e, wheel);
     }
@@ -94,14 +92,14 @@ private:
     Viewport* keyboard;
 };
 
-class PianoRoll : public Component,
-                  public ChangeBroadcaster
+class PianoRoll : public juce::Component,
+                  public juce::ChangeBroadcaster
 {
     friend class Timeline;
     friend class PianoPort;
 
 public:
-    PianoRoll (AudioProcessor* _plugin, AudioProcessorEditor* _owner, Timeline* _timeline);
+    PianoRoll (juce::AudioProcessor* _plugin, juce::AudioProcessorEditor* _owner, Timeline* _timeline);
     ~PianoRoll() override;
 
     void setSequence (Loop* sequence_);
@@ -126,7 +124,7 @@ public:
         int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
         blankLength        = getPpqPerBar() * bars;
         sequenceChanged();
-        setSize ((int) ppqToPixels (jmax (blankLength, seqLengthInPpq)), getHeight());
+        setSize ((int) ppqToPixels (juce::jmax (blankLength, seqLengthInPpq)), getHeight());
     }
     void addBar()
     {
@@ -137,18 +135,18 @@ public:
     void removeBar()
     {
         int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
-        setDisplayLength (jmax (getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
-        setSize (jmax (pixelBarLength, getWidth() - pixelBarLength), getHeight());
+        setDisplayLength (juce::jmax (getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
+        setSize (juce::jmax (pixelBarLength, getWidth() - pixelBarLength), getHeight());
     }
-    int getDisplayLength() { return (int) (jmax (blankLength, seqLengthInPpq) / getPpqPerBar()); }
+    int getDisplayLength() { return (int) (juce::jmax (blankLength, seqLengthInPpq) / getPpqPerBar()); }
 
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
     //void mouseMove (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
 
-    void paintOverChildren (Graphics& g) override;
+    void paintOverChildren (juce::Graphics& g) override;
     void resized() override;
 
     bool getSnap() { return snapToGrid; }
@@ -192,8 +190,8 @@ public:
 
 private:
     juce::Rectangle<int> lasso;
-    Array<PizMidiMessageSequence::mehPtr> selectedNotes;
-    Array<PizNote> selectedNoteLengths;
+    juce::Array<PizMidiMessageSequence::mehPtr> selectedNotes;
+    juce::Array<PizNote> selectedNoteLengths;
     void addToSelection (PizMidiMessageSequence::mehPtr note)
     {
         if (note->message.isNoteOn())
@@ -215,15 +213,15 @@ private:
     public:
         Playbar (PianoRoll* pianoroll) : Component(), roll (pianoroll) {}
         ~Playbar() override {}
-        void paint (Graphics& g) override
+        void paint (juce::Graphics& g) override
         {
-            g.fillAll (Colour (0x0));
+            g.fillAll (juce::Colour (0x0));
             //if (sequence->isRecording) {
             //	g.setColour(Colours::red);
             //	g.drawVerticalLine((int)((float)sequence->recTime*(float)getWidth()/seqLengthInPpq),0.f,(float)getHeight());
             //}
             //else {
-            g.setColour (Colours::green);
+            g.setColour (juce::Colours::green);
             g.drawVerticalLine ((int) roll->ppqToPixelsWithOffset (roll->playTime), 0.f, (float) getHeight());
             //}
         }
@@ -240,7 +238,7 @@ private:
             setBufferedToImage (true);
         }
         ~PianoRollBackground() override {}
-        void paint (Graphics& g) override
+        void paint (juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
             int n                 = 0;
@@ -250,20 +248,20 @@ private:
             while (y > 0)
             {
                 if (getNoteNameWithoutOctave (n).contains ("#"))
-                    g.setColour (Colours::lightgrey);
+                    g.setColour (juce::Colours::lightgrey);
                 else if (n == 60)
-                    g.setColour (Colours::yellow);
+                    g.setColour (juce::Colours::yellow);
                 else
-                    g.setColour (Colours::white);
+                    g.setColour (juce::Colours::white);
                 g.fillRect (0.f, y - yinc, (float) getWidth(), yinc);
                 if (getNoteNameWithoutOctave (n).contains ("F") && ! getNoteNameWithoutOctave (n).contains ("#"))
                 {
-                    g.setColour (Colours::grey);
+                    g.setColour (juce::Colours::grey);
                     g.drawLine (0.f, y, (float) getWidth(), y, 1);
                 }
                 if (getNoteNameWithoutOctave (n).contains ("C") && ! getNoteNameWithoutOctave (n).contains ("#"))
                 {
-                    g.setColour (Colours::black);
+                    g.setColour (juce::Colours::black);
                     g.drawLine (0.f, y, (float) getWidth(), y, 1);
                 }
                 n++;
@@ -275,7 +273,7 @@ private:
                 //draw grid
                 if (! (fmod (x, roll->barSize) < 0.0001) && ! (fmod (x, roll->beatSize) < 0.0001))
                 {
-                    g.setColour (Colours::lightgrey);
+                    g.setColour (juce::Colours::lightgrey);
                     g.drawLine (x, 0.f, x, (float) getHeight());
                 }
                 x += roll->gridSize;
@@ -286,7 +284,7 @@ private:
                 //draw beats
                 if (! (fmod (x, roll->barSize) < 0.0001))
                 {
-                    g.setColour (Colours::grey);
+                    g.setColour (juce::Colours::grey);
                     g.drawLine (x, 0.f, x, (float) getHeight());
                 }
                 x += roll->beatSize;
@@ -295,7 +293,7 @@ private:
             while (x < getWidth())
             {
                 //draw bars
-                g.setColour (Colours::black);
+                g.setColour (juce::Colours::black);
                 g.drawLine (x, 0.f, x, (float) getHeight());
                 x += roll->barSize;
             }
@@ -310,7 +308,7 @@ private:
             setBufferedToImage (true);
         }
         ~PianoRollNotes() override {}
-        void paint (Graphics& g) override
+        void paint (juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
             if (roll->barSize > 0)
@@ -321,7 +319,7 @@ private:
                     {
                         if (roll->sequence->getEventPointer (i)->message.isNoteOn() /* && (i-9999!=hoveringNote)*/)
                         {
-                            float noteLength = (float) (jmax (1.0, (roll->sequence->getEventTime (roll->sequence->getIndexOfMatchingKeyUp (i)) - roll->sequence->getEventTime (i))) * (double) getWidth() / roll->seqLengthInPpq);
+                            float noteLength = (float) (juce::jmax (1.0, (roll->sequence->getEventTime (roll->sequence->getIndexOfMatchingKeyUp (i)) - roll->sequence->getEventTime (i))) * (double) getWidth() / roll->seqLengthInPpq);
                             //if (i==sequence->indexOfLastNoteOn
                             //	|| abs(sequence->getEventTime(i)-sequence->getEventTime(sequence->indexOfLastNoteOn))<sequence->chordTolerance)
                             //	g.setColour(Colours::blue);
@@ -329,7 +327,7 @@ private:
                             if (roll->selectedNotes.contains (roll->sequence->getEventPointer (i)))
                             {
                                 //outline of original note position
-                                g.setColour (Colours::blue);
+                                g.setColour (juce::Colours::blue);
                                 g.drawRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
                                             (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
                                             noteLength,
@@ -338,12 +336,12 @@ private:
                                 //dragging note position
                                 const double newTime = (float) ((roll->sequence->getEventTime (i) + roll->draggingNoteTimeDelta));
                                 const float newNote  = (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber() + roll->draggingNoteTransposition);
-                                g.setColour (Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
+                                g.setColour (juce::Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
                                 g.fillRect ((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
                                             (float) getHeight() - newNote * roll->yinc - roll->yinc,
                                             noteLength,
                                             roll->yinc);
-                                g.setColour (Colours::red);
+                                g.setColour (juce::Colours::red);
                                 g.drawRect ((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
                                             (float) getHeight() - newNote * roll->yinc - roll->yinc,
                                             noteLength,
@@ -351,12 +349,12 @@ private:
                             }
                             else
                             {
-                                g.setColour (Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
+                                g.setColour (juce::Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
                                 g.fillRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
                                             (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
                                             noteLength,
                                             roll->yinc);
-                                g.setColour (Colours::black);
+                                g.setColour (juce::Colours::black);
                                 g.drawRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
                                             (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
                                             noteLength,
@@ -373,8 +371,8 @@ private:
     Playbar* playline;
     PianoRollBackground* bg;
     PianoRollNotes* noteLayer;
-    AudioProcessor* plugin;
-    AudioProcessorEditor* owner;
+    juce::AudioProcessor* plugin;
+    juce::AudioProcessorEditor* owner;
     Loop* sequence;
     PizMidiMessageSequence::mehPtr hoveringNote;
     int hoveringNoteIndex;
@@ -389,7 +387,7 @@ private:
     float xinc;
     float yinc;
     double lastDragTime;
-    uint8 draggingNoteChannel;
+    juce::uint8 draggingNoteChannel;
     int draggingNoteNumber;
     int draggingNoteVelocity;
     int originalNoteVelocity;

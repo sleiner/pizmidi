@@ -1,12 +1,12 @@
 #ifndef BIGCLOCKPLUGINEDITOR_H
 #define BIGCLOCKPLUGINEDITOR_H
 
-#include "juce_gui_basics/juce_gui_basics.h"
-#include "juce_gui_extra/juce_gui_extra.h"
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 #include "BigClock.h"
 
-class TimeDisplay : public Button
+class TimeDisplay : public juce::Button
 {
 public:
     //==============================================================================
@@ -14,68 +14,68 @@ public:
     ~TimeDisplay() override;
 
     //==============================================================================
-    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
+    void paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
     void resized() override;
-    String time;
-    Colour textcolor;
+    juce::String time;
+    juce::Colour textcolor;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private :
-
-        TimeDisplay (const TimeDisplay&);
+private:
+    TimeDisplay (const TimeDisplay&);
     const TimeDisplay& operator= (const TimeDisplay&);
+
+    JUCE_LEAK_DETECTOR (TimeDisplay)
 };
 
 //==============================================================================
-class BigClockEditor : public AudioProcessorEditor,
-                       public Button::Listener,
-                       public TextEditor::Listener,
-                       public ChangeListener,
-                       public Timer
+class BigClockEditor : public juce::AudioProcessorEditor,
+                       public juce::Button::Listener,
+                       public juce::TextEditor::Listener,
+                       public juce::ChangeListener,
+                       public juce::Timer
 {
 public:
     BigClockEditor (BigClockFilter* const ownerFilter);
     ~BigClockEditor() override;
 
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
-    void buttonStateChanged (Button* buttonThatWasClicked) override;
-    void textEditorReturnKeyPressed (TextEditor& editor) override;
-    void textEditorEscapeKeyPressed (TextEditor& editor) override{};
-    void textEditorTextChanged (TextEditor& editor) override{};
-    void textEditorFocusLost (TextEditor& editor) override{};
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
+    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override{};
+    void textEditorTextChanged (juce::TextEditor& editor) override{};
+    void textEditorFocusLost (juce::TextEditor& editor) override{};
     void timerCallback() override;
-    void mouseEnter (const MouseEvent& e) override;
-    void mouseExit (const MouseEvent& e) override;
+    void mouseEnter (const juce::MouseEvent& e) override;
+    void mouseExit (const juce::MouseEvent& e) override;
 
     //==============================================================================
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     void resized() override;
 
 private:
     //==============================================================================
     TimeDisplay* infoLabel;
-    ColourSelector* colourSelector;
-    TooltipWindow tooltipWindow;
-    ResizableCornerComponent* resizer;
-    ComponentBoundsConstrainer resizeLimits;
-    TextEditor* textBox;
-    Label* cueLabel;
-    Label* modeLabel;
-    TextButton* runButton;
-    TextButton* resetButton;
+    juce::ColourSelector* colourSelector;
+    juce::TooltipWindow tooltipWindow;
+    juce::ResizableCornerComponent* resizer;
+    juce::ComponentBoundsConstrainer resizeLimits;
+    juce::TextEditor* textBox;
+    juce::Label* cueLabel;
+    juce::Label* modeLabel;
+    juce::TextButton* runButton;
+    juce::TextButton* resetButton;
 
     bool showtextbox;
     bool barsbeats;
     bool recording;
     bool hosttime;
-    uint32 watchTime;
+    juce::uint32 watchTime;
 
     void updateParametersFromFilter();
 
     BigClockFilter* getFilter() const throw() { return (BigClockFilter*) getAudioProcessor(); }
+
+    JUCE_LEAK_DETECTOR (BigClockEditor)
 };
 
 #endif

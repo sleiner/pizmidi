@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "juce_audio_devices/juce_audio_devices.h"
-#include "juce_data_structures/juce_data_structures.h"
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <juce_data_structures/juce_data_structures.h>
 
 #include "../_common/key.h"
 #include "../_common/PizArray.h"
@@ -105,17 +105,17 @@ public:
                                                                          undo_manager_ (nullptr),
                                                                          fallback_settings_ (fallback_settings)
     {
-        ValueTree tree ("PRSettings");
+        juce::ValueTree tree ("PRSettings");
         values_.addChild (tree, 0, undo_manager_);
         loadDefaults();
     }
 
-    ValueTree& set (const Identifier& name, const var& newValue)
+    juce::ValueTree& set (const juce::Identifier& name, const juce::var& newValue)
     {
         return values_.getChild (0).setProperty (name, newValue, undo_manager_);
     }
 
-    var get (const Identifier& name)
+    juce::var get (const juce::Identifier& name)
     {
         if (values_.getChild (0).hasProperty (name) && fallback_settings_ != nullptr)
         {
@@ -127,18 +127,18 @@ public:
         }
     }
 
-    std::unique_ptr<XmlElement> createXml() const
+    std::unique_ptr<juce::XmlElement> createXml() const
     {
         return values_.getChild (0).createXml();
     }
 
-    void loadXml (XmlElement const& xmlProgram)
+    void loadXml (juce::XmlElement const& xmlProgram)
     {
         values_.removeChild (0, undo_manager_);
         auto tree = xmlProgram.getChildByName ("PRSettings");
         if (tree != nullptr)
         {
-            values_.addChild (ValueTree::fromXml (*tree), 0, undo_manager_);
+            values_.addChild (juce::ValueTree::fromXml (*tree), 0, undo_manager_);
         }
     }
 
@@ -157,8 +157,8 @@ private:
         set ("bars", 4);
     }
 
-    ValueTree values_;
-    UndoManager* undo_manager_;
+    juce::ValueTree values_;
+    juce::UndoManager* undo_manager_;
     PianoRollSettings* fallback_settings_;
 };
 
@@ -177,16 +177,16 @@ private:
     double loopstart;
     double looplength;
     double measureFromHere;
-    String name;
+    juce::String name;
     int numerator, denominator;
     PianoRollSettings PRSettings;
-    MidiDeviceInfo device;
+    juce::MidiDeviceInfo device;
 };
 
 //==============================================================================
 class PizLooper : public PizAudioProcessor,
-                  public ChangeBroadcaster,
-                  public MidiKeyboardStateListener
+                  public juce::ChangeBroadcaster,
+                  public juce::MidiKeyboardStateListener
 {
 public:
     //==============================================================================
@@ -197,13 +197,13 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor (void) const override { return true; }
     //==============================================================================
-    const String getName() const override;
+    const juce::String getName() const override;
 
     int getNumParameters() override { return numParams; }
     inline float getParameterForSlot (int parameter, int slot)
@@ -265,17 +265,17 @@ public:
         else
             setParameterNotifyingHost (parameter + curProgram * numParamsPerSlot, value);
     }
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
-    const String getCurrentSlotParameterText (int parameter)
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
+    const juce::String getCurrentSlotParameterText (int parameter)
     {
         if (parameter < numGlobalParams)
             return getParameterText (parameter);
         return getParameterText (parameter + curProgram * numParamsPerSlot);
     }
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -291,8 +291,8 @@ public:
         setActiveSlot (index);
     }
     void resetCurrentProgram (int index);
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
     void setActiveSlot (int slot);
 
     void setSize (int w, int h)
@@ -321,20 +321,20 @@ public:
     //==============================================================================
     //void getCurrentProgramStateInformation (MemoryBlock& destData);
     //void setCurrentProgramStateInformation (const void* data, int sizeInBytes);
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    void handleNoteOn (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override
+    void handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override
     {
         setParameterForSlot (kNote0 + midiNoteNumber % 12, curProgram, 1.f);
     }
-    void handleNoteOff (MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override
+    void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override
     {
         setParameterForSlot (kNote0 + midiNoteNumber % 12, curProgram, 0.f);
     }
 
     //==============================================================================
-    AudioPlayHead::CurrentPositionInfo lastPosInfo;
+    juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
 
     int lastUIWidth, lastUIHeight;
     double currentLength;
@@ -342,13 +342,13 @@ public:
     class Info : public ChangeBroadcaster
     {
     public:
-        String s;
+        juce::String s;
     };
     Info* info;
     void killNotes (int slot);
     bool newLoop;
 
-    void loadMidiFile (File file);
+    void loadMidiFile (juce::File file);
     Loop* getActiveLoop();
     void updateLoopInfo();
     void setLoopLength (int slot, double newLength)
@@ -379,7 +379,7 @@ public:
     {
         return programs[slot].loop.getNumEvents() == 0;
     }
-    MidiKeyboardState keySelectorState;
+    juce::MidiKeyboardState keySelectorState;
 
     int getNumerator (int slot) { return programs[slot].numerator; }
     int getDenominator (int slot) { return programs[slot].denominator; }
@@ -390,20 +390,20 @@ public:
     }
 
     //midi out stuff
-    PizArray<MidiDeviceInfo> devices;
-    void setActiveDevice (String name);
-    void setActiveDevice (MidiDeviceInfo device);
-    MidiDeviceInfo getActiveDevice() { return activeDevice; }
-    MidiDeviceInfo getDeviceByName (String name) const;
+    PizArray<juce::MidiDeviceInfo> devices;
+    void setActiveDevice (juce::String name);
+    void setActiveDevice (juce::MidiDeviceInfo device);
+    juce::MidiDeviceInfo getActiveDevice() { return activeDevice; }
+    juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
 
-    void setPRSetting (const Identifier& name, const var& value, bool updateEditor = true)
+    void setPRSetting (const juce::Identifier& name, const juce::var& value, bool updateEditor = true)
     {
         programs[curProgram].PRSettings.set (name, value);
         if (updateEditor)
             sendChangeMessage();
     }
 
-    const var getPRSetting (const Identifier& name)
+    const juce::var getPRSetting (const juce::Identifier& name)
     {
         return programs[curProgram].PRSettings.get (name);
     }
@@ -414,16 +414,14 @@ public:
         recording = getParameterForSlot (kRecord, curProgram) >= 0.5f;
         return loopPpq[curProgram];
     }
-    MidiKeyboardState kbstate;
+    juce::MidiKeyboardState kbstate;
 
-    String loopDir;
-    bool writeMidiFile (int index, File file, bool IncrementFilename = false);
-    bool readMidiFile (int index, String progname, File mid = File());
+    juce::String loopDir;
+    bool writeMidiFile (int index, juce::File file, bool IncrementFilename = false);
+    bool readMidiFile (int index, juce::String progname, juce::File mid = juce::File());
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private : float param[numParams];
+private:
+    float param[numParams];
     int recCC, playCC;
 
     JuceProgram* programs;
@@ -455,7 +453,7 @@ public:
     int polytrigger[numPrograms][polyphony]; // note numbers of polyphonic triggers
     int currentPoly[numPrograms];            // number of playing instances of current pattern
 
-    void endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int slot, int voice = -1, bool kill = false);
+    void endHangingNotesInLoop (juce::MidiBuffer& buffer, int samplePos, int slot, int voice = -1, bool kill = false);
     class TransposeRules
     {
     public:
@@ -503,8 +501,8 @@ public:
                 memcpy (&oldrules, &rules, sizeof (Rules));
             else if (memcmp (&rules, &oldrules, sizeof (Rules)) == 0)
                 return false;
-            rules.semitones         = roundToInt (plugin->getParameterForSlot (kTranspose, slot) * 24.f) - 12;
-            rules.octaves           = roundToInt (plugin->getParameterForSlot (kOctave, slot) * 8.f) - 4;
+            rules.semitones         = juce::roundToInt (plugin->getParameterForSlot (kTranspose, slot) * 24.f) - 12;
+            rules.octaves           = juce::roundToInt (plugin->getParameterForSlot (kOctave, slot) * 8.f) - 4;
             rules.forceToScale      = plugin->getParameterForSlot (kForceToKey, slot) >= 0.5f;
             rules.noteswitch[0]     = plugin->getParameterForSlot (kNote0, slot) >= 0.5f;
             rules.noteswitch[1]     = plugin->getParameterForSlot (kNote1, slot) >= 0.5f;
@@ -522,8 +520,8 @@ public:
             rules.transposedTrigger = plugin->getParameterForSlot (kNoteTrig, slot) > 0.0
                                    && plugin->getParameterForSlot (kNoteTrig, slot) < 0.2f
                                    && rules.root > -1;
-            rules.masterTranspose = roundToInt (plugin->getParameter (kMasterTranspose) * 24.f) - 12;
-            rules.mode            = roundToInt (plugin->getParameterForSlot (kForceToScaleMode, slot) * (float) (numForceToKeyModes - 1));
+            rules.masterTranspose = juce::roundToInt (plugin->getParameter (kMasterTranspose) * 24.f) - 12;
+            rules.mode            = juce::roundToInt (plugin->getParameterForSlot (kForceToScaleMode, slot) * (float) (numForceToKeyModes - 1));
             rules.transpose10     = plugin->getParameterForSlot (kTranspose10, slot) >= 0.5f;
             if (initialize)
                 memcpy (&oldrules, &rules, sizeof (Rules));
@@ -740,16 +738,16 @@ public:
         int slot;
     };
     TransposeRules* tRules[numSlots];
-    void transposePlayingNotes (MidiBuffer& buffer, int samplePos, int slot, int voice, int numSamples);
+    void transposePlayingNotes (juce::MidiBuffer& buffer, int samplePos, int slot, int voice, int numSamples);
 
     void processGroups (int slot)
     {
-        int pgroup = roundToInt (getParameterForSlot (kPlayGroup, slot) * 16.f) - 1;
-        int mgroup = roundToInt (getParameterForSlot (kMuteGroup, slot) * 16.f) - 1;
+        int pgroup = juce::roundToInt (getParameterForSlot (kPlayGroup, slot) * 16.f) - 1;
+        int mgroup = juce::roundToInt (getParameterForSlot (kMuteGroup, slot) * 16.f) - 1;
         if (mgroup != -1 && getParameterForSlot (kPlay, slot) >= 0.5f)
         {
             for (int i = 0; i < numSlots; i++)
-                if (i != slot && mgroup == (roundToInt (getParameterForSlot (kMuteGroup, i) * 16.f) - 1))
+                if (i != slot && mgroup == (juce::roundToInt (getParameterForSlot (kMuteGroup, i) * 16.f) - 1))
                 {
                     for (int v = 0; v < polyphony; v++)
                         if (slot != i)
@@ -760,7 +758,7 @@ public:
         if (pgroup != -1)
         {
             for (int i = 0; i < numSlots; i++)
-                if (i != slot && pgroup == (roundToInt (getParameterForSlot (kPlayGroup, i) * 16.f) - 1))
+                if (i != slot && pgroup == (juce::roundToInt (getParameterForSlot (kPlayGroup, i) * 16.f) - 1))
                     notifyHost (kPlay, i, getParameterForSlot (kPlay, slot));
         }
     }
@@ -773,12 +771,12 @@ public:
     int capturingTranspose[numSlots];
     int lowestScaleInputNote[numSlots];
     int playingNote[16][128]; //keep track of the actual notes that are output
-    int64 barTriggerSample[numSlots][polyphony];
-    int64 barStopSample[numSlots][polyphony];
+    juce::int64 barTriggerSample[numSlots][polyphony];
+    juce::int64 barStopSample[numSlots][polyphony];
     int lastPlayedIndex[numSlots][polyphony];
     int lastLoopCount[numSlots][polyphony];
     int startLoopCount[numSlots][polyphony];
-    Array<LoopNote> noteOffBuffer[numSlots];
+    juce::Array<LoopNote> noteOffBuffer[numSlots];
     int getIndexOfNoteOff (PizMidiMessageSequence::MidiEventHolder* n, int slot, int v)
     {
         for (int i = 0; i < noteOffBuffer[slot].size(); i++)
@@ -792,24 +790,26 @@ public:
     }
     bool recordAndPlay[numSlots];
 
-    uint64 samples;
+    juce::uint64 samples;
     int samplesInLastBuffer;
 
-    MidiDeviceInfo activeDevice;
-    std::unique_ptr<MidiOutput> midiOutput;
+    juce::MidiDeviceInfo activeDevice;
+    std::unique_ptr<juce::MidiOutput> midiOutput;
 
     PianoRollSettings defaultPRSettings;
 
     double getStretchMultiplier (int slot);
-    bool isNoteTriggeringAnySlot (MidiMessage const& message);
-    bool processTriggerNote (const int slot, MidiMessage& message, int root, MidiBuffer& midiout, const int sample, const double ppqOfNextBar, const double ppqPerSample, const double ppqOfLastStep, const double looplengthstep);
-    void processNoteOffBuffer (int slot, MidiBuffer& midiout, int numSamples);
-    void playLoopEvent (int slot, int instance, int eventindex, int channel, double stretch, int samplepos, double samplesPerPpq, MidiBuffer& midiout);
+    bool isNoteTriggeringAnySlot (juce::MidiMessage const& message);
+    bool processTriggerNote (const int slot, juce::MidiMessage& message, int root, juce::MidiBuffer& midiout, const int sample, const double ppqOfNextBar, const double ppqPerSample, const double ppqOfLastStep, const double looplengthstep);
+    void processNoteOffBuffer (int slot, juce::MidiBuffer& midiout, int numSamples);
+    void playLoopEvent (int slot, int instance, int eventindex, int channel, double stretch, int samplepos, double samplesPerPpq, juce::MidiBuffer& midiout);
     double getLoopLengthStep();
     double getPpqOfLastLoopStart (double ppq, int slot);
-    void recordMessage (const MidiMessage& midi_message, int slot, bool playing, double ppq, double eventoffset, double ppqPerSample, int sample_number);
+    void recordMessage (const juce::MidiMessage& midi_message, int slot, bool playing, double ppq, double eventoffset, double ppqPerSample, int sample_number);
 
     int slotLimit;
+
+    JUCE_LEAK_DETECTOR (PizLooper)
 };
 
 #endif

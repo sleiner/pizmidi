@@ -6,20 +6,19 @@
 #include "MidiMorph.h"
 #include "ModuleGUI.h"
 
+using juce::jmax;
+
 Scene::Scene (const Scene& scene)
 {
-    // Bouml preserved body begin 0003D10D
-    // Bouml preserved body end 0003D10D
 }
 
 Scene::Scene (MidiMorph* core)
 {
-    // Bouml preserved body begin 00034B0D
     this->core   = core;
-    this->colour = Colours::green;
+    this->colour = juce::Colours::green;
     this->size   = 50;
 
-    addAndMakeVisible (textEditor = new TextEditor ("new text editor"));
+    addAndMakeVisible (textEditor = new juce::TextEditor ("new text editor"));
     textEditor->setMultiLine (false);
     textEditor->setReturnKeyStartsNewLine (false);
     textEditor->setReadOnly (false);
@@ -30,61 +29,49 @@ Scene::Scene (MidiMorph* core)
     textEditor->addListener (this);
     textEditor->setText (this->getName());
 
-    colourSelector = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace);
+    colourSelector = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace);
     colourSelector->setName ("color");
     colourSelector->setCurrentColour (this->colour);
     colourSelector->addChangeListener (this);
 
-    addAndMakeVisible (sizeSlider = new Slider ("size"));
+    addAndMakeVisible (sizeSlider = new juce::Slider ("size"));
     sizeSlider->setRange (10, 100, 1);
-    sizeSlider->setSliderStyle (Slider::LinearHorizontal);
+    sizeSlider->setSliderStyle (juce::Slider::LinearHorizontal);
     sizeSlider->addListener (this);
 
     this->setMouseClickGrabsKeyboardFocus (false);
-
-    // Bouml preserved body end 00034B0D
 }
 
 Scene::~Scene()
 {
-    // Bouml preserved body begin 00040B0D
     for (int i = 0; i < this->controllerValues.size(); i++)
     {
         delete controllerValues[i];
     }
-    // Bouml preserved body end 00040B0D
 }
 
 float Scene::getAffectionRatio()
 {
-    // Bouml preserved body begin 0003C68D
     if (affectionRatioChanged || core->needsRefresh())
     {
         affectionRatio        = getAffectionValue() / core->getSumAffectionValues();
         affectionRatioChanged = false;
     }
     return affectionRatio;
-    //return 1. - getDistanceFromCursor() / core->getSumDistances() * ;
-    // Bouml preserved body end 0003C68D
 }
 
-//get Precalculated Value
 float Scene::getDistanceFromCursor()
 {
-    // Bouml preserved body begin 00034F8D
     if (distanceFromCursorChanged_)
     {
-        this->distanceFromCursor = jmax (0.f, getDistance (*core->cursor) - this->size * 0.5f);
-        //this->setName(String(this->distanceFromCursor));
+        this->distanceFromCursor   = jmax (0.f, getDistance (*core->cursor) - this->size * 0.5f);
         distanceFromCursorChanged_ = false;
     }
     return this->distanceFromCursor;
-    // Bouml preserved body end 00034F8D
 }
 
 int Scene::getValue (const Controller* controller)
 {
-    // Bouml preserved body begin 0003520D
     for (int i = 0; i < controllerValues.size(); i++)
     {
         if (controllerValues[i]->getController() == controller)
@@ -93,44 +80,32 @@ int Scene::getValue (const Controller* controller)
         }
     }
     return -1;
-    // Bouml preserved body end 0003520D
 }
 
-//gets called when the XYItem gets new coordinates
-//in this implementation refresh the distance value
 void Scene::moved()
 {
-    // Bouml preserved body begin 0003590D
     distanceFromCursorChanged();
     core->sceneMoved();
-    // Bouml preserved body end 0003590D
 }
 
 juce::Colour Scene::getColour()
 {
-    // Bouml preserved body begin 0003D00D
     return this->colour;
-    // Bouml preserved body end 0003D00D
 }
 
 void Scene::setColour (const juce::Colour& colour)
 {
-    // Bouml preserved body begin 0003D08D
     this->colour = colour;
     core->sendChangeMessage (this);
-    // Bouml preserved body end 0003D08D
 }
 
 void Scene::addValue (ControllerValue* value)
 {
-    // Bouml preserved body begin 0003F30D
     this->controllerValues.add (value);
-    // Bouml preserved body end 0003F30D
 }
 
 float Scene::getAffectionValue()
 {
-    // Bouml preserved body begin 0003F48D
     if (affectionValueChanged || core->needsRefresh())
     {
         float sumOtherDis = 0;
@@ -148,32 +123,24 @@ float Scene::getAffectionValue()
         this->affectionValueChanged = false;
     }
     return this->affectionValue;
-
-    // Bouml preserved body end 0003F48D
 }
 
 void Scene::distanceFromCursorChanged()
 {
-    // Bouml preserved body begin 0003F58D
     distanceFromCursorChanged_ = true;
     affectionRatioChanged      = true;
     affectionValueChanged      = true;
-    // Bouml preserved body end 0003F58D
 }
 
-void Scene::mouseDown (const MouseEvent& e)
+void Scene::mouseDown (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003F78D
-
-    // Bouml preserved body end 0003F78D
 }
 
-void Scene::mouseUp (const MouseEvent& e)
+void Scene::mouseUp (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003F80D
     if (e.mods.isRightButtonDown())
     {
-        PopupMenu menu, sub1, sub2, sub3;
+        juce::PopupMenu menu, sub1, sub2, sub3;
         menu.addItem (1, "delete");
         textEditor->setText (this->getName());
         sub1.addCustomItem (2, *textEditor, 64, 20, false, nullptr);
@@ -181,7 +148,6 @@ void Scene::mouseUp (const MouseEvent& e)
         sub2.addCustomItem (3, *colourSelector, 300, 300, false, nullptr);
         menu.addSubMenu ("color", sub2);
         sub3.addCustomItem (4, *sizeSlider, 300, 20, false, nullptr);
-        //menu.addSubMenu("size",sub3);
 
         int result = menu.show();
         if (result == 1)
@@ -189,44 +155,37 @@ void Scene::mouseUp (const MouseEvent& e)
             this->core->removeScene (this);
         }
     }
-    // Bouml preserved body end 0003F80D
 }
 
-void Scene::mouseDrag (const MouseEvent& e)
+void Scene::mouseDrag (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003F88D
-    // Bouml preserved body end 0003F88D
 }
 
 void Scene::getMidiMessages (juce::MidiBuffer& buffer, int pos)
 {
-    // Bouml preserved body begin 00048D8D
     for (int i = controllerValues.size(); --i >= 0;)
     {
         controllerValues[i]->getMidiMessage (buffer, pos);
     }
-    // Bouml preserved body end 00048D8D
 }
 
 int Scene::getId()
 {
-    // Bouml preserved body begin 0004070D
     return core->getSceneIndex (this);
-    // Bouml preserved body end 0004070D
 }
 
-String Scene::getName()
+juce::String Scene::getName()
 {
     return this->name;
 }
 
-void Scene::setName (String newName)
+void Scene::setName (juce::String newName)
 {
     this->name = newName;
     core->sendChangeMessage (this);
 }
 
-void Scene::textEditorTextChanged (TextEditor& editor)
+void Scene::textEditorTextChanged (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -234,7 +193,7 @@ void Scene::textEditorTextChanged (TextEditor& editor)
     }
 }
 
-void Scene::textEditorReturnKeyPressed (TextEditor& editor)
+void Scene::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -242,26 +201,26 @@ void Scene::textEditorReturnKeyPressed (TextEditor& editor)
     }
 }
 
-void Scene::textEditorEscapeKeyPressed (TextEditor& editor)
+void Scene::textEditorEscapeKeyPressed (juce::TextEditor& editor)
 {
 }
 
-void Scene::textEditorFocusLost (TextEditor& editor)
+void Scene::textEditorFocusLost (juce::TextEditor& editor)
 {
 }
 
-void Scene::changeListenerCallback (ChangeBroadcaster* source)
+void Scene::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
-    ColourSelector* cs = (ColourSelector*) source;
+    auto* cs = (juce::ColourSelector*) source;
     this->setColour (cs->getCurrentColour());
 }
 
-void Scene::sliderValueChanged (Slider* sliderThatWasMoved)
+void Scene::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     if (sliderThatWasMoved == sizeSlider)
     {
-        this->size = ::roundToInt (sizeSlider->getValue());
-        this->setSize (::roundToInt (sizeSlider->getValue()), ::roundToInt (sizeSlider->getValue()));
+        this->size = juce::roundToInt (sizeSlider->getValue());
+        this->setSize (juce::roundToInt (sizeSlider->getValue()), juce::roundToInt (sizeSlider->getValue()));
         this->resized();
         core->sendChangeMessage (this);
     }

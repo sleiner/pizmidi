@@ -1,8 +1,8 @@
 #ifndef MidiChordAnalyzerPLUGINFILTER_H
 #define MidiChordAnalyzerPLUGINFILTER_H
 
-#include "juce_data_structures/juce_data_structures.h"
-#include "juce_events/juce_events.h"
+#include <juce_data_structures/juce_data_structures.h>
+#include <juce_events/juce_events.h>
 
 #include "../_common/BankStorage.h"
 #include "../_common/ChordFunctions.h"
@@ -30,7 +30,7 @@ private:
 
 //==============================================================================
 class MidiChordAnalyzer : public PizAudioProcessor,
-                          public ChangeBroadcaster
+                          public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -41,14 +41,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override;
+    const juce::String getName() const override;
     bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
@@ -56,11 +56,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -71,25 +71,24 @@ public:
     int getNumPrograms() override { return numProgs; }
     int getCurrentProgram() override { return curProgram; }
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override { return programs->get (0, index, "Name"); }
-    void changeProgramName (int index, const String& newName) override { programs->set (0, index, "Name", newName); }
+    const juce::String getProgramName (int index) override { return programs->get (0, index, "Name"); }
+    void changeProgramName (int index, const juce::String& newName) override { programs->set (0, index, "Name", newName); }
     void copySettingsToProgram (int index);
     double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    MidiKeyboardState chordKbState;
+    juce::MidiKeyboardState chordKbState;
     //String getCurrentChordName();
     int lastUIWidth, lastUIHeight;
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
-        private : MidiChordAnalyzerPrograms* programs;
+private:
+    MidiChordAnalyzerPrograms* programs;
     int curProgram;
     int curTrigger;
 
@@ -97,7 +96,9 @@ public:
 
     int channel;
     bool flats;
-    AudioPlayHead::CurrentPositionInfo lastPosInfo;
+    juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
+
+    JUCE_LEAK_DETECTOR (MidiChordAnalyzer)
 };
 
 #endif

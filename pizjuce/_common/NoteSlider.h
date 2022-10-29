@@ -1,8 +1,8 @@
 #ifndef PIZ_NOTE_SLIDER_HEADER
 #define PIZ_NOTE_SLIDER_HEADER
 
-#include "juce_core/juce_core.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/midistuff.h"
 

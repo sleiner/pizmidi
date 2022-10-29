@@ -1,13 +1,13 @@
 #ifndef MIDICHSPLUGINFILTER_H
 #define MIDICHSPLUGINFILTER_H
 
-#include "juce_events/juce_events.h"
+#include <juce_events/juce_events.h>
 
 #include "../_common/PizAudioProcessor.h"
 
 //==============================================================================
 class MidiChsProcessor : public PizAudioProcessor,
-                         public ChangeBroadcaster
+                         public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -18,14 +18,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool hasEditor() const override { return true; }
     bool acceptsMidi() const override
     {
@@ -49,11 +49,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -61,12 +61,12 @@ public:
     int getNumPrograms() override { return 0; }
     int getCurrentProgram() override { return 0; }
     void setCurrentProgram (int index) override {}
-    const String getProgramName (int index) override { return String(); }
-    void changeProgramName (int index, const String& newName) override {}
+    const juce::String getProgramName (int index) override { return juce::String(); }
+    void changeProgramName (int index, const juce::String& newName) override {}
     double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
@@ -78,12 +78,9 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private :
-        //parameters
-        float fChannel1;
+private:
+    //parameters
+    float fChannel1;
     float fChannel2;
     float fChannel3;
     float fChannel4;
@@ -105,6 +102,8 @@ public:
     float bgsat;
     float bgbri;
     float contrast;
+
+    JUCE_LEAK_DETECTOR (MidiChsProcessor)
 };
 
 #endif

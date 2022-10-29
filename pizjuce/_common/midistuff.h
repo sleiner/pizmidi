@@ -1,8 +1,7 @@
 #ifndef PIZ_MIDI_STUFF_H
 #define PIZ_MIDI_STUFF_H
 
-#include "juce_core/juce_core.h"
-using namespace juce;
+#include <juce_core/juce_core.h>
 
 #define NOT_PLAYING  (-999)
 #define ANY_CHANNEL  (0)
@@ -11,10 +10,10 @@ using namespace juce;
 #define midiScaler   ((float) 0.007874015748031496062992125984252)
 #define NOT_A_NOTE   (98765)
 
-const String Flat ("b"); //(L"\x266d");
-const String Natural (L"\x266e");
-const String Sharp ("#");      //(L"\x266f");
-const String Diminished ("o"); //(L"\x0080");
+const juce::String Flat ("b"); //(L"\x266d");
+const juce::String Natural (L"\x266e");
+const juce::String Sharp ("#");      //(L"\x266f");
+const juce::String Diminished ("o"); //(L"\x0080");
 
 enum NoteNames
 {
@@ -35,8 +34,8 @@ enum NoteNames
 inline int floatToMidi (float f, bool learnspace = true)
 {
     if (learnspace)
-        return roundToInt (f * 128.f) - 1;
-    return roundToInt (f * 127.f);
+        return juce::roundToInt (f * 128.f) - 1;
+    return juce::roundToInt (f * 127.f);
 }
 inline float midiToFloat (int n, bool learnspace = true)
 {
@@ -45,10 +44,10 @@ inline float midiToFloat (int n, bool learnspace = true)
     return (float) n * (float) 0.007874015748031496062992125984252;
 }
 
-inline int floatToChannel (float f) { return roundToInt (f * 16.0f); }
+inline int floatToChannel (float f) { return juce::roundToInt (f * 16.0f); }
 inline float channelToFloat (int c) { return (float) c * 0.0625f; }
 
-inline int getNoteValue (String noteName)
+inline int getNoteValue (juce::String noteName)
 {
     if (noteName.equalsIgnoreCase ("C") || noteName.equalsIgnoreCase ("B#") || noteName.equalsIgnoreCase ("Dbb"))
         return nC;
@@ -77,7 +76,7 @@ inline int getNoteValue (String noteName)
     return NOT_A_NOTE;
 }
 
-inline int getNoteValue (String noteName, int bottomOctave, bool& hasOctaveNumber)
+inline int getNoteValue (juce::String noteName, int bottomOctave, bool& hasOctaveNumber)
 {
     int octave = 0;
     if (noteName.containsAnyOf ("-0123456789"))
@@ -115,7 +114,7 @@ inline int getNoteValue (String noteName, int bottomOctave, bool& hasOctaveNumbe
     return NOT_A_NOTE;
 }
 
-inline int getIntervalValue (String intervalName)
+inline int getIntervalValue (juce::String intervalName)
 {
     int result    = NOT_A_NOTE;
     bool inverted = intervalName.startsWith ("-");
@@ -176,9 +175,9 @@ inline int getIntervalValue (String intervalName)
     return result;
 }
 
-inline String getNoteName (int noteNumber, int baseOctave /*=-2*/)
+inline juce::String getNoteName (int noteNumber, int baseOctave /*=-2*/)
 {
-    String Note{};
+    juce::String Note{};
     switch (noteNumber % 12)
     {
         case 0:
@@ -220,12 +219,12 @@ inline String getNoteName (int noteNumber, int baseOctave /*=-2*/)
         default:
             break;
     }
-    return Note + String ((noteNumber / 12) + baseOctave);
+    return Note + juce::String ((noteNumber / 12) + baseOctave);
 }
 
-inline String getNoteNameWithoutOctave (int noteNumber, bool sharps = true)
+inline juce::String getNoteNameWithoutOctave (int noteNumber, bool sharps = true)
 {
-    String Note{};
+    juce::String Note{};
     if (sharps)
     {
         switch (noteNumber % 12)
@@ -321,7 +320,7 @@ inline int mapToRange (float x, float in1, float in2, float out1, float out2)
 {
     float slope = ((float) (out2 - out1)) / ((float) (in2 - in1));
     float b     = out1 - slope * in1;
-    return roundToInt (slope * x + b);
+    return juce::roundToInt (slope * x + b);
 }
 
 inline int CombineBytes (unsigned char lsb, unsigned char msb)

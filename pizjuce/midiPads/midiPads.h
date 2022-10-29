@@ -1,12 +1,10 @@
 #ifndef MIDIPADSPLUGINFILTER_H
 #define MIDIPADSPLUGINFILTER_H
 
-#include "juce_core/juce_core.h"
-#include "juce_data_structures/juce_data_structures.h"
+#include <juce_core/juce_core.h>
+#include <juce_data_structures/juce_data_structures.h>
 
 #include "../_common/PizAudioProcessor.h"
-
-using namespace juce;
 
 #define midiScaler (0.007874016f)
 
@@ -58,21 +56,21 @@ class PadLayouts
 public:
     PadLayouts() : values_ ("PadLayouts"){};
     ~PadLayouts(){};
-    static void setPadLayout (ValueTree tree, float x, float y, float w, float h)
+    static void setPadLayout (juce::ValueTree tree, float x, float y, float w, float h)
     {
-        tree.setProperty ("x", x, 0);
-        tree.setProperty ("y", y, 0);
-        tree.setProperty ("w", w, 0);
-        tree.setProperty ("h", h, 0);
+        tree.setProperty ("x", x, nullptr);
+        tree.setProperty ("y", y, nullptr);
+        tree.setProperty ("w", w, nullptr);
+        tree.setProperty ("h", h, nullptr);
     }
 
     void setPadVisible (int prog, int pad, bool visibility)
     {
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("visible", visibility, 0);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("visible", visibility, nullptr);
     }
 
 private:
-    ValueTree values_;
+    juce::ValueTree values_;
 };
 
 class MidiPadsPrograms
@@ -81,38 +79,38 @@ class MidiPadsPrograms
 
 public:
     MidiPadsPrograms();
-    void set (int prog, const Identifier& name, const var& newValue)
+    void set (int prog, const juce::Identifier& name, const juce::var& newValue)
     {
-        values_.getChild (prog).getChildWithName ("GlobalValues").setProperty (name, newValue, 0);
+        values_.getChild (prog).getChildWithName ("GlobalValues").setProperty (name, newValue, nullptr);
     }
-    const var get (int prog, const Identifier& name)
+    const juce::var get (int prog, const juce::Identifier& name)
     {
         return values_.getChild (prog).getChildWithName ("GlobalValues").getProperty (name);
     }
-    void setForPad (int prog, int pad, const Identifier& name, const var& newValue)
+    void setForPad (int prog, int pad, const juce::Identifier& name, const juce::var& newValue)
     {
-        values_.getChild (prog).getChild (pad).setProperty (name, newValue, 0);
+        values_.getChild (prog).getChild (pad).setProperty (name, newValue, nullptr);
     }
     void setPadLayout (int prog, int pad, float x, float y, float w, float h)
     {
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("x", x, 0);
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("y", y, 0);
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("w", w, 0);
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("h", h, 0);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("x", x, nullptr);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("y", y, nullptr);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("w", w, nullptr);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("h", h, nullptr);
     }
     void setPadPosition (int prog, int pad, float x, float y)
     {
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("x", x, 0);
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("y", y, 0);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("x", x, nullptr);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("y", y, nullptr);
     }
     void setPadSize (int prog, int pad, float w, float h)
     {
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("w", w, 0);
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("h", h, 0);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("w", w, nullptr);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("h", h, nullptr);
     }
     void setPadVisible (int prog, int pad, bool visibility)
     {
-        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("visible", visibility, 0);
+        values_.getChild (prog).getChildWithName ("Layout").getChild (pad).setProperty ("visible", visibility, nullptr);
     }
     bool getPadVisible (int prog, int pad)
     {
@@ -120,28 +118,28 @@ public:
     }
     juce::Rectangle<float> getPadBounds (int prog, int pad)
     {
-        return juce::Rectangle<float> (values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("x"),
-                                       values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("y"),
-                                       values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("w"),
-                                       values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("h"));
+        return { values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("x"),
+                 values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("y"),
+                 values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("w"),
+                 values_.getChild (prog).getChildWithName ("Layout").getChild (pad).getProperty ("h") };
     }
-    const var getForPad (int prog, int pad, const Identifier& name)
+    const juce::var getForPad (int prog, int pad, const juce::Identifier& name)
     {
         return values_.getChild (prog).getChild (pad).getProperty (name);
     }
 
-    const var getForPad (int prog, int pad, const Identifier& name, const var& defaultValue)
+    const juce::var getForPad (int prog, int pad, const juce::Identifier& name, const juce::var& defaultValue)
     {
         return values_.getChild (prog).getChild (pad).getProperty (name, defaultValue);
     }
 
-    MidiPadsPrograms (ValueTree& tree)
+    MidiPadsPrograms (juce::ValueTree& tree)
     {
         values_.getChild (0).getParent() = tree.createCopy();
     }
 
 private:
-    ValueTree values_;
+    juce::ValueTree values_;
 
     float x[numPrograms][numPads];
     float y[numPrograms][numPads];
@@ -149,7 +147,7 @@ private:
 
 //==============================================================================
 class midiPads : public PizAudioProcessor,
-                 public ChangeBroadcaster
+                 public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -160,15 +158,15 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
     double getTailLengthSeconds() const override { return 0; }
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -193,11 +191,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -215,28 +213,28 @@ public:
 #endif
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
     void copySettingsToProgram (int index);
 
     //==============================================================================
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    void saveXmlPatch (int index, File file);
-    void saveXmlBank (File file);
-    bool loadXmlPatch (int index, File file);
-    bool loadXmlBank (File file);
-    bool loadFxp (File file);
-    bool loadFxb (File file);
+    void saveXmlPatch (int index, juce::File file);
+    void saveXmlBank (juce::File file);
+    bool loadXmlPatch (int index, juce::File file);
+    bool loadXmlBank (juce::File file);
+    bool loadFxp (juce::File file);
+    bool loadFxb (juce::File file);
     void loadDefaultPrograms();
 
     juce::Rectangle<int> getPadBounds (int index);
     void setPadPosition (int index, float x, float y);
     void setPadSize (int index, float w, float h);
 
-    String getGlobalParamValueName (int index)
+    juce::String getGlobalParamValueName (int index)
     {
         switch (index)
         {
@@ -261,7 +259,7 @@ public:
             case kNoteOnTrig:
                 return "NoteOnTrig";
             default:
-                return String();
+                return {};
         }
     }
 
@@ -270,17 +268,17 @@ public:
     void setLayout (int prog, int layoutIndex)
     {
         int index = programs->values_.getChild (prog).indexOf (programs->values_.getChild (prog).getChildWithName ("Layout"));
-        programs->values_.getChild (prog).removeChild (index, 0);
-        programs->values_.getChild (prog).addChild (layouts->values_.getChild (layoutIndex).createCopy(), index, 0);
+        programs->values_.getChild (prog).removeChild (index, nullptr);
+        programs->values_.getChild (prog).addChild (layouts->values_.getChild (layoutIndex).createCopy(), index, nullptr);
     }
-    void loadXmlLayout (File file);
-    void saveXmlLayout (File file);
+    void loadXmlLayout (juce::File file);
+    void saveXmlLayout (juce::File file);
     void copyPadSettings (int source, int dest);
-    void setProperty (int pad, const Identifier& name, const var& newValue)
+    void setProperty (int pad, const juce::Identifier& name, const juce::var& newValue)
     {
         programs->setForPad (curProgram, pad, name, newValue);
     }
-    const var getProperty (int pad, const Identifier& name, const var defaultReturnValue = 0)
+    const juce::var getProperty (int pad, const juce::Identifier& name, const juce::var defaultReturnValue = 0)
     {
         return programs->getForPad (curProgram, pad, name, defaultReturnValue);
     }
@@ -310,9 +308,9 @@ public:
     float bgsat;
     float bgbri;
     float contrast;
-    String icon[numPads];
-    String text[numPads];
-    Colour padcolor[numPads];
+    juce::String icon[numPads];
+    juce::String text[numPads];
+    juce::Colour padcolor[numPads];
     bool buttondown[numPads];
     bool isplaying[128];
     int squares;
@@ -332,12 +330,10 @@ public:
     int lastxccvalue[numPads];
     int lastyccvalue[numPads];
     bool centeredText[numPads];
-    String pluginPath, layoutPath, presetPath, bankPath, iconPath;
+    juce::String pluginPath, layoutPath, presetPath, bankPath, iconPath;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private : float param[kNumParams];
+private:
+    float param[kNumParams];
     int triggervel;
 
     MidiPadsPrograms* programs;
@@ -346,6 +342,8 @@ public:
     int curProgram;
 
     bool init;
+
+    JUCE_LEAK_DETECTOR (midiPads)
 };
 
 #endif

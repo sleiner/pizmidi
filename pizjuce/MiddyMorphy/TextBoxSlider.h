@@ -1,62 +1,47 @@
 #pragma once
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
-namespace juce
-{
-class TextEditor;
-}
 class NumberBox;
-namespace juce
-{
-class String;
-}
-using namespace juce;
 
 class TextBoxSlider : public juce::Label::Listener, public juce::Label
 {
 public:
-    void mouseDrag (const MouseEvent& e) override;
-
-    void labelTextChanged (Label* labelThatHasChanged) override;
-
-    TextBoxSlider (double initval);
+    TextBoxSlider (double initVal);
 
     ~TextBoxSlider() override;
 
-    void mouseDown (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+
+    void labelTextChanged (Label* labelThatHasChanged) override;
+
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+
+    void setRange (double newMin, double newMax, double stepSize, int pixelPerStep);
+
+    juce::TextEditor* createEditorComponent() override;
+
+    void paintOverChildren (juce::Graphics& g) override;
+
+    double getValue();
+
+    void setValue (double newVal, juce::NotificationType notification);
+
+    void resized() override;
+
+    void textWasEdited() override;
 
 private:
     int pixelStep;
 
     double oldValue;
-
     double value;
 
     double min;
-
     double max;
 
     double step;
 
-public:
-    void setRange (double min, double max, double stepsize, int pixelPerStep);
-
-    juce::TextEditor* createEditorComponent() override;
-
-    void paintOverChildren (Graphics& g) override;
-
-    double getValue();
-
-private:
-    // (const String& newText,                       const bool broadcastChangeMessage)
-    void setText (const String& newText, NotificationType notification);
-
-public:
-    void setValue (double newVal, NotificationType notification);
-
-    void resized() override;
-
-    void textWasEdited() override;
+    void setText (const juce::String& newText, juce::NotificationType notification);
 };

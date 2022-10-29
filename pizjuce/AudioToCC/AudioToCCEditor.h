@@ -20,42 +20,42 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_core/juce_core.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/VSTSlider.h"
 #include "AudioToCC.h"
 
-class DecibelMeter : public Slider
+class DecibelMeter : public juce::Slider
 {
 public:
-    DecibelMeter (const String& name) : Slider (name)
+    DecibelMeter (const juce::String& name) : Slider (name)
     {
         this->setMouseClickGrabsKeyboardFocus (false);
         this->setInterceptsMouseClicks (false, false);
     }
     ~DecibelMeter() override {}
 
-    String getTextFromValue (double value) override
+    juce::String getTextFromValue (double value) override
     {
-        return value == 0.0 ? " " : String (20.0 * log10 (value), 1) + " dB";
+        return value == 0.0 ? " " : juce::String (20.0 * log10 (value), 1) + " dB";
     }
 };
 
-class DecibelSlider : public Slider
+class DecibelSlider : public juce::Slider
 {
 public:
-    DecibelSlider (const String& name) : Slider (name)
+    DecibelSlider (const juce::String& name) : juce::Slider (name)
     {
         this->setMouseClickGrabsKeyboardFocus (false);
     }
     ~DecibelSlider() override {}
 
-    String getTextFromValue (double value) override
+    juce::String getTextFromValue (double value) override
     {
-        return value == 0.0 ? "-inf" : String (20.0 * log10 (value), 1) + " dB";
+        return value == 0.0 ? "-inf" : juce::String (20.0 * log10 (value), 1) + " dB";
     }
-    double getValueFromText (const String& text) override
+    double getValueFromText (const juce::String& text) override
     {
         if (text.equalsIgnoreCase ("-inf"))
             return 0.0;
@@ -87,7 +87,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void timerCallback() override;
     //[/UserMethods]
 

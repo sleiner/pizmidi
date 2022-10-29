@@ -1,19 +1,17 @@
 #ifndef Piz_VSTSlider_h
 #define Piz_VSTSlider_h
 
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_core/juce_core.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
-using namespace juce;
-
-class VSTSlider : public Slider
+class VSTSlider : public juce::Slider
 {
 public:
-    VSTSlider (String name);
+    VSTSlider (juce::String name);
     ~VSTSlider() override;
-    String getTextFromValue (double value) override;
-    void setOwner (AudioProcessor*, int);
+    juce::String getTextFromValue (double value) override;
+    void setOwner (juce::AudioProcessor*, int);
     float mapToVSTRange();
     void setVSTSlider (float x);
 
@@ -22,7 +20,7 @@ public:
     void setIndex (int index);
 
 private:
-    AudioProcessor* ownerPlugin;
+    juce::AudioProcessor* ownerPlugin;
     int vstIndex;
 };
 #endif

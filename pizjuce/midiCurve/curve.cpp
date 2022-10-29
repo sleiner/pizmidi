@@ -1,6 +1,8 @@
 #include "curve.h"
 #include "curvegui.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /*
     This function must be implemented to create the actual plugin object that
@@ -27,13 +29,13 @@ MidiCurvePrograms::MidiCurvePrograms()
         set (p, "PointType1", 1.f);
         for (int i = 2; i < MAX_ENVELOPE_POINTS - 1; i++)
         {
-            set (p, "x" + String (i), (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler);
-            set (p, "y" + String (i), (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler);
-            set (p, "PointType" + String (i), 0.f);
+            set (p, "x" + juce::String (i), (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler);
+            set (p, "y" + juce::String (i), (float) roundToInt (127.f * (float) i / (MAX_ENVELOPE_POINTS - 1)) * fmidiScaler);
+            set (p, "PointType" + juce::String (i), 0.f);
         }
-        set (p, "x" + String (MAX_ENVELOPE_POINTS - 1), 1.f);
-        set (p, "y" + String (MAX_ENVELOPE_POINTS - 1), 1.f);
-        set (p, "PointType" + String (MAX_ENVELOPE_POINTS - 1), 1.f);
+        set (p, "x" + juce::String (MAX_ENVELOPE_POINTS - 1), 1.f);
+        set (p, "y" + juce::String (MAX_ENVELOPE_POINTS - 1), 1.f);
+        set (p, "PointType" + juce::String (MAX_ENVELOPE_POINTS - 1), 1.f);
 
         set (p, "CC", 0.f);
         set (p, "CCNumber", 1.f * fmidiScaler);
@@ -43,7 +45,7 @@ MidiCurvePrograms::MidiCurvePrograms()
         set (p, "PitchBend", 0.f);
         set (p, "Channel", 0.f);
 
-        set (p, "Name", "Program " + String (p + 1));
+        set (p, "Name", "Program " + juce::String (p + 1));
         set (p, "lastUIWidth", 600);
         set (p, "lastUIHeight", 400);
     }
@@ -53,8 +55,8 @@ MidiCurvePrograms::MidiCurvePrograms()
 MidiCurve::MidiCurve()
 {
     // create built-in programs
-    programs           = new MidiCurvePrograms;
-    String defaultBank = String();
+    programs                 = new MidiCurvePrograms;
+    juce::String defaultBank = juce::String();
     loadDefaultFxb();
 
     init = true;
@@ -96,17 +98,17 @@ void MidiCurve::setParameter (int index, float newValue)
     }
 }
 
-const String MidiCurve::getParameterName (int index)
+const juce::String MidiCurve::getParameterName (int index)
 {
     if (index < kNumPointParams)
     {
         if (index % 2 == 0)
-            return "x" + String (index / 2);
-        return "y" + String (index / 2);
+            return "x" + juce::String (index / 2);
+        return "y" + juce::String (index / 2);
     }
     if (index < kNumPointParams + MAX_ENVELOPE_POINTS)
     {
-        return "PointType" + String (index - kActive);
+        return "PointType" + juce::String (index - kActive);
     }
     if (index == kCC)
         return "CC";
@@ -123,14 +125,14 @@ const String MidiCurve::getParameterName (int index)
     if (index == kPitchBend)
         return "PitchBend";
 
-    return "param" + String (index);
+    return "param" + juce::String (index);
 }
 
-const String MidiCurve::getParameterText (int index)
+const juce::String MidiCurve::getParameterText (int index)
 {
     if (index < kNumPointParams)
     {
-        return String (roundToInt (127.f * param[index]));
+        return juce::String (roundToInt (127.f * param[index]));
     }
     if (index < kNumPointParams + MAX_ENVELOPE_POINTS)
     {
@@ -147,29 +149,29 @@ const String MidiCurve::getParameterText (int index)
     }
     if (index == kCCNumber)
     {
-        return String (roundToInt (127.f * param[index]));
+        return juce::String (roundToInt (127.f * param[index]));
     }
     if (index == kChannel)
     {
         if (roundToInt (param[kChannel] * 16.0f) == 0)
-            return String ("Any");
-        return String (roundToInt (param[kChannel] * 16.0f));
+            return juce::String ("Any");
+        return juce::String (roundToInt (param[kChannel] * 16.0f));
     }
-    return String();
+    return juce::String();
 }
 
-const String MidiCurve::getInputChannelName (const int channelIndex) const
+const juce::String MidiCurve::getInputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
-const String MidiCurve::getOutputChannelName (const int channelIndex) const
+const juce::String MidiCurve::getOutputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
 bool MidiCurve::isInputChannelStereoPair (int index) const
@@ -213,17 +215,17 @@ void MidiCurve::setCurrentProgram (int index)
     sendChangeMessage();
 }
 
-void MidiCurve::changeProgramName (int index, const String& newName)
+void MidiCurve::changeProgramName (int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
         programs->set (index, "Name", newName);
 }
 
-const String MidiCurve::getProgramName (int index)
+const juce::String MidiCurve::getProgramName (int index)
 {
     if (index < getNumPrograms())
         return programs->get (index, "Name");
-    return String();
+    return juce::String();
 }
 
 int MidiCurve::getCurrentProgram()
@@ -257,7 +259,7 @@ float MidiCurve::getPointValue (int n, int y)
 
 float MidiCurve::findValue (float input)
 {
-    PathFlatteningIterator it (path, {}, fmidiScaler);
+    juce::PathFlatteningIterator it (path, {}, fmidiScaler);
     while (it.next())
     {
         if (it.x1 == input)
@@ -278,15 +280,15 @@ double MidiCurve::linearInterpolate (double x, double y1, double y2, double x1, 
     return slope * x + y0;
 }
 
-void MidiCurve::processBlock (AudioSampleBuffer& buffer,
-                              MidiBuffer& midiMessages)
+void MidiCurve::processBlock (juce::AudioSampleBuffer& buffer,
+                              juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
     const int channel = roundToInt (param[kChannel] * 16.0f);
-    MidiBuffer output;
+    juce::MidiBuffer output;
     for (auto&& msgMetadata : midiMessages)
     {
         auto midi_message  = msgMetadata.getMessage();
@@ -302,12 +304,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kCC] >= 0.5f && midi_message.getControllerNumber() == roundToInt (param[kCCNumber] * 127.f))
                 {
-                    int v             = midi_message.getControllerValue();
-                    const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn  = v;
-                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
-                    lastMsg.lastCCOut = v;
-                    MidiMessage cc    = MidiMessage (data[0], data[1], v);
+                    int v                   = midi_message.getControllerValue();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastMsg.lastCCIn        = v;
+                    v                       = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCOut       = v;
+                    juce::MidiMessage cc    = juce::MidiMessage (data[0], data[1], v);
                     output.addEvent (cc, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -318,12 +320,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kVelocity] >= 0.5f)
                 {
-                    int v             = midi_message.getVelocity();
-                    const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn  = v;
-                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
-                    lastMsg.lastCCOut = v;
-                    MidiMessage cc    = MidiMessage (data[0], data[1], v);
+                    int v                   = midi_message.getVelocity();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastMsg.lastCCIn        = v;
+                    v                       = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCOut       = v;
+                    juce::MidiMessage cc    = juce::MidiMessage (data[0], data[1], v);
                     output.addEvent (cc, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -334,12 +336,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kChannelPressure] >= 0.5f)
                 {
-                    int v             = midi_message.getChannelPressureValue();
-                    const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn  = v;
-                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
-                    lastMsg.lastCCOut = v;
-                    MidiMessage out   = MidiMessage (data[0], v);
+                    int v                   = midi_message.getChannelPressureValue();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastMsg.lastCCIn        = v;
+                    v                       = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCOut       = v;
+                    juce::MidiMessage out   = juce::MidiMessage (data[0], v);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -350,12 +352,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kAftertouch] >= 0.5f)
                 {
-                    int v             = midi_message.getAfterTouchValue();
-                    const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn  = v;
-                    v                 = roundToInt (127.f * findValue (v * fmidiScaler));
-                    lastMsg.lastCCOut = v;
-                    MidiMessage out   = MidiMessage (data[0], data[1], v);
+                    int v                   = midi_message.getAfterTouchValue();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastMsg.lastCCIn        = v;
+                    v                       = roundToInt (127.f * findValue (v * fmidiScaler));
+                    lastMsg.lastCCOut       = v;
+                    juce::MidiMessage out   = juce::MidiMessage (data[0], data[1], v);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -366,12 +368,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kPitchBend] >= 0.5f)
                 {
-                    int v             = midi_message.getPitchWheelValue();
-                    const uint8* data = midi_message.getRawData();
-                    lastMsg.lastCCIn  = (v & 0x3f80) >> 7;
-                    v                 = findPBValue (v);
-                    lastMsg.lastCCOut = (v & 0x3f80) >> 7;
-                    MidiMessage out   = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
+                    int v                   = midi_message.getPitchWheelValue();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastMsg.lastCCIn        = (v & 0x3f80) >> 7;
+                    v                       = findPBValue (v);
+                    lastMsg.lastCCOut       = (v & 0x3f80) >> 7;
+                    juce::MidiMessage out   = juce::MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
                     output.addEvent (out, sample_number);
                     lastMsg.sendChangeMessage();
                 }
@@ -390,7 +392,7 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
 int MidiCurve::findPBValue (int input)
 {
     float v = (float) input;
-    PathFlatteningIterator it (path, {}, (float) 0.0000610388);
+    juce::PathFlatteningIterator it (path, {}, (float) 0.0000610388);
     while (it.next())
     {
         if (it.x1 == v)
@@ -412,7 +414,7 @@ void MidiCurve::updatePath()
         midiPoint p = midiPoint (param[i * 2], param[i * 2 + 1], isPointActive (i), isPointControl (i));
         points.addSorted (pointComparator, p);
     }
-    Path myPath;
+    juce::Path myPath;
     if (points[0].isActive)
     {
         myPath.startNewSubPath (0.f, getPointValue (0, 1));
@@ -510,7 +512,7 @@ bool MidiCurve::isPointControl (int point)
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiCurve::createEditor()
+juce::AudioProcessorEditor* MidiCurve::createEditor()
 {
     return new CurveEditor (this);
 }
@@ -525,13 +527,13 @@ void MidiCurve::copySettingsToProgram (int index)
 }
 
 //==============================================================================
-void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
+void MidiCurve::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpProgramTo (0, curProgram, destData);
 }
 
-void MidiCurve::getStateInformation (MemoryBlock& destData)
+void MidiCurve::getStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpTo (destData);
@@ -550,7 +552,7 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
             changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
             for (int i = 0; i < kNumParams; i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
             }
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
@@ -564,7 +566,7 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
     }
     else
     {
-        MemoryInputStream stream (data, sizeInBytes, false);
+        juce::MemoryInputStream stream (data, sizeInBytes, false);
         programs->loadProgram (curProgram, stream);
         init = true;
         setCurrentProgram (curProgram);
@@ -580,10 +582,10 @@ void MidiCurve::setStateInformation (const void* data, int sizeInBytes)
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
-                String prefix = "P" + String (p) + ".";
+                juce::String prefix = "P" + juce::String (p) + ".";
                 for (int i = 0; i < kNumParams; i++)
                 {
-                    programs->set (p, getParameterName (i), (float) xmlState->getDoubleAttribute (prefix + String (i), programs->get (p, getParameterName (i))));
+                    programs->set (p, getParameterName (i), (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs->get (p, getParameterName (i))));
                 }
                 programs->set (p, "lastUIWidth", xmlState->getIntAttribute (prefix + "uiWidth", programs->get (p, "lastUIWidth")));
                 programs->set (p, "lastUIHeight", xmlState->getIntAttribute (prefix + "uiHeight", programs->get (p, "lastUIHeight")));
@@ -595,8 +597,8 @@ void MidiCurve::setStateInformation (const void* data, int sizeInBytes)
     }
     else
     {
-        MemoryInputStream stream (data, sizeInBytes, false);
-        ValueTree vt = ValueTree::readFromStream (stream);
+        juce::MemoryInputStream stream (data, sizeInBytes, false);
+        juce::ValueTree vt = juce::ValueTree::readFromStream (stream);
         programs->loadFrom (vt);
         init = true;
         setCurrentProgram (vt.getProperty ("lastProgram", 0));

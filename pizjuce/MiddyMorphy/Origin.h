@@ -1,26 +1,20 @@
 #pragma once
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class ZoomingShiftingComponent;
-
-using namespace juce;
 
 class Origin : public juce::Component
 {
 public:
-    void paint (Graphics& g) override;
-
     Origin();
+
+    void paint (juce::Graphics& g) override;
 
     void resized() override;
 
-private:
-    ZoomingShiftingComponent* owner;
-
-public:
     void moved() override;
 
 private:
-    float originalSize;
+    ZoomingShiftingComponent* owner;
 };

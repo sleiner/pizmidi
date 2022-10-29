@@ -1,10 +1,13 @@
 #include "BigClockEditor.h"
 
+using juce::jmin;
+using juce::roundToInt;
+
 TimeDisplay::TimeDisplay()
-    : Button (String())
+    : Button (juce::String())
 {
     setSize (600, 400);
-    textcolor = Colour (0xff000000);
+    textcolor = juce::Colour (0xff000000);
     setMouseClickGrabsKeyboardFocus (false);
 }
 
@@ -13,16 +16,16 @@ TimeDisplay::~TimeDisplay()
 }
 
 //==============================================================================
-void TimeDisplay::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void TimeDisplay::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
     g.setColour (textcolor);
-    g.setFont (Font (jmin ((float) getHeight() * .95f, (float) getWidth() * .16f), Font::bold));
+    g.setFont (juce::Font (jmin ((float) getHeight() * .95f, (float) getWidth() * .16f), juce::Font::bold));
     g.drawFittedText (time,
                       0,
                       0,
                       getWidth(),
                       getHeight(),
-                      Justification::centred,
+                      juce::Justification::centred,
                       true);
 }
 
@@ -36,45 +39,45 @@ BigClockEditor::BigClockEditor (BigClockFilter* const ownerFilter)
     : AudioProcessorEditor (ownerFilter),
       showtextbox (ownerFilter->showcues)
 {
-    addChildComponent (modeLabel = new Label ("Mode Label", String()));
+    addChildComponent (modeLabel = new juce::Label ("Mode Label", juce::String()));
     modeLabel->setMouseClickGrabsKeyboardFocus (false);
-    modeLabel->setFont (Font (12.f, Font::bold));
-    modeLabel->setJustificationType (Justification::topRight);
+    modeLabel->setFont (juce::Font (12.f, juce::Font::bold));
+    modeLabel->setJustificationType (juce::Justification::topRight);
 
     addAndMakeVisible (infoLabel = new TimeDisplay());
     infoLabel->addListener (this);
     infoLabel->addMouseListener (this, false);
 
-    colourSelector = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace);
-    colourSelector->setName (String (L"color"));
+    colourSelector = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace);
+    colourSelector->setName (juce::String (L"color"));
     colourSelector->setCurrentColour (getFilter()->bgcolor);
     colourSelector->addChangeListener (this);
 
-    addAndMakeVisible (textBox = new TextEditor());
+    addAndMakeVisible (textBox = new juce::TextEditor());
     textBox->setMultiLine (false);
     textBox->setReturnKeyStartsNewLine (false);
     textBox->setReadOnly (false);
     textBox->setScrollbarsShown (false);
     textBox->setCaretVisible (true);
     textBox->setPopupMenuEnabled (true);
-    textBox->setText (String());
+    textBox->setText (juce::String());
     textBox->addListener (this);
 
-    addAndMakeVisible (cueLabel = new Label ("Cue Label", String()));
+    addAndMakeVisible (cueLabel = new juce::Label ("Cue Label", juce::String()));
 
-    addAndMakeVisible (runButton = new TextButton ("Run"));
+    addAndMakeVisible (runButton = new juce::TextButton ("Run"));
     runButton->setMouseClickGrabsKeyboardFocus (false);
     runButton->setButtonText (">");
-    runButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    runButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     runButton->addListener (this);
 
-    addAndMakeVisible (resetButton = new TextButton ("Reset"));
+    addAndMakeVisible (resetButton = new juce::TextButton ("Reset"));
     resetButton->setMouseClickGrabsKeyboardFocus (false);
     resetButton->setButtonText ("0");
-    resetButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    resetButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight);
     resetButton->addListener (this);
 
-    addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer = new juce::ResizableCornerComponent (this, &resizeLimits));
     resizer->setMouseClickGrabsKeyboardFocus (false);
     resizeLimits.setSizeLimits (10, 10, 1200, 200);
 
@@ -92,7 +95,7 @@ BigClockEditor::~BigClockEditor()
 }
 
 //==============================================================================
-void BigClockEditor::paint (Graphics& g)
+void BigClockEditor::paint (juce::Graphics& g)
 {
     g.fillAll (getFilter()->bgcolor);
 }
@@ -125,15 +128,15 @@ void BigClockEditor::resized()
     getFilter()->lastUIHeight = getHeight();
 }
 
-void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked)
+void BigClockEditor::buttonStateChanged (juce::Button* buttonThatWasClicked)
 {
     if (buttonThatWasClicked->isDown())
     {
-        ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+        juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
         if (mousebutton.isPopupMenu())
         {
             bool samplemode = getFilter()->getParameter (kSamples) >= 0.5f;
-            PopupMenu m, sub1, sub2, sub3, sub4, clockmode;
+            juce::PopupMenu m, sub1, sub2, sub3, sub4, clockmode;
             sub1.addCustomItem (-1, *colourSelector, 300, 300, false);
             m.addSubMenu (L"Color", sub1);
             m.addSeparator();
@@ -332,7 +335,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked)
                     else if (getFilter()->mode == RecTimeMode)
                         getFilter()->rectime = 0;
                     else if (getFilter()->mode == PluginTimeMode)
-                        getFilter()->plugintime = Time::getMillisecondCounter();
+                        getFilter()->plugintime = juce::Time::getMillisecondCounter();
                 }
 
                 else if (result == 998)
@@ -344,24 +347,24 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked)
                 }
                 else if (result == 996)
                 {
-                    FileChooser myChooser ("Import cue file...",
-                                           File (getFilter()->getCurrentPath()),
-                                           "*.xml");
+                    juce::FileChooser myChooser ("Import cue file...",
+                                                 juce::File (getFilter()->getCurrentPath()),
+                                                 "*.xml");
 
                     if (myChooser.browseForFileToOpen())
                     {
-                        File file (myChooser.getResult());
+                        juce::File file (myChooser.getResult());
                         getFilter()->loadCues (file);
                     }
                 }
                 else if (result == 997)
                 {
-                    FileChooser myChooser ("Export cue file...",
-                                           File (getFilter()->getCurrentPath() + File::getSeparatorString() + "cues.xml"));
+                    juce::FileChooser myChooser ("Export cue file...",
+                                                 juce::File (getFilter()->getCurrentPath() + juce::File::getSeparatorString() + "cues.xml"));
 
                     if (myChooser.browseForFileToSave (true))
                     {
-                        File cuefile (myChooser.getResult());
+                        juce::File cuefile (myChooser.getResult());
                         if (! cuefile.hasFileExtension ("xml"))
                             cuefile = cuefile.withFileExtension ("xml");
 
@@ -371,7 +374,7 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked)
                 else if (result == 999)
                 {
                     getFilter()->cues.clear();
-                    cueLabel->setText (String(), dontSendNotification);
+                    cueLabel->setText (juce::String(), juce::dontSendNotification);
                 }
                 else if (result >= 1000)
                 {
@@ -382,9 +385,9 @@ void BigClockEditor::buttonStateChanged (Button* buttonThatWasClicked)
         }
     }
 }
-void BigClockEditor::buttonClicked (Button* buttonThatWasClicked)
+void BigClockEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
-    ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+    juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
     if (! mousebutton.isPopupMenu())
     {
         if (buttonThatWasClicked == runButton)
@@ -419,7 +422,7 @@ void BigClockEditor::buttonClicked (Button* buttonThatWasClicked)
     }
 }
 
-void BigClockEditor::textEditorReturnKeyPressed (TextEditor& editor)
+void BigClockEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
     if (textBox->getText().isNotEmpty())
     {
@@ -436,17 +439,17 @@ void BigClockEditor::timerCallback()
         updateParametersFromFilter();
 }
 
-void BigClockEditor::mouseEnter (const MouseEvent& e)
+void BigClockEditor::mouseEnter (const juce::MouseEvent& e)
 {
     modeLabel->setVisible (true);
 }
 
-void BigClockEditor::mouseExit (const MouseEvent& e)
+void BigClockEditor::mouseExit (const juce::MouseEvent& e)
 {
     modeLabel->setVisible (false);
 }
 
-void BigClockEditor::changeListenerCallback (ChangeBroadcaster* source)
+void BigClockEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -454,7 +457,7 @@ void BigClockEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else
     {
-        ColourSelector* cs = (ColourSelector*) source;
+        auto* cs = (juce::ColourSelector*) source;
         if (cs)
         {
             getFilter()->bgcolor = (cs->getCurrentColour());
@@ -470,7 +473,7 @@ void BigClockEditor::updateParametersFromFilter()
     BigClockFilter* const filter = getFilter();
 
     filter->getCallbackLock().enter();
-    const AudioPlayHead::CurrentPositionInfo positionInfo (filter->lastPosInfo);
+    const juce::AudioPlayHead::CurrentPositionInfo positionInfo (filter->lastPosInfo);
     barsbeats               = filter->getParameter (kBarsBeats) >= 0.5f;
     const float clockmode   = filter->getParameter (kClockMode);
     const bool watchrunning = filter->getParameter (kRunWatch) >= 0.5f;
@@ -483,7 +486,7 @@ void BigClockEditor::updateParametersFromFilter()
     {
         case HostTimeMode:
             hosttime = true;
-            modeLabel->setText ("Host Timeline", dontSendNotification);
+            modeLabel->setText ("Host Timeline", juce::dontSendNotification);
             infoLabel->time = filter->ppqToString (positionInfo.ppqPosition,
                                                    positionInfo.timeSigNumerator,
                                                    positionInfo.timeSigDenominator,
@@ -492,7 +495,7 @@ void BigClockEditor::updateParametersFromFilter()
             break;
         case RecTimeMode:
             hosttime = false;
-            modeLabel->setText ("Recording Time", dontSendNotification);
+            modeLabel->setText ("Recording Time", juce::dontSendNotification);
             infoLabel->time = filter->ppqToString (filter->secondsToPpq (filter->rectime, positionInfo.bpm),
                                                    positionInfo.timeSigNumerator,
                                                    positionInfo.timeSigDenominator,
@@ -501,7 +504,7 @@ void BigClockEditor::updateParametersFromFilter()
             break;
         case StopwatchMode:
             hosttime = false;
-            modeLabel->setText ("Stopwatch", dontSendNotification);
+            modeLabel->setText ("Stopwatch", juce::dontSendNotification);
             infoLabel->time = filter->ppqToString (filter->secondsToPpq ((double) (filter->watchtime) * 0.001, positionInfo.bpm),
                                                    positionInfo.timeSigNumerator,
                                                    positionInfo.timeSigDenominator,
@@ -510,8 +513,8 @@ void BigClockEditor::updateParametersFromFilter()
             break;
         case PluginTimeMode:
             hosttime = false;
-            modeLabel->setText ("Plugin Time", dontSendNotification);
-            infoLabel->time = filter->ppqToString (filter->secondsToPpq ((double) (Time::getMillisecondCounter() - filter->plugintime) * 0.001, positionInfo.bpm),
+            modeLabel->setText ("Plugin Time", juce::dontSendNotification);
+            infoLabel->time = filter->ppqToString (filter->secondsToPpq ((double) (juce::Time::getMillisecondCounter() - filter->plugintime) * 0.001, positionInfo.bpm),
                                                    positionInfo.timeSigNumerator,
                                                    positionInfo.timeSigDenominator,
                                                    positionInfo.bpm,
@@ -519,8 +522,8 @@ void BigClockEditor::updateParametersFromFilter()
             break;
         case ActualTimeMode:
             hosttime = false;
-            modeLabel->setText ("Actual Time", dontSendNotification);
-            infoLabel->time = Time::getCurrentTime().toString (false, true);
+            modeLabel->setText ("Actual Time", juce::dontSendNotification);
+            infoLabel->time = juce::Time::getCurrentTime().toString (false, true);
             break;
         default:
             break;
@@ -529,14 +532,14 @@ void BigClockEditor::updateParametersFromFilter()
     infoLabel->textcolor = filter->bgcolor.contrasting (filter->getParameter (kLook));
     infoLabel->repaint();
 
-    modeLabel->setColour (Label::textColourId, infoLabel->textcolor);
+    modeLabel->setColour (juce::Label::textColourId, infoLabel->textcolor);
 
     runButton->setButtonText (watchrunning ? "||" : ">");
 
     if (showtextbox)
     {
-        cueLabel->setColour (Label::textColourId, infoLabel->textcolor);
-        cueLabel->setText (filter->getCue (positionInfo.ppqPosition, barsbeats), sendNotification);
+        cueLabel->setColour (juce::Label::textColourId, infoLabel->textcolor);
+        cueLabel->setText (filter->getCue (positionInfo.ppqPosition, barsbeats), juce::sendNotification);
     }
 
     setSize (filter->lastUIWidth,

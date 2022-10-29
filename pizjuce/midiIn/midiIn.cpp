@@ -1,6 +1,8 @@
 #include "midiIn.h"
 #include "midiInEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
@@ -14,7 +16,7 @@ JuceProgram::JuceProgram()
     param[kHostIn]  = 1.0f;
     param[kChannel] = 0.f;
 
-    icon = String (""); // icon filename
+    icon = juce::String (""); // icon filename
 
     //program name
     name = "Default";
@@ -25,8 +27,8 @@ MidiInFilter::MidiInFilter()
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices   = MidiInput::getAvailableDevices();
-    midiInput = 0;
+    devices   = juce::MidiInput::getAvailableDevices();
+    midiInput = nullptr;
     loadDefaultFxb();
     curProgram = 0;
     init       = true;
@@ -65,74 +67,74 @@ void MidiInFilter::setParameter (int index, float newValue)
             {
                 if (midiInput)
                     midiInput->stop();
-                midiInput = NULL;
+                midiInput = nullptr;
             }
         }
         sendChangeMessage();
     }
 }
 
-void MidiInFilter::setActiveDevice (String name)
+void MidiInFilter::setActiveDevice (juce::String name)
 {
     setActiveDevice (getDeviceByName (name));
 }
 
-void MidiInFilter::setActiveDevice (MidiDeviceInfo device)
+void MidiInFilter::setActiveDevice (juce::MidiDeviceInfo device)
 {
     if (midiInput != nullptr)
     {
         midiInput->stop();
     }
     activeDevice = programs[curProgram].device = device;
-    midiInput                                  = MidiInput::openDevice (device.identifier, &collector);
+    midiInput                                  = juce::MidiInput::openDevice (device.identifier, &collector);
     if (midiInput != nullptr)
     {
         midiInput->start();
     }
 }
 
-MidiDeviceInfo MidiInFilter::getDeviceByName (String name) const
+juce::MidiDeviceInfo MidiInFilter::getDeviceByName (juce::String name) const
 {
     return devices.findIf ([&] (auto const& device)
                            { return name == device.name; });
 }
 
-const String MidiInFilter::getParameterName (int index)
+const juce::String MidiInFilter::getParameterName (int index)
 {
     if (index == kPower)
         return "Power";
     if (index == kHostIn)
         return "HostIn";
-    return String();
+    return juce::String();
 }
 
-const String MidiInFilter::getParameterText (int index)
+const juce::String MidiInFilter::getParameterText (int index)
 {
     if (index == kPower)
     {
         if (param[kPower] > 0.f)
-            return String ("On");
+            return juce::String ("On");
         else
-            return String ("Off");
+            return juce::String ("Off");
     }
     if (index == kHostIn)
     {
         if (param[kHostIn] >= 0.5)
-            return String ("On");
+            return juce::String ("On");
         else
-            return String ("Off");
+            return juce::String ("Off");
     }
-    return String();
+    return juce::String();
 }
 
-const String MidiInFilter::getInputChannelName (const int channelIndex) const
+const juce::String MidiInFilter::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String MidiInFilter::getOutputChannelName (const int channelIndex) const
+const juce::String MidiInFilter::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool MidiInFilter::isInputChannelStereoPair (int index) const
@@ -168,12 +170,12 @@ void MidiInFilter::setCurrentProgram (int index)
     icon = ap->icon;
 }
 
-void MidiInFilter::changeProgramName (int index, const String& newName)
+void MidiInFilter::changeProgramName (int index, const juce::String& newName)
 {
     programs[curProgram].name = newName;
 }
 
-const String MidiInFilter::getProgramName (int index)
+const juce::String MidiInFilter::getProgramName (int index)
 {
     return programs[index].name;
 }
@@ -183,7 +185,7 @@ int MidiInFilter::getCurrentProgram()
     return curProgram;
 }
 //==============================================================================
-AudioProcessorEditor* MidiInFilter::createEditor()
+juce::AudioProcessorEditor* MidiInFilter::createEditor()
 {
     return new MidiInEditor (this);
 }
@@ -202,8 +204,8 @@ void MidiInFilter::releaseResources()
     this->collector.reset (44100);
 }
 
-void MidiInFilter::processBlock (AudioSampleBuffer& buffer,
-                                 MidiBuffer& midiMessages)
+void MidiInFilter::processBlock (juce::AudioSampleBuffer& buffer,
+                                 juce::MidiBuffer& midiMessages)
 {
     for (int i = 0; i < getNumOutputChannels(); ++i)
     {
@@ -216,7 +218,7 @@ void MidiInFilter::processBlock (AudioSampleBuffer& buffer,
     collector.removeNextBlockOfMessages (midiMessages, buffer.getNumSamples());
     if (channel > 0)
     {
-        MidiBuffer output;
+        juce::MidiBuffer output;
         for (auto&& msgMetadata : midiMessages)
         {
             auto midi_message = msgMetadata.getMessage();
@@ -232,7 +234,7 @@ void MidiInFilter::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-void MidiInFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
+void MidiInFilter::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].icon = icon;
@@ -242,7 +244,7 @@ void MidiInFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     // add some attributes to it..
     xmlState.setAttribute ("pluginVersion", 1);
@@ -252,7 +254,7 @@ void MidiInFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
 
     for (int i = 0; i < getNumParameters(); i++)
     {
-        xmlState.setAttribute (String (i), param[i]);
+        xmlState.setAttribute (juce::String (i), param[i]);
     }
 
     xmlState.setAttribute ("icon", icon);
@@ -261,21 +263,21 @@ void MidiInFilter::getCurrentProgramStateInformation (MemoryBlock& destData)
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
 }
-void MidiInFilter::getStateInformation (MemoryBlock& destData)
+void MidiInFilter::getStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].icon = icon;
 
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("program", getCurrentProgram());
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        String prefix = "P" + String (p) + ".";
+        juce::String prefix = "P" + juce::String (p) + ".";
         xmlState.setAttribute (prefix + "progname", programs[p].name);
         for (int i = 0; i < getNumParameters(); i++)
         {
-            xmlState.setAttribute (prefix + String (i), programs[p].param[i]);
+            xmlState.setAttribute (prefix + juce::String (i), programs[p].param[i]);
         }
         xmlState.setAttribute (prefix + "icon", programs[p].icon);
         xmlState.setAttribute (prefix + "device", programs[p].device.name);
@@ -288,7 +290,7 @@ void MidiInFilter::setCurrentProgramStateInformation (const void* data, int size
     // use this helper function to get the XML from this binary blob..
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
@@ -297,7 +299,7 @@ void MidiInFilter::setCurrentProgramStateInformation (const void* data, int size
             changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
             for (int i = 0; i < getNumParameters(); i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
             }
             icon = xmlState->getStringAttribute ("icon", icon);
             setActiveDevice (xmlState->getStringAttribute ("device", activeDevice.name));
@@ -311,16 +313,16 @@ void MidiInFilter::setStateInformation (const void* data, int sizeInBytes)
 {
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
-                String prefix = "P" + String (p) + ".";
+                juce::String prefix = "P" + juce::String (p) + ".";
                 for (int i = 0; i < getNumParameters(); i++)
                 {
-                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
+                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs[p].param[i]);
                 }
                 programs[p].icon   = xmlState->getStringAttribute (prefix + "icon", programs[p].icon);
                 programs[p].device = getDeviceByName (xmlState->getStringAttribute (prefix + "device", programs[p].device.name));

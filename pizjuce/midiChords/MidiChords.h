@@ -1,16 +1,14 @@
 #ifndef MidiChordsPLUGINFILTER_H
 #define MidiChordsPLUGINFILTER_H
 
-#include "juce_core/juce_core.h"
-#include "juce_data_structures/juce_data_structures.h"
+#include <juce_core/juce_core.h>
+#include <juce_data_structures/juce_data_structures.h>
 
 #include "../_common/BankStorage.h"
 #include "../_common/ChordFunctions.h"
 #include "../_common/key.h"
 #include "../_common/midistuff.h"
 #include "../_common/PizAudioProcessor.h"
-
-using namespace juce;
 
 enum parameters
 {
@@ -71,13 +69,13 @@ class GuitarDefinition
 public:
     GuitarDefinition()
     {
-        guitarName = String();
+        guitarName = juce::String();
         chordFile  = "Chords.txt";
         numFrets   = 0;
         numStrings = 0;
     }
 
-    GuitarDefinition (String name, String file, int frets, Array<int>& notes)
+    GuitarDefinition (juce::String name, juce::String file, int frets, juce::Array<int>& notes)
     {
         guitarName = name;
         chordFile  = file;
@@ -87,11 +85,11 @@ public:
     }
     ~GuitarDefinition() {}
 
-    String guitarName;
+    juce::String guitarName;
     int numStrings;
     int numFrets;
-    Array<int> stringNotes;
-    String chordFile;
+    juce::Array<int> stringNotes;
+    juce::String chordFile;
 };
 
 class MidiChordsPrograms : public BankStorage
@@ -99,7 +97,7 @@ class MidiChordsPrograms : public BankStorage
 public:
     MidiChordsPrograms();
 
-    void set (int prog, const Identifier& name, const var& newValue)
+    void set (int prog, const juce::Identifier& name, const juce::var& newValue)
     {
         BankStorage::set (0, prog, name.toString(), newValue);
     }
@@ -108,7 +106,7 @@ public:
     {
         auto noteMatrix = values_.getChild (0).getChild (prog).getChild (trigger);
         if (noteMatrix.isValid())
-            noteMatrix.removeAllProperties (0);
+            noteMatrix.removeAllProperties (nullptr);
     }
 
     void setChordNote (int prog, int trigger, int channel, int note, const bool& newValue)
@@ -118,51 +116,51 @@ public:
 
         if (! triggerProp.isValid())
         {
-            ValueTree noteMatrix ("NoteMatrix_T" + String (trigger));
-            values_.getChild (0).getChild (prog).addChild (noteMatrix, trigger, 0);
+            juce::ValueTree noteMatrix ("NoteMatrix_T" + juce::String (trigger));
+            values_.getChild (0).getChild (prog).addChild (noteMatrix, trigger, nullptr);
         }
         if (note < 32)
         {
-            int state = triggerProp.getProperty ("Ch" + String (channel) + "_0-31", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (channel) + "_0-31", 0);
             if (newValue)
                 state |= 1 << note;
             else
                 state &= ~(1 << note);
-            triggerProp.setProperty ("Ch" + String (channel) + "_0-31", state, 0);
+            triggerProp.setProperty ("Ch" + juce::String (channel) + "_0-31", state, nullptr);
         }
         else if (note < 64)
         {
             note -= 32;
-            int state = triggerProp.getProperty ("Ch" + String (channel) + "_32-63", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (channel) + "_32-63", 0);
             if (newValue)
                 state |= 1 << note;
             else
                 state &= ~(1 << note);
-            triggerProp.setProperty ("Ch" + String (channel) + "_32-63", state, 0);
+            triggerProp.setProperty ("Ch" + juce::String (channel) + "_32-63", state, nullptr);
         }
         else if (note < 96)
         {
             note -= 64;
-            int state = triggerProp.getProperty ("Ch" + String (channel) + "_64-95", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (channel) + "_64-95", 0);
             if (newValue)
                 state |= 1 << note;
             else
                 state &= ~(1 << note);
-            triggerProp.setProperty ("Ch" + String (channel) + "_64-95", state, 0);
+            triggerProp.setProperty ("Ch" + juce::String (channel) + "_64-95", state, nullptr);
         }
         else if (note < 128)
         {
             note -= 96;
-            int state = triggerProp.getProperty ("Ch" + String (channel) + "_96-127", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (channel) + "_96-127", 0);
             if (newValue)
                 state |= 1 << note;
             else
                 state &= ~(1 << note);
-            triggerProp.setProperty ("Ch" + String (channel) + "_96-127", state, 0);
+            triggerProp.setProperty ("Ch" + juce::String (channel) + "_96-127", state, nullptr);
         }
     }
 
-    const var get (int prog, const Identifier& name)
+    const juce::var get (int prog, const juce::Identifier& name)
     {
         return BankStorage::get (0, prog, name.toString());
     }
@@ -176,25 +174,25 @@ public:
             return false;
         if (note < 32)
         {
-            int state = triggerProp.getProperty ("Ch" + String (ch) + "_0-31", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (ch) + "_0-31", 0);
             return (state & (1 << note)) != 0;
         }
         else if (note < 64)
         {
             note -= 32;
-            int state = triggerProp.getProperty ("Ch" + String (ch) + "_32-63", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (ch) + "_32-63", 0);
             return (state & (1 << note)) != 0;
         }
         else if (note < 96)
         {
             note -= 64;
-            int state = triggerProp.getProperty ("Ch" + String (ch) + "_64-95", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (ch) + "_64-95", 0);
             return (state & (1 << note)) != 0;
         }
         else if (note < 128)
         {
             note -= 96;
-            int state = triggerProp.getProperty ("Ch" + String (ch) + "_96-127", 0);
+            int state = triggerProp.getProperty ("Ch" + juce::String (ch) + "_96-127", 0);
             return (state & (1 << note)) != 0;
         }
         return false;
@@ -207,7 +205,7 @@ public:
             auto bank = values_.getChild (b);
             for (int p = 0; p < bank.getNumChildren(); p++)
             {
-                if (BankStorage::get (b, p, "Velocity") == var (0))
+                if (BankStorage::get (b, p, "Velocity") == juce::var (0))
                 {
                     BankStorage::set (b, p, "Velocity", 100);
                 }
@@ -221,7 +219,7 @@ private:
 
 //==============================================================================
 class MidiChords : public PizAudioProcessor,
-                   public ChangeBroadcaster
+                   public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -232,14 +230,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override;
+    const juce::String getName() const override;
     bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
@@ -247,11 +245,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -262,21 +260,21 @@ public:
     int getNumPrograms() override { return numProgs; }
     int getCurrentProgram() override { return curProgram; }
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override { return programs->get (index, "Name"); }
-    void changeProgramName (int index, const String& newName) override { programs->set (index, "Name", newName); }
+    const juce::String getProgramName (int index) override { return programs->get (index, "Name"); }
+    void changeProgramName (int index, const juce::String& newName) override { programs->set (index, "Name", newName); }
     double getTailLengthSeconds() const override { return 0; }
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    MidiKeyboardState progKbState[numProgs][128];
-    MidiKeyboardState chordKbState;
-    MidiKeyboardState triggerKbState;
-    MidiKeyboardState* getCurrentKbState() { return &(progKbState[curProgram][curTrigger]); }
+    juce::MidiKeyboardState progKbState[numProgs][128];
+    juce::MidiKeyboardState chordKbState;
+    juce::MidiKeyboardState triggerKbState;
+    juce::MidiKeyboardState* getCurrentKbState() { return &(progKbState[curProgram][curTrigger]); }
     void selectTrigger (int index);
     void selectChordNote (int index, int note, bool on, int ch = -1);
     int getCurrentTrigger() { return curTrigger; }
@@ -291,11 +289,11 @@ public:
     int getLearnChannel() { return learnchan; }
     void setNoteBypassed (int note, bool bypass)
     {
-        programs->set (curProgram, "Bypassed" + String (note), bypass);
+        programs->set (curProgram, "Bypassed" + juce::String (note), bypass);
     }
     bool isNoteBypassed (int note)
     {
-        return programs->get (curProgram, "Bypassed" + String (note));
+        return programs->get (curProgram, "Bypassed" + juce::String (note));
     }
     void clearAllChords();
     void resetAllChords();
@@ -306,8 +304,8 @@ public:
     void transposeChord (int trigger, bool up);
     void transposeCurrentChordByOctave (bool up);
     void applyChannelToChord();
-    String getCurrentChordName();
-    void savePreset (String name);
+    juce::String getCurrentChordName();
+    void savePreset (juce::String name);
     void playCurrentChord (bool on)
     {
         if (on)
@@ -337,13 +335,13 @@ public:
     }
     void setStringValue (int string, int note, bool translate)
     {
-        programs->set (curProgram, "String" + String (string), note);
+        programs->set (curProgram, "String" + juce::String (string), note);
         if (translate)
             translateToGuitarChord();
     }
     int getStringValue (int string)
     {
-        return programs->get (curProgram, "String" + String (string));
+        return programs->get (curProgram, "String" + juce::String (string));
     }
     void setNumFrets (int frets, bool translate)
     {
@@ -380,28 +378,27 @@ public:
     }
     void setStrumDirection (bool up)
     {
-        programs->set (curProgram, "StrumUp" + String (curTrigger), up);
+        programs->set (curProgram, "StrumUp" + juce::String (curTrigger), up);
         sendChangeMessage();
     }
     bool getStrumDirection()
     {
-        return programs->get (curProgram, "StrumUp" + String (curTrigger));
+        return programs->get (curProgram, "StrumUp" + juce::String (curTrigger));
     }
-    void readChorderPreset (File file);
-    bool readKeyFile (File file = File());
+    void readChorderPreset (juce::File file);
+    bool readKeyFile (juce::File file = juce::File());
     bool demo;
 
-    Array<GuitarDefinition> guitarPresets;
+    juce::Array<GuitarDefinition> guitarPresets;
     void fillGuitarPresetList();
 
     void toggleUsePC (bool use);
 
-    String dataPath;
+    juce::String dataPath;
     int lastUIWidth, lastUIHeight;
-    //==============================================================================
-    juce_UseDebuggingNewOperator
 
-        private : MidiChordsPrograms* programs;
+private:
+    MidiChordsPrograms* programs;
     int curProgram;
     int curTrigger;
     //StringArray chordNames;
@@ -438,19 +435,21 @@ public:
     int outputNote[16][128];
     int numChordNotes[numProgs][128];
 
-    Array<ChordNote> playingChord[128];
+    juce::Array<ChordNote> playingChord[128];
     bool chordNotePlaying[16][128];
     bool chordNotePlaying2[16][128];
-    Array<int> ignoreNextNoteOff[16];
+    juce::Array<int> ignoreNextNoteOff[16];
 
     void copySettingsToProgram (int index);
 
-    MidiBuffer delayBuffer;
+    juce::MidiBuffer delayBuffer;
     int noteDelay[16][128];
-    uint64 noteOrigPos[16][128];
-    uint64 totalSamples;
+    juce::uint64 noteOrigPos[16][128];
+    juce::uint64 totalSamples;
     bool expectingDelayedNotes;
-    AudioPlayHead::CurrentPositionInfo lastPosInfo;
+    juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
+
+    JUCE_LEAK_DETECTOR (MidiChords)
 };
 
 #endif

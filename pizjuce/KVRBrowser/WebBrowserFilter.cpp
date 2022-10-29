@@ -1,6 +1,8 @@
 #include "WebBrowserFilter.h"
 #include "WebBrowserPluginEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /**
     This function must be implemented to create a new instance of your
@@ -26,7 +28,7 @@ WebBrowserFilter::~WebBrowserFilter()
 }
 
 //==============================================================================
-const String WebBrowserFilter::getName() const
+const juce::String WebBrowserFilter::getName() const
 {
     return "KVRBrowser";
 }
@@ -57,30 +59,30 @@ void WebBrowserFilter::setParameter (int index, float newValue)
     }
 }
 
-const String WebBrowserFilter::getParameterName (int index)
+const juce::String WebBrowserFilter::getParameterName (int index)
 {
     if (index == 0)
         return " ";
 
-    return String();
+    return juce::String();
 }
 
-const String WebBrowserFilter::getParameterText (int index)
+const juce::String WebBrowserFilter::getParameterText (int index)
 {
     if (index == 0)
-        return String (gain, 2);
+        return juce::String (gain, 2);
 
-    return String();
+    return juce::String();
 }
 
-const String WebBrowserFilter::getInputChannelName (const int channelIndex) const
+const juce::String WebBrowserFilter::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String WebBrowserFilter::getOutputChannelName (const int channelIndex) const
+const juce::String WebBrowserFilter::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool WebBrowserFilter::isInputChannelStereoPair (int index) const
@@ -120,17 +122,17 @@ void WebBrowserFilter::releaseResources()
     // spare memory, etc.
 }
 
-void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
-                                     MidiBuffer& midiMessages)
+void WebBrowserFilter::processBlock (juce::AudioSampleBuffer& buffer,
+                                     juce::MidiBuffer& midiMessages)
 {
     if (! initialPageLoaded)
         sendChangeMessage();
 
-    int16 mask1      = URL.hashCode() & 0xffff;
-    int16 mask2      = URL.hashCode() / 0x10000;
-    float rm         = (float) (URL.hashCode() & 0xff) / 255.f;
-    int8 mask3       = ~(roundToInt (255.f * buffer.getMagnitude (0, buffer.getNumSamples()) * gain * 0.1f) & 0xff);
-    float integerMax = 32767.f;
+    juce::int16 mask1 = URL.hashCode() & 0xffff;
+    juce::int16 mask2 = URL.hashCode() / 0x10000;
+    float rm          = (float) (URL.hashCode() & 0xff) / 255.f;
+    juce::int8 mask3  = ~(roundToInt (255.f * buffer.getMagnitude (0, buffer.getNumSamples()) * gain * 0.1f) & 0xff);
+    float integerMax  = 32767.f;
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -142,16 +144,16 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
 
     for (int i = 0; i < buffer.getNumSamples(); i++)
     {
-        float sampleL = in1[i] * gain * 0.01f + denorm;
-        float sampleR = in2[i] * gain * 0.01f + denorm;
-        int16 L16     = roundToInt (sampleL * integerMax);
-        int16 R16     = roundToInt (sampleR * integerMax);
-        L16           = L16 & mask1;
-        R16           = R16 & mask2;
-        int8 L8       = L16 & mask3;
-        int8 R8       = R16 & mask3;
-        sampleL       = (float) L8 / 255.f + denorm;
-        sampleR       = (float) R8 / 255.f + denorm;
+        float sampleL   = in1[i] * gain * 0.01f + denorm;
+        float sampleR   = in2[i] * gain * 0.01f + denorm;
+        juce::int16 L16 = roundToInt (sampleL * integerMax);
+        juce::int16 R16 = roundToInt (sampleR * integerMax);
+        L16             = L16 & mask1;
+        R16             = R16 & mask2;
+        juce::int8 L8   = L16 & mask3;
+        juce::int8 R8   = R16 & mask3;
+        sampleL         = (float) L8 / 255.f + denorm;
+        sampleR         = (float) R8 / 255.f + denorm;
 
         //dc removal
         in1[i]   = sampleL - lastinL + R * lastoutL + denorm;
@@ -172,46 +174,46 @@ void WebBrowserFilter::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* WebBrowserFilter::createEditor()
+juce::AudioProcessorEditor* WebBrowserFilter::createEditor()
 {
     return new WebBrowserPluginEditor (this);
 }
 
 //==============================================================================
-void WebBrowserFilter::getStateInformation (MemoryBlock& destData)
+void WebBrowserFilter::getStateInformation (juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
     // XML is a much cleaner way of doing it - here's an example of how to store your
-    // params as XML..
+    // params as XML
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
-    // add some attributes to it..
+    // add some attributes to it
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("gainLevel", gain);
     xmlState.setAttribute ("uiWidth", lastUIWidth);
     xmlState.setAttribute ("uiHeight", lastUIHeight);
     xmlState.setAttribute ("lastURL", URL);
 
-    // you could also add as many child elements as you need to here..
+    // you could also add as many child elements as you need to here
 
-    // then use this helper function to stuff it into the binary blob and return it..
+    // then use this helper function to stuff it into the binary blob and return it
     copyXmlToBinary (xmlState, destData);
 }
 
 void WebBrowserFilter::setStateInformation (const void* data, int sizeInBytes)
 {
-    // use this helper function to get the XML from this binary blob..
+    // use this helper function to get the XML from this binary blob
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
-        // check that it's the right type of xml..
+        // check that it's the right type of xml
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
-            // ok, now pull out our parameters..
+            // ok, now pull out our parameters
             gain = (float) xmlState->getDoubleAttribute ("gainLevel", gain);
 
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);

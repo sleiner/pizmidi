@@ -25,7 +25,7 @@ void CpuRam::resetToDefaultSettings()
     showGraph    = true;
     lastUIWidth  = 230;
     lastUIHeight = 30;
-    bgcolor      = Colour (0xffb8bcc0);
+    bgcolor      = juce::Colour (0xffb8bcc0);
 }
 
 CpuRam::~CpuRam()
@@ -86,7 +86,7 @@ void CpuRam::setParameter (int index, float newValue)
     }
 }
 
-const String CpuRam::getParameterName (int index)
+const juce::String CpuRam::getParameterName (int index)
 {
     if (index == 0)
         return "interval";
@@ -95,37 +95,37 @@ const String CpuRam::getParameterName (int index)
     if (index == 2)
         return "show graph";
     else
-        return String();
+        return juce::String();
 }
 
-const String CpuRam::getParameterText (int index)
+const juce::String CpuRam::getParameterText (int index)
 {
     if (index == 0)
     {
-        return String ((int) (interval * 1700.0) + 300) + String (" ms");
+        return juce::String ((int) (interval * 1700.0) + 300) + juce::String (" ms");
     }
     if (index == 1)
     {
         if (minimize >= 0.5f)
-            return String ("yes");
+            return juce::String ("yes");
         else
-            return String ("no");
+            return juce::String ("no");
     }
     if (index == 2)
     {
-        return showGraph ? String ("yes") : String ("no");
+        return showGraph ? juce::String ("yes") : juce::String ("no");
     }
     else
-        return String();
+        return juce::String();
 }
-const String CpuRam::getInputChannelName (const int channelIndex) const
+const juce::String CpuRam::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String CpuRam::getOutputChannelName (const int channelIndex) const
+const juce::String CpuRam::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool CpuRam::isInputChannelStereoPair (int index) const
@@ -150,8 +150,8 @@ void CpuRam::releaseResources()
     // spare memory, etc.
 }
 
-void CpuRam::processBlock (AudioSampleBuffer& buffer,
-                           MidiBuffer& midiMessages)
+void CpuRam::processBlock (juce::AudioSampleBuffer& buffer,
+                           juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -162,23 +162,23 @@ void CpuRam::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* CpuRam::createEditor()
+juce::AudioProcessorEditor* CpuRam::createEditor()
 {
     return new CpuRamEditor (this);
 }
 
 //==============================================================================
-void CpuRam::getStateInformation (JUCE_NAMESPACE::MemoryBlock& destData)
+void CpuRam::getStateInformation (juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
     // XML is a much cleaner way of doing it - here's an example of how to store your
-    // params as XML..
+    // params as XML
 
-    // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    // create an outer XML element
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
-    // add some attributes to it..
+    // add some attributes to it
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("intervalLevel", interval);
     xmlState.setAttribute ("showGraph", showGraph);
@@ -186,28 +186,28 @@ void CpuRam::getStateInformation (JUCE_NAMESPACE::MemoryBlock& destData)
     xmlState.setAttribute ("uiHeight", lastUIHeight);
     xmlState.setAttribute ("bgcolor", (int) (bgcolor.getARGB()));
 
-    // you could also add as many child elements as you need to here..
+    // you could also add as many child elements as you need to here
 
-    // then use this helper function to stuff it into the binary blob and return it..
+    // then use this helper function to stuff it into the binary blob and return it
     copyXmlToBinary (xmlState, destData);
 }
 
 void CpuRam::setStateInformation (const void* data, int sizeInBytes)
 {
-    // use this helper function to get the XML from this binary blob..
+    // use this helper function to get the XML from this binary blob
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
-        // check that it's the right type of xml..
+        // check that it's the right type of xml
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
-            // ok, now pull out our parameters..
+            // ok, now pull out our parameters
             interval     = (float) xmlState->getDoubleAttribute ("intervalLevel", interval);
             showGraph    = xmlState->getBoolAttribute ("showGraph", showGraph);
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
+            bgcolor      = juce::Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
             sendChangeMessage();
         }
     }

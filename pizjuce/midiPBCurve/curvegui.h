@@ -20,9 +20,9 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/ChannelSlider.h"
 #include "curve.h"
@@ -59,16 +59,16 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void updateParameters();
-    ComponentBoundsConstrainer resizeLimits;
+    juce::ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]
 
     //==============================================================================
     std::unique_ptr<MidiEnvelope> curve;
     std::unique_ptr<juce::Label> label;
     std::unique_ptr<juce::Label> label2;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<ChannelSlider> channelSlider;
     std::unique_ptr<juce::Label> label3;
     std::unique_ptr<juce::TextButton> resetButton;

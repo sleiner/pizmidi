@@ -1,7 +1,12 @@
 #include "GuitarNeckComponent.h"
 
+using juce::jlimit;
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
+
 //==============================================================================
-GuitarNeckComponent::GuitarNeckComponent (MidiKeyboardState& state_)
+GuitarNeckComponent::GuitarNeckComponent (juce::MidiKeyboardState& state_)
     : state (state_),
       xOffset (0),
       midiChannel (1),
@@ -103,14 +108,14 @@ int GuitarNeckComponent::getStringFret (int string)
     return currentlyFrettedFret[string];
 }
 
-FrettedNote GuitarNeckComponent::xyToNote (const Point<int>& pos, float& mousePositionVelocity)
+FrettedNote GuitarNeckComponent::xyToNote (const juce::Point<int>& pos, float& mousePositionVelocity)
 {
     FrettedNote fretString;
 
     if (! reallyContains (pos, false))
         return fretString;
 
-    Point<int> p (pos);
+    juce::Point<int> p (pos);
 
     for (int f = 0; f <= numFrets; f++)
     {
@@ -148,32 +153,32 @@ void GuitarNeckComponent::repaintNote (const int fret)
     }
 }
 
-void GuitarNeckComponent::paint (Graphics& g)
+void GuitarNeckComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (Colours::brown.brighter (0.2f));
+    g.fillAll (juce::Colours::brown.brighter (0.2f));
 
-    const Colour lineColour (findColour (keySeparatorLineColourId));
-    const Colour textColour (findColour (textLabelColourId));
+    const juce::Colour lineColour (findColour (keySeparatorLineColourId));
+    const juce::Colour textColour (findColour (textLabelColourId));
 
     for (int fret = firstFret; fret <= (numFrets - firstFret); fret++)
     {
         if (fret == 0)
         {
-            g.setColour (Colours::ivory);
+            g.setColour (juce::Colours::ivory);
             g.drawLine (0.f, 0.f, 0.f, (float) getHeight(), (float) nutWidth);
         }
         else
         {
-            g.setColour (Colours::grey);
+            g.setColour (juce::Colours::grey);
             g.drawLine (fretPosition[fret] * getWidth() / fretPosition[numFrets], 0.f, fretPosition[fret] * getWidth() / fretPosition[numFrets], (float) getHeight(), 3.f);
             if (fret == 3 || fret == 5 || fret == 7 || fret == 9 || fret == 15 || fret == 17 || fret == 19 || fret == 21)
             {
-                g.setColour (Colours::black.withAlpha (0.2f));
+                g.setColour (juce::Colours::black.withAlpha (0.2f));
                 g.fillEllipse ((getFretPos (fret) - getFretWidth (fret) * 0.5f) - 4.f, (float) getHeight() * 0.5f - 4.f, 8.f, 8.f);
             }
             else if (fret == 12 || fret == 24)
             {
-                g.setColour (Colours::black.withAlpha (0.2f));
+                g.setColour (juce::Colours::black.withAlpha (0.2f));
                 g.fillEllipse ((getFretPos (fret) - getFretWidth (fret) * 0.5f) - 4.f, (float) getHeight() * 0.25f - 4.f, 8.f, 8.f);
                 g.fillEllipse ((getFretPos (fret) - getFretWidth (fret) * 0.5f) - 4.f, (float) getHeight() * 0.75f - 4.f, 8.f, 8.f);
             }
@@ -184,31 +189,31 @@ void GuitarNeckComponent::paint (Graphics& g)
     for (int string = 0; string < numStrings; string++)
     {
         float yStringPos = stringSpacing * 0.5f + stringSpacing * (float) string;
-        g.setColour (Colours::goldenrod);
+        g.setColour (juce::Colours::goldenrod);
         g.drawLine (0.f, yStringPos, (float) getWidth(), yStringPos, 2.f);
 
         if (currentlyFrettedFret[string] >= 0)
         {
             int x, w;
             getFretPos (currentlyFrettedFret[string], x, w);
-            g.setColour (Colours::pink);
+            g.setColour (juce::Colours::pink);
             g.fillEllipse ((float) x - (float) w * 0.5f - dotSize * 0.5f, yStringPos - dotSize * 0.5f, dotSize, dotSize);
-            g.setColour (Colours::black);
+            g.setColour (juce::Colours::black);
             g.drawEllipse ((float) x - (float) w * 0.5f - dotSize * 0.5f, yStringPos - dotSize * 0.5f, dotSize, dotSize, 1.f);
-            g.setFont (Font (12.f, Font::bold));
+            g.setFont (juce::Font (12.f, juce::Font::bold));
             g.drawFittedText (
                 getNoteNameWithoutOctave (currentlyFrettedFret[string] + stringNote[string], ! showFlats),
                 roundToInt (x - w / 2 - dotSize / 2 + 3),
                 roundToInt (yStringPos - dotSize / 2 + 3),
                 roundToInt (dotSize) - 6,
                 roundToInt (dotSize) - 6,
-                Justification::centred,
+                juce::Justification::centred,
                 1,
                 0.4f);
         }
         else
         {
-            g.setColour (Colours::darkred);
+            g.setColour (juce::Colours::darkred);
             g.drawLine (0, yStringPos - dotSize * 0.5f, dotSize, yStringPos + dotSize * 0.5f, 2.f);
             g.drawLine (0, yStringPos + dotSize * 0.5f, dotSize, yStringPos - dotSize * 0.5f, 2.f);
         }
@@ -218,27 +223,27 @@ void GuitarNeckComponent::paint (Graphics& g)
         int x, w;
         float yStringPos = stringSpacing * 0.5f + stringSpacing * (float) noteUnderMouse.string;
         getFretPos (noteUnderMouse.fret, x, w);
-        g.setColour (Colours::green);
+        g.setColour (juce::Colours::green);
         g.fillEllipse ((float) x - (float) w * 0.5f - dotSize * 0.5f, yStringPos - dotSize * 0.5f, dotSize, dotSize);
-        g.setColour (Colours::black);
+        g.setColour (juce::Colours::black);
         g.drawEllipse ((float) x - (float) w * 0.5f - dotSize * 0.5f, yStringPos - dotSize * 0.5f, dotSize, dotSize, 1.f);
 
-        g.setFont (Font (12.f, Font::bold));
+        g.setFont (juce::Font (12.f, juce::Font::bold));
         g.drawFittedText (
             getNoteNameWithoutOctave (noteUnderMouse.fret + stringNote[noteUnderMouse.string], ! showFlats),
             roundToInt (x - w / 2 - dotSize / 2) + 3,
             roundToInt (yStringPos - dotSize / 2) + 3,
             roundToInt (dotSize) - 6,
             roundToInt (dotSize) - 6,
-            Justification::centred,
+            juce::Justification::centred,
             1,
             0.4f);
     }
 }
 
-void GuitarNeckComponent::drawFretString (int fret, int string, Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const Colour& lineColour, const Colour& textColour)
+void GuitarNeckComponent::drawFretString (int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
 {
-    Colour c (Colours::transparentWhite);
+    juce::Colour c (juce::Colours::transparentWhite);
 
     if (isDown)
         c = findColour (keyDownOverlayColourId);
@@ -249,16 +254,16 @@ void GuitarNeckComponent::drawFretString (int fret, int string, Graphics& g, int
     g.setColour (c);
     g.fillRect (x, y, w, h);
 
-    const String text (getNoteText (fret, string));
+    const juce::String text (getNoteText (fret, string));
 
     if (! text.isEmpty())
     {
         g.setColour (textColour);
 
-        Font f (12.0f);
+        juce::Font f (12.0f);
         f.setHorizontalScale (0.8f);
         g.setFont (f);
-        Justification justification (Justification::centredBottom);
+        juce::Justification justification (juce::Justification::centredBottom);
 
         g.drawFittedText (text, x + 2, y + 2, w - 4, h - 4, justification, 1);
     }
@@ -277,11 +282,11 @@ void GuitarNeckComponent::setOctaveForMiddleC (const int octaveNumForMiddleC_)
     repaint();
 }
 
-const String GuitarNeckComponent::getNoteText (const int fret, const int string)
+const juce::String GuitarNeckComponent::getNoteText (const int fret, const int string)
 {
     const int midiNoteNumber = stringNote[string] + fret;
     //if (keyWidth > 14.0f && midiNoteNumber % 12 == 0)
-    return MidiMessage::getMidiNoteName (midiNoteNumber, true, true, octaveNumForMiddleC);
+    return juce::MidiMessage::getMidiNoteName (midiNoteNumber, true, true, octaveNumForMiddleC);
 
     //return String();
 }
@@ -358,12 +363,12 @@ void GuitarNeckComponent::resized()
 }
 
 //==============================================================================
-void GuitarNeckComponent::handleNoteOn (MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/, float /*velocity*/)
+void GuitarNeckComponent::handleNoteOn (juce::MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/, float /*velocity*/)
 {
     triggerAsyncUpdate();
 }
 
-void GuitarNeckComponent::handleNoteOff (MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/, float /*velocity*/)
+void GuitarNeckComponent::handleNoteOff (juce::MidiKeyboardState*, int /*midiChannel*/, int /*midiNoteNumber*/, float /*velocity*/)
 {
     triggerAsyncUpdate();
 }
@@ -401,7 +406,7 @@ void GuitarNeckComponent::resetAnyKeysInUse()
     }
 }
 
-void GuitarNeckComponent::updateNoteUnderMouse (const Point<int>& pos)
+void GuitarNeckComponent::updateNoteUnderMouse (const juce::Point<int>& pos)
 {
     float mousePositionVelocity = 0.0f;
     const FrettedNote newNote   = (mouseDragging || isMouseOver())
@@ -441,13 +446,13 @@ void GuitarNeckComponent::updateNoteUnderMouse (const Point<int>& pos)
     }
 }
 
-void GuitarNeckComponent::mouseMove (const MouseEvent& e)
+void GuitarNeckComponent::mouseMove (const juce::MouseEvent& e)
 {
     updateNoteUnderMouse (e.getPosition());
     stopTimer();
 }
 
-void GuitarNeckComponent::mouseDrag (const MouseEvent& e)
+void GuitarNeckComponent::mouseDrag (const juce::MouseEvent& e)
 {
     float mousePositionVelocity;
     const FrettedNote newNote = xyToNote (e.getPosition(), mousePositionVelocity);
@@ -459,16 +464,16 @@ void GuitarNeckComponent::mouseDrag (const MouseEvent& e)
     repaint();
 }
 
-bool GuitarNeckComponent::mouseDownOnKey (int /*fret*/, int /*string*/, const MouseEvent&)
+bool GuitarNeckComponent::mouseDownOnKey (int /*fret*/, int /*string*/, const juce::MouseEvent&)
 {
     return true;
 }
 
-void GuitarNeckComponent::mouseDraggedToKey (int /*fret*/, int /*string*/, const MouseEvent&)
+void GuitarNeckComponent::mouseDraggedToKey (int /*fret*/, int /*string*/, const juce::MouseEvent&)
 {
 }
 
-void GuitarNeckComponent::mouseDown (const MouseEvent& e)
+void GuitarNeckComponent::mouseDown (const juce::MouseEvent& e)
 {
     float mousePositionVelocity;
     const FrettedNote newNote = xyToNote (e.getPosition(), mousePositionVelocity);
@@ -487,7 +492,7 @@ void GuitarNeckComponent::mouseDown (const MouseEvent& e)
     }
 }
 
-void GuitarNeckComponent::mouseUp (const MouseEvent& e)
+void GuitarNeckComponent::mouseUp (const juce::MouseEvent& e)
 {
     mouseDragging = false;
     updateNoteUnderMouse (e.getPosition());
@@ -495,12 +500,12 @@ void GuitarNeckComponent::mouseUp (const MouseEvent& e)
     stopTimer();
 }
 
-void GuitarNeckComponent::mouseEnter (const MouseEvent& e)
+void GuitarNeckComponent::mouseEnter (const juce::MouseEvent& e)
 {
     updateNoteUnderMouse (e.getPosition());
 }
 
-void GuitarNeckComponent::mouseExit (const MouseEvent& e)
+void GuitarNeckComponent::mouseExit (const juce::MouseEvent& e)
 {
     updateNoteUnderMouse (e.getPosition());
 }

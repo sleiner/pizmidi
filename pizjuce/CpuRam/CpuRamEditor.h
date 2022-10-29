@@ -1,13 +1,13 @@
 #ifndef DEMOJUCEPLUGINEDITOR_H
 #define DEMOJUCEPLUGINEDITOR_H
 
-#include "juce_gui_basics/juce_gui_basics.h"
-#include "juce_gui_extra/juce_gui_extra.h"
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 #include "CpuRam.h"
 #include "cputime.h"
 
-class CpuGraph : public Component
+class CpuGraph : public juce::Component
 {
 public:
     CpuGraph()
@@ -32,10 +32,10 @@ private:
         numPoints = 128
     };
     float points[numPoints];
-    void paint (Graphics& g) override
+    void paint (juce::Graphics& g) override
     {
-        g.fillAll (Colours::black);
-        g.setColour (Colours::green);
+        g.fillAll (juce::Colours::black);
+        g.setColour (juce::Colours::green);
         for (int i = 0; i < numPoints; i++)
         {
             float x = ((float) i / float (numPoints)) * getWidth();
@@ -57,10 +57,10 @@ private:
     when it's destroyed. When the filter's parameters are changed, it broadcasts
     a message and this editor responds by updating its display.
 */
-class CpuRamEditor : public AudioProcessorEditor,
-                     public ChangeListener,
-                     public Slider::Listener,
-                     public Timer
+class CpuRamEditor : public juce::AudioProcessorEditor,
+                     public juce::ChangeListener,
+                     public juce::Slider::Listener,
+                     public juce::Timer
 {
 public:
     /** Constructor.
@@ -77,25 +77,25 @@ public:
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void timerCallback() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void mouseUp (const MouseEvent&) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void mouseUp (const juce::MouseEvent&) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
 
     /** Standard Juce resize callback. */
     void resized() override;
 
 private:
     //==============================================================================
-    Label* infoLabel;
-    Label* memLabel2;
-    Slider* slider;
+    juce::Label* infoLabel;
+    juce::Label* memLabel2;
+    juce::Slider* slider;
     CpuGraph* graph;
-    ColourSelector* colourSelector;
+    juce::ColourSelector* colourSelector;
     //TooltipWindow tooltipWindow;
     //ResizableCornerComponent* resizer;
     //ComponentBoundsConstrainer resizeLimits;
@@ -110,7 +110,7 @@ private:
     void updateParametersFromFilter();
 
     // handy wrapper method to avoid having to cast the filter to a CpuRam
-    // every time we need it..
+    // every time we need it
     CpuRam* getFilter() const throw() { return (CpuRam*) getAudioProcessor(); }
 };
 

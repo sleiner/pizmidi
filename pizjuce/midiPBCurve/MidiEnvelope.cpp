@@ -1,33 +1,37 @@
 #include "MidiEnvelope.h"
 
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
+
 //==============================================================================
 MidiEnvelope::MidiEnvelope (const int envelopeType_,
-                            AudioProcessorEditor* owner_,
+                            juce::AudioProcessorEditor* owner_,
                             MidiCurve* plugin_)
     : owner (owner_),
       plugin (plugin_),
       draggingPoint (-1),
       hoveringPoint (-1),
-      labelX (0),
-      labelY (0)
+      labelX (nullptr),
+      labelY (nullptr)
 {
-    addAndMakeVisible (labelX = new Label ("x label",
-                                           "x: --"));
-    labelX->setFont (Font (15.0000f, Font::plain));
-    labelX->setJustificationType (Justification::centredLeft);
+    addAndMakeVisible (labelX = new juce::Label ("x label",
+                                                 "x: --"));
+    labelX->setFont (juce::Font (15.0000f, juce::Font::plain));
+    labelX->setJustificationType (juce::Justification::centredLeft);
     labelX->setEditable (false, false, false);
-    labelX->setColour (TextEditor::textColourId, Colours::black);
-    labelX->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    labelX->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    labelX->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x0));
     labelX->setOpaque (false);
     labelX->setInterceptsMouseClicks (false, false);
 
-    addAndMakeVisible (labelY = new Label ("y label",
-                                           "y: --"));
-    labelY->setFont (Font (15.0000f, Font::plain));
-    labelY->setJustificationType (Justification::centredLeft);
+    addAndMakeVisible (labelY = new juce::Label ("y label",
+                                                 "y: --"));
+    labelY->setFont (juce::Font (15.0000f, juce::Font::plain));
+    labelY->setJustificationType (juce::Justification::centredLeft);
     labelY->setEditable (false, false, false);
-    labelY->setColour (TextEditor::textColourId, Colours::black);
-    labelY->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    labelY->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    labelY->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x0));
     labelY->setOpaque (false);
     labelY->setInterceptsMouseClicks (false, false);
 }
@@ -49,12 +53,12 @@ void MidiEnvelope::resized()
 }
 
 //==============================================================================
-void MidiEnvelope::paint (Graphics& g)
+void MidiEnvelope::paint (juce::Graphics& g)
 {
     const int dotSize     = MAX_ENVELOPE_DOT_SIZE;
     const int halfDotSize = dotSize / 2;
 
-    g.fillAll (Colour (0xffffffff));
+    g.fillAll (juce::Colour (0xffffffff));
 
     for (int grid = 1; grid < 16383; grid++)
     {
@@ -64,7 +68,7 @@ void MidiEnvelope::paint (Graphics& g)
         int pbstep2    = pbrange2 == 0.f ? pbstep : roundToInt (8192.f / (jmax (1.f, pbrange2)));
         if (grid == 8192)
         { //center line
-            g.setColour (Colours::blueviolet);
+            g.setColour (juce::Colours::blueviolet);
             g.drawLine (0.f, ((float) (16383 - grid) * inc) * getHeight(), (float) getWidth(), ((float) (16383 - grid) * inc) * getHeight(), 1.f);
             g.drawLine (((float) grid * inc) * getWidth(), 0.f, ((float) grid * inc) * getWidth(), (float) getHeight(), 1.f);
         }
@@ -78,25 +82,25 @@ void MidiEnvelope::paint (Graphics& g)
         //		 grid==15019 || grid==15701 ) { //semitones for +/-12 range
         else if (grid > 8192 && grid % pbstep == 0)
         {
-            g.setColour (Colours::lightgrey);
+            g.setColour (juce::Colours::lightgrey);
             g.drawLine (0.f, ((float) (16383 - grid) * inc) * getHeight(), (float) getWidth(), ((float) (16383 - grid) * inc) * getHeight(), 1.f);
             g.drawLine (((float) grid * inc) * getWidth(), 0.f, ((float) grid * inc) * getWidth(), (float) getHeight(), 1.f);
         }
         else if (grid < 8192 && grid % pbstep2 == 0)
         {
-            g.setColour (Colours::lightgrey);
+            g.setColour (juce::Colours::lightgrey);
             g.drawLine (0.f, ((float) (16383 - grid) * inc) * getHeight(), (float) getWidth(), ((float) (16383 - grid) * inc) * getHeight(), 1.f);
             g.drawLine (((float) grid * inc) * getWidth(), 0.f, ((float) grid * inc) * getWidth(), (float) getHeight(), 1.f);
         }
         else if (grid % 4096 == 0)
         {
-            g.setColour (Colours::lightgoldenrodyellow);
+            g.setColour (juce::Colours::lightgoldenrodyellow);
             g.drawLine (0.f, ((float) (16383 - grid) * inc) * getHeight(), (float) getWidth(), ((float) (16383 - grid) * inc) * getHeight(), 1.f);
             g.drawLine (((float) grid * inc) * getWidth(), 0.f, ((float) grid * inc) * getWidth(), (float) getHeight(), 1.f);
         }
         if (grid == 8192)
         { //center line
-            g.setColour (Colours::blueviolet);
+            g.setColour (juce::Colours::blueviolet);
             g.drawLine (0.f, ((float) (16383 - grid) * inc) * getHeight(), (float) getWidth(), ((float) (16383 - grid) * inc) * getHeight(), 2.f);
             g.drawLine (((float) grid * inc) * getWidth(), 0.f, ((float) grid * inc) * getWidth(), (float) getHeight(), 2.f);
         }
@@ -105,12 +109,12 @@ void MidiEnvelope::paint (Graphics& g)
         //	g.setPixel(((float)grid*inc)*getWidth(),((float)(16383-grid)*inc)*getHeight());
         //}
     }
-    Path myPath = plugin->path;
-    myPath.applyTransform (AffineTransform::scale ((float) getWidth(), (float) getHeight()));
-    g.setColour (Colours::black);
-    g.strokePath (myPath, PathStrokeType (2.0f));
+    juce::Path myPath = plugin->path;
+    myPath.applyTransform (juce::AffineTransform::scale ((float) getWidth(), (float) getHeight()));
+    g.setColour (juce::Colours::black);
+    g.strokePath (myPath, juce::PathStrokeType (2.0f));
 
-    g.setColour (Colours::black);
+    g.setColour (juce::Colours::black);
     g.drawEllipse ((float) getWidth() * (float) roundToInt (16383.0 * (mouseDownPoint.getX() / (double) getWidth())) / 16383.f - 2,
                    (float) getHeight() * (float) roundToInt (16383.0 * (mouseDownPoint.getY() / (double) getHeight())) / 16383.f - 2,
                    4,
@@ -123,28 +127,28 @@ void MidiEnvelope::paint (Graphics& g)
 
         if (isPointActive (i))
         {
-            g.setColour (Colours::white);
+            g.setColour (juce::Colours::white);
             g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
             if (draggingPoint == i)
             {
-                g.setColour (Colours::red);
+                g.setColour (juce::Colours::red);
                 g.drawHorizontalLine (y, 0, (float) getWidth());
                 g.drawVerticalLine (x, 0, (float) getHeight());
-                g.setColour (Colours::black);
+                g.setColour (juce::Colours::black);
                 g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
-                g.setColour (Colours::red);
+                g.setColour (juce::Colours::red);
                 g.drawEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 2.f);
             }
             else if (hoveringPoint == i)
             {
-                g.setColour (Colours::green);
+                g.setColour (juce::Colours::green);
                 g.drawHorizontalLine (y, 0, (float) getWidth());
                 g.drawVerticalLine (x, 0, (float) getHeight());
                 g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
             }
             else
             {
-                g.setColour (Colours::black);
+                g.setColour (juce::Colours::black);
                 if (i == 0 || i == (MAX_ENVELOPE_POINTS - 1))
                     g.drawEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 3);
                 else
@@ -152,7 +156,7 @@ void MidiEnvelope::paint (Graphics& g)
             }
             if (isPointControl (i))
             {
-                g.setColour (Colours::blue);
+                g.setColour (juce::Colours::blue);
                 g.drawEllipse ((float) (x - dotSize), (float) (y - dotSize), dotSize * 2.f, dotSize * 2.f, 1);
                 //g.setColour (Colours::lightblue);
                 //float dashes[2] = {2.f,2.f};
@@ -173,7 +177,7 @@ void MidiEnvelope::paint (Graphics& g)
         //	g.drawLine(x-dotSize,y+dotSize,x+dotSize,y-dotSize,1);
         //}
     }
-    g.setColour (Colours::darkgoldenrod);
+    g.setColour (juce::Colours::darkgoldenrod);
     g.drawVerticalLine (roundToInt ((float) plugin->lastCCIn * getWidth() / 16383.f),
                         (float) getHeight() - ((float) plugin->lastCCOut * (float) getHeight() / 16383.f),
                         (float) getHeight());
@@ -184,7 +188,7 @@ void MidiEnvelope::paint (Graphics& g)
 }
 
 //==============================================================================
-void MidiEnvelope::mouseDown (const MouseEvent& e)
+void MidiEnvelope::mouseDown (const juce::MouseEvent& e)
 {
     draggingPoint = findPointByMousePos (e.x, e.y);
     if (draggingPoint != -1)
@@ -218,9 +222,9 @@ void MidiEnvelope::mouseDown (const MouseEvent& e)
         }
         else
         {
-            labelX->setColour (Label::textColourId, Colours::red);
-            labelY->setColour (Label::textColourId, Colours::red);
-            Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
+            labelX->setColour (juce::Label::textColourId, juce::Colours::red);
+            labelY->setColour (juce::Label::textColourId, juce::Colours::red);
+            juce::Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
             float pbrange  = plugin->getParameter (kPBRange) * 48.f;
             float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
             if (pbrange2 == 0.f)
@@ -228,30 +232,30 @@ void MidiEnvelope::mouseDown (const MouseEvent& e)
             if (p.getX() > 0.5f)
             {
                 labelX->setText ("x: "
-                                     + String (roundToInt (16383.f * p.getX()))
-                                     + " (" + String (pbrange * (p.getX() - 0.5f), 2) + ")",
-                                 dontSendNotification);
+                                     + juce::String (roundToInt (16383.f * p.getX()))
+                                     + " (" + juce::String (pbrange * (p.getX() - 0.5f), 2) + ")",
+                                 juce::dontSendNotification);
             }
             else
             {
                 labelX->setText ("x: "
-                                     + String (roundToInt (16383.f * p.getX()))
-                                     + " (" + String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
-                                 dontSendNotification);
+                                     + juce::String (roundToInt (16383.f * p.getX()))
+                                     + " (" + juce::String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
+                                 juce::dontSendNotification);
             }
             if (p.getY() > 0.5f)
             {
                 labelY->setText ("y: "
-                                     + String (roundToInt (16383.f * p.getY()))
-                                     + " (" + String (pbrange * (p.getY() - 0.5f), 2) + ")",
-                                 dontSendNotification);
+                                     + juce::String (roundToInt (16383.f * p.getY()))
+                                     + " (" + juce::String (pbrange * (p.getY() - 0.5f), 2) + ")",
+                                 juce::dontSendNotification);
             }
             else
             {
                 labelY->setText ("y: "
-                                     + String (roundToInt (16383.f * p.getY()))
-                                     + " (" + String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
-                                 dontSendNotification);
+                                     + juce::String (roundToInt (16383.f * p.getY()))
+                                     + " (" + juce::String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
+                                 juce::dontSendNotification);
             }
         }
     }
@@ -292,7 +296,7 @@ int MidiEnvelope::findInactivePoint()
     return -1;
 }
 
-void MidiEnvelope::mouseDoubleClick (const MouseEvent& e)
+void MidiEnvelope::mouseDoubleClick (const juce::MouseEvent& e)
 {
     int p = findPointByMousePos (e.x, e.y);
     if (p != -1)
@@ -315,7 +319,7 @@ void MidiEnvelope::mouseDoubleClick (const MouseEvent& e)
     repaint();
 }
 
-void MidiEnvelope::mouseDrag (const MouseEvent& e)
+void MidiEnvelope::mouseDrag (const juce::MouseEvent& e)
 {
     int restrict = 0;
     if (e.mods.isCommandDown() && ! e.mods.isShiftDown())
@@ -363,9 +367,9 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
             points[draggingPoint][1] = restrict == 1 ? oldpoints[draggingPoint][1] : (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
 
         plugin->setParameterNotifyingHost ((paramNumber + 1), (1.f - points[draggingPoint][1]));
-        labelX->setColour (Label::textColourId, Colours::red);
-        labelY->setColour (Label::textColourId, Colours::red);
-        Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
+        labelX->setColour (juce::Label::textColourId, juce::Colours::red);
+        labelY->setColour (juce::Label::textColourId, juce::Colours::red);
+        juce::Point<float> p (points[draggingPoint][0], 1.f - points[draggingPoint][1]);
         float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
@@ -373,30 +377,30 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
         if (p.getX() > 0.5f)
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         if (p.getY() > 0.5f)
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
 
         repaint();
@@ -425,22 +429,22 @@ void MidiEnvelope::mouseDrag (const MouseEvent& e)
                 plugin->setParameterNotifyingHost ((i * 2 + 1), (1.f - points[i][1]));
             }
         }
-        labelX->setColour (Label::textColourId, Colours::black);
-        labelY->setColour (Label::textColourId, Colours::black);
+        labelX->setColour (juce::Label::textColourId, juce::Colours::black);
+        labelY->setColour (juce::Label::textColourId, juce::Colours::black);
         repaint();
     }
 }
 
-void MidiEnvelope::mouseUp (const MouseEvent& e)
+void MidiEnvelope::mouseUp (const juce::MouseEvent& e)
 {
-    labelX->setColour (Label::textColourId, Colours::black);
-    labelY->setColour (Label::textColourId, Colours::black);
+    labelX->setColour (juce::Label::textColourId, juce::Colours::black);
+    labelY->setColour (juce::Label::textColourId, juce::Colours::black);
     draggingPoint = -1;
 
     repaint();
 }
 
-void MidiEnvelope::mouseMove (const MouseEvent& e)
+void MidiEnvelope::mouseMove (const juce::MouseEvent& e)
 {
     hoveringPoint = findPointByMousePos (e.x, e.y);
     if (hoveringPoint != -1)
@@ -452,10 +456,10 @@ void MidiEnvelope::mouseMove (const MouseEvent& e)
 
         //labelX->setTopLeftPosition(x,y);
         //labelY->setTopLeftPosition(x,y+labelX->getHeight());
-        labelX->setColour (Label::textColourId, Colours::green);
-        labelY->setColour (Label::textColourId, Colours::green);
+        labelX->setColour (juce::Label::textColourId, juce::Colours::green);
+        labelY->setColour (juce::Label::textColourId, juce::Colours::green);
 
-        Point<float> p (points[hoveringPoint][0], 1.f - points[hoveringPoint][1]);
+        juce::Point<float> p (points[hoveringPoint][0], 1.f - points[hoveringPoint][1]);
         float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
@@ -463,40 +467,40 @@ void MidiEnvelope::mouseMove (const MouseEvent& e)
         if (p.getX() > 0.5f)
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         if (p.getY() > 0.5f)
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
     }
     else
     {
         //labelX->setTopLeftPosition(e.x+16,e.y);
         //labelY->setTopLeftPosition(e.x+16,e.y+labelX->getHeight());
-        labelX->setColour (Label::textColourId, Colours::black);
-        labelY->setColour (Label::textColourId, Colours::black);
+        labelX->setColour (juce::Label::textColourId, juce::Colours::black);
+        labelY->setColour (juce::Label::textColourId, juce::Colours::black);
 
-        Point<float> p ((float) e.x / (float) getWidth(), 1.f - (float) e.y / (float) getHeight());
+        juce::Point<float> p ((float) e.x / (float) getWidth(), 1.f - (float) e.y / (float) getHeight());
         float pbrange  = plugin->getParameter (kPBRange) * 48.f;
         float pbrange2 = plugin->getParameter (kPBRange2) * 48.f;
         if (pbrange2 == 0.f)
@@ -504,30 +508,30 @@ void MidiEnvelope::mouseMove (const MouseEvent& e)
         if (p.getX() > 0.5f)
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelX->setText ("x: "
-                                 + String (roundToInt (16383.f * p.getX()))
-                                 + " (" + String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getX()))
+                                 + " (" + juce::String (pbrange2 * (p.getX() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         if (p.getY() > 0.5f)
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
         else
         {
             labelY->setText ("y: "
-                                 + String (roundToInt (16383.f * p.getY()))
-                                 + " (" + String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
-                             dontSendNotification);
+                                 + juce::String (roundToInt (16383.f * p.getY()))
+                                 + " (" + juce::String (pbrange2 * (p.getY() - 0.5f), 2) + ")",
+                             juce::dontSendNotification);
         }
     }
 

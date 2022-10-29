@@ -1,8 +1,11 @@
 #include "PianoRoll.h"
 
+using juce::jlimit;
+using juce::jmax;
+
 Timeline::Timeline()
     : Component(),
-      roll (0),
+      roll (nullptr),
       scrollOffset (0)
 {
     setLoop (0, 0);
@@ -11,15 +14,15 @@ Timeline::Timeline()
 
 Timeline::~Timeline() { dispatchPendingMessages(); }
 
-void Timeline::paint (Graphics& g)
+void Timeline::paint (juce::Graphics& g)
 {
-    g.fillAll (Colour (0x0));
+    g.fillAll (juce::Colour (0x0));
     if (roll && getLength() != 0)
     {
-        g.setColour (Colour (0x79006b00));
+        g.setColour (juce::Colour (0x79006b00));
         g.fillRect (getStartPixel(), 0.f, getEndPixel() - getStartPixel(), (float) getHeight());
-        g.setColour (Colours::white);
-        g.drawFittedText ("LOOP AREA", (int) getStartPixel(), 0, (int) (getEndPixel() - getStartPixel()), getHeight(), Justification::centred, 2);
+        g.setColour (juce::Colours::white);
+        g.drawFittedText ("LOOP AREA", (int) getStartPixel(), 0, (int) (getEndPixel() - getStartPixel()), getHeight(), juce::Justification::centred, 2);
     }
 }
 float Timeline::getStartPixel() { return roll->ppqToPixels (loopStart) - scrollOffset; }
@@ -40,7 +43,7 @@ void Timeline::setPianoRoll (PianoRoll* pr)
     setSize (pr->getWidth(), getHeight());
 }
 
-void Timeline::mouseDown (const MouseEvent& e)
+void Timeline::mouseDown (const juce::MouseEvent& e)
 {
     bool snap = roll->getSnap() != e.mods.isShiftDown();
     if (e.mods.isPopupMenu())
@@ -51,7 +54,7 @@ void Timeline::mouseDown (const MouseEvent& e)
     sendChangeMessage();
 }
 
-void Timeline::mouseDrag (const MouseEvent& e)
+void Timeline::mouseDrag (const juce::MouseEvent& e)
 {
     bool snap = roll->getSnap() != e.mods.isShiftDown();
     if (e.mods.isPopupMenu())

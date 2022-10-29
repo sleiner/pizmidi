@@ -3,7 +3,7 @@
 
 #include "step.h"
 
-class PianoRoll : public Component
+class PianoRoll : public juce::Component
 {
 public:
     PianoRoll (MidiStep* plugin_);
@@ -20,13 +20,13 @@ public:
     float pixelsPerPpq;
     float getNoteHeight();
 
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    void mouseMove (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseMove (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
 
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     void resized() override;
 
 private:
@@ -42,7 +42,7 @@ private:
     float xinc;
     float yinc;
     double lastDragTime;
-    uint8 draggingNoteChannel;
+    juce::uint8 draggingNoteChannel;
     int draggingNoteNumber;
     int draggingNoteVelocity;
     double draggingNoteLength;
