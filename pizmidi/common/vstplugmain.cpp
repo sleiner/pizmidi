@@ -18,7 +18,7 @@ extern "C"
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #define VST_EXPORT __attribute__ ((visibility ("default")))
 #elif defined(_WIN32)
-#define VST_EXPORT __declspec(dllexport)
+#define VST_EXPORT __declspec (dllexport)
 #else
 #define VST_EXPORT
 #endif
@@ -58,7 +58,7 @@ extern "C"
         return VSTPluginMain (audioMaster);
     }
 #elif defined(__linux__)
-    AEffect* main_plugin (audioMasterCallback audioMaster) asm("main");
+    AEffect* main_plugin (audioMasterCallback audioMaster) asm ("main");
 #endif
 }
 
