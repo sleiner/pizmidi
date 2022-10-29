@@ -82,7 +82,7 @@ jobs:
             - name: "CMake: Build packages"
               run: cmake --build --preset=${{ matrix.config.cmake_preset }} --parallel --target package
             - name: Store packages
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: packages-${{ matrix.config.os }}
                   path: |
