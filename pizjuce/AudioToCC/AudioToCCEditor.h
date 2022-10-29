@@ -29,44 +29,44 @@
 class DecibelMeter : public juce::Slider
 {
 public:
-    DecibelMeter (const juce::String& name)
-        : Slider (name)
+    DecibelMeter(const juce::String& name)
+        : Slider(name)
     {
-        this->setMouseClickGrabsKeyboardFocus (false);
-        this->setInterceptsMouseClicks (false, false);
+        this->setMouseClickGrabsKeyboardFocus(false);
+        this->setInterceptsMouseClicks(false, false);
     }
     ~DecibelMeter() override
     {
     }
 
-    juce::String getTextFromValue (double value) override
+    juce::String getTextFromValue(double value) override
     {
-        return value == 0.0 ? " " : juce::String (20.0 * log10 (value), 1) + " dB";
+        return value == 0.0 ? " " : juce::String(20.0 * log10(value), 1) + " dB";
     }
 };
 
 class DecibelSlider : public juce::Slider
 {
 public:
-    DecibelSlider (const juce::String& name)
-        : juce::Slider (name)
+    DecibelSlider(const juce::String& name)
+        : juce::Slider(name)
     {
-        this->setMouseClickGrabsKeyboardFocus (false);
+        this->setMouseClickGrabsKeyboardFocus(false);
     }
     ~DecibelSlider() override
     {
     }
 
-    juce::String getTextFromValue (double value) override
+    juce::String getTextFromValue(double value) override
     {
-        return value == 0.0 ? "-inf" : juce::String (20.0 * log10 (value), 1) + " dB";
+        return value == 0.0 ? "-inf" : juce::String(20.0 * log10(value), 1) + " dB";
     }
-    double getValueFromText (const juce::String& text) override
+    double getValueFromText(const juce::String& text) override
     {
-        if (text.equalsIgnoreCase ("-inf"))
+        if (text.equalsIgnoreCase("-inf"))
             return 0.0;
         double dB = text.getDoubleValue();
-        return pow (10, dB / 20.0);
+        return pow(10, dB / 20.0);
     }
 };
 //[/Headers]
@@ -88,20 +88,20 @@ class AudioToCCEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    AudioToCCEditor (AudioToCC* const ownerFilter);
+    AudioToCCEditor(AudioToCC* const ownerFilter);
     ~AudioToCCEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void timerCallback() override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -163,7 +163,7 @@ private:
     std::unique_ptr<DecibelMeter> s_IndicatorLIn;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioToCCEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioToCCEditor)
 };
 
 //[EndFile] You can add extra defines here...

@@ -17,11 +17,11 @@ public:
     using juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>::operator=;
 
     template <class UnaryPredicate>
-    ElementType findIf (UnaryPredicate p) const
+    ElementType findIf(UnaryPredicate p) const
     {
         for (auto&& element : *this)
         {
-            if (p (element))
+            if (p(element))
             {
                 return element;
             }

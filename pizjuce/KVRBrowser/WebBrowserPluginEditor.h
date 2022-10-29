@@ -30,9 +30,9 @@ class MyBrowser : public juce::WebBrowserComponent,
 {
 public:
     MyBrowser()
-        : unloadPageWhenBrowserIsHidden (false){};
+        : unloadPageWhenBrowserIsHidden(false){};
     ~MyBrowser() override{};
-    bool pageAboutToLoad (const juce::String& newURL) override;
+    bool pageAboutToLoad(const juce::String& newURL) override;
     juce::String getCurrentURL();
     friend class WebBrowserComponent;
     juce::String lastURL;
@@ -58,21 +58,21 @@ class WebBrowserPluginEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    WebBrowserPluginEditor (WebBrowserFilter* const ownerFilter);
+    WebBrowserPluginEditor(WebBrowserFilter* const ownerFilter);
     ~WebBrowserPluginEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override{};
-    void textEditorTextChanged (juce::TextEditor& editor) override{};
-    void textEditorFocusLost (juce::TextEditor& editor) override{};
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override{};
+    void textEditorTextChanged(juce::TextEditor& editor) override{};
+    void textEditorFocusLost(juce::TextEditor& editor) override{};
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -101,7 +101,7 @@ private:
     std::unique_ptr<juce::ResizableCornerComponent> resizer;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebBrowserPluginEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebBrowserPluginEditor)
 };
 
 //[EndFile] You can add extra defines here...

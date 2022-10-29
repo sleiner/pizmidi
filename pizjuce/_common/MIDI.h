@@ -101,9 +101,9 @@
 #define MIDI_MONO_MODE_ON          0x7E
 #define MIDI_POLY_MODE_ON          0x7F
 
-inline int roundToInt (double x)
+inline int roundToInt(double x)
 {
-    return x >= 0 ? static_cast<int> (x + 0.5) : static_cast<int> (x - 0.5);
+    return x >= 0 ? static_cast<int>(x + 0.5) : static_cast<int>(x - 0.5);
 }
 
 #define MIDISCALER             0.00787401574803149606299212598425197f
@@ -111,16 +111,16 @@ inline int roundToInt (double x)
 #define MIDI_TO_FLOAT2(i)      ((float) (i) *0.0078125f)
 #define MIDI_TO_FLOAT_X(i)     ((float) (i + 1) * 0.0078125f)
 #define VELOCITY_TO_FLOAT(i)   ((float) (i - 1) * 0.0079365079365079365079365079365079f)
-#define FLOAT_TO_MIDI(i)       (roundToInt ((i) *127.0f))
-#define FLOAT_TO_MIDI2(i)      (roundToInt ((i) *128.0f)) // use '0' for "none"
-#define FLOAT_TO_MIDI_X(i)     (roundToInt ((i) *128.0f) - 1)
-#define FLOAT_TO_VELOCITY(i)   (roundToInt ((i) *126.0f) + 1) //1-127
+#define FLOAT_TO_MIDI(i)       (roundToInt((i) *127.0f))
+#define FLOAT_TO_MIDI2(i)      (roundToInt((i) *128.0f)) // use '0' for "none"
+#define FLOAT_TO_MIDI_X(i)     (roundToInt((i) *128.0f) - 1)
+#define FLOAT_TO_VELOCITY(i)   (roundToInt((i) *126.0f) + 1) //1-127
 #define CHANNEL_TO_FLOAT(i)    ((float) (i + 1) * 0.0625f)
 #define CHANNEL_TO_FLOAT015(i) ((float) (i) *0.066666666666666666666666666666667f)
 #define CHANNEL_TO_FLOAT016(i) ((float) (i) *0.0625f)
-#define FLOAT_TO_CHANNEL(i)    (roundToInt ((i) *16.0f) - 1) // use '-1' for all/any channel, then 0-15
-#define FLOAT_TO_CHANNEL015(i) (roundToInt ((i) *15.0f))
-#define FLOAT_TO_CHANNEL016(i) (roundToInt ((i) *16.0f)) // use '0' for all/any channel, then 1-16
+#define FLOAT_TO_CHANNEL(i)    (roundToInt((i) *16.0f) - 1) // use '-1' for all/any channel, then 0-15
+#define FLOAT_TO_CHANNEL015(i) (roundToInt((i) *15.0f))
+#define FLOAT_TO_CHANNEL016(i) (roundToInt((i) *16.0f)) // use '0' for all/any channel, then 1-16
 #define ANY_CHANNEL            (-1)
 
 #define MIDI_MAX_NOTES    128
@@ -131,23 +131,23 @@ inline int roundToInt (double x)
 
 #define MAP_TO_MIDI1(i, low, high) ((float) i) * (((float) (high - low)) / 126) + ((float) low - ((float) (high - low)) / 126)
 
-int MAP_TO_MIDI (float x, float y1, float y2, float x1, float x2)
+int MAP_TO_MIDI(float x, float y1, float y2, float x1, float x2)
 {
     float slope = ((float) (y2 - y1)) / ((float) (x2 - x1));
     float y0    = y1 - slope * x1;
     float y     = slope * x + y0;
-    return roundToInt (y);
+    return roundToInt(y);
 }
 
-int MAP_TO_MIDI (int x, int y1, int y2, int x1, int x2)
+int MAP_TO_MIDI(int x, int y1, int y2, int x1, int x2)
 {
     float slope = ((float) (y2 - y1)) / ((float) (x2 - x1));
     float y0    = (float) y1 - slope * (float) x1;
     float y     = slope * (float) x + (float) y0;
-    return roundToInt (y);
+    return roundToInt(y);
 }
 
-char* getNoteName (int noteNumber)
+char* getNoteName(int noteNumber)
 {
     const char* Note;
     Note = new char[4];
@@ -195,11 +195,11 @@ char* getNoteName (int noteNumber)
     }
     int Octave     = (noteNumber / 12) - 2;
     char* noteName = new char[5];
-    sprintf (noteName, "%s%d", Note, Octave);
+    sprintf(noteName, "%s%d", Note, Octave);
     return noteName;
 }
 
-char* getNoteNameWithoutOctave (int noteNumber, bool flats = false)
+char* getNoteNameWithoutOctave(int noteNumber, bool flats = false)
 {
     const char* Note;
     Note = new char[4];
@@ -246,11 +246,11 @@ char* getNoteNameWithoutOctave (int noteNumber, bool flats = false)
             break;
     }
     char* noteName = new char[5];
-    sprintf (noteName, "%s", Note);
+    sprintf(noteName, "%s", Note);
     return noteName;
 }
 
-bool isBlackKey (int noteNumber)
+bool isBlackKey(int noteNumber)
 {
     switch (noteNumber % 12)
     {
@@ -284,7 +284,7 @@ bool isBlackKey (int noteNumber)
     }
 }
 
-inline int midiLimit (int data)
+inline int midiLimit(int data)
 {
     if (data < 0)
         return 0;
@@ -293,7 +293,7 @@ inline int midiLimit (int data)
     return data;
 }
 
-inline int midiNoteWrap (int n)
+inline int midiNoteWrap(int n)
 {
     while (n < 0)
         n += 12;
@@ -302,7 +302,7 @@ inline int midiNoteWrap (int n)
     return n;
 }
 
-inline int velocityLimit (int data)
+inline int velocityLimit(int data)
 {
     if (data < 1)
         return 1;
@@ -311,12 +311,12 @@ inline int velocityLimit (int data)
     return data;
 }
 
-inline int CombineBytes (unsigned char lsb, unsigned char msb)
+inline int CombineBytes(unsigned char lsb, unsigned char msb)
 {
     return (((unsigned int) msb) << 7) | (unsigned int) lsb;
 }
 
-inline int CombineBytes (int lsb, int msb)
+inline int CombineBytes(int lsb, int msb)
 {
     return ((msb & 0x7f) << 7) | (lsb & 0x7f);
 }

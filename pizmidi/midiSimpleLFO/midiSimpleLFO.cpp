@@ -5,16 +5,16 @@
 #include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiSimpleLFO (audioMaster);
+    return new MidiSimpleLFO(audioMaster);
 }
 
 MidiSimpleLFOProgram::MidiSimpleLFOProgram()
 {
     // default Program Values
     fWave    = 0.0f;
-    fCC      = MIDI_TO_FLOAT (1.1);
+    fCC      = MIDI_TO_FLOAT(1.1);
     fChannel = 0.0f;
     fSync    = 0.0f;
     fFreq    = 0.333333333333333f;
@@ -24,35 +24,35 @@ MidiSimpleLFOProgram::MidiSimpleLFOProgram()
     fTrigger = 0.0f;
     fPower   = 1.0f;
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiSimpleLFO::MidiSimpleLFO(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiSimpleLFOProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fWave    = defaultBank->GetProgParm (i, 0);
-                    programs[i].fCC      = defaultBank->GetProgParm (i, 1);
-                    programs[i].fChannel = defaultBank->GetProgParm (i, 2);
-                    programs[i].fSync    = defaultBank->GetProgParm (i, 3);
-                    programs[i].fFreq    = defaultBank->GetProgParm (i, 4);
-                    programs[i].fPhase   = defaultBank->GetProgParm (i, 5);
-                    programs[i].fRange   = defaultBank->GetProgParm (i, 6);
-                    programs[i].fOffset  = defaultBank->GetProgParm (i, 7);
-                    programs[i].fTrigger = defaultBank->GetProgParm (i, 8);
-                    programs[i].fPower   = defaultBank->GetProgParm (i, 9);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    programs[i].fWave    = defaultBank->GetProgParm(i, 0);
+                    programs[i].fCC      = defaultBank->GetProgParm(i, 1);
+                    programs[i].fChannel = defaultBank->GetProgParm(i, 2);
+                    programs[i].fSync    = defaultBank->GetProgParm(i, 3);
+                    programs[i].fFreq    = defaultBank->GetProgParm(i, 4);
+                    programs[i].fPhase   = defaultBank->GetProgParm(i, 5);
+                    programs[i].fRange   = defaultBank->GetProgParm(i, 6);
+                    programs[i].fOffset  = defaultBank->GetProgParm(i, 7);
+                    programs[i].fTrigger = defaultBank->GetProgParm(i, 8);
+                    programs[i].fPower   = defaultBank->GetProgParm(i, 9);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -68,22 +68,22 @@ MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
                         programs[i].fSync    = 1.0f;
                         programs[i].fTrigger = 0.9f;
                         programs[i].fFreq    = 0.15f;
-                        sprintf (programs[i].name, "1 bar Sine");
+                        sprintf(programs[i].name, "1 bar Sine");
                         break;
                     case 1:
                         programs[i].fWave = 0.0f;
-                        sprintf (programs[i].name, "1Hz Saw");
+                        sprintf(programs[i].name, "1Hz Saw");
                         break;
                     default:
-                        sprintf (programs[i].name, "Program %d", i + 1);
+                        sprintf(programs[i].name, "Program %d", i + 1);
                 }
             }
-            setProgram (0);
+            setProgram(0);
         }
     }
 
     if (programs)
-        setProgram (0);
+        setProgram(0);
 
     oldenv     = 0;
     samp       = 0;
@@ -103,7 +103,7 @@ MidiSimpleLFO::MidiSimpleLFO (audioMasterCallback audioMaster)
     playing = false;
     ccsent  = false;
 
-    srand ((unsigned int) time (NULL));
+    srand((unsigned int) time(NULL));
     init();
 }
 
@@ -115,48 +115,48 @@ MidiSimpleLFO::~MidiSimpleLFO()
 }
 
 //------------------------------------------------------------------------
-void MidiSimpleLFO::setProgram (VstInt32 program)
+void MidiSimpleLFO::setProgram(VstInt32 program)
 {
     MidiSimpleLFOProgram* ap = &programs[program];
 
     curProgram = program;
-    setParameter (kWave, ap->fWave);
-    setParameter (kCC, ap->fCC);
-    setParameter (kChannel, ap->fChannel);
-    setParameter (kSync, ap->fSync);
-    setParameter (kFreq, ap->fFreq);
-    setParameter (kPhase, ap->fPhase);
-    setParameter (kRange, ap->fRange);
-    setParameter (kOffset, ap->fOffset);
-    setParameter (kTrigger, ap->fTrigger);
-    setParameter (kPower, ap->fPower);
+    setParameter(kWave, ap->fWave);
+    setParameter(kCC, ap->fCC);
+    setParameter(kChannel, ap->fChannel);
+    setParameter(kSync, ap->fSync);
+    setParameter(kFreq, ap->fFreq);
+    setParameter(kPhase, ap->fPhase);
+    setParameter(kRange, ap->fRange);
+    setParameter(kOffset, ap->fOffset);
+    setParameter(kTrigger, ap->fTrigger);
+    setParameter(kPower, ap->fPower);
 }
 
 //------------------------------------------------------------------------
-void MidiSimpleLFO::setProgramName (char* name)
+void MidiSimpleLFO::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiSimpleLFO::getProgramName (char* name)
+void MidiSimpleLFO::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiSimpleLFO::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiSimpleLFO::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSimpleLFO::setParameter (VstInt32 index, float value)
+void MidiSimpleLFO::setParameter(VstInt32 index, float value)
 {
     float old = fTrigger;
 
@@ -181,11 +181,11 @@ void MidiSimpleLFO::setParameter (VstInt32 index, float value)
             fFreq = ap->fFreq = value;
             break;
         case kPhase:
-            if (fabs (value - 0.25) < 0.005)
+            if (fabs(value - 0.25) < 0.005)
                 fPhase = ap->fPhase = 0.25;
-            else if (fabs (value - 0.5) < 0.005)
+            else if (fabs(value - 0.5) < 0.005)
                 fPhase = ap->fPhase = 0.5;
-            else if (fabs (value - 0.75) < 0.005)
+            else if (fabs(value - 0.75) < 0.005)
                 fPhase = ap->fPhase = 0.75;
             else
                 fPhase = ap->fPhase = value;
@@ -225,7 +225,7 @@ void MidiSimpleLFO::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiSimpleLFO::getParameter (VstInt32 index)
+float MidiSimpleLFO::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -268,39 +268,39 @@ float MidiSimpleLFO::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSimpleLFO::getParameterName (VstInt32 index, char* label)
+void MidiSimpleLFO::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kWave:
-            strcpy (label, "Waveform");
+            strcpy(label, "Waveform");
             break;
         case kCC:
-            strcpy (label, "CC Out");
+            strcpy(label, "CC Out");
             break;
         case kChannel:
-            strcpy (label, "Channel Out");
+            strcpy(label, "Channel Out");
             break;
         case kSync:
-            strcpy (label, "Freq Mode");
+            strcpy(label, "Freq Mode");
             break;
         case kFreq:
-            strcpy (label, "Frequency");
+            strcpy(label, "Frequency");
             break;
         case kPhase:
-            strcpy (label, "Phase");
+            strcpy(label, "Phase");
             break;
         case kRange:
-            strcpy (label, "Amplitude");
+            strcpy(label, "Amplitude");
             break;
         case kOffset:
-            strcpy (label, "Offset");
+            strcpy(label, "Offset");
             break;
         case kTrigger:
-            strcpy (label, "Triggering");
+            strcpy(label, "Triggering");
             break;
         case kPower:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         default:
             break;
@@ -308,113 +308,113 @@ void MidiSimpleLFO::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSimpleLFO::getParameterDisplay (VstInt32 index, char* text)
+void MidiSimpleLFO::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kWave:
             if (fWave == 0.0)
-                strcpy (text, "Sawtooth");
+                strcpy(text, "Sawtooth");
             else if (fWave < 0.2)
-                strcpy (text, "Ramp");
+                strcpy(text, "Ramp");
             else if (fWave < 0.4)
-                strcpy (text, "Triangle");
+                strcpy(text, "Triangle");
             else if (fWave < 0.6)
-                strcpy (text, "Square");
+                strcpy(text, "Square");
             else if (fWave < 0.8)
-                strcpy (text, "Sine");
+                strcpy(text, "Sine");
             else if (fWave < 1.0)
-                strcpy (text, "Slow Random");
+                strcpy(text, "Slow Random");
             else
-                strcpy (text, "Fast Random");
+                strcpy(text, "Fast Random");
             break;
         case kCC:
-            sprintf (text, "%d", FLOAT_TO_MIDI (fCC));
+            sprintf(text, "%d", FLOAT_TO_MIDI(fCC));
             break;
         case kChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (fChannel) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(fChannel) + 1);
             break;
         case kSync:
             if (fSync < 0.5)
-                strcpy (text, "Hz");
+                strcpy(text, "Hz");
             else
-                strcpy (text, "Tempo");
+                strcpy(text, "Tempo");
             break;
         case kFreq:
             if (fSync < 0.5)
-                sprintf (text, "%f", 27 * fFreq * fFreq * fFreq);
+                sprintf(text, "%f", 27 * fFreq * fFreq * fFreq);
             else
             {
                 if (fFreq == 0.0f)
-                    strcpy (text, "32 bars");
+                    strcpy(text, "32 bars");
                 else if (fFreq < 0.01)
-                    strcpy (text, "24 bars");
+                    strcpy(text, "24 bars");
                 else if (fFreq < 0.02)
-                    strcpy (text, "16 bars");
+                    strcpy(text, "16 bars");
                 else if (fFreq < 0.03)
-                    strcpy (text, "12 bars");
+                    strcpy(text, "12 bars");
                 else if (fFreq < 0.04)
-                    strcpy (text, "8 bars");
+                    strcpy(text, "8 bars");
                 else if (fFreq < 0.06)
-                    strcpy (text, "6 bars");
+                    strcpy(text, "6 bars");
                 else if (fFreq < 0.08)
-                    strcpy (text, "4 bars");
+                    strcpy(text, "4 bars");
                 else if (fFreq < 0.10)
-                    strcpy (text, "3 bars");
+                    strcpy(text, "3 bars");
                 else if (fFreq < 0.12)
-                    strcpy (text, "2 bars");
+                    strcpy(text, "2 bars");
                 else if (fFreq < 0.14)
-                    strcpy (text, "1.5 bars");
+                    strcpy(text, "1.5 bars");
                 else if (fFreq < 0.16)
-                    strcpy (text, "1 bar");
+                    strcpy(text, "1 bar");
                 else if (fFreq < 0.20)
-                    strcpy (text, "dotted half");
+                    strcpy(text, "dotted half");
                 else if (fFreq < 0.3)
-                    strcpy (text, "half");
+                    strcpy(text, "half");
                 else if (fFreq < 0.35)
-                    strcpy (text, "dotted quarter");
+                    strcpy(text, "dotted quarter");
                 else if (fFreq < 0.4)
-                    strcpy (text, "quarter");
+                    strcpy(text, "quarter");
                 else if (fFreq < 0.5)
-                    strcpy (text, "dotted 8th");
+                    strcpy(text, "dotted 8th");
                 else if (fFreq < 0.6)
-                    strcpy (text, "4th triplet");
+                    strcpy(text, "4th triplet");
                 else if (fFreq < 0.7)
-                    strcpy (text, "8th");
+                    strcpy(text, "8th");
                 else if (fFreq < 0.8)
-                    strcpy (text, "8th triplet");
+                    strcpy(text, "8th triplet");
                 else if (fFreq < 0.9)
-                    strcpy (text, "16th");
+                    strcpy(text, "16th");
                 else if (fFreq < 1.0)
-                    strcpy (text, "16th triplet");
+                    strcpy(text, "16th triplet");
                 else if (fFreq == 1.0)
-                    strcpy (text, "32nd");
+                    strcpy(text, "32nd");
             }
             break;
         case kPhase:
-            sprintf (text, "%.1f", fPhase * 360 - 180);
+            sprintf(text, "%.1f", fPhase * 360 - 180);
             break;
         case kRange:
-            sprintf (text, "%d", FLOAT_TO_MIDI (fRange));
+            sprintf(text, "%d", FLOAT_TO_MIDI(fRange));
             break;
         case kOffset:
-            sprintf (text, "%d", FLOAT_TO_MIDI (fOffset) - 64);
+            sprintf(text, "%d", FLOAT_TO_MIDI(fOffset) - 64);
             break;
         case kTrigger:
             if (fTrigger < 0.3)
-                strcpy (text, "Notes (Mono)");
+                strcpy(text, "Notes (Mono)");
             else if (fTrigger < 0.7)
-                strcpy (text, "Notes (Poly)");
+                strcpy(text, "Notes (Poly)");
             else if (fTrigger < 1.0)
-                strcpy (text, "Beat Sync");
+                strcpy(text, "Beat Sync");
             else
-                strcpy (text, "Free Running");
+                strcpy(text, "Free Running");
             break;
         case kPower:
             if (fPower < 0.5)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         default:
             break;
@@ -422,31 +422,31 @@ void MidiSimpleLFO::getParameterDisplay (VstInt32 index, char* text)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSimpleLFO::getParameterLabel (VstInt32 index, char* label)
+void MidiSimpleLFO::getParameterLabel(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kFreq:
             if (fSync < 0.5)
-                strcpy (label, "Hz");
+                strcpy(label, "Hz");
             else
-                strcpy (label, "");
+                strcpy(label, "");
             break;
         case kPhase:
-            strcpy (label, "°");
+            strcpy(label, "Â°");
             break;
         default:
-            strcpy (label, "");
+            strcpy(label, "");
             break;
     }
 }
 
-void MidiSimpleLFO::preProcess (void)
+void MidiSimpleLFO::preProcess(void)
 {
     // preparing Proccess
     sampleRate            = getSampleRate();
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     numerator       = 4;
     int denominator = 4;
@@ -518,8 +518,8 @@ void MidiSimpleLFO::preProcess (void)
             else if (fFreq == 1.0)
                 beats = 0.125f;
         }
-        double lastbeats = (fmod (lastppq, beats) / beats);
-        _beats           = (fmod (_ppq, beats) / beats);
+        double lastbeats = (fmod(lastppq, beats) / beats);
+        _beats           = (fmod(_ppq, beats) / beats);
         //if (_beats<0.01) barstarted=true;
         if (lastbeats > _beats)
             barstarted = true;
@@ -534,7 +534,7 @@ void MidiSimpleLFO::preProcess (void)
     _cleanMidiOutBuffers();
 }
 
-void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiSimpleLFO::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -556,7 +556,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         if (status == MIDI_CONTROLCHANGE)
         {
             //don't send through LFO output CC:
-            if (data1 == FLOAT_TO_MIDI (fCC))
+            if (data1 == FLOAT_TO_MIDI(fCC))
             {
                 discard = true;
             }
@@ -588,12 +588,12 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             //discard=true;
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
-    int channel = FLOAT_TO_CHANNEL015 (fChannel); //outgoing midi channel
-    int data1   = FLOAT_TO_MIDI (fCC);
+    int channel = FLOAT_TO_CHANNEL015(fChannel); //outgoing midi channel
+    int data1   = FLOAT_TO_MIDI(fCC);
     float freq  = 27 * fFreq * fFreq * fFreq;
-    int offset  = FLOAT_TO_MIDI (fOffset) - 64;
+    int offset  = FLOAT_TO_MIDI(fOffset) - 64;
 
     if (fSync >= 0.5f)
     {
@@ -636,9 +636,9 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         steps    = 1.0;
         stepsize = sampleRate / 500.0;
     }
-    signed int phase = roundToInt ((fPhase - 0.5) * steps);
+    signed int phase = roundToInt((fPhase - 0.5) * steps);
     if (phase < 0)
-        phase = roundToInt (steps) + phase;
+        phase = roundToInt(steps) + phase;
 
     if (beatsync && barstarted)
     {
@@ -667,13 +667,13 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             ccsent    = false;
             step      = 0;
             retrigger = false;
-            samp      = roundToInt (stepsize) + 1;
+            samp      = roundToInt(stepsize) + 1;
         }
         //for every step, calculate the new value
-        if (samp >= roundToInt (stepsize) || (beatsync && fSync >= 0.5))
+        if (samp >= roundToInt(stepsize) || (beatsync && fSync >= 0.5))
         {
             if (beatsync && fSync >= 0.5)
-                step = roundToInt (_beats * steps);
+                step = roundToInt(_beats * steps);
             else if (step >= steps)
             {
                 step = 0;
@@ -685,18 +685,18 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             if (wave == 0)
             {
                 if (step < (steps - phase))
-                    data2 = roundToInt ((-phase - step) * (128 / steps)) + 128;
+                    data2 = roundToInt((-phase - step) * (128 / steps)) + 128;
                 else
-                    data2 = roundToInt ((steps - phase - step) * (128 / steps)) + 128;
+                    data2 = roundToInt((steps - phase - step) * (128 / steps)) + 128;
             }
 
             //ramp
             else if (wave == 1)
             {
                 if (step < (steps - phase))
-                    data2 = roundToInt ((step + phase) * (128 / steps)) + 1;
+                    data2 = roundToInt((step + phase) * (128 / steps)) + 1;
                 else
-                    data2 = roundToInt ((step + phase - steps) * (128 / steps)) + 1;
+                    data2 = roundToInt((step + phase - steps) * (128 / steps)) + 1;
             }
 
             //triangle
@@ -706,14 +706,14 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (ph > steps)
                     ph = ph - steps;
                 if (step < (steps * 0.5 - ph))
-                    data2 = roundToInt (((double) step + ph) * (256.0 / steps));
+                    data2 = roundToInt(((double) step + ph) * (256.0 / steps));
                 else if (step < (steps - ph))
-                    data2 = roundToInt (-(step + ph) * (256 / steps)) + 256;
+                    data2 = roundToInt(-(step + ph) * (256 / steps)) + 256;
                 else if (step < (1.5 * steps - ph))
-                    data2 = roundToInt ((step + ph - steps) * (256 / steps));
+                    data2 = roundToInt((step + ph - steps) * (256 / steps));
                 //else if (step<(2.0*steps-ph)) data2=(int)((step+ph)*(256/steps))-256;
                 else
-                    data2 = roundToInt (-(step + ph - steps) * (256 / steps)) + 256;
+                    data2 = roundToInt(-(step + ph - steps) * (256 / steps)) + 256;
             }
 
             //square
@@ -732,7 +732,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             //sine
             else if (wave == 4)
             {
-                data2 = roundToInt (64.0 * sin ((float) (step + phase) * 2 * PI / steps) + 64.0);
+                data2 = roundToInt(64.0 * sin((float) (step + phase) * 2 * PI / steps) + 64.0);
             }
 
             //random
@@ -741,7 +741,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (! ccsent)
                 {
                     int randdata2 = rand() % 128; //random number between 0 and 127
-                    data2         = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
+                    data2         = (roundToInt((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
                     ccsent        = true;
                 }
                 else
@@ -752,14 +752,14 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             else if (wave == 6)
             {
                 int randdata2 = rand() % 128; //random number between 0 and 127
-                data2         = (roundToInt ((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
+                data2         = (roundToInt((float) randdata2 * fRange + 63 - (fRange * 127.0) / 2.0) + offset);
             }
 
             //for non-random waveforms:
             if (wave < 5)
             {
                 //amplitude
-                data2 = roundToInt ((float) data2 * fRange + 63 - (fRange * 127.0) / 2.0);
+                data2 = roundToInt((float) data2 * fRange + 63 - (fRange * 127.0) / 2.0);
                 //offset
                 data2 += offset;
             }
@@ -781,7 +781,7 @@ void MidiSimpleLFO::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     cc.midiData[0] = MIDI_CONTROLCHANGE + channel;
                     cc.midiData[1] = data1;
                     cc.midiData[2] = data2;
-                    _midiEventsOut[0].push_back (cc);
+                    _midiEventsOut[0].push_back(cc);
                     oldenv = data2;
                 }
             }

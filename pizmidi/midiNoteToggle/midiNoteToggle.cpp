@@ -1,27 +1,27 @@
 #include "midiNoteToggle.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiNoteToggle (audioMaster);
+    return new MidiNoteToggle(audioMaster);
 }
 
 //-----------------------------------------------------------------------------
-MidiNoteToggle::MidiNoteToggle (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiNoteToggle::MidiNoteToggle(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
-    programs = new CFxBank (numPrograms, numParams);
-    if (! readDefaultBank (PLUG_NAME, programs, PLUG_IDENT))
+    programs = new CFxBank(numPrograms, numParams);
+    if (! readDefaultBank(PLUG_NAME, programs, PLUG_IDENT))
     {
         // built-in programs
         for (int i = 0; i < numPrograms; i++)
         {
-            programs->SetProgramName (i, "Note Toggle");
+            programs->SetProgramName(i, "Note Toggle");
             // default values
-            programs->SetProgParm (i, kPower, 1.f);
-            programs->SetProgParm (i, kLowNote, 0.f);
-            programs->SetProgParm (i, kHighNote, MIDI_TO_FLOAT (127));
-            programs->SetProgParm (i, kChannel, CHANNEL_TO_FLOAT016 (0));
+            programs->SetProgParm(i, kPower, 1.f);
+            programs->SetProgParm(i, kLowNote, 0.f);
+            programs->SetProgParm(i, kHighNote, MIDI_TO_FLOAT(127));
+            programs->SetProgParm(i, kChannel, CHANNEL_TO_FLOAT016(0));
         }
     }
 
@@ -38,39 +38,39 @@ MidiNoteToggle::~MidiNoteToggle()
         delete programs;
 }
 
-void MidiNoteToggle::setProgram (VstInt32 program)
+void MidiNoteToggle::setProgram(VstInt32 program)
 {
     for (int i = 0; i < numParams; i++)
     {
-        setParameter (i, programs->GetProgParm (program, i));
+        setParameter(i, programs->GetProgParm(program, i));
     }
     curProgram = program;
     updateDisplay();
 }
 
-void MidiNoteToggle::setProgramName (char* name)
+void MidiNoteToggle::setProgramName(char* name)
 {
-    programs->SetProgramName (curProgram, name);
+    programs->SetProgramName(curProgram, name);
     updateDisplay();
 }
 
-void MidiNoteToggle::getProgramName (char* name)
+void MidiNoteToggle::getProgramName(char* name)
 {
-    strcpy (name, programs->GetProgramName (curProgram));
+    strcpy(name, programs->GetProgramName(curProgram));
 }
 
-bool MidiNoteToggle::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiNoteToggle::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        strcpy (text, programs->GetProgramName (index));
+        strcpy(text, programs->GetProgramName(index));
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteToggle::setParameter (VstInt32 index, float value)
+void MidiNoteToggle::setParameter(VstInt32 index, float value)
 {
     if (index < numParams)
     {
@@ -81,12 +81,12 @@ void MidiNoteToggle::setParameter (VstInt32 index, float value)
                 break;
             case kLowNote:
                 if (value > param[kHighNote])
-                    setParameterAutomated (kHighNote, value);
+                    setParameterAutomated(kHighNote, value);
                 param[kLowNote] = value;
                 break;
             case kHighNote:
                 if (value < param[kLowNote])
-                    setParameterAutomated (kLowNote, value);
+                    setParameterAutomated(kLowNote, value);
                 param[kHighNote] = value;
                 break;
             case kChannel:
@@ -96,12 +96,12 @@ void MidiNoteToggle::setParameter (VstInt32 index, float value)
                 break;
         }
         for (int i = 0; i < numPrograms; i++)
-            programs->SetProgParm (i, index, value);
+            programs->SetProgParm(i, index, value);
     }
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiNoteToggle::getParameter (VstInt32 index)
+float MidiNoteToggle::getParameter(VstInt32 index)
 {
     if (index < numParams)
         return param[index];
@@ -109,21 +109,21 @@ float MidiNoteToggle::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteToggle::getParameterName (VstInt32 index, char* label)
+void MidiNoteToggle::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kPower:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         case kLowNote:
-            strcpy (label, "Low Note");
+            strcpy(label, "Low Note");
             break;
         case kHighNote:
-            strcpy (label, "High Note");
+            strcpy(label, "High Note");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         default:
             break;
@@ -131,34 +131,34 @@ void MidiNoteToggle::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteToggle::getParameterDisplay (VstInt32 index, char* text)
+void MidiNoteToggle::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kPower:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kLowNote:
-            sprintf (text, "%d (%s)", FLOAT_TO_MIDI (param[index]), getNoteName (FLOAT_TO_MIDI (param[index]), bottomOctave));
+            sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[index]), getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave));
             break;
         case kHighNote:
-            sprintf (text, "%d (%s)", FLOAT_TO_MIDI (param[index]), getNoteName (FLOAT_TO_MIDI (param[index]), bottomOctave));
+            sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[index]), getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave));
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL016 (param[index]) == 0)
-                strcpy (text, "All");
+            if (FLOAT_TO_CHANNEL016(param[index]) == 0)
+                strcpy(text, "All");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (param[index]));
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
             break;
         default:
             break;
     }
 }
 
-void MidiNoteToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiNoteToggle::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -172,9 +172,9 @@ void MidiNoteToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         const int data2   = tomod.midiData[2] & 0x7f;
 
         const bool on        = param[kPower] >= 0.5f;
-        const int lownote    = FLOAT_TO_MIDI (param[kLowNote]);
-        const int highnote   = FLOAT_TO_MIDI (param[kHighNote]);
-        const int outchannel = FLOAT_TO_CHANNEL (param[kChannel]) == -1 ? channel : FLOAT_TO_CHANNEL (param[kChannel]);
+        const int lownote    = FLOAT_TO_MIDI(param[kLowNote]);
+        const int highnote   = FLOAT_TO_MIDI(param[kHighNote]);
+        const int outchannel = FLOAT_TO_CHANNEL(param[kChannel]) == -1 ? channel : FLOAT_TO_CHANNEL(param[kChannel]);
 
         bool discard = false;
 
@@ -204,6 +204,6 @@ void MidiNoteToggle::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
             //}
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 }

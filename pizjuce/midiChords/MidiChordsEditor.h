@@ -36,28 +36,28 @@ using juce::jmin;
 class FretsSlider : public juce::Slider
 {
 public:
-    FretsSlider (juce::String name)
-        : juce::Slider (name){};
+    FretsSlider(juce::String name)
+        : juce::Slider(name){};
     ~FretsSlider() override{};
 
-    juce::String getTextFromValue (double value) override
+    juce::String getTextFromValue(double value) override
     {
-        const int n = juce::roundToInt (value);
-        return "Frets: " + juce::String (n);
+        const int n = juce::roundToInt(value);
+        return "Frets: " + juce::String(n);
     }
 };
 
 class StringsSlider : public juce::Slider
 {
 public:
-    StringsSlider (juce::String name)
-        : juce::Slider (name){};
+    StringsSlider(juce::String name)
+        : juce::Slider(name){};
     ~StringsSlider() override{};
 
-    juce::String getTextFromValue (double value) override
+    juce::String getTextFromValue(double value) override
     {
-        const int n = juce::roundToInt (value);
-        return "Strings: " + juce::String (n);
+        const int n = juce::roundToInt(value);
+        return "Strings: " + juce::String(n);
     }
 };
 
@@ -65,19 +65,19 @@ class ChordPresetFileFilter : public juce::FileFilter
 {
 public:
     ChordPresetFileFilter()
-        : juce::FileFilter ("midiChords presets")
+        : juce::FileFilter("midiChords presets")
     {
     }
     ~ChordPresetFileFilter() override
     {
     }
-    bool isFileSuitable (const juce::File& file) const override
+    bool isFileSuitable(const juce::File& file) const override
     {
-        return (file.hasFileExtension ("chords")
-                || file.hasFileExtension ("fxp")
-                || file.hasFileExtension ("xml"));
+        return (file.hasFileExtension("chords")
+                || file.hasFileExtension("fxp")
+                || file.hasFileExtension("xml"));
     }
-    bool isDirectorySuitable (const juce::File& file) const override
+    bool isDirectorySuitable(const juce::File& file) const override
     {
         return true;
     }
@@ -86,10 +86,10 @@ public:
 class ChordsGuitar : public GuitarNeckComponent
 {
 public:
-    ChordsGuitar (juce::MidiKeyboardState& state, MidiChords* ownerFilter)
-        : GuitarNeckComponent (state),
-          owner (nullptr),
-          erasing (false)
+    ChordsGuitar(juce::MidiKeyboardState& state, MidiChords* ownerFilter)
+        : GuitarNeckComponent(state),
+          owner(nullptr),
+          erasing(false)
     {
         owner = ownerFilter;
         s     = &state;
@@ -101,43 +101,43 @@ private:
     FrettedNote lastDraggedNote;
     bool erasing;
 
-    void mouseDraggedToKey (int fret, int string, const juce::MouseEvent& e) override
+    void mouseDraggedToKey(int fret, int string, const juce::MouseEvent& e) override
     {
-        FrettedNote n (fret, string);
+        FrettedNote n(fret, string);
         if (n != lastDraggedNote)
         {
-            int midiNoteNumber  = getNote (n);
-            int oldNoteOnString = getNote (FrettedNote (getStringFret (string), string));
-            if (s->isNoteOn (string + 1, midiNoteNumber))
+            int midiNoteNumber  = getNote(n);
+            int oldNoteOnString = getNote(FrettedNote(getStringFret(string), string));
+            if (s->isNoteOn(string + 1, midiNoteNumber))
             {
                 /*if (!erasing)*/
-                owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, false, string + 1);
+                owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, string + 1);
             }
             else /* if (!erasing)*/
             {
-                owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
+                owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
                 if (oldNoteOnString >= 0)
-                    owner->selectChordNote (owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
+                    owner->selectChordNote(owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
             }
         }
         lastDraggedNote = n;
     }
 
-    bool mouseDownOnKey (int fret, int string, const juce::MouseEvent& e) override
+    bool mouseDownOnKey(int fret, int string, const juce::MouseEvent& e) override
     {
-        FrettedNote n (fret, string);
-        int midiNoteNumber  = getNote (n);
-        int oldNoteOnString = getNote (FrettedNote (getStringFret (string), string));
-        if (s->isNoteOn (string + 1, midiNoteNumber))
+        FrettedNote n(fret, string);
+        int midiNoteNumber  = getNote(n);
+        int oldNoteOnString = getNote(FrettedNote(getStringFret(string), string));
+        if (s->isNoteOn(string + 1, midiNoteNumber))
         {
-            owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, false, string + 1);
+            owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, string + 1);
             erasing = true;
         }
         else
         {
-            owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
+            owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, string + 1);
             if (oldNoteOnString >= 0)
-                owner->selectChordNote (owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
+                owner->selectChordNote(owner->getCurrentTrigger(), oldNoteOnString, false, string + 1);
             erasing = false;
         }
         lastDraggedNote = n;
@@ -148,83 +148,83 @@ private:
 class ChordsKeyboardComponent : public juce::MidiKeyboardComponent
 {
 public:
-    ChordsKeyboardComponent (juce::MidiKeyboardState& state, MidiChords* ownerFilter)
-        : juce::MidiKeyboardComponent (state, MidiKeyboardComponent::horizontalKeyboard),
-          owner (nullptr)
+    ChordsKeyboardComponent(juce::MidiKeyboardState& state, MidiChords* ownerFilter)
+        : juce::MidiKeyboardComponent(state, MidiKeyboardComponent::horizontalKeyboard),
+          owner(nullptr)
     {
         owner = ownerFilter;
         s     = &state;
-        this->setMidiChannel (1);
-        this->setLowestVisibleKey (36);
+        this->setMidiChannel(1);
+        this->setLowestVisibleKey(36);
     }
-    void drawBlackNote (int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
+    void drawBlackNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
     {
-        juce::Colour c (textColour);
-        const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels (0xffff, midiNoteNumber);
+        juce::Colour c(textColour);
+        const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels(0xffff, midiNoteNumber);
 
         if (isReallyReallyDown)
-            c = c.overlaidWith (findColour (keyDownOverlayColourId));
-        else if (s->isNoteOnForChannels (0xffff, midiNoteNumber))
-            c = c.overlaidWith (juce::Colours::brown.withAlpha (0.4f));
+            c = c.overlaidWith(findColour(keyDownOverlayColourId));
+        else if (s->isNoteOnForChannels(0xffff, midiNoteNumber))
+            c = c.overlaidWith(juce::Colours::brown.withAlpha(0.4f));
 
         if (isOver)
-            c = c.overlaidWith (findColour (mouseOverKeyOverlayColourId));
+            c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
 
-        g.setColour (c);
-        g.fillRect (x, y, w, h);
+        g.setColour(c);
+        g.fillRect(x, y, w, h);
 
         if (isReallyReallyDown)
         {
-            g.setColour (textColour);
-            g.drawRect (x, y, w, h);
+            g.setColour(textColour);
+            g.drawRect(x, y, w, h);
         }
         else
         {
-            const int xIndent = juce::jmax (1, jmin (w, h) / 8);
+            const int xIndent = juce::jmax(1, jmin(w, h) / 8);
 
-            g.setColour (c.brighter());
-            g.fillRect (x + xIndent, y, w - xIndent * 2, 7 * h / 8);
+            g.setColour(c.brighter());
+            g.fillRect(x + xIndent, y, w - xIndent * 2, 7 * h / 8);
         }
-        juce::Font f (jmin (12.0f, w * 0.9f));
-        f.setHorizontalScale (0.8f);
-        g.setFont (f);
-        g.setColour (juce::Colours::white);
-        g.drawFittedText (juce::String (midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
+        juce::Font f(jmin(12.0f, w * 0.9f));
+        f.setHorizontalScale(0.8f);
+        g.setFont(f);
+        g.setColour(juce::Colours::white);
+        g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
     }
 
-    void drawWhiteNote (int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
+    void drawWhiteNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
     {
         //const int chordChan = roundToInt(owner->getParameter(kLearnChannel)*16.f);
-        juce::Colour c (juce::Colours::transparentWhite);
-        const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels (0xffff, midiNoteNumber);
+        juce::Colour c(juce::Colours::transparentWhite);
+        const bool isReallyReallyDown = owner->getCurrentKbState()->isNoteOnForChannels(0xffff, midiNoteNumber);
 
         if (isReallyReallyDown)
-            c = findColour (keyDownOverlayColourId);
+            c = findColour(keyDownOverlayColourId);
         if (isOver)
-            c = c.overlaidWith (findColour (mouseOverKeyOverlayColourId));
+            c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
 
-        g.setColour (c);
-        g.fillRect (x, y, w, h);
+        g.setColour(c);
+        g.fillRect(x, y, w, h);
 
-        g.setColour (textColour);
+        g.setColour(textColour);
 
-        juce::Font f (jmin (12.0f, getKeyWidth() * 0.9f));
-        f.setHorizontalScale (0.8f);
-        f.setBold (midiNoteNumber == 60);
-        g.setFont (f);
-        juce::Justification justification (juce::Justification::centredBottom);
+        juce::Font f(jmin(12.0f, getKeyWidth() * 0.9f));
+        f.setHorizontalScale(0.8f);
+        f.setBold(midiNoteNumber == 60);
+        g.setFont(f);
+        juce::Justification justification(juce::Justification::centredBottom);
 
-        g.drawFittedText (juce::String (midiNoteNumber), x + 2, y + 2, w - 4, h - 16, juce::Justification::centredBottom, 1);
+        g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 16, juce::Justification::centredBottom, 1);
 
-        const juce::String text (getWhiteNoteText (midiNoteNumber));
+        const juce::String text(getWhiteNoteText(midiNoteNumber));
         if (! text.isEmpty())
-            g.drawFittedText (text, x + 2, y + 2, w - 4, h - 4, justification, 1);
-        g.setColour (lineColour);
-        g.fillRect (x, y, 1, h);
+            g.drawFittedText(text, x + 2, y + 2, w - 4, h - 4, justification, 1);
+        g.setColour(lineColour);
+        g.fillRect(x, y, 1, h);
 
         if (midiNoteNumber == getRangeEnd())
         {
-            g.fillRect (x + w, y, 1, h);
+            g.fillRect(x + w, y, 1, h);
         }
 
         //MidiKeyboardComponent::drawWhiteNote(midiNoteNumber,g,x,y,w,h,isDown,isOver,lineColour,textColour);
@@ -252,77 +252,77 @@ protected:
     MidiChords* owner;
     juce::MidiKeyboardState* s;
 
-    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    bool mouseDownOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         if (e.mods.isPopupMenu())
         {
             juce::PopupMenu m;
-            m.addSectionHeader (getNoteName (midiNoteNumber, owner->bottomOctave) + " (" + juce::String (midiNoteNumber) + ")");
+            m.addSectionHeader(getNoteName(midiNoteNumber, owner->bottomOctave) + " (" + juce::String(midiNoteNumber) + ")");
             for (int i = 1; i <= 16; i++)
             {
-                m.addItem (i, "Ch " + juce::String (i), true, s->isNoteOn (i, midiNoteNumber));
+                m.addItem(i, "Ch " + juce::String(i), true, s->isNoteOn(i, midiNoteNumber));
             }
             int result = m.show();
             if (result != 0)
             {
-                if (s->isNoteOn (result, midiNoteNumber))
+                if (s->isNoteOn(result, midiNoteNumber))
                 {
                     //s->noteOff(result,midiNoteNumber);
-                    owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, false, result);
+                    owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, result);
                 }
                 else
                 {
                     //s->noteOn(result,midiNoteNumber,127);
-                    owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, true, result);
+                    owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, result);
                 }
                 repaint();
             }
         }
         else
         {
-            const int chordChan = juce::roundToInt (owner->getParameter (kLearnChannel) * 16.f);
+            const int chordChan = juce::roundToInt(owner->getParameter(kLearnChannel) * 16.f);
             if (chordChan == 0)
             {
-                if (s->isNoteOnForChannels (0xffff, midiNoteNumber))
+                if (s->isNoteOnForChannels(0xffff, midiNoteNumber))
                 {
                     for (int c = 1; c <= 16; c++)
                     {
-                        if (s->isNoteOn (c, midiNoteNumber))
+                        if (s->isNoteOn(c, midiNoteNumber))
                             //s->noteOff(c, midiNoteNumber);
-                            owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, false, c);
+                            owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, c);
                     }
                 }
                 else
                 {
                     //s->noteOn(1,midiNoteNumber,1.f);
-                    owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, true, 1);
+                    owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, 1);
                 }
             }
             else
             {
-                if (s->isNoteOn (chordChan, midiNoteNumber))
+                if (s->isNoteOn(chordChan, midiNoteNumber))
                 {
                     //s->noteOff(chordChan,midiNoteNumber);
-                    owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, false, chordChan);
+                    owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, false, chordChan);
                 }
                 else
                 {
                     //s->noteOn(chordChan,midiNoteNumber,1.f);
-                    owner->selectChordNote (owner->getCurrentTrigger(), midiNoteNumber, true, chordChan);
+                    owner->selectChordNote(owner->getCurrentTrigger(), midiNoteNumber, true, chordChan);
                 }
             }
         }
-        owner->setSavedGuitarVoicing (false);
+        owner->setSavedGuitarVoicing(false);
         return false;
     }
 
-    void mouseUpOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    void mouseUpOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         // In any case, a mouse up event leads to the key being switched off.
         // But if that key was just toggled to "on", we have to send a note on message again.
-        if (owner->getCurrentKbState()->isNoteOn (1, midiNoteNumber))
+        if (owner->getCurrentKbState()->isNoteOn(1, midiNoteNumber))
         {
-            owner->chordKbState.noteOn (1, midiNoteNumber, 1.0f);
+            owner->chordKbState.noteOn(1, midiNoteNumber, 1.0f);
         }
     }
 };
@@ -330,125 +330,125 @@ protected:
 class TriggerKeySelectorKeyboard : public juce::MidiKeyboardComponent
 {
 public:
-    TriggerKeySelectorKeyboard (juce::MidiKeyboardState& state, MidiChords* ownerFilter)
-        : MidiKeyboardComponent (state, MidiKeyboardComponent::horizontalKeyboard), owner (nullptr)
+    TriggerKeySelectorKeyboard(juce::MidiKeyboardState& state, MidiChords* ownerFilter)
+        : MidiKeyboardComponent(state, MidiKeyboardComponent::horizontalKeyboard), owner(nullptr)
     {
         s     = &state;
         owner = ownerFilter;
-        this->setMidiChannel (1);
-        this->setLowestVisibleKey (36);
+        this->setMidiChannel(1);
+        this->setLowestVisibleKey(36);
     }
-    void drawBlackNote (int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
+    void drawBlackNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
     {
-        const int mode = juce::roundToInt (owner->getParameter (kMode) * (numModes - 1));
-        juce::Colour c (textColour);
+        const int mode = juce::roundToInt(owner->getParameter(kMode) * (numModes - 1));
+        juce::Colour c(textColour);
 
         if (isDown || owner->getCurrentTrigger() == midiNoteNumber)
-            c = c.overlaidWith (findColour (keyDownOverlayColourId));
+            c = c.overlaidWith(findColour(keyDownOverlayColourId));
 
         if (isOver)
-            c = c.overlaidWith (findColour (mouseOverKeyOverlayColourId));
+            c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
 
-        if (owner->isNoteBypassed (midiNoteNumber))
-            c = c.overlaidWith (juce::Colours::orange.withAlpha (0.6f));
+        if (owner->isNoteBypassed(midiNoteNumber))
+            c = c.overlaidWith(juce::Colours::orange.withAlpha(0.6f));
 
         if (mode == Octave)
         {
             int n = midiNoteNumber % 12;
             while (n < 128)
             {
-                if (owner->isTriggerNotePlaying (n))
-                    c = c.overlaidWith (juce::Colours::green.withAlpha (0.6f));
+                if (owner->isTriggerNotePlaying(n))
+                    c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
                 n += 12;
             }
         }
         else
         {
-            if (owner->isTriggerNotePlaying (midiNoteNumber))
-                c = c.overlaidWith (juce::Colours::green.withAlpha (0.6f));
+            if (owner->isTriggerNotePlaying(midiNoteNumber))
+                c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
         }
 
-        g.setColour (c);
-        g.fillRect (x, y, w, h);
+        g.setColour(c);
+        g.fillRect(x, y, w, h);
 
         if (isDown)
         {
-            g.setColour (textColour);
-            g.drawRect (x, y, w, h);
+            g.setColour(textColour);
+            g.drawRect(x, y, w, h);
         }
         else
         {
-            const int xIndent = juce::jmax (1, jmin (w, h) / 8);
+            const int xIndent = juce::jmax(1, jmin(w, h) / 8);
 
-            g.setColour (c.brighter());
-            g.fillRect (x + xIndent, y, w - xIndent * 2, 7 * h / 8);
+            g.setColour(c.brighter());
+            g.fillRect(x + xIndent, y, w - xIndent * 2, 7 * h / 8);
         }
-        if (juce::roundToInt (owner->getParameter (kMode) * (numModes - 1)) != Octave)
+        if (juce::roundToInt(owner->getParameter(kMode) * (numModes - 1)) != Octave)
         {
-            juce::Font f (jmin (12.0f, w * 0.9f));
-            f.setHorizontalScale (0.8f);
-            g.setFont (f);
-            g.setColour (juce::Colours::white);
-            g.drawFittedText (juce::String (midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
+            juce::Font f(jmin(12.0f, w * 0.9f));
+            f.setHorizontalScale(0.8f);
+            g.setFont(f);
+            g.setColour(juce::Colours::white);
+            g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
         }
     }
-    void drawWhiteNote (int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
+    void drawWhiteNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
     {
-        const int mode = juce::roundToInt (owner->getParameter (kMode) * (numModes - 1));
-        juce::Colour c (juce::Colours::transparentWhite);
+        const int mode = juce::roundToInt(owner->getParameter(kMode) * (numModes - 1));
+        juce::Colour c(juce::Colours::transparentWhite);
 
         if (isDown || owner->getCurrentTrigger() == midiNoteNumber)
-            c = findColour (keyDownOverlayColourId);
+            c = findColour(keyDownOverlayColourId);
         if (isOver)
-            c = c.overlaidWith (findColour (mouseOverKeyOverlayColourId));
-        if (owner->isNoteBypassed (midiNoteNumber))
-            c = c.overlaidWith (juce::Colours::orange.withAlpha (0.6f));
+            c = c.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        if (owner->isNoteBypassed(midiNoteNumber))
+            c = c.overlaidWith(juce::Colours::orange.withAlpha(0.6f));
         if (mode == Octave)
         {
             int n = midiNoteNumber % 12;
             while (n < 128)
             {
-                if (owner->isTriggerNotePlaying (n))
-                    c = c.overlaidWith (juce::Colours::green.withAlpha (0.6f));
+                if (owner->isTriggerNotePlaying(n))
+                    c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
                 n += 12;
             }
         }
         else
         {
-            if (owner->isTriggerNotePlaying (midiNoteNumber))
-                c = c.overlaidWith (juce::Colours::green.withAlpha (0.6f));
+            if (owner->isTriggerNotePlaying(midiNoteNumber))
+                c = c.overlaidWith(juce::Colours::green.withAlpha(0.6f));
         }
 
-        g.setColour (c);
-        g.fillRect (x, y, w, h);
+        g.setColour(c);
+        g.fillRect(x, y, w, h);
 
         if (mode != Octave)
         {
-            g.setColour (textColour);
+            g.setColour(textColour);
 
-            juce::Font f (jmin (12.0f, getKeyWidth() * 0.9f));
-            f.setHorizontalScale (0.8f);
-            f.setBold (midiNoteNumber == 60);
-            g.setFont (f);
-            juce::Justification justification (juce::Justification::centredBottom);
+            juce::Font f(jmin(12.0f, getKeyWidth() * 0.9f));
+            f.setHorizontalScale(0.8f);
+            f.setBold(midiNoteNumber == 60);
+            g.setFont(f);
+            juce::Justification justification(juce::Justification::centredBottom);
 
-            g.drawFittedText (juce::String (midiNoteNumber), x + 2, y + 2, w - 4, h - 16, juce::Justification::centredBottom, 1);
+            g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 16, juce::Justification::centredBottom, 1);
 
-            const juce::String text (getWhiteNoteText (midiNoteNumber));
+            const juce::String text(getWhiteNoteText(midiNoteNumber));
             if (! text.isEmpty())
-                g.drawFittedText (text, x + 2, y + 2, w - 4, h - 4, justification, 1);
+                g.drawFittedText(text, x + 2, y + 2, w - 4, h - 4, justification, 1);
         }
 
         if (mode == Global)
-            g.setColour (juce::Colours::red);
+            g.setColour(juce::Colours::red);
         else
-            g.setColour (lineColour);
+            g.setColour(lineColour);
 
-        g.fillRect (x, y, 1, h);
+        g.fillRect(x, y, 1, h);
 
         if (midiNoteNumber == getRangeEnd())
         {
-            g.fillRect (x + w, y, 1, h);
+            g.fillRect(x + w, y, 1, h);
         }
     }
 
@@ -457,47 +457,47 @@ private:
     MidiChords* owner;
     bool bypassing;
 
-    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    bool mouseDownOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         if (e.mods.isShiftDown() || e.mods.isPopupMenu())
         {
-            bypassing = ! owner->isNoteBypassed (midiNoteNumber);
-            owner->setNoteBypassed (midiNoteNumber, bypassing);
+            bypassing = ! owner->isNoteBypassed(midiNoteNumber);
+            owner->setNoteBypassed(midiNoteNumber, bypassing);
             repaint();
         }
         else
         {
-            if (juce::roundToInt (owner->getParameter (kMode) * (numModes - 1)) == Global)
-                owner->setParameterNotifyingHost (kRoot, midiNoteNumber / 127.f);
+            if (juce::roundToInt(owner->getParameter(kMode) * (numModes - 1)) == Global)
+                owner->setParameterNotifyingHost(kRoot, midiNoteNumber / 127.f);
             else
-                owner->selectTrigger (midiNoteNumber);
+                owner->selectTrigger(midiNoteNumber);
         }
         return false;
     }
 
-    void mouseUpOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    void mouseUpOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         // In any case, a mouse up event leads to the key being switched off.
         // But if that key was just toggled to "on", we have to send a note on message again.
         if (midiNoteNumber == owner->getCurrentTrigger())
         {
-            owner->triggerKbState.noteOn (1, midiNoteNumber, 1.0f);
+            owner->triggerKbState.noteOn(1, midiNoteNumber, 1.0f);
         }
     }
 
-    bool mouseDraggedToKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    bool mouseDraggedToKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         if (e.mods.isShiftDown() || e.mods.isPopupMenu())
         {
-            owner->setNoteBypassed (midiNoteNumber, bypassing);
+            owner->setNoteBypassed(midiNoteNumber, bypassing);
             repaint();
         }
         else
         {
-            if (juce::roundToInt (owner->getParameter (kMode) * (numModes - 1)) == Global)
-                owner->setParameterNotifyingHost (kRoot, midiNoteNumber / 127.f);
+            if (juce::roundToInt(owner->getParameter(kMode) * (numModes - 1)) == Global)
+                owner->setParameterNotifyingHost(kRoot, midiNoteNumber / 127.f);
             else
-                owner->selectTrigger (midiNoteNumber);
+                owner->selectTrigger(midiNoteNumber);
         }
 
         return true;
@@ -527,35 +527,35 @@ class MidiChordsEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    MidiChordsEditor (MidiChords* const ownerFilter);
+    MidiChordsEditor(MidiChords* const ownerFilter);
     ~MidiChordsEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     friend class ChordsKeyboardComponent;
     friend class TriggerKeySelectorKeyboard;
-    static void chordMenuCallback (int result, MidiChordsEditor* editor);
-    void textEditorTextChanged (juce::TextEditor&) override;
-    void textEditorReturnKeyPressed (juce::TextEditor&) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor&) override;
-    void textEditorFocusLost (juce::TextEditor&) override;
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    bool isInterestedInFileDrag (const juce::StringArray& files) override;
-    void filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY) override;
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
+    static void chordMenuCallback(int result, MidiChordsEditor* editor);
+    void textEditorTextChanged(juce::TextEditor&) override;
+    void textEditorReturnKeyPressed(juce::TextEditor&) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor&) override;
+    void textEditorFocusLost(juce::TextEditor&) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag(const juce::StringArray& files) override;
+    void filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     void selectionChanged() override{};
-    void fileClicked (const juce::File& file, const juce::MouseEvent&) override;
-    void fileDoubleClicked (const juce::File& file) override;
-    void browserRootChanged (const juce::File& newRoot) override;
+    void fileClicked(const juce::File& file, const juce::MouseEvent&) override;
+    void fileDoubleClicked(const juce::File& file) override;
+    void browserRootChanged(const juce::File& newRoot) override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void labelTextChanged(juce::Label* labelThatHasChanged) override;
 
     // Binary resources:
     static const char* midichordsLogo_png;
@@ -566,44 +566,44 @@ private:
     juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
     juce::String const getCurrentChordName();
-    void listChordFiles (juce::StringArray& list);
-    void listPresetFiles (juce::Array<juce::File>& list);
-    void loadChord (juce::String chorddef);
-    void saveChord (juce::String name);
-    void loadPreset (juce::File file);
-    void chordFromString (juce::String chordString);
+    void listChordFiles(juce::StringArray& list);
+    void listPresetFiles(juce::Array<juce::File>& list);
+    void loadChord(juce::String chorddef);
+    void saveChord(juce::String name);
+    void loadPreset(juce::File file);
+    void chordFromString(juce::String chordString);
 
-    bool isGuitarPreset (int index)
+    bool isGuitarPreset(int index)
     {
         if (getFilter()->getNumStrings() != getFilter()->guitarPresets[index].numStrings)
             return false;
         for (int i = 0; i < getFilter()->getNumStrings(); i++)
         {
-            if (getFilter()->getStringValue (i) != getFilter()->guitarPresets[index].stringNotes[i])
+            if (getFilter()->getStringValue(i) != getFilter()->guitarPresets[index].stringNotes[i])
                 return false;
         }
         return true;
     }
 
-    void setUpGuitar (int index)
+    void setUpGuitar(int index)
     {
         const int f = getFilter()->guitarPresets[index].numFrets;
         const int s = getFilter()->guitarPresets[index].numStrings;
-        getFilter()->setNumFrets (f, false);
-        guitar->setNumFrets (f);
-        getFilter()->setNumStrings (s, false);
-        guitar->setNumStrings (s);
+        getFilter()->setNumFrets(f, false);
+        guitar->setNumFrets(f);
+        getFilter()->setNumStrings(s, false);
+        guitar->setNumStrings(s);
         for (int i = 0; i < maxStrings; i++)
         {
             if (i < s)
             {
-                getFilter()->setStringValue (i, getFilter()->guitarPresets[index].stringNotes[i], false);
-                guitar->setStringNote (i, getFilter()->guitarPresets[index].stringNotes[i]);
+                getFilter()->setStringValue(i, getFilter()->guitarPresets[index].stringNotes[i], false);
+                guitar->setStringNote(i, getFilter()->guitarPresets[index].stringNotes[i]);
             }
             else
             {
-                getFilter()->setStringValue (i, -1, false);
-                guitar->setStringNote (i, -1);
+                getFilter()->setStringValue(i, -1, false);
+                guitar->setStringNote(i, -1);
             }
         }
 
@@ -690,7 +690,7 @@ private:
     juce::Image cachedImage_midichordsLogo_png_1;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiChordsEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiChordsEditor)
 };
 
 //[EndFile] You can add extra defines here...

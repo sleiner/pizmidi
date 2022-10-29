@@ -1,29 +1,29 @@
 #include "midiStuckNoteKiller.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new midiStuckNoteKiller (audioMaster);
+    return new midiStuckNoteKiller(audioMaster);
 }
 
 //-----------------------------------------------------------------------------
-midiStuckNoteKiller::midiStuckNoteKiller (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, 1, kNumParams)
+midiStuckNoteKiller::midiStuckNoteKiller(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, 1, kNumParams)
 {
-    CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-    if (readDefaultBank (PLUG_NAME, defaultBank))
+    CFxBank* defaultBank = new CFxBank(numPrograms, numParams);
+    if (readDefaultBank(PLUG_NAME, defaultBank))
     {
         if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
         {
-            fParam01 = defaultBank->GetProgParm (0, 0);
-            strcpy (_programName, defaultBank->GetProgramName (0));
+            fParam01 = defaultBank->GetProgParm(0, 0);
+            strcpy(_programName, defaultBank->GetProgramName(0));
         }
     }
     else
     {
         // default values
         fParam01 = 1.0;
-        strcpy (_programName, "StuckNoteKiller"); // default program name
+        strcpy(_programName, "StuckNoteKiller"); // default program name
     }
 
     for (int ch = 0; ch < 16; ch++)
@@ -42,7 +42,7 @@ midiStuckNoteKiller::~midiStuckNoteKiller()
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStuckNoteKiller::setParameter (VstInt32 index, float value)
+void midiStuckNoteKiller::setParameter(VstInt32 index, float value)
 {
     switch (index)
     {
@@ -55,7 +55,7 @@ void midiStuckNoteKiller::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float midiStuckNoteKiller::getParameter (VstInt32 index)
+float midiStuckNoteKiller::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -71,12 +71,12 @@ float midiStuckNoteKiller::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStuckNoteKiller::getParameterName (VstInt32 index, char* label)
+void midiStuckNoteKiller::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kParam01:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         default:
             break;
@@ -84,26 +84,26 @@ void midiStuckNoteKiller::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStuckNoteKiller::getParameterDisplay (VstInt32 index, char* text)
+void midiStuckNoteKiller::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kParam01:
             if (fParam01 < 0.5)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         default:
             break;
     }
 }
 
-void midiStuckNoteKiller::preProcess (void)
+void midiStuckNoteKiller::preProcess(void)
 {
     //// preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     if (timeInfo)
     {
@@ -115,7 +115,7 @@ void midiStuckNoteKiller::preProcess (void)
     PizMidi::preProcess();
 }
 
-void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void midiStuckNoteKiller::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     if (trigger)
     {
@@ -130,7 +130,7 @@ void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
                     kill.midiData[0] = MIDI_NOTEOFF | ch;
                     kill.midiData[1] = i;
                     kill.midiData[2] = 0;
-                    outputs[0].push_back (kill);
+                    outputs[0].push_back(kill);
                     held_notes[i][ch] = false;
                 }
             }
@@ -164,7 +164,7 @@ void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
                         kill.midiData[0]  = MIDI_NOTEOFF | ch;
                         kill.midiData[1]  = n;
                         kill.midiData[2]  = 0;
-                        outputs[0].push_back (kill);
+                        outputs[0].push_back(kill);
                         held_notes[n][ch] = false;
                     }
                 }
@@ -179,6 +179,6 @@ void midiStuckNoteKiller::processMidiEvents (VstMidiEventVec* inputs, VstMidiEve
             held_notes[data1][channel] = false;
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 }

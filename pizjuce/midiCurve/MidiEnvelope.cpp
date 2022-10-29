@@ -5,80 +5,80 @@ using juce::jmin;
 using juce::roundToInt;
 
 //==============================================================================
-MidiEnvelope::MidiEnvelope (const int envelopeType_,
-                            juce::AudioProcessorEditor* owner_,
-                            MidiCurve* plugin_)
-    : owner (owner_),
-      plugin (plugin_),
-      draggingPoint (-1),
-      hoveringPoint (-1),
-      labelX (nullptr),
-      labelY (nullptr)
+MidiEnvelope::MidiEnvelope(const int envelopeType_,
+                           juce::AudioProcessorEditor* owner_,
+                           MidiCurve* plugin_)
+    : owner(owner_),
+      plugin(plugin_),
+      draggingPoint(-1),
+      hoveringPoint(-1),
+      labelX(nullptr),
+      labelY(nullptr)
 {
-    addAndMakeVisible (labelX = new juce::Label ("x label",
-                                                 "x: --"));
-    labelX->setFont (juce::Font (15.0000f, juce::Font::plain));
-    labelX->setJustificationType (juce::Justification::centredLeft);
-    labelX->setEditable (false, false, false);
-    labelX->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    labelX->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x0));
-    labelX->setOpaque (false);
-    labelX->setInterceptsMouseClicks (false, false);
+    addAndMakeVisible(labelX = new juce::Label("x label",
+                                               "x: --"));
+    labelX->setFont(juce::Font(15.0000f, juce::Font::plain));
+    labelX->setJustificationType(juce::Justification::centredLeft);
+    labelX->setEditable(false, false, false);
+    labelX->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    labelX->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x0));
+    labelX->setOpaque(false);
+    labelX->setInterceptsMouseClicks(false, false);
 
-    addAndMakeVisible (labelY = new juce::Label ("y label",
-                                                 "y: --"));
-    labelY->setFont (juce::Font (15.0000f, juce::Font::plain));
-    labelY->setJustificationType (juce::Justification::centredLeft);
-    labelY->setEditable (false, false, false);
-    labelY->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    labelY->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x0));
-    labelY->setOpaque (false);
-    labelY->setInterceptsMouseClicks (false, false);
+    addAndMakeVisible(labelY = new juce::Label("y label",
+                                               "y: --"));
+    labelY->setFont(juce::Font(15.0000f, juce::Font::plain));
+    labelY->setJustificationType(juce::Justification::centredLeft);
+    labelY->setEditable(false, false, false);
+    labelY->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    labelY->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x0));
+    labelY->setOpaque(false);
+    labelY->setInterceptsMouseClicks(false, false);
 
-    addAndMakeVisible (indicator = new MidiIndicator());
-    indicator->setInterceptsMouseClicks (false, false);
+    addAndMakeVisible(indicator = new MidiIndicator());
+    indicator->setInterceptsMouseClicks(false, false);
 }
 
 MidiEnvelope::~MidiEnvelope()
 {
-    deleteAndZero (labelX);
-    deleteAndZero (labelY);
-    deleteAndZero (indicator);
+    deleteAndZero(labelX);
+    deleteAndZero(labelY);
+    deleteAndZero(indicator);
 }
 
 //==============================================================================
 void MidiEnvelope::resized()
 {
-    labelX->setSize (100, 20);
-    labelY->setSize (100, 20);
-    labelX->setTopLeftPosition (0, 0);
-    labelY->setTopLeftPosition (0, labelX->getHeight());
-    indicator->setSize (getWidth(), getHeight());
-    updateParameters (false);
+    labelX->setSize(100, 20);
+    labelY->setSize(100, 20);
+    labelX->setTopLeftPosition(0, 0);
+    labelY->setTopLeftPosition(0, labelX->getHeight());
+    indicator->setSize(getWidth(), getHeight());
+    updateParameters(false);
 }
 
 //==============================================================================
-void MidiEnvelope::paint (juce::Graphics& g)
+void MidiEnvelope::paint(juce::Graphics& g)
 {
     const int dotSize     = MAX_ENVELOPE_DOT_SIZE;
     const int halfDotSize = dotSize / 2;
 
-    g.fillAll (juce::Colour (0xffffffff));
+    g.fillAll(juce::Colour(0xffffffff));
 
     for (int grid = 1; grid < 127; grid++)
     {
         float inc = 1.f / 127.f;
         if (grid == 64)
         { //center line
-            g.setColour (juce::Colours::blueviolet);
-            g.drawHorizontalLine ((int) (((float) (127 - grid) * inc) * (float) getHeight()), 0, (float) getWidth());
-            g.drawVerticalLine ((int) (((float) grid * inc) * (float) getWidth()), 0, (float) getHeight());
+            g.setColour(juce::Colours::blueviolet);
+            g.drawHorizontalLine((int) (((float) (127 - grid) * inc) * (float) getHeight()), 0, (float) getWidth());
+            g.drawVerticalLine((int) (((float) grid * inc) * (float) getWidth()), 0, (float) getHeight());
         }
         else if (grid % 16 == 0)
         {
-            g.setColour (juce::Colours::lightgrey);
-            g.drawHorizontalLine ((int) (((float) (127 - grid) * inc) * (float) getHeight()), 0, (float) getWidth());
-            g.drawVerticalLine ((int) (((float) grid * inc) * (float) getWidth()), 0, (float) getHeight());
+            g.setColour(juce::Colours::lightgrey);
+            g.drawHorizontalLine((int) (((float) (127 - grid) * inc) * (float) getHeight()), 0, (float) getWidth());
+            g.drawVerticalLine((int) (((float) grid * inc) * (float) getWidth()), 0, (float) getHeight());
         }
         //else if (grid%4==0) {
         //	g.setColour(Colours::ivory);
@@ -91,54 +91,54 @@ void MidiEnvelope::paint (juce::Graphics& g)
         //}
     }
     juce::Path myPath = plugin->path;
-    myPath.applyTransform (juce::AffineTransform::scale ((float) getWidth(), (float) getHeight()));
-    g.setColour (juce::Colours::black);
-    g.strokePath (myPath, juce::PathStrokeType (2.0f));
+    myPath.applyTransform(juce::AffineTransform::scale((float) getWidth(), (float) getHeight()));
+    g.setColour(juce::Colours::black);
+    g.strokePath(myPath, juce::PathStrokeType(2.0f));
 
-    g.setColour (juce::Colours::black);
-    g.drawEllipse ((float) getWidth() * (float) roundToInt (127.0 * (mouseDownPoint.getX() / (double) getWidth())) / 127.f - 2,
-                   (float) getHeight() * (float) roundToInt (127.0 * (mouseDownPoint.getY() / (double) getHeight())) / 127.f - 2,
-                   4,
-                   4,
-                   1);
+    g.setColour(juce::Colours::black);
+    g.drawEllipse((float) getWidth() * (float) roundToInt(127.0 * (mouseDownPoint.getX() / (double) getWidth())) / 127.f - 2,
+                  (float) getHeight() * (float) roundToInt(127.0 * (mouseDownPoint.getY() / (double) getHeight())) / 127.f - 2,
+                  4,
+                  4,
+                  1);
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
         int x = (int) (getWidth() * points[i][0]);
         int y = (int) (getHeight() * points[i][1]);
 
-        if (isPointActive (i))
+        if (isPointActive(i))
         {
-            g.setColour (juce::Colours::white);
-            g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
+            g.setColour(juce::Colours::white);
+            g.fillEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
             if (draggingPoint == i)
             {
-                g.setColour (juce::Colours::red);
-                g.drawHorizontalLine (y, 0, (float) getWidth());
-                g.drawVerticalLine (x, 0, (float) getHeight());
-                g.setColour (juce::Colours::black);
-                g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
-                g.setColour (juce::Colours::red);
-                g.drawEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 2.f);
+                g.setColour(juce::Colours::red);
+                g.drawHorizontalLine(y, 0, (float) getWidth());
+                g.drawVerticalLine(x, 0, (float) getHeight());
+                g.setColour(juce::Colours::black);
+                g.fillEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
+                g.setColour(juce::Colours::red);
+                g.drawEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 2.f);
             }
             else if (hoveringPoint == i)
             {
-                g.setColour (juce::Colours::green);
-                g.drawHorizontalLine (y, 0, (float) getWidth());
-                g.drawVerticalLine (x, 0, (float) getHeight());
-                g.fillEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
+                g.setColour(juce::Colours::green);
+                g.drawHorizontalLine(y, 0, (float) getWidth());
+                g.drawVerticalLine(x, 0, (float) getHeight());
+                g.fillEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize);
             }
             else
             {
-                g.setColour (juce::Colours::black);
+                g.setColour(juce::Colours::black);
                 if (i == 0 || i == (MAX_ENVELOPE_POINTS - 1))
-                    g.drawEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 3.f);
+                    g.drawEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 3.f);
                 else
-                    g.drawEllipse ((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 1.f);
+                    g.drawEllipse((float) (x - halfDotSize), (float) (y - halfDotSize), (float) dotSize, (float) dotSize, 1.f);
             }
-            if (isPointControl (i))
+            if (isPointControl(i))
             {
-                g.setColour (juce::Colours::blue);
-                g.drawEllipse ((float) (x - dotSize), (float) (y - dotSize), (float) (dotSize * 2), (float) (dotSize * 2), 1.f);
+                g.setColour(juce::Colours::blue);
+                g.drawEllipse((float) (x - dotSize), (float) (y - dotSize), (float) (dotSize * 2), (float) (dotSize * 2), 1.f);
                 //g.setColour (Colours::lightblue);
                 //float dashes[2] = {2.f,2.f};
                 //g.drawDashedLine (x,y,points[i-1][0]*getWidth(),points[i-1][1]*getHeight(),dashes,2);
@@ -168,48 +168,48 @@ void MidiEnvelope::paint (juce::Graphics& g)
 }
 
 //==============================================================================
-void MidiEnvelope::mouseDown (const juce::MouseEvent& e)
+void MidiEnvelope::mouseDown(const juce::MouseEvent& e)
 {
-    draggingPoint = findPointByMousePos (e.x, e.y);
+    draggingPoint = findPointByMousePos(e.x, e.y);
     if (draggingPoint != -1)
     {
-        mouseDownPoint.setXY (points[draggingPoint][0] * getWidth(), points[draggingPoint][1] * getHeight());
+        mouseDownPoint.setXY(points[draggingPoint][0] * getWidth(), points[draggingPoint][1] * getHeight());
         oldpoints[draggingPoint][0] = points[draggingPoint][0];
         oldpoints[draggingPoint][1] = points[draggingPoint][1];
 
         if (e.mods.isPopupMenu())
         {
-            setPointActive (draggingPoint, false);
-            setPointControl (draggingPoint, false);
+            setPointActive(draggingPoint, false);
+            setPointControl(draggingPoint, false);
         }
         else if (e.mods.isMiddleButtonDown() || e.mods.isAltDown())
         {
             if (draggingPoint > 0 && draggingPoint < (MAX_ENVELOPE_POINTS - 1))
-                setPointControl (draggingPoint, ! isPointControl (draggingPoint));
+                setPointControl(draggingPoint, ! isPointControl(draggingPoint));
         }
         else if (e.mods.isShiftDown())
         {
             points[draggingPoint][1] = 1.f - points[draggingPoint][0];
-            plugin->setParameterNotifyingHost ((draggingPoint * 2 + 1), (1.f - points[draggingPoint][1]));
+            plugin->setParameterNotifyingHost((draggingPoint * 2 + 1), (1.f - points[draggingPoint][1]));
         }
         else
         {
-            labelX->setColour (juce::Label::textColourId, juce::Colours::red);
-            labelY->setColour (juce::Label::textColourId, juce::Colours::red);
-            labelX->setText ("x: " + juce::String (roundToInt (127.f * points[draggingPoint][0])), juce::dontSendNotification);
-            labelY->setText ("y: " + juce::String (roundToInt (127.f * (1.f - points[draggingPoint][1]))), juce::dontSendNotification);
+            labelX->setColour(juce::Label::textColourId, juce::Colours::red);
+            labelY->setColour(juce::Label::textColourId, juce::Colours::red);
+            labelX->setText("x: " + juce::String(roundToInt(127.f * points[draggingPoint][0])), juce::dontSendNotification);
+            labelY->setText("y: " + juce::String(roundToInt(127.f * (1.f - points[draggingPoint][1]))), juce::dontSendNotification);
         }
     }
     else
     {
-        mouseDownPoint.setXY ((float) e.x, (float) e.y);
+        mouseDownPoint.setXY((float) e.x, (float) e.y);
         if (e.mods.isPopupMenu())
         {
-            addPoint ((float) e.x, (float) e.y, false);
+            addPoint((float) e.x, (float) e.y, false);
         }
         else if (e.mods.isAltDown() || e.mods.isMiddleButtonDown())
         {
-            addPoint ((float) e.x, (float) e.y, true);
+            addPoint((float) e.x, (float) e.y, true);
         }
         else
         {
@@ -231,36 +231,36 @@ int MidiEnvelope::findInactivePoint()
 {
     for (int i = 1; i < MAX_ENVELOPE_POINTS - 1; i++)
     {
-        if (! plugin->isPointActive (i))
+        if (! plugin->isPointActive(i))
             return i;
     }
     return -1;
 }
 
-void MidiEnvelope::mouseDoubleClick (const juce::MouseEvent& e)
+void MidiEnvelope::mouseDoubleClick(const juce::MouseEvent& e)
 {
-    int p = findPointByMousePos (e.x, e.y);
+    int p = findPointByMousePos(e.x, e.y);
     if (p != -1)
     {
-        setPointActive (p, false);
-        setPointControl (p, false);
+        setPointActive(p, false);
+        setPointControl(p, false);
     }
     else
     {
         if (e.mods.isShiftDown())
-            addPoint ((float) e.x, (getWidth() - (float) e.x) * getHeight() / getWidth(), false);
+            addPoint((float) e.x, (getWidth() - (float) e.x) * getHeight() / getWidth(), false);
         else
-            addPoint ((float) e.x, (float) e.y, false);
+            addPoint((float) e.x, (float) e.y, false);
     }
     repaint();
 }
 
-void MidiEnvelope::mouseDrag (const juce::MouseEvent& e)
+void MidiEnvelope::mouseDrag(const juce::MouseEvent& e)
 {
     int restrict = 0;
     if (e.mods.isCommandDown())
     {
-        if (abs (e.x - roundToInt (mouseDownPoint.getX())) < abs (e.y - roundToInt (mouseDownPoint.getY())))
+        if (abs(e.x - roundToInt(mouseDownPoint.getX())) < abs(e.y - roundToInt(mouseDownPoint.getY())))
         {
             restrict = -1;
         }
@@ -270,8 +270,8 @@ void MidiEnvelope::mouseDrag (const juce::MouseEvent& e)
 
     if (draggingPoint != -1)
     {
-        int prevPoint   = jmax (0, draggingPoint - 1);
-        int nextPoint   = jmin (MAX_ENVELOPE_POINTS, draggingPoint + 1);
+        int prevPoint   = jmax(0, draggingPoint - 1);
+        int nextPoint   = jmin(MAX_ENVELOPE_POINTS, draggingPoint + 1);
         int paramNumber = draggingPoint * 2;
 
         // calculate X
@@ -281,28 +281,28 @@ void MidiEnvelope::mouseDrag (const juce::MouseEvent& e)
         }
         else if (draggingPoint > 0 && draggingPoint < MAX_ENVELOPE_POINTS - 1)
         {
-            float snapx              = (float) getWidth() * (float) roundToInt (127.0 * ((double) e.x / (double) getWidth())) / 127.f;
-            points[draggingPoint][0] = restrict == -1 ? oldpoints[draggingPoint][0] : (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
+            float snapx              = (float) getWidth() * (float) roundToInt(127.0 * ((double) e.x / (double) getWidth())) / 127.f;
+            points[draggingPoint][0] = restrict == -1 ? oldpoints[draggingPoint][0] : (jmax(jmin(snapx, (float) getWidth()), 0.f)) / (float) getWidth();
         }
         else
         {
             points[draggingPoint][0] = 1.f;
         }
-        plugin->setParameterNotifyingHost ((paramNumber), points[draggingPoint][0]);
+        plugin->setParameterNotifyingHost((paramNumber), points[draggingPoint][0]);
 
         // calculate Y
-        float snapy = (float) getHeight() * (float) roundToInt (127.0 * ((double) e.y / (double) getHeight())) / 127.f;
+        float snapy = (float) getHeight() * (float) roundToInt(127.0 * ((double) e.y / (double) getHeight())) / 127.f;
         if (e.mods.isShiftDown())
             points[draggingPoint][1] = 1.f - points[draggingPoint][0];
         else
-            points[draggingPoint][1] = restrict == 1 ? oldpoints[draggingPoint][1] : (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
+            points[draggingPoint][1] = restrict == 1 ? oldpoints[draggingPoint][1] : (jmax(0.f, jmin(snapy, (float) getHeight()))) / (float) getHeight();
 
-        plugin->setParameterNotifyingHost ((paramNumber + 1), (1.f - points[draggingPoint][1]));
+        plugin->setParameterNotifyingHost((paramNumber + 1), (1.f - points[draggingPoint][1]));
 
-        labelX->setColour (juce::Label::textColourId, juce::Colours::red);
-        labelY->setColour (juce::Label::textColourId, juce::Colours::red);
-        labelX->setText ("x: " + juce::String (roundToInt (127.f * points[draggingPoint][0])), juce::dontSendNotification);
-        labelY->setText ("y: " + juce::String (roundToInt (127.f * (1.f - points[draggingPoint][1]))), juce::dontSendNotification);
+        labelX->setColour(juce::Label::textColourId, juce::Colours::red);
+        labelY->setColour(juce::Label::textColourId, juce::Colours::red);
+        labelX->setText("x: " + juce::String(roundToInt(127.f * points[draggingPoint][0])), juce::dontSendNotification);
+        labelY->setText("y: " + juce::String(roundToInt(127.f * (1.f - points[draggingPoint][1]))), juce::dontSendNotification);
 
         repaint();
     }
@@ -312,42 +312,42 @@ void MidiEnvelope::mouseDrag (const juce::MouseEvent& e)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapy  = (float) getHeight() * (float) roundToInt (127.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 127.f;
-                points[i][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
+                float snapy  = (float) getHeight() * (float) roundToInt(127.0 * ((double) (oldpoints[i][1] * getHeight() + e.y - mouseDownPoint.getY()) / (double) getHeight())) / 127.f;
+                points[i][1] = (jmax(0.f, jmin(snapy, (float) getHeight()))) / (float) getHeight();
                 points[i][0] = oldpoints[i][0];
-                plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
-                plugin->setParameterNotifyingHost ((i * 2 + 1), (1.f - points[i][1]));
+                plugin->setParameterNotifyingHost((i * 2), (points[i][0]));
+                plugin->setParameterNotifyingHost((i * 2 + 1), (1.f - points[i][1]));
             }
         }
         else if (restrict == 1)
         {
             for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
             {
-                float snapx  = (float) getWidth() * (float) roundToInt (127.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 127.f;
-                points[i][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
+                float snapx  = (float) getWidth() * (float) roundToInt(127.0 * ((double) (oldpoints[i][0] * getWidth() + e.x - mouseDownPoint.getX()) / (double) getWidth())) / 127.f;
+                points[i][0] = (jmax(jmin(snapx, (float) getWidth()), 0.f)) / (float) getWidth();
                 points[i][1] = oldpoints[i][1];
-                plugin->setParameterNotifyingHost ((i * 2), (points[i][0]));
-                plugin->setParameterNotifyingHost ((i * 2 + 1), (1.f - points[i][1]));
+                plugin->setParameterNotifyingHost((i * 2), (points[i][0]));
+                plugin->setParameterNotifyingHost((i * 2 + 1), (1.f - points[i][1]));
             }
         }
-        labelX->setColour (juce::Label::textColourId, juce::Colours::black);
-        labelY->setColour (juce::Label::textColourId, juce::Colours::black);
+        labelX->setColour(juce::Label::textColourId, juce::Colours::black);
+        labelY->setColour(juce::Label::textColourId, juce::Colours::black);
         repaint();
     }
 }
 
-void MidiEnvelope::mouseUp (const juce::MouseEvent& e)
+void MidiEnvelope::mouseUp(const juce::MouseEvent& e)
 {
-    labelX->setColour (juce::Label::textColourId, juce::Colours::black);
-    labelY->setColour (juce::Label::textColourId, juce::Colours::black);
+    labelX->setColour(juce::Label::textColourId, juce::Colours::black);
+    labelY->setColour(juce::Label::textColourId, juce::Colours::black);
     draggingPoint = -1;
 
     repaint();
 }
 
-void MidiEnvelope::mouseMove (const juce::MouseEvent& e)
+void MidiEnvelope::mouseMove(const juce::MouseEvent& e)
 {
-    hoveringPoint = findPointByMousePos (e.x, e.y);
+    hoveringPoint = findPointByMousePos(e.x, e.y);
     if (hoveringPoint != -1)
     {
         //int x = points[hoveringPoint][0]*getWidth()+16;
@@ -357,73 +357,73 @@ void MidiEnvelope::mouseMove (const juce::MouseEvent& e)
 
         //labelX->setTopLeftPosition(x,y);
         //labelY->setTopLeftPosition(x,y+labelX->getHeight());
-        labelX->setColour (juce::Label::textColourId, juce::Colours::green);
-        labelY->setColour (juce::Label::textColourId, juce::Colours::green);
-        labelX->setText ("x: " + juce::String (roundToInt (127.f * points[hoveringPoint][0])), juce::dontSendNotification);
-        labelY->setText ("y: " + juce::String (roundToInt (127.f * (1.f - points[hoveringPoint][1]))), juce::dontSendNotification);
+        labelX->setColour(juce::Label::textColourId, juce::Colours::green);
+        labelY->setColour(juce::Label::textColourId, juce::Colours::green);
+        labelX->setText("x: " + juce::String(roundToInt(127.f * points[hoveringPoint][0])), juce::dontSendNotification);
+        labelY->setText("y: " + juce::String(roundToInt(127.f * (1.f - points[hoveringPoint][1]))), juce::dontSendNotification);
     }
     else
     {
         //labelX->setTopLeftPosition(e.x+16,e.y);
         //labelY->setTopLeftPosition(e.x+16,e.y+labelX->getHeight());
-        labelX->setColour (juce::Label::textColourId, juce::Colours::black);
-        labelY->setColour (juce::Label::textColourId, juce::Colours::black);
-        labelX->setText ("x: " + juce::String (roundToInt (127.f * (float) e.x / (float) getWidth())), juce::dontSendNotification);
-        labelY->setText ("y: " + juce::String (roundToInt (127.f * (1.f - (float) e.y / (float) getHeight()))), juce::dontSendNotification);
+        labelX->setColour(juce::Label::textColourId, juce::Colours::black);
+        labelY->setColour(juce::Label::textColourId, juce::Colours::black);
+        labelX->setText("x: " + juce::String(roundToInt(127.f * (float) e.x / (float) getWidth())), juce::dontSendNotification);
+        labelY->setText("y: " + juce::String(roundToInt(127.f * (1.f - (float) e.y / (float) getHeight()))), juce::dontSendNotification);
     }
 
     repaint();
 }
 
-int MidiEnvelope::addPoint (float x, float y, bool control)
+int MidiEnvelope::addPoint(float x, float y, bool control)
 {
     int newPoint = findInactivePoint();
     if (newPoint != -1)
     {
-        setPointActive (newPoint, true);
-        setPointControl (newPoint, control);
-        float snapx         = (float) getWidth() * (float) roundToInt (127.0 * (x / (double) getWidth())) / 127.f;
-        points[newPoint][0] = (jmax (jmin (snapx, (float) getWidth()), 0.f)) / (float) getWidth();
-        float snapy         = (float) getHeight() * (float) roundToInt (127.0 * (y / (double) getHeight())) / 127.f;
-        points[newPoint][1] = (jmax (0.f, jmin (snapy, (float) getHeight()))) / (float) getHeight();
-        plugin->setParameterNotifyingHost ((newPoint * 2), points[newPoint][0]);
-        plugin->setParameterNotifyingHost ((newPoint * 2 + 1), (1.f - points[newPoint][1]));
+        setPointActive(newPoint, true);
+        setPointControl(newPoint, control);
+        float snapx         = (float) getWidth() * (float) roundToInt(127.0 * (x / (double) getWidth())) / 127.f;
+        points[newPoint][0] = (jmax(jmin(snapx, (float) getWidth()), 0.f)) / (float) getWidth();
+        float snapy         = (float) getHeight() * (float) roundToInt(127.0 * (y / (double) getHeight())) / 127.f;
+        points[newPoint][1] = (jmax(0.f, jmin(snapy, (float) getHeight()))) / (float) getHeight();
+        plugin->setParameterNotifyingHost((newPoint * 2), points[newPoint][0]);
+        plugin->setParameterNotifyingHost((newPoint * 2 + 1), (1.f - points[newPoint][1]));
     }
     return newPoint;
 }
 
-void MidiEnvelope::setPointActive (int point, bool active)
+void MidiEnvelope::setPointActive(int point, bool active)
 {
-    if (isPointControl (point))
-        plugin->setParameter (point + kActive, active ? 0.75f : 0.25f);
+    if (isPointControl(point))
+        plugin->setParameter(point + kActive, active ? 0.75f : 0.25f);
     else
-        plugin->setParameter (point + kActive, active ? 1.f : 0.f);
+        plugin->setParameter(point + kActive, active ? 1.f : 0.f);
 }
 
-void MidiEnvelope::setPointControl (int point, bool control)
+void MidiEnvelope::setPointControl(int point, bool control)
 {
-    if (isPointActive (point))
-        plugin->setParameter (point + kActive, control ? 0.75f : 1.f);
+    if (isPointActive(point))
+        plugin->setParameter(point + kActive, control ? 0.75f : 1.f);
     else
-        plugin->setParameter (point + kActive, control ? 0.25f : 0.f);
+        plugin->setParameter(point + kActive, control ? 0.25f : 0.f);
 }
 
-bool MidiEnvelope::isPointActive (int point)
+bool MidiEnvelope::isPointActive(int point)
 {
     if (point < 0)
         return false;
-    return plugin->getParameter (point + kActive) > 0.5f;
+    return plugin->getParameter(point + kActive) > 0.5f;
 }
 
-bool MidiEnvelope::isPointControl (int point)
+bool MidiEnvelope::isPointControl(int point)
 {
     if (point < 0)
         return false;
-    return plugin->getParameter (point + kActive) > 0.1f && plugin->getParameter (point + kActive) < 0.9f;
+    return plugin->getParameter(point + kActive) > 0.1f && plugin->getParameter(point + kActive) < 0.9f;
 }
 
 //==============================================================================
-int MidiEnvelope::findPointByMousePos (const int x, const int y)
+int MidiEnvelope::findPointByMousePos(const int x, const int y)
 {
     const int pixelSnap = MAX_ENVELOPE_DOT_SIZE;
 
@@ -432,19 +432,19 @@ int MidiEnvelope::findPointByMousePos (const int x, const int y)
         if ((x >= (points[i][0] * getWidth() - pixelSnap) && x <= (points[i][0] * getWidth() + pixelSnap))
             && (y >= (points[i][1] * getHeight() - pixelSnap) && y <= (points[i][1] * getHeight() + pixelSnap)))
         {
-            if (isPointActive (i))
+            if (isPointActive(i))
                 return i;
         }
     }
     return -1;
 }
 
-void MidiEnvelope::updateParameters (const bool repaintComponent)
+void MidiEnvelope::updateParameters(const bool repaintComponent)
 {
     for (int i = 0; i < MAX_ENVELOPE_POINTS; i++)
     {
-        points[i][0] = plugin->getParameter (i * 2);
-        points[i][1] = 1.f - plugin->getParameter (i * 2 + 1);
+        points[i][0] = plugin->getParameter(i * 2);
+        points[i][1] = 1.f - plugin->getParameter(i * 2 + 1);
     }
 
     if (repaintComponent)

@@ -15,8 +15,8 @@
 
 class CProcessorUsage
 {
-    typedef BOOL (WINAPI* pfnGetSystemTimes) (LPFILETIME lpIdleTime, LPFILETIME lpKernelTime, LPFILETIME lpUserTime);
-    typedef LONG (WINAPI* pfnNtQuerySystemInformation) (ULONG SystemInformationClass, PVOID SystemInformation, ULONG SystemInformationLength, PULONG ReturnLength);
+    typedef BOOL(WINAPI* pfnGetSystemTimes)(LPFILETIME lpIdleTime, LPFILETIME lpKernelTime, LPFILETIME lpUserTime);
+    typedef LONG(WINAPI* pfnNtQuerySystemInformation)(ULONG SystemInformationClass, PVOID SystemInformation, ULONG SystemInformationLength, PULONG ReturnLength);
 
     struct PROC_PERF_INFO
     {
@@ -31,11 +31,11 @@ public:
     CProcessorUsage();
     ~CProcessorUsage();
 
-    float GetUsage (bool processOnly = false);
-    void setInterval (int newInterval);
+    float GetUsage(bool processOnly = false);
+    void setInterval(int newInterval);
 
 private:
-    void GetSysTimes (__int64& idleTime, __int64& kernelTime, __int64& userTime);
+    void GetSysTimes(__int64& idleTime, __int64& kernelTime, __int64& userTime);
 
     ////////////////////////////////////////////////
     // Set of static variables to be accessed from

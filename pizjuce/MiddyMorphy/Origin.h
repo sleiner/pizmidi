@@ -9,7 +9,7 @@ class Origin : public juce::Component
 public:
     Origin();
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
     void resized() override;
 

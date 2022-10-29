@@ -1,54 +1,54 @@
 #include "midiChs_noGUI.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiChs (audioMaster);
+    return new MidiChs(audioMaster);
 }
 
 void MidiChs::Reset()
 {
-    setParameterAutomated (kChannel1, CHANNEL_TO_FLOAT (0));
-    setParameterAutomated (kChannel2, CHANNEL_TO_FLOAT (1));
-    setParameterAutomated (kChannel3, CHANNEL_TO_FLOAT (2));
-    setParameterAutomated (kChannel4, CHANNEL_TO_FLOAT (3));
-    setParameterAutomated (kChannel5, CHANNEL_TO_FLOAT (4));
-    setParameterAutomated (kChannel6, CHANNEL_TO_FLOAT (5));
-    setParameterAutomated (kChannel7, CHANNEL_TO_FLOAT (6));
-    setParameterAutomated (kChannel8, CHANNEL_TO_FLOAT (7));
-    setParameterAutomated (kChannel9, CHANNEL_TO_FLOAT (8));
-    setParameterAutomated (kChannel10, CHANNEL_TO_FLOAT (9));
-    setParameterAutomated (kChannel11, CHANNEL_TO_FLOAT (10));
-    setParameterAutomated (kChannel12, CHANNEL_TO_FLOAT (11));
-    setParameterAutomated (kChannel13, CHANNEL_TO_FLOAT (12));
-    setParameterAutomated (kChannel14, CHANNEL_TO_FLOAT (13));
-    setParameterAutomated (kChannel15, CHANNEL_TO_FLOAT (14));
-    setParameterAutomated (kChannel16, CHANNEL_TO_FLOAT (15));
-    setParameterAutomated (kClear, 0.4f);
-    setParameterAutomated (kReset, 0.4f);
+    setParameterAutomated(kChannel1, CHANNEL_TO_FLOAT(0));
+    setParameterAutomated(kChannel2, CHANNEL_TO_FLOAT(1));
+    setParameterAutomated(kChannel3, CHANNEL_TO_FLOAT(2));
+    setParameterAutomated(kChannel4, CHANNEL_TO_FLOAT(3));
+    setParameterAutomated(kChannel5, CHANNEL_TO_FLOAT(4));
+    setParameterAutomated(kChannel6, CHANNEL_TO_FLOAT(5));
+    setParameterAutomated(kChannel7, CHANNEL_TO_FLOAT(6));
+    setParameterAutomated(kChannel8, CHANNEL_TO_FLOAT(7));
+    setParameterAutomated(kChannel9, CHANNEL_TO_FLOAT(8));
+    setParameterAutomated(kChannel10, CHANNEL_TO_FLOAT(9));
+    setParameterAutomated(kChannel11, CHANNEL_TO_FLOAT(10));
+    setParameterAutomated(kChannel12, CHANNEL_TO_FLOAT(11));
+    setParameterAutomated(kChannel13, CHANNEL_TO_FLOAT(12));
+    setParameterAutomated(kChannel14, CHANNEL_TO_FLOAT(13));
+    setParameterAutomated(kChannel15, CHANNEL_TO_FLOAT(14));
+    setParameterAutomated(kChannel16, CHANNEL_TO_FLOAT(15));
+    setParameterAutomated(kClear, 0.4f);
+    setParameterAutomated(kReset, 0.4f);
     updateDisplay();
 }
 
 void MidiChs::Clear()
 {
-    setParameterAutomated (kChannel1, 0);
-    setParameterAutomated (kChannel2, 0);
-    setParameterAutomated (kChannel3, 0);
-    setParameterAutomated (kChannel4, 0);
-    setParameterAutomated (kChannel5, 0);
-    setParameterAutomated (kChannel6, 0);
-    setParameterAutomated (kChannel7, 0);
-    setParameterAutomated (kChannel8, 0);
-    setParameterAutomated (kChannel9, 0);
-    setParameterAutomated (kChannel10, 0);
-    setParameterAutomated (kChannel11, 0);
-    setParameterAutomated (kChannel12, 0);
-    setParameterAutomated (kChannel13, 0);
-    setParameterAutomated (kChannel14, 0);
-    setParameterAutomated (kChannel15, 0);
-    setParameterAutomated (kChannel16, 0);
-    setParameterAutomated (kReset, 0.4f);
-    setParameterAutomated (kClear, 0.4f);
+    setParameterAutomated(kChannel1, 0);
+    setParameterAutomated(kChannel2, 0);
+    setParameterAutomated(kChannel3, 0);
+    setParameterAutomated(kChannel4, 0);
+    setParameterAutomated(kChannel5, 0);
+    setParameterAutomated(kChannel6, 0);
+    setParameterAutomated(kChannel7, 0);
+    setParameterAutomated(kChannel8, 0);
+    setParameterAutomated(kChannel9, 0);
+    setParameterAutomated(kChannel10, 0);
+    setParameterAutomated(kChannel11, 0);
+    setParameterAutomated(kChannel12, 0);
+    setParameterAutomated(kChannel13, 0);
+    setParameterAutomated(kChannel14, 0);
+    setParameterAutomated(kChannel15, 0);
+    setParameterAutomated(kChannel16, 0);
+    setParameterAutomated(kReset, 0.4f);
+    setParameterAutomated(kClear, 0.4f);
     updateDisplay();
 }
 
@@ -57,24 +57,24 @@ MidiChsProgram::MidiChsProgram()
     // default Program Values
     for (int i = 0; i < 16; i++)
     {
-        param[i] = CHANNEL_TO_FLOAT (i);
+        param[i] = CHANNEL_TO_FLOAT(i);
     }
     param[kReset] = 0.4f;
     param[kClear] = 0.4f;
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiChs::MidiChs (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams),
-      programs (0)
+MidiChs::MidiChs(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams),
+      programs(0)
 {
     programs = new MidiChsProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -82,9 +82,9 @@ MidiChs::MidiChs (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -96,16 +96,16 @@ MidiChs::MidiChs (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 0:
-                        sprintf (programs[i].name, "MIDI chs");
+                        sprintf(programs[i].name, "MIDI chs");
                         break;
                     case 1:
                         for (int j = 0; j < 16; j++)
                             programs[i].param[j] = 0;
-                        sprintf (programs[i].name, "--");
+                        sprintf(programs[i].name, "--");
                 }
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     init();
@@ -119,40 +119,40 @@ MidiChs::~MidiChs()
 }
 
 //------------------------------------------------------------------------
-void MidiChs::setProgram (VstInt32 program)
+void MidiChs::setProgram(VstInt32 program)
 {
     MidiChsProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
 }
 
 //------------------------------------------------------------------------
-void MidiChs::setProgramName (char* name)
+void MidiChs::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiChs::getProgramName (char* name)
+void MidiChs::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiChs::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiChs::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChs::setParameter (VstInt32 index, float value)
+void MidiChs::setParameter(VstInt32 index, float value)
 {
     MidiChsProgram* ap = &programs[curProgram];
     if (index < kNumParams)
@@ -162,7 +162,7 @@ void MidiChs::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiChs::getParameter (VstInt32 index)
+float MidiChs::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
         return param[index];
@@ -170,63 +170,63 @@ float MidiChs::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChs::getParameterName (VstInt32 index, char* label)
+void MidiChs::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kChannel1:
-            strcpy (label, "1 ->");
+            strcpy(label, "1 ->");
             break;
         case kChannel2:
-            strcpy (label, "2 ->");
+            strcpy(label, "2 ->");
             break;
         case kChannel3:
-            strcpy (label, "3 ->");
+            strcpy(label, "3 ->");
             break;
         case kChannel4:
-            strcpy (label, "4 ->");
+            strcpy(label, "4 ->");
             break;
         case kChannel5:
-            strcpy (label, "5 ->");
+            strcpy(label, "5 ->");
             break;
         case kChannel6:
-            strcpy (label, "6 ->");
+            strcpy(label, "6 ->");
             break;
         case kChannel7:
-            strcpy (label, "7 ->");
+            strcpy(label, "7 ->");
             break;
         case kChannel8:
-            strcpy (label, "8 ->");
+            strcpy(label, "8 ->");
             break;
         case kChannel9:
-            strcpy (label, "9 ->");
+            strcpy(label, "9 ->");
             break;
         case kChannel10:
-            strcpy (label, "10 ->");
+            strcpy(label, "10 ->");
             break;
         case kChannel11:
-            strcpy (label, "11 ->");
+            strcpy(label, "11 ->");
             break;
         case kChannel12:
-            strcpy (label, "12 ->");
+            strcpy(label, "12 ->");
             break;
         case kChannel13:
-            strcpy (label, "13 ->");
+            strcpy(label, "13 ->");
             break;
         case kChannel14:
-            strcpy (label, "14 ->");
+            strcpy(label, "14 ->");
             break;
         case kChannel15:
-            strcpy (label, "15 ->");
+            strcpy(label, "15 ->");
             break;
         case kChannel16:
-            strcpy (label, "16 ->");
+            strcpy(label, "16 ->");
             break;
         case kReset:
-            strcpy (label, "Reset");
+            strcpy(label, "Reset");
             break;
         case kClear:
-            strcpy (label, "Clear");
+            strcpy(label, "Clear");
             break;
         default:
             break;
@@ -234,7 +234,7 @@ void MidiChs::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChs::getParameterDisplay (VstInt32 index, char* text)
+void MidiChs::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
@@ -254,26 +254,26 @@ void MidiChs::getParameterDisplay (VstInt32 index, char* text)
         case kChannel14:
         case kChannel15:
         case kChannel16:
-            if (FLOAT_TO_CHANNEL (param[index]) < 0)
-                strcpy (text, "--");
+            if (FLOAT_TO_CHANNEL(param[index]) < 0)
+                strcpy(text, "--");
             else
-                sprintf (text, "%d", 1 + FLOAT_TO_CHANNEL (param[index]));
+                sprintf(text, "%d", 1 + FLOAT_TO_CHANNEL(param[index]));
             break;
         case kReset:
             if (param[index] < 1.0f)
-                strcpy (text, "Reset");
+                strcpy(text, "Reset");
             else
             {
-                strcpy (text, "!");
+                strcpy(text, "!");
                 Reset();
             }
             break;
         case kClear:
             if (param[index] < 1.0f)
-                strcpy (text, "Clear");
+                strcpy(text, "Clear");
             else
             {
-                strcpy (text, "!");
+                strcpy(text, "!");
                 Clear();
             }
             break;
@@ -282,7 +282,7 @@ void MidiChs::getParameterDisplay (VstInt32 index, char* text)
     }
 }
 
-void MidiChs::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiChs::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -302,7 +302,7 @@ void MidiChs::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outpu
             {
                 if (channel == ch)
                 {
-                    const int newch = FLOAT_TO_CHANNEL (param[ch]);
+                    const int newch = FLOAT_TO_CHANNEL(param[ch]);
                     if (newch > -1)
                         tomod.midiData[0] = status | newch;
                     else
@@ -311,6 +311,6 @@ void MidiChs::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outpu
             }
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 }

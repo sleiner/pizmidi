@@ -32,26 +32,26 @@
 class KeySelector : public juce::MidiKeyboardComponent
 {
 public:
-    KeySelector (juce::MidiKeyboardState& state)
-        : MidiKeyboardComponent (state, MidiKeyboardComponent::horizontalKeyboard)
+    KeySelector(juce::MidiKeyboardState& state)
+        : MidiKeyboardComponent(state, MidiKeyboardComponent::horizontalKeyboard)
     {
         s = &state;
-        this->setColour (MidiKeyboardComponent::textLabelColourId, juce::Colours::transparentBlack);
+        this->setColour(MidiKeyboardComponent::textLabelColourId, juce::Colours::transparentBlack);
     }
     ~KeySelector() override
     {
     }
 
 private:
-    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    bool mouseDownOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
-        if (s->isNoteOn (this->getMidiChannel(), midiNoteNumber))
+        if (s->isNoteOn(this->getMidiChannel(), midiNoteNumber))
         {
-            s->noteOff (this->getMidiChannel(), midiNoteNumber, 1.f);
+            s->noteOff(this->getMidiChannel(), midiNoteNumber, 1.f);
         }
         else
         {
-            s->noteOn (this->getMidiChannel(), midiNoteNumber, 1.f);
+            s->noteOn(this->getMidiChannel(), midiNoteNumber, 1.f);
         }
         return false;
     }
@@ -81,39 +81,39 @@ class PizLooperEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    PizLooperEditor (PizLooper* const ownerFilter);
+    PizLooperEditor(PizLooper* const ownerFilter);
     ~PizLooperEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    bool isInterestedInFileDrag (const juce::StringArray& files) override;
-    void filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    bool isInterestedInFileDrag(const juce::StringArray& files) override;
+    void filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY) override;
     //    void sliderDragStarted (Slider* slider); //slider mousedown
     //    void sliderDragEnded (Slider* slider); //slider mouseup
     void timerCallback() override;
-    void buttonStateChanged (juce::Button* button) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override
+    void buttonStateChanged(juce::Button* button) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void clickableLabelMouseDown(ClickableLabel* label, const juce::MouseEvent& e) override
     {
     }
-    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override
+    void clickableLabelMouseDoubleClick(ClickableLabel* label, const juce::MouseEvent& e) override
     {
         if (label == nameLabel.get())
             label->edit();
     }
-    void handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
-    void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOn(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void labelTextChanged(juce::Label* labelThatHasChanged) override;
 
     // Binary resources:
     static const char* piznew40_png;
@@ -123,11 +123,11 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
-    void updateControls (int param, float value, bool forCurProgram);
+    void updateControls(int param, float value, bool forCurProgram);
     void updateSlotButtons();
     juce::ComponentBoundsConstrainer resizeLimits;
-    juce::TextButton* getButtonForSlot (int slot);
-    int getButtonIndex (Component* button);
+    juce::TextButton* getButtonForSlot(int slot);
+    int getButtonIndex(Component* button);
     int lastActiveLoop;
     PianoRoll* pianoRoll;
     bool noSnap;
@@ -376,7 +376,7 @@ private:
     juce::Image cachedImage_piznew40_png_1;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PizLooperEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PizLooperEditor)
 };
 
 //[EndFile] You can add extra defines here...

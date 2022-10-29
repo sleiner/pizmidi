@@ -10,9 +10,9 @@
 #include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiTriggerList (audioMaster);
+    return new MidiTriggerList(audioMaster);
 }
 
 MidiTriggerListProgram::MidiTriggerListProgram()
@@ -26,18 +26,18 @@ MidiTriggerListProgram::MidiTriggerListProgram()
         param[kOutputType + i * 3] = 0.3f;
 
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiTriggerList::MidiTriggerList (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiTriggerList::MidiTriggerList(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiTriggerListProgram[numPrograms];
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -45,9 +45,9 @@ MidiTriggerList::MidiTriggerList (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -56,16 +56,16 @@ MidiTriggerList::MidiTriggerList (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     init();
 
     if (programs)
-        setProgram (0);
+        setProgram(0);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -76,42 +76,42 @@ MidiTriggerList::~MidiTriggerList()
 }
 
 //------------------------------------------------------------------------
-void MidiTriggerList::setProgram (VstInt32 program)
+void MidiTriggerList::setProgram(VstInt32 program)
 {
     MidiTriggerListProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
 }
 
 //------------------------------------------------------------------------
-void MidiTriggerList::setProgramName (char* name)
+void MidiTriggerList::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiTriggerList::getProgramName (char* name)
+void MidiTriggerList::getProgramName(char* name)
 {
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
+    vst_strncpy(name, programs[curProgram].name, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiTriggerList::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiTriggerList::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
+        vst_strncpy(text, programs[index].name, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTriggerList::setParameter (VstInt32 index, float value)
+void MidiTriggerList::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
     {
@@ -139,7 +139,7 @@ void MidiTriggerList::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiTriggerList::getParameter (VstInt32 index)
+float MidiTriggerList::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
         return param[index];
@@ -147,41 +147,41 @@ float MidiTriggerList::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTriggerList::getParameterName (VstInt32 index, char* label)
+void MidiTriggerList::getParameterName(VstInt32 index, char* label)
 {
     if (index < kNumParams)
     {
         if (index == kTriggerType)
-            strcpy (label, "Trigger Type");
+            strcpy(label, "Trigger Type");
         else if (index == kTriggerNum)
-            strcpy (label, "Trigger Num");
+            strcpy(label, "Trigger Num");
         //        else if (index==kTriggerVal) strcpy(label, "Trigger Value");
         else if (index == kCCOff)
-            strcpy (label, "Send CC Off");
+            strcpy(label, "Send CC Off");
         else if (index == kProgCh)
-            strcpy (label, "Use ProgCh");
+            strcpy(label, "Use ProgCh");
         else if (index == kChannel)
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
         else if (index == kThru)
-            strcpy (label, "Thru");
+            strcpy(label, "Thru");
 
         else
         {
             for (int i = 0; i < kNumSlots; i++)
             {
                 if (index == kOutputNum + i * 3)
-                    sprintf (label, "Slot %d Num", i + 1);
+                    sprintf(label, "Slot %d Num", i + 1);
                 else if (index == kOutputType + i * 3)
-                    sprintf (label, "Slot %d Type", i + 1);
+                    sprintf(label, "Slot %d Type", i + 1);
                 else if (index == kOutputVal + i * 3)
-                    sprintf (label, "Slot %d Value", i + 1);
+                    sprintf(label, "Slot %d Value", i + 1);
             }
         }
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTriggerList::getParameterDisplay (VstInt32 index, char* text)
+void MidiTriggerList::getParameterDisplay(VstInt32 index, char* text)
 {
     float v = param[index];
     if (index < kNumParams)
@@ -189,22 +189,22 @@ void MidiTriggerList::getParameterDisplay (VstInt32 index, char* text)
         if (index == kTriggerType)
         {
             if (v < 0.25f)
-                strcpy (text, "Learn Next");
+                strcpy(text, "Learn Next");
             else if (v < 0.50f)
-                strcpy (text, "Note On/Off");
+                strcpy(text, "Note On/Off");
             else if (v < 0.75f)
-                strcpy (text, "CC 127/0");
+                strcpy(text, "CC 127/0");
             else
-                strcpy (text, "CC > 0");
+                strcpy(text, "CC > 0");
         }
         else if (index == kTriggerNum)
         {
             if (param[kTriggerType] < 0.25f)
-                strcpy (text, "Waiting...");
+                strcpy(text, "Waiting...");
             else if (param[kTriggerType] < 0.5f)
-                sprintf (text, "%s (%d)", getNoteName (FLOAT_TO_MIDI (v), bottomOctave), FLOAT_TO_MIDI (v));
+                sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI(v), bottomOctave), FLOAT_TO_MIDI(v));
             else
-                sprintf (text, "%d", FLOAT_TO_MIDI (v));
+                sprintf(text, "%d", FLOAT_TO_MIDI(v));
         }
         //        else if (index==kTriggerVal) {
         //            if (FLOAT_TO_MIDI2(v)==-1) strcpy(text, "Any");
@@ -213,29 +213,29 @@ void MidiTriggerList::getParameterDisplay (VstInt32 index, char* text)
         else if (index == kCCOff)
         {
             if (v < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else
-                strcpy (text, "Yes");
+                strcpy(text, "Yes");
         }
         else if (index == kProgCh)
         {
             if (v < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else
-                strcpy (text, "Yes");
+                strcpy(text, "Yes");
         }
         else if (index == kChannel)
         {
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (v) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(v) + 1);
         }
         else if (index == kThru)
         {
             if (v < 0.33333f)
-                strcpy (text, "All Thru");
+                strcpy(text, "All Thru");
             else if (v < 0.66667f)
-                strcpy (text, "Block Trigger");
+                strcpy(text, "Block Trigger");
             else
-                strcpy (text, "Block All");
+                strcpy(text, "Block All");
         }
 
         else
@@ -245,38 +245,38 @@ void MidiTriggerList::getParameterDisplay (VstInt32 index, char* text)
                 if (index == kOutputType + i * 3)
                 {
                     if (v < 0.25f)
-                        strcpy (text, "Learn");
+                        strcpy(text, "Learn");
                     else if (v < 0.5f)
-                        strcpy (text, "Off");
+                        strcpy(text, "Off");
                     else if (v < 0.75f)
-                        strcpy (text, "Note");
+                        strcpy(text, "Note");
                     else
-                        strcpy (text, "CC");
+                        strcpy(text, "CC");
                 }
                 else if (index == kOutputNum + i * 3)
                 {
                     if (param[kOutputType + i * 3] < 0.25f)
-                        strcpy (text, "Waiting...");
+                        strcpy(text, "Waiting...");
                     else if (param[kOutputType + i * 3] < 0.5f)
-                        strcpy (text, "--");
+                        strcpy(text, "--");
                     else if (param[kOutputType + i * 3] < 0.75f)
-                        sprintf (text, "%s (%d)", getNoteName (FLOAT_TO_MIDI (v), bottomOctave), FLOAT_TO_MIDI (v));
+                        sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI(v), bottomOctave), FLOAT_TO_MIDI(v));
                     else
-                        sprintf (text, "%d", FLOAT_TO_MIDI (v));
+                        sprintf(text, "%d", FLOAT_TO_MIDI(v));
                 }
                 else if (index == kOutputVal + i * 3)
                 {
-                    if (FLOAT_TO_MIDI_X (v) == -1)
-                        strcpy (text, "As Input");
+                    if (FLOAT_TO_MIDI_X(v) == -1)
+                        strcpy(text, "As Input");
                     else
-                        sprintf (text, "%d", FLOAT_TO_MIDI_X (v));
+                        sprintf(text, "%d", FLOAT_TO_MIDI_X(v));
                 }
             }
         }
     }
 }
 
-void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void MidiTriggerList::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -291,8 +291,8 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
 
         //        int trigval = FLOAT_TO_MIDI2(param[kTriggerVal]);
         //        if (trigval==-1) trigval=data2;
-        int trignum       = FLOAT_TO_MIDI (param[kTriggerNum]);
-        int listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+        int trignum       = FLOAT_TO_MIDI(param[kTriggerNum]);
+        int listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
         bool discard      = param[kThru] >= 0.5f;
 
         if (channel == listenchannel)
@@ -303,15 +303,15 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                 if (status == MIDI_CONTROLCHANGE)
                 {
                     if (data2 == 127)
-                        setParameterAutomated (kTriggerType, 1.f);
+                        setParameterAutomated(kTriggerType, 1.f);
                     else if (data2 > 0)
-                        setParameterAutomated (kTriggerType, 0.6f);
+                        setParameterAutomated(kTriggerType, 0.6f);
                 }
                 else if (status == MIDI_NOTEON)
-                    setParameterAutomated (kTriggerType, 0.4f);
+                    setParameterAutomated(kTriggerType, 0.4f);
                 if (param[kTriggerType] >= 0.25f)
                 {
-                    setParameterAutomated (kTriggerNum, MIDI_TO_FLOAT (data1));
+                    setParameterAutomated(kTriggerNum, MIDI_TO_FLOAT(data1));
                 }
             }
             else
@@ -321,13 +321,13 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                     if (param[kOutputType + i * 3] < 0.25f)
                     {
                         if (status == MIDI_CONTROLCHANGE)
-                            setParameterAutomated (kOutputType + i * 3, 1.f);
+                            setParameterAutomated(kOutputType + i * 3, 1.f);
                         else if (status == MIDI_NOTEON)
-                            setParameterAutomated (kOutputType + i * 3, 0.6f);
+                            setParameterAutomated(kOutputType + i * 3, 0.6f);
                         if (param[kOutputType + i * 3] >= 0.25f)
                         {
-                            setParameterAutomated (kOutputNum + i * 3, MIDI_TO_FLOAT (data1));
-                            setParameterAutomated (kOutputVal + i * 3, MIDI_TO_FLOAT (data2));
+                            setParameterAutomated(kOutputNum + i * 3, MIDI_TO_FLOAT(data1));
+                            setParameterAutomated(kOutputVal + i * 3, MIDI_TO_FLOAT(data2));
                         }
                         break;
                     }
@@ -348,10 +348,10 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                             {
                                 if (param[kOutputType + i * 3] >= 0.5f)
                                 {
-                                    int outval = FLOAT_TO_MIDI_X (param[kOutputVal + i * 3]);
+                                    int outval = FLOAT_TO_MIDI_X(param[kOutputVal + i * 3]);
                                     if (outval == -1)
                                         outval = data2;
-                                    int outnum  = FLOAT_TO_MIDI (param[kOutputNum + i * 3]);
+                                    int outnum  = FLOAT_TO_MIDI(param[kOutputNum + i * 3]);
                                     bool isNote = param[kOutputType + i * 3] < 0.75f;
                                     if (isNote && notesPlaying[outnum])
                                     {
@@ -360,13 +360,13 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                         m.midiData[0]  = MIDI_NOTEOFF | channel;
                                         m.midiData[1]  = outnum;
                                         m.midiData[2]  = 0;
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                     }
                                     VstMidiEvent m = tomod;
                                     m.midiData[0]  = (isNote ? MIDI_NOTEON : MIDI_CONTROLCHANGE) | channel;
                                     m.midiData[1]  = outnum;
                                     m.midiData[2]  = outval;
-                                    outputs[0].push_back (m);
+                                    outputs[0].push_back(m);
                                     if (isNote)
                                         notesPlaying[outnum] = true;
                                 }
@@ -378,7 +378,7 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                             {
                                 if (param[kOutputType + i * 3] >= 0.5f)
                                 {
-                                    int outnum  = FLOAT_TO_MIDI (param[kOutputNum + i * 3]);
+                                    int outnum  = FLOAT_TO_MIDI(param[kOutputNum + i * 3]);
                                     bool isNote = param[kOutputType + i * 3] < 0.75f;
                                     if (isNote && notesPlaying[outnum])
                                     {
@@ -387,14 +387,14 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                         m.midiData[0]  = MIDI_NOTEOFF | channel;
                                         m.midiData[1]  = outnum;
                                         m.midiData[2]  = 0;
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                     }
                                     VstMidiEvent m = tomod;
                                     m.midiData[0]  = (isNote ? MIDI_NOTEOFF : MIDI_CONTROLCHANGE) | channel;
                                     m.midiData[1]  = outnum;
                                     m.midiData[2]  = 0;
                                     if (isNote || param[kCCOff] >= 0.5f)
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                     if (isNote)
                                         notesPlaying[outnum] = false;
                                 }
@@ -404,7 +404,7 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                 }
                 else if (status == MIDI_NOTEON)
                 {
-                    if (param[kTriggerType] < 0.5f && data1 == FLOAT_TO_MIDI (param[kTriggerNum]))
+                    if (param[kTriggerType] < 0.5f && data1 == FLOAT_TO_MIDI(param[kTriggerNum]))
                     {
                         if (param[kThru] >= 0.33333f)
                             discard = true;
@@ -412,9 +412,9 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         {
                             if (param[kOutputType + i * 3] >= 0.5f)
                             {
-                                int outnum  = FLOAT_TO_MIDI (param[kOutputNum + i * 3]);
+                                int outnum  = FLOAT_TO_MIDI(param[kOutputNum + i * 3]);
                                 bool isNote = param[kOutputType + i * 3] < 0.75f;
-                                int outval  = FLOAT_TO_MIDI_X (param[kOutputVal + i * 3]);
+                                int outval  = FLOAT_TO_MIDI_X(param[kOutputVal + i * 3]);
                                 if (outval == -1)
                                     outval = data2;
                                 if (isNote && notesPlaying[outnum])
@@ -424,13 +424,13 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                                     m.midiData[0]  = MIDI_NOTEOFF | channel;
                                     m.midiData[1]  = outnum;
                                     m.midiData[2]  = 0;
-                                    outputs[0].push_back (m);
+                                    outputs[0].push_back(m);
                                 }
                                 VstMidiEvent m = tomod;
                                 m.midiData[0]  = (isNote ? MIDI_NOTEON : MIDI_CONTROLCHANGE) | channel;
                                 m.midiData[1]  = outnum;
                                 m.midiData[2]  = outval;
-                                outputs[0].push_back (m);
+                                outputs[0].push_back(m);
                                 if (isNote)
                                     notesPlaying[outnum] = true;
                             }
@@ -439,7 +439,7 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                 }
                 else if (status == MIDI_NOTEOFF)
                 {
-                    if (param[kTriggerType] < 0.5f && data1 == FLOAT_TO_MIDI (param[kTriggerNum]))
+                    if (param[kTriggerType] < 0.5f && data1 == FLOAT_TO_MIDI(param[kTriggerNum]))
                     {
                         if (param[kThru] > 0.33333f)
                             discard = true;
@@ -447,14 +447,14 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                         {
                             if (param[kOutputType + i * 3] >= 0.5f)
                             {
-                                int outnum     = FLOAT_TO_MIDI (param[kOutputNum + i * 3]);
+                                int outnum     = FLOAT_TO_MIDI(param[kOutputNum + i * 3]);
                                 bool isNote    = param[kOutputType + i * 3] < 0.75f;
                                 VstMidiEvent m = tomod;
                                 m.midiData[0]  = (isNote ? MIDI_NOTEOFF : MIDI_CONTROLCHANGE) | channel;
                                 m.midiData[1]  = outnum;
                                 m.midiData[2]  = data2;
                                 if (isNote || param[kCCOff] >= 0.5f)
-                                    outputs[0].push_back (m);
+                                    outputs[0].push_back(m);
                                 if (isNote)
                                     notesPlaying[outnum] = false;
                             }
@@ -477,12 +477,12 @@ void MidiTriggerList::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVe
                     }
                 }
                 if (param[kProgCh] >= 0.5f)
-                    setProgram (data1);
+                    setProgram(data1);
             }
         }
 
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
 
     } //for() inputs loop
 }

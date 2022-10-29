@@ -7,9 +7,9 @@
 #include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new midiStrum (audioMaster);
+    return new midiStrum(audioMaster);
 }
 
 midiStrumProgram::midiStrumProgram()
@@ -28,12 +28,12 @@ midiStrumProgram::midiStrumProgram()
     param[kVelRamp]      = 0.5f;
     param[kVelToVel]     = 0.0f;
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-midiStrum::midiStrum (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+midiStrum::midiStrum(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new midiStrumProgram[numPrograms];
 
@@ -42,8 +42,8 @@ midiStrum::midiStrum (audioMasterCallback audioMaster)
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -51,9 +51,9 @@ midiStrum::midiStrum (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -62,10 +62,10 @@ midiStrum::midiStrum (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 }
 
@@ -77,45 +77,45 @@ midiStrum::~midiStrum()
 }
 
 //------------------------------------------------------------------------
-void midiStrum::setProgram (VstInt32 program)
+void midiStrum::setProgram(VstInt32 program)
 {
     midiStrumProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
 }
 
 //------------------------------------------------------------------------
-void midiStrum::setProgramName (char* name)
+void midiStrum::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void midiStrum::getProgramName (char* name)
+void midiStrum::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool midiStrum::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool midiStrum::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStrum::setSampleRate (float sampleRateIn)
+void midiStrum::setSampleRate(float sampleRateIn)
 {
-    PizMidi::setSampleRate (sampleRateIn);
-    timezone = roundToInt (sampleRate * 0.02f); //20ms
+    PizMidi::setSampleRate(sampleRateIn);
+    timezone = roundToInt(sampleRate * 0.02f); //20ms
 }
 
 //-----------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ void midiStrum::resume()
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStrum::setParameter (VstInt32 index, float value)
+void midiStrum::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
     {
@@ -193,7 +193,7 @@ void midiStrum::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float midiStrum::getParameter (VstInt32 index)
+float midiStrum::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
         return param[index];
@@ -201,202 +201,202 @@ float midiStrum::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStrum::getParameterName (VstInt32 index, char* label)
+void midiStrum::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kMode:
-            strcpy (label, "Mode");
+            strcpy(label, "Mode");
             break;
         case kRandom:
-            strcpy (label, "Randomness");
+            strcpy(label, "Randomness");
             break;
         case kLength:
-            strcpy (label, "NoteLength");
+            strcpy(label, "NoteLength");
             break;
         case kSpeed:
-            strcpy (label, "Speed");
+            strcpy(label, "Speed");
             break;
         case kMaxDelay:
-            strcpy (label, "Max Time");
+            strcpy(label, "Max Time");
             break;
         case kSync:
-            strcpy (label, "TempoSync");
+            strcpy(label, "TempoSync");
             break;
         case kVelToSpeed:
-            strcpy (label, "VelToSpeed");
+            strcpy(label, "VelToSpeed");
             break;
         case kVelToVel:
-            strcpy (label, "VelToVel");
+            strcpy(label, "VelToVel");
             break;
         case kDnVelocity:
-            strcpy (label, "DownVel");
+            strcpy(label, "DownVel");
             break;
         case kUpVelocity:
-            strcpy (label, "UpVel");
+            strcpy(label, "UpVel");
             break;
         case kAccel:
-            strcpy (label, "Accel");
+            strcpy(label, "Accel");
             break;
         case kInChannel:
-            strcpy (label, "In Chan");
+            strcpy(label, "In Chan");
             break;
         case kStrumChannel:
-            strcpy (label, "Strum Chan");
+            strcpy(label, "Strum Chan");
             break;
         case kStrumOct:
-            strcpy (label, "Strum Octave");
+            strcpy(label, "Strum Octave");
             break;
         case kOutChannel:
-            strcpy (label, "Out Chan");
+            strcpy(label, "Out Chan");
             break;
         case kVelRamp:
-            strcpy (label, "VelRamp");
+            strcpy(label, "VelRamp");
             break;
         case kThru:
-            strcpy (label, "Audition");
+            strcpy(label, "Audition");
             break;
         case kSustain:
-            strcpy (label, "Use Sustain");
+            strcpy(label, "Use Sustain");
             break;
         default:
-            strcpy (label, " ");
+            strcpy(label, " ");
             break;
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void midiStrum::getParameterDisplay (VstInt32 index, char* text)
+void midiStrum::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kMode:
             if (param[index] < 0.5f)
-                strcpy (text, "Complicated");
+                strcpy(text, "Complicated");
             else
-                strcpy (text, "Simple");
+                strcpy(text, "Simple");
             break;
         case kMaxDelay:
             if (param[kSync] < 0.5f)
             {
-                sprintf (text, "%d ms", roundToInt (1000.f * (0.1f + 2.9f * param[kMaxDelay])));
+                sprintf(text, "%d ms", roundToInt(1000.f * (0.1f + 2.9f * param[kMaxDelay])));
             }
             else
             {
                 if (param[index] == 0.0f)
-                    strcpy (text, "64");
+                    strcpy(text, "64");
                 else if (param[index] < 0.05f)
-                    strcpy (text, "32T");
+                    strcpy(text, "32T");
                 else if (param[index] < 0.1f)
-                    strcpy (text, "dotted64");
+                    strcpy(text, "dotted64");
                 else if (param[index] < 0.15f)
-                    strcpy (text, "32");
+                    strcpy(text, "32");
                 else if (param[index] < 0.2f)
-                    strcpy (text, "16T");
+                    strcpy(text, "16T");
                 else if (param[index] < 0.25f)
-                    strcpy (text, "dotted32");
+                    strcpy(text, "dotted32");
                 else if (param[index] < 0.3f)
-                    strcpy (text, "16");
+                    strcpy(text, "16");
                 else if (param[index] < 0.35f)
-                    strcpy (text, "8T");
+                    strcpy(text, "8T");
                 else if (param[index] < 0.4f)
-                    strcpy (text, "dotted16");
+                    strcpy(text, "dotted16");
                 else if (param[index] < 0.45f)
-                    strcpy (text, "8");
+                    strcpy(text, "8");
                 else if (param[index] < 0.5f)
-                    strcpy (text, "4T");
+                    strcpy(text, "4T");
                 else if (param[index] < 0.55f)
-                    strcpy (text, "dotted8");
+                    strcpy(text, "dotted8");
                 else if (param[index] < 0.6f)
-                    strcpy (text, "4");
+                    strcpy(text, "4");
                 else if (param[index] < 0.65f)
-                    strcpy (text, "2T");
+                    strcpy(text, "2T");
                 else if (param[index] < 0.7f)
-                    strcpy (text, "dotted4");
+                    strcpy(text, "dotted4");
                 else if (param[index] < 0.75f)
-                    strcpy (text, "2");
+                    strcpy(text, "2");
                 else if (param[index] < 0.8f)
-                    strcpy (text, "dotted2");
+                    strcpy(text, "dotted2");
                 else if (param[index] < 0.85f)
-                    strcpy (text, "1");
+                    strcpy(text, "1");
                 else if (param[index] < 0.9f)
-                    strcpy (text, "dotted1");
+                    strcpy(text, "dotted1");
                 else if (param[index] < 0.95f)
-                    strcpy (text, "2bars");
+                    strcpy(text, "2bars");
                 else if (param[index] < 1.0f)
-                    strcpy (text, "3bars");
+                    strcpy(text, "3bars");
                 else
-                    strcpy (text, "4bars");
+                    strcpy(text, "4bars");
             }
             break;
         case kInChannel:
         case kStrumChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[index]) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kOutChannel:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                strcpy (text, "As Input");
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+                strcpy(text, "As Input");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
             break;
         case kStrumOct:
             int d;
-            d = roundToInt (param[index] * 10.f) * 12;
-            sprintf (text, "%s (%d)", getNoteName (d, bottomOctave), d);
+            d = roundToInt(param[index] * 10.f) * 12;
+            sprintf(text, "%s (%d)", getNoteName(d, bottomOctave), d);
             break;
         case kDnVelocity:
         case kUpVelocity:
-            sprintf (text, "%d", FLOAT_TO_VELOCITY (param[index]));
+            sprintf(text, "%d", FLOAT_TO_VELOCITY(param[index]));
             break;
         case kRandom:
         case kSpeed:
         case kVelToSpeed:
         case kVelToVel:
-            sprintf (text, "%d%%", roundToInt (param[index] * 100.0f));
+            sprintf(text, "%d%%", roundToInt(param[index] * 100.0f));
             break;
         case kAccel:
             if (param[index] > 0.5f)
-                sprintf (text, "+%d%%", roundToInt (param[index] * 200.f) - 100);
+                sprintf(text, "+%d%%", roundToInt(param[index] * 200.f) - 100);
             else
-                sprintf (text, "%d%%", roundToInt (param[index] * 200.f) - 100);
+                sprintf(text, "%d%%", roundToInt(param[index] * 200.f) - 100);
             break;
         case kLength:
             if (param[index] < 0.5f)
-                strcpy (text, "InChannel");
+                strcpy(text, "InChannel");
             else
-                strcpy (text, "StrumChannel");
+                strcpy(text, "StrumChannel");
             break;
         case kVelRamp:
             if (param[index] > 0.5f)
-                sprintf (text, "+%d%%", roundToInt (param[index] * 200.f) - 100);
+                sprintf(text, "+%d%%", roundToInt(param[index] * 200.f) - 100);
             else
-                sprintf (text, "%d%%", roundToInt (param[index] * 200.f) - 100);
+                sprintf(text, "%d%%", roundToInt(param[index] * 200.f) - 100);
             break;
         case kThru:
             if (param[index] < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else if (param[index] < 1.f)
-                strcpy (text, "Always");
+                strcpy(text, "Always");
             else
-                strcpy (text, "While Strumming");
+                strcpy(text, "While Strumming");
             break;
         case kSustain:
         case kSync:
             if (param[index] < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else
-                strcpy (text, "Yes");
+                strcpy(text, "Yes");
             break;
         default:
-            sprintf (text, " ", param[index]);
+            sprintf(text, " ", param[index]);
             break;
     }
 }
 
 //-----------------------------------------------------------------------------------------
-bool midiStrum::init (void)
+bool midiStrum::init(void)
 {
-    srand ((unsigned int) time (NULL));
+    srand((unsigned int) time(NULL));
 
     _ppq           = 0.0;
     _bpm           = 120.f;
@@ -422,7 +422,7 @@ bool midiStrum::init (void)
     mutedstrumnote = 0;
 
     //for simple mode, the listening time after the first note
-    timezone = roundToInt (sampleRate * 0.02f); //20ms
+    timezone = roundToInt(sampleRate * 0.02f); //20ms
 
     return PizMidi::init();
 }
@@ -437,7 +437,7 @@ void midiStrum::preProcess()
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     if (timeInfo)
     {
@@ -451,22 +451,22 @@ void midiStrum::preProcess()
             isplaying = false;
     }
 
-    samplesPerBeat = roundToInt (60.0f * sampleRate / _bpm);
-    totalSamples   = roundToInt (_ppq * (double) samplesPerBeat);
+    samplesPerBeat = roundToInt(60.0f * sampleRate / _bpm);
+    totalSamples   = roundToInt(_ppq * (double) samplesPerBeat);
 
     _cleanMidiOutBuffers();
 }
 
-void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void midiStrum::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
     //calculations------------------------------------------------------------------
-    char listenchannel = FLOAT_TO_CHANNEL015 (param[kInChannel]);
-    char strumchannel  = FLOAT_TO_CHANNEL015 (param[kStrumChannel]);
-    char outchannel    = FLOAT_TO_CHANNEL (param[kOutChannel]);
+    char listenchannel = FLOAT_TO_CHANNEL015(param[kInChannel]);
+    char strumchannel  = FLOAT_TO_CHANNEL015(param[kStrumChannel]);
+    char outchannel    = FLOAT_TO_CHANNEL(param[kOutChannel]);
     if (outchannel == -1)
         outchannel = listenchannel;
 
-    char downstroke = roundToInt (param[kStrumOct] * 10.f) * 12;
+    char downstroke = roundToInt(param[kStrumOct] * 10.f) * 12;
     char upstroke   = downstroke + 2;
     //char downupstroke=upstroke+2;
 
@@ -514,23 +514,23 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     VstMidiEvent kill = event;
                     kill.midiData[0]  = MIDI_NOTEOFF + channel;
                     kill.midiData[2]  = 0;
-                    outputs[0].push_back (kill);
+                    outputs[0].push_back(kill);
                     notePlaying[data1] = false;
                 }
                 int velocity = data2;
-                int random   = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                int random   = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
                 velocity += random;
                 if (velocity > 127)
                     velocity = 127;
                 else if (velocity < 1)
                     velocity = 1;
                 event.midiData[2] = velocity;
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
                 notePlaying[data1] = true;
             }
             else if (status == MIDI_NOTEOFF)
             {
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
                 notePlaying[data1] = false;
             }
         }
@@ -538,7 +538,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         {
             //not due yet, try next block
             event.deltaFrames -= samples;
-            newBuffer.push_back (event);
+            newBuffer.push_back(event);
         }
     }
     if (wasplaying && ! isplaying)
@@ -575,7 +575,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         //all notes off-----------------------------------------------------------------
         if ((channel == listenchannel || channel == strumchannel) && status == MIDI_CONTROLCHANGE && data1 == MIDI_ALL_NOTES_OFF)
         {
-            dbg ("panic");
+            dbg("panic");
             heldnotes = 0;
             killall   = true;
             for (int n = 0; n < 128; n++)
@@ -592,7 +592,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     kill.deltaFrames = tomod.deltaFrames;
                     kill.detune      = 0;
                     notePlaying[n]   = false;
-                    outputs[0].push_back (kill);
+                    outputs[0].push_back(kill);
                 }
             }
         }
@@ -623,7 +623,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 heldnotes = 0;
                             if (notePlaying[n])
                             {
-                                VstInt32 delay = roundToInt ((0.1f + param[kRandom]) * (float (rand() % 1000) * 0.001f - 0.5f) * (sampleRate * 0.1f));
+                                VstInt32 delay = roundToInt((0.1f + param[kRandom]) * (float(rand() % 1000) * 0.001f - 0.5f) * (sampleRate * 0.1f));
                                 if ((noteDelay[n] + noteOrigPos[n]) >= (totalSamples + tomod.deltaFrames + delay))
                                 {
                                     delay = noteDelay[n];
@@ -638,10 +638,10 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                         kill.midiData[1]  = n;
                                         kill.midiData[2]  = 0;
                                         kill.deltaFrames  = delay;
-                                        outputs[0].push_back (kill);
+                                        outputs[0].push_back(kill);
                                         notePlaying[n] = false;
                                         noteDelay[n]   = 0;
-                                        dbg ("strum ended, killed note " << n);
+                                        dbg("strum ended, killed note " << n);
                                     }
                                     else
                                     {
@@ -650,22 +650,22 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                         delayed.midiData[1]  = n;
                                         delayed.midiData[2]  = 0;
                                         delayed.deltaFrames += delay - samples;
-                                        midiDelayBuffer.push_back (delayed);
+                                        midiDelayBuffer.push_back(delayed);
                                         expectingDelayedNotes = true;
                                         discard               = true;
                                     }
                                 }
                                 else
                                 {
-                                    dbg ("no delay");
+                                    dbg("no delay");
                                     VstMidiEvent kill = tomod;
                                     kill.midiData[0]  = MIDI_NOTEOFF + outchannel;
                                     kill.midiData[1]  = n;
                                     kill.midiData[2]  = 0;
-                                    outputs[0].push_back (kill);
+                                    outputs[0].push_back(kill);
                                     notePlaying[n] = false;
                                     noteDelay[n]   = 0;
-                                    dbg ("strum ended, killed note " << n);
+                                    dbg("strum ended, killed note " << n);
                                 }
                             }
                             else
@@ -718,7 +718,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     }
                     if (delay > 0)
                     {
-                        dbg ("NoteOff needs delay=" << delay);
+                        dbg("NoteOff needs delay=" << delay);
                         if (samples - tomod.deltaFrames - delay > 0)
                         {
                             // delayed event is within the current block
@@ -729,10 +729,10 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         }
                         else
                         {
-                            dbg ("future");
+                            dbg("future");
                             tomod.deltaFrames += (delay - samples);
                             tomod.midiData[0] = MIDI_NOTEOFF | outchannel;
-                            midiDelayBuffer.push_back (tomod);
+                            midiDelayBuffer.push_back(tomod);
                             expectingDelayedNotes = true;
                             discard               = true;
                         }
@@ -758,7 +758,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[2] = 0;
                             kill.deltaFrames = tomod.deltaFrames;
                             kill.detune      = 0;
-                            outputs[0].push_back (kill);
+                            outputs[0].push_back(kill);
                             notePlaying[mutedstrumnote] = false;
                             mutedstrumnote              = 0;
                         }
@@ -789,8 +789,8 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                             kill.deltaFrames += delay;
                                             notePlaying[n] = false;
                                             noteDelay[n]   = 0;
-                                            outputs[0].push_back (kill);
-                                            dbg ("strum ended, killed note " << n);
+                                            outputs[0].push_back(kill);
+                                            dbg("strum ended, killed note " << n);
                                         }
                                         else
                                         {
@@ -800,22 +800,22 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                             delayed.midiData[1]  = n;
                                             delayed.midiData[2]  = 0;
                                             delayed.deltaFrames += delay - samples;
-                                            midiDelayBuffer.push_back (delayed);
+                                            midiDelayBuffer.push_back(delayed);
                                             expectingDelayedNotes = true;
                                             discard               = true;
                                         }
                                     }
                                     else
                                     {
-                                        dbg ("no delay");
+                                        dbg("no delay");
                                         VstMidiEvent kill = tomod;
                                         kill.midiData[0]  = MIDI_NOTEOFF + outchannel;
                                         kill.midiData[1]  = n;
                                         kill.midiData[2]  = 0;
-                                        outputs[0].push_back (kill);
+                                        outputs[0].push_back(kill);
                                         notePlaying[n] = false;
                                         noteDelay[n]   = 0;
-                                        dbg ("strum ended, killed note " << n);
+                                        dbg("strum ended, killed note " << n);
                                     }
                                 }
                                 else
@@ -893,19 +893,19 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         //this should be the first received note
                         strumdelta = tomod.deltaFrames;
                         strumvel   = data2;
-                        dbg ("first " << tomod.deltaFrames);
+                        dbg("first " << tomod.deltaFrames);
                     }
                     if (tomod.deltaFrames - strumdelta < timezone)
                     {
                         //keep collecting
-                        dbg ("here " << tomod.deltaFrames);
+                        dbg("here " << tomod.deltaFrames);
                     }
                     else
                     {
                         //first note in next strum
                         startstrum = true;
                         strumdelta = -999;
-                        dbg ("there " << tomod.deltaFrames);
+                        dbg("there " << tomod.deltaFrames);
                     }
                 }
             }
@@ -928,7 +928,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         kill.deltaFrames            = tomod.deltaFrames;
                         kill.detune                 = 0;
                         notePlaying[mutedstrumnote] = false;
-                        outputs[0].push_back (kill);
+                        outputs[0].push_back(kill);
                         mutedstrumnote = 0;
                     }
                     if (heldnotes == 0)
@@ -949,7 +949,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             strum.midiData[2] = data2;
                             strum.deltaFrames = tomod.deltaFrames;
                             strum.detune      = 0;
-                            outputs[0].push_back (strum);
+                            outputs[0].push_back(strum);
                         }
                     }
                     else
@@ -974,30 +974,30 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 }
                                 else if (held[n])
                                 {
-                                    dbg ("play chord, notes = " << heldnotes);
+                                    dbg("play chord, notes = " << heldnotes);
                                     if (up)
                                         velocity =
-                                            FLOAT_TO_VELOCITY (param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (data2));
+                                            FLOAT_TO_VELOCITY(param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(data2));
                                     else
                                         velocity =
-                                            FLOAT_TO_VELOCITY (param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (data2));
-                                    dbg ("v=" << velocity);
+                                            FLOAT_TO_VELOCITY(param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(data2));
+                                    dbg("v=" << velocity);
 
                                     //delay based on chord position, in samples:
                                     VstInt32 delay = 0;
                                     if (heldnotes > 1)
                                     {
                                         float x = (float) (chordpos) / (float) (heldnotes - 1);
-                                        delay   = roundToInt ((accel * 0.3f * sin (PI * x) + x) * maxdelay);
-                                        velocity += roundToInt ((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
+                                        delay   = roundToInt((accel * 0.3f * sin(PI * x) + x) * maxdelay);
+                                        velocity += roundToInt((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
                                         if (velocity > 127)
                                             velocity = 127;
                                         else if (velocity < 1)
                                             velocity = 1;
-                                        float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT (data2);
-                                        delay          = roundToInt (veldelay * (float) delay);
+                                        float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT(data2);
+                                        delay          = roundToInt(veldelay * (float) delay);
                                     }
-                                    dbg ("held note " << n << " delay=" << delay);
+                                    dbg("held note " << n << " delay=" << delay);
                                     if (delay > 0)
                                     {
                                         if (samples - tomod.deltaFrames - delay > 0)
@@ -1014,12 +1014,12 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                                 kill.midiData[2] = 0;
                                                 kill.deltaFrames = tomod.deltaFrames + delay;
                                                 kill.detune      = 0;
-                                                outputs[0].push_back (kill);
+                                                outputs[0].push_back(kill);
                                                 notePlaying[n] = false;
-                                                dbg ("KILL " << n);
+                                                dbg("KILL " << n);
                                             }
-                                            int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
-                                            dbg ("random vel=" << random);
+                                            int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                                            dbg("random vel=" << random);
                                             velocity += random;
                                             if (velocity > 127)
                                                 velocity = 127;
@@ -1032,7 +1032,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                             strum.midiData[2] = velocity;
                                             strum.deltaFrames = tomod.deltaFrames + delay;
                                             strum.detune      = 0;
-                                            outputs[0].push_back (strum);
+                                            outputs[0].push_back(strum);
                                         }
                                         else
                                         {
@@ -1041,14 +1041,14 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                             delayed.midiData[1] = n;
                                             delayed.midiData[2] = velocity;
                                             delayed.deltaFrames = tomod.deltaFrames + delay - samples;
-                                            midiDelayBuffer.push_back (delayed);
+                                            midiDelayBuffer.push_back(delayed);
                                             expectingDelayedNotes = true;
                                         }
                                         noteDelay[n] = delay;
                                     } //(delay>0)
                                     else if (velocity > 0)
                                     {
-                                        dbg ("no delay");
+                                        dbg("no delay");
                                         noteDelay[n] = 0;
                                         if (notePlaying[n])
                                         {
@@ -1058,12 +1058,12 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                             kill.midiData[2] = 0;
                                             kill.deltaFrames = tomod.deltaFrames;
                                             kill.detune      = 0;
-                                            outputs[0].push_back (kill);
-                                            dbg ("incoming noteon killed note " << n);
+                                            outputs[0].push_back(kill);
+                                            dbg("incoming noteon killed note " << n);
                                             notePlaying[n] = false;
                                         }
-                                        int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
-                                        dbg ("random vel=" << random);
+                                        int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                                        dbg("random vel=" << random);
                                         velocity += random;
                                         if (velocity > 127)
                                             velocity = 127;
@@ -1076,7 +1076,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                         strum.midiData[2] = velocity;
                                         strum.deltaFrames = tomod.deltaFrames;
                                         strum.detune      = 0;
-                                        outputs[0].push_back (strum);
+                                        outputs[0].push_back(strum);
                                     } //(no delay)
                                     chordpos++;
                                 } //(held[n])
@@ -1119,12 +1119,12 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
             } //channel==strumchannel
         }     // status==noteon
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
 
         //simple strumming:
         if (mode == simple && startstrum)
         {
-            dbg ("zing ");
+            dbg("zing ");
             strumwaiting = false;
             startstrum   = false;
             strumming    = true;
@@ -1145,22 +1145,22 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 {
                     int velocity = strumvel;
                     if (up)
-                        velocity = FLOAT_TO_VELOCITY (param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (strumvel));
+                        velocity = FLOAT_TO_VELOCITY(param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(strumvel));
                     else
-                        velocity = FLOAT_TO_VELOCITY (param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (strumvel));
+                        velocity = FLOAT_TO_VELOCITY(param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(strumvel));
                     //delay based on chord position, in samples:
                     VstInt32 delay = 0;
                     if (heldnotes > 1)
                     {
                         float x = (float) (chordpos) / (float) (heldnotes - 1);
-                        delay   = roundToInt ((accel * 0.3f * sin (PI * x) + x) * maxdelay);
-                        velocity += roundToInt ((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
+                        delay   = roundToInt((accel * 0.3f * sin(PI * x) + x) * maxdelay);
+                        velocity += roundToInt((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
                         if (velocity > 127)
                             velocity = 127;
                         else if (velocity < 1)
                             velocity = 1;
-                        float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT (strumvel);
-                        delay          = roundToInt (veldelay * (float) delay);
+                        float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT(strumvel);
+                        delay          = roundToInt(veldelay * (float) delay);
                     }
                     if (delay > 0)
                     {
@@ -1176,11 +1176,11 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                                 kill.midiData[2] = 0;
                                 kill.deltaFrames = strumdelta + delay;
                                 kill.detune      = 0;
-                                outputs[0].push_back (kill);
+                                outputs[0].push_back(kill);
                                 notePlaying[n] = false;
-                                dbg ("KILLY " << n);
+                                dbg("KILLY " << n);
                             }
-                            int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                            int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
                             velocity += random;
                             if (velocity > 127)
                                 velocity = 127;
@@ -1193,7 +1193,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             strum.midiData[2] = velocity;
                             strum.deltaFrames = strumdelta + delay;
                             strum.detune      = 0;
-                            outputs[0].push_back (strum);
+                            outputs[0].push_back(strum);
                         }
                         else
                         {
@@ -1202,7 +1202,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             delayed.midiData[1] = n;
                             delayed.midiData[2] = velocity;
                             delayed.deltaFrames = strumdelta + delay - samples;
-                            midiDelayBuffer.push_back (delayed);
+                            midiDelayBuffer.push_back(delayed);
                             expectingDelayedNotes = true;
                         }
                         noteDelay[n] = delay;
@@ -1218,11 +1218,11 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[2] = 0;
                             kill.deltaFrames = strumdelta;
                             kill.detune      = 0;
-                            outputs[0].push_back (kill);
+                            outputs[0].push_back(kill);
                             notePlaying[n] = false;
-                            dbg ("KILL MASTER!!! " << n);
+                            dbg("KILL MASTER!!! " << n);
                         }
-                        int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                        int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
                         velocity += random;
                         if (velocity > 127)
                             velocity = 127;
@@ -1235,7 +1235,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         strum.midiData[2] = velocity;
                         strum.deltaFrames = strumdelta;
                         strum.detune      = 0;
-                        outputs[0].push_back (strum);
+                        outputs[0].push_back(strum);
                     } //(no delay)
                     chordpos++;
                 } //(held[n])
@@ -1250,7 +1250,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
     //in case we're at the end of the block and strumming hasn't started yet
     if (mode == simple && strumwaiting)
     {
-        dbg ("ouch ");
+        dbg("ouch ");
         strumwaiting = false;
         startstrum   = false;
         strumming    = true;
@@ -1271,22 +1271,22 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
             {
                 int velocity = strumvel;
                 if (up)
-                    velocity = FLOAT_TO_VELOCITY (param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (strumvel));
+                    velocity = FLOAT_TO_VELOCITY(param[kUpVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(strumvel));
                 else
-                    velocity = FLOAT_TO_VELOCITY (param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT (strumvel));
+                    velocity = FLOAT_TO_VELOCITY(param[kDnVelocity] * (1.f - param[kVelToVel]) + param[kVelToVel] * VELOCITY_TO_FLOAT(strumvel));
                 //delay based on chord position, in samples:
                 VstInt32 delay = 0;
                 if (heldnotes > 1)
                 {
                     float x = (float) (chordpos) / (float) (heldnotes - 1);
-                    delay   = roundToInt ((accel * 0.3f * sin (PI * x) + x) * maxdelay);
-                    velocity += roundToInt ((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
+                    delay   = roundToInt((accel * 0.3f * sin(PI * x) + x) * maxdelay);
+                    velocity += roundToInt((2.f * param[kVelRamp] - 1.f) * (x * 127.f - 64.f));
                     if (velocity > 127)
                         velocity = 127;
                     else if (velocity < 1)
                         velocity = 1;
-                    float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT (strumvel);
-                    delay          = roundToInt (veldelay * (float) delay);
+                    float veldelay = 1.f - (param[kVelToSpeed]) * MIDI_TO_FLOAT(strumvel);
+                    delay          = roundToInt(veldelay * (float) delay);
                 }
                 if (delay > 0)
                 {
@@ -1302,10 +1302,10 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                             kill.midiData[2] = 0;
                             kill.deltaFrames = strumdelta + delay;
                             kill.detune      = 0;
-                            outputs[0].push_back (kill);
-                            dbg ("Killo " << n);
+                            outputs[0].push_back(kill);
+                            dbg("Killo " << n);
                         }
-                        int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                        int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
                         velocity += random;
                         if (velocity > 127)
                             velocity = 127;
@@ -1318,7 +1318,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         strum.midiData[2] = velocity;
                         strum.deltaFrames = strumdelta + delay;
                         strum.detune      = 0;
-                        outputs[0].push_back (strum);
+                        outputs[0].push_back(strum);
                     }
                     else
                     {
@@ -1327,7 +1327,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         delayed.midiData[1] = n;
                         delayed.midiData[2] = velocity;
                         delayed.deltaFrames = strumdelta + delay;
-                        midiDelayBuffer.push_back (delayed);
+                        midiDelayBuffer.push_back(delayed);
                         expectingDelayedNotes = true;
                     }
                     noteDelay[n]   = delay;
@@ -1344,11 +1344,11 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                         kill.midiData[2] = 0;
                         kill.deltaFrames = strumdelta;
                         kill.detune      = 0;
-                        outputs[0].push_back (kill);
+                        outputs[0].push_back(kill);
                         notePlaying[n] = false;
-                        dbg ("killkillkilly " << n);
+                        dbg("killkillkilly " << n);
                     }
-                    int random = roundToInt (param[kRandom] * (float (rand() % 1000) * 0.001f - 0.5f) * 127.f);
+                    int random = roundToInt(param[kRandom] * (float(rand() % 1000) * 0.001f - 0.5f) * 127.f);
                     velocity += random;
                     if (velocity > 127)
                         velocity = 127;
@@ -1361,7 +1361,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     strum.midiData[2] = velocity;
                     strum.deltaFrames = strumdelta;
                     strum.detune      = 0;
-                    outputs[0].push_back (strum);
+                    outputs[0].push_back(strum);
                 } //(no delay)
                 chordpos++;
             } //(held[n])
@@ -1373,7 +1373,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
     }
     if (! wasplaying && isplaying)
     {
-        dbg ("playing");
+        dbg("playing");
     }
     else if (wasplaying && ! isplaying)
     { //just stopped
@@ -1390,10 +1390,10 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 kill.midiData[2] = 0;
                 kill.deltaFrames = samples - 1;
                 kill.detune      = 0;
-                outputs[0].push_back (kill);
+                outputs[0].push_back(kill);
                 notePlaying[n] = false;
                 noteDelay[n]   = 0;
-                dbg ("stopped, killed note " << n);
+                dbg("stopped, killed note " << n);
             }
             //}
             held[n] = 0;
@@ -1405,7 +1405,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
     //sort combined buffer, then deal with overlapping notes
     VstMidiEventVec temp = outputs[0];
     outputs[0].clear();
-    sortMidiEvents (temp);
+    sortMidiEvents(temp);
     for (unsigned int i = 0; i < temp.size(); i++)
     {
         //copying event "i" from input (with all its fields)
@@ -1434,7 +1434,7 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     VstMidiEvent kill = tomod;
                     kill.midiData[0]  = MIDI_NOTEOFF + outchannel;
                     kill.midiData[2]  = 0;
-                    outputs[0].push_back (kill);
+                    outputs[0].push_back(kill);
                     notePlaying2[data1] = false;
                     notePlaying[data1]  = false;
                 }
@@ -1442,21 +1442,21 @@ void midiStrum::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 {
                     notePlaying2[data1] = true;
                     notePlaying[data1]  = true;
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 }
             }
             else if (status == MIDI_NOTEOFF)
             {
                 if (notePlaying2[data1])
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 notePlaying2[data1] = false;
                 notePlaying[data1]  = false;
             }
             else
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
         }
         else
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 #endif
 }

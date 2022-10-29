@@ -13,15 +13,15 @@
 #include "midi2qwerty16.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new midi2qwerty (audioMaster);
+    return new midi2qwerty(audioMaster);
 }
 
 #if _WIN32
 
 // this way works for the window with focus:
-void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantaneous)
+void midi2qwerty::key2(int vkeycode, int modifiers, bool keyup, bool instantaneous)
 {
     int mods = wxMOD_NONE;
     if (modifiers == 0)
@@ -94,64 +94,64 @@ void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantane
     if (instantaneous)
     {
         if ((mods & wxMOD_SHIFT) == wxMOD_SHIFT)
-            keybd_event (VK_SHIFT, 0, 0, 0);
+            keybd_event(VK_SHIFT, 0, 0, 0);
         if ((mods & wxMOD_ALT) == wxMOD_ALT)
-            keybd_event (VK_MENU, 0, 0, 0);
+            keybd_event(VK_MENU, 0, 0, 0);
         if ((mods & wxMOD_CONTROL) == wxMOD_CONTROL)
-            keybd_event (VK_CONTROL, 0, 0, 0);
+            keybd_event(VK_CONTROL, 0, 0, 0);
         if ((mods & wxMOD_META) == wxMOD_META)
-            keybd_event (VK_LWIN, 0, 0, 0);
+            keybd_event(VK_LWIN, 0, 0, 0);
         if (mousebutton)
-            mouse_event (vkeycode, X, Y, 0, 0);
+            mouse_event(vkeycode, X, Y, 0, 0);
         else
         {
-            keystroke (vkeycode);
+            keystroke(vkeycode);
             //keybd_event(vkeycode,0,0,0);
             //keybd_event(vkeycode,0,KEYEVENTF_KEYUP,0);
         }
         if ((mods & wxMOD_CONTROL) == wxMOD_CONTROL)
-            keybd_event (VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_ALT) == wxMOD_ALT)
-            keybd_event (VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_SHIFT) == wxMOD_SHIFT)
-            keybd_event (VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_META) == wxMOD_META)
-            keybd_event (VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
     }
     else if (! keyup)
     {
         if ((mods & wxMOD_SHIFT) == wxMOD_SHIFT)
-            keybd_event (VK_SHIFT, 0, 0, 0);
+            keybd_event(VK_SHIFT, 0, 0, 0);
         if ((mods & wxMOD_ALT) == wxMOD_ALT)
-            keybd_event (VK_MENU, 0, 0, 0);
+            keybd_event(VK_MENU, 0, 0, 0);
         if ((mods & wxMOD_CONTROL) == wxMOD_CONTROL)
-            keybd_event (VK_CONTROL, 0, 0, 0);
+            keybd_event(VK_CONTROL, 0, 0, 0);
         if ((mods & wxMOD_META) == wxMOD_META)
-            keybd_event (VK_LWIN, 0, 0, 0);
+            keybd_event(VK_LWIN, 0, 0, 0);
         if (mousebutton)
-            mouse_event (vkeycode, X, Y, 0, 0);
+            mouse_event(vkeycode, X, Y, 0, 0);
         else
-            keybd_event (vkeycode, 0, 0, 0);
+            keybd_event(vkeycode, 0, 0, 0);
     }
     else if (keyup)
     {
         if (mousebutton)
-            mouse_event (vkeycode, X, Y, 0, 0);
+            mouse_event(vkeycode, X, Y, 0, 0);
         else
-            keybd_event (vkeycode, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(vkeycode, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_CONTROL) == wxMOD_CONTROL)
-            keybd_event (VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_ALT) == wxMOD_ALT)
-            keybd_event (VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_SHIFT) == wxMOD_SHIFT)
-            keybd_event (VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
         if ((mods & wxMOD_META) == wxMOD_META)
-            keybd_event (VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
+            keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, 0);
     }
 }
 
 //SendInput method
-void midi2qwerty::keystroke (int vkeycode)
+void midi2qwerty::keystroke(int vkeycode)
 {
     /*
 	HWND w = GetActiveWindow();
@@ -159,7 +159,7 @@ void midi2qwerty::keystroke (int vkeycode)
 	if (w) {SendMessage(w,WM_KEYDOWN,vkeycode,0);SendMessage(w,WM_KEYUP,vkeycode,0);}
 */
     INPUT input[2];
-    memset (input, 0, sizeof (input));
+    memset(input, 0, sizeof(input));
     input[0].type = INPUT_KEYBOARD;
 
     input[0].ki.wVk         = vkeycode;
@@ -172,7 +172,7 @@ void midi2qwerty::keystroke (int vkeycode)
     input[1].ki.time        = 0;
     input[1].ki.dwExtraInfo = 0;
 
-    SendInput (2, input, sizeof (INPUT));
+    SendInput(2, input, sizeof(INPUT));
     //*/
 }
 
@@ -199,7 +199,7 @@ void mouseclick(int button) {
 
 #elif defined(__linux__)
 
-void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantaneous)
+void midi2qwerty::key2(int vkeycode, int modifiers, bool keyup, bool instantaneous)
 {
     int wxMODS = wxMOD_NONE;
     if (modifiers == 0)
@@ -235,60 +235,60 @@ void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantane
     else if (modifiers == 15)
         wxMODS = wxMOD_ALL;
 
-    Display* display = XOpenDisplay (NULL);
+    Display* display = XOpenDisplay(NULL);
 
     if (instantaneous)
     {
         if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Shift_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Shift_L), True, 0);
         if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Alt_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Alt_L), True, 0);
         if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Control_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Control_L), True, 0);
         if ((wxMODS & wxMOD_META) == wxMOD_META)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Super_L), True, 0);
-        XTestFakeKeyEvent (display, XKeysymToKeycode (display, WINVK_TO_LINXK (vkeycode)), True, 0);
-        XTestFakeKeyEvent (display, XKeysymToKeycode (display, WINVK_TO_LINXK (vkeycode)), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Super_L), True, 0);
+        XTestFakeKeyEvent(display, XKeysymToKeycode(display, WINVK_TO_LINXK(vkeycode)), True, 0);
+        XTestFakeKeyEvent(display, XKeysymToKeycode(display, WINVK_TO_LINXK(vkeycode)), False, 0);
         if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Control_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Control_L), False, 0);
         if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Alt_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Alt_L), False, 0);
         if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Shift_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Shift_L), False, 0);
         if ((wxMODS & wxMOD_META) == wxMOD_META)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Super_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Super_L), False, 0);
     }
     else if (! keyup)
     {
         if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Shift_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Shift_L), True, 0);
         if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Alt_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Alt_L), True, 0);
         if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Control_L), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Control_L), True, 0);
         if ((wxMODS & wxMOD_META) == wxMOD_META)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Super_L), True, 0);
-        XTestFakeKeyEvent (display, XKeysymToKeycode (display, WINVK_TO_LINXK (vkeycode)), True, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Super_L), True, 0);
+        XTestFakeKeyEvent(display, XKeysymToKeycode(display, WINVK_TO_LINXK(vkeycode)), True, 0);
     }
     else if (keyup)
     {
-        XTestFakeKeyEvent (display, XKeysymToKeycode (display, WINVK_TO_LINXK (vkeycode)), False, 0);
+        XTestFakeKeyEvent(display, XKeysymToKeycode(display, WINVK_TO_LINXK(vkeycode)), False, 0);
         if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Control_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Control_L), False, 0);
         if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Alt_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Alt_L), False, 0);
         if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Shift_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Shift_L), False, 0);
         if ((wxMODS & wxMOD_META) == wxMOD_META)
-            XTestFakeKeyEvent (display, XKeysymToKeycode (display, XK_Super_L), False, 0);
+            XTestFakeKeyEvent(display, XKeysymToKeycode(display, XK_Super_L), False, 0);
     }
 
-    XCloseDisplay (display);
+    XCloseDisplay(display);
 }
 #else
 //mac
 
-void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantaneous)
+void midi2qwerty::key2(int vkeycode, int modifiers, bool keyup, bool instantaneous)
 {
     int wxMODS = wxMOD_NONE;
     if (modifiers == 0)
@@ -324,57 +324,57 @@ void midi2qwerty::key2 (int vkeycode, int modifiers, bool keyup, bool instantane
     else if (modifiers == 15)
         wxMODS = wxMOD_ALL;
 
-    int keyCode = keyNameToKeyCode (getKeyName (vkeycode));
+    int keyCode = keyNameToKeyCode(getKeyName(vkeycode));
 
     if (keyCode != -1)
     {
         if (instantaneous)
         {
             if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-                CGPostKeyboardEvent (NULL, kVK_Shift, true);
+                CGPostKeyboardEvent(NULL, kVK_Shift, true);
             if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-                CGPostKeyboardEvent (NULL, kVK_Option, true);
+                CGPostKeyboardEvent(NULL, kVK_Option, true);
             if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-                CGPostKeyboardEvent (NULL, kVK_Control, true);
+                CGPostKeyboardEvent(NULL, kVK_Control, true);
             if ((wxMODS & wxMOD_META) == wxMOD_META)
-                CGPostKeyboardEvent (NULL, kVK_Command, true);
+                CGPostKeyboardEvent(NULL, kVK_Command, true);
             else
             {
-                CGPostKeyboardEvent (NULL, keyCode, true);
-                CGPostKeyboardEvent (NULL, keyCode, false);
+                CGPostKeyboardEvent(NULL, keyCode, true);
+                CGPostKeyboardEvent(NULL, keyCode, false);
             }
             if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-                CGPostKeyboardEvent (NULL, kVK_Shift, false);
+                CGPostKeyboardEvent(NULL, kVK_Shift, false);
             if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-                CGPostKeyboardEvent (NULL, kVK_Option, false);
+                CGPostKeyboardEvent(NULL, kVK_Option, false);
             if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-                CGPostKeyboardEvent (NULL, kVK_Control, false);
+                CGPostKeyboardEvent(NULL, kVK_Control, false);
             if ((wxMODS & wxMOD_META) == wxMOD_META)
-                CGPostKeyboardEvent (NULL, kVK_Command, false);
+                CGPostKeyboardEvent(NULL, kVK_Command, false);
         }
         else if (! keyup)
         {
             if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-                CGPostKeyboardEvent (NULL, kVK_Shift, true);
+                CGPostKeyboardEvent(NULL, kVK_Shift, true);
             if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-                CGPostKeyboardEvent (NULL, kVK_Option, true);
+                CGPostKeyboardEvent(NULL, kVK_Option, true);
             if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-                CGPostKeyboardEvent (NULL, kVK_Control, true);
+                CGPostKeyboardEvent(NULL, kVK_Control, true);
             if ((wxMODS & wxMOD_META) == wxMOD_META)
-                CGPostKeyboardEvent (NULL, kVK_Command, true);
-            CGPostKeyboardEvent (0, keyCode, true);
+                CGPostKeyboardEvent(NULL, kVK_Command, true);
+            CGPostKeyboardEvent(0, keyCode, true);
         }
         else if (keyup)
         {
-            CGPostKeyboardEvent (0, keyCode, false);
+            CGPostKeyboardEvent(0, keyCode, false);
             if ((wxMODS & wxMOD_SHIFT) == wxMOD_SHIFT)
-                CGPostKeyboardEvent (NULL, kVK_Shift, false);
+                CGPostKeyboardEvent(NULL, kVK_Shift, false);
             if ((wxMODS & wxMOD_ALT) == wxMOD_ALT)
-                CGPostKeyboardEvent (NULL, kVK_Option, false);
+                CGPostKeyboardEvent(NULL, kVK_Option, false);
             if ((wxMODS & wxMOD_CONTROL) == wxMOD_CONTROL)
-                CGPostKeyboardEvent (NULL, kVK_Control, false);
+                CGPostKeyboardEvent(NULL, kVK_Control, false);
             if ((wxMODS & wxMOD_META) == wxMOD_META)
-                CGPostKeyboardEvent (NULL, kVK_Command, false);
+                CGPostKeyboardEvent(NULL, kVK_Command, false);
         }
     }
 }
@@ -386,18 +386,18 @@ midi2qwertyProgram::midi2qwertyProgram()
     // default Program Values
     for (int i = 0; i < kNumSlots; i++)
     {
-        param[i * 4]     = 0.0;                       //msg
-        param[i * 4 + 1] = MIDI_TO_FLOAT (i);         //note
-        param[i * 4 + 2] = MOD_TO_FLOAT (0);          //mods
-        param[i * 4 + 3] = KEYCODE_TO_FLOAT (96 + i); //key
+        param[i * 4]     = 0.0;                      //msg
+        param[i * 4 + 1] = MIDI_TO_FLOAT(i);         //note
+        param[i * 4 + 2] = MOD_TO_FLOAT(0);          //mods
+        param[i * 4 + 3] = KEYCODE_TO_FLOAT(96 + i); //key
     }
-    param[kChannel] = CHANNEL_TO_FLOAT016 (0); //0==any channel
-    strcpy (name, "default");
+    param[kChannel] = CHANNEL_TO_FLOAT016(0); //0==any channel
+    strcpy(name, "default");
 }
 
 //-----------------------------------------------------------------------------
-midi2qwerty::midi2qwerty (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+midi2qwerty::midi2qwerty(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     for (int i = 0; i < 16; i++)
         lastPC[i] = 0;
@@ -407,8 +407,8 @@ midi2qwerty::midi2qwerty (audioMasterCallback audioMaster)
     //make built-in programs
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -416,9 +416,9 @@ midi2qwerty::midi2qwerty (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -431,76 +431,76 @@ midi2qwerty::midi2qwerty (audioMasterCallback audioMaster)
                 {
                     case 0:
                         programs[i].param[kMsg1]  = 0.15f;
-                        programs[i].param[kNote1] = MIDI_TO_FLOAT (0);
-                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT (25); //return
+                        programs[i].param[kNote1] = MIDI_TO_FLOAT(0);
+                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT(25); //return
                         programs[i].param[kMsg2]  = 0.15f;
-                        programs[i].param[kNote2] = MIDI_TO_FLOAT (1.1);
-                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT (96); //num0
+                        programs[i].param[kNote2] = MIDI_TO_FLOAT(1.1);
+                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT(96); //num0
                         programs[i].param[kMsg3]  = 0.15f;
-                        programs[i].param[kNote3] = MIDI_TO_FLOAT (2.1);
-                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT (99); //num3
+                        programs[i].param[kNote3] = MIDI_TO_FLOAT(2.1);
+                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT(99); //num3
                         programs[i].param[kMsg4]  = 0.15f;
-                        programs[i].param[kNote4] = MIDI_TO_FLOAT (3.1);
-                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT (106); //num*
-                        sprintf (programs[i].name, "Notes->XT2 transport");
+                        programs[i].param[kNote4] = MIDI_TO_FLOAT(3.1);
+                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT(106); //num*
+                        sprintf(programs[i].name, "Notes->XT2 transport");
                         break;
                     case 1:
-                        programs[i].param[kNote1] = MIDI_TO_FLOAT (0);
+                        programs[i].param[kNote1] = MIDI_TO_FLOAT(0);
                         programs[i].param[kMsg1]  = 0.45f;
-                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT (25); //return
-                        programs[i].param[kNote2] = MIDI_TO_FLOAT (1.1);
+                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT(25); //return
+                        programs[i].param[kNote2] = MIDI_TO_FLOAT(1.1);
                         programs[i].param[kMsg2]  = 0.45f;
-                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT (96); //num0
-                        programs[i].param[kNote3] = MIDI_TO_FLOAT (2.1);
+                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT(96); //num0
+                        programs[i].param[kNote3] = MIDI_TO_FLOAT(2.1);
                         programs[i].param[kMsg3]  = 0.45f;
-                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT (99); //num3
-                        programs[i].param[kNote4] = MIDI_TO_FLOAT (3.1);
+                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT(99); //num3
+                        programs[i].param[kNote4] = MIDI_TO_FLOAT(3.1);
                         programs[i].param[kMsg4]  = 0.45f;
-                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT (106); //num*
-                        sprintf (programs[i].name, "CCs->XT2 transport");
+                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT(106); //num*
+                        sprintf(programs[i].name, "CCs->XT2 transport");
                         break;
                     case 2:
-                        programs[i].param[kNote1] = MIDI_TO_FLOAT (0);
+                        programs[i].param[kNote1] = MIDI_TO_FLOAT(0);
                         programs[i].param[kMsg1]  = 0.15f;
-                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT (45); //insert
-                        programs[i].param[kMod1]  = MOD_TO_FLOAT (2);
-                        programs[i].param[kNote2] = MIDI_TO_FLOAT (1.1);
+                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT(45); //insert
+                        programs[i].param[kMod1]  = MOD_TO_FLOAT(2);
+                        programs[i].param[kNote2] = MIDI_TO_FLOAT(1.1);
                         programs[i].param[kMsg2]  = 0.15f;
-                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT (97); //num1
-                        programs[i].param[kMod2]  = MOD_TO_FLOAT (0);
-                        programs[i].param[kNote3] = MIDI_TO_FLOAT (2.1);
+                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT(97); //num1
+                        programs[i].param[kMod2]  = MOD_TO_FLOAT(0);
+                        programs[i].param[kNote3] = MIDI_TO_FLOAT(2.1);
                         programs[i].param[kMsg3]  = 0.15f;
-                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT ('Z'); //z
-                        programs[i].param[kMod3]  = MOD_TO_FLOAT (2);
-                        programs[i].param[kNote4] = MIDI_TO_FLOAT (3.1);
+                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT('Z'); //z
+                        programs[i].param[kMod3]  = MOD_TO_FLOAT(2);
+                        programs[i].param[kNote4] = MIDI_TO_FLOAT(3.1);
                         programs[i].param[kMsg4]  = 0.15f;
-                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT (106); //num*
-                        programs[i].param[kMod4]  = MOD_TO_FLOAT (0);
-                        strcpy (programs[i].name, "stuff");
+                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT(106); //num*
+                        programs[i].param[kMod4]  = MOD_TO_FLOAT(0);
+                        strcpy(programs[i].name, "stuff");
                         break;
                     case 3:
-                        programs[i].param[kNote1] = MIDI_TO_FLOAT (1.1);
+                        programs[i].param[kNote1] = MIDI_TO_FLOAT(1.1);
                         programs[i].param[kMsg1]  = 0.55f;
-                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT (109); //num-
-                        programs[i].param[kMod1]  = MOD_TO_FLOAT (0);
-                        programs[i].param[kNote2] = MIDI_TO_FLOAT (1.1);
+                        programs[i].param[kKey1]  = KEYCODE_TO_FLOAT(109); //num-
+                        programs[i].param[kMod1]  = MOD_TO_FLOAT(0);
+                        programs[i].param[kNote2] = MIDI_TO_FLOAT(1.1);
                         programs[i].param[kMsg2]  = 0.45f;
-                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT (107); //num+
-                        programs[i].param[kMod2]  = MOD_TO_FLOAT (0);
-                        programs[i].param[kNote3] = MIDI_TO_FLOAT (2.1);
+                        programs[i].param[kKey2]  = KEYCODE_TO_FLOAT(107); //num+
+                        programs[i].param[kMod2]  = MOD_TO_FLOAT(0);
+                        programs[i].param[kNote3] = MIDI_TO_FLOAT(2.1);
                         programs[i].param[kMsg3]  = 1.0f;
-                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT (58); //,
-                        programs[i].param[kMod3]  = MOD_TO_FLOAT (0);
-                        programs[i].param[kNote4] = MIDI_TO_FLOAT (2.1);
+                        programs[i].param[kKey3]  = KEYCODE_TO_FLOAT(58); //,
+                        programs[i].param[kMod3]  = MOD_TO_FLOAT(0);
+                        programs[i].param[kNote4] = MIDI_TO_FLOAT(2.1);
                         programs[i].param[kMsg4]  = 0.85f;
-                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT (59); //.
-                        programs[i].param[kMod4]  = MOD_TO_FLOAT (0);
-                        strcpy (programs[i].name, "zoom/scroll");
+                        programs[i].param[kKey4]  = KEYCODE_TO_FLOAT(59); //.
+                        programs[i].param[kMod4]  = MOD_TO_FLOAT(0);
+                        strcpy(programs[i].name, "zoom/scroll");
                         break;
                 }
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     for (int i = 0; i < kNumSlots; i++)
@@ -519,7 +519,7 @@ midi2qwerty::~midi2qwerty()
 }
 
 //------------------------------------------------------------------------
-void midi2qwerty::setProgram (VstInt32 program)
+void midi2qwerty::setProgram(VstInt32 program)
 {
     midi2qwertyProgram* ap = &programs[program];
 
@@ -527,39 +527,39 @@ void midi2qwerty::setProgram (VstInt32 program)
     curProgram  = program;
     for (int i = 0; i < kNumParams - 1; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
-    setParameter (kProg, (float) program / (float) (kNumPrograms - 1));
+    setParameter(kProg, (float) program / (float) (kNumPrograms - 1));
     updateDisplay();
     settingprog = false;
 }
 
 //------------------------------------------------------------------------
-void midi2qwerty::setProgramName (char* name)
+void midi2qwerty::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
     updateDisplay();
 }
 
 //------------------------------------------------------------------------
-void midi2qwerty::getProgramName (char* name)
+void midi2qwerty::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool midi2qwerty::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool midi2qwerty::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void midi2qwerty::setParameter (VstInt32 index, float value)
+void midi2qwerty::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
     {
@@ -574,7 +574,7 @@ void midi2qwerty::setParameter (VstInt32 index, float value)
             param[kProg] = value;
             if (! settingprog)
             {
-                setProgram ((int) (param[kProg] * (kNumPrograms - 1)));
+                setProgram((int) (param[kProg] * (kNumPrograms - 1)));
                 updateDisplay();
             }
         }
@@ -584,7 +584,7 @@ void midi2qwerty::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float midi2qwerty::getParameter (VstInt32 index)
+float midi2qwerty::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
     {
@@ -594,29 +594,29 @@ float midi2qwerty::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void midi2qwerty::getParameterName (VstInt32 index, char* label)
+void midi2qwerty::getParameterName(VstInt32 index, char* label)
 {
     if (index < kNumParams)
     {
         int slot = (index / 4) + 1;
         int data = index % 4;
         if (index == kChannel)
-            strcpy (label, "channel");
+            strcpy(label, "channel");
         else if (index == kProg)
-            strcpy (label, "Program");
+            strcpy(label, "Program");
         else if (data == 0)
-            sprintf (label, "%d: data", slot);
+            sprintf(label, "%d: data", slot);
         else if (data == 1)
-            strcpy (label, " note/cc");
+            strcpy(label, " note/cc");
         else if (data == 2)
-            strcpy (label, " modifiers");
+            strcpy(label, " modifiers");
         else if (data == 3)
-            strcpy (label, " key");
+            strcpy(label, " key");
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void midi2qwerty::getParameterDisplay (VstInt32 index, char* text)
+void midi2qwerty::getParameterDisplay(VstInt32 index, char* text)
 {
     if (index < kNumParams)
     {
@@ -625,63 +625,63 @@ void midi2qwerty::getParameterDisplay (VstInt32 index, char* text)
         if (data == 0)
         {
             if (param[index] < 0.1f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else if (param[index] < 0.2f)
-                strcpy (text, "Note");
+                strcpy(text, "Note");
             else if (param[index] < 0.3f)
-                strcpy (text, "ProgCh +");
+                strcpy(text, "ProgCh +");
             else if (param[index] < 0.4f)
-                strcpy (text, "ProgCh -");
+                strcpy(text, "ProgCh -");
             else if (param[index] < 0.5f)
-                strcpy (text, "CC (127)");
+                strcpy(text, "CC (127)");
             else if (param[index] < 0.6f)
-                strcpy (text, "CC (0)");
+                strcpy(text, "CC (0)");
             else if (param[index] < 0.7f)
-                strcpy (text, "CC (>64)");
+                strcpy(text, "CC (>64)");
             else if (param[index] < 0.8f)
-                strcpy (text, "CC (<64)");
+                strcpy(text, "CC (<64)");
             else if (param[index] < 0.9f)
-                strcpy (text, "CC slider > 100");
+                strcpy(text, "CC slider > 100");
             else
-                strcpy (text, "CC slider < 27");
+                strcpy(text, "CC slider < 27");
         }
         else if (data == 1)
         {
             if (param[slot * 4] >= 0.3)
-                sprintf (text, "%d", FLOAT_TO_MIDI (param[index]));
+                sprintf(text, "%d", FLOAT_TO_MIDI(param[index]));
             else if (param[slot * 4] >= 0.1)
-                sprintf (text, "%d (%s)", FLOAT_TO_MIDI (param[index]), getNoteName (FLOAT_TO_MIDI (param[index]), bottomOctave));
+                sprintf(text, "%d (%s)", FLOAT_TO_MIDI(param[index]), getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave));
             else
-                strcpy (text, " ");
+                strcpy(text, " ");
         }
         else if (data == 2)
         {
             if (param[slot * 4] >= 0.1)
-                strcpy (text, getModifierName (param[index]));
+                strcpy(text, getModifierName(param[index]));
             else
-                strcpy (text, " ");
+                strcpy(text, " ");
         }
         else if (data == 3)
         {
             if (param[slot * 4] >= 0.1)
-                strcpy (text, getKeyName (FLOAT_TO_KEYCODE (param[index])));
+                strcpy(text, getKeyName(FLOAT_TO_KEYCODE(param[index])));
             else
-                strcpy (text, " ");
+                strcpy(text, " ");
         }
 
         if (index == kChannel)
         {
-            if (FLOAT_TO_CHANNEL016 (param[kChannel]) < 1)
-                strcpy (text, "Any");
+            if (FLOAT_TO_CHANNEL016(param[kChannel]) < 1)
+                strcpy(text, "Any");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (param[kChannel]));
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[kChannel]));
         }
         else if (index == kProg)
-            getProgramNameIndexed (0, roundToInt (param[kProg] * (kNumPrograms - 1)), text);
+            getProgramNameIndexed(0, roundToInt(param[kProg] * (kNumPrograms - 1)), text);
     }
 }
 
-void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void midi2qwerty::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     int msg[kNumSlots];
     short note[kNumSlots];
@@ -709,9 +709,9 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
             msg[s] = msgCCSliderUp;
         else
             msg[s] = msgCCSliderDn;
-        note[s] = FLOAT_TO_MIDI (param[s * 4 + 1]);
-        mod[s]  = FLOAT_TO_MOD (param[s * 4 + 2]);
-        key[s]  = FLOAT_TO_KEYCODE (param[s * 4 + 3]);
+        note[s] = FLOAT_TO_MIDI(param[s * 4 + 1]);
+        mod[s]  = FLOAT_TO_MOD(param[s * 4 + 2]);
+        key[s]  = FLOAT_TO_KEYCODE(param[s * 4 + 3]);
     }
 
     // process incoming events
@@ -727,7 +727,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
             status = MIDI_NOTEOFF;
         bool discard = false;
 
-        const short listenchannel = FLOAT_TO_CHANNEL016 (param[kChannel]);
+        const short listenchannel = FLOAT_TO_CHANNEL016(param[kChannel]);
 
         if (channel == listenchannel || listenchannel == 0)
         { //only look at the selected channel
@@ -738,7 +738,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                 {
                     if (data1 == note[s] && msg[s] == msgNote)
                     {
-                        key2 (key[s], mod[s]);
+                        key2(key[s], mod[s]);
                         discard = true;
                     }
                 }
@@ -746,7 +746,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                 {
                     if (data1 == note[s] && msg[s] == msgNote)
                     {
-                        key2 (key[s], mod[s], true);
+                        key2(key[s], mod[s], true);
                         discard = true;
                     }
                 }
@@ -757,12 +757,12 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         //program increment
                         if (lastPC[channel - 1] == 127 && data1 == 0)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                         else if (data1 == lastPC[channel - 1] + 1)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -771,12 +771,12 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         //program decrement
                         if (lastPC[channel - 1] == 0 && data1 == 127)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                         else if (data1 == lastPC[channel - 1] - 1)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -787,7 +787,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         if (data1 == note[s] && msg[s] == msgCCMax)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -795,7 +795,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         if (data1 == note[s] && msg[s] == msgCCMin)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -803,7 +803,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         if (data1 == note[s] && msg[s] == msgCCHigh)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -811,7 +811,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         if (data1 == note[s] && msg[s] == msgCCLow)
                         {
-                            key2 (key[s], mod[s], false, true);
+                            key2(key[s], mod[s], false, true);
                             discard = true;
                         }
                     }
@@ -820,14 +820,14 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         //if in CC- mode, send keyup if key is down
                         if (data1 == note[s] && msg[s] == msgCCSliderDn && keydown[s])
                         {
-                            key2 (key[s], mod[s], true);
+                            key2(key[s], mod[s], true);
                             keydown[s] = false;
                             discard    = true;
                         }
                         //if in CC+ mode, send keydown if key isn't already down
                         if (data1 == note[s] && msg[s] == msgCCSliderUp && ! keydown[s])
                         {
-                            key2 (key[s], mod[s]);
+                            key2(key[s], mod[s]);
                             keydown[s] = true;
                             discard    = true;
                         }
@@ -837,14 +837,14 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         //if CC+ mode, send keyup if key is down
                         if (data1 == note[s] && msg[s] == msgCCSliderUp && keydown[s])
                         {
-                            key2 (key[s], mod[s], true);
+                            key2(key[s], mod[s], true);
                             keydown[s] = false;
                             discard    = true;
                         }
                         //in CC- mode, send keydown if key isn't already down
                         if (data1 == note[s] && msg[s] == msgCCSliderDn && ! keydown[s])
                         {
-                            key2 (key[s], mod[s]);
+                            key2(key[s], mod[s]);
                             keydown[s] = true;
                             discard    = true;
                         }
@@ -854,7 +854,7 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         //27-100 sends keyup in either CC+ or CC- mode
                         if (data1 == note[s] && (msg[s] == msgCCSliderUp || msg[s] == msgCCSliderDn) && keydown[s])
                         {
-                            key2 (key[s], mod[s], true);
+                            key2(key[s], mod[s], true);
                             keydown[s] = false;
                             discard    = true;
                         }
@@ -865,6 +865,6 @@ void midi2qwerty::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
         if (status == MIDI_PROGRAMCHANGE)
             lastPC[channel - 1] = data1;
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 }

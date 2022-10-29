@@ -10,35 +10,35 @@ class MidiMorph;
 class ControllerGUI : public juce::TextEditor::Listener, public juce::ChangeListener, public juce::Component, public juce::Slider::Listener, public juce::Label::Listener
 {
 public:
-    ControllerGUI (Controller* controller, MidiMorph* core);
+    ControllerGUI(Controller* controller, MidiMorph* core);
 
     ~ControllerGUI() override;
 
     void resized() override;
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
-    void paintOverChildren (juce::Graphics& g) override;
+    void paintOverChildren(juce::Graphics& g) override;
 
-    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
-    void sliderValueChanged (juce::Slider* slider) override;
+    void sliderValueChanged(juce::Slider* slider) override;
 
-    void setSelected (bool shouldDrawSelected);
+    void setSelected(bool shouldDrawSelected);
 
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
     void refreshControllerData();
 
-    void textEditorTextChanged (juce::TextEditor& editor) override;
+    void textEditorTextChanged(juce::TextEditor& editor) override;
 
-    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
-    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
 
-    void textEditorFocusLost (juce::TextEditor& editor) override;
+    void textEditorFocusLost(juce::TextEditor& editor) override;
 
-    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+    void labelTextChanged(juce::Label* labelThatHasChanged) override;
 
 private:
     bool isSelected;

@@ -4,11 +4,11 @@
 #include "ModulePaneModel.h"
 #include "Scene.h"
 
-MorphPane::MorphPane (ModulePaneModel* model, MidiMorph* core)
-    : ModulePane (model)
+MorphPane::MorphPane(ModulePaneModel* model, MidiMorph* core)
+    : ModulePane(model)
 {
     this->core = core;
-    this->setSelectedScenes (core->getSelectedScenes(), false);
+    this->setSelectedScenes(core->getSelectedScenes(), false);
     //this->selectedModules.addChangeListener(core);
     //ComponentBoundsConstrainer* limit = new ComponentBoundsConstrainer();
     //limit->setMinimumSize(50,50);
@@ -31,11 +31,11 @@ MorphPane::~MorphPane()
     //deleteAndZero(resizer);
 }
 
-void MorphPane::setSelectedScenes (juce::Array<Scene*>* scenes, bool sendChangeMessage)
+void MorphPane::setSelectedScenes(juce::Array<Scene*>* scenes, bool sendChangeMessage)
 {
     for (int i = 0; i < scenes->size(); i++)
     {
-        int isc = core->getSceneIndex (scenes->operator[] (i));
-        selectModule (isc, i == 0);
+        int isc = core->getSceneIndex(scenes->operator[](i));
+        selectModule(isc, i == 0);
     }
 }

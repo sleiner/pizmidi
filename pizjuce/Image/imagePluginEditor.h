@@ -24,7 +24,7 @@ public:
         When created, this will register itself with the filter for changes. It's
         safe to assume that the filter won't be deleted before this object is.
     */
-    imagePluginEditor (imagePluginFilter* const ownerFilter);
+    imagePluginEditor(imagePluginFilter* const ownerFilter);
 
     /** Destructor. */
     ~imagePluginEditor() override;
@@ -33,23 +33,23 @@ public:
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void buttonClicked (juce::Button*) override;
-    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
-    bool keyPressed (const juce::KeyPress& key, Component* originatingComponent) override;
-    void textEditorTextChanged (juce::TextEditor& editor) override;
-    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override;
-    void textEditorFocusLost (juce::TextEditor& editor) override;
-    void filesDropped (const juce::StringArray& files, int x, int y) override;
-    bool isInterestedInFileDrag (const juce::StringArray& files) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void buttonClicked(juce::Button*) override;
+    void buttonStateChanged(juce::Button* buttonThatWasClicked) override;
+    bool keyPressed(const juce::KeyPress& key, Component* originatingComponent) override;
+    void textEditorTextChanged(juce::TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
+    void textEditorFocusLost(juce::TextEditor& editor) override;
+    void filesDropped(const juce::StringArray& files, int x, int y) override;
+    bool isInterestedInFileDrag(const juce::StringArray& files) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
 
     /** Standard Juce resize callback. */
     void resized() override;

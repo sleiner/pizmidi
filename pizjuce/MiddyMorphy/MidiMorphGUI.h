@@ -17,7 +17,7 @@ class MidiMorphGUI : public juce::ChangeListener,
                      public juce::AudioProcessorEditor
 {
 public:
-    MidiMorphGUI (juce::AudioProcessor* ownerPlugIn);
+    MidiMorphGUI(juce::AudioProcessor* ownerPlugIn);
 
     ~MidiMorphGUI() override;
 
@@ -27,15 +27,15 @@ public:
 
     void resized() override;
 
-    void getAllCommands (juce::Array<juce::CommandID>& commands) override;
+    void getAllCommands(juce::Array<juce::CommandID>& commands) override;
 
-    void getCommandInfo (juce::CommandID commandID, juce::ApplicationCommandInfo& result) override;
+    void getCommandInfo(juce::CommandID commandID, juce::ApplicationCommandInfo& result) override;
 
-    bool perform (const InvocationInfo& info) override;
+    bool perform(const InvocationInfo& info) override;
 
-    void changeListenerCallback (juce::ChangeBroadcaster* objectThatHasChanged) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* objectThatHasChanged) override;
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
 private:
     MorphPane* morphPane;
@@ -48,5 +48,5 @@ private:
     juce::AudioProcessor* ownerFilter;
     juce::ResizableBorderComponent* resizer;
 
-    JUCE_LEAK_DETECTOR (MidiMorphGUI)
+    JUCE_LEAK_DETECTOR(MidiMorphGUI)
 };

@@ -16,11 +16,11 @@ public:
     ~CpuRam() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -57,16 +57,16 @@ public:
 
     int getNumParameters() override;
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //==============================================================================
     int getNumPrograms() override
@@ -77,20 +77,20 @@ public:
     {
         return 0;
     }
-    void setCurrentProgram (int index) override
+    void setCurrentProgram(int index) override
     {
     }
-    const juce::String getProgramName (int index) override
+    const juce::String getProgramName(int index) override
     {
         return juce::String();
     }
-    void changeProgramName (int index, const juce::String& newName) override
+    void changeProgramName(int index, const juce::String& newName) override
     {
     }
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
     void resetToDefaultSettings();
 
     //==============================================================================
@@ -111,7 +111,7 @@ private:
     float interval;
     float minimize;
 
-    JUCE_LEAK_DETECTOR (CpuRam)
+    JUCE_LEAK_DETECTOR(CpuRam)
 };
 
 #endif

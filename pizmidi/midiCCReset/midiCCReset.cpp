@@ -1,9 +1,9 @@
 #include "midiCCReset.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiCCReset (audioMaster);
+    return new MidiCCReset(audioMaster);
 }
 
 MidiCCResetProgram::MidiCCResetProgram()
@@ -14,7 +14,7 @@ MidiCCResetProgram::MidiCCResetProgram()
     this->param[kCapture] = 1.f;
     this->param[kClear]   = 0.f;
     //this->param[kTimeout]  = 0;
-    this->param[kChannel]    = CHANNEL_TO_FLOAT016 (0); // any channel
+    this->param[kChannel]    = CHANNEL_TO_FLOAT016(0); // any channel
     this->param[kProgChSend] = 1.f;
     this->param[kUsePC]      = 0.f;
     this->param[kThru]       = 1.f;
@@ -22,7 +22,7 @@ MidiCCResetProgram::MidiCCResetProgram()
     //param[kUseMIDIReset]  = 0;
 
     // default program name
-    vst_strncpy (this->name, "default", kVstMaxProgNameLen);
+    vst_strncpy(this->name, "default", kVstMaxProgNameLen);
 
     for (int ch = 0; ch < 16; ch++)
     {
@@ -32,8 +32,8 @@ MidiCCResetProgram::MidiCCResetProgram()
 }
 
 //-----------------------------------------------------------------------------
-MidiCCReset::MidiCCReset (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams)
+MidiCCReset::MidiCCReset(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams)
 {
     programsAreChunks();
 
@@ -43,8 +43,8 @@ MidiCCReset::MidiCCReset (audioMasterCallback audioMaster)
     programs = new MidiCCResetProgram[numPrograms];
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -52,9 +52,9 @@ MidiCCReset::MidiCCReset (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -63,10 +63,10 @@ MidiCCReset::MidiCCReset (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 }
 
@@ -77,9 +77,9 @@ MidiCCReset::~MidiCCReset()
         delete[] programs;
 }
 
-VstInt32 MidiCCReset::getChunk (void** data, bool isPreset)
+VstInt32 MidiCCReset::getChunk(void** data, bool isPreset)
 {
-    dbg ("getChunk " << isPreset);
+    dbg("getChunk " << isPreset);
     for (int ch = 0; ch < 16; ch++)
     {
         for (int n = 0; n < 128; n++)
@@ -89,24 +89,24 @@ VstInt32 MidiCCReset::getChunk (void** data, bool isPreset)
     {
         MidiCCResetProgram* ap = &programs[curProgram];
         *data                  = (void*) ap;
-        return sizeof (programs[curProgram]);
+        return sizeof(programs[curProgram]);
     }
     else
     {
         *data = (void*) programs;
-        return sizeof (programs[0]) * kNumPrograms;
+        return sizeof(programs[0]) * kNumPrograms;
     }
 }
 
-VstInt32 MidiCCReset::setChunk (void* data, VstInt32 byteSize, bool isPreset)
+VstInt32 MidiCCReset::setChunk(void* data, VstInt32 byteSize, bool isPreset)
 {
-    dbg ("setChunk " << isPreset);
+    dbg("setChunk " << isPreset);
     if (byteSize > 0 && data != 0)
     {
         if (isPreset)
         {
-            MidiCCResetProgram* ap = reinterpret_cast<MidiCCResetProgram*> (data);
-            setProgramName (ap->name);
+            MidiCCResetProgram* ap = reinterpret_cast<MidiCCResetProgram*>(data);
+            setProgramName(ap->name);
             for (int i = 0; i < kNumParams; i++)
             {
                 param[i] = ap->param[i];
@@ -119,10 +119,10 @@ VstInt32 MidiCCReset::setChunk (void* data, VstInt32 byteSize, bool isPreset)
         }
         else
         {
-            MidiCCResetProgram* ap = reinterpret_cast<MidiCCResetProgram*> (data);
+            MidiCCResetProgram* ap = reinterpret_cast<MidiCCResetProgram*>(data);
             for (int p = 0; p < kNumPrograms; p++)
             {
-                strcpy (programs[p].name, ap->name);
+                strcpy(programs[p].name, ap->name);
                 for (int i = 0; i < kNumParams; i++)
                 {
                     programs[p].param[i] = ap->param[i];
@@ -135,7 +135,7 @@ VstInt32 MidiCCReset::setChunk (void* data, VstInt32 byteSize, bool isPreset)
                 ap++;
             }
             firstTime = true;
-            setProgram (0);
+            setProgram(0);
         }
     }
 
@@ -143,9 +143,9 @@ VstInt32 MidiCCReset::setChunk (void* data, VstInt32 byteSize, bool isPreset)
 }
 
 //------------------------------------------------------------------------
-void MidiCCReset::setProgram (VstInt32 program)
+void MidiCCReset::setProgram(VstInt32 program)
 {
-    dbg ("setProgram(" << program << ")");
+    dbg("setProgram(" << program << ")");
     if (! firstTime)
     {
         //save non-parameter info to the old program, except the first time
@@ -163,7 +163,7 @@ void MidiCCReset::setProgram (VstInt32 program)
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
 
     //non-parameter values go here
@@ -188,30 +188,30 @@ void MidiCCReset::setProgram (VstInt32 program)
 }
 
 //------------------------------------------------------------------------
-void MidiCCReset::setProgramName (char* name)
+void MidiCCReset::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiCCReset::getProgramName (char* name)
+void MidiCCReset::getProgramName(char* name)
 {
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
+    vst_strncpy(name, programs[curProgram].name, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiCCReset::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiCCReset::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
+        vst_strncpy(text, programs[index].name, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCReset::setParameter (VstInt32 index, float value)
+void MidiCCReset::setParameter(VstInt32 index, float value)
 {
     //MidiCCResetProgram* ap = &programs[curProgram];
     if (index == kTrigger)
@@ -245,43 +245,43 @@ void MidiCCReset::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiCCReset::getParameter (VstInt32 index)
+float MidiCCReset::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCReset::getParameterName (VstInt32 index, char* label)
+void MidiCCReset::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kTrigger:
-            strcpy (label, "ManualTrig");
+            strcpy(label, "ManualTrig");
             break;
         case kUsePlay:
-            strcpy (label, "RecordTrig");
+            strcpy(label, "RecordTrig");
             break;
         case kCapture:
-            strcpy (label, "Capture");
+            strcpy(label, "Capture");
             break;
         case kClear:
-            strcpy (label, "Clear");
+            strcpy(label, "Clear");
             break;
             //	  case kTimeout:   strcpy(label, "Timeout"); break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         case kProgChSend:
-            strcpy (label, "ProgramTrig");
+            strcpy(label, "ProgramTrig");
             break;
         case kUsePC:
-            strcpy (label, "PC Listen");
+            strcpy(label, "PC Listen");
             break;
         case kThru:
-            strcpy (label, "Thru");
+            strcpy(label, "Thru");
             break;
         case kBlockDup:
-            strcpy (label, "Duplicates");
+            strcpy(label, "Duplicates");
             break;
             //	  case kUseMIDIReset:   strcpy(label, "Use MIDI Reset"); break;
         default:
@@ -290,63 +290,63 @@ void MidiCCReset::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCReset::getParameterDisplay (VstInt32 index, char* text)
+void MidiCCReset::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kTrigger:
             if (param[index] < 0.5f)
-                strcpy (text, "Trigger-->");
+                strcpy(text, "Trigger-->");
             else
-                strcpy (text, "Triggered");
+                strcpy(text, "Triggered");
             break;
         case kUsePlay:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kCapture:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kClear:
             if (param[index] < 0.5f)
-                strcpy (text, "Clear-->");
+                strcpy(text, "Clear-->");
             else
-                strcpy (text, "Cleared");
+                strcpy(text, "Cleared");
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL016 (param[index]) < 1)
-                vst_strncpy (text, "All", kVstMaxParamStrLen);
+            if (FLOAT_TO_CHANNEL016(param[index]) < 1)
+                vst_strncpy(text, "All", kVstMaxParamStrLen);
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (param[index]));
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
             break;
         case kUsePC:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kProgChSend:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kThru:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kBlockDup:
             if (param[index] < 0.5f)
-                strcpy (text, "Allow");
+                strcpy(text, "Allow");
             else
-                strcpy (text, "Block");
+                strcpy(text, "Block");
             break;
         default:
             break;
@@ -362,11 +362,11 @@ bool MidiCCReset::init()
     return PizMidi::init();
 }
 
-void MidiCCReset::preProcess (void)
+void MidiCCReset::preProcess(void)
 {
     // preparing Proccess
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     if (timeInfo)
     {
@@ -392,9 +392,9 @@ void MidiCCReset::preProcess (void)
     _cleanMidiOutBuffers();
 }
 
-void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiCCReset::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    short listenchannel = FLOAT_TO_CHANNEL016 (param[kChannel]);
+    short listenchannel = FLOAT_TO_CHANNEL016(param[kChannel]);
 
     if (trigger)
     {
@@ -413,13 +413,13 @@ void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                     {
                         if (lastSentCC[listenchannel - 1][i] != cc.midiData[2])
                         {
-                            outputs[0].push_back (cc);
+                            outputs[0].push_back(cc);
                             lastSentCC[listenchannel - 1][i] = cc.midiData[2];
                         }
                     }
                     else
                     {
-                        outputs[0].push_back (cc);
+                        outputs[0].push_back(cc);
                         lastSentCC[listenchannel - 1][i] = cc.midiData[2];
                     }
                 }
@@ -442,13 +442,13 @@ void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
                         {
                             if (lastSentCC[ch][i] != cc.midiData[2])
                             {
-                                outputs[0].push_back (cc);
+                                outputs[0].push_back(cc);
                                 lastSentCC[ch][i] = cc.midiData[2];
                             }
                         }
                         else
                         {
-                            outputs[0].push_back (cc);
+                            outputs[0].push_back(cc);
                             lastSentCC[ch][i] = cc.midiData[2];
                         }
                     }
@@ -487,11 +487,11 @@ void MidiCCReset::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* o
             }
             else if (status == MIDI_PROGRAMCHANGE && param[kUsePC] >= 0.5f)
             {
-                setProgram (data1);
+                setProgram(data1);
                 updateDisplay();
             }
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
     }
 }

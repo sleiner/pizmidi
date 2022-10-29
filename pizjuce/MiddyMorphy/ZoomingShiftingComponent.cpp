@@ -5,44 +5,44 @@ using juce::roundToInt;
 
 ZoomingShiftingComponent::ZoomingShiftingComponent()
 {
-    addAndMakeVisible (&origin);
+    addAndMakeVisible(&origin);
     zoomFactorX = zoomFactorY = 1;
 }
 
-juce::XmlElement* ZoomingShiftingComponent::getXml (const juce::String tagName)
+juce::XmlElement* ZoomingShiftingComponent::getXml(const juce::String tagName)
 {
-    auto* state = new juce::XmlElement (tagName);
-    state->setAttribute ("xoff", this->origin.getX());
-    state->setAttribute ("yoff", this->origin.getY());
-    state->setAttribute ("xzoom", this->zoomFactorX);
-    state->setAttribute ("yzoom", this->zoomFactorX);
+    auto* state = new juce::XmlElement(tagName);
+    state->setAttribute("xoff", this->origin.getX());
+    state->setAttribute("yoff", this->origin.getY());
+    state->setAttribute("xzoom", this->zoomFactorX);
+    state->setAttribute("yzoom", this->zoomFactorX);
     return state;
 }
 
-void ZoomingShiftingComponent::setFromXml (juce::XmlElement* data)
+void ZoomingShiftingComponent::setFromXml(juce::XmlElement* data)
 {
     if (data != nullptr)
     {
-        int x = data->getIntAttribute ("xoff");
-        int y = data->getIntAttribute ("yoff");
+        int x = data->getIntAttribute("xoff");
+        int y = data->getIntAttribute("yoff");
 
-        this->zoomFactorX = (float) data->getDoubleAttribute ("xzoom");
-        this->zoomFactorY = (float) data->getDoubleAttribute ("yzoom");
-        origin.setTopLeftPosition (x, y);
+        this->zoomFactorX = (float) data->getDoubleAttribute("xzoom");
+        this->zoomFactorY = (float) data->getDoubleAttribute("yzoom");
+        origin.setTopLeftPosition(x, y);
     }
 }
 
-void ZoomingShiftingComponent::dragOrigin (const juce::MouseEvent& e)
+void ZoomingShiftingComponent::dragOrigin(const juce::MouseEvent& e)
 {
-    this->dragger.dragComponent (&origin, e, nullptr);
+    this->dragger.dragComponent(&origin, e, nullptr);
 }
 
-void ZoomingShiftingComponent::startDragOrigin (const juce::MouseEvent& e)
+void ZoomingShiftingComponent::startDragOrigin(const juce::MouseEvent& e)
 {
-    dragger.startDraggingComponent (&origin, e);
+    dragger.startDraggingComponent(&origin, e);
 }
 
-void ZoomingShiftingComponent::zoom (float multX, float multY, float x, float y)
+void ZoomingShiftingComponent::zoom(float multX, float multY, float x, float y)
 {
     float newZoomRatioX = multX * zoomFactorX;
     float newZoomRatioY = multY * zoomFactorY;
@@ -63,13 +63,13 @@ void ZoomingShiftingComponent::zoom (float multX, float multY, float x, float y)
         zoomFactorY = newZoomRatioY;
     }
 
-    origin.setTopLeftPosition (roundToInt ((double) origin.getX() + grownLeft),
-                               roundToInt ((double) origin.getY() + grownTop));
+    origin.setTopLeftPosition(roundToInt((double) origin.getX() + grownLeft),
+                              roundToInt((double) origin.getY() + grownTop));
 }
 
-void ZoomingShiftingComponent::shift (const juce::Point<int> newPosition)
+void ZoomingShiftingComponent::shift(const juce::Point<int> newPosition)
 {
-    origin.setTopLeftPosition (newPosition.getX(), newPosition.getY());
+    origin.setTopLeftPosition(newPosition.getX(), newPosition.getY());
 }
 
 void ZoomingShiftingComponent::rePositionChildren()
@@ -100,7 +100,7 @@ float ZoomingShiftingComponent::getZoomFactorY()
     return this->zoomFactorY;
 }
 
-void ZoomingShiftingComponent::childBoundsChanged (juce::Component* component)
+void ZoomingShiftingComponent::childBoundsChanged(juce::Component* component)
 {
     if (component == &origin)
     {
@@ -112,21 +112,21 @@ void ZoomingShiftingComponent::deleteAllZoomedComps()
 {
     for (int i = 0; i < zoomedComponents.size(); i++)
     {
-        removeChildComponent (zoomedComponents[i]);
+        removeChildComponent(zoomedComponents[i]);
     }
-    zoomedComponents.clear (true);
+    zoomedComponents.clear(true);
 }
 
-void ZoomingShiftingComponent::addZoomedComp (ZoomableShiftableComponent* zsComp, bool doZoom)
+void ZoomingShiftingComponent::addZoomedComp(ZoomableShiftableComponent* zsComp, bool doZoom)
 {
-    addAndMakeVisible (zsComp);
-    zsComp->setZoomer (this);
-    this->zoomedComponents.add (zsComp);
+    addAndMakeVisible(zsComp);
+    zsComp->setZoomer(this);
+    this->zoomedComponents.add(zsComp);
     zsComp->rePosition();
 }
 
-void ZoomingShiftingComponent::removeZoomedComp (ZoomableShiftableComponent* comp)
+void ZoomingShiftingComponent::removeZoomedComp(ZoomableShiftableComponent* comp)
 {
-    removeChildComponent (comp);
-    zoomedComponents.remove (zoomedComponents.indexOf (comp), true);
+    removeChildComponent(comp);
+    zoomedComponents.remove(zoomedComponents.indexOf(comp), true);
 }

@@ -14,16 +14,16 @@ public:
     ~TimeDisplay() override;
 
     //==============================================================================
-    void paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
+    void paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
     void resized() override;
     juce::String time;
     juce::Colour textcolor;
 
 private:
-    TimeDisplay (const TimeDisplay&);
-    const TimeDisplay& operator= (const TimeDisplay&);
+    TimeDisplay(const TimeDisplay&);
+    const TimeDisplay& operator=(const TimeDisplay&);
 
-    JUCE_LEAK_DETECTOR (TimeDisplay)
+    JUCE_LEAK_DETECTOR(TimeDisplay)
 };
 
 //==============================================================================
@@ -34,22 +34,22 @@ class BigClockEditor : public juce::AudioProcessorEditor,
                        public juce::Timer
 {
 public:
-    BigClockEditor (BigClockFilter* const ownerFilter);
+    BigClockEditor(BigClockFilter* const ownerFilter);
     ~BigClockEditor() override;
 
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
-    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override{};
-    void textEditorTextChanged (juce::TextEditor& editor) override{};
-    void textEditorFocusLost (juce::TextEditor& editor) override{};
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void buttonStateChanged(juce::Button* buttonThatWasClicked) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override{};
+    void textEditorTextChanged(juce::TextEditor& editor) override{};
+    void textEditorFocusLost(juce::TextEditor& editor) override{};
     void timerCallback() override;
-    void mouseEnter (const juce::MouseEvent& e) override;
-    void mouseExit (const juce::MouseEvent& e) override;
+    void mouseEnter(const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
 
     //==============================================================================
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
 private:
@@ -78,7 +78,7 @@ private:
         return (BigClockFilter*) getAudioProcessor();
     }
 
-    JUCE_LEAK_DETECTOR (BigClockEditor)
+    JUCE_LEAK_DETECTOR(BigClockEditor)
 };
 
 #endif

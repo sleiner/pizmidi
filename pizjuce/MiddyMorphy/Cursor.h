@@ -9,7 +9,7 @@ class MidiMorph;
 class Cursor : public Module, public juce::ChangeBroadcaster
 {
 public:
-    Cursor (MidiMorph* core);
+    Cursor(MidiMorph* core);
 
     void moved() override;
 

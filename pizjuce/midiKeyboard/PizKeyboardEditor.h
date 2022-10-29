@@ -44,25 +44,25 @@ class midiKeyboardEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    midiKeyboardEditor (PizKeyboard* const ownerFilter);
+    midiKeyboardEditor(PizKeyboard* const ownerFilter);
     ~midiKeyboardEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     friend class PizKeyboardComponent;
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    bool keyPressed (const juce::KeyPress& key, Component* originatingComponent) override
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    bool keyPressed(const juce::KeyPress& key, Component* originatingComponent) override
     {
-        DBG (juce::String (key.getKeyCode()) + " " + key.getTextDescription());
+        DBG(juce::String(key.getKeyCode()) + " " + key.getTextDescription());
         return false;
     }
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -93,7 +93,7 @@ private:
     std::unique_ptr<juce::ToggleButton> showNumbersButton;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiKeyboardEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(midiKeyboardEditor)
 };
 
 //[EndFile] You can add extra defines here...

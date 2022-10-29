@@ -6,27 +6,27 @@
 class PianoRoll : public juce::Component
 {
 public:
-    PianoRoll (MidiStep* plugin_);
+    PianoRoll(MidiStep* plugin_);
     ~PianoRoll() override;
 
-    void setSequence (Loop* sequence_);
+    void setSequence(Loop* sequence_);
     void sequenceChanged();
     int getTimeInPixels();
-    double pixelsToPpq (float pixels, bool snap);
-    float ppqToPixels (double ppq);
-    double snapPpqToGrid (double ppq);
-    void setNoteLength (int beatDiv);
+    double pixelsToPpq(float pixels, bool snap);
+    float ppqToPixels(double ppq);
+    double snapPpqToGrid(double ppq);
+    void setNoteLength(int beatDiv);
     double blankLength;
     float pixelsPerPpq;
     float getNoteHeight();
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    void mouseMove (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
 private:

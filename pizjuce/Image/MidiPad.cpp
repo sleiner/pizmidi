@@ -4,10 +4,10 @@ using juce::jmax;
 using juce::jmin;
 
 MidiPad::MidiPad()
-    : Button ("MidiPad"),
-      normalImage (nullptr),
-      index (0),
-      text (nullptr)
+    : Button("MidiPad"),
+      normalImage(nullptr),
+      index(0),
+      text(nullptr)
 
 {
     bgColour   = juce::Colours::white;
@@ -15,14 +15,14 @@ MidiPad::MidiPad()
 
     centeredText = false;
     imageSize    = 1.f;
-    setMouseClickGrabsKeyboardFocus (true);
+    setMouseClickGrabsKeyboardFocus(true);
 
-    addAndMakeVisible (text = new juce::Label ("label", ""));
-    text->setJustificationType (juce::Justification::centredTop);
-    text->setEditable (false, false, false);
-    text->setInterceptsMouseClicks (false, false);
+    addAndMakeVisible(text = new juce::Label("label", ""));
+    text->setJustificationType(juce::Justification::centredTop);
+    text->setEditable(false, false, false);
+    text->setInterceptsMouseClicks(false, false);
 
-    setSize (200, 200);
+    setSize(200, 200);
 }
 
 MidiPad::~MidiPad()
@@ -37,13 +37,13 @@ void MidiPad::deleteImages()
     normalImage.reset();
 }
 
-bool MidiPad::setImageFromFile (juce::File file)
+bool MidiPad::setImageFromFile(juce::File file)
 {
     if (file.exists())
     {
         deleteImages();
 
-        normalImage = juce::Drawable::createFromImageFile (file);
+        normalImage = juce::Drawable::createFromImageFile(file);
         if (normalImage != nullptr)
         {
             repaint();
@@ -55,7 +55,7 @@ bool MidiPad::setImageFromFile (juce::File file)
     return false;
 }
 
-void MidiPad::setImages (const juce::Drawable* normal)
+void MidiPad::setImages(const juce::Drawable* normal)
 {
     deleteImages();
     if (normal != nullptr)
@@ -65,7 +65,7 @@ void MidiPad::setImages (const juce::Drawable* normal)
     repaint();
 }
 
-void MidiPad::setIconPath (juce::String name)
+void MidiPad::setIconPath(juce::String name)
 {
     iconPath = name;
 }
@@ -75,16 +75,16 @@ juce::String MidiPad::getIconPath()
     return iconPath;
 }
 
-void MidiPad::setColour (const juce::Colour& colour)
+void MidiPad::setColour(const juce::Colour& colour)
 {
     bgColour = colour;
     repaint();
 }
 
-void MidiPad::setTextColour (const juce::Colour& colour)
+void MidiPad::setTextColour(const juce::Colour& colour)
 {
     textColour = colour;
-    text->setColour (juce::Label::textColourId, colour);
+    text->setColour(juce::Label::textColourId, colour);
 }
 
 const juce::Colour& MidiPad::getBackgroundColour() const throw()
@@ -92,47 +92,47 @@ const juce::Colour& MidiPad::getBackgroundColour() const throw()
     return bgColour;
 }
 
-void MidiPad::drawButtonBackground (juce::Graphics& g,
-                                    Button& button,
-                                    const juce::Colour& backgroundColour,
-                                    bool isMouseOverButton,
-                                    bool isButtonDown)
+void MidiPad::drawButtonBackground(juce::Graphics& g,
+                                   Button& button,
+                                   const juce::Colour& backgroundColour,
+                                   bool isMouseOverButton,
+                                   bool isButtonDown)
 {
-    g.fillAll (backgroundColour);
+    g.fillAll(backgroundColour);
 }
 
-void MidiPad::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void MidiPad::paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
     juce::Rectangle<float> imageSpace;
     const float insetX = getWidth() * (1.f - imageSize) * 0.5f;
     const float insetY = getHeight() * (1.f - imageSize) * 0.5f;
-    imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
-    MidiPad::drawButtonBackground (g, *this, getBackgroundColour(), isMouseOverButton, isButtonDown);
+    imageSpace.setBounds(insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
+    MidiPad::drawButtonBackground(g, *this, getBackgroundColour(), isMouseOverButton, isButtonDown);
 
-    g.setImageResamplingQuality (juce::Graphics::highResamplingQuality);
-    g.setOpacity (1.0f);
+    g.setImageResamplingQuality(juce::Graphics::highResamplingQuality);
+    g.setOpacity(1.0f);
 
     const juce::Drawable* imageToDraw = nullptr;
     imageToDraw                       = getCurrentImage();
     if (imageToDraw != nullptr)
     {
-        imageToDraw->drawWithin (g,
-                                 imageSpace,
-                                 juce::RectanglePlacement::centred,
-                                 1.f);
+        imageToDraw->drawWithin(g,
+                                imageSpace,
+                                juce::RectanglePlacement::centred,
+                                1.f);
     }
 }
 
-void MidiPad::setCenteredText (bool centered)
+void MidiPad::setCenteredText(bool centered)
 {
-    text->setJustificationType (centered ? juce::Justification::centred : juce::Justification::centredTop);
+    text->setJustificationType(centered ? juce::Justification::centred : juce::Justification::centredTop);
 }
 
 void MidiPad::resized()
 {
-    text->setBounds (4, 4, getWidth() - 8, getHeight() - 8);
-    float fontsize = jmax (5.f, jmin ((float) (proportionOfWidth (0.2f)), (float) (proportionOfHeight (0.15f))));
-    text->setFont (juce::Font (fontsize, juce::Font::bold));
+    text->setBounds(4, 4, getWidth() - 8, getHeight() - 8);
+    float fontsize = jmax(5.f, jmin((float) (proportionOfWidth(0.2f)), (float) (proportionOfHeight(0.15f))));
+    text->setFont(juce::Font(fontsize, juce::Font::bold));
 }
 
 const juce::Drawable* MidiPad::getCurrentImage() const throw()
@@ -145,14 +145,14 @@ const juce::Drawable* MidiPad::getNormalImage() const throw()
     return normalImage.get();
 }
 
-void MidiPad::setText (const juce::String& name)
+void MidiPad::setText(const juce::String& name)
 {
-    text->setText (name, juce::dontSendNotification);
+    text->setText(name, juce::dontSendNotification);
 }
 
-void MidiPad::setButtonText (const juce::String& newText)
+void MidiPad::setButtonText(const juce::String& newText)
 {
-    text->setText (newText, juce::dontSendNotification);
+    text->setText(newText, juce::dontSendNotification);
 }
 
 juce::String MidiPad::getText()

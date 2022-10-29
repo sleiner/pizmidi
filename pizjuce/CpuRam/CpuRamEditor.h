@@ -14,11 +14,11 @@ public:
     {
         for (int i = 0; i < numPoints; i++)
             points[i] = 0.f;
-        setMouseClickGrabsKeyboardFocus (false);
+        setMouseClickGrabsKeyboardFocus(false);
     }
     ~CpuGraph() override{};
 
-    void addPoint (float value)
+    void addPoint(float value)
     {
         for (int i = 1; i < numPoints; i++)
             points[i - 1] = points[i];
@@ -32,14 +32,14 @@ private:
         numPoints = 128
     };
     float points[numPoints];
-    void paint (juce::Graphics& g) override
+    void paint(juce::Graphics& g) override
     {
-        g.fillAll (juce::Colours::black);
-        g.setColour (juce::Colours::green);
+        g.fillAll(juce::Colours::black);
+        g.setColour(juce::Colours::green);
         for (int i = 0; i < numPoints; i++)
         {
-            float x = ((float) i / float (numPoints)) * getWidth();
-            g.drawLine (x, (float) getHeight(), x, (float) getHeight() - (float) getHeight() * points[i]);
+            float x = ((float) i / float(numPoints)) * getWidth();
+            g.drawLine(x, (float) getHeight(), x, (float) getHeight() - (float) getHeight() * points[i]);
         }
     }
 };
@@ -68,7 +68,7 @@ public:
         When created, this will register itself with the filter for changes. It's
         safe to assume that the filter won't be deleted before this object is.
     */
-    CpuRamEditor (CpuRam* const ownerFilter);
+    CpuRamEditor(CpuRam* const ownerFilter);
 
     /** Destructor. */
     ~CpuRamEditor() override;
@@ -77,14 +77,14 @@ public:
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void timerCallback() override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void mouseUp (const juce::MouseEvent&) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void mouseUp(const juce::MouseEvent&) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
     /** Standard Juce resize callback. */
     void resized() override;

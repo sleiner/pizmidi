@@ -33,7 +33,7 @@ struct LoopNote
         noteOffSample        = -1;
         voice                = -1;
     }
-    LoopNote (PizMidiMessageSequence::mehPtr object, int n, int ch, int offSample, int v)
+    LoopNote(PizMidiMessageSequence::mehPtr object, int n, int ch, int offSample, int v)
     {
         note                 = object;
         lastOutputNoteNumber = n;
@@ -41,7 +41,7 @@ struct LoopNote
         noteOffSample        = offSample;
         voice                = v;
     }
-    void subtractFromTime (int samples)
+    void subtractFromTime(int samples)
     {
         noteOffSample -= samples;
     }
@@ -56,34 +56,34 @@ class Loop : public PizMidiMessageSequence
 {
 public:
     Loop();
-    Loop (PizMidiMessageSequence sequence, int triggerNote_, int transpose_ = 0, bool playMode_ = 0);
+    Loop(PizMidiMessageSequence sequence, int triggerNote_, int transpose_ = 0, bool playMode_ = 0);
     ~Loop();
 
     void startRecording();
     bool findNextNote();
-    void playAllNotesAtCurrentTime (juce::MidiBuffer& buffer, int sample_number, int velocity);
-    void sendCurrentNoteToBuffer (juce::MidiBuffer& buffer, int sample_number, int velocity);
-    bool isNotePlaying (PizMidiMessageSequence::mehPtr note, int p);
-    bool isNotePlaying (PizMidiMessageSequence::mehPtr note);
-    bool isTriggerNote (int note);
-    void setTriggerNote (int note);
+    void playAllNotesAtCurrentTime(juce::MidiBuffer& buffer, int sample_number, int velocity);
+    void sendCurrentNoteToBuffer(juce::MidiBuffer& buffer, int sample_number, int velocity);
+    bool isNotePlaying(PizMidiMessageSequence::mehPtr note, int p);
+    bool isNotePlaying(PizMidiMessageSequence::mehPtr note);
+    bool isTriggerNote(int note);
+    void setTriggerNote(int note);
     void resetNotes();
-    void sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_number);
+    void sendNoteOffMessagesToBuffer(juce::MidiBuffer& buffer, int sample_number);
     juce::MidiMessage getCurrentMessage();
     double getCurrentTime();
-    int getIndexOfNote (int noteNumber, double time, bool exact = false);
-    void convertTimeBase (short timeBase);
+    int getIndexOfNote(int noteNumber, double time, bool exact = false);
+    void convertTimeBase(short timeBase);
     int getTransposition();
-    int getTranspositionOfNote (PizMidiMessageSequence::mehPtr note, int p);
-    int getChannelOfNote (PizMidiMessageSequence::mehPtr note, int p);
-    void setSemitones (int semitones);
-    void setOctaves (int octaves);
-    void setNoteOff (PizMidiMessageSequence::mehPtr note, int p);
-    void setNoteOff (PizMidiMessageSequence::mehPtr note);
-    void sentNoteAs (PizMidiMessageSequence::mehPtr note, int p, int sentNoteNumber, int sentChannel, int offSample);
+    int getTranspositionOfNote(PizMidiMessageSequence::mehPtr note, int p);
+    int getChannelOfNote(PizMidiMessageSequence::mehPtr note, int p);
+    void setSemitones(int semitones);
+    void setOctaves(int octaves);
+    void setNoteOff(PizMidiMessageSequence::mehPtr note, int p);
+    void setNoteOff(PizMidiMessageSequence::mehPtr note);
+    void sentNoteAs(PizMidiMessageSequence::mehPtr note, int p, int sentNoteNumber, int sentChannel, int offSample);
     //void setNoteChannel(MidiEventHolder* note, int p);
     void cleanZeroLengthNotes();
-    void setLength (double newLength)
+    void setLength(double newLength)
     {
         length = 960.0 * newLength;
     }

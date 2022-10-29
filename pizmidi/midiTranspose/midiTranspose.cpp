@@ -1,9 +1,9 @@
 #include "midiTranspose.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiTranspose (audioMaster);
+    return new MidiTranspose(audioMaster);
 }
 
 MidiTransposeProgram::MidiTransposeProgram()
@@ -20,7 +20,7 @@ MidiTransposeProgram::MidiTransposeProgram()
                 param[i] = 0.5f;
                 break;
             case kInChannel:
-                param[i] = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+                param[i] = CHANNEL_TO_FLOAT(ANY_CHANNEL);
                 break;
             case kImmediate:
                 param[i] = 0.f;
@@ -32,19 +32,19 @@ MidiTransposeProgram::MidiTransposeProgram()
         }
     }
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiTranspose::MidiTranspose (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiTranspose::MidiTranspose(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiTransposeProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -52,9 +52,9 @@ MidiTranspose::MidiTranspose (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -63,10 +63,10 @@ MidiTranspose::MidiTranspose (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     for (int c = 0; c < 16; c++)
@@ -89,40 +89,40 @@ MidiTranspose::~MidiTranspose()
 }
 
 //------------------------------------------------------------------------
-void MidiTranspose::setProgram (VstInt32 program)
+void MidiTranspose::setProgram(VstInt32 program)
 {
     MidiTransposeProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
 }
 
 //------------------------------------------------------------------------
-void MidiTranspose::setProgramName (char* name)
+void MidiTranspose::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiTranspose::getProgramName (char* name)
+void MidiTranspose::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiTranspose::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiTranspose::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTranspose::setParameter (VstInt32 index, float value)
+void MidiTranspose::setParameter(VstInt32 index, float value)
 {
     MidiTransposeProgram* ap = &programs[curProgram];
     param[index] = ap->param[index] = value;
@@ -132,91 +132,91 @@ void MidiTranspose::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiTranspose::getParameter (VstInt32 index)
+float MidiTranspose::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTranspose::getParameterName (VstInt32 index, char* label)
+void MidiTranspose::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kInChannel:
-            strcpy (label, "InChannel");
+            strcpy(label, "InChannel");
             break;
         case kRange:
-            strcpy (label, "Range");
+            strcpy(label, "Range");
             break;
         case kImmediate:
-            strcpy (label, "Immediate");
+            strcpy(label, "Immediate");
             break;
         case kTranspose:
-            strcpy (label, "Transpose");
+            strcpy(label, "Transpose");
             break;
         case kUsePB:
-            strcpy (label, "PitchBend");
+            strcpy(label, "PitchBend");
             break;
         case kUseCC:
-            strcpy (label, "Transp CC");
+            strcpy(label, "Transp CC");
             break;
         default:
-            sprintf (label, "param %d", index);
+            sprintf(label, "param %d", index);
             break;
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiTranspose::getParameterDisplay (VstInt32 index, char* text)
+void MidiTranspose::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kInChannel:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                strcpy (text, "All");
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+                strcpy(text, "All");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
             break;
         case kTranspose:
-            sprintf (text, "%d", getTranspose());
+            sprintf(text, "%d", getTranspose());
             if (getTranspose() > 0)
-                sprintf (text, "+%d", getTranspose());
+                sprintf(text, "+%d", getTranspose());
             else
-                sprintf (text, "%d", getTranspose());
+                sprintf(text, "%d", getTranspose());
             break;
         case kRange:
-            sprintf (text, "± %d", roundToInt (MAX_TRANSPOSE * param[index]));
+            sprintf(text, "Â± %d", roundToInt(MAX_TRANSPOSE * param[index]));
             break;
         case kUsePB:
             if (param[index] < 0.5f)
-                strcpy (text, "Thru");
+                strcpy(text, "Thru");
             else
-                strcpy (text, "Use");
+                strcpy(text, "Use");
             break;
         case kImmediate:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else
-                strcpy (text, "On");
+                strcpy(text, "On");
             break;
         case kUseCC:
-            if (FLOAT_TO_MIDI_X (param[index]) == -1)
-                strcpy (text, "Off");
+            if (FLOAT_TO_MIDI_X(param[index]) == -1)
+                strcpy(text, "Off");
             else
-                sprintf (text, "%d", FLOAT_TO_MIDI_X (param[index]));
+                sprintf(text, "%d", FLOAT_TO_MIDI_X(param[index]));
             break;
         default:
-            sprintf (text, "%f", param[index]);
+            sprintf(text, "%f", param[index]);
             break;
     }
 }
 
-void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiTranspose::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int ch       = FLOAT_TO_CHANNEL (param[kInChannel]);
+    const int ch       = FLOAT_TO_CHANNEL(param[kInChannel]);
     const bool split   = param[kImmediate] >= 0.5f;
     const bool usePB   = param[kUsePB] >= 0.5f;
-    const int transpCC = FLOAT_TO_MIDI_X (param[kUseCC]);
+    const int transpCC = FLOAT_TO_MIDI_X(param[kUseCC]);
     int transp         = getTranspose();
 
     if (split && transp != lastTranspose)
@@ -229,18 +229,18 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     VstMidiEvent noteoff;
                     noteoff.midiData[0] = MIDI_NOTEOFF | c;
-                    noteoff.midiData[1] = midiLimit (n + transposed[c][n]);
+                    noteoff.midiData[1] = midiLimit(n + transposed[c][n]);
                     noteoff.midiData[2] = 0;
                     noteoff.deltaFrames = 0;
-                    outputs[0].push_back (noteoff);
+                    outputs[0].push_back(noteoff);
 
                     VstMidiEvent noteon;
                     noteon.midiData[0] = MIDI_NOTEON | c;
-                    noteon.midiData[1] = midiLimit (n + transp);
+                    noteon.midiData[1] = midiLimit(n + transp);
                     noteon.midiData[2] = velocity[c][n];
                     noteon.deltaFrames = 0;
                     transposed[c][n]   = transp;
-                    outputs[0].push_back (noteon);
+                    outputs[0].push_back(noteon);
                 }
             }
         }
@@ -269,7 +269,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (note < 128 && note >= 0)
                 {
                     tomod.midiData[1] = data1 + transp;
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 }
                 velocity[channel][data1]   = tomod.midiData[2];
                 transposed[channel][data1] = transp;
@@ -280,7 +280,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (note < 128 && note >= 0)
                 {
                     tomod.midiData[1] = data1 + transposed[channel][data1];
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 }
                 velocity[channel][data1]   = 0;
                 transposed[channel][data1] = -999;
@@ -291,7 +291,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (note < 128 && note >= 0)
                 {
                     tomod.midiData[1] = data1 + transp;
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 }
             }
             else if (status == MIDI_CONTROLCHANGE && transpCC == tomod.midiData[1]
@@ -299,13 +299,13 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             {
                 if (status == MIDI_CONTROLCHANGE)
                 {
-                    setParameterAutomated (kTranspose, MIDI_TO_FLOAT (tomod.midiData[2]));
-                    outputs[0].push_back (tomod);
+                    setParameterAutomated(kTranspose, MIDI_TO_FLOAT(tomod.midiData[2]));
+                    outputs[0].push_back(tomod);
                 }
                 else if (status == MIDI_PITCHBEND)
                 {
-                    float bend = (float) CombineBytes (tomod.midiData[1], tomod.midiData[2]) / 16383.f;
-                    setParameterAutomated (kTranspose, bend);
+                    float bend = (float) CombineBytes(tomod.midiData[1], tomod.midiData[2]) / 16383.f;
+                    setParameterAutomated(kTranspose, bend);
                 }
                 transp = getTranspose();
                 if (split && transp != lastTranspose)
@@ -318,18 +318,18 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             {
                                 VstMidiEvent noteoff;
                                 noteoff.midiData[0] = MIDI_NOTEOFF | c;
-                                noteoff.midiData[1] = midiLimit (n + transposed[c][n]);
+                                noteoff.midiData[1] = midiLimit(n + transposed[c][n]);
                                 noteoff.midiData[2] = 0;
                                 noteoff.deltaFrames = tomod.deltaFrames;
-                                outputs[0].push_back (noteoff);
+                                outputs[0].push_back(noteoff);
 
                                 VstMidiEvent noteon;
                                 noteon.midiData[0] = MIDI_NOTEON | c;
-                                noteon.midiData[1] = midiLimit (n + transp);
+                                noteon.midiData[1] = midiLimit(n + transp);
                                 noteon.midiData[2] = velocity[c][n];
                                 noteon.deltaFrames = tomod.deltaFrames;
                                 transposed[c][n]   = transp;
-                                outputs[0].push_back (noteon);
+                                outputs[0].push_back(noteon);
                             }
                         }
                     }
@@ -337,7 +337,7 @@ void MidiTranspose::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 lastTranspose = transp;
             }
             else
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
         }
     }
 }

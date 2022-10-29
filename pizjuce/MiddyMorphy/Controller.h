@@ -11,7 +11,7 @@ class Scene;
 class Controller : public juce::ChangeBroadcaster
 {
 public:
-    Controller (MidiMorph* core);
+    Controller(MidiMorph* core);
 
     ~Controller() override;
 
@@ -23,11 +23,11 @@ public:
 
     };
 
-    ControllerValue* getValue (int index);
+    ControllerValue* getValue(int index);
 
-    ControllerValue* getValue (const Scene* scene);
+    ControllerValue* getValue(const Scene* scene);
 
-    void setValue (int newValue, Scene* scene);
+    void setValue(int newValue, Scene* scene);
 
     void controllerChanged();
 
@@ -35,15 +35,15 @@ public:
 
     int getInterpolatedValue();
 
-    void addValue (ControllerValue* value);
+    void addValue(ControllerValue* value);
 
     void learn();
 
-    void removeValue (ControllerValue* value);
+    void removeValue(ControllerValue* value);
 
     int getNumValues();
 
-    void getMidiMessage (juce::MidiBuffer& buffer, int pos);
+    void getMidiMessage(juce::MidiBuffer& buffer, int pos);
 
     void remove();
 
@@ -51,17 +51,17 @@ public:
 
     int getCcNo() const;
 
-    void setCcNo (int val);
+    void setCcNo(int val);
 
     int getChannel() const;
 
-    void setChannel (int channel);
+    void setChannel(int channel);
 
     juce::String getName();
 
-    void setName (juce::String name);
+    void setName(juce::String name);
 
-    void setValueInSelectedScenes (int newValue);
+    void setValueInSelectedScenes(int newValue);
 
 private:
     bool newMidi;

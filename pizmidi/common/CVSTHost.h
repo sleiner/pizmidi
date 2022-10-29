@@ -252,10 +252,10 @@ protected:
     static bool NeedsBSwap;
 
 protected:
-    static void SwapBytes (float& f);
-    static void SwapBytes (long& l);
+    static void SwapBytes(float& f);
+    static void SwapBytes(long& l);
 #if defined(VST_2_4_EXTENSIONS)
-    static void SwapBytes (VstInt32& vi);
+    static void SwapBytes(VstInt32& vi);
 #endif
 };
 
@@ -266,24 +266,24 @@ protected:
 class CFxBank : public CFxBase
 {
 public:
-    CFxBank (char* pszFile = 0);
-    CFxBank (int nPrograms, int nParams);
-    CFxBank (int nChunkSize);
-    CFxBank (CFxBank const& org)
+    CFxBank(char* pszFile = 0);
+    CFxBank(int nPrograms, int nParams);
+    CFxBank(int nChunkSize);
+    CFxBank(CFxBank const& org)
     {
-        DoCopy (org);
+        DoCopy(org);
     }
     virtual ~CFxBank();
-    CFxBank& operator= (CFxBank const& org)
+    CFxBank& operator=(CFxBank const& org)
     {
-        return DoCopy (org);
+        return DoCopy(org);
     }
 
 public:
-    bool SetSize (int nPrograms, int nParams);
-    bool SetSize (int nChunkSize);
-    bool LoadBank (char* pszFile);
-    bool SaveBank (char* pszFile);
+    bool SetSize(int nPrograms, int nParams);
+    bool SetSize(int nChunkSize);
+    bool LoadBank(char* pszFile);
+    bool SaveBank(char* pszFile);
     void Unload();
     bool IsLoaded()
     {
@@ -308,13 +308,13 @@ public:
             return 0;
         return ((SFxBase*) bBank)->fxID;
     }
-    void SetFxID (long id)
+    void SetFxID(long id)
     {
         if (bBank)
             ((SFxBase*) bBank)->fxID = id;
         if (! bChunk)
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
-                GetProgram (i)->fxID = id;
+                GetProgram(i)->fxID = id;
     }
     long GetFxVersion()
     {
@@ -322,13 +322,13 @@ public:
             return 0;
         return ((SFxBase*) bBank)->fxVersion;
     }
-    void SetFxVersion (long v)
+    void SetFxVersion(long v)
     {
         if (bBank)
             ((SFxBase*) bBank)->fxVersion = v;
         if (! bChunk)
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
-                GetProgram (i)->fxVersion = v;
+                GetProgram(i)->fxVersion = v;
     }
     long GetNumPrograms()
     {
@@ -340,7 +340,7 @@ public:
     {
         if (bChunk)
             return 0;
-        return GetProgram (0)->numParams;
+        return GetProgram(0)->numParams;
     }
     long GetChunkSize()
     {
@@ -354,34 +354,34 @@ public:
             return 0;
         return ((SFxBankChunk*) bBank)->chunk;
     }
-    bool SetChunk (void* chunk)
+    bool SetChunk(void* chunk)
     {
         if (! bChunk)
             return false;
-        memcpy (((SFxBankChunk*) bBank)->chunk, chunk, ((SFxBankChunk*) bBank)->size);
+        memcpy(((SFxBankChunk*) bBank)->chunk, chunk, ((SFxBankChunk*) bBank)->size);
         return true;
     }
 
-    SFxProgram* GetProgram (int nProgNum);
+    SFxProgram* GetProgram(int nProgNum);
 
-    char* GetProgramName (int nProgram)
+    char* GetProgramName(int nProgram)
     {
-        SFxProgram* p = GetProgram (nProgram);
+        SFxProgram* p = GetProgram(nProgram);
         if (! p)
             return NULL;
         return p->prgName;
     }
-    void SetProgramName (int nProgram, char* name = "")
+    void SetProgramName(int nProgram, char* name = "")
     {
-        SFxProgram* p = GetProgram (nProgram);
+        SFxProgram* p = GetProgram(nProgram);
         if (! p)
             return;
-        strncpy (p->prgName, name, sizeof (p->prgName));
-        p->prgName[sizeof (p->prgName) - 1] = '\0';
+        strncpy(p->prgName, name, sizeof(p->prgName));
+        p->prgName[sizeof(p->prgName) - 1] = '\0';
     }
-    float GetProgParm (int nProgram, int nParm)
+    float GetProgParm(int nProgram, int nParm)
     {
-        SFxProgram* p = GetProgram (nProgram);
+        SFxProgram* p = GetProgram(nProgram);
         if (! p || nParm > p->numParams)
             return 0;
 #ifndef chunkGlobalMagic /* VST SDK 2.4 rev2?                 */
@@ -390,9 +390,9 @@ public:
         return p->params[nParm];
 #endif
     }
-    bool SetProgParm (int nProgram, int nParm, float val = 0.0)
+    bool SetProgParm(int nProgram, int nParm, float val = 0.0)
     {
-        SFxProgram* p = GetProgram (nProgram);
+        SFxProgram* p = GetProgram(nProgram);
         if (! p || nParm > p->numParams)
             return false;
         if (val < 0.0)
@@ -415,7 +415,7 @@ protected:
 
 protected:
     void Init();
-    CFxBank& DoCopy (CFxBank const& org);
+    CFxBank& DoCopy(CFxBank const& org);
 };
 
 /*****************************************************************************/

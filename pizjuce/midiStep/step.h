@@ -49,11 +49,11 @@ public:
     ~MidiStep() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -93,16 +93,16 @@ public:
         return kNumParams;
     }
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //==============================================================================
 
@@ -111,15 +111,15 @@ public:
         return 1;
     }
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
     //void getCurrentProgramStateInformation (MemoryBlock& destData);
     //void setCurrentProgramStateInformation (const void* data, int sizeInBytes);
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     //==============================================================================
     juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
@@ -130,8 +130,8 @@ public:
     {
         return loop[activeLoop];
     }
-    bool writeMidiFile (int index, juce::File& file);
-    bool readMidiFile (int index, juce::File& mid);
+    bool writeMidiFile(int index, juce::File& file);
+    bool readMidiFile(int index, juce::File& mid);
     juce::MidiKeyboardState keyboardState;
 
 private:
@@ -145,7 +145,7 @@ private:
     juce::Array<juce::File> midiFiles;
     bool wasRecording;
 
-    JUCE_LEAK_DETECTOR (MidiStep)
+    JUCE_LEAK_DETECTOR(MidiStep)
 };
 
 #endif

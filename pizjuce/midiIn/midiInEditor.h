@@ -43,19 +43,19 @@ class MidiInEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    MidiInEditor (MidiInFilter* const ownerFilter);
+    MidiInEditor(MidiInFilter* const ownerFilter);
     ~MidiInEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void buttonStateChanged(juce::Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<juce::Label> label;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiInEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiInEditor)
 };
 
 //[EndFile] You can add extra defines here...

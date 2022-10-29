@@ -5,7 +5,7 @@
 
 using juce::roundToInt;
 
-Controller::Controller (MidiMorph* core)
+Controller::Controller(MidiMorph* core)
 {
     this->core         = core;
     this->channel      = 1;
@@ -23,12 +23,12 @@ Controller::~Controller()
     removeAllChangeListeners();
 }
 
-ControllerValue* Controller::getValue (int index)
+ControllerValue* Controller::getValue(int index)
 {
     return values[index];
 }
 
-ControllerValue* Controller::getValue (const Scene* scene)
+ControllerValue* Controller::getValue(const Scene* scene)
 {
     for (int i = 0; i < values.size(); i++)
     {
@@ -40,22 +40,22 @@ ControllerValue* Controller::getValue (const Scene* scene)
     return nullptr;
 }
 
-void Controller::setValue (int newValue, Scene* scene)
+void Controller::setValue(int newValue, Scene* scene)
 {
     for (int i = 0; i < values.size(); i++)
     {
         if (values[i]->scene == scene)
         {
-            values[i]->setValue (newValue);
-            core->controllerChanged (this);
+            values[i]->setValue(newValue);
+            core->controllerChanged(this);
             controllerChanged();
             return;
         }
     }
-    auto* newControllerValue = new ControllerValue (this, scene);
-    newControllerValue->setValue (newValue);
-    values.add (newControllerValue);
-    scene->addValue (newControllerValue);
+    auto* newControllerValue = new ControllerValue(this, scene);
+    newControllerValue->setValue(newValue);
+    values.add(newControllerValue);
+    scene->addValue(newControllerValue);
     controllerChanged();
 }
 
@@ -63,7 +63,7 @@ void Controller::controllerChanged()
 {
     this->valueChanged = true;
     this->newMidi      = true;
-    this->core->controllerChanged (this);
+    this->core->controllerChanged(this);
 }
 
 int Controller::getState()
@@ -74,7 +74,7 @@ int Controller::getState()
     }
     else if (core->getNumSelectedScenes() == 1)
     {
-        if (core->getSelectedScene (0)->getValue (this) == -1)
+        if (core->getSelectedScene(0)->getValue(this) == -1)
         {
             return Controller::undefined;
         }
@@ -90,11 +90,11 @@ int Controller::getState()
 
         for (int i = 0; i < this->core->getNumSelectedScenes(); i++)
         {
-            if (core->getSelectedScene (i)->getValue (this) != lastVal && i > 0)
+            if (core->getSelectedScene(i)->getValue(this) != lastVal && i > 0)
             {
                 return Controller::mutival;
             }
-            lastVal = core->getSelectedScenes()->operator[] (i)->getValue (this);
+            lastVal = core->getSelectedScenes()->operator[](i)->getValue(this);
             if (lastVal != -1)
             {
                 defined = true;
@@ -121,26 +121,26 @@ int Controller::getInterpolatedValue()
         for (int i = 0; i < values.size(); i++)
         {
             scene = values[i]->getScene();
-            tmp += scene->getValue (this) * scene->getAffectionRatio();
+            tmp += scene->getValue(this) * scene->getAffectionRatio();
         }
         valueChanged = false;
-        value        = roundToInt (tmp);
+        value        = roundToInt(tmp);
     }
     return value;
 }
 
-void Controller::addValue (ControllerValue* valueToAdd)
+void Controller::addValue(ControllerValue* valueToAdd)
 {
-    this->values.add (valueToAdd);
+    this->values.add(valueToAdd);
 }
 
 void Controller::learn()
 {
 }
 
-void Controller::removeValue (ControllerValue* valueToRemove)
+void Controller::removeValue(ControllerValue* valueToRemove)
 {
-    this->values.removeAllInstancesOf (valueToRemove);
+    this->values.removeAllInstancesOf(valueToRemove);
 }
 
 int Controller::getNumValues()
@@ -148,16 +148,16 @@ int Controller::getNumValues()
     return this->values.size();
 }
 
-void Controller::getMidiMessage (juce::MidiBuffer& buffer, int pos)
+void Controller::getMidiMessage(juce::MidiBuffer& buffer, int pos)
 {
     {
-        buffer.addEvent (juce::MidiMessage::controllerEvent (channel, ccNo, getInterpolatedValue()), pos);
+        buffer.addEvent(juce::MidiMessage::controllerEvent(channel, ccNo, getInterpolatedValue()), pos);
     }
 }
 
 void Controller::remove()
 {
-    core->removeController (this);
+    core->removeController(this);
 }
 
 bool Controller::hasNewMidi()
@@ -172,7 +172,7 @@ int Controller::getCcNo() const
     return ccNo;
 }
 
-void Controller::setCcNo (int val)
+void Controller::setCcNo(int val)
 {
     this->ccNo = val;
 }
@@ -182,7 +182,7 @@ int Controller::getChannel() const
     return channel;
 }
 
-void Controller::setChannel (int channelToSet)
+void Controller::setChannel(int channelToSet)
 {
     this->channel = channelToSet;
 }
@@ -192,18 +192,18 @@ juce::String Controller::getName()
     return this->name;
 }
 
-void Controller::setName (juce::String nameToSet)
+void Controller::setName(juce::String nameToSet)
 {
     this->name = nameToSet;
 }
 
-void Controller::setValueInSelectedScenes (int newValue)
+void Controller::setValueInSelectedScenes(int newValue)
 {
     for (int i = core->getNumSelectedScenes(); --i >= 0;)
     {
-        setValue (newValue, core->getSelectedScene (i));
+        setValue(newValue, core->getSelectedScene(i));
     }
-    core->sendChangeMessage (this);
+    core->sendChangeMessage(this);
 
     if (core->getNumSelectedScenes() == 0 && core->autoKey)
     {

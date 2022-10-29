@@ -31,335 +31,335 @@ PadEditor::PadEditor()
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    textEditor.reset (new juce::TextEditor ("new text editor"));
-    addAndMakeVisible (textEditor.get());
-    textEditor->setMultiLine (false);
-    textEditor->setReturnKeyStartsNewLine (false);
-    textEditor->setReadOnly (false);
-    textEditor->setScrollbarsShown (true);
-    textEditor->setCaretVisible (true);
-    textEditor->setPopupMenuEnabled (true);
-    textEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
-    textEditor->setText (juce::String());
-
-    textEditor->setBounds (8, 16, 224, 88);
+    textEditor.reset(new juce::TextEditor("new text editor"));
+    addAndMakeVisible(textEditor.get());
+    textEditor->setMultiLine(false);
+    textEditor->setReturnKeyStartsNewLine(false);
+    textEditor->setReadOnly(false);
+    textEditor->setScrollbarsShown(true);
+    textEditor->setCaretVisible(true);
+    textEditor->setPopupMenuEnabled(true);
+    textEditor->setColour(juce::TextEditor::outlineColourId, juce::Colours::black);
+    textEditor->setText(juce::String());
+
+    textEditor->setBounds(8, 16, 224, 88);
 
-    textButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton.get());
-    textButton->setButtonText (TRANS ("Clear Icon"));
-    textButton->addListener (this);
-
-    textButton->setBounds (8, 128, 56, 16);
+    textButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton.get());
+    textButton->setButtonText(TRANS("Clear Icon"));
+    textButton->addListener(this);
+
+    textButton->setBounds(8, 128, 56, 16);
 
-    textButton2.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton2.get());
-    textButton2->setButtonText (TRANS ("Choose Icon"));
-    textButton2->addListener (this);
+    textButton2.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton2.get());
+    textButton2->setButtonText(TRANS("Choose Icon"));
+    textButton2->addListener(this);
 
-    textButton2->setBounds (72, 128, 64, 16);
+    textButton2->setBounds(72, 128, 64, 16);
 
-    component.reset (new juce::ColourSelector());
-    addAndMakeVisible (component.get());
-    component->setName ("new component");
-
-    component->setBounds (8, 152, 224, 192);
+    component.reset(new juce::ColourSelector());
+    addAndMakeVisible(component.get());
+    component->setName("new component");
+
+    component->setBounds(8, 152, 224, 192);
 
-    toggleButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS ("Show Dot"));
-    toggleButton->addListener (this);
-
-    toggleButton->setBounds (8, 352, 72, 16);
-
-    toggleButton2.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton2.get());
-    toggleButton2->setButtonText (TRANS ("Show Values"));
-    toggleButton2->addListener (this);
+    toggleButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton.get());
+    toggleButton->setButtonText(TRANS("Show Dot"));
+    toggleButton->addListener(this);
+
+    toggleButton->setBounds(8, 352, 72, 16);
+
+    toggleButton2.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton2.get());
+    toggleButton2->setButtonText(TRANS("Show Values"));
+    toggleButton2->addListener(this);
 
-    toggleButton2->setBounds (80, 352, 88, 16);
-
-    toggleButton3.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton3.get());
-    toggleButton3->setButtonText (TRANS ("Centered Text"));
-    toggleButton3->addListener (this);
-
-    toggleButton3->setBounds (8, 104, 150, 16);
-
-    slider.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider.get());
-    slider->setRange (0, 10, 0);
-    slider->setSliderStyle (juce::Slider::LinearBar);
-    slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider->setColour (juce::Slider::textBoxTextColourId, juce::Colour (0x00000000));
-    slider->addListener (this);
-
-    slider->setBounds (72, 376, 144, 16);
-
-    slider2.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider2.get());
-    slider2->setRange (0, 10, 0);
-    slider2->setSliderStyle (juce::Slider::LinearBar);
-    slider2->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider2->setColour (juce::Slider::textBoxTextColourId, juce::Colour (0x00000000));
-    slider2->addListener (this);
-
-    slider2->setBounds (144, 128, 88, 16);
-
-    toggleButton4.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton4.get());
-    toggleButton4->setButtonText (TRANS ("Note"));
-    toggleButton4->setRadioGroupId (1);
-    toggleButton4->addListener (this);
-
-    toggleButton4->setBounds (248, 8, 64, 24);
-
-    toggleButton5.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton5.get());
-    toggleButton5->setButtonText (TRANS ("CC"));
-    toggleButton5->setRadioGroupId (1);
-    toggleButton5->addListener (this);
-
-    toggleButton5->setBounds (320, 8, 56, 24);
-
-    toggleButton6.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton6.get());
-    toggleButton6->setButtonText (TRANS ("Use Y-Position"));
-    toggleButton6->addListener (this);
-
-    toggleButton6->setBounds (248, 24, 150, 24);
-
-    toggleButton7.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton7.get());
-    toggleButton7->setButtonText (TRANS ("Use X-Position"));
-    toggleButton7->addListener (this);
-
-    toggleButton7->setBounds (248, 40, 150, 24);
+    toggleButton2->setBounds(80, 352, 88, 16);
+
+    toggleButton3.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton3.get());
+    toggleButton3->setButtonText(TRANS("Centered Text"));
+    toggleButton3->addListener(this);
+
+    toggleButton3->setBounds(8, 104, 150, 16);
+
+    slider.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider.get());
+    slider->setRange(0, 10, 0);
+    slider->setSliderStyle(juce::Slider::LinearBar);
+    slider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0x00000000));
+    slider->addListener(this);
+
+    slider->setBounds(72, 376, 144, 16);
+
+    slider2.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider2.get());
+    slider2->setRange(0, 10, 0);
+    slider2->setSliderStyle(juce::Slider::LinearBar);
+    slider2->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider2->setColour(juce::Slider::textBoxTextColourId, juce::Colour(0x00000000));
+    slider2->addListener(this);
+
+    slider2->setBounds(144, 128, 88, 16);
+
+    toggleButton4.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton4.get());
+    toggleButton4->setButtonText(TRANS("Note"));
+    toggleButton4->setRadioGroupId(1);
+    toggleButton4->addListener(this);
+
+    toggleButton4->setBounds(248, 8, 64, 24);
+
+    toggleButton5.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton5.get());
+    toggleButton5->setButtonText(TRANS("CC"));
+    toggleButton5->setRadioGroupId(1);
+    toggleButton5->addListener(this);
+
+    toggleButton5->setBounds(320, 8, 56, 24);
+
+    toggleButton6.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton6.get());
+    toggleButton6->setButtonText(TRANS("Use Y-Position"));
+    toggleButton6->addListener(this);
+
+    toggleButton6->setBounds(248, 24, 150, 24);
+
+    toggleButton7.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton7.get());
+    toggleButton7->setButtonText(TRANS("Use X-Position"));
+    toggleButton7->addListener(this);
+
+    toggleButton7->setBounds(248, 40, 150, 24);
 
-    toggleButton8.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton8.get());
-    toggleButton8->setButtonText (TRANS ("X is Pitch Bend"));
-    toggleButton8->addListener (this);
+    toggleButton8.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton8.get());
+    toggleButton8->setButtonText(TRANS("X is Pitch Bend"));
+    toggleButton8->addListener(this);
 
-    toggleButton8->setBounds (248, 56, 150, 24);
+    toggleButton8->setBounds(248, 56, 150, 24);
 
-    toggleButton9.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton9.get());
-    toggleButton9->setButtonText (TRANS ("Send Off Values"));
-    toggleButton9->addListener (this);
+    toggleButton9.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton9.get());
+    toggleButton9->setButtonText(TRANS("Send Off Values"));
+    toggleButton9->addListener(this);
 
-    toggleButton9->setBounds (248, 72, 150, 24);
+    toggleButton9->setBounds(248, 72, 150, 24);
 
-    toggleButton10.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton10.get());
-    toggleButton10->setButtonText (TRANS ("Toggle Mode"));
-    toggleButton10->addListener (this);
+    toggleButton10.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton10.get());
+    toggleButton10->setButtonText(TRANS("Toggle Mode"));
+    toggleButton10->addListener(this);
 
-    toggleButton10->setBounds (248, 88, 150, 24);
+    toggleButton10->setBounds(248, 88, 150, 24);
 
-    slider3.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider3.get());
-    slider3->setRange (0, 127, 1);
-    slider3->setSliderStyle (juce::Slider::LinearBar);
-    slider3->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider3->addListener (this);
+    slider3.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider3.get());
+    slider3->setRange(0, 127, 1);
+    slider3->setSliderStyle(juce::Slider::LinearBar);
+    slider3->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider3->addListener(this);
 
-    slider3->setBounds (248, 136, 96, 16);
+    slider3->setBounds(248, 136, 96, 16);
 
-    slider4.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider4.get());
-    slider4->setRange (0, 127, 1);
-    slider4->setSliderStyle (juce::Slider::LinearBar);
-    slider4->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider4->addListener (this);
+    slider4.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider4.get());
+    slider4->setRange(0, 127, 1);
+    slider4->setSliderStyle(juce::Slider::LinearBar);
+    slider4->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider4->addListener(this);
 
-    slider4->setBounds (248, 176, 96, 16);
+    slider4->setBounds(248, 176, 96, 16);
 
-    slider5.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider5.get());
-    slider5->setRange (0, 127, 1);
-    slider5->setSliderStyle (juce::Slider::LinearBar);
-    slider5->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider5->addListener (this);
+    slider5.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider5.get());
+    slider5->setRange(0, 127, 1);
+    slider5->setSliderStyle(juce::Slider::LinearBar);
+    slider5->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider5->addListener(this);
 
-    slider5->setBounds (248, 216, 96, 16);
+    slider5->setBounds(248, 216, 96, 16);
 
-    slider6.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider6.get());
-    slider6->setRange (0, 127, 1);
-    slider6->setSliderStyle (juce::Slider::LinearBar);
-    slider6->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider6->addListener (this);
-
-    slider6->setBounds (248, 256, 96, 16);
+    slider6.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider6.get());
+    slider6->setRange(0, 127, 1);
+    slider6->setSliderStyle(juce::Slider::LinearBar);
+    slider6->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider6->addListener(this);
+
+    slider6->setBounds(248, 256, 96, 16);
 
-    slider7.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider7.get());
-    slider7->setRange (0, 127, 1);
-    slider7->setSliderStyle (juce::Slider::LinearBar);
-    slider7->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider7->addListener (this);
-
-    slider7->setBounds (248, 296, 96, 16);
-
-    slider8.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider8.get());
-    slider8->setRange (0, 127, 1);
-    slider8->setSliderStyle (juce::Slider::LinearBar);
-    slider8->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider8->addListener (this);
-
-    slider8->setBounds (248, 336, 96, 16);
-
-    slider9.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (slider9.get());
-    slider9->setRange (0, 127, 1);
-    slider9->setSliderStyle (juce::Slider::LinearBar);
-    slider9->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    slider9->addListener (this);
-
-    slider9->setBounds (248, 376, 96, 16);
-
-    textButton3.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton3.get());
-    textButton3->setButtonText (TRANS ("Learn"));
-    textButton3->addListener (this);
-
-    textButton3->setBounds (352, 136, 40, 16);
-
-    textButton4.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton4.get());
-    textButton4->setButtonText (TRANS ("Learn"));
-    textButton4->addListener (this);
-
-    textButton4->setBounds (352, 176, 40, 16);
-
-    textButton5.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton5.get());
-    textButton5->setButtonText (TRANS ("Learn"));
-    textButton5->addListener (this);
-
-    textButton5->setBounds (352, 216, 40, 16);
-
-    textButton6.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton6.get());
-    textButton6->setButtonText (TRANS ("Learn"));
-    textButton6->addListener (this);
-
-    textButton6->setBounds (352, 256, 40, 16);
-
-    textButton7.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton7.get());
-    textButton7->setButtonText (TRANS ("Learn"));
-    textButton7->addListener (this);
-
-    textButton7->setBounds (352, 296, 40, 16);
-
-    textButton8.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton8.get());
-    textButton8->setButtonText (TRANS ("Learn"));
-    textButton8->addListener (this);
-
-    textButton8->setBounds (352, 336, 40, 16);
-
-    textButton9.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (textButton9.get());
-    textButton9->setButtonText (TRANS ("Learn"));
-    textButton9->addListener (this);
-
-    textButton9->setBounds (352, 376, 40, 16);
-
-    label.reset (new juce::Label ("new label",
-                                  TRANS ("Trigger Note")));
-    addAndMakeVisible (label.get());
-    label->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label->setJustificationType (juce::Justification::centredLeft);
-    label->setEditable (false, false, false);
-    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label->setBounds (248, 360, 150, 16);
-
-    label2.reset (new juce::Label ("new label",
-                                   TRANS ("X-CC Off Value")));
-    addAndMakeVisible (label2.get());
-    label2->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label2->setJustificationType (juce::Justification::centredLeft);
-    label2->setEditable (false, false, false);
-    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label2->setBounds (248, 320, 150, 16);
-
-    label3.reset (new juce::Label ("new label",
-                                   TRANS ("X-CC #")));
-    addAndMakeVisible (label3.get());
-    label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label3->setJustificationType (juce::Justification::centredLeft);
-    label3->setEditable (false, false, false);
-    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label3->setBounds (248, 280, 150, 16);
-
-    label4.reset (new juce::Label ("new label",
-                                   TRANS ("Velocity/Y-CC Off Value")));
-    addAndMakeVisible (label4.get());
-    label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label4->setJustificationType (juce::Justification::centredLeft);
-    label4->setEditable (false, false, false);
-    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label4->setBounds (248, 240, 150, 16);
-
-    label5.reset (new juce::Label ("new label",
-                                   TRANS ("Velocity/Y-CC On Value")));
-    addAndMakeVisible (label5.get());
-    label5->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label5->setJustificationType (juce::Justification::centredLeft);
-    label5->setEditable (false, false, false);
-    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label5->setBounds (248, 200, 150, 16);
-
-    label6.reset (new juce::Label ("new label",
-                                   TRANS ("Y-CC #")));
-    addAndMakeVisible (label6.get());
-    label6->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label6->setJustificationType (juce::Justification::centredLeft);
-    label6->setEditable (false, false, false);
-    label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label6->setBounds (248, 160, 150, 16);
-
-    label7.reset (new juce::Label ("new label",
-                                   TRANS ("Note")));
-    addAndMakeVisible (label7.get());
-    label7->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label7->setJustificationType (juce::Justification::centredLeft);
-    label7->setEditable (false, false, false);
-    label7->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label7->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label7->setBounds (248, 120, 150, 16);
-
-    label8.reset (new juce::Label ("new label",
-                                   TRANS ("Roundness")));
-    addAndMakeVisible (label8.get());
-    label8->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label8->setJustificationType (juce::Justification::centredLeft);
-    label8->setEditable (false, false, false);
-    label8->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label8->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label8->setBounds (8, 376, 64, 16);
+    slider7.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider7.get());
+    slider7->setRange(0, 127, 1);
+    slider7->setSliderStyle(juce::Slider::LinearBar);
+    slider7->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider7->addListener(this);
+
+    slider7->setBounds(248, 296, 96, 16);
+
+    slider8.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider8.get());
+    slider8->setRange(0, 127, 1);
+    slider8->setSliderStyle(juce::Slider::LinearBar);
+    slider8->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider8->addListener(this);
+
+    slider8->setBounds(248, 336, 96, 16);
+
+    slider9.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(slider9.get());
+    slider9->setRange(0, 127, 1);
+    slider9->setSliderStyle(juce::Slider::LinearBar);
+    slider9->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    slider9->addListener(this);
+
+    slider9->setBounds(248, 376, 96, 16);
+
+    textButton3.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton3.get());
+    textButton3->setButtonText(TRANS("Learn"));
+    textButton3->addListener(this);
+
+    textButton3->setBounds(352, 136, 40, 16);
+
+    textButton4.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton4.get());
+    textButton4->setButtonText(TRANS("Learn"));
+    textButton4->addListener(this);
+
+    textButton4->setBounds(352, 176, 40, 16);
+
+    textButton5.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton5.get());
+    textButton5->setButtonText(TRANS("Learn"));
+    textButton5->addListener(this);
+
+    textButton5->setBounds(352, 216, 40, 16);
+
+    textButton6.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton6.get());
+    textButton6->setButtonText(TRANS("Learn"));
+    textButton6->addListener(this);
+
+    textButton6->setBounds(352, 256, 40, 16);
+
+    textButton7.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton7.get());
+    textButton7->setButtonText(TRANS("Learn"));
+    textButton7->addListener(this);
+
+    textButton7->setBounds(352, 296, 40, 16);
+
+    textButton8.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton8.get());
+    textButton8->setButtonText(TRANS("Learn"));
+    textButton8->addListener(this);
+
+    textButton8->setBounds(352, 336, 40, 16);
+
+    textButton9.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(textButton9.get());
+    textButton9->setButtonText(TRANS("Learn"));
+    textButton9->addListener(this);
+
+    textButton9->setBounds(352, 376, 40, 16);
+
+    label.reset(new juce::Label("new label",
+                                TRANS("Trigger Note")));
+    addAndMakeVisible(label.get());
+    label->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label->setJustificationType(juce::Justification::centredLeft);
+    label->setEditable(false, false, false);
+    label->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label->setBounds(248, 360, 150, 16);
+
+    label2.reset(new juce::Label("new label",
+                                 TRANS("X-CC Off Value")));
+    addAndMakeVisible(label2.get());
+    label2->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label2->setJustificationType(juce::Justification::centredLeft);
+    label2->setEditable(false, false, false);
+    label2->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label2->setBounds(248, 320, 150, 16);
+
+    label3.reset(new juce::Label("new label",
+                                 TRANS("X-CC #")));
+    addAndMakeVisible(label3.get());
+    label3->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label3->setJustificationType(juce::Justification::centredLeft);
+    label3->setEditable(false, false, false);
+    label3->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label3->setBounds(248, 280, 150, 16);
+
+    label4.reset(new juce::Label("new label",
+                                 TRANS("Velocity/Y-CC Off Value")));
+    addAndMakeVisible(label4.get());
+    label4->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label4->setJustificationType(juce::Justification::centredLeft);
+    label4->setEditable(false, false, false);
+    label4->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label4->setBounds(248, 240, 150, 16);
+
+    label5.reset(new juce::Label("new label",
+                                 TRANS("Velocity/Y-CC On Value")));
+    addAndMakeVisible(label5.get());
+    label5->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label5->setJustificationType(juce::Justification::centredLeft);
+    label5->setEditable(false, false, false);
+    label5->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label5->setBounds(248, 200, 150, 16);
+
+    label6.reset(new juce::Label("new label",
+                                 TRANS("Y-CC #")));
+    addAndMakeVisible(label6.get());
+    label6->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label6->setJustificationType(juce::Justification::centredLeft);
+    label6->setEditable(false, false, false);
+    label6->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label6->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label6->setBounds(248, 160, 150, 16);
+
+    label7.reset(new juce::Label("new label",
+                                 TRANS("Note")));
+    addAndMakeVisible(label7.get());
+    label7->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label7->setJustificationType(juce::Justification::centredLeft);
+    label7->setEditable(false, false, false);
+    label7->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label7->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label7->setBounds(248, 120, 150, 16);
+
+    label8.reset(new juce::Label("new label",
+                                 TRANS("Roundness")));
+    addAndMakeVisible(label8.get());
+    label8->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label8->setJustificationType(juce::Justification::centredLeft);
+    label8->setEditable(false, false, false);
+    label8->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label8->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label8->setBounds(8, 376, 64, 16);
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (400, 400);
+    setSize(400, 400);
 
     //[Constructor] You can add your own custom stuff here..
     //[/Constructor]
@@ -414,22 +414,22 @@ PadEditor::~PadEditor()
 }
 
 //==============================================================================
-void PadEditor::paint (juce::Graphics& g)
+void PadEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colours::white);
+    g.fillAll(juce::Colours::white);
 
     {
         int x = 147, y = 131, width = 85, height = 13;
-        juce::String text (TRANS ("Icon Size"));
+        juce::String text(TRANS("Icon Size"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centredLeft, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centredLeft, true);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -445,7 +445,7 @@ void PadEditor::resized()
     //[/UserResized]
 }
 
-void PadEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void PadEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -550,7 +550,7 @@ void PadEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void PadEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void PadEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]

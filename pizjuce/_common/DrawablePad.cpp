@@ -1,23 +1,23 @@
 #include "DrawablePad.h"
 
 //==============================================================================
-DrawablePad::DrawablePad (const juce::String& name)
-    : Button (name),
+DrawablePad::DrawablePad(const juce::String& name)
+    : Button(name),
       //buttonState(buttonNormal),
-      normalImage (nullptr),
-      overImage (nullptr),
-      downImage (nullptr),
-      disabledImage (nullptr),
-      normalImageOn (nullptr),
-      overImageOn (nullptr),
-      downImageOn (nullptr),
-      disabledImageOn (nullptr)
+      normalImage(nullptr),
+      overImage(nullptr),
+      downImage(nullptr),
+      disabledImage(nullptr),
+      normalImageOn(nullptr),
+      overImageOn(nullptr),
+      downImageOn(nullptr),
+      disabledImageOn(nullptr)
 {
-    setSize (200, 200);
-    backgroundOff = juce::Colour (0xffbbbbff);
-    backgroundOn  = juce::Colour (0xff3333ff);
+    setSize(200, 200);
+    backgroundOff = juce::Colour(0xffbbbbff);
+    backgroundOn  = juce::Colour(0xff3333ff);
     Label         = "Pad";
-    setMouseClickGrabsKeyboardFocus (false);
+    setMouseClickGrabsKeyboardFocus(false);
 }
 
 void DrawablePad::deleteImages()
@@ -32,18 +32,18 @@ void DrawablePad::deleteImages()
     disabledImageOn.reset();
 }
 
-void DrawablePad::setImages (const juce::Drawable* normal,
-                             const juce::Drawable* over,
-                             const juce::Drawable* down,
-                             const juce::Drawable* disabled,
-                             const juce::Drawable* normalOn,
-                             const juce::Drawable* overOn,
-                             const juce::Drawable* downOn,
-                             const juce::Drawable* disabledOn)
+void DrawablePad::setImages(const juce::Drawable* normal,
+                            const juce::Drawable* over,
+                            const juce::Drawable* down,
+                            const juce::Drawable* disabled,
+                            const juce::Drawable* normalOn,
+                            const juce::Drawable* overOn,
+                            const juce::Drawable* downOn,
+                            const juce::Drawable* disabledOn)
 {
     deleteImages();
 
-    jassert (normal != nullptr); // you really need to give it at least a normal image..
+    jassert(normal != nullptr); // you really need to give it at least a normal image..
 
     if (normal != nullptr)
         normalImage = normal->createCopy();
@@ -65,37 +65,37 @@ void DrawablePad::setImages (const juce::Drawable* normal,
     repaint();
 }
 
-static std::unique_ptr<juce::Drawable> drawableFromFile (const juce::File& f)
+static std::unique_ptr<juce::Drawable> drawableFromFile(const juce::File& f)
 {
     if (f.exists())
     {
-        return juce::Drawable::createFromImageFile (f);
+        return juce::Drawable::createFromImageFile(f);
     }
 
     return nullptr;
 }
 
-void DrawablePad::setImages (const juce::File normalImage,
-                             const juce::File overImage,
-                             const juce::File downImage,
-                             const juce::File disabledImage,
-                             const juce::File normalImageOn,
-                             const juce::File overImageOn,
-                             const juce::File downImageOn,
-                             const juce::File disabledImageOn)
+void DrawablePad::setImages(const juce::File normalImage,
+                            const juce::File overImage,
+                            const juce::File downImage,
+                            const juce::File disabledImage,
+                            const juce::File normalImageOn,
+                            const juce::File overImageOn,
+                            const juce::File downImageOn,
+                            const juce::File disabledImageOn)
 {
-    setImagesFromUptr (drawableFromFile (normalImage),
-                       drawableFromFile (overImage),
-                       drawableFromFile (downImage),
-                       drawableFromFile (disabledImage),
-                       drawableFromFile (normalImageOn),
-                       drawableFromFile (overImageOn),
-                       drawableFromFile (downImageOn),
-                       drawableFromFile (disabledImageOn));
+    setImagesFromUptr(drawableFromFile(normalImage),
+                      drawableFromFile(overImage),
+                      drawableFromFile(downImage),
+                      drawableFromFile(disabledImage),
+                      drawableFromFile(normalImageOn),
+                      drawableFromFile(overImageOn),
+                      drawableFromFile(downImageOn),
+                      drawableFromFile(disabledImageOn));
 }
 
-void DrawablePad::setBackgroundColours (const juce::Colour& toggledOffColour,
-                                        const juce::Colour& toggledOnColour)
+void DrawablePad::setBackgroundColours(const juce::Colour& toggledOffColour,
+                                       const juce::Colour& toggledOnColour)
 {
     if (backgroundOff != toggledOffColour
         || backgroundOn != toggledOnColour)
@@ -113,23 +113,23 @@ const juce::Colour& DrawablePad::getBackgroundColour() const throw()
                             : backgroundOff;
 }
 
-void DrawablePad::drawButtonBackground (juce::Graphics& g,
-                                        Button& button,
-                                        const juce::Colour& backgroundColour,
-                                        bool isMouseOverButton,
-                                        bool isButtonDown)
+void DrawablePad::drawButtonBackground(juce::Graphics& g,
+                                       Button& button,
+                                       const juce::Colour& backgroundColour,
+                                       bool isMouseOverButton,
+                                       bool isButtonDown)
 {
 }
 
-void DrawablePad::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void DrawablePad::paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
     juce::Rectangle<int> imageSpace;
     const int insetX = getWidth() / 100;
     const int insetY = getHeight() / 100;
-    imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
+    imageSpace.setBounds(insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
 
-    g.setImageResamplingQuality (juce::Graphics::highResamplingQuality);
-    g.setOpacity (1.0f);
+    g.setImageResamplingQuality(juce::Graphics::highResamplingQuality);
+    g.setOpacity(1.0f);
 
     const juce::Drawable* imageToDraw = nullptr;
 
@@ -144,22 +144,22 @@ void DrawablePad::paintButton (juce::Graphics& g, bool isMouseOverButton, bool i
 
         if (imageToDraw == nullptr)
         {
-            g.setOpacity (0.4f);
+            g.setOpacity(0.4f);
             imageToDraw = getNormalImage();
         }
     }
 
     if (imageToDraw != nullptr)
     {
-        g.fillAll (juce::Colours::transparentBlack);
-        imageToDraw->drawWithin (g,
-                                 imageSpace.toFloat(),
-                                 juce::RectanglePlacement::centred,
-                                 1.f);
+        g.fillAll(juce::Colours::transparentBlack);
+        imageToDraw->drawWithin(g,
+                                imageSpace.toFloat(),
+                                juce::RectanglePlacement::centred,
+                                1.f);
     }
     else
     {
-        g.fillAll (getBackgroundColour());
+        g.fillAll(getBackgroundColour());
         //	g.setColour (getBackgroundColour().contrasting(0.8f));
         //	g.setFont (Font (9.f, Font::bold));
         //	g.drawText (Label,

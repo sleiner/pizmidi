@@ -46,7 +46,7 @@ SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: true
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: NonEmptyParentheses
+SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false

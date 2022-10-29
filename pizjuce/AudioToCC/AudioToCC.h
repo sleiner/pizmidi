@@ -47,9 +47,9 @@ class EnvelopeFollower
 public:
     EnvelopeFollower();
 
-    void setup (double attackMs, double releaseMs, double sampleRate);
+    void setup(double attackMs, double releaseMs, double sampleRate);
 
-    float process (float v);
+    float process(float v);
 
 protected:
     double envelope;
@@ -119,11 +119,11 @@ public:
     ~AudioToCC() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -156,16 +156,16 @@ public:
 
     int getNumParameters() override;
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -177,21 +177,21 @@ public:
         return 16;
     }
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setActiveDevice (juce::String name);
-    void setActiveDevice (juce::MidiDeviceInfo const& device);
+    void setActiveDevice(juce::String name);
+    void setActiveDevice(juce::MidiDeviceInfo const& device);
     juce::MidiDeviceInfo getActiveDevice()
     {
         return activeDevice;
     }
-    juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
+    juce::MidiDeviceInfo getDeviceByName(juce::String name) const;
 
     PizArray<juce::MidiDeviceInfo> devices;
     int lastCCL, lastCCR;
@@ -205,7 +205,7 @@ private:
     double continualRMS[numChannels];
     double guiContinualRMS[numChannels];
     unsigned int samp[numChannels];
-    int smooth (int dnew, int old, int older, float inertia);
+    int smooth(int dnew, int old, int older, float inertia);
     int oldenv[numChannels];
     int olderenv[numChannels];
 
@@ -224,7 +224,7 @@ private:
 
     bool resetGateL, resetGateR;
 
-    JUCE_LEAK_DETECTOR (AudioToCC)
+    JUCE_LEAK_DETECTOR(AudioToCC)
 };
 
 #endif

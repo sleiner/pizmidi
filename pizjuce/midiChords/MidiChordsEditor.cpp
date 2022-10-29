@@ -27,720 +27,720 @@ using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
-MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+MidiChordsEditor::MidiChordsEditor(MidiChords* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    toggleButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS ("Guess chord name"));
-    toggleButton->addListener (this);
-
-    toggleButton->setBounds (372, 50, 150, 24);
-
-    chordNameLabel.reset (new juce::Label ("new label",
-                                           TRANS ("chord name")));
-    addAndMakeVisible (chordNameLabel.get());
-    chordNameLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    chordNameLabel->setJustificationType (juce::Justification::centred);
-    chordNameLabel->setEditable (false, false, false);
-    chordNameLabel->setColour (juce::Label::backgroundColourId, juce::Colour (0x279a3c3c));
-    chordNameLabel->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
-    chordNameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    chordNameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    chordNameLabel->setBounds (375, 72, 144, 26);
-
-    chordKeyboard.reset (new ChordsKeyboardComponent (ownerFilter->chordKbState, ownerFilter));
-    addAndMakeVisible (chordKeyboard.get());
-
-    triggerKeyboard.reset (new TriggerKeySelectorKeyboard (ownerFilter->triggerKbState, ownerFilter));
-    addAndMakeVisible (triggerKeyboard.get());
-
-    chordLearnButton.reset (new juce::TextButton ("chordLearn"));
-    addAndMakeVisible (chordLearnButton.get());
-    chordLearnButton->setTooltip (TRANS ("Learn next input chord"));
-    chordLearnButton->setButtonText (TRANS ("Learn"));
-    chordLearnButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
-    chordLearnButton->addListener (this);
-
-    chordLearnButton->setBounds (6, 76, 45, 21);
-
-    triggerLearnButton.reset (new juce::TextButton ("triggerLearn"));
-    addAndMakeVisible (triggerLearnButton.get());
-    triggerLearnButton->setTooltip (TRANS ("When on, displayed trigger note follows input note"));
-    triggerLearnButton->setButtonText (TRANS ("Follow Input"));
-    triggerLearnButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
-    triggerLearnButton->addListener (this);
-
-    triggerLearnButton->setBounds (6, 204, 80, 21);
-
-    channelSlider.reset (new ChannelSlider ("channel"));
-    addAndMakeVisible (channelSlider.get());
-    channelSlider->setTooltip (TRANS ("Trigger channel"));
-    channelSlider->setRange (0, 16, 1);
-    channelSlider->setSliderStyle (juce::Slider::LinearBar);
-    channelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    channelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    channelSlider->addListener (this);
-
-    channelSlider->setBounds (123, 323, 66, 16);
-
-    outputLabel.reset (new juce::Label ("new label",
-                                        TRANS ("Output")));
-    addAndMakeVisible (outputLabel.get());
-    outputLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    outputLabel->setJustificationType (juce::Justification::centredRight);
-    outputLabel->setEditable (false, false, false);
-    outputLabel->setColour (juce::Label::textColourId, juce::Colours::white);
-    outputLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    outputLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    outputLabel->setBounds (573, 76, 54, 24);
-
-    pizButton.reset (new PizButton());
-    addAndMakeVisible (pizButton.get());
-    pizButton->setBounds (38, 3, 74, 40);
-
-    triggerLabel.reset (new juce::Label ("new label",
-                                         TRANS ("Trigger Note:")));
-    addAndMakeVisible (triggerLabel.get());
-    triggerLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    triggerLabel->setJustificationType (juce::Justification::centredRight);
-    triggerLabel->setEditable (false, false, false);
-    triggerLabel->setColour (juce::Label::textColourId, juce::Colours::white);
-    triggerLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    triggerLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    triggerLabel->setBounds (464, 203, 97, 24);
-
-    clearChordButton.reset (new juce::TextButton ("clear"));
-    addAndMakeVisible (clearChordButton.get());
-    clearChordButton->setTooltip (TRANS ("Clear current chord"));
-    clearChordButton->setButtonText (TRANS ("Clear"));
-    clearChordButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
-    clearChordButton->addListener (this);
-
-    clearChordButton->setBounds (291, 76, 40, 21);
-
-    resetChordButton.reset (new juce::TextButton ("reset"));
-    addAndMakeVisible (resetChordButton.get());
-    resetChordButton->setTooltip (TRANS ("Reset current chord to just the trigger note"));
-    resetChordButton->setButtonText (TRANS ("Reset"));
-    resetChordButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
-    resetChordButton->addListener (this);
-
-    resetChordButton->setBounds (331, 76, 40, 21);
-
-    clearAllButton.reset (new juce::TextButton ("clear"));
-    addAndMakeVisible (clearAllButton.get());
-    clearAllButton->setButtonText (TRANS ("Clear All"));
-    clearAllButton->setConnectedEdges (juce::Button::ConnectedOnRight);
-    clearAllButton->addListener (this);
-
-    clearAllButton->setBounds (8, 429, 64, 24);
-
-    resetAllButton.reset (new juce::TextButton ("reset"));
-    addAndMakeVisible (resetAllButton.get());
-    resetAllButton->setButtonText (TRANS ("Reset All"));
-    resetAllButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    resetAllButton->addListener (this);
-
-    resetAllButton->setBounds (69, 441, 64, 24);
-
-    transposeUpButton.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeUpButton.get());
-    transposeUpButton->setButtonText (TRANS ("->"));
-    transposeUpButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    transposeUpButton->addListener (this);
-
-    transposeUpButton->setBounds (172, 425, 32, 24);
-
-    transposeDownButton.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeDownButton.get());
-    transposeDownButton->setButtonText (TRANS ("<-"));
-    transposeDownButton->setConnectedEdges (juce::Button::ConnectedOnRight);
-    transposeDownButton->addListener (this);
-
-    transposeDownButton->setBounds (143, 425, 29, 24);
-
-    transposeChordUpButton.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeChordUpButton.get());
-    transposeChordUpButton->setTooltip (TRANS ("Shift chord up one semitone"));
-    transposeChordUpButton->setButtonText (TRANS (">"));
-    transposeChordUpButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
-    transposeChordUpButton->addListener (this);
-
-    transposeChordUpButton->setBounds (159, 76, 23, 21);
-
-    transposeChordDownButton.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeChordDownButton.get());
-    transposeChordDownButton->setTooltip (TRANS ("Shift chord down one semitone"));
-    transposeChordDownButton->setButtonText (TRANS ("<"));
-    transposeChordDownButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
-    transposeChordDownButton->addListener (this);
-
-    transposeChordDownButton->setBounds (136, 76, 23, 21);
-
-    transposeSlider.reset (new juce::Slider ("transpose"));
-    addAndMakeVisible (transposeSlider.get());
-    transposeSlider->setTooltip (TRANS ("Transpose output by semitones"));
-    transposeSlider->setRange (-12, 12, 1);
-    transposeSlider->setSliderStyle (juce::Slider::LinearBar);
-    transposeSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    transposeSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    transposeSlider->addListener (this);
-
-    transposeSlider->setBounds (475, 372, 66, 16);
-
-    velocitySlider.reset (new juce::Slider ("velocity"));
-    addAndMakeVisible (velocitySlider.get());
-    velocitySlider->setTooltip (TRANS ("Velocity for \"Play Chord\" button"));
-    velocitySlider->setRange (1, 127, 1);
-    velocitySlider->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    velocitySlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
-    velocitySlider->setColour (juce::Slider::rotarySliderFillColourId, juce::Colour (0x7f000000));
-    velocitySlider->addListener (this);
-
-    velocitySlider->setBounds (397, 197, 22, 22);
-
-    variationSlider.reset (new juce::Slider ("Variation"));
-    addAndMakeVisible (variationSlider.get());
-    variationSlider->setRange (0, 100, 0.1);
-    variationSlider->setSliderStyle (juce::Slider::LinearBar);
-    variationSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    variationSlider->addListener (this);
-
-    variationSlider->setBounds (333, 432, 104, 16);
-
-    normalButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (normalButton.get());
-    normalButton->setTooltip (TRANS ("Full mode: a separate chord is defined for every input note"));
-    normalButton->setButtonText (TRANS ("Full"));
-    normalButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
-    normalButton->setRadioGroupId (1);
-    normalButton->addListener (this);
-
-    normalButton->setBounds (442, 318, 64, 24);
-
-    octaveButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (octaveButton.get());
-    octaveButton->setTooltip (TRANS ("Octave mode: 12 chords are defined which are transposed to every octave"));
-    octaveButton->setButtonText (TRANS ("Octave"));
-    octaveButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
-    octaveButton->setRadioGroupId (1);
-    octaveButton->addListener (this);
-
-    octaveButton->setBounds (506, 318, 64, 24);
-
-    globalButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (globalButton.get());
-    globalButton->setTooltip (TRANS ("Global mode: one defined chord is transposed relative to the root note"));
-    globalButton->setButtonText (TRANS ("Global"));
-    globalButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
-    globalButton->setRadioGroupId (1);
-    globalButton->addListener (this);
-
-    globalButton->setBounds (570, 318, 64, 24);
-
-    flatsButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (flatsButton.get());
-    flatsButton->setButtonText (TRANS ("flats"));
-    flatsButton->addListener (this);
-
-    flatsButton->setBounds (519, 76, 48, 24);
-
-    transposeChordUpButton2.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeChordUpButton2.get());
-    transposeChordUpButton2->setTooltip (TRANS ("Shift chord up one octave"));
-    transposeChordUpButton2->setButtonText (TRANS (">>"));
-    transposeChordUpButton2->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
-    transposeChordUpButton2->addListener (this);
-
-    transposeChordUpButton2->setBounds (182, 76, 25, 21);
-
-    transposeChordDownButton2.reset (new juce::TextButton ("transpose"));
-    addAndMakeVisible (transposeChordDownButton2.get());
-    transposeChordDownButton2->setTooltip (TRANS ("Shift chord down one octave"));
-    transposeChordDownButton2->setButtonText (TRANS ("<<"));
-    transposeChordDownButton2->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
-    transposeChordDownButton2->addListener (this);
-
-    transposeChordDownButton2->setBounds (111, 76, 25, 21);
-
-    chordMenuButton.reset (new juce::TextButton ("chordMenu"));
-    addAndMakeVisible (chordMenuButton.get());
-    chordMenuButton->setButtonText (TRANS ("Menu"));
-    chordMenuButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
-    chordMenuButton->addListener (this);
-
-    chordMenuButton->setBounds (55, 76, 52, 21);
-
-    presetNameLabel.reset (new juce::Label ("new label",
-                                            TRANS ("preset name")));
-    addAndMakeVisible (presetNameLabel.get());
-    presetNameLabel->setTooltip (TRANS ("Preset Name (double-click to edit)"));
-    presetNameLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    presetNameLabel->setJustificationType (juce::Justification::centred);
-    presetNameLabel->setEditable (true, true, false);
-    presetNameLabel->setColour (juce::Label::backgroundColourId, juce::Colour (0x27a1b404));
-    presetNameLabel->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
-    presetNameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    presetNameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-    presetNameLabel->addListener (this);
-
-    presetNameLabel->setBounds (414, 12, 191, 26);
-
-    presetMenuButton.reset (new juce::TextButton ("presets"));
-    addAndMakeVisible (presetMenuButton.get());
-    presetMenuButton->setTooltip (TRANS ("Preset Menu"));
-    presetMenuButton->setButtonText (TRANS (">"));
-    presetMenuButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    presetMenuButton->addListener (this);
-
-    presetMenuButton->setBounds (605, 12, 25, 26);
-
-    chordSaveEditor.reset (new juce::TextEditor ("new text editor"));
-    addAndMakeVisible (chordSaveEditor.get());
-    chordSaveEditor->setMultiLine (false);
-    chordSaveEditor->setReturnKeyStartsNewLine (false);
-    chordSaveEditor->setReadOnly (false);
-    chordSaveEditor->setScrollbarsShown (true);
-    chordSaveEditor->setCaretVisible (true);
-    chordSaveEditor->setPopupMenuEnabled (true);
-    chordSaveEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
-    chordSaveEditor->setText (juce::String());
-
-    chordSaveEditor->setBounds (82, -35, 150, 24);
-
-    copyButton.reset (new juce::TextButton ("copy"));
-    addAndMakeVisible (copyButton.get());
-    copyButton->setButtonText (TRANS ("Copy"));
-    copyButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
-    copyButton->addListener (this);
-
-    copyButton->setBounds (211, 73, 38, 21);
-
-    pasteButton.reset (new juce::TextButton ("paste"));
-    addAndMakeVisible (pasteButton.get());
-    pasteButton->setButtonText (TRANS ("Paste"));
-    pasteButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
-    pasteButton->addListener (this);
-
-    pasteButton->setBounds (249, 73, 38, 21);
-
-    previewButton.reset (new juce::TextButton ("play"));
-    addAndMakeVisible (previewButton.get());
-    previewButton->setTooltip (TRANS ("Plays currently displayed chord"));
-    previewButton->setButtonText (TRANS ("Play Chord"));
-    previewButton->setColour (juce::TextButton::buttonColourId, juce::Colour (0xff7ca17c));
-
-    previewButton->setBounds (251, 196, 143, 24);
-
-    chordEditor.reset (new juce::Label ("new label",
-                                        TRANS ("chord")));
-    addAndMakeVisible (chordEditor.get());
-    chordEditor->setTooltip (TRANS ("Double-click to type a chord"));
-    chordEditor->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    chordEditor->setJustificationType (juce::Justification::centred);
-    chordEditor->setEditable (false, true, false);
-    chordEditor->setColour (juce::Label::backgroundColourId, juce::Colours::white);
-    chordEditor->setColour (juce::Label::outlineColourId, juce::Colour (0xb3000000));
-    chordEditor->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    chordEditor->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-    chordEditor->addListener (this);
-
-    chordEditor->setBounds (178, 54, 144, 20);
-
-    pcButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (pcButton.get());
-    pcButton->setTooltip (TRANS ("Change program when receiving MIDI Program Change"));
-    pcButton->setButtonText (TRANS ("Use Program Chg"));
-    pcButton->addListener (this);
-
-    pcButton->setBounds (500, 397, 134, 20);
-
-    nextButton.reset (new juce::TextButton ("next"));
-    addAndMakeVisible (nextButton.get());
-    nextButton->setTooltip (TRANS ("Select next higher trigger note"));
-    nextButton->setButtonText (TRANS (">"));
-    nextButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
-    nextButton->addListener (this);
-
-    nextButton->setBounds (113, 204, 23, 21);
-
-    prevButton.reset (new juce::TextButton ("prev"));
-    addAndMakeVisible (prevButton.get());
-    prevButton->setTooltip (TRANS ("Select previous trigger note"));
-    prevButton->setButtonText (TRANS ("<"));
-    prevButton->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
-    prevButton->addListener (this);
-
-    prevButton->setBounds (90, 204, 23, 21);
-
-    triggerNoteLabel.reset (new juce::Label ("new label",
-                                             TRANS ("G8 (127)")));
-    addAndMakeVisible (triggerNoteLabel.get());
-    triggerNoteLabel->setTooltip (TRANS ("Currently displayed trigger note (double-click to edit)"));
-    triggerNoteLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    triggerNoteLabel->setJustificationType (juce::Justification::centredLeft);
-    triggerNoteLabel->setEditable (false, true, false);
-    triggerNoteLabel->setColour (juce::Label::textColourId, juce::Colours::white);
-    triggerNoteLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    triggerNoteLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colours::white);
-    triggerNoteLabel->addListener (this);
-
-    triggerNoteLabel->setBounds (558, 203, 73, 24);
-
-    learnChanSlider.reset (new ChannelSlider ("channel"));
-    addAndMakeVisible (learnChanSlider.get());
-    learnChanSlider->setTooltip (TRANS ("Chord Input Channel, used for Learn and left-click entering notes"));
-    learnChanSlider->setRange (0, 16, 1);
-    learnChanSlider->setSliderStyle (juce::Slider::LinearBar);
-    learnChanSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    learnChanSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    learnChanSlider->addListener (this);
-
-    learnChanSlider->setBounds (6, 56, 38, 16);
-
-    demoLabel.reset (new juce::Label ("new label",
-                                      TRANS ("UNREGISTERED\n"
-                                             "DEMO VERSION")));
-    addAndMakeVisible (demoLabel.get());
-    demoLabel->setFont (juce::Font ("OCR A Extended", 10.00f, juce::Font::plain));
-    demoLabel->setJustificationType (juce::Justification::centred);
-    demoLabel->setEditable (false, false, false);
-    demoLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    demoLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    demoLabel->setBounds (318, 5, 97, 24);
-
-    guitar.reset (new ChordsGuitar (ownerFilter->chordKbState, ownerFilter));
-    addAndMakeVisible (guitar.get());
-    guitar->setName ("new component");
-
-    versionLabel.reset (new juce::Label ("new label",
-                                         TRANS ("99.99.99")));
-    addAndMakeVisible (versionLabel.get());
-    versionLabel->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    versionLabel->setJustificationType (juce::Justification::centredLeft);
-    versionLabel->setEditable (false, false, false);
-    versionLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    versionLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    versionLabel->setBounds (352, 28, 58, 24);
-
-    transposeInputButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (transposeInputButton.get());
-    transposeInputButton->setTooltip (TRANS ("When checked, incoming trigger notes are transposed by the opposite of the \"Transpose\" slider."));
-    transposeInputButton->setButtonText (TRANS ("Also Transpose Input"));
-    transposeInputButton->addListener (this);
-
-    transposeInputButton->setBounds (545, 370, 91, 21);
-
-    toAllChannelsButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toAllChannelsButton.get());
-    toAllChannelsButton->setTooltip (TRANS ("When checked, CCs (and other control messages) are sent to all MIDI channels. Otherwise they are passed through on the original channel."));
-    toAllChannelsButton->setButtonText (TRANS ("CCs to All Chans"));
-    toAllChannelsButton->addListener (this);
-
-    toAllChannelsButton->setBounds (364, 397, 129, 20);
-
-    infoButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (infoButton.get());
-    infoButton->setButtonText (TRANS ("?"));
-    infoButton->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
-    infoButton->addListener (this);
-
-    infoButton->setBounds (-1, -1, 19, 18);
-
-    specialMenuButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (specialMenuButton.get());
-    specialMenuButton->setButtonText (TRANS ("Global Functions..."));
-    specialMenuButton->addListener (this);
-
-    specialMenuButton->setBounds (6, 357, 140, 24);
-
-    outputChannelSlider.reset (new ChannelSlider ("channel"));
-    addAndMakeVisible (outputChannelSlider.get());
-    outputChannelSlider->setTooltip (TRANS ("Output channel (\"Multi\" is as saved, otherwise overrides chord\'s saved channel)"));
-    outputChannelSlider->setRange (0, 16, 1);
-    outputChannelSlider->setSliderStyle (juce::Slider::LinearBar);
-    outputChannelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    outputChannelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    outputChannelSlider->addListener (this);
-
-    outputChannelSlider->setBounds (381, 372, 66, 16);
-
-    applyChannelButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (applyChannelButton.get());
-    applyChannelButton->setTooltip (TRANS ("Applies input channel to selected chord"));
-    applyChannelButton->setButtonText (TRANS ("Apply"));
-    applyChannelButton->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    applyChannelButton->addListener (this);
-
-    applyChannelButton->setBounds (44, 56, 32, 16);
-
-    label.reset (new juce::Label ("new label",
-                                  TRANS ("Out Channel")));
-    addAndMakeVisible (label.get());
-    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label->setJustificationType (juce::Justification::centred);
-    label->setEditable (false, false, false);
-    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label->setBounds (368, 357, 91, 13);
-
-    label2.reset (new juce::Label ("new label",
-                                   TRANS ("Transpose")));
-    addAndMakeVisible (label2.get());
-    label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label2->setJustificationType (juce::Justification::centred);
-    label2->setEditable (false, false, false);
-    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label2->setBounds (461, 357, 91, 13);
-
-    viewButton.reset (new juce::TextButton ("view"));
-    addAndMakeVisible (viewButton.get());
-    viewButton->setTooltip (TRANS ("Switch between keyboard & guitar views"));
-    viewButton->setButtonText (TRANS ("View"));
-    viewButton->setConnectedEdges (juce::Button::ConnectedOnTop);
-    viewButton->addListener (this);
-
-    viewButton->setBounds (151, 190, 41, 21);
-
-    setupButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (setupButton.get());
-    setupButton->setButtonText (TRANS ("Setup"));
-    setupButton->setConnectedEdges (juce::Button::ConnectedOnTop);
-    setupButton->addListener (this);
-
-    setupButton->setBounds (195, 190, 45, 21);
-
-    strumDirectionButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (strumDirectionButton.get());
-    strumDirectionButton->setTooltip (TRANS ("Strum Direction"));
-    strumDirectionButton->setButtonText (TRANS ("Down"));
-    strumDirectionButton->addListener (this);
-
-    strumDirectionButton->setBounds (267, 327, 48, 19);
-
-    strumButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (strumButton.get());
-    strumButton->setButtonText (TRANS ("Strum"));
-    strumButton->setConnectedEdges (juce::Button::ConnectedOnRight);
-    strumButton->addListener (this);
-
-    strumButton->setBounds (142, 391, 54, 21);
-
-    maxTimeSlider.reset (new VSTSlider ("maxTime"));
-    addAndMakeVisible (maxTimeSlider.get());
-    maxTimeSlider->setTooltip (TRANS ("Max Strum Time"));
-    maxTimeSlider->setRange (100, 3000, 1);
-    maxTimeSlider->setSliderStyle (juce::Slider::LinearBar);
-    maxTimeSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    maxTimeSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    maxTimeSlider->addListener (this);
-
-    maxTimeSlider->setBounds (202, 364, 66, 16);
-
-    speedSlider.reset (new VSTSlider ("speed"));
-    addAndMakeVisible (speedSlider.get());
-    speedSlider->setTooltip (TRANS ("Strum Speed"));
-    speedSlider->setRange (0, 100, 1);
-    speedSlider->setSliderStyle (juce::Slider::LinearBar);
-    speedSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    speedSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    speedSlider->addListener (this);
-
-    speedSlider->setBounds (202, 393, 66, 16);
-
-    accelSlider.reset (new VSTSlider ("accel"));
-    addAndMakeVisible (accelSlider.get());
-    accelSlider->setTooltip (TRANS ("Strum Acceleration"));
-    accelSlider->setRange (-100, 100, 1);
-    accelSlider->setSliderStyle (juce::Slider::LinearBar);
-    accelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    accelSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    accelSlider->addListener (this);
-
-    accelSlider->setBounds (275, 393, 66, 16);
-
-    velRampSlider.reset (new VSTSlider ("velRamp"));
-    addAndMakeVisible (velRampSlider.get());
-    velRampSlider->setTooltip (TRANS ("Strum Velocity Ramp"));
-    velRampSlider->setRange (-100, 100, 1);
-    velRampSlider->setSliderStyle (juce::Slider::LinearBar);
-    velRampSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    velRampSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    velRampSlider->addListener (this);
-
-    velRampSlider->setBounds (275, 364, 66, 16);
-
-    infoBox.reset (new juce::TextEditor ("new text editor"));
-    addAndMakeVisible (infoBox.get());
-    infoBox->setMultiLine (true);
-    infoBox->setReturnKeyStartsNewLine (false);
-    infoBox->setReadOnly (true);
-    infoBox->setScrollbarsShown (true);
-    infoBox->setCaretVisible (false);
-    infoBox->setPopupMenuEnabled (true);
-    infoBox->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0xf2ffffff));
-    infoBox->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
-    infoBox->setColour (juce::TextEditor::shadowColourId, juce::Colour (0x38000000));
-    infoBox->setText (juce::String());
-
-    tuningSaveEditor.reset (new juce::TextEditor ("new text editor"));
-    addAndMakeVisible (tuningSaveEditor.get());
-    tuningSaveEditor->setMultiLine (false);
-    tuningSaveEditor->setReturnKeyStartsNewLine (false);
-    tuningSaveEditor->setReadOnly (false);
-    tuningSaveEditor->setScrollbarsShown (true);
-    tuningSaveEditor->setCaretVisible (true);
-    tuningSaveEditor->setPopupMenuEnabled (true);
-    tuningSaveEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
-    tuningSaveEditor->setText (juce::String());
-
-    tuningSaveEditor->setBounds (253, -31, 150, 24);
-
-    cachedImage_midichordsLogo_png_1 = juce::ImageCache::getFromMemory (midichordsLogo_png, midichordsLogo_pngSize);
+    toggleButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton.get());
+    toggleButton->setButtonText(TRANS("Guess chord name"));
+    toggleButton->addListener(this);
+
+    toggleButton->setBounds(372, 50, 150, 24);
+
+    chordNameLabel.reset(new juce::Label("new label",
+                                         TRANS("chord name")));
+    addAndMakeVisible(chordNameLabel.get());
+    chordNameLabel->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    chordNameLabel->setJustificationType(juce::Justification::centred);
+    chordNameLabel->setEditable(false, false, false);
+    chordNameLabel->setColour(juce::Label::backgroundColourId, juce::Colour(0x279a3c3c));
+    chordNameLabel->setColour(juce::Label::outlineColourId, juce::Colour(0xb3000000));
+    chordNameLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    chordNameLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    chordNameLabel->setBounds(375, 72, 144, 26);
+
+    chordKeyboard.reset(new ChordsKeyboardComponent(ownerFilter->chordKbState, ownerFilter));
+    addAndMakeVisible(chordKeyboard.get());
+
+    triggerKeyboard.reset(new TriggerKeySelectorKeyboard(ownerFilter->triggerKbState, ownerFilter));
+    addAndMakeVisible(triggerKeyboard.get());
+
+    chordLearnButton.reset(new juce::TextButton("chordLearn"));
+    addAndMakeVisible(chordLearnButton.get());
+    chordLearnButton->setTooltip(TRANS("Learn next input chord"));
+    chordLearnButton->setButtonText(TRANS("Learn"));
+    chordLearnButton->setConnectedEdges(juce::Button::ConnectedOnBottom);
+    chordLearnButton->addListener(this);
+
+    chordLearnButton->setBounds(6, 76, 45, 21);
+
+    triggerLearnButton.reset(new juce::TextButton("triggerLearn"));
+    addAndMakeVisible(triggerLearnButton.get());
+    triggerLearnButton->setTooltip(TRANS("When on, displayed trigger note follows input note"));
+    triggerLearnButton->setButtonText(TRANS("Follow Input"));
+    triggerLearnButton->setConnectedEdges(juce::Button::ConnectedOnBottom);
+    triggerLearnButton->addListener(this);
+
+    triggerLearnButton->setBounds(6, 204, 80, 21);
+
+    channelSlider.reset(new ChannelSlider("channel"));
+    addAndMakeVisible(channelSlider.get());
+    channelSlider->setTooltip(TRANS("Trigger channel"));
+    channelSlider->setRange(0, 16, 1);
+    channelSlider->setSliderStyle(juce::Slider::LinearBar);
+    channelSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    channelSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    channelSlider->addListener(this);
+
+    channelSlider->setBounds(123, 323, 66, 16);
+
+    outputLabel.reset(new juce::Label("new label",
+                                      TRANS("Output")));
+    addAndMakeVisible(outputLabel.get());
+    outputLabel->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    outputLabel->setJustificationType(juce::Justification::centredRight);
+    outputLabel->setEditable(false, false, false);
+    outputLabel->setColour(juce::Label::textColourId, juce::Colours::white);
+    outputLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    outputLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    outputLabel->setBounds(573, 76, 54, 24);
+
+    pizButton.reset(new PizButton());
+    addAndMakeVisible(pizButton.get());
+    pizButton->setBounds(38, 3, 74, 40);
+
+    triggerLabel.reset(new juce::Label("new label",
+                                       TRANS("Trigger Note:")));
+    addAndMakeVisible(triggerLabel.get());
+    triggerLabel->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    triggerLabel->setJustificationType(juce::Justification::centredRight);
+    triggerLabel->setEditable(false, false, false);
+    triggerLabel->setColour(juce::Label::textColourId, juce::Colours::white);
+    triggerLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    triggerLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    triggerLabel->setBounds(464, 203, 97, 24);
+
+    clearChordButton.reset(new juce::TextButton("clear"));
+    addAndMakeVisible(clearChordButton.get());
+    clearChordButton->setTooltip(TRANS("Clear current chord"));
+    clearChordButton->setButtonText(TRANS("Clear"));
+    clearChordButton->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    clearChordButton->addListener(this);
+
+    clearChordButton->setBounds(291, 76, 40, 21);
+
+    resetChordButton.reset(new juce::TextButton("reset"));
+    addAndMakeVisible(resetChordButton.get());
+    resetChordButton->setTooltip(TRANS("Reset current chord to just the trigger note"));
+    resetChordButton->setButtonText(TRANS("Reset"));
+    resetChordButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
+    resetChordButton->addListener(this);
+
+    resetChordButton->setBounds(331, 76, 40, 21);
+
+    clearAllButton.reset(new juce::TextButton("clear"));
+    addAndMakeVisible(clearAllButton.get());
+    clearAllButton->setButtonText(TRANS("Clear All"));
+    clearAllButton->setConnectedEdges(juce::Button::ConnectedOnRight);
+    clearAllButton->addListener(this);
+
+    clearAllButton->setBounds(8, 429, 64, 24);
+
+    resetAllButton.reset(new juce::TextButton("reset"));
+    addAndMakeVisible(resetAllButton.get());
+    resetAllButton->setButtonText(TRANS("Reset All"));
+    resetAllButton->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    resetAllButton->addListener(this);
+
+    resetAllButton->setBounds(69, 441, 64, 24);
+
+    transposeUpButton.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeUpButton.get());
+    transposeUpButton->setButtonText(TRANS("->"));
+    transposeUpButton->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    transposeUpButton->addListener(this);
+
+    transposeUpButton->setBounds(172, 425, 32, 24);
+
+    transposeDownButton.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeDownButton.get());
+    transposeDownButton->setButtonText(TRANS("<-"));
+    transposeDownButton->setConnectedEdges(juce::Button::ConnectedOnRight);
+    transposeDownButton->addListener(this);
+
+    transposeDownButton->setBounds(143, 425, 29, 24);
+
+    transposeChordUpButton.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeChordUpButton.get());
+    transposeChordUpButton->setTooltip(TRANS("Shift chord up one semitone"));
+    transposeChordUpButton->setButtonText(TRANS(">"));
+    transposeChordUpButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    transposeChordUpButton->addListener(this);
+
+    transposeChordUpButton->setBounds(159, 76, 23, 21);
+
+    transposeChordDownButton.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeChordDownButton.get());
+    transposeChordDownButton->setTooltip(TRANS("Shift chord down one semitone"));
+    transposeChordDownButton->setButtonText(TRANS("<"));
+    transposeChordDownButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    transposeChordDownButton->addListener(this);
+
+    transposeChordDownButton->setBounds(136, 76, 23, 21);
+
+    transposeSlider.reset(new juce::Slider("transpose"));
+    addAndMakeVisible(transposeSlider.get());
+    transposeSlider->setTooltip(TRANS("Transpose output by semitones"));
+    transposeSlider->setRange(-12, 12, 1);
+    transposeSlider->setSliderStyle(juce::Slider::LinearBar);
+    transposeSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    transposeSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    transposeSlider->addListener(this);
+
+    transposeSlider->setBounds(475, 372, 66, 16);
+
+    velocitySlider.reset(new juce::Slider("velocity"));
+    addAndMakeVisible(velocitySlider.get());
+    velocitySlider->setTooltip(TRANS("Velocity for \"Play Chord\" button"));
+    velocitySlider->setRange(1, 127, 1);
+    velocitySlider->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    velocitySlider->setTextBoxStyle(juce::Slider::NoTextBox, false, 80, 20);
+    velocitySlider->setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0x7f000000));
+    velocitySlider->addListener(this);
+
+    velocitySlider->setBounds(397, 197, 22, 22);
+
+    variationSlider.reset(new juce::Slider("Variation"));
+    addAndMakeVisible(variationSlider.get());
+    variationSlider->setRange(0, 100, 0.1);
+    variationSlider->setSliderStyle(juce::Slider::LinearBar);
+    variationSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    variationSlider->addListener(this);
+
+    variationSlider->setBounds(333, 432, 104, 16);
+
+    normalButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(normalButton.get());
+    normalButton->setTooltip(TRANS("Full mode: a separate chord is defined for every input note"));
+    normalButton->setButtonText(TRANS("Full"));
+    normalButton->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
+    normalButton->setRadioGroupId(1);
+    normalButton->addListener(this);
+
+    normalButton->setBounds(442, 318, 64, 24);
+
+    octaveButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(octaveButton.get());
+    octaveButton->setTooltip(TRANS("Octave mode: 12 chords are defined which are transposed to every octave"));
+    octaveButton->setButtonText(TRANS("Octave"));
+    octaveButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
+    octaveButton->setRadioGroupId(1);
+    octaveButton->addListener(this);
+
+    octaveButton->setBounds(506, 318, 64, 24);
+
+    globalButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(globalButton.get());
+    globalButton->setTooltip(TRANS("Global mode: one defined chord is transposed relative to the root note"));
+    globalButton->setButtonText(TRANS("Global"));
+    globalButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
+    globalButton->setRadioGroupId(1);
+    globalButton->addListener(this);
+
+    globalButton->setBounds(570, 318, 64, 24);
+
+    flatsButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(flatsButton.get());
+    flatsButton->setButtonText(TRANS("flats"));
+    flatsButton->addListener(this);
+
+    flatsButton->setBounds(519, 76, 48, 24);
+
+    transposeChordUpButton2.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeChordUpButton2.get());
+    transposeChordUpButton2->setTooltip(TRANS("Shift chord up one octave"));
+    transposeChordUpButton2->setButtonText(TRANS(">>"));
+    transposeChordUpButton2->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
+    transposeChordUpButton2->addListener(this);
+
+    transposeChordUpButton2->setBounds(182, 76, 25, 21);
+
+    transposeChordDownButton2.reset(new juce::TextButton("transpose"));
+    addAndMakeVisible(transposeChordDownButton2.get());
+    transposeChordDownButton2->setTooltip(TRANS("Shift chord down one octave"));
+    transposeChordDownButton2->setButtonText(TRANS("<<"));
+    transposeChordDownButton2->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    transposeChordDownButton2->addListener(this);
+
+    transposeChordDownButton2->setBounds(111, 76, 25, 21);
+
+    chordMenuButton.reset(new juce::TextButton("chordMenu"));
+    addAndMakeVisible(chordMenuButton.get());
+    chordMenuButton->setButtonText(TRANS("Menu"));
+    chordMenuButton->setConnectedEdges(juce::Button::ConnectedOnBottom);
+    chordMenuButton->addListener(this);
+
+    chordMenuButton->setBounds(55, 76, 52, 21);
+
+    presetNameLabel.reset(new juce::Label("new label",
+                                          TRANS("preset name")));
+    addAndMakeVisible(presetNameLabel.get());
+    presetNameLabel->setTooltip(TRANS("Preset Name (double-click to edit)"));
+    presetNameLabel->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    presetNameLabel->setJustificationType(juce::Justification::centred);
+    presetNameLabel->setEditable(true, true, false);
+    presetNameLabel->setColour(juce::Label::backgroundColourId, juce::Colour(0x27a1b404));
+    presetNameLabel->setColour(juce::Label::outlineColourId, juce::Colour(0xb3000000));
+    presetNameLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    presetNameLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+    presetNameLabel->addListener(this);
+
+    presetNameLabel->setBounds(414, 12, 191, 26);
+
+    presetMenuButton.reset(new juce::TextButton("presets"));
+    addAndMakeVisible(presetMenuButton.get());
+    presetMenuButton->setTooltip(TRANS("Preset Menu"));
+    presetMenuButton->setButtonText(TRANS(">"));
+    presetMenuButton->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    presetMenuButton->addListener(this);
+
+    presetMenuButton->setBounds(605, 12, 25, 26);
+
+    chordSaveEditor.reset(new juce::TextEditor("new text editor"));
+    addAndMakeVisible(chordSaveEditor.get());
+    chordSaveEditor->setMultiLine(false);
+    chordSaveEditor->setReturnKeyStartsNewLine(false);
+    chordSaveEditor->setReadOnly(false);
+    chordSaveEditor->setScrollbarsShown(true);
+    chordSaveEditor->setCaretVisible(true);
+    chordSaveEditor->setPopupMenuEnabled(true);
+    chordSaveEditor->setColour(juce::TextEditor::outlineColourId, juce::Colours::black);
+    chordSaveEditor->setText(juce::String());
+
+    chordSaveEditor->setBounds(82, -35, 150, 24);
+
+    copyButton.reset(new juce::TextButton("copy"));
+    addAndMakeVisible(copyButton.get());
+    copyButton->setButtonText(TRANS("Copy"));
+    copyButton->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
+    copyButton->addListener(this);
+
+    copyButton->setBounds(211, 73, 38, 21);
+
+    pasteButton.reset(new juce::TextButton("paste"));
+    addAndMakeVisible(pasteButton.get());
+    pasteButton->setButtonText(TRANS("Paste"));
+    pasteButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
+    pasteButton->addListener(this);
+
+    pasteButton->setBounds(249, 73, 38, 21);
+
+    previewButton.reset(new juce::TextButton("play"));
+    addAndMakeVisible(previewButton.get());
+    previewButton->setTooltip(TRANS("Plays currently displayed chord"));
+    previewButton->setButtonText(TRANS("Play Chord"));
+    previewButton->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff7ca17c));
+
+    previewButton->setBounds(251, 196, 143, 24);
+
+    chordEditor.reset(new juce::Label("new label",
+                                      TRANS("chord")));
+    addAndMakeVisible(chordEditor.get());
+    chordEditor->setTooltip(TRANS("Double-click to type a chord"));
+    chordEditor->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    chordEditor->setJustificationType(juce::Justification::centred);
+    chordEditor->setEditable(false, true, false);
+    chordEditor->setColour(juce::Label::backgroundColourId, juce::Colours::white);
+    chordEditor->setColour(juce::Label::outlineColourId, juce::Colour(0xb3000000));
+    chordEditor->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    chordEditor->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+    chordEditor->addListener(this);
+
+    chordEditor->setBounds(178, 54, 144, 20);
+
+    pcButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(pcButton.get());
+    pcButton->setTooltip(TRANS("Change program when receiving MIDI Program Change"));
+    pcButton->setButtonText(TRANS("Use Program Chg"));
+    pcButton->addListener(this);
+
+    pcButton->setBounds(500, 397, 134, 20);
+
+    nextButton.reset(new juce::TextButton("next"));
+    addAndMakeVisible(nextButton.get());
+    nextButton->setTooltip(TRANS("Select next higher trigger note"));
+    nextButton->setButtonText(TRANS(">"));
+    nextButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnBottom);
+    nextButton->addListener(this);
+
+    nextButton->setBounds(113, 204, 23, 21);
+
+    prevButton.reset(new juce::TextButton("prev"));
+    addAndMakeVisible(prevButton.get());
+    prevButton->setTooltip(TRANS("Select previous trigger note"));
+    prevButton->setButtonText(TRANS("<"));
+    prevButton->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnBottom);
+    prevButton->addListener(this);
+
+    prevButton->setBounds(90, 204, 23, 21);
+
+    triggerNoteLabel.reset(new juce::Label("new label",
+                                           TRANS("G8 (127)")));
+    addAndMakeVisible(triggerNoteLabel.get());
+    triggerNoteLabel->setTooltip(TRANS("Currently displayed trigger note (double-click to edit)"));
+    triggerNoteLabel->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    triggerNoteLabel->setJustificationType(juce::Justification::centredLeft);
+    triggerNoteLabel->setEditable(false, true, false);
+    triggerNoteLabel->setColour(juce::Label::textColourId, juce::Colours::white);
+    triggerNoteLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    triggerNoteLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colours::white);
+    triggerNoteLabel->addListener(this);
+
+    triggerNoteLabel->setBounds(558, 203, 73, 24);
+
+    learnChanSlider.reset(new ChannelSlider("channel"));
+    addAndMakeVisible(learnChanSlider.get());
+    learnChanSlider->setTooltip(TRANS("Chord Input Channel, used for Learn and left-click entering notes"));
+    learnChanSlider->setRange(0, 16, 1);
+    learnChanSlider->setSliderStyle(juce::Slider::LinearBar);
+    learnChanSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    learnChanSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    learnChanSlider->addListener(this);
+
+    learnChanSlider->setBounds(6, 56, 38, 16);
+
+    demoLabel.reset(new juce::Label("new label",
+                                    TRANS("UNREGISTERED\n"
+                                          "DEMO VERSION")));
+    addAndMakeVisible(demoLabel.get());
+    demoLabel->setFont(juce::Font("OCR A Extended", 10.00f, juce::Font::plain));
+    demoLabel->setJustificationType(juce::Justification::centred);
+    demoLabel->setEditable(false, false, false);
+    demoLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    demoLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    demoLabel->setBounds(318, 5, 97, 24);
+
+    guitar.reset(new ChordsGuitar(ownerFilter->chordKbState, ownerFilter));
+    addAndMakeVisible(guitar.get());
+    guitar->setName("new component");
+
+    versionLabel.reset(new juce::Label("new label",
+                                       TRANS("99.99.99")));
+    addAndMakeVisible(versionLabel.get());
+    versionLabel->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    versionLabel->setJustificationType(juce::Justification::centredLeft);
+    versionLabel->setEditable(false, false, false);
+    versionLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    versionLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    versionLabel->setBounds(352, 28, 58, 24);
+
+    transposeInputButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(transposeInputButton.get());
+    transposeInputButton->setTooltip(TRANS("When checked, incoming trigger notes are transposed by the opposite of the \"Transpose\" slider."));
+    transposeInputButton->setButtonText(TRANS("Also Transpose Input"));
+    transposeInputButton->addListener(this);
+
+    transposeInputButton->setBounds(545, 370, 91, 21);
+
+    toAllChannelsButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toAllChannelsButton.get());
+    toAllChannelsButton->setTooltip(TRANS("When checked, CCs (and other control messages) are sent to all MIDI channels. Otherwise they are passed through on the original channel."));
+    toAllChannelsButton->setButtonText(TRANS("CCs to All Chans"));
+    toAllChannelsButton->addListener(this);
+
+    toAllChannelsButton->setBounds(364, 397, 129, 20);
+
+    infoButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(infoButton.get());
+    infoButton->setButtonText(TRANS("?"));
+    infoButton->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
+    infoButton->addListener(this);
+
+    infoButton->setBounds(-1, -1, 19, 18);
+
+    specialMenuButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(specialMenuButton.get());
+    specialMenuButton->setButtonText(TRANS("Global Functions..."));
+    specialMenuButton->addListener(this);
+
+    specialMenuButton->setBounds(6, 357, 140, 24);
+
+    outputChannelSlider.reset(new ChannelSlider("channel"));
+    addAndMakeVisible(outputChannelSlider.get());
+    outputChannelSlider->setTooltip(TRANS("Output channel (\"Multi\" is as saved, otherwise overrides chord\'s saved channel)"));
+    outputChannelSlider->setRange(0, 16, 1);
+    outputChannelSlider->setSliderStyle(juce::Slider::LinearBar);
+    outputChannelSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    outputChannelSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    outputChannelSlider->addListener(this);
+
+    outputChannelSlider->setBounds(381, 372, 66, 16);
+
+    applyChannelButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(applyChannelButton.get());
+    applyChannelButton->setTooltip(TRANS("Applies input channel to selected chord"));
+    applyChannelButton->setButtonText(TRANS("Apply"));
+    applyChannelButton->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    applyChannelButton->addListener(this);
+
+    applyChannelButton->setBounds(44, 56, 32, 16);
+
+    label.reset(new juce::Label("new label",
+                                TRANS("Out Channel")));
+    addAndMakeVisible(label.get());
+    label->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label->setJustificationType(juce::Justification::centred);
+    label->setEditable(false, false, false);
+    label->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label->setBounds(368, 357, 91, 13);
+
+    label2.reset(new juce::Label("new label",
+                                 TRANS("Transpose")));
+    addAndMakeVisible(label2.get());
+    label2->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label2->setJustificationType(juce::Justification::centred);
+    label2->setEditable(false, false, false);
+    label2->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label2->setBounds(461, 357, 91, 13);
+
+    viewButton.reset(new juce::TextButton("view"));
+    addAndMakeVisible(viewButton.get());
+    viewButton->setTooltip(TRANS("Switch between keyboard & guitar views"));
+    viewButton->setButtonText(TRANS("View"));
+    viewButton->setConnectedEdges(juce::Button::ConnectedOnTop);
+    viewButton->addListener(this);
+
+    viewButton->setBounds(151, 190, 41, 21);
+
+    setupButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(setupButton.get());
+    setupButton->setButtonText(TRANS("Setup"));
+    setupButton->setConnectedEdges(juce::Button::ConnectedOnTop);
+    setupButton->addListener(this);
+
+    setupButton->setBounds(195, 190, 45, 21);
+
+    strumDirectionButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(strumDirectionButton.get());
+    strumDirectionButton->setTooltip(TRANS("Strum Direction"));
+    strumDirectionButton->setButtonText(TRANS("Down"));
+    strumDirectionButton->addListener(this);
+
+    strumDirectionButton->setBounds(267, 327, 48, 19);
+
+    strumButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(strumButton.get());
+    strumButton->setButtonText(TRANS("Strum"));
+    strumButton->setConnectedEdges(juce::Button::ConnectedOnRight);
+    strumButton->addListener(this);
+
+    strumButton->setBounds(142, 391, 54, 21);
+
+    maxTimeSlider.reset(new VSTSlider("maxTime"));
+    addAndMakeVisible(maxTimeSlider.get());
+    maxTimeSlider->setTooltip(TRANS("Max Strum Time"));
+    maxTimeSlider->setRange(100, 3000, 1);
+    maxTimeSlider->setSliderStyle(juce::Slider::LinearBar);
+    maxTimeSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    maxTimeSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    maxTimeSlider->addListener(this);
+
+    maxTimeSlider->setBounds(202, 364, 66, 16);
+
+    speedSlider.reset(new VSTSlider("speed"));
+    addAndMakeVisible(speedSlider.get());
+    speedSlider->setTooltip(TRANS("Strum Speed"));
+    speedSlider->setRange(0, 100, 1);
+    speedSlider->setSliderStyle(juce::Slider::LinearBar);
+    speedSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    speedSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    speedSlider->addListener(this);
+
+    speedSlider->setBounds(202, 393, 66, 16);
+
+    accelSlider.reset(new VSTSlider("accel"));
+    addAndMakeVisible(accelSlider.get());
+    accelSlider->setTooltip(TRANS("Strum Acceleration"));
+    accelSlider->setRange(-100, 100, 1);
+    accelSlider->setSliderStyle(juce::Slider::LinearBar);
+    accelSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    accelSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    accelSlider->addListener(this);
+
+    accelSlider->setBounds(275, 393, 66, 16);
+
+    velRampSlider.reset(new VSTSlider("velRamp"));
+    addAndMakeVisible(velRampSlider.get());
+    velRampSlider->setTooltip(TRANS("Strum Velocity Ramp"));
+    velRampSlider->setRange(-100, 100, 1);
+    velRampSlider->setSliderStyle(juce::Slider::LinearBar);
+    velRampSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    velRampSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    velRampSlider->addListener(this);
+
+    velRampSlider->setBounds(275, 364, 66, 16);
+
+    infoBox.reset(new juce::TextEditor("new text editor"));
+    addAndMakeVisible(infoBox.get());
+    infoBox->setMultiLine(true);
+    infoBox->setReturnKeyStartsNewLine(false);
+    infoBox->setReadOnly(true);
+    infoBox->setScrollbarsShown(true);
+    infoBox->setCaretVisible(false);
+    infoBox->setPopupMenuEnabled(true);
+    infoBox->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xf2ffffff));
+    infoBox->setColour(juce::TextEditor::outlineColourId, juce::Colours::black);
+    infoBox->setColour(juce::TextEditor::shadowColourId, juce::Colour(0x38000000));
+    infoBox->setText(juce::String());
+
+    tuningSaveEditor.reset(new juce::TextEditor("new text editor"));
+    addAndMakeVisible(tuningSaveEditor.get());
+    tuningSaveEditor->setMultiLine(false);
+    tuningSaveEditor->setReturnKeyStartsNewLine(false);
+    tuningSaveEditor->setReadOnly(false);
+    tuningSaveEditor->setScrollbarsShown(true);
+    tuningSaveEditor->setCaretVisible(true);
+    tuningSaveEditor->setPopupMenuEnabled(true);
+    tuningSaveEditor->setColour(juce::TextEditor::outlineColourId, juce::Colours::black);
+    tuningSaveEditor->setText(juce::String());
+
+    tuningSaveEditor->setBounds(253, -31, 150, 24);
+
+    cachedImage_midichordsLogo_png_1 = juce::ImageCache::getFromMemory(midichordsLogo_png, midichordsLogo_pngSize);
 
     //[UserPreSize]
 
-    fretsSlider = new FretsSlider (L"new slider");
-    fretsSlider->setRange (5, maxFrets, 1);
-    fretsSlider->setSliderStyle (juce::Slider::LinearHorizontal);
-    fretsSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    fretsSlider->addListener (this);
-    fretsSlider->setMouseClickGrabsKeyboardFocus (false);
+    fretsSlider = new FretsSlider(L"new slider");
+    fretsSlider->setRange(5, maxFrets, 1);
+    fretsSlider->setSliderStyle(juce::Slider::LinearHorizontal);
+    fretsSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    fretsSlider->addListener(this);
+    fretsSlider->setMouseClickGrabsKeyboardFocus(false);
 
-    stringsSlider = new StringsSlider (L"new slider");
-    stringsSlider->setRange (1, maxStrings, 1);
-    stringsSlider->setSliderStyle (juce::Slider::LinearHorizontal);
-    stringsSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    stringsSlider->addListener (this);
-    stringsSlider->setMouseClickGrabsKeyboardFocus (false);
+    stringsSlider = new StringsSlider(L"new slider");
+    stringsSlider->setRange(1, maxStrings, 1);
+    stringsSlider->setSliderStyle(juce::Slider::LinearHorizontal);
+    stringsSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    stringsSlider->addListener(this);
+    stringsSlider->setMouseClickGrabsKeyboardFocus(false);
 
     for (int i = 0; i < maxStrings; i++)
     {
-        stringSlider[i] = new NoteSlider (L"new slider");
-        stringSlider[i]->setRange (-1, 127, 1);
-        stringSlider[i]->setSliderStyle (juce::Slider::LinearHorizontal);
-        stringSlider[i]->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-        stringSlider[i]->addListener (this);
-        stringSlider[i]->setBottomOctave (ownerFilter->bottomOctave);
-        stringSlider[i]->setMouseClickGrabsKeyboardFocus (false);
+        stringSlider[i] = new NoteSlider(L"new slider");
+        stringSlider[i]->setRange(-1, 127, 1);
+        stringSlider[i]->setSliderStyle(juce::Slider::LinearHorizontal);
+        stringSlider[i]->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+        stringSlider[i]->addListener(this);
+        stringSlider[i]->setBottomOctave(ownerFilter->bottomOctave);
+        stringSlider[i]->setMouseClickGrabsKeyboardFocus(false);
     }
 
-    this->setMouseClickGrabsKeyboardFocus (false);
-    chordKeyboard->setMouseClickGrabsKeyboardFocus (false);
-    triggerKeyboard->setMouseClickGrabsKeyboardFocus (false);
-    chordLearnButton->setMouseClickGrabsKeyboardFocus (false);
-    triggerLearnButton->setMouseClickGrabsKeyboardFocus (false);
-    channelSlider->setMouseClickGrabsKeyboardFocus (false);
-    learnChanSlider->setMouseClickGrabsKeyboardFocus (false);
-    outputLabel->setMouseClickGrabsKeyboardFocus (false);
-    pizButton->setMouseClickGrabsKeyboardFocus (false);
-    triggerLabel->setMouseClickGrabsKeyboardFocus (false);
-    clearChordButton->setMouseClickGrabsKeyboardFocus (false);
-    resetChordButton->setMouseClickGrabsKeyboardFocus (false);
-    clearAllButton->setMouseClickGrabsKeyboardFocus (false);
-    resetAllButton->setMouseClickGrabsKeyboardFocus (false);
-    transposeUpButton->setMouseClickGrabsKeyboardFocus (false);
-    transposeDownButton->setMouseClickGrabsKeyboardFocus (false);
-    transposeChordUpButton->setMouseClickGrabsKeyboardFocus (false);
-    transposeChordDownButton->setMouseClickGrabsKeyboardFocus (false);
-    transposeSlider->setMouseClickGrabsKeyboardFocus (false);
-    velocitySlider->setMouseClickGrabsKeyboardFocus (false);
-    variationSlider->setMouseClickGrabsKeyboardFocus (false);
-    normalButton->setMouseClickGrabsKeyboardFocus (false);
-    octaveButton->setMouseClickGrabsKeyboardFocus (false);
-    globalButton->setMouseClickGrabsKeyboardFocus (false);
-    toggleButton->setMouseClickGrabsKeyboardFocus (false);
-    chordNameLabel->setMouseClickGrabsKeyboardFocus (false);
-    flatsButton->setMouseClickGrabsKeyboardFocus (false);
-    chordMenuButton->setMouseClickGrabsKeyboardFocus (false);
-    presetNameLabel->setMouseClickGrabsKeyboardFocus (false);
-    presetMenuButton->setMouseClickGrabsKeyboardFocus (false);
-    toAllChannelsButton->setMouseClickGrabsKeyboardFocus (false);
-    specialMenuButton->setMouseClickGrabsKeyboardFocus (false);
-    applyChannelButton->setMouseClickGrabsKeyboardFocus (false);
-    outputChannelSlider->setMouseClickGrabsKeyboardFocus (false);
-    label->setMouseClickGrabsKeyboardFocus (false);
-    label2->setMouseClickGrabsKeyboardFocus (false);
-    guitar->setMouseClickGrabsKeyboardFocus (false);
-    setupButton->setMouseClickGrabsKeyboardFocus (false);
-    strumButton->setMouseClickGrabsKeyboardFocus (false);
-    strumDirectionButton->setMouseClickGrabsKeyboardFocus (false);
+    this->setMouseClickGrabsKeyboardFocus(false);
+    chordKeyboard->setMouseClickGrabsKeyboardFocus(false);
+    triggerKeyboard->setMouseClickGrabsKeyboardFocus(false);
+    chordLearnButton->setMouseClickGrabsKeyboardFocus(false);
+    triggerLearnButton->setMouseClickGrabsKeyboardFocus(false);
+    channelSlider->setMouseClickGrabsKeyboardFocus(false);
+    learnChanSlider->setMouseClickGrabsKeyboardFocus(false);
+    outputLabel->setMouseClickGrabsKeyboardFocus(false);
+    pizButton->setMouseClickGrabsKeyboardFocus(false);
+    triggerLabel->setMouseClickGrabsKeyboardFocus(false);
+    clearChordButton->setMouseClickGrabsKeyboardFocus(false);
+    resetChordButton->setMouseClickGrabsKeyboardFocus(false);
+    clearAllButton->setMouseClickGrabsKeyboardFocus(false);
+    resetAllButton->setMouseClickGrabsKeyboardFocus(false);
+    transposeUpButton->setMouseClickGrabsKeyboardFocus(false);
+    transposeDownButton->setMouseClickGrabsKeyboardFocus(false);
+    transposeChordUpButton->setMouseClickGrabsKeyboardFocus(false);
+    transposeChordDownButton->setMouseClickGrabsKeyboardFocus(false);
+    transposeSlider->setMouseClickGrabsKeyboardFocus(false);
+    velocitySlider->setMouseClickGrabsKeyboardFocus(false);
+    variationSlider->setMouseClickGrabsKeyboardFocus(false);
+    normalButton->setMouseClickGrabsKeyboardFocus(false);
+    octaveButton->setMouseClickGrabsKeyboardFocus(false);
+    globalButton->setMouseClickGrabsKeyboardFocus(false);
+    toggleButton->setMouseClickGrabsKeyboardFocus(false);
+    chordNameLabel->setMouseClickGrabsKeyboardFocus(false);
+    flatsButton->setMouseClickGrabsKeyboardFocus(false);
+    chordMenuButton->setMouseClickGrabsKeyboardFocus(false);
+    presetNameLabel->setMouseClickGrabsKeyboardFocus(false);
+    presetMenuButton->setMouseClickGrabsKeyboardFocus(false);
+    toAllChannelsButton->setMouseClickGrabsKeyboardFocus(false);
+    specialMenuButton->setMouseClickGrabsKeyboardFocus(false);
+    applyChannelButton->setMouseClickGrabsKeyboardFocus(false);
+    outputChannelSlider->setMouseClickGrabsKeyboardFocus(false);
+    label->setMouseClickGrabsKeyboardFocus(false);
+    label2->setMouseClickGrabsKeyboardFocus(false);
+    guitar->setMouseClickGrabsKeyboardFocus(false);
+    setupButton->setMouseClickGrabsKeyboardFocus(false);
+    strumButton->setMouseClickGrabsKeyboardFocus(false);
+    strumDirectionButton->setMouseClickGrabsKeyboardFocus(false);
 
-    accelSlider->setOwner (ownerFilter, kAccel);
-    velRampSlider->setOwner (ownerFilter, kVelRamp);
-    speedSlider->setOwner (ownerFilter, kSpeed);
-    maxTimeSlider->setOwner (ownerFilter, kMaxDelay);
+    accelSlider->setOwner(ownerFilter, kAccel);
+    velRampSlider->setOwner(ownerFilter, kVelRamp);
+    speedSlider->setOwner(ownerFilter, kSpeed);
+    maxTimeSlider->setOwner(ownerFilter, kMaxDelay);
 
-    guitar->setMouseCursor (juce::MouseCursor::PointingHandCursor);
-    chordKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
-    triggerKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    guitar->setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    chordKeyboard->setMouseCursor(juce::MouseCursor::PointingHandCursor);
+    triggerKeyboard->setMouseCursor(juce::MouseCursor::PointingHandCursor);
 
     //channelSlider->setAllText("Any");
-    learnChanSlider->setAllText ("All");
-    outputChannelSlider->setAllText ("Multi");
-    chordSaveEditor->addListener (this);
-    chordSaveEditor->setTextToShowWhenEmpty ("Save chord (type a name)", juce::Colours::grey);
-    tuningSaveEditor->addListener (this);
-    tuningSaveEditor->setTextToShowWhenEmpty ("Save tuning (type name)", juce::Colours::grey);
-    pizButton->addListener (this);
-    pizButton->setTooltip ("http://thepiz.org/plugins");
-    previewButton->addMouseListener (this, false);
-    velocitySlider->setPopupDisplayEnabled (true, true, this);
-    velocitySlider->setDoubleClickReturnValue (true, 100);
-    triggerKeyboard->addMouseListener (this, false);
+    learnChanSlider->setAllText("All");
+    outputChannelSlider->setAllText("Multi");
+    chordSaveEditor->addListener(this);
+    chordSaveEditor->setTextToShowWhenEmpty("Save chord (type a name)", juce::Colours::grey);
+    tuningSaveEditor->addListener(this);
+    tuningSaveEditor->setTextToShowWhenEmpty("Save tuning (type name)", juce::Colours::grey);
+    pizButton->addListener(this);
+    pizButton->setTooltip("http://thepiz.org/plugins");
+    previewButton->addMouseListener(this, false);
+    velocitySlider->setPopupDisplayEnabled(true, true, this);
+    velocitySlider->setDoubleClickReturnValue(true, 100);
+    triggerKeyboard->addMouseListener(this, false);
 
-    variationSlider->setVisible (false);
-    transposeDownButton->setVisible (false);
-    transposeUpButton->setVisible (false);
-    guitar->setVisible (false);
+    variationSlider->setVisible(false);
+    transposeDownButton->setVisible(false);
+    transposeUpButton->setVisible(false);
+    guitar->setVisible(false);
 
-    juce::File chordPath (getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
-    browser = new juce::FileBrowserComponent (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::useTreeView | juce::FileBrowserComponent::canSelectFiles,
-                                              chordPath,
-                                              &fileFilter,
-                                              0);
-    browser->addListener (this);
+    juce::File chordPath(getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
+    browser = new juce::FileBrowserComponent(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::useTreeView | juce::FileBrowserComponent::canSelectFiles,
+                                             chordPath,
+                                             &fileFilter,
+                                             0);
+    browser->addListener(this);
 
     juce::Font const defaultFont = infoBox->getFont();
-    infoBox->setVisible (false);
-    infoBox->setFont (juce::Font (18.f, juce::Font::bold));
-    infoBox->insertTextAtCaret ("Insert Piz Here-> midiChords v." + juce::String (JucePlugin_VersionString) + "\n\n");
-    infoBox->setFont (defaultFont.boldened());
-    infoBox->insertTextAtCaret ("== Host Info ==\n");
-    infoBox->setFont (defaultFont);
-    infoBox->insertTextAtCaret (getFilter()->hostInfo + "\n\n");
-    infoBox->setFont (defaultFont.boldened());
-    infoBox->insertTextAtCaret ("== Documentation ==\n");
-    infoBox->setFont (defaultFont);
-    infoBox->insertTextAtCaret (juce::File (getFilter()->dataPath + juce::File::getSeparatorString() + "readme.txt").loadFileAsString());
+    infoBox->setVisible(false);
+    infoBox->setFont(juce::Font(18.f, juce::Font::bold));
+    infoBox->insertTextAtCaret("Insert Piz Here-> midiChords v." + juce::String(JucePlugin_VersionString) + "\n\n");
+    infoBox->setFont(defaultFont.boldened());
+    infoBox->insertTextAtCaret("== Host Info ==\n");
+    infoBox->setFont(defaultFont);
+    infoBox->insertTextAtCaret(getFilter()->hostInfo + "\n\n");
+    infoBox->setFont(defaultFont.boldened());
+    infoBox->insertTextAtCaret("== Documentation ==\n");
+    infoBox->setFont(defaultFont);
+    infoBox->insertTextAtCaret(juce::File(getFilter()->dataPath + juce::File::getSeparatorString() + "readme.txt").loadFileAsString());
 
     const int middleC = getFilter()->getBottomOctave() + 5;
-    chordKeyboard->setOctaveForMiddleC (middleC);
-    triggerKeyboard->setOctaveForMiddleC (middleC);
-    guitar->setOctaveForMiddleC (middleC);
+    chordKeyboard->setOctaveForMiddleC(middleC);
+    triggerKeyboard->setOctaveForMiddleC(middleC);
+    guitar->setOctaveForMiddleC(middleC);
 
     mode = Normal;
     //[/UserPreSize]
 
-    setSize (640, 420);
+    setSize(640, 420);
 
     //[Constructor] You can add your own custom stuff here..
-    versionLabel->setText (JucePlugin_VersionString, juce::dontSendNotification);
-    ownerFilter->addChangeListener (this);
+    versionLabel->setText(JucePlugin_VersionString, juce::dontSendNotification);
+    ownerFilter->addChangeListener(this);
     if (! ownerFilter->demo)
-        demoLabel->setVisible (false);
+        demoLabel->setVisible(false);
     updateParametersFromFilter();
     //[/Constructor]
 }
@@ -748,9 +748,9 @@ MidiChordsEditor::MidiChordsEditor (MidiChords* const ownerFilter)
 MidiChordsEditor::~MidiChordsEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
 
-    deleteAndZero (browser);
+    deleteAndZero(browser);
     //[/Destructor_pre]
 
     toggleButton              = nullptr;
@@ -816,78 +816,78 @@ MidiChordsEditor::~MidiChordsEditor()
     tuningSaveEditor          = nullptr;
 
     //[Destructor]. You can add your own custom destruction code here..
-    deleteAndZero (fretsSlider);
-    deleteAndZero (stringsSlider);
+    deleteAndZero(fretsSlider);
+    deleteAndZero(stringsSlider);
     for (int i = 0; i < maxStrings; i++)
-        deleteAndZero (stringSlider[i]);
+        deleteAndZero(stringSlider[i]);
     //[/Destructor]
 }
 
 //==============================================================================
-void MidiChordsEditor::paint (juce::Graphics& g)
+void MidiChordsEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colour (0xffd8d8d8));
+    g.fillAll(juce::Colour(0xffd8d8d8));
 
     {
         int x = 0, y = 0, width = 640, height = 100;
-        juce::Colour fillColour1 = juce::Colours::white, fillColour2 = juce::Colour (0x00e7e7e7);
+        juce::Colour fillColour1 = juce::Colours::white, fillColour2 = juce::Colour(0x00e7e7e7);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 61.0f - 0.0f + x,
-                                                 static_cast<float> (-31) - 0.0f + y,
-                                                 fillColour2,
-                                                 61.0f - 0.0f + x,
-                                                 23.0f - 0.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               61.0f - 0.0f + x,
+                                               static_cast<float>(-31) - 0.0f + y,
+                                               fillColour2,
+                                               61.0f - 0.0f + x,
+                                               23.0f - 0.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
     }
 
     {
         int x = 113, y = 7, width = 234, height = 45;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (juce::Colours::black);
-        g.drawImageWithin (cachedImage_midichordsLogo_png_1,
-                           x,
-                           y,
-                           width,
-                           height,
-                           juce::RectanglePlacement::centred,
-                           false);
+        g.setColour(juce::Colours::black);
+        g.drawImageWithin(cachedImage_midichordsLogo_png_1,
+                          x,
+                          y,
+                          width,
+                          height,
+                          juce::RectanglePlacement::centred,
+                          false);
     }
 
     {
-        int x = 0, y = 348, width = proportionOfWidth (1.0000f), height = 72;
-        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0xff828282);
+        int x = 0, y = 348, width = proportionOfWidth(1.0000f), height = 72;
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour(0xff828282);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 0.0f - 0.0f + x,
-                                                 331.0f - 348.0f + y,
-                                                 fillColour2,
-                                                 0.0f - 0.0f + x,
-                                                 360.0f - 348.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               0.0f - 0.0f + x,
+                                               331.0f - 348.0f + y,
+                                               fillColour2,
+                                               0.0f - 0.0f + x,
+                                               360.0f - 348.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
     }
 
     {
         int x = 196, y = 323, width = 150, height = 92;
-        juce::Colour strokeColour1 = juce::Colour (0x00ff0000), strokeColour2 = juce::Colours::black;
+        juce::Colour strokeColour1 = juce::Colour(0x00ff0000), strokeColour2 = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (strokeColour1,
-                                                 230.0f - 196.0f + x,
-                                                 323.0f - 323.0f + y,
-                                                 strokeColour2,
-                                                 230.0f - 196.0f + x,
-                                                 377.0f - 323.0f + y,
-                                                 false));
-        g.drawRect (x, y, width, height, 1);
+        g.setGradientFill(juce::ColourGradient(strokeColour1,
+                                               230.0f - 196.0f + x,
+                                               323.0f - 323.0f + y,
+                                               strokeColour2,
+                                               230.0f - 196.0f + x,
+                                               377.0f - 323.0f + y,
+                                               false));
+        g.drawRect(x, y, width, height, 1);
     }
 
     {
@@ -895,30 +895,30 @@ void MidiChordsEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         int x = 14, y = 319, width = 103, height = 24;
-        juce::String text (TRANS ("Trigger Channel:"));
+        juce::String text(TRANS("Trigger Channel:"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 330, y = 318, width = 126, height = 24;
-        juce::String text (TRANS ("Trigger Mode:"));
+        juce::String text(TRANS("Trigger Mode:"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
@@ -926,8 +926,8 @@ void MidiChordsEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRect (x, y, width, height);
+        g.setColour(fillColour);
+        g.fillRect(x, y, width, height);
     }
 
     {
@@ -935,8 +935,8 @@ void MidiChordsEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRect (x, y, width, height);
+        g.setColour(fillColour);
+        g.fillRect(x, y, width, height);
     }
 
     {
@@ -944,89 +944,89 @@ void MidiChordsEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         float x = 250.0f, y = 195.0f, width = 173.0f, height = 26.0f;
-        juce::Colour fillColour1 = juce::Colour (0xff666666), fillColour2 = juce::Colour (0xffbfbfbf);
+        juce::Colour fillColour1 = juce::Colour(0xff666666), fillColour2 = juce::Colour(0xffbfbfbf);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 248.0f - 250.0f + x,
-                                                 183.0f - 195.0f + y,
-                                                 fillColour2,
-                                                 248.0f - 250.0f + x,
-                                                 215.0f - 195.0f + y,
-                                                 false));
-        g.fillRoundedRectangle (x, y, width, height, 12.000f);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               248.0f - 250.0f + x,
+                                               183.0f - 195.0f + y,
+                                               fillColour2,
+                                               248.0f - 250.0f + x,
+                                               215.0f - 195.0f + y,
+                                               false));
+        g.fillRoundedRectangle(x, y, width, height, 12.000f);
     }
 
     {
         int x = 6, y = 46, width = 71, height = 8;
-        juce::String text (TRANS ("Input Channel"));
+        juce::String text(TRANS("Input Channel"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (10.70f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(10.70f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 219, y = 328, width = 53, height = 16;
-        juce::String text (TRANS ("Strum:"));
+        juce::String text(TRANS("Strum:"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 204, y = 351, width = 62, height = 16;
-        juce::String text (TRANS ("Max Time"));
+        juce::String text(TRANS("Max Time"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 277, y = 351, width = 62, height = 16;
-        juce::String text (TRANS ("Vel. Ramp"));
+        juce::String text(TRANS("Vel. Ramp"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 277, y = 380, width = 62, height = 16;
-        juce::String text (TRANS ("Accel"));
+        juce::String text(TRANS("Accel"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 204, y = 380, width = 62, height = 16;
-        juce::String text (TRANS ("Speed"));
+        juce::String text(TRANS("Speed"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -1038,15 +1038,15 @@ void MidiChordsEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    chordKeyboard->setBounds (8, 99, getWidth() - 16, 89);
-    triggerKeyboard->setBounds (8, 227, getWidth() - 16, 89);
-    guitar->setBounds (8, 99, getWidth() - 16, 89);
-    infoBox->setBounds (proportionOfWidth (0.5000f) - (500 / 2), proportionOfHeight (0.5000f) - (300 / 2), 500, 300);
+    chordKeyboard->setBounds(8, 99, getWidth() - 16, 89);
+    triggerKeyboard->setBounds(8, 227, getWidth() - 16, 89);
+    guitar->setBounds(8, 99, getWidth() - 16, 89);
+    infoBox->setBounds(proportionOfWidth(0.5000f) - (500 / 2), proportionOfHeight(0.5000f) - (300 / 2), 500, 300);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
 
-void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -1054,37 +1054,37 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kGuess, toggleButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kGuess, toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
     else if (buttonThatWasClicked == chordLearnButton.get())
     {
         //[UserButtonCode_chordLearnButton] -- add your button handler code here..
-        if (getFilter()->getParameter (kLearnChord) > 0)
-            getFilter()->setParameterNotifyingHost (kLearnChord, 0.f);
+        if (getFilter()->getParameter(kLearnChord) > 0)
+            getFilter()->setParameterNotifyingHost(kLearnChord, 0.f);
         else
-            getFilter()->setParameterNotifyingHost (kLearnChord, 1.f);
+            getFilter()->setParameterNotifyingHost(kLearnChord, 1.f);
         //[/UserButtonCode_chordLearnButton]
     }
     else if (buttonThatWasClicked == triggerLearnButton.get())
     {
         //[UserButtonCode_triggerLearnButton] -- add your button handler code here..
-        if (getFilter()->getParameter (kFollowInput) > 0)
-            getFilter()->setParameterNotifyingHost (kFollowInput, 0.f);
+        if (getFilter()->getParameter(kFollowInput) > 0)
+            getFilter()->setParameterNotifyingHost(kFollowInput, 0.f);
         else
-            getFilter()->setParameterNotifyingHost (kFollowInput, 1.f);
+            getFilter()->setParameterNotifyingHost(kFollowInput, 1.f);
         //[/UserButtonCode_triggerLearnButton]
     }
     else if (buttonThatWasClicked == clearChordButton.get())
     {
         //[UserButtonCode_clearChordButton] -- add your button handler code here..
-        getFilter()->clearChord (getFilter()->getCurrentTrigger());
+        getFilter()->clearChord(getFilter()->getCurrentTrigger());
         //[/UserButtonCode_clearChordButton]
     }
     else if (buttonThatWasClicked == resetChordButton.get())
     {
         //[UserButtonCode_resetChordButton] -- add your button handler code here..
-        getFilter()->resetChord (getFilter()->getCurrentTrigger());
+        getFilter()->resetChord(getFilter()->getCurrentTrigger());
         //[/UserButtonCode_resetChordButton]
     }
     else if (buttonThatWasClicked == clearAllButton.get())
@@ -1102,92 +1102,92 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == transposeUpButton.get())
     {
         //[UserButtonCode_transposeUpButton] -- add your button handler code here..
-        getFilter()->transposeAll (true);
+        getFilter()->transposeAll(true);
         //[/UserButtonCode_transposeUpButton]
     }
     else if (buttonThatWasClicked == transposeDownButton.get())
     {
         //[UserButtonCode_transposeDownButton] -- add your button handler code here..
-        getFilter()->transposeAll (false);
+        getFilter()->transposeAll(false);
         //[/UserButtonCode_transposeDownButton]
     }
     else if (buttonThatWasClicked == transposeChordUpButton.get())
     {
         //[UserButtonCode_transposeChordUpButton] -- add your button handler code here..
-        getFilter()->transposeChord (getFilter()->getCurrentTrigger(), true);
+        getFilter()->transposeChord(getFilter()->getCurrentTrigger(), true);
         //[/UserButtonCode_transposeChordUpButton]
     }
     else if (buttonThatWasClicked == transposeChordDownButton.get())
     {
         //[UserButtonCode_transposeChordDownButton] -- add your button handler code here..
-        getFilter()->transposeChord (getFilter()->getCurrentTrigger(), false);
+        getFilter()->transposeChord(getFilter()->getCurrentTrigger(), false);
         //[/UserButtonCode_transposeChordDownButton]
     }
     else if (buttonThatWasClicked == normalButton.get())
     {
         //[UserButtonCode_normalButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kMode, ((float) Normal) / (float) (numModes - 1));
+        getFilter()->setParameterNotifyingHost(kMode, ((float) Normal) / (float) (numModes - 1));
         //[/UserButtonCode_normalButton]
     }
     else if (buttonThatWasClicked == octaveButton.get())
     {
         //[UserButtonCode_octaveButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kMode, ((float) Octave) / (float) (numModes - 1));
+        getFilter()->setParameterNotifyingHost(kMode, ((float) Octave) / (float) (numModes - 1));
         //[/UserButtonCode_octaveButton]
     }
     else if (buttonThatWasClicked == globalButton.get())
     {
         //[UserButtonCode_globalButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kMode, ((float) Global) / (float) (numModes - 1));
+        getFilter()->setParameterNotifyingHost(kMode, ((float) Global) / (float) (numModes - 1));
         //[/UserButtonCode_globalButton]
     }
     else if (buttonThatWasClicked == flatsButton.get())
     {
         //[UserButtonCode_flatsButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kFlats, flatsButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kFlats, flatsButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_flatsButton]
     }
     else if (buttonThatWasClicked == transposeChordUpButton2.get())
     {
         //[UserButtonCode_transposeChordUpButton2] -- add your button handler code here..
-        getFilter()->transposeCurrentChordByOctave (true);
+        getFilter()->transposeCurrentChordByOctave(true);
         //[/UserButtonCode_transposeChordUpButton2]
     }
     else if (buttonThatWasClicked == transposeChordDownButton2.get())
     {
         //[UserButtonCode_transposeChordDownButton2] -- add your button handler code here..
-        getFilter()->transposeCurrentChordByOctave (false);
+        getFilter()->transposeCurrentChordByOctave(false);
         //[/UserButtonCode_transposeChordDownButton2]
     }
     else if (buttonThatWasClicked == chordMenuButton.get())
     {
         //[UserButtonCode_chordMenuButton] -- add your button handler code here..
         juce::StringArray list;
-        listChordFiles (list);
+        listChordFiles(list);
         juce::PopupMenu menu;
-        menu.addCustomItem (-1, *chordSaveEditor, 150, 24, false);
+        menu.addCustomItem(-1, *chordSaveEditor, 150, 24, false);
         menu.addSeparator();
         for (int i = 0; i < list.size(); i++)
         {
             if (list[i].isNotEmpty())
             {
-                if (list[i].startsWith ("--"))
+                if (list[i].startsWith("--"))
                     menu.addSeparator();
-                else if (list[i].startsWithChar ('#'))
-                    menu.addSectionHeader (list[i].fromFirstOccurrenceOf ("#", false, false));
+                else if (list[i].startsWithChar('#'))
+                    menu.addSectionHeader(list[i].fromFirstOccurrenceOf("#", false, false));
                 else
-                    menu.addItem (i + 1, list[i].upToFirstOccurrenceOf (":", false, false));
+                    menu.addItem(i + 1, list[i].upToFirstOccurrenceOf(":", false, false));
             }
         }
         //menu.showMenuAsync (PopupMenu::Options().withTargetComponent (chordMenuButton),
         //	ModalCallbackFunction::forComponent (chordMenuCallback, this));
-        int result = menu.showAt (chordMenuButton.get());
+        int result = menu.showAt(chordMenuButton.get());
 
         if (result != 0)
         {
             if (result > 0)
             {
-                loadChord (list[result - 1]);
+                loadChord(list[result - 1]);
             }
         }
         //[/UserButtonCode_chordMenuButton]
@@ -1200,9 +1200,9 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         browser->refresh();
 
         juce::PopupMenu menu;
-        menu.addItem (-1, "Save...");
+        menu.addItem(-1, "Save...");
         menu.addSeparator();
-        menu.addCustomItem (-2, *browser, 250, 300, false);
+        menu.addCustomItem(-2, *browser, 250, 300, false);
         //for (int i=0;i<list.size();i++)
         //{
         //	if (list[i].existsAsFile())
@@ -1210,13 +1210,13 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //		menu.addItem(i+1,list[i].getFileNameWithoutExtension());
         //	}
         //}
-        int result = menu.showAt (presetMenuButton.get());
+        int result = menu.showAt(presetMenuButton.get());
         if (result != 0)
         {
             //if (result>0)
             //	loadPreset(list[result-1]);
             if (result == -1)
-                getFilter()->savePreset (presetNameLabel->getText());
+                getFilter()->savePreset(presetNameLabel->getText());
         }
         //[/UserButtonCode_presetMenuButton]
     }
@@ -1224,76 +1224,76 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_copyButton] -- add your button handler code here..
         const int t              = getFilter()->getCurrentTrigger();
-        juce::String chordString = juce::String (t) + ":";
+        juce::String chordString = juce::String(t) + ":";
         for (int n = 0; n < 128; n++)
         {
             for (int c = 1; c <= 16; c++)
             {
-                if (getFilter()->progKbState[getFilter()->getCurrentProgram()][t].isNoteOn (c, n))
-                    chordString += " " + juce::String (n - t) + "." + juce::String (c);
+                if (getFilter()->progKbState[getFilter()->getCurrentProgram()][t].isNoteOn(c, n))
+                    chordString += " " + juce::String(n - t) + "." + juce::String(c);
             }
         }
-        juce::SystemClipboard::copyTextToClipboard (chordString);
+        juce::SystemClipboard::copyTextToClipboard(chordString);
         //[/UserButtonCode_copyButton]
     }
     else if (buttonThatWasClicked == pasteButton.get())
     {
         //[UserButtonCode_pasteButton] -- add your button handler code here..
-        chordFromString (juce::SystemClipboard::getTextFromClipboard());
+        chordFromString(juce::SystemClipboard::getTextFromClipboard());
         //[/UserButtonCode_pasteButton]
     }
     else if (buttonThatWasClicked == pcButton.get())
     {
         //[UserButtonCode_pcButton] -- add your button handler code here..
-        getFilter()->toggleUsePC (pcButton->getToggleState());
+        getFilter()->toggleUsePC(pcButton->getToggleState());
         //[/UserButtonCode_pcButton]
     }
     else if (buttonThatWasClicked == nextButton.get())
     {
         //[UserButtonCode_nextButton] -- add your button handler code here..
-        getFilter()->selectTrigger (getFilter()->getCurrentTrigger() + 1);
+        getFilter()->selectTrigger(getFilter()->getCurrentTrigger() + 1);
         //[/UserButtonCode_nextButton]
     }
     else if (buttonThatWasClicked == prevButton.get())
     {
         //[UserButtonCode_prevButton] -- add your button handler code here..
-        getFilter()->selectTrigger (getFilter()->getCurrentTrigger() - 1);
+        getFilter()->selectTrigger(getFilter()->getCurrentTrigger() - 1);
         //[/UserButtonCode_prevButton]
     }
     else if (buttonThatWasClicked == transposeInputButton.get())
     {
         //[UserButtonCode_transposeInputButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kInputTranspose, transposeInputButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kInputTranspose, transposeInputButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_transposeInputButton]
     }
     else if (buttonThatWasClicked == toAllChannelsButton.get())
     {
         //[UserButtonCode_toAllChannelsButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kToAllChannels, toAllChannelsButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kToAllChannels, toAllChannelsButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toAllChannelsButton]
     }
     else if (buttonThatWasClicked == infoButton.get())
     {
         //[UserButtonCode_infoButton] -- add your button handler code here..
-        infoBox->moveCaretToTop (false);
+        infoBox->moveCaretToTop(false);
         if (infoButton->getToggleState())
-            juce::Desktop::getInstance().getAnimator().fadeOut (infoBox.get(), 150);
+            juce::Desktop::getInstance().getAnimator().fadeOut(infoBox.get(), 150);
         else
-            juce::Desktop::getInstance().getAnimator().fadeIn (infoBox.get(), 100);
+            juce::Desktop::getInstance().getAnimator().fadeIn(infoBox.get(), 100);
         //infoBox->setVisible(!infoBox->isVisible());
-        infoButton->setToggleState (! infoButton->getToggleState(), juce::dontSendNotification);
+        infoButton->setToggleState(! infoButton->getToggleState(), juce::dontSendNotification);
         //[/UserButtonCode_infoButton]
     }
     else if (buttonThatWasClicked == specialMenuButton.get())
     {
         //[UserButtonCode_specialMenuButton] -- add your button handler code here..
         juce::PopupMenu m;
-        m.addItem (1, "Clear all chords");
-        m.addItem (2, "Reset all chords");
-        m.addItem (3, "Copy to all triggers (absolute)");
-        m.addItem (4, "Copy to all triggers (relative)");
-        m.addItem (5, "Transpose all up one semitone");
-        m.addItem (6, "Transpose all down one semitone");
+        m.addItem(1, "Clear all chords");
+        m.addItem(2, "Reset all chords");
+        m.addItem(3, "Copy to all triggers (absolute)");
+        m.addItem(4, "Copy to all triggers (relative)");
+        m.addItem(5, "Transpose all up one semitone");
+        m.addItem(6, "Transpose all down one semitone");
         int result = m.show(); //At(specialMenuButton);
         if (result != 0)
         {
@@ -1302,13 +1302,13 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
             else if (result == 2)
                 getFilter()->resetAllChords();
             else if (result == 3)
-                getFilter()->copyChordToAllTriggers (true);
+                getFilter()->copyChordToAllTriggers(true);
             else if (result == 4)
-                getFilter()->copyChordToAllTriggers (false);
+                getFilter()->copyChordToAllTriggers(false);
             else if (result == 5)
-                getFilter()->transposeAll (true);
+                getFilter()->transposeAll(true);
             else if (result == 6)
-                getFilter()->transposeAll (false);
+                getFilter()->transposeAll(false);
         }
         //[/UserButtonCode_specialMenuButton]
     }
@@ -1321,9 +1321,9 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == viewButton.get())
     {
         //[UserButtonCode_viewButton] -- add your button handler code here..
-        setupButton->setEnabled (! guitar->isVisible());
-        guitar->setVisible (! guitar->isVisible());
-        getFilter()->setGuitarView (guitar->isVisible());
+        setupButton->setEnabled(! guitar->isVisible());
+        guitar->setVisible(! guitar->isVisible());
+        getFilter()->setGuitarView(guitar->isVisible());
         //[/UserButtonCode_viewButton]
     }
     else if (buttonThatWasClicked == setupButton.get())
@@ -1332,10 +1332,10 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         getFilter()->fillGuitarPresetList();
         juce::PopupMenu m, custom, chordfiles;
         for (int i = 0; i < getFilter()->guitarPresets.size(); i++)
-            m.addItem (i + 1, getFilter()->guitarPresets[i].guitarName, true, isGuitarPreset (i));
+            m.addItem(i + 1, getFilter()->guitarPresets[i].guitarName, true, isGuitarPreset(i));
 
         m.addSeparator();
-        custom.addCustomItem (-1, *tuningSaveEditor, 160, 18, false);
+        custom.addCustomItem(-1, *tuningSaveEditor, 160, 18, false);
         custom.addSeparator();
 
         //File chordsPath(getFilter()->dataPath+File::getSeparatorString()+"chords");
@@ -1349,13 +1349,13 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //}
         //custom.addSubMenu("Chord File",chordfiles);
 
-        custom.addCustomItem (-1, *fretsSlider, 150, 18, false);
-        custom.addCustomItem (-1, *stringsSlider, 150, 18, false);
+        custom.addCustomItem(-1, *fretsSlider, 150, 18, false);
+        custom.addCustomItem(-1, *stringsSlider, 150, 18, false);
         for (int i = 0; i < maxStrings; i++)
-            custom.addCustomItem (-1, *stringSlider[i], 150, 18, false);
-        m.addSubMenu ("Customize", custom);
+            custom.addCustomItem(-1, *stringSlider[i], 150, 18, false);
+        m.addSubMenu("Customize", custom);
 
-        int result = m.showAt (setupButton.get());
+        int result = m.showAt(setupButton.get());
         if (result > 0)
         {
             if (result >= 10000)
@@ -1363,32 +1363,32 @@ void MidiChordsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
                 ;
             }
             else
-                setUpGuitar (result - 1);
+                setUpGuitar(result - 1);
         }
         //[/UserButtonCode_setupButton]
     }
     else if (buttonThatWasClicked == strumDirectionButton.get())
     {
         //[UserButtonCode_strumDirectionButton] -- add your button handler code here..
-        getFilter()->setStrumDirection (! getFilter()->getStrumDirection());
+        getFilter()->setStrumDirection(! getFilter()->getStrumDirection());
         //[/UserButtonCode_strumDirectionButton]
     }
     else if (buttonThatWasClicked == strumButton.get())
     {
         //[UserButtonCode_strumButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kStrum, strumButton->getToggleState() ? 0.f : 1.f);
+        getFilter()->setParameterNotifyingHost(kStrum, strumButton->getToggleState() ? 0.f : 1.f);
         //[/UserButtonCode_strumButton]
     }
 
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        juce::URL ("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
+        juce::URL("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
 
-void MidiChordsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void MidiChordsEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
@@ -1396,19 +1396,19 @@ void MidiChordsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == channelSlider.get())
     {
         //[UserSliderCode_channelSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kChannel, (float) channelSlider->getValue() / 16.f);
+        getFilter()->setParameterNotifyingHost(kChannel, (float) channelSlider->getValue() / 16.f);
         //[/UserSliderCode_channelSlider]
     }
     else if (sliderThatWasMoved == transposeSlider.get())
     {
         //[UserSliderCode_transposeSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kTranspose, (float) (transposeSlider->getValue() + 48) / 96.f);
+        getFilter()->setParameterNotifyingHost(kTranspose, (float) (transposeSlider->getValue() + 48) / 96.f);
         //[/UserSliderCode_transposeSlider]
     }
     else if (sliderThatWasMoved == velocitySlider.get())
     {
         //[UserSliderCode_velocitySlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kVelocity, (float) (velocitySlider->getValue() - 1) / 126.f);
+        getFilter()->setParameterNotifyingHost(kVelocity, (float) (velocitySlider->getValue() - 1) / 126.f);
         //[/UserSliderCode_velocitySlider]
     }
     else if (sliderThatWasMoved == variationSlider.get())
@@ -1419,13 +1419,13 @@ void MidiChordsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == learnChanSlider.get())
     {
         //[UserSliderCode_learnChanSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kLearnChannel, (float) learnChanSlider->getValue() / 16.f);
+        getFilter()->setParameterNotifyingHost(kLearnChannel, (float) learnChanSlider->getValue() / 16.f);
         //[/UserSliderCode_learnChanSlider]
     }
     else if (sliderThatWasMoved == outputChannelSlider.get())
     {
         //[UserSliderCode_outputChannelSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kOutChannel, (float) outputChannelSlider->getValue() / 16.f);
+        getFilter()->setParameterNotifyingHost(kOutChannel, (float) outputChannelSlider->getValue() / 16.f);
         //[/UserSliderCode_outputChannelSlider]
     }
     else if (sliderThatWasMoved == maxTimeSlider.get())
@@ -1456,103 +1456,103 @@ void MidiChordsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Post]
     else if (sliderThatWasMoved == fretsSlider)
     {
-        getFilter()->setNumFrets (roundToInt (fretsSlider->getValue()), true);
-        guitar->setNumFrets (roundToInt (fretsSlider->getValue()));
+        getFilter()->setNumFrets(roundToInt(fretsSlider->getValue()), true);
+        guitar->setNumFrets(roundToInt(fretsSlider->getValue()));
     }
     else if (sliderThatWasMoved == stringsSlider)
     {
-        const int s = roundToInt (stringsSlider->getValue());
-        getFilter()->setNumStrings (s, true);
-        guitar->setNumStrings (s);
+        const int s = roundToInt(stringsSlider->getValue());
+        getFilter()->setNumStrings(s, true);
+        guitar->setNumStrings(s);
         for (int i = 0; i < maxStrings; i++)
         {
-            stringSlider[i]->setEnabled (i < s);
+            stringSlider[i]->setEnabled(i < s);
         }
     }
     else if (sliderThatWasMoved == stringSlider[0])
     {
-        getFilter()->setStringValue (0, roundToInt (stringSlider[0]->getValue()), true);
-        guitar->setStringNote (0, roundToInt (stringSlider[0]->getValue()));
+        getFilter()->setStringValue(0, roundToInt(stringSlider[0]->getValue()), true);
+        guitar->setStringNote(0, roundToInt(stringSlider[0]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[1])
     {
-        getFilter()->setStringValue (1, roundToInt (stringSlider[1]->getValue()), true);
-        guitar->setStringNote (1, roundToInt (stringSlider[1]->getValue()));
+        getFilter()->setStringValue(1, roundToInt(stringSlider[1]->getValue()), true);
+        guitar->setStringNote(1, roundToInt(stringSlider[1]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[2])
     {
-        getFilter()->setStringValue (2, roundToInt (stringSlider[2]->getValue()), true);
-        guitar->setStringNote (2, roundToInt (stringSlider[2]->getValue()));
+        getFilter()->setStringValue(2, roundToInt(stringSlider[2]->getValue()), true);
+        guitar->setStringNote(2, roundToInt(stringSlider[2]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[3])
     {
-        getFilter()->setStringValue (3, roundToInt (stringSlider[3]->getValue()), true);
-        guitar->setStringNote (3, roundToInt (stringSlider[3]->getValue()));
+        getFilter()->setStringValue(3, roundToInt(stringSlider[3]->getValue()), true);
+        guitar->setStringNote(3, roundToInt(stringSlider[3]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[4])
     {
-        getFilter()->setStringValue (4, roundToInt (stringSlider[4]->getValue()), true);
-        guitar->setStringNote (4, roundToInt (stringSlider[4]->getValue()));
+        getFilter()->setStringValue(4, roundToInt(stringSlider[4]->getValue()), true);
+        guitar->setStringNote(4, roundToInt(stringSlider[4]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[5])
     {
-        getFilter()->setStringValue (5, roundToInt (stringSlider[5]->getValue()), true);
-        guitar->setStringNote (5, roundToInt (stringSlider[5]->getValue()));
+        getFilter()->setStringValue(5, roundToInt(stringSlider[5]->getValue()), true);
+        guitar->setStringNote(5, roundToInt(stringSlider[5]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[6])
     {
-        getFilter()->setStringValue (6, roundToInt (stringSlider[6]->getValue()), true);
-        guitar->setStringNote (6, roundToInt (stringSlider[6]->getValue()));
+        getFilter()->setStringValue(6, roundToInt(stringSlider[6]->getValue()), true);
+        guitar->setStringNote(6, roundToInt(stringSlider[6]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[7])
     {
-        getFilter()->setStringValue (7, roundToInt (stringSlider[7]->getValue()), true);
-        guitar->setStringNote (7, roundToInt (stringSlider[7]->getValue()));
+        getFilter()->setStringValue(7, roundToInt(stringSlider[7]->getValue()), true);
+        guitar->setStringNote(7, roundToInt(stringSlider[7]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[8])
     {
-        getFilter()->setStringValue (8, roundToInt (stringSlider[8]->getValue()), true);
-        guitar->setStringNote (8, roundToInt (stringSlider[8]->getValue()));
+        getFilter()->setStringValue(8, roundToInt(stringSlider[8]->getValue()), true);
+        guitar->setStringNote(8, roundToInt(stringSlider[8]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[9])
     {
-        getFilter()->setStringValue (9, roundToInt (stringSlider[9]->getValue()), true);
-        guitar->setStringNote (9, roundToInt (stringSlider[9]->getValue()));
+        getFilter()->setStringValue(9, roundToInt(stringSlider[9]->getValue()), true);
+        guitar->setStringNote(9, roundToInt(stringSlider[9]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[10])
     {
-        getFilter()->setStringValue (10, roundToInt (stringSlider[10]->getValue()), true);
-        guitar->setStringNote (10, roundToInt (stringSlider[10]->getValue()));
+        getFilter()->setStringValue(10, roundToInt(stringSlider[10]->getValue()), true);
+        guitar->setStringNote(10, roundToInt(stringSlider[10]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[11])
     {
-        getFilter()->setStringValue (11, roundToInt (stringSlider[11]->getValue()), true);
-        guitar->setStringNote (11, roundToInt (stringSlider[11]->getValue()));
+        getFilter()->setStringValue(11, roundToInt(stringSlider[11]->getValue()), true);
+        guitar->setStringNote(11, roundToInt(stringSlider[11]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[12])
     {
-        getFilter()->setStringValue (12, roundToInt (stringSlider[12]->getValue()), true);
-        guitar->setStringNote (12, roundToInt (stringSlider[12]->getValue()));
+        getFilter()->setStringValue(12, roundToInt(stringSlider[12]->getValue()), true);
+        guitar->setStringNote(12, roundToInt(stringSlider[12]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[13])
     {
-        getFilter()->setStringValue (13, roundToInt (stringSlider[13]->getValue()), true);
-        guitar->setStringNote (13, roundToInt (stringSlider[13]->getValue()));
+        getFilter()->setStringValue(13, roundToInt(stringSlider[13]->getValue()), true);
+        guitar->setStringNote(13, roundToInt(stringSlider[13]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[14])
     {
-        getFilter()->setStringValue (14, roundToInt (stringSlider[14]->getValue()), true);
-        guitar->setStringNote (14, roundToInt (stringSlider[14]->getValue()));
+        getFilter()->setStringValue(14, roundToInt(stringSlider[14]->getValue()), true);
+        guitar->setStringNote(14, roundToInt(stringSlider[14]->getValue()));
     }
     else if (sliderThatWasMoved == stringSlider[15])
     {
-        getFilter()->setStringValue (15, roundToInt (stringSlider[15]->getValue()), true);
-        guitar->setStringNote (15, roundToInt (stringSlider[15]->getValue()));
+        getFilter()->setStringValue(15, roundToInt(stringSlider[15]->getValue()), true);
+        guitar->setStringNote(15, roundToInt(stringSlider[15]->getValue()));
     }
     //[/UsersliderValueChanged_Post]
 }
 
-void MidiChordsEditor::labelTextChanged (juce::Label* labelThatHasChanged)
+void MidiChordsEditor::labelTextChanged(juce::Label* labelThatHasChanged)
 {
     //[UserlabelTextChanged_Pre]
     //[/UserlabelTextChanged_Pre]
@@ -1560,20 +1560,20 @@ void MidiChordsEditor::labelTextChanged (juce::Label* labelThatHasChanged)
     if (labelThatHasChanged == presetNameLabel.get())
     {
         //[UserLabelCode_presetNameLabel] -- add your label text handling code here..
-        getFilter()->changeProgramName (getFilter()->getCurrentProgram(), presetNameLabel->getText());
+        getFilter()->changeProgramName(getFilter()->getCurrentProgram(), presetNameLabel->getText());
         getFilter()->updateHostDisplay();
         //[/UserLabelCode_presetNameLabel]
     }
     else if (labelThatHasChanged == chordEditor.get())
     {
         //[UserLabelCode_chordEditor] -- add your label text handling code here..
-        chordFromString (chordEditor->getText());
+        chordFromString(chordEditor->getText());
         //[/UserLabelCode_chordEditor]
     }
     else if (labelThatHasChanged == triggerNoteLabel.get())
     {
         //[UserLabelCode_triggerNoteLabel] -- add your label text handling code here..
-        getFilter()->selectTrigger (triggerNoteLabel->getText().getIntValue());
+        getFilter()->selectTrigger(triggerNoteLabel->getText().getIntValue());
         //[/UserLabelCode_triggerNoteLabel]
     }
 
@@ -1583,7 +1583,7 @@ void MidiChordsEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
-void MidiChordsEditor::chordMenuCallback (int result, MidiChordsEditor* editor)
+void MidiChordsEditor::chordMenuCallback(int result, MidiChordsEditor* editor)
 {
     if (result != 0)
     {
@@ -1594,28 +1594,28 @@ void MidiChordsEditor::chordMenuCallback (int result, MidiChordsEditor* editor)
     }
 }
 
-void MidiChordsEditor::mouseDown (const juce::MouseEvent& e)
+void MidiChordsEditor::mouseDown(const juce::MouseEvent& e)
 {
     if (e.eventComponent == previewButton.get() && ! e.mods.isPopupMenu())
-        getFilter()->playCurrentChord (true);
+        getFilter()->playCurrentChord(true);
     if (e.eventComponent != infoBox.get() && infoBox->isVisible())
     {
-        infoBox->setVisible (false);
-        infoButton->setToggleState (false, juce::dontSendNotification);
+        infoBox->setVisible(false);
+        infoButton->setToggleState(false, juce::dontSendNotification);
     }
 }
 
-void MidiChordsEditor::mouseDoubleClick (const juce::MouseEvent& e)
+void MidiChordsEditor::mouseDoubleClick(const juce::MouseEvent& e)
 {
     if (e.eventComponent == triggerKeyboard.get() && (e.mods.isShiftDown() || e.mods.isPopupMenu()))
     {
         for (int i = 0; i < 128; i++)
-            getFilter()->setNoteBypassed (i, false);
+            getFilter()->setNoteBypassed(i, false);
         triggerKeyboard->repaint();
     }
 }
 
-void MidiChordsEditor::mouseUp (const juce::MouseEvent& e)
+void MidiChordsEditor::mouseUp(const juce::MouseEvent& e)
 {
     if (e.eventComponent == previewButton.get())
     {
@@ -1623,36 +1623,36 @@ void MidiChordsEditor::mouseUp (const juce::MouseEvent& e)
         {
             if (getFilter()->isPreviewChordPlaying())
             {
-                getFilter()->playCurrentChord (false);
-                previewButton->setToggleState (false, juce::dontSendNotification);
+                getFilter()->playCurrentChord(false);
+                previewButton->setToggleState(false, juce::dontSendNotification);
             }
             else
             {
-                getFilter()->playCurrentChord (true);
-                previewButton->setToggleState (true, juce::dontSendNotification);
+                getFilter()->playCurrentChord(true);
+                previewButton->setToggleState(true, juce::dontSendNotification);
             }
         }
         else
         {
-            getFilter()->playCurrentChord (false);
-            previewButton->setToggleState (false, juce::dontSendNotification);
+            getFilter()->playCurrentChord(false);
+            previewButton->setToggleState(false, juce::dontSendNotification);
         }
     }
 }
 
-void MidiChordsEditor::chordFromString (juce::String chordString)
+void MidiChordsEditor::chordFromString(juce::String chordString)
 {
-    const int root = chordString.upToFirstOccurrenceOf (":", false, false).getIntValue();
+    const int root = chordString.upToFirstOccurrenceOf(":", false, false).getIntValue();
     const int t    = getFilter()->getCurrentTrigger();
     juce::StringArray sa;
-    if (chordString.contains (":"))
-        chordString = chordString.fromLastOccurrenceOf (":", false, false);
-    if (chordString.containsAnyOf ("abcdefgABCDEFGmMrRopP#+") /* || !chordString.contains("0")*/)
-        chordString = getIntervalStringFromNoteNames (t, chordString, getFilter()->bottomOctave);
+    if (chordString.contains(":"))
+        chordString = chordString.fromLastOccurrenceOf(":", false, false);
+    if (chordString.containsAnyOf("abcdefgABCDEFGmMrRopP#+") /* || !chordString.contains("0")*/)
+        chordString = getIntervalStringFromNoteNames(t, chordString, getFilter()->bottomOctave);
 
-    sa.addTokens (chordString, " ,", juce::String());
+    sa.addTokens(chordString, " ,", juce::String());
     if (sa.size() > 0)
-        getFilter()->clearChord (t);
+        getFilter()->clearChord(t);
     if (juce::ModifierKeys::getCurrentModifiers().isCommandDown())
     {
         //absolute
@@ -1661,10 +1661,10 @@ void MidiChordsEditor::chordFromString (juce::String chordString)
             juce::String s = sa[i].trim();
             if (s.isNotEmpty())
             {
-                if (s.contains ("."))
-                    getFilter()->selectChordNote (t, root + s.upToFirstOccurrenceOf (".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf (".", false, true).getIntValue());
+                if (s.contains("."))
+                    getFilter()->selectChordNote(t, root + s.upToFirstOccurrenceOf(".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf(".", false, true).getIntValue());
                 else
-                    getFilter()->selectChordNote (t, root + s.getIntValue(), true);
+                    getFilter()->selectChordNote(t, root + s.getIntValue(), true);
             }
         }
     }
@@ -1676,10 +1676,10 @@ void MidiChordsEditor::chordFromString (juce::String chordString)
             juce::String s = sa[i].trim();
             if (s.isNotEmpty())
             {
-                if (s.contains ("."))
-                    getFilter()->selectChordNote (t, t + s.upToFirstOccurrenceOf (".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf (".", false, true).getIntValue());
+                if (s.contains("."))
+                    getFilter()->selectChordNote(t, t + s.upToFirstOccurrenceOf(".", false, true).getIntValue(), true, s.fromFirstOccurrenceOf(".", false, true).getIntValue());
                 else
-                    getFilter()->selectChordNote (t, t + s.getIntValue(), true);
+                    getFilter()->selectChordNote(t, t + s.getIntValue(), true);
             }
         }
     }
@@ -1687,7 +1687,7 @@ void MidiChordsEditor::chordFromString (juce::String chordString)
         getFilter()->translateToGuitarChord();
 }
 
-void MidiChordsEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void MidiChordsEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -1696,27 +1696,27 @@ void MidiChordsEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 void MidiChordsEditor::updateParametersFromFilter()
 {
     MidiChords* const filter = getFilter();
-    const int newMode        = roundToInt (filter->getParameter (kMode) * (numModes - 1));
-    const int chordChan      = roundToInt (filter->getParameter (kLearnChannel) * 16.f);
-    const int outChan        = roundToInt (filter->getParameter (kOutChannel) * 16.f);
-    const int previewVel     = roundToInt (filter->getParameter (kVelocity) * 126.f) + 1;
-    const int transpose      = roundToInt (filter->getParameter (kTranspose) * 96.f) - 48;
+    const int newMode        = roundToInt(filter->getParameter(kMode) * (numModes - 1));
+    const int chordChan      = roundToInt(filter->getParameter(kLearnChannel) * 16.f);
+    const int outChan        = roundToInt(filter->getParameter(kOutChannel) * 16.f);
+    const int previewVel     = roundToInt(filter->getParameter(kVelocity) * 126.f) + 1;
+    const int transpose      = roundToInt(filter->getParameter(kTranspose) * 96.f) - 48;
     const int s              = filter->getNumStrings();
-    const bool flats         = filter->getParameter (kFlats) > 0;
+    const bool flats         = filter->getParameter(kFlats) > 0;
     const int p              = filter->getCurrentProgram();
 
-    guitar->setVisible (filter->getGuitarView());
-    setupButton->setEnabled (filter->getGuitarView());
-    fretsSlider->setValue (filter->getNumFrets(), juce::dontSendNotification);
-    guitar->setNumFrets (filter->getNumFrets());
+    guitar->setVisible(filter->getGuitarView());
+    setupButton->setEnabled(filter->getGuitarView());
+    fretsSlider->setValue(filter->getNumFrets(), juce::dontSendNotification);
+    guitar->setNumFrets(filter->getNumFrets());
 
-    stringsSlider->setValue (s, juce::dontSendNotification);
-    guitar->setNumStrings (s);
+    stringsSlider->setValue(s, juce::dontSendNotification);
+    guitar->setNumStrings(s);
 
     guitarPreset = -1;
     for (int i = 0; i < filter->guitarPresets.size(); i++)
     {
-        if (isGuitarPreset (i))
+        if (isGuitarPreset(i))
         {
             guitarPreset = i;
             break;
@@ -1725,50 +1725,50 @@ void MidiChordsEditor::updateParametersFromFilter()
 
     for (int i = 0; i < maxStrings; i++)
     {
-        stringSlider[i]->setEnabled (i < s);
-        stringSlider[i]->setValue (filter->getStringValue (i), juce::dontSendNotification);
-        guitar->setStringNote (i, filter->getStringValue (i));
+        stringSlider[i]->setEnabled(i < s);
+        stringSlider[i]->setValue(filter->getStringValue(i), juce::dontSendNotification);
+        guitar->setStringNote(i, filter->getStringValue(i));
     }
 
-    channelSlider->setValue (filter->getParameter (kChannel) * 16.f, juce::dontSendNotification);
-    learnChanSlider->setValue (chordChan, juce::dontSendNotification);
-    outputChannelSlider->setValue (outChan, juce::dontSendNotification);
-    velocitySlider->setValue (previewVel, juce::dontSendNotification);
-    transposeSlider->setValue (transpose, juce::dontSendNotification);
-    chordLearnButton->setToggleState (filter->getParameter (kLearnChord) > 0, juce::dontSendNotification);
-    triggerLearnButton->setToggleState (filter->getParameter (kFollowInput) > 0, juce::dontSendNotification);
-    toggleButton->setToggleState (filter->getParameter (kGuess) > 0, juce::dontSendNotification);
-    flatsButton->setToggleState (flats, juce::dontSendNotification);
-    guitar->setFlats (flats);
-    pcButton->setToggleState (filter->getParameter (kUseProgCh) > 0, juce::dontSendNotification);
-    transposeInputButton->setToggleState (filter->getParameter (kInputTranspose) > 0, juce::dontSendNotification);
-    toAllChannelsButton->setToggleState (filter->getParameter (kToAllChannels) > 0, juce::dontSendNotification);
+    channelSlider->setValue(filter->getParameter(kChannel) * 16.f, juce::dontSendNotification);
+    learnChanSlider->setValue(chordChan, juce::dontSendNotification);
+    outputChannelSlider->setValue(outChan, juce::dontSendNotification);
+    velocitySlider->setValue(previewVel, juce::dontSendNotification);
+    transposeSlider->setValue(transpose, juce::dontSendNotification);
+    chordLearnButton->setToggleState(filter->getParameter(kLearnChord) > 0, juce::dontSendNotification);
+    triggerLearnButton->setToggleState(filter->getParameter(kFollowInput) > 0, juce::dontSendNotification);
+    toggleButton->setToggleState(filter->getParameter(kGuess) > 0, juce::dontSendNotification);
+    flatsButton->setToggleState(flats, juce::dontSendNotification);
+    guitar->setFlats(flats);
+    pcButton->setToggleState(filter->getParameter(kUseProgCh) > 0, juce::dontSendNotification);
+    transposeInputButton->setToggleState(filter->getParameter(kInputTranspose) > 0, juce::dontSendNotification);
+    toAllChannelsButton->setToggleState(filter->getParameter(kToAllChannels) > 0, juce::dontSendNotification);
 
     accelSlider->setVSTSlider();
     velRampSlider->setVSTSlider();
     speedSlider->setVSTSlider();
     maxTimeSlider->setVSTSlider();
-    strumButton->setToggleState (filter->getParameter (kStrum) > 0, juce::dontSendNotification);
-    strumDirectionButton->setEnabled (strumButton->getToggleState());
-    accelSlider->setEnabled (strumButton->getToggleState());
-    velRampSlider->setEnabled (strumButton->getToggleState());
-    speedSlider->setEnabled (strumButton->getToggleState());
-    maxTimeSlider->setEnabled (strumButton->getToggleState());
+    strumButton->setToggleState(filter->getParameter(kStrum) > 0, juce::dontSendNotification);
+    strumDirectionButton->setEnabled(strumButton->getToggleState());
+    accelSlider->setEnabled(strumButton->getToggleState());
+    velRampSlider->setEnabled(strumButton->getToggleState());
+    speedSlider->setEnabled(strumButton->getToggleState());
+    maxTimeSlider->setEnabled(strumButton->getToggleState());
     if (filter->getStrumDirection())
-        strumDirectionButton->setButtonText ("Up");
+        strumDirectionButton->setButtonText("Up");
     else
-        strumDirectionButton->setButtonText ("Down");
+        strumDirectionButton->setButtonText("Down");
 
     if (chordChan == 0)
-        chordKeyboard->setMidiChannelsToDisplay (0xffff);
+        chordKeyboard->setMidiChannelsToDisplay(0xffff);
     else
-        chordKeyboard->setMidiChannelsToDisplay (1 << (chordChan - 1));
+        chordKeyboard->setMidiChannelsToDisplay(1 << (chordChan - 1));
 
-    normalButton->setToggleState (newMode == Normal, juce::dontSendNotification);
-    octaveButton->setToggleState (newMode == Octave, juce::dontSendNotification);
-    globalButton->setToggleState (newMode == Global, juce::dontSendNotification);
+    normalButton->setToggleState(newMode == Normal, juce::dontSendNotification);
+    octaveButton->setToggleState(newMode == Octave, juce::dontSendNotification);
+    globalButton->setToggleState(newMode == Global, juce::dontSendNotification);
 
-    chordNameLabel->setText (getCurrentChordName(), juce::dontSendNotification);
+    chordNameLabel->setText(getCurrentChordName(), juce::dontSendNotification);
 
     if (guitar->isVisible())
         guitar->handleAsyncUpdate();
@@ -1779,49 +1779,49 @@ void MidiChordsEditor::updateParametersFromFilter()
     {
         for (int c = 1; c <= 16; c++)
         {
-            if (getFilter()->progKbState[p][t].isNoteOn (c, n))
-                chordString += juce::String (n - t) /*+"."+String(c)*/ + " ";
+            if (getFilter()->progKbState[p][t].isNoteOn(c, n))
+                chordString += juce::String(n - t) /*+"."+String(c)*/ + " ";
         }
     }
-    chordEditor->setText (chordString.trimEnd(), juce::dontSendNotification);
+    chordEditor->setText(chordString.trimEnd(), juce::dontSendNotification);
 
     if (mode != newMode)
     {
         if (newMode == Global)
         {
-            triggerLabel->setText ("Root Note:", juce::dontSendNotification);
-            triggerKeyboard->setKeyWidth (16.f);
-            triggerKeyboard->setAvailableRange (0, 127);
-            triggerKeyboard->setLowestVisibleKey (36);
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
+            triggerLabel->setText("Root Note:", juce::dontSendNotification);
+            triggerKeyboard->setKeyWidth(16.f);
+            triggerKeyboard->setAvailableRange(0, 127);
+            triggerKeyboard->setLowestVisibleKey(36);
+            triggerNoteLabel->setText(getNoteName(t, getFilter()->bottomOctave) + " (" + juce::String(t) + ")", juce::dontSendNotification);
         }
         else if (newMode == Octave)
         {
-            triggerLabel->setText ("Trigger Note:", juce::dontSendNotification);
-            triggerKeyboard->setAvailableRange (60, 71);
-            triggerKeyboard->setKeyWidth ((float) triggerKeyboard->getWidth() / 7.f);
-            triggerNoteLabel->setText (getNoteNameWithoutOctave (t, ! flats), juce::dontSendNotification);
+            triggerLabel->setText("Trigger Note:", juce::dontSendNotification);
+            triggerKeyboard->setAvailableRange(60, 71);
+            triggerKeyboard->setKeyWidth((float) triggerKeyboard->getWidth() / 7.f);
+            triggerNoteLabel->setText(getNoteNameWithoutOctave(t, ! flats), juce::dontSendNotification);
         }
         else
         {
-            triggerLabel->setText ("Trigger Note:", juce::dontSendNotification);
-            triggerKeyboard->setKeyWidth (16.f);
-            triggerKeyboard->setAvailableRange (0, 127);
-            triggerKeyboard->setLowestVisibleKey (36);
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
+            triggerLabel->setText("Trigger Note:", juce::dontSendNotification);
+            triggerKeyboard->setKeyWidth(16.f);
+            triggerKeyboard->setAvailableRange(0, 127);
+            triggerKeyboard->setLowestVisibleKey(36);
+            triggerNoteLabel->setText(getNoteName(t, getFilter()->bottomOctave) + " (" + juce::String(t) + ")", juce::dontSendNotification);
         }
         mode = newMode;
     }
     else
     {
         if (newMode != Octave)
-            triggerNoteLabel->setText (getNoteName (t, getFilter()->bottomOctave) + " (" + juce::String (t) + ")", juce::dontSendNotification);
+            triggerNoteLabel->setText(getNoteName(t, getFilter()->bottomOctave) + " (" + juce::String(t) + ")", juce::dontSendNotification);
         else
-            triggerNoteLabel->setText (getNoteNameWithoutOctave (t), juce::dontSendNotification);
+            triggerNoteLabel->setText(getNoteNameWithoutOctave(t), juce::dontSendNotification);
     }
 
-    if (presetNameLabel->getText() != getFilter()->getProgramName (p))
-        presetNameLabel->setText (getFilter()->getProgramName (p), juce::dontSendNotification);
+    if (presetNameLabel->getText() != getFilter()->getProgramName(p))
+        presetNameLabel->setText(getFilter()->getProgramName(p), juce::dontSendNotification);
 
     triggerKeyboard->repaint();
     chordKeyboard->repaint();
@@ -1829,7 +1829,7 @@ void MidiChordsEditor::updateParametersFromFilter()
 
 juce::String const MidiChordsEditor::getCurrentChordName()
 {
-    if (getFilter()->getParameter (kGuess) == 0.f)
+    if (getFilter()->getParameter(kGuess) == 0.f)
         return juce::String();
 
     juce::Array<int> chord;
@@ -1837,14 +1837,14 @@ juce::String const MidiChordsEditor::getCurrentChordName()
     {
         for (int c = 1; c <= 16; c++)
         {
-            if (getFilter()->progKbState[getFilter()->getCurrentProgram()][getFilter()->getCurrentTrigger()].isNoteOn (c, n))
-                chord.add (n);
+            if (getFilter()->progKbState[getFilter()->getCurrentProgram()][getFilter()->getCurrentTrigger()].isNoteOn(c, n))
+                chord.add(n);
         }
     }
-    return getFirstRecognizedChord (chord, getFilter()->getParameter (kFlats) > 0.f);
+    return getFirstRecognizedChord(chord, getFilter()->getParameter(kFlats) > 0.f);
 }
 
-void MidiChordsEditor::listChordFiles (juce::StringArray& list)
+void MidiChordsEditor::listChordFiles(juce::StringArray& list)
 {
     juce::String chordPath = getFilter()->dataPath + juce::File::getSeparatorString() + "chords";
 
@@ -1853,68 +1853,68 @@ void MidiChordsEditor::listChordFiles (juce::StringArray& list)
     else
         chordPath += juce::File::getSeparatorString() + "Chords.txt";
 
-    juce::File chordFile = juce::File (chordPath);
+    juce::File chordFile = juce::File(chordPath);
     if (! chordFile.exists())
         chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "Chords.txt";
 
     juce::StringArray s;
-    s.addLines (chordFile.loadFileAsString());
+    s.addLines(chordFile.loadFileAsString());
     for (int line = 0; line < s.size(); line++)
     {
-        if (! s[line].startsWithChar (';'))
-            list.add (s[line]);
+        if (! s[line].startsWithChar(';'))
+            list.add(s[line]);
     }
 
     chordFile = getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt";
     s.clear();
-    s.addLines (chordFile.loadFileAsString());
+    s.addLines(chordFile.loadFileAsString());
     for (int line = 0; line < s.size(); line++)
     {
-        if (! s[line].startsWithChar (';'))
-            list.add (s[line]);
+        if (! s[line].startsWithChar(';'))
+            list.add(s[line]);
     }
 }
 
-void MidiChordsEditor::listPresetFiles (juce::Array<juce::File>& list)
+void MidiChordsEditor::listPresetFiles(juce::Array<juce::File>& list)
 {
-    juce::File mappingsPath (getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
+    juce::File mappingsPath(getFilter()->dataPath + juce::File::getSeparatorString() + "mappings");
     juce::Array<juce::File> files;
-    mappingsPath.findChildFiles (files, juce::File::findFiles, true);
+    mappingsPath.findChildFiles(files, juce::File::findFiles, true);
     for (int i = 0; i < files.size(); i++)
     {
-        if (files[i].hasFileExtension ("chords") || files[i].hasFileExtension ("fxp") || files[i].hasFileExtension ("xml"))
-            list.add (files[i]);
+        if (files[i].hasFileExtension("chords") || files[i].hasFileExtension("fxp") || files[i].hasFileExtension("xml"))
+            list.add(files[i]);
     }
 }
 
-void MidiChordsEditor::loadChord (juce::String chorddef)
+void MidiChordsEditor::loadChord(juce::String chorddef)
 {
     const int t = getFilter()->getCurrentTrigger();
-    getFilter()->clearChord (t);
+    getFilter()->clearChord(t);
     juce::StringArray sa;
-    sa.addTokens (chorddef.fromLastOccurrenceOf (":", false, true), " ", juce::String());
+    sa.addTokens(chorddef.fromLastOccurrenceOf(":", false, true), " ", juce::String());
     for (int i = 0; i < sa.size(); i++)
     {
         if (sa[i].trim().isNotEmpty())
         {
-            if (sa[i].contains ("."))
-                getFilter()->selectChordNote (t, t + sa[i].upToFirstOccurrenceOf (".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf (".", false, true).getIntValue());
+            if (sa[i].contains("."))
+                getFilter()->selectChordNote(t, t + sa[i].upToFirstOccurrenceOf(".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf(".", false, true).getIntValue());
             else
-                getFilter()->selectChordNote (t, t + sa[i].getIntValue(), true);
+                getFilter()->selectChordNote(t, t + sa[i].getIntValue(), true);
         }
     }
     if (guitar->isVisible())
         getFilter()->translateToGuitarChord();
 }
 
-void MidiChordsEditor::loadPreset (juce::File file)
+void MidiChordsEditor::loadPreset(juce::File file)
 {
-    if (file.hasFileExtension ("fxp"))
-        getFilter()->loadFxpFile (file);
-    else if (file.hasFileExtension ("fxb"))
-        getFilter()->loadFxbFile (file);
-    else if (file.hasFileExtension ("xml"))
-        getFilter()->readChorderPreset (file);
+    if (file.hasFileExtension("fxp"))
+        getFilter()->loadFxpFile(file);
+    else if (file.hasFileExtension("fxb"))
+        getFilter()->loadFxbFile(file);
+    else if (file.hasFileExtension("xml"))
+        getFilter()->readChorderPreset(file);
     else
     {
         //const int t = getFilter()->getCurrentTrigger();
@@ -1922,47 +1922,47 @@ void MidiChordsEditor::loadPreset (juce::File file)
         getFilter()->clearAllChords();
 
         juce::StringArray lines;
-        lines.addLines (file.loadFileAsString());
+        lines.addLines(file.loadFileAsString());
         for (int ln = 0; ln < lines.size(); ln++)
         {
-            if (! lines[ln].startsWithChar (';'))
+            if (! lines[ln].startsWithChar(';'))
             {
-                if (lines[ln].upToFirstOccurrenceOf (":", false, false).equalsIgnoreCase ("Mode"))
+                if (lines[ln].upToFirstOccurrenceOf(":", false, false).equalsIgnoreCase("Mode"))
                 {
-                    juce::String s = lines[ln].fromLastOccurrenceOf (":", false, true);
-                    if (s.equalsIgnoreCase ("Full"))
-                        getFilter()->setParameterNotifyingHost (kMode, ((float) Normal) / (float) (numModes - 1));
-                    if (s.equalsIgnoreCase ("Octave"))
-                        getFilter()->setParameterNotifyingHost (kMode, ((float) Octave) / (float) (numModes - 1));
-                    if (s.equalsIgnoreCase ("Global"))
-                        getFilter()->setParameterNotifyingHost (kMode, ((float) Global) / (float) (numModes - 1));
+                    juce::String s = lines[ln].fromLastOccurrenceOf(":", false, true);
+                    if (s.equalsIgnoreCase("Full"))
+                        getFilter()->setParameterNotifyingHost(kMode, ((float) Normal) / (float) (numModes - 1));
+                    if (s.equalsIgnoreCase("Octave"))
+                        getFilter()->setParameterNotifyingHost(kMode, ((float) Octave) / (float) (numModes - 1));
+                    if (s.equalsIgnoreCase("Global"))
+                        getFilter()->setParameterNotifyingHost(kMode, ((float) Global) / (float) (numModes - 1));
                 }
                 else
                 {
-                    int t = lines[ln].upToFirstOccurrenceOf (":", false, false).getIntValue();
+                    int t = lines[ln].upToFirstOccurrenceOf(":", false, false).getIntValue();
                     //getFilter()->clearChord(t);
                     juce::StringArray sa;
-                    sa.addTokens (lines[ln].fromLastOccurrenceOf (":", false, true), " ", juce::String());
+                    sa.addTokens(lines[ln].fromLastOccurrenceOf(":", false, true), " ", juce::String());
                     for (int i = 0; i < sa.size(); i++)
                     {
                         if (sa[i].trim().isNotEmpty())
                         {
-                            if (sa[i].contains ("."))
-                                getFilter()->selectChordNote (t, t + sa[i].upToFirstOccurrenceOf (".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf (".", false, true).getIntValue());
+                            if (sa[i].contains("."))
+                                getFilter()->selectChordNote(t, t + sa[i].upToFirstOccurrenceOf(".", false, true).getIntValue(), true, sa[i].fromFirstOccurrenceOf(".", false, true).getIntValue());
                             else
-                                getFilter()->selectChordNote (t, t + sa[i].getIntValue(), true);
+                                getFilter()->selectChordNote(t, t + sa[i].getIntValue(), true);
                         }
                     }
                 }
             }
         }
-        presetNameLabel->setText (file.getFileNameWithoutExtension(), juce::dontSendNotification);
-        getFilter()->changeProgramName (getFilter()->getCurrentProgram(), file.getFileNameWithoutExtension());
+        presetNameLabel->setText(file.getFileNameWithoutExtension(), juce::dontSendNotification);
+        getFilter()->changeProgramName(getFilter()->getCurrentProgram(), file.getFileNameWithoutExtension());
         getFilter()->updateHostDisplay();
     }
 }
 
-void MidiChordsEditor::saveChord (juce::String name)
+void MidiChordsEditor::saveChord(juce::String name)
 {
     const int curProgram     = getFilter()->getCurrentProgram();
     const int t              = getFilter()->getCurrentTrigger();
@@ -1971,41 +1971,41 @@ void MidiChordsEditor::saveChord (juce::String name)
     {
         for (int n = 0; n < 128; n++)
         {
-            if (getFilter()->progKbState[curProgram][t].isNoteOn (c, n))
-                chordString += " " + juce::String (n - t) + "." + juce::String (c);
+            if (getFilter()->progKbState[curProgram][t].isNoteOn(c, n))
+                chordString += " " + juce::String(n - t) + "." + juce::String(c);
         }
     }
-    juce::File chordFile (getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt");
+    juce::File chordFile(getFilter()->dataPath + juce::File::getSeparatorString() + "chords" + juce::File::getSeparatorString() + "User.txt");
     if (chordFile.create())
-        chordFile.appendText (chordString + "\n");
+        chordFile.appendText(chordString + "\n");
 }
 
-void MidiChordsEditor::textEditorTextChanged (juce::TextEditor& editor)
+void MidiChordsEditor::textEditorTextChanged(juce::TextEditor& editor)
 {
 }
 
-void MidiChordsEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
+void MidiChordsEditor::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     if (&editor == chordSaveEditor.get())
     {
-        saveChord (chordSaveEditor->getText());
+        saveChord(chordSaveEditor->getText());
         juce::PopupMenu::dismissAllActiveMenus();
         chordSaveEditor->clear();
     }
     else if (&editor == tuningSaveEditor.get())
     {
         juce::String tuningString = "\"" + tuningSaveEditor->getText() + "\", "
-                                  + juce::String ("Chords.txt, ")
-                                  + juce::String (roundToInt (fretsSlider->getValue())) + " frets, ";
-        for (int i = 0; i < roundToInt (stringsSlider->getValue()); i++)
+                                  + juce::String("Chords.txt, ")
+                                  + juce::String(roundToInt(fretsSlider->getValue())) + " frets, ";
+        for (int i = 0; i < roundToInt(stringsSlider->getValue()); i++)
         {
             if (i > 0)
                 tuningString += ",";
-            tuningString += juce::String (roundToInt (stringSlider[i]->getValue()));
+            tuningString += juce::String(roundToInt(stringSlider[i]->getValue()));
         }
-        juce::File tuningFile (getFilter()->dataPath + juce::File::getSeparatorString() + "guitars" + juce::File::getSeparatorString() + "GuitarPresets.txt");
+        juce::File tuningFile(getFilter()->dataPath + juce::File::getSeparatorString() + "guitars" + juce::File::getSeparatorString() + "GuitarPresets.txt");
         if (tuningFile.create())
-            tuningFile.appendText (tuningString + "\n");
+            tuningFile.appendText(tuningString + "\n");
 
         getFilter()->fillGuitarPresetList();
         juce::PopupMenu::dismissAllActiveMenus();
@@ -2013,48 +2013,48 @@ void MidiChordsEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
     }
 }
 
-void MidiChordsEditor::textEditorEscapeKeyPressed (juce::TextEditor& editor)
+void MidiChordsEditor::textEditorEscapeKeyPressed(juce::TextEditor& editor)
 {
     juce::PopupMenu::dismissAllActiveMenus();
 }
 
-void MidiChordsEditor::textEditorFocusLost (juce::TextEditor& editor)
+void MidiChordsEditor::textEditorFocusLost(juce::TextEditor& editor)
 {
 }
 
-void MidiChordsEditor::filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY)
+void MidiChordsEditor::filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY)
 {
-    juce::File file = juce::File (filenames[0]);
-    if (file.hasFileExtension ("chords") || file.hasFileExtension ("fxp") || file.hasFileExtension ("fxb")
-        || file.hasFileExtension ("xml"))
-        loadPreset (file);
+    juce::File file = juce::File(filenames[0]);
+    if (file.hasFileExtension("chords") || file.hasFileExtension("fxp") || file.hasFileExtension("fxb")
+        || file.hasFileExtension("xml"))
+        loadPreset(file);
     else if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
     {
-        getFilter()->readKeyFile (juce::File (filenames[0]));
+        getFilter()->readKeyFile(juce::File(filenames[0]));
         if (! getFilter()->demo)
         {
-            demoLabel->setVisible (false);
+            demoLabel->setVisible(false);
         }
     }
 }
 
-bool MidiChordsEditor::isInterestedInFileDrag (const juce::StringArray& files)
+bool MidiChordsEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
-    juce::File file = juce::File (files[0]);
-    if (file.hasFileExtension ("chords") || file.hasFileExtension ("fxp") || file.hasFileExtension ("fxb") || file.hasFileExtension ("xml"))
+    juce::File file = juce::File(files[0]);
+    if (file.hasFileExtension("chords") || file.hasFileExtension("fxp") || file.hasFileExtension("fxb") || file.hasFileExtension("xml"))
         return true;
     if (file.getFileName() == "midiChordsKey.txt" || file.getFileName() == "midiChordsKey.zip")
         return true;
     return false;
 }
 
-void MidiChordsEditor::fileClicked (const juce::File& file, const juce::MouseEvent&)
+void MidiChordsEditor::fileClicked(const juce::File& file, const juce::MouseEvent&)
 {
     if (file.existsAsFile())
-        loadPreset (file);
+        loadPreset(file);
 }
 
-void MidiChordsEditor::fileDoubleClicked (const juce::File& file)
+void MidiChordsEditor::fileDoubleClicked(const juce::File& file)
 {
     if (file.existsAsFile())
     {
@@ -2063,7 +2063,7 @@ void MidiChordsEditor::fileDoubleClicked (const juce::File& file)
     }
 }
 
-void MidiChordsEditor::browserRootChanged (const juce::File& newRoot)
+void MidiChordsEditor::browserRootChanged(const juce::File& newRoot)
 {
 }
 

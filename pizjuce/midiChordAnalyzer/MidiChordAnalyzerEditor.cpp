@@ -27,460 +27,460 @@ using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
-MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+MidiChordAnalyzerEditor::MidiChordAnalyzerEditor(MidiChordAnalyzer* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    chordNameLabel.reset (new juce::Label ("new label",
-                                           TRANS ("G#Maj13b5#9")));
-    addAndMakeVisible (chordNameLabel.get());
-    chordNameLabel->setFont (juce::Font (46.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    chordNameLabel->setJustificationType (juce::Justification::centred);
-    chordNameLabel->setEditable (false, false, false);
-    chordNameLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    chordNameLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    chordNameLabel.reset(new juce::Label("new label",
+                                         TRANS("G#Maj13b5#9")));
+    addAndMakeVisible(chordNameLabel.get());
+    chordNameLabel->setFont(juce::Font(46.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    chordNameLabel->setJustificationType(juce::Justification::centred);
+    chordNameLabel->setEditable(false, false, false);
+    chordNameLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    chordNameLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    chordNameLabel->setBounds (8, 57, 460, 59);
+    chordNameLabel->setBounds(8, 57, 460, 59);
 
-    chordKeyboard.reset (new ChordAnalyzerKeyboardComponent (ownerFilter->chordKbState, ownerFilter));
-    addAndMakeVisible (chordKeyboard.get());
+    chordKeyboard.reset(new ChordAnalyzerKeyboardComponent(ownerFilter->chordKbState, ownerFilter));
+    addAndMakeVisible(chordKeyboard.get());
 
-    pizButton.reset (new PizButton());
-    addAndMakeVisible (pizButton.get());
-    pizButton->setBounds (49, 9, 74, 40);
+    pizButton.reset(new PizButton());
+    addAndMakeVisible(pizButton.get());
+    pizButton->setBounds(49, 9, 74, 40);
 
-    flatsButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (flatsButton.get());
-    flatsButton->setButtonText (TRANS ("flats"));
-    flatsButton->addListener (this);
+    flatsButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(flatsButton.get());
+    flatsButton->setButtonText(TRANS("flats"));
+    flatsButton->addListener(this);
 
-    flatsButton->setBounds (472, 97, 48, 24);
+    flatsButton->setBounds(472, 97, 48, 24);
 
-    copyButton.reset (new juce::TextButton ("copy"));
-    addAndMakeVisible (copyButton.get());
-    copyButton->setButtonText (TRANS ("Copy"));
-    copyButton->setConnectedEdges (juce::Button::ConnectedOnBottom);
-    copyButton->addListener (this);
+    copyButton.reset(new juce::TextButton("copy"));
+    addAndMakeVisible(copyButton.get());
+    copyButton->setButtonText(TRANS("Copy"));
+    copyButton->setConnectedEdges(juce::Button::ConnectedOnBottom);
+    copyButton->addListener(this);
 
-    copyButton->setBounds (544, 103, 48, 21);
+    copyButton->setBounds(544, 103, 48, 21);
 
-    learnChanSlider.reset (new ChannelSlider ("channel"));
-    addAndMakeVisible (learnChanSlider.get());
-    learnChanSlider->setTooltip (TRANS ("Chord Input Channel, used for Learn and left-click entering notes"));
-    learnChanSlider->setRange (0, 16, 1);
-    learnChanSlider->setSliderStyle (juce::Slider::LinearBar);
-    learnChanSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    learnChanSlider->setColour (juce::Slider::backgroundColourId, juce::Colours::white);
-    learnChanSlider->addListener (this);
+    learnChanSlider.reset(new ChannelSlider("channel"));
+    addAndMakeVisible(learnChanSlider.get());
+    learnChanSlider->setTooltip(TRANS("Chord Input Channel, used for Learn and left-click entering notes"));
+    learnChanSlider->setRange(0, 16, 1);
+    learnChanSlider->setSliderStyle(juce::Slider::LinearBar);
+    learnChanSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 80, 20);
+    learnChanSlider->setColour(juce::Slider::backgroundColourId, juce::Colours::white);
+    learnChanSlider->addListener(this);
 
-    learnChanSlider->setBounds (475, 81, 43, 16);
+    learnChanSlider->setBounds(475, 81, 43, 16);
 
-    versionLabel.reset (new juce::Label ("new label",
-                                         TRANS ("99.99.99")));
-    addAndMakeVisible (versionLabel.get());
-    versionLabel->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    versionLabel->setJustificationType (juce::Justification::centredLeft);
-    versionLabel->setEditable (false, false, false);
-    versionLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    versionLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    versionLabel.reset(new juce::Label("new label",
+                                       TRANS("99.99.99")));
+    addAndMakeVisible(versionLabel.get());
+    versionLabel->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    versionLabel->setJustificationType(juce::Justification::centredLeft);
+    versionLabel->setEditable(false, false, false);
+    versionLabel->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    versionLabel->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    versionLabel->setBounds (339, 23, 58, 24);
+    versionLabel->setBounds(339, 23, 58, 24);
 
-    cachedImage_snake_gif_1 = juce::ImageCache::getFromMemory (snake_gif, snake_gifSize);
-    internalPath2.startNewSubPath (149.0f, 31.0f);
-    internalPath2.lineTo (149.0f, 39.0f);
-    internalPath2.lineTo (144.0f, 39.0f);
-    internalPath2.lineTo (144.0f, 33.0f);
-    internalPath2.lineTo (142.0f, 33.0f);
-    internalPath2.lineTo (142.0f, 39.0f);
-    internalPath2.lineTo (138.0f, 39.0f);
-    internalPath2.lineTo (138.0f, 33.0f);
-    internalPath2.lineTo (136.0f, 33.0f);
-    internalPath2.lineTo (136.0f, 39.0f);
-    internalPath2.lineTo (131.0f, 39.0f);
-    internalPath2.lineTo (131.0f, 31.0f);
+    cachedImage_snake_gif_1 = juce::ImageCache::getFromMemory(snake_gif, snake_gifSize);
+    internalPath2.startNewSubPath(149.0f, 31.0f);
+    internalPath2.lineTo(149.0f, 39.0f);
+    internalPath2.lineTo(144.0f, 39.0f);
+    internalPath2.lineTo(144.0f, 33.0f);
+    internalPath2.lineTo(142.0f, 33.0f);
+    internalPath2.lineTo(142.0f, 39.0f);
+    internalPath2.lineTo(138.0f, 39.0f);
+    internalPath2.lineTo(138.0f, 33.0f);
+    internalPath2.lineTo(136.0f, 33.0f);
+    internalPath2.lineTo(136.0f, 39.0f);
+    internalPath2.lineTo(131.0f, 39.0f);
+    internalPath2.lineTo(131.0f, 31.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (151.0f, 39.0f);
-    internalPath2.lineTo (151.0f, 33.0f);
-    internalPath2.lineTo (155.0f, 33.0f);
-    internalPath2.lineTo (155.0f, 39.0f);
+    internalPath2.startNewSubPath(151.0f, 39.0f);
+    internalPath2.lineTo(151.0f, 33.0f);
+    internalPath2.lineTo(155.0f, 33.0f);
+    internalPath2.lineTo(155.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (151.0f, 29.0f);
-    internalPath2.lineTo (155.0f, 29.0f);
-    internalPath2.lineTo (155.0f, 31.0f);
-    internalPath2.lineTo (151.0f, 31.0f);
+    internalPath2.startNewSubPath(151.0f, 29.0f);
+    internalPath2.lineTo(155.0f, 29.0f);
+    internalPath2.lineTo(155.0f, 31.0f);
+    internalPath2.lineTo(151.0f, 31.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (157.0f, 39.0f);
-    internalPath2.lineTo (157.0f, 31.0f);
-    internalPath2.lineTo (164.0f, 31.0f);
-    internalPath2.lineTo (164.0f, 29.0f);
-    internalPath2.lineTo (168.0f, 29.0f);
-    internalPath2.lineTo (168.0f, 39.0f);
+    internalPath2.startNewSubPath(157.0f, 39.0f);
+    internalPath2.lineTo(157.0f, 31.0f);
+    internalPath2.lineTo(164.0f, 31.0f);
+    internalPath2.lineTo(164.0f, 29.0f);
+    internalPath2.lineTo(168.0f, 29.0f);
+    internalPath2.lineTo(168.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (162.0f, 33.0f);
-    internalPath2.lineTo (162.0f, 37.0f);
-    internalPath2.lineTo (164.0f, 37.0f);
-    internalPath2.lineTo (164.0f, 33.0f);
+    internalPath2.startNewSubPath(162.0f, 33.0f);
+    internalPath2.lineTo(162.0f, 37.0f);
+    internalPath2.lineTo(164.0f, 37.0f);
+    internalPath2.lineTo(164.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (170.0f, 39.0f);
-    internalPath2.lineTo (170.0f, 33.0f);
-    internalPath2.lineTo (175.0f, 33.0f);
-    internalPath2.lineTo (175.0f, 39.0f);
+    internalPath2.startNewSubPath(170.0f, 39.0f);
+    internalPath2.lineTo(170.0f, 33.0f);
+    internalPath2.lineTo(175.0f, 33.0f);
+    internalPath2.lineTo(175.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (170.0f, 29.0f);
-    internalPath2.lineTo (175.0f, 29.0f);
-    internalPath2.lineTo (175.0f, 31.0f);
-    internalPath2.lineTo (170.0f, 31.0f);
+    internalPath2.startNewSubPath(170.0f, 29.0f);
+    internalPath2.lineTo(175.0f, 29.0f);
+    internalPath2.lineTo(175.0f, 31.0f);
+    internalPath2.lineTo(170.0f, 31.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (188.0f, 37.0f);
-    internalPath2.lineTo (188.0f, 39.0f);
-    internalPath2.lineTo (177.0f, 39.0f);
-    internalPath2.lineTo (177.0f, 29.0f);
-    internalPath2.lineTo (188.0f, 29.0f);
-    internalPath2.lineTo (188.0f, 31.0f);
-    internalPath2.lineTo (181.0f, 31.0f);
-    internalPath2.lineTo (181.0f, 37.0f);
+    internalPath2.startNewSubPath(188.0f, 37.0f);
+    internalPath2.lineTo(188.0f, 39.0f);
+    internalPath2.lineTo(177.0f, 39.0f);
+    internalPath2.lineTo(177.0f, 29.0f);
+    internalPath2.lineTo(188.0f, 29.0f);
+    internalPath2.lineTo(188.0f, 31.0f);
+    internalPath2.lineTo(181.0f, 31.0f);
+    internalPath2.lineTo(181.0f, 37.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (196.0f, 33.0f);
-    internalPath2.lineTo (194.0f, 33.0f);
-    internalPath2.lineTo (194.0f, 39.0f);
-    internalPath2.lineTo (190.0f, 39.0f);
-    internalPath2.lineTo (190.0f, 29.0f);
-    internalPath2.lineTo (194.0f, 29.0f);
-    internalPath2.lineTo (194.0f, 31.0f);
-    internalPath2.lineTo (201.0f, 31.0f);
-    internalPath2.lineTo (201.0f, 39.0f);
-    internalPath2.lineTo (196.0f, 39.0f);
+    internalPath2.startNewSubPath(196.0f, 33.0f);
+    internalPath2.lineTo(194.0f, 33.0f);
+    internalPath2.lineTo(194.0f, 39.0f);
+    internalPath2.lineTo(190.0f, 39.0f);
+    internalPath2.lineTo(190.0f, 29.0f);
+    internalPath2.lineTo(194.0f, 29.0f);
+    internalPath2.lineTo(194.0f, 31.0f);
+    internalPath2.lineTo(201.0f, 31.0f);
+    internalPath2.lineTo(201.0f, 39.0f);
+    internalPath2.lineTo(196.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (214.0f, 39.0f);
-    internalPath2.lineTo (203.0f, 39.0f);
-    internalPath2.lineTo (203.0f, 31.0f);
-    internalPath2.lineTo (214.0f, 31.0f);
+    internalPath2.startNewSubPath(214.0f, 39.0f);
+    internalPath2.lineTo(203.0f, 39.0f);
+    internalPath2.lineTo(203.0f, 31.0f);
+    internalPath2.lineTo(214.0f, 31.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (210.0f, 33.0f);
-    internalPath2.lineTo (207.0f, 33.0f);
-    internalPath2.lineTo (207.0f, 37.0f);
-    internalPath2.lineTo (210.0f, 37.0f);
+    internalPath2.startNewSubPath(210.0f, 33.0f);
+    internalPath2.lineTo(207.0f, 33.0f);
+    internalPath2.lineTo(207.0f, 37.0f);
+    internalPath2.lineTo(210.0f, 37.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (225.0f, 31.0f);
-    internalPath2.lineTo (225.0f, 33.0f);
-    internalPath2.lineTo (220.0f, 33.0f);
-    internalPath2.lineTo (220.0f, 39.0f);
-    internalPath2.lineTo (216.0f, 39.0f);
-    internalPath2.lineTo (216.0f, 31.0f);
+    internalPath2.startNewSubPath(225.0f, 31.0f);
+    internalPath2.lineTo(225.0f, 33.0f);
+    internalPath2.lineTo(220.0f, 33.0f);
+    internalPath2.lineTo(220.0f, 39.0f);
+    internalPath2.lineTo(216.0f, 39.0f);
+    internalPath2.lineTo(216.0f, 31.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (227.0f, 39.0f);
-    internalPath2.lineTo (227.0f, 31.0f);
-    internalPath2.lineTo (234.0f, 31.0f);
-    internalPath2.lineTo (234.0f, 29.0f);
-    internalPath2.lineTo (238.0f, 29.0f);
-    internalPath2.lineTo (238.0f, 39.0f);
+    internalPath2.startNewSubPath(227.0f, 39.0f);
+    internalPath2.lineTo(227.0f, 31.0f);
+    internalPath2.lineTo(234.0f, 31.0f);
+    internalPath2.lineTo(234.0f, 29.0f);
+    internalPath2.lineTo(238.0f, 29.0f);
+    internalPath2.lineTo(238.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (231.0f, 33.0f);
-    internalPath2.lineTo (231.0f, 37.0f);
-    internalPath2.lineTo (234.0f, 37.0f);
-    internalPath2.lineTo (234.0f, 33.0f);
+    internalPath2.startNewSubPath(231.0f, 33.0f);
+    internalPath2.lineTo(231.0f, 37.0f);
+    internalPath2.lineTo(234.0f, 37.0f);
+    internalPath2.lineTo(234.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (251.0f, 29.0f);
-    internalPath2.lineTo (251.0f, 39.0f);
-    internalPath2.lineTo (247.0f, 39.0f);
-    internalPath2.lineTo (247.0f, 35.0f);
-    internalPath2.lineTo (244.0f, 35.0f);
-    internalPath2.lineTo (244.0f, 39.0f);
-    internalPath2.lineTo (240.0f, 39.0f);
-    internalPath2.lineTo (240.0f, 29.0f);
+    internalPath2.startNewSubPath(251.0f, 29.0f);
+    internalPath2.lineTo(251.0f, 39.0f);
+    internalPath2.lineTo(247.0f, 39.0f);
+    internalPath2.lineTo(247.0f, 35.0f);
+    internalPath2.lineTo(244.0f, 35.0f);
+    internalPath2.lineTo(244.0f, 39.0f);
+    internalPath2.lineTo(240.0f, 39.0f);
+    internalPath2.lineTo(240.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (247.0f, 31.0f);
-    internalPath2.lineTo (244.0f, 31.0f);
-    internalPath2.lineTo (244.0f, 33.0f);
-    internalPath2.lineTo (247.0f, 33.0f);
+    internalPath2.startNewSubPath(247.0f, 31.0f);
+    internalPath2.lineTo(244.0f, 31.0f);
+    internalPath2.lineTo(244.0f, 33.0f);
+    internalPath2.lineTo(247.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (253.0f, 31.0f);
-    internalPath2.lineTo (264.0f, 31.0f);
-    internalPath2.lineTo (264.0f, 39.0f);
-    internalPath2.lineTo (260.0f, 39.0f);
-    internalPath2.lineTo (260.0f, 33.0f);
-    internalPath2.lineTo (257.0f, 33.0f);
-    internalPath2.lineTo (257.0f, 39.0f);
-    internalPath2.lineTo (253.0f, 39.0f);
+    internalPath2.startNewSubPath(253.0f, 31.0f);
+    internalPath2.lineTo(264.0f, 31.0f);
+    internalPath2.lineTo(264.0f, 39.0f);
+    internalPath2.lineTo(260.0f, 39.0f);
+    internalPath2.lineTo(260.0f, 33.0f);
+    internalPath2.lineTo(257.0f, 33.0f);
+    internalPath2.lineTo(257.0f, 39.0f);
+    internalPath2.lineTo(253.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (266.0f, 33.0f);
-    internalPath2.lineTo (268.0f, 33.0f);
-    internalPath2.lineTo (268.0f, 31.0f);
-    internalPath2.lineTo (277.0f, 31.0f);
-    internalPath2.lineTo (277.0f, 39.0f);
-    internalPath2.lineTo (266.0f, 39.0f);
+    internalPath2.startNewSubPath(266.0f, 33.0f);
+    internalPath2.lineTo(268.0f, 33.0f);
+    internalPath2.lineTo(268.0f, 31.0f);
+    internalPath2.lineTo(277.0f, 31.0f);
+    internalPath2.lineTo(277.0f, 39.0f);
+    internalPath2.lineTo(266.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (273.0f, 33.0f);
-    internalPath2.lineTo (271.0f, 33.0f);
-    internalPath2.lineTo (271.0f, 37.0f);
-    internalPath2.lineTo (273.0f, 37.0f);
+    internalPath2.startNewSubPath(273.0f, 33.0f);
+    internalPath2.lineTo(271.0f, 33.0f);
+    internalPath2.lineTo(271.0f, 37.0f);
+    internalPath2.lineTo(273.0f, 37.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (279.0f, 29.0f);
-    internalPath2.lineTo (284.0f, 29.0f);
-    internalPath2.lineTo (284.0f, 39.0f);
-    internalPath2.lineTo (279.0f, 39.0f);
+    internalPath2.startNewSubPath(279.0f, 29.0f);
+    internalPath2.lineTo(284.0f, 29.0f);
+    internalPath2.lineTo(284.0f, 39.0f);
+    internalPath2.lineTo(279.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (286.0f, 44.0f);
-    internalPath2.lineTo (286.0f, 42.0f);
-    internalPath2.lineTo (292.0f, 42.0f);
-    internalPath2.lineTo (292.0f, 39.0f);
-    internalPath2.lineTo (286.0f, 39.0f);
-    internalPath2.lineTo (286.0f, 31.0f);
-    internalPath2.lineTo (290.0f, 31.0f);
-    internalPath2.lineTo (290.0f, 37.0f);
-    internalPath2.lineTo (292.0f, 37.0f);
-    internalPath2.lineTo (292.0f, 31.0f);
-    internalPath2.lineTo (297.0f, 31.0f);
-    internalPath2.lineTo (297.0f, 44.0f);
+    internalPath2.startNewSubPath(286.0f, 44.0f);
+    internalPath2.lineTo(286.0f, 42.0f);
+    internalPath2.lineTo(292.0f, 42.0f);
+    internalPath2.lineTo(292.0f, 39.0f);
+    internalPath2.lineTo(286.0f, 39.0f);
+    internalPath2.lineTo(286.0f, 31.0f);
+    internalPath2.lineTo(290.0f, 31.0f);
+    internalPath2.lineTo(290.0f, 37.0f);
+    internalPath2.lineTo(292.0f, 37.0f);
+    internalPath2.lineTo(292.0f, 31.0f);
+    internalPath2.lineTo(297.0f, 31.0f);
+    internalPath2.lineTo(297.0f, 44.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (303.0f, 35.0f);
-    internalPath2.lineTo (303.0f, 33.0f);
-    internalPath2.lineTo (299.0f, 33.0f);
-    internalPath2.lineTo (299.0f, 31.0f);
-    internalPath2.lineTo (310.0f, 31.0f);
-    internalPath2.lineTo (310.0f, 33.0f);
-    internalPath2.lineTo (308.0f, 33.0f);
-    internalPath2.lineTo (308.0f, 35.0f);
-    internalPath2.lineTo (305.0f, 35.0f);
-    internalPath2.lineTo (305.0f, 37.0f);
-    internalPath2.lineTo (310.0f, 37.0f);
-    internalPath2.lineTo (310.0f, 39.0f);
-    internalPath2.lineTo (299.0f, 39.0f);
-    internalPath2.lineTo (299.0f, 37.0f);
-    internalPath2.lineTo (301.0f, 37.0f);
-    internalPath2.lineTo (301.0f, 35.0f);
+    internalPath2.startNewSubPath(303.0f, 35.0f);
+    internalPath2.lineTo(303.0f, 33.0f);
+    internalPath2.lineTo(299.0f, 33.0f);
+    internalPath2.lineTo(299.0f, 31.0f);
+    internalPath2.lineTo(310.0f, 31.0f);
+    internalPath2.lineTo(310.0f, 33.0f);
+    internalPath2.lineTo(308.0f, 33.0f);
+    internalPath2.lineTo(308.0f, 35.0f);
+    internalPath2.lineTo(305.0f, 35.0f);
+    internalPath2.lineTo(305.0f, 37.0f);
+    internalPath2.lineTo(310.0f, 37.0f);
+    internalPath2.lineTo(310.0f, 39.0f);
+    internalPath2.lineTo(299.0f, 39.0f);
+    internalPath2.lineTo(299.0f, 37.0f);
+    internalPath2.lineTo(301.0f, 37.0f);
+    internalPath2.lineTo(301.0f, 35.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (312.0f, 39.0f);
-    internalPath2.lineTo (312.0f, 31.0f);
-    internalPath2.lineTo (323.0f, 31.0f);
-    internalPath2.lineTo (323.0f, 35.0f);
-    internalPath2.lineTo (321.0f, 35.0f);
-    internalPath2.lineTo (321.0f, 37.0f);
-    internalPath2.lineTo (323.0f, 37.0f);
-    internalPath2.lineTo (323.0f, 39.0f);
+    internalPath2.startNewSubPath(312.0f, 39.0f);
+    internalPath2.lineTo(312.0f, 31.0f);
+    internalPath2.lineTo(323.0f, 31.0f);
+    internalPath2.lineTo(323.0f, 35.0f);
+    internalPath2.lineTo(321.0f, 35.0f);
+    internalPath2.lineTo(321.0f, 37.0f);
+    internalPath2.lineTo(323.0f, 37.0f);
+    internalPath2.lineTo(323.0f, 39.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (316.0f, 35.0f);
-    internalPath2.lineTo (318.0f, 35.0f);
-    internalPath2.lineTo (318.0f, 33.0f);
-    internalPath2.lineTo (316.0f, 33.0f);
+    internalPath2.startNewSubPath(316.0f, 35.0f);
+    internalPath2.lineTo(318.0f, 35.0f);
+    internalPath2.lineTo(318.0f, 33.0f);
+    internalPath2.lineTo(316.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (334.0f, 31.0f);
-    internalPath2.lineTo (334.0f, 33.0f);
-    internalPath2.lineTo (329.0f, 33.0f);
-    internalPath2.lineTo (329.0f, 39.0f);
-    internalPath2.lineTo (325.0f, 39.0f);
-    internalPath2.lineTo (325.0f, 31.0f);
+    internalPath2.startNewSubPath(334.0f, 31.0f);
+    internalPath2.lineTo(334.0f, 33.0f);
+    internalPath2.lineTo(329.0f, 33.0f);
+    internalPath2.lineTo(329.0f, 39.0f);
+    internalPath2.lineTo(325.0f, 39.0f);
+    internalPath2.lineTo(325.0f, 31.0f);
     internalPath2.closeSubPath();
 
-    internalPath3.startNewSubPath (162.0f, 17.0f);
-    internalPath3.lineTo (165.0f, 17.0f);
-    internalPath3.lineTo (165.0f, 25.0f);
-    internalPath3.lineTo (162.0f, 25.0f);
+    internalPath3.startNewSubPath(162.0f, 17.0f);
+    internalPath3.lineTo(165.0f, 17.0f);
+    internalPath3.lineTo(165.0f, 25.0f);
+    internalPath3.lineTo(162.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (167.0f, 18.0f);
-    internalPath3.lineTo (175.0f, 18.0f);
-    internalPath3.lineTo (175.0f, 25.0f);
-    internalPath3.lineTo (172.0f, 25.0f);
-    internalPath3.lineTo (172.0f, 20.0f);
-    internalPath3.lineTo (170.0f, 20.0f);
-    internalPath3.lineTo (170.0f, 25.0f);
-    internalPath3.lineTo (167.0f, 25.0f);
+    internalPath3.startNewSubPath(167.0f, 18.0f);
+    internalPath3.lineTo(175.0f, 18.0f);
+    internalPath3.lineTo(175.0f, 25.0f);
+    internalPath3.lineTo(172.0f, 25.0f);
+    internalPath3.lineTo(172.0f, 20.0f);
+    internalPath3.lineTo(170.0f, 20.0f);
+    internalPath3.lineTo(170.0f, 25.0f);
+    internalPath3.lineTo(167.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (185.0f, 20.0f);
-    internalPath3.lineTo (182.0f, 20.0f);
-    internalPath3.lineTo (182.0f, 22.0f);
-    internalPath3.lineTo (185.0f, 22.0f);
-    internalPath3.lineTo (185.0f, 24.0f);
-    internalPath3.lineTo (183.0f, 24.0f);
-    internalPath3.lineTo (183.0f, 25.0f);
-    internalPath3.lineTo (177.0f, 25.0f);
-    internalPath3.lineTo (177.0f, 24.0f);
-    internalPath3.lineTo (180.0f, 24.0f);
-    internalPath3.lineTo (180.0f, 22.0f);
-    internalPath3.lineTo (177.0f, 22.0f);
-    internalPath3.lineTo (177.0f, 20.0f);
-    internalPath3.lineTo (178.0f, 20.0f);
-    internalPath3.lineTo (178.0f, 18.0f);
-    internalPath3.lineTo (185.0f, 18.0f);
+    internalPath3.startNewSubPath(185.0f, 20.0f);
+    internalPath3.lineTo(182.0f, 20.0f);
+    internalPath3.lineTo(182.0f, 22.0f);
+    internalPath3.lineTo(185.0f, 22.0f);
+    internalPath3.lineTo(185.0f, 24.0f);
+    internalPath3.lineTo(183.0f, 24.0f);
+    internalPath3.lineTo(183.0f, 25.0f);
+    internalPath3.lineTo(177.0f, 25.0f);
+    internalPath3.lineTo(177.0f, 24.0f);
+    internalPath3.lineTo(180.0f, 24.0f);
+    internalPath3.lineTo(180.0f, 22.0f);
+    internalPath3.lineTo(177.0f, 22.0f);
+    internalPath3.lineTo(177.0f, 20.0f);
+    internalPath3.lineTo(178.0f, 20.0f);
+    internalPath3.lineTo(178.0f, 18.0f);
+    internalPath3.lineTo(185.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (187.0f, 25.0f);
-    internalPath3.lineTo (187.0f, 18.0f);
-    internalPath3.lineTo (195.0f, 18.0f);
-    internalPath3.lineTo (195.0f, 22.0f);
-    internalPath3.lineTo (193.0f, 22.0f);
-    internalPath3.lineTo (193.0f, 24.0f);
-    internalPath3.lineTo (195.0f, 24.0f);
-    internalPath3.lineTo (195.0f, 25.0f);
+    internalPath3.startNewSubPath(187.0f, 25.0f);
+    internalPath3.lineTo(187.0f, 18.0f);
+    internalPath3.lineTo(195.0f, 18.0f);
+    internalPath3.lineTo(195.0f, 22.0f);
+    internalPath3.lineTo(193.0f, 22.0f);
+    internalPath3.lineTo(193.0f, 24.0f);
+    internalPath3.lineTo(195.0f, 24.0f);
+    internalPath3.lineTo(195.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (190.0f, 22.0f);
-    internalPath3.lineTo (192.0f, 22.0f);
-    internalPath3.lineTo (192.0f, 20.0f);
-    internalPath3.lineTo (190.0f, 20.0f);
+    internalPath3.startNewSubPath(190.0f, 22.0f);
+    internalPath3.lineTo(192.0f, 22.0f);
+    internalPath3.lineTo(192.0f, 20.0f);
+    internalPath3.lineTo(190.0f, 20.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (203.0f, 18.0f);
-    internalPath3.lineTo (203.0f, 20.0f);
-    internalPath3.lineTo (200.0f, 20.0f);
-    internalPath3.lineTo (200.0f, 25.0f);
-    internalPath3.lineTo (197.0f, 25.0f);
-    internalPath3.lineTo (197.0f, 18.0f);
+    internalPath3.startNewSubPath(203.0f, 18.0f);
+    internalPath3.lineTo(203.0f, 20.0f);
+    internalPath3.lineTo(200.0f, 20.0f);
+    internalPath3.lineTo(200.0f, 25.0f);
+    internalPath3.lineTo(197.0f, 25.0f);
+    internalPath3.lineTo(197.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (212.0f, 18.0f);
-    internalPath3.lineTo (212.0f, 20.0f);
-    internalPath3.lineTo (210.0f, 20.0f);
-    internalPath3.lineTo (210.0f, 25.0f);
-    internalPath3.lineTo (207.0f, 25.0f);
-    internalPath3.lineTo (207.0f, 20.0f);
-    internalPath3.lineTo (205.0f, 20.0f);
-    internalPath3.lineTo (205.0f, 18.0f);
-    internalPath3.lineTo (207.0f, 18.0f);
-    internalPath3.lineTo (207.0f, 17.0f);
-    internalPath3.lineTo (210.0f, 17.0f);
-    internalPath3.lineTo (210.0f, 18.0f);
+    internalPath3.startNewSubPath(212.0f, 18.0f);
+    internalPath3.lineTo(212.0f, 20.0f);
+    internalPath3.lineTo(210.0f, 20.0f);
+    internalPath3.lineTo(210.0f, 25.0f);
+    internalPath3.lineTo(207.0f, 25.0f);
+    internalPath3.lineTo(207.0f, 20.0f);
+    internalPath3.lineTo(205.0f, 20.0f);
+    internalPath3.lineTo(205.0f, 18.0f);
+    internalPath3.lineTo(207.0f, 18.0f);
+    internalPath3.lineTo(207.0f, 17.0f);
+    internalPath3.lineTo(210.0f, 17.0f);
+    internalPath3.lineTo(210.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (228.0f, 17.0f);
-    internalPath3.lineTo (228.0f, 22.0f);
-    internalPath3.lineTo (222.0f, 22.0f);
-    internalPath3.lineTo (222.0f, 25.0f);
-    internalPath3.lineTo (218.0f, 25.0f);
-    internalPath3.lineTo (218.0f, 17.0f);
+    internalPath3.startNewSubPath(228.0f, 17.0f);
+    internalPath3.lineTo(228.0f, 22.0f);
+    internalPath3.lineTo(222.0f, 22.0f);
+    internalPath3.lineTo(222.0f, 25.0f);
+    internalPath3.lineTo(218.0f, 25.0f);
+    internalPath3.lineTo(218.0f, 17.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (222.0f, 20.0f);
-    internalPath3.lineTo (225.0f, 20.0f);
-    internalPath3.lineTo (225.0f, 18.0f);
-    internalPath3.lineTo (222.0f, 18.0f);
+    internalPath3.startNewSubPath(222.0f, 20.0f);
+    internalPath3.lineTo(225.0f, 20.0f);
+    internalPath3.lineTo(225.0f, 18.0f);
+    internalPath3.lineTo(222.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (230.0f, 25.0f);
-    internalPath3.lineTo (230.0f, 20.0f);
-    internalPath3.lineTo (233.0f, 20.0f);
-    internalPath3.lineTo (233.0f, 25.0f);
+    internalPath3.startNewSubPath(230.0f, 25.0f);
+    internalPath3.lineTo(230.0f, 20.0f);
+    internalPath3.lineTo(233.0f, 20.0f);
+    internalPath3.lineTo(233.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (230.0f, 17.0f);
-    internalPath3.lineTo (233.0f, 17.0f);
-    internalPath3.lineTo (233.0f, 18.0f);
-    internalPath3.lineTo (230.0f, 18.0f);
+    internalPath3.startNewSubPath(230.0f, 17.0f);
+    internalPath3.lineTo(233.0f, 17.0f);
+    internalPath3.lineTo(233.0f, 18.0f);
+    internalPath3.lineTo(230.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (238.0f, 22.0f);
-    internalPath3.lineTo (238.0f, 20.0f);
-    internalPath3.lineTo (235.0f, 20.0f);
-    internalPath3.lineTo (235.0f, 18.0f);
-    internalPath3.lineTo (243.0f, 18.0f);
-    internalPath3.lineTo (243.0f, 20.0f);
-    internalPath3.lineTo (242.0f, 20.0f);
-    internalPath3.lineTo (242.0f, 22.0f);
-    internalPath3.lineTo (240.0f, 22.0f);
-    internalPath3.lineTo (240.0f, 24.0f);
-    internalPath3.lineTo (243.0f, 24.0f);
-    internalPath3.lineTo (243.0f, 25.0f);
-    internalPath3.lineTo (235.0f, 25.0f);
-    internalPath3.lineTo (235.0f, 24.0f);
-    internalPath3.lineTo (237.0f, 24.0f);
-    internalPath3.lineTo (237.0f, 22.0f);
+    internalPath3.startNewSubPath(238.0f, 22.0f);
+    internalPath3.lineTo(238.0f, 20.0f);
+    internalPath3.lineTo(235.0f, 20.0f);
+    internalPath3.lineTo(235.0f, 18.0f);
+    internalPath3.lineTo(243.0f, 18.0f);
+    internalPath3.lineTo(243.0f, 20.0f);
+    internalPath3.lineTo(242.0f, 20.0f);
+    internalPath3.lineTo(242.0f, 22.0f);
+    internalPath3.lineTo(240.0f, 22.0f);
+    internalPath3.lineTo(240.0f, 24.0f);
+    internalPath3.lineTo(243.0f, 24.0f);
+    internalPath3.lineTo(243.0f, 25.0f);
+    internalPath3.lineTo(235.0f, 25.0f);
+    internalPath3.lineTo(235.0f, 24.0f);
+    internalPath3.lineTo(237.0f, 24.0f);
+    internalPath3.lineTo(237.0f, 22.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (257.0f, 17.0f);
-    internalPath3.lineTo (260.0f, 17.0f);
-    internalPath3.lineTo (260.0f, 25.0f);
-    internalPath3.lineTo (257.0f, 25.0f);
-    internalPath3.lineTo (257.0f, 22.0f);
-    internalPath3.lineTo (253.0f, 22.0f);
-    internalPath3.lineTo (253.0f, 25.0f);
-    internalPath3.lineTo (250.0f, 25.0f);
-    internalPath3.lineTo (250.0f, 17.0f);
-    internalPath3.lineTo (253.0f, 17.0f);
-    internalPath3.lineTo (253.0f, 20.0f);
-    internalPath3.lineTo (257.0f, 20.0f);
+    internalPath3.startNewSubPath(257.0f, 17.0f);
+    internalPath3.lineTo(260.0f, 17.0f);
+    internalPath3.lineTo(260.0f, 25.0f);
+    internalPath3.lineTo(257.0f, 25.0f);
+    internalPath3.lineTo(257.0f, 22.0f);
+    internalPath3.lineTo(253.0f, 22.0f);
+    internalPath3.lineTo(253.0f, 25.0f);
+    internalPath3.lineTo(250.0f, 25.0f);
+    internalPath3.lineTo(250.0f, 17.0f);
+    internalPath3.lineTo(253.0f, 17.0f);
+    internalPath3.lineTo(253.0f, 20.0f);
+    internalPath3.lineTo(257.0f, 20.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (262.0f, 25.0f);
-    internalPath3.lineTo (262.0f, 18.0f);
-    internalPath3.lineTo (270.0f, 18.0f);
-    internalPath3.lineTo (270.0f, 22.0f);
-    internalPath3.lineTo (268.0f, 22.0f);
-    internalPath3.lineTo (268.0f, 24.0f);
-    internalPath3.lineTo (270.0f, 24.0f);
-    internalPath3.lineTo (270.0f, 25.0f);
+    internalPath3.startNewSubPath(262.0f, 25.0f);
+    internalPath3.lineTo(262.0f, 18.0f);
+    internalPath3.lineTo(270.0f, 18.0f);
+    internalPath3.lineTo(270.0f, 22.0f);
+    internalPath3.lineTo(268.0f, 22.0f);
+    internalPath3.lineTo(268.0f, 24.0f);
+    internalPath3.lineTo(270.0f, 24.0f);
+    internalPath3.lineTo(270.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (265.0f, 22.0f);
-    internalPath3.lineTo (267.0f, 22.0f);
-    internalPath3.lineTo (267.0f, 20.0f);
-    internalPath3.lineTo (265.0f, 20.0f);
+    internalPath3.startNewSubPath(265.0f, 22.0f);
+    internalPath3.lineTo(267.0f, 22.0f);
+    internalPath3.lineTo(267.0f, 20.0f);
+    internalPath3.lineTo(265.0f, 20.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (278.0f, 18.0f);
-    internalPath3.lineTo (278.0f, 20.0f);
-    internalPath3.lineTo (275.0f, 20.0f);
-    internalPath3.lineTo (275.0f, 25.0f);
-    internalPath3.lineTo (272.0f, 25.0f);
-    internalPath3.lineTo (272.0f, 18.0f);
+    internalPath3.startNewSubPath(278.0f, 18.0f);
+    internalPath3.lineTo(278.0f, 20.0f);
+    internalPath3.lineTo(275.0f, 20.0f);
+    internalPath3.lineTo(275.0f, 25.0f);
+    internalPath3.lineTo(272.0f, 25.0f);
+    internalPath3.lineTo(272.0f, 18.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (280.0f, 25.0f);
-    internalPath3.lineTo (280.0f, 18.0f);
-    internalPath3.lineTo (288.0f, 18.0f);
-    internalPath3.lineTo (288.0f, 22.0f);
-    internalPath3.lineTo (287.0f, 22.0f);
-    internalPath3.lineTo (287.0f, 24.0f);
-    internalPath3.lineTo (288.0f, 24.0f);
-    internalPath3.lineTo (288.0f, 25.0f);
+    internalPath3.startNewSubPath(280.0f, 25.0f);
+    internalPath3.lineTo(280.0f, 18.0f);
+    internalPath3.lineTo(288.0f, 18.0f);
+    internalPath3.lineTo(288.0f, 22.0f);
+    internalPath3.lineTo(287.0f, 22.0f);
+    internalPath3.lineTo(287.0f, 24.0f);
+    internalPath3.lineTo(288.0f, 24.0f);
+    internalPath3.lineTo(288.0f, 25.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (283.0f, 22.0f);
-    internalPath3.lineTo (285.0f, 22.0f);
-    internalPath3.lineTo (285.0f, 20.0f);
-    internalPath3.lineTo (283.0f, 20.0f);
+    internalPath3.startNewSubPath(283.0f, 22.0f);
+    internalPath3.lineTo(285.0f, 22.0f);
+    internalPath3.lineTo(285.0f, 20.0f);
+    internalPath3.lineTo(283.0f, 20.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (290.0f, 22.0f);
-    internalPath3.lineTo (290.0f, 20.0f);
-    internalPath3.lineTo (298.0f, 20.0f);
-    internalPath3.lineTo (298.0f, 22.0f);
+    internalPath3.startNewSubPath(290.0f, 22.0f);
+    internalPath3.lineTo(290.0f, 20.0f);
+    internalPath3.lineTo(298.0f, 20.0f);
+    internalPath3.lineTo(298.0f, 22.0f);
     internalPath3.closeSubPath();
-    internalPath3.startNewSubPath (300.0f, 17.0f);
-    internalPath3.lineTo (303.0f, 17.0f);
-    internalPath3.lineTo (303.0f, 18.0f);
-    internalPath3.lineTo (305.0f, 18.0f);
-    internalPath3.lineTo (305.0f, 20.0f);
-    internalPath3.lineTo (307.0f, 20.0f);
-    internalPath3.lineTo (307.0f, 22.0f);
-    internalPath3.lineTo (305.0f, 22.0f);
-    internalPath3.lineTo (305.0f, 24.0f);
-    internalPath3.lineTo (303.0f, 24.0f);
-    internalPath3.lineTo (303.0f, 25.0f);
-    internalPath3.lineTo (300.0f, 25.0f);
-    internalPath3.lineTo (300.0f, 24.0f);
-    internalPath3.lineTo (302.0f, 24.0f);
-    internalPath3.lineTo (302.0f, 22.0f);
-    internalPath3.lineTo (303.0f, 22.0f);
-    internalPath3.lineTo (303.0f, 20.0f);
-    internalPath3.lineTo (302.0f, 20.0f);
-    internalPath3.lineTo (302.0f, 18.0f);
-    internalPath3.lineTo (300.0f, 18.0f);
+    internalPath3.startNewSubPath(300.0f, 17.0f);
+    internalPath3.lineTo(303.0f, 17.0f);
+    internalPath3.lineTo(303.0f, 18.0f);
+    internalPath3.lineTo(305.0f, 18.0f);
+    internalPath3.lineTo(305.0f, 20.0f);
+    internalPath3.lineTo(307.0f, 20.0f);
+    internalPath3.lineTo(307.0f, 22.0f);
+    internalPath3.lineTo(305.0f, 22.0f);
+    internalPath3.lineTo(305.0f, 24.0f);
+    internalPath3.lineTo(303.0f, 24.0f);
+    internalPath3.lineTo(303.0f, 25.0f);
+    internalPath3.lineTo(300.0f, 25.0f);
+    internalPath3.lineTo(300.0f, 24.0f);
+    internalPath3.lineTo(302.0f, 24.0f);
+    internalPath3.lineTo(302.0f, 22.0f);
+    internalPath3.lineTo(303.0f, 22.0f);
+    internalPath3.lineTo(303.0f, 20.0f);
+    internalPath3.lineTo(302.0f, 20.0f);
+    internalPath3.lineTo(302.0f, 18.0f);
+    internalPath3.lineTo(300.0f, 18.0f);
     internalPath3.closeSubPath();
 
     //[UserPreSize]
 
-    this->setMouseClickGrabsKeyboardFocus (false);
-    chordKeyboard->setMouseClickGrabsKeyboardFocus (false);
-    learnChanSlider->setMouseClickGrabsKeyboardFocus (false);
-    pizButton->setMouseClickGrabsKeyboardFocus (false);
-    chordNameLabel->setMouseClickGrabsKeyboardFocus (false);
-    chordNameLabel->setText (" ", juce::dontSendNotification);
-    flatsButton->setMouseClickGrabsKeyboardFocus (false);
-    chordKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    this->setMouseClickGrabsKeyboardFocus(false);
+    chordKeyboard->setMouseClickGrabsKeyboardFocus(false);
+    learnChanSlider->setMouseClickGrabsKeyboardFocus(false);
+    pizButton->setMouseClickGrabsKeyboardFocus(false);
+    chordNameLabel->setMouseClickGrabsKeyboardFocus(false);
+    chordNameLabel->setText(" ", juce::dontSendNotification);
+    flatsButton->setMouseClickGrabsKeyboardFocus(false);
+    chordKeyboard->setMouseCursor(juce::MouseCursor::PointingHandCursor);
     numHeldNotes = 0;
 
-    learnChanSlider->setAllText ("All");
-    pizButton->addListener (this);
-    pizButton->setTooltip ("http://thepiz.org/plugins");
+    learnChanSlider->setAllText("All");
+    pizButton->addListener(this);
+    pizButton->setTooltip("http://thepiz.org/plugins");
 
     const int middleC = getFilter()->getBottomOctave() + 5;
-    chordKeyboard->setOctaveForMiddleC (middleC);
-    chordKeyboard->setScrollButtonsVisible (false);
+    chordKeyboard->setOctaveForMiddleC(middleC);
+    chordKeyboard->setScrollButtonsVisible(false);
 
     //[/UserPreSize]
 
-    setSize (600, 180);
+    setSize(600, 180);
 
     //[Constructor] You can add your own custom stuff here..
-    versionLabel->setText (JucePlugin_VersionString, juce::dontSendNotification);
-    ownerFilter->addChangeListener (this);
+    versionLabel->setText(JucePlugin_VersionString, juce::dontSendNotification);
+    ownerFilter->addChangeListener(this);
     updateParametersFromFilter();
     //[/Constructor]
 }
@@ -488,7 +488,7 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
 MidiChordAnalyzerEditor::~MidiChordAnalyzerEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
     //[/Destructor_pre]
 
     chordNameLabel  = nullptr;
@@ -504,53 +504,53 @@ MidiChordAnalyzerEditor::~MidiChordAnalyzerEditor()
 }
 
 //==============================================================================
-void MidiChordAnalyzerEditor::paint (juce::Graphics& g)
+void MidiChordAnalyzerEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colour (0xffd8d8d8));
+    g.fillAll(juce::Colour(0xffd8d8d8));
 
     {
-        int x = 0, y = 0, width = proportionOfWidth (1.0000f), height = 100;
-        juce::Colour fillColour1 = juce::Colours::white, fillColour2 = juce::Colour (0x00e7e7e7);
+        int x = 0, y = 0, width = proportionOfWidth(1.0000f), height = 100;
+        juce::Colour fillColour1 = juce::Colours::white, fillColour2 = juce::Colour(0x00e7e7e7);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 61.0f - 0.0f + x,
-                                                 static_cast<float> (-15) - 0.0f + y,
-                                                 fillColour2,
-                                                 61.0f - 0.0f + x,
-                                                 23.0f - 0.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               61.0f - 0.0f + x,
+                                               static_cast<float>(-15) - 0.0f + y,
+                                               fillColour2,
+                                               61.0f - 0.0f + x,
+                                               23.0f - 0.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
     }
 
     {
         int x = 479, y = 9, width = 111, height = 61;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (juce::Colours::black);
-        g.drawImage (cachedImage_snake_gif_1,
-                     x,
-                     y,
-                     width,
-                     height,
-                     0,
-                     0,
-                     cachedImage_snake_gif_1.getWidth(),
-                     cachedImage_snake_gif_1.getHeight());
+        g.setColour(juce::Colours::black);
+        g.drawImage(cachedImage_snake_gif_1,
+                    x,
+                    y,
+                    width,
+                    height,
+                    0,
+                    0,
+                    cachedImage_snake_gif_1.getWidth(),
+                    cachedImage_snake_gif_1.getHeight());
     }
 
     {
         int x = 477, y = 73, width = 38, height = 8;
-        juce::String text (TRANS ("Channel"));
+        juce::String text(TRANS("Channel"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (10.70f, juce::Font::plain).withTypefaceStyle ("Regular"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(10.70f, juce::Font::plain).withTypefaceStyle("Regular"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
@@ -558,8 +558,8 @@ void MidiChordAnalyzerEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillPath (internalPath2, juce::AffineTransform::translation (x, y));
+        g.setColour(fillColour);
+        g.fillPath(internalPath2, juce::AffineTransform::translation(x, y));
     }
 
     {
@@ -567,41 +567,41 @@ void MidiChordAnalyzerEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillPath (internalPath3, juce::AffineTransform::translation (x, y));
+        g.setColour(fillColour);
+        g.fillPath(internalPath3, juce::AffineTransform::translation(x, y));
     }
 
     {
         int x = 8, y = 57, width = 460, height = 59;
-        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour (0x279a3c3c);
-        juce::Colour strokeColour = juce::Colour (0xb3000000);
+        juce::Colour fillColour1 = juce::Colours::black, fillColour2 = juce::Colour(0x279a3c3c);
+        juce::Colour strokeColour = juce::Colour(0xb3000000);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 100.0f - 8.0f + x,
-                                                 16.0f - 57.0f + y,
-                                                 fillColour2,
-                                                 100.0f - 8.0f + x,
-                                                 63.0f - 57.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
-        g.setColour (strokeColour);
-        g.drawRect (x, y, width, height, 1);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               100.0f - 8.0f + x,
+                                               16.0f - 57.0f + y,
+                                               fillColour2,
+                                               100.0f - 8.0f + x,
+                                               63.0f - 57.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
+        g.setColour(strokeColour);
+        g.drawRect(x, y, width, height, 1);
     }
 
     {
-        int x = 0, y = 149, width = proportionOfWidth (1.0000f), height = 33;
-        juce::Colour fillColour1 = juce::Colour (0x00000000), fillColour2 = juce::Colours::black;
+        int x = 0, y = 149, width = proportionOfWidth(1.0000f), height = 33;
+        juce::Colour fillColour1 = juce::Colour(0x00000000), fillColour2 = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 69.0f - 0.0f + x,
-                                                 168.0f - 149.0f + y,
-                                                 fillColour2,
-                                                 69.0f - 0.0f + x,
-                                                 294.0f - 149.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               69.0f - 0.0f + x,
+                                               168.0f - 149.0f + y,
+                                               fillColour2,
+                                               69.0f - 0.0f + x,
+                                               294.0f - 149.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -613,13 +613,13 @@ void MidiChordAnalyzerEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    chordKeyboard->setBounds (8, 124, getWidth() - 16, 47);
+    chordKeyboard->setBounds(8, 124, getWidth() - 16, 47);
     //[UserResized] Add your own custom resize handling here..
-    chordKeyboard->setKeyWidth ((float) chordKeyboard->getWidth() / 75.2f);
+    chordKeyboard->setKeyWidth((float) chordKeyboard->getWidth() / 75.2f);
     //[/UserResized]
 }
 
-void MidiChordAnalyzerEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void MidiChordAnalyzerEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -627,37 +627,37 @@ void MidiChordAnalyzerEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == flatsButton.get())
     {
         //[UserButtonCode_flatsButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kFlats, flatsButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kFlats, flatsButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_flatsButton]
     }
     else if (buttonThatWasClicked == copyButton.get())
     {
         //[UserButtonCode_copyButton] -- add your button handler code here..
-        const int channel = roundToInt (getFilter()->getParameter (kChannel) * 16.f);
+        const int channel = roundToInt(getFilter()->getParameter(kChannel) * 16.f);
         juce::String chordString;
         for (int n = 0; n < 128; n++)
         {
             for (int c = 1; c <= 16; c++)
             {
-                if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn (c, n))
+                if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn(c, n))
                 {
-                    chordString += getNoteName (n, getFilter()->bottomOctave) + "." + juce::String (c) + " ";
+                    chordString += getNoteName(n, getFilter()->bottomOctave) + "." + juce::String(c) + " ";
                 }
             }
         }
-        juce::SystemClipboard::copyTextToClipboard (chordString);
+        juce::SystemClipboard::copyTextToClipboard(chordString);
         //[/UserButtonCode_copyButton]
     }
 
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        juce::URL ("http://thepiz.org/plugins/?p=midiChordAnalyzer").launchInDefaultBrowser();
+        juce::URL("http://thepiz.org/plugins/?p=midiChordAnalyzer").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
 
-void MidiChordAnalyzerEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void MidiChordAnalyzerEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
@@ -665,7 +665,7 @@ void MidiChordAnalyzerEditor::sliderValueChanged (juce::Slider* sliderThatWasMov
     if (sliderThatWasMoved == learnChanSlider.get())
     {
         //[UserSliderCode_learnChanSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kChannel, (float) learnChanSlider->getValue() / 16.f);
+        getFilter()->setParameterNotifyingHost(kChannel, (float) learnChanSlider->getValue() / 16.f);
         //[/UserSliderCode_learnChanSlider]
     }
 
@@ -675,19 +675,19 @@ void MidiChordAnalyzerEditor::sliderValueChanged (juce::Slider* sliderThatWasMov
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
-void MidiChordAnalyzerEditor::mouseDown (const juce::MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseDown(const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::mouseDoubleClick (const juce::MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseDoubleClick(const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::mouseUp (const juce::MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseUp(const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void MidiChordAnalyzerEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -696,57 +696,57 @@ void MidiChordAnalyzerEditor::changeListenerCallback (juce::ChangeBroadcaster* s
 void MidiChordAnalyzerEditor::updateParametersFromFilter()
 {
     MidiChordAnalyzer* const filter = getFilter();
-    const bool flats                = filter->getParameter (kFlats) > 0;
-    const int chordChan             = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const bool flats                = filter->getParameter(kFlats) > 0;
+    const int chordChan             = roundToInt(filter->getParameter(kChannel) * 16.f);
 
-    learnChanSlider->setValue (chordChan, juce::dontSendNotification);
-    flatsButton->setToggleState (flats, juce::dontSendNotification);
+    learnChanSlider->setValue(chordChan, juce::dontSendNotification);
+    flatsButton->setToggleState(flats, juce::dontSendNotification);
     if (chordChan == 0)
-        chordKeyboard->setMidiChannelsToDisplay (0xffff);
+        chordKeyboard->setMidiChannelsToDisplay(0xffff);
     else
-        chordKeyboard->setMidiChannelsToDisplay (1 << (chordChan - 1));
+        chordKeyboard->setMidiChannelsToDisplay(1 << (chordChan - 1));
 
-    if (numHeldNotes < chordKeyboard->getNumHeldNotes (chordChan))
+    if (numHeldNotes < chordKeyboard->getNumHeldNotes(chordChan))
     {
-        chordNameLabel->setText (getCurrentChordName (chordChan), juce::dontSendNotification);
-        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
+        chordNameLabel->setText(getCurrentChordName(chordChan), juce::dontSendNotification);
+        juce::Desktop::getInstance().getAnimator().animateComponent(chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
     }
-    else if (getCurrentChordName (chordChan) == " ")
+    else if (getCurrentChordName(chordChan) == " ")
     {
-        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
+        juce::Desktop::getInstance().getAnimator().animateComponent(chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
     }
     else
-        startTimer (100);
-    numHeldNotes = chordKeyboard->getNumHeldNotes (chordChan);
+        startTimer(100);
+    numHeldNotes = chordKeyboard->getNumHeldNotes(chordChan);
 }
 
 void MidiChordAnalyzerEditor::timerCallback()
 {
-    const int chordChan = roundToInt (getFilter()->getParameter (kChannel) * 16.f);
-    if (getCurrentChordName (chordChan) == " ")
+    const int chordChan = roundToInt(getFilter()->getParameter(kChannel) * 16.f);
+    if (getCurrentChordName(chordChan) == " ")
     {
-        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
+        juce::Desktop::getInstance().getAnimator().animateComponent(chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
     }
     else
     {
-        chordNameLabel->setText (getCurrentChordName (chordChan), juce::dontSendNotification);
-        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
+        chordNameLabel->setText(getCurrentChordName(chordChan), juce::dontSendNotification);
+        juce::Desktop::getInstance().getAnimator().animateComponent(chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
     }
     stopTimer();
 }
 
-juce::String const MidiChordAnalyzerEditor::getCurrentChordName (int channel)
+juce::String const MidiChordAnalyzerEditor::getCurrentChordName(int channel)
 {
     juce::Array<int> chord;
     for (int n = 0; n < 128; n++)
     {
         for (int c = 1; c <= 16; c++)
         {
-            if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn (c, n))
-                chord.add (n);
+            if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn(c, n))
+                chord.add(n);
         }
     }
-    return getFirstRecognizedChord (chord, getFilter()->getParameter (kFlats) > 0.f);
+    return getFirstRecognizedChord(chord, getFilter()->getParameter(kFlats) > 0.f);
 }
 //[/MiscUserCode]
 

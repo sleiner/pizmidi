@@ -1,10 +1,10 @@
 #ifndef KEYS_H
 #define KEYS_H
 
-int FLOAT_TO_KEYCODE (float i)
+int FLOAT_TO_KEYCODE(float i)
 {
     //int k = ((unsigned char)((i) * 115.0f) + 8 );
-    int k = roundToInt (i * 100.0f) + 23;
+    int k = roundToInt(i * 100.0f) + 23;
     //remapping
     if (k == 23)
         k = 8; //BACKSPACE
@@ -88,206 +88,206 @@ enum wxKeyModifier
 };
 
 #if WIN32
-char* getKeyName (unsigned int keycode)
+char* getKeyName(unsigned int keycode)
 {
     char* text;
     text = new char[16];
     if (keycode == 8)
-        strcpy (text, "BACKSPACE");
+        strcpy(text, "BACKSPACE");
     else if (keycode == 9)
-        strcpy (text, "TAB");
+        strcpy(text, "TAB");
     else if (keycode == 13)
-        strcpy (text, "ENTER");
+        strcpy(text, "ENTER");
     else if (keycode == 19)
-        strcpy (text, "PAUSE");
+        strcpy(text, "PAUSE");
     else if (keycode == 27)
-        strcpy (text, "ESCAPE");
+        strcpy(text, "ESCAPE");
 
     //28-30 for mouse buttons
     else if (keycode == 0x01)
-        strcpy (text, "Left Click");
+        strcpy(text, "Left Click");
     else if (keycode == 0x02)
-        strcpy (text, "Right Click");
+        strcpy(text, "Right Click");
     else if (keycode == 0x04)
-        strcpy (text, "Middle Click");
+        strcpy(text, "Middle Click");
 
     else if (keycode == 0x5D)
-        strcpy (text, "MENU");
+        strcpy(text, "MENU");
     else if (keycode == 32)
-        strcpy (text, "SPACE");
+        strcpy(text, "SPACE");
     else if (keycode == 33)
-        strcpy (text, "PAGE UP");
+        strcpy(text, "PAGE UP");
     else if (keycode == 34)
-        strcpy (text, "PAGE DOWN");
+        strcpy(text, "PAGE DOWN");
     else if (keycode == 35)
-        strcpy (text, "END");
+        strcpy(text, "END");
     else if (keycode == 36)
-        strcpy (text, "HOME");
+        strcpy(text, "HOME");
     else if (keycode == 37)
-        strcpy (text, "LEFT");
+        strcpy(text, "LEFT");
     else if (keycode == 38)
-        strcpy (text, "UP");
+        strcpy(text, "UP");
     else if (keycode == 39)
-        strcpy (text, "RIGHT");
+        strcpy(text, "RIGHT");
     else if (keycode == 40)
-        strcpy (text, "DOWN");
+        strcpy(text, "DOWN");
     else if (keycode == 0xDB)
-        strcpy (text, "[ {");
+        strcpy(text, "[ {");
     else if (keycode == 0xDC)
-        strcpy (text, "\\ |");
+        strcpy(text, "\\ |");
     else if (keycode == 0xDD)
-        strcpy (text, "] }");
+        strcpy(text, "] }");
     else if (keycode == 44)
-        strcpy (text, "PRINT SCREEN");
+        strcpy(text, "PRINT SCREEN");
     else if (keycode == 45)
-        strcpy (text, "INSERT");
+        strcpy(text, "INSERT");
     else if (keycode == 46)
-        strcpy (text, "DELETE");
+        strcpy(text, "DELETE");
     else if (keycode == 0xC0)
-        strcpy (text, "` ~");
+        strcpy(text, "` ~");
     else if (keycode == 48)
-        strcpy (text, "0 )");
+        strcpy(text, "0 )");
     else if (keycode == 49)
-        strcpy (text, "1 !");
+        strcpy(text, "1 !");
     else if (keycode == 50)
-        strcpy (text, "2 @");
+        strcpy(text, "2 @");
     else if (keycode == 51)
-        strcpy (text, "3 #");
+        strcpy(text, "3 #");
     else if (keycode == 52)
-        strcpy (text, "4 $");
+        strcpy(text, "4 $");
     else if (keycode == 53)
-        strcpy (text, "5 %");
+        strcpy(text, "5 %");
     else if (keycode == 54)
-        strcpy (text, "6 ^");
+        strcpy(text, "6 ^");
     else if (keycode == 55)
-        strcpy (text, "7 &");
+        strcpy(text, "7 &");
     else if (keycode == 56)
-        strcpy (text, "8 *");
+        strcpy(text, "8 *");
     else if (keycode == 57)
-        strcpy (text, "9 (");
+        strcpy(text, "9 (");
     else if (keycode == 0xBD)
-        strcpy (text, "- _");
+        strcpy(text, "- _");
     else if (keycode == 0xBB)
-        strcpy (text, "= +");
+        strcpy(text, "= +");
     else if (keycode == 0xBC)
-        strcpy (text, ", <");
+        strcpy(text, ", <");
     else if (keycode == 0xBE)
-        strcpy (text, ". >");
+        strcpy(text, ". >");
     else if (keycode == 0xBF)
-        strcpy (text, "/ ?");
+        strcpy(text, "/ ?");
     else if (keycode == 0xBA)
-        strcpy (text, "; :");
+        strcpy(text, "; :");
     else if (keycode == 0xDE)
-        strcpy (text, "' \"");
+        strcpy(text, "' \"");
     else if (65 <= keycode && keycode <= 90)
-        sprintf (text, "%c", keycode); //letters
+        sprintf(text, "%c", keycode); //letters
     else if (keycode == 0x14)
-        strcpy (text, "CAPS LOCK");
+        strcpy(text, "CAPS LOCK");
     else if (keycode == 0x10)
-        strcpy (text, "SHIFT");
+        strcpy(text, "SHIFT");
     else if (keycode == 0x12)
-        strcpy (text, "CTRL");
+        strcpy(text, "CTRL");
     else if (keycode == 0x11)
-        strcpy (text, "ALT");
+        strcpy(text, "ALT");
     else if (keycode == 0x5B)
-        strcpy (text, "WIN");
+        strcpy(text, "WIN");
     else if (keycode == 96)
-        strcpy (text, "NUMPAD 0");
+        strcpy(text, "NUMPAD 0");
     else if (keycode == 97)
-        strcpy (text, "NUMPAD 1");
+        strcpy(text, "NUMPAD 1");
     else if (keycode == 98)
-        strcpy (text, "NUMPAD 2");
+        strcpy(text, "NUMPAD 2");
     else if (keycode == 99)
-        strcpy (text, "NUMPAD 3");
+        strcpy(text, "NUMPAD 3");
     else if (keycode == 100)
-        strcpy (text, "NUMPAD 4");
+        strcpy(text, "NUMPAD 4");
     else if (keycode == 101)
-        strcpy (text, "NUMPAD 5");
+        strcpy(text, "NUMPAD 5");
     else if (keycode == 102)
-        strcpy (text, "NUMPAD 6");
+        strcpy(text, "NUMPAD 6");
     else if (keycode == 103)
-        strcpy (text, "NUMPAD 7");
+        strcpy(text, "NUMPAD 7");
     else if (keycode == 104)
-        strcpy (text, "NUMPAD 8");
+        strcpy(text, "NUMPAD 8");
     else if (keycode == 105)
-        strcpy (text, "NUMPAD 9");
+        strcpy(text, "NUMPAD 9");
     else if (keycode == 106)
-        strcpy (text, "NUMPAD *");
+        strcpy(text, "NUMPAD *");
     else if (keycode == 107)
-        strcpy (text, "NUMPAD +");
+        strcpy(text, "NUMPAD +");
     else if (keycode == 0x90)
-        strcpy (text, "NUM LOCK");
+        strcpy(text, "NUM LOCK");
     else if (keycode == 109)
-        strcpy (text, "NUMPAD -");
+        strcpy(text, "NUMPAD -");
     else if (keycode == 110)
-        strcpy (text, "NUMPAD .");
+        strcpy(text, "NUMPAD .");
     else if (keycode == 111)
-        strcpy (text, "NUMPAD /");
+        strcpy(text, "NUMPAD /");
     else if (keycode == 112)
-        strcpy (text, "F1");
+        strcpy(text, "F1");
     else if (keycode == 113)
-        strcpy (text, "F2");
+        strcpy(text, "F2");
     else if (keycode == 114)
-        strcpy (text, "F3");
+        strcpy(text, "F3");
     else if (keycode == 115)
-        strcpy (text, "F4");
+        strcpy(text, "F4");
     else if (keycode == 116)
-        strcpy (text, "F5");
+        strcpy(text, "F5");
     else if (keycode == 117)
-        strcpy (text, "F6");
+        strcpy(text, "F6");
     else if (keycode == 118)
-        strcpy (text, "F7");
+        strcpy(text, "F7");
     else if (keycode == 119)
-        strcpy (text, "F8");
+        strcpy(text, "F8");
     else if (keycode == 120)
-        strcpy (text, "F9");
+        strcpy(text, "F9");
     else if (keycode == 121)
-        strcpy (text, "F10");
+        strcpy(text, "F10");
     else if (keycode == 122)
-        strcpy (text, "F11");
+        strcpy(text, "F11");
     else if (keycode == 123)
-        strcpy (text, "F12");
+        strcpy(text, "F12");
     else
-        sprintf (text, "keycode %d", keycode);
+        sprintf(text, "keycode %d", keycode);
     return text;
 }
 
-char* getModifierName (float i)
+char* getModifierName(float i)
 {
     char* Modifier;
     Modifier = new char[24];
-    if (FLOAT_TO_MOD (i) == 0)
-        strcpy (Modifier, "None");
-    else if (FLOAT_TO_MOD (i) == 1)
-        strcpy (Modifier, "Shift");
-    else if (FLOAT_TO_MOD (i) == 2)
-        strcpy (Modifier, "Ctrl");
-    else if (FLOAT_TO_MOD (i) == 3)
-        strcpy (Modifier, "Alt");
-    else if (FLOAT_TO_MOD (i) == 4)
-        strcpy (Modifier, "Win");
-    else if (FLOAT_TO_MOD (i) == 5)
-        strcpy (Modifier, "ShiftCtrl");
-    else if (FLOAT_TO_MOD (i) == 6)
-        strcpy (Modifier, "ShiftAlt");
-    else if (FLOAT_TO_MOD (i) == 7)
-        strcpy (Modifier, "ShiftWin");
-    else if (FLOAT_TO_MOD (i) == 8)
-        strcpy (Modifier, "CtrlAlt");
-    else if (FLOAT_TO_MOD (i) == 9)
-        strcpy (Modifier, "CtrlWin");
-    else if (FLOAT_TO_MOD (i) == 10)
-        strcpy (Modifier, "AltWin");
-    else if (FLOAT_TO_MOD (i) == 11)
-        strcpy (Modifier, "ShiftCtrlAlt");
-    else if (FLOAT_TO_MOD (i) == 12)
-        strcpy (Modifier, "ShiftCtrlWin");
-    else if (FLOAT_TO_MOD (i) == 13)
-        strcpy (Modifier, "ShiftWinAlt");
-    else if (FLOAT_TO_MOD (i) == 14)
-        strcpy (Modifier, "WinCtrlAlt");
+    if (FLOAT_TO_MOD(i) == 0)
+        strcpy(Modifier, "None");
+    else if (FLOAT_TO_MOD(i) == 1)
+        strcpy(Modifier, "Shift");
+    else if (FLOAT_TO_MOD(i) == 2)
+        strcpy(Modifier, "Ctrl");
+    else if (FLOAT_TO_MOD(i) == 3)
+        strcpy(Modifier, "Alt");
+    else if (FLOAT_TO_MOD(i) == 4)
+        strcpy(Modifier, "Win");
+    else if (FLOAT_TO_MOD(i) == 5)
+        strcpy(Modifier, "ShiftCtrl");
+    else if (FLOAT_TO_MOD(i) == 6)
+        strcpy(Modifier, "ShiftAlt");
+    else if (FLOAT_TO_MOD(i) == 7)
+        strcpy(Modifier, "ShiftWin");
+    else if (FLOAT_TO_MOD(i) == 8)
+        strcpy(Modifier, "CtrlAlt");
+    else if (FLOAT_TO_MOD(i) == 9)
+        strcpy(Modifier, "CtrlWin");
+    else if (FLOAT_TO_MOD(i) == 10)
+        strcpy(Modifier, "AltWin");
+    else if (FLOAT_TO_MOD(i) == 11)
+        strcpy(Modifier, "ShiftCtrlAlt");
+    else if (FLOAT_TO_MOD(i) == 12)
+        strcpy(Modifier, "ShiftCtrlWin");
+    else if (FLOAT_TO_MOD(i) == 13)
+        strcpy(Modifier, "ShiftWinAlt");
+    else if (FLOAT_TO_MOD(i) == 14)
+        strcpy(Modifier, "WinCtrlAlt");
     else
-        strcpy (Modifier, "ShiftCtrlAltWin");
+        strcpy(Modifier, "ShiftCtrlAltWin");
     return Modifier;
 }
 
@@ -295,7 +295,7 @@ void InitAscii2KeyCodeTable(){};
 
 #elif defined(__linux__)
 //map keys from winuser.h to the ones in keysymdef.h
-int WINVK_TO_LINXK (int k)
+int WINVK_TO_LINXK(int k)
 {
     if (k == 0x08)
         k = XK_BackSpace;
@@ -434,206 +434,206 @@ int WINVK_TO_LINXK (int k)
     return k;
 }
 
-char* getKeyName (unsigned int keycode)
+char* getKeyName(unsigned int keycode)
 {
     char* text;
     text = new char[16];
     if (keycode == 8)
-        strcpy (text, "BACKSPACE");
+        strcpy(text, "BACKSPACE");
     else if (keycode == 9)
-        strcpy (text, "TAB");
+        strcpy(text, "TAB");
     else if (keycode == 13)
-        strcpy (text, "ENTER");
+        strcpy(text, "ENTER");
     else if (keycode == 19)
-        strcpy (text, "PAUSE");
+        strcpy(text, "PAUSE");
     else if (keycode == 27)
-        strcpy (text, "ESCAPE");
+        strcpy(text, "ESCAPE");
 
     //28-30 for mouse buttons
     else if (keycode == 0x01)
-        strcpy (text, "(reserved)");
+        strcpy(text, "(reserved)");
     else if (keycode == 0x02)
-        strcpy (text, "(reserved)");
+        strcpy(text, "(reserved)");
     else if (keycode == 0x04)
-        strcpy (text, "(reserved)");
+        strcpy(text, "(reserved)");
 
     else if (keycode == 0x5D)
-        strcpy (text, "MENU");
+        strcpy(text, "MENU");
     else if (keycode == 32)
-        strcpy (text, "SPACE");
+        strcpy(text, "SPACE");
     else if (keycode == 33)
-        strcpy (text, "PAGE UP");
+        strcpy(text, "PAGE UP");
     else if (keycode == 34)
-        strcpy (text, "PAGE DOWN");
+        strcpy(text, "PAGE DOWN");
     else if (keycode == 35)
-        strcpy (text, "END");
+        strcpy(text, "END");
     else if (keycode == 36)
-        strcpy (text, "HOME");
+        strcpy(text, "HOME");
     else if (keycode == 37)
-        strcpy (text, "LEFT");
+        strcpy(text, "LEFT");
     else if (keycode == 38)
-        strcpy (text, "UP");
+        strcpy(text, "UP");
     else if (keycode == 39)
-        strcpy (text, "RIGHT");
+        strcpy(text, "RIGHT");
     else if (keycode == 40)
-        strcpy (text, "DOWN");
+        strcpy(text, "DOWN");
     else if (keycode == 0xDB)
-        strcpy (text, "[ {");
+        strcpy(text, "[ {");
     else if (keycode == 0xDC)
-        strcpy (text, "\\ |");
+        strcpy(text, "\\ |");
     else if (keycode == 0xDD)
-        strcpy (text, "] }");
+        strcpy(text, "] }");
     else if (keycode == 44)
-        strcpy (text, "PRINT SCREEN");
+        strcpy(text, "PRINT SCREEN");
     else if (keycode == 45)
-        strcpy (text, "INSERT");
+        strcpy(text, "INSERT");
     else if (keycode == 46)
-        strcpy (text, "DELETE");
+        strcpy(text, "DELETE");
     else if (keycode == 0xC0)
-        strcpy (text, "` ~");
+        strcpy(text, "` ~");
     else if (keycode == 48)
-        strcpy (text, "0 )");
+        strcpy(text, "0 )");
     else if (keycode == 49)
-        strcpy (text, "1 !");
+        strcpy(text, "1 !");
     else if (keycode == 50)
-        strcpy (text, "2 @");
+        strcpy(text, "2 @");
     else if (keycode == 51)
-        strcpy (text, "3 #");
+        strcpy(text, "3 #");
     else if (keycode == 52)
-        strcpy (text, "4 $");
+        strcpy(text, "4 $");
     else if (keycode == 53)
-        strcpy (text, "5 %");
+        strcpy(text, "5 %");
     else if (keycode == 54)
-        strcpy (text, "6 ^");
+        strcpy(text, "6 ^");
     else if (keycode == 55)
-        strcpy (text, "7 &");
+        strcpy(text, "7 &");
     else if (keycode == 56)
-        strcpy (text, "8 *");
+        strcpy(text, "8 *");
     else if (keycode == 57)
-        strcpy (text, "9 (");
+        strcpy(text, "9 (");
     else if (keycode == 0xBD)
-        strcpy (text, "- _");
+        strcpy(text, "- _");
     else if (keycode == 0xBB)
-        strcpy (text, "= +");
+        strcpy(text, "= +");
     else if (keycode == 0xBC)
-        strcpy (text, ", <");
+        strcpy(text, ", <");
     else if (keycode == 0xBE)
-        strcpy (text, ". >");
+        strcpy(text, ". >");
     else if (keycode == 0xBF)
-        strcpy (text, "/ ?");
+        strcpy(text, "/ ?");
     else if (keycode == 0xBA)
-        strcpy (text, "; :");
+        strcpy(text, "; :");
     else if (keycode == 0xDE)
-        strcpy (text, "' \"");
+        strcpy(text, "' \"");
     else if (65 <= keycode && keycode <= 90)
-        sprintf (text, "%c", keycode); //letters
+        sprintf(text, "%c", keycode); //letters
     else if (keycode == 0x14)
-        strcpy (text, "CAPS LOCK");
+        strcpy(text, "CAPS LOCK");
     else if (keycode == 0x10)
-        strcpy (text, "SHIFT");
+        strcpy(text, "SHIFT");
     else if (keycode == 0x12)
-        strcpy (text, "CTRL");
+        strcpy(text, "CTRL");
     else if (keycode == 0x11)
-        strcpy (text, "ALT");
+        strcpy(text, "ALT");
     else if (keycode == 0x5B)
-        strcpy (text, "SUPER");
+        strcpy(text, "SUPER");
     else if (keycode == 96)
-        strcpy (text, "NUMPAD 0");
+        strcpy(text, "NUMPAD 0");
     else if (keycode == 97)
-        strcpy (text, "NUMPAD 1");
+        strcpy(text, "NUMPAD 1");
     else if (keycode == 98)
-        strcpy (text, "NUMPAD 2");
+        strcpy(text, "NUMPAD 2");
     else if (keycode == 99)
-        strcpy (text, "NUMPAD 3");
+        strcpy(text, "NUMPAD 3");
     else if (keycode == 100)
-        strcpy (text, "NUMPAD 4");
+        strcpy(text, "NUMPAD 4");
     else if (keycode == 101)
-        strcpy (text, "NUMPAD 5");
+        strcpy(text, "NUMPAD 5");
     else if (keycode == 102)
-        strcpy (text, "NUMPAD 6");
+        strcpy(text, "NUMPAD 6");
     else if (keycode == 103)
-        strcpy (text, "NUMPAD 7");
+        strcpy(text, "NUMPAD 7");
     else if (keycode == 104)
-        strcpy (text, "NUMPAD 8");
+        strcpy(text, "NUMPAD 8");
     else if (keycode == 105)
-        strcpy (text, "NUMPAD 9");
+        strcpy(text, "NUMPAD 9");
     else if (keycode == 106)
-        strcpy (text, "NUMPAD *");
+        strcpy(text, "NUMPAD *");
     else if (keycode == 107)
-        strcpy (text, "NUMPAD +");
+        strcpy(text, "NUMPAD +");
     else if (keycode == 0x90)
-        strcpy (text, "NUM LOCK");
+        strcpy(text, "NUM LOCK");
     else if (keycode == 109)
-        strcpy (text, "NUMPAD -");
+        strcpy(text, "NUMPAD -");
     else if (keycode == 110)
-        strcpy (text, "NUMPAD .");
+        strcpy(text, "NUMPAD .");
     else if (keycode == 111)
-        strcpy (text, "NUMPAD /");
+        strcpy(text, "NUMPAD /");
     else if (keycode == 112)
-        strcpy (text, "F1");
+        strcpy(text, "F1");
     else if (keycode == 113)
-        strcpy (text, "F2");
+        strcpy(text, "F2");
     else if (keycode == 114)
-        strcpy (text, "F3");
+        strcpy(text, "F3");
     else if (keycode == 115)
-        strcpy (text, "F4");
+        strcpy(text, "F4");
     else if (keycode == 116)
-        strcpy (text, "F5");
+        strcpy(text, "F5");
     else if (keycode == 117)
-        strcpy (text, "F6");
+        strcpy(text, "F6");
     else if (keycode == 118)
-        strcpy (text, "F7");
+        strcpy(text, "F7");
     else if (keycode == 119)
-        strcpy (text, "F8");
+        strcpy(text, "F8");
     else if (keycode == 120)
-        strcpy (text, "F9");
+        strcpy(text, "F9");
     else if (keycode == 121)
-        strcpy (text, "F10");
+        strcpy(text, "F10");
     else if (keycode == 122)
-        strcpy (text, "F11");
+        strcpy(text, "F11");
     else if (keycode == 123)
-        strcpy (text, "F12");
+        strcpy(text, "F12");
     else
-        sprintf (text, "keycode %d", keycode);
+        sprintf(text, "keycode %d", keycode);
     return text;
 }
 
-char* getModifierName (float i)
+char* getModifierName(float i)
 {
     char* Modifier;
     Modifier = new char[24];
-    if (FLOAT_TO_MOD (i) == 0)
-        strcpy (Modifier, "None");
-    else if (FLOAT_TO_MOD (i) == 1)
-        strcpy (Modifier, "Shift");
-    else if (FLOAT_TO_MOD (i) == 2)
-        strcpy (Modifier, "Ctrl");
-    else if (FLOAT_TO_MOD (i) == 3)
-        strcpy (Modifier, "Alt");
-    else if (FLOAT_TO_MOD (i) == 4)
-        strcpy (Modifier, "Super");
-    else if (FLOAT_TO_MOD (i) == 5)
-        strcpy (Modifier, "ShiftCtrl");
-    else if (FLOAT_TO_MOD (i) == 6)
-        strcpy (Modifier, "ShiftAlt");
-    else if (FLOAT_TO_MOD (i) == 7)
-        strcpy (Modifier, "ShiftSuper");
-    else if (FLOAT_TO_MOD (i) == 8)
-        strcpy (Modifier, "CtrlAlt");
-    else if (FLOAT_TO_MOD (i) == 9)
-        strcpy (Modifier, "CtrlSuper");
-    else if (FLOAT_TO_MOD (i) == 10)
-        strcpy (Modifier, "AltSuper");
-    else if (FLOAT_TO_MOD (i) == 11)
-        strcpy (Modifier, "ShiftCtrlAlt");
-    else if (FLOAT_TO_MOD (i) == 12)
-        strcpy (Modifier, "ShiftCtrlSuper");
-    else if (FLOAT_TO_MOD (i) == 13)
-        strcpy (Modifier, "ShiftAltSuper");
-    else if (FLOAT_TO_MOD (i) == 14)
-        strcpy (Modifier, "CtrlAltSuper");
-    else if (FLOAT_TO_MOD (i) == 15)
-        strcpy (Modifier, "ShiftCtrlAltSuper");
+    if (FLOAT_TO_MOD(i) == 0)
+        strcpy(Modifier, "None");
+    else if (FLOAT_TO_MOD(i) == 1)
+        strcpy(Modifier, "Shift");
+    else if (FLOAT_TO_MOD(i) == 2)
+        strcpy(Modifier, "Ctrl");
+    else if (FLOAT_TO_MOD(i) == 3)
+        strcpy(Modifier, "Alt");
+    else if (FLOAT_TO_MOD(i) == 4)
+        strcpy(Modifier, "Super");
+    else if (FLOAT_TO_MOD(i) == 5)
+        strcpy(Modifier, "ShiftCtrl");
+    else if (FLOAT_TO_MOD(i) == 6)
+        strcpy(Modifier, "ShiftAlt");
+    else if (FLOAT_TO_MOD(i) == 7)
+        strcpy(Modifier, "ShiftSuper");
+    else if (FLOAT_TO_MOD(i) == 8)
+        strcpy(Modifier, "CtrlAlt");
+    else if (FLOAT_TO_MOD(i) == 9)
+        strcpy(Modifier, "CtrlSuper");
+    else if (FLOAT_TO_MOD(i) == 10)
+        strcpy(Modifier, "AltSuper");
+    else if (FLOAT_TO_MOD(i) == 11)
+        strcpy(Modifier, "ShiftCtrlAlt");
+    else if (FLOAT_TO_MOD(i) == 12)
+        strcpy(Modifier, "ShiftCtrlSuper");
+    else if (FLOAT_TO_MOD(i) == 13)
+        strcpy(Modifier, "ShiftAltSuper");
+    else if (FLOAT_TO_MOD(i) == 14)
+        strcpy(Modifier, "CtrlAltSuper");
+    else if (FLOAT_TO_MOD(i) == 15)
+        strcpy(Modifier, "ShiftCtrlAltSuper");
     return Modifier;
 }
 
@@ -700,402 +700,402 @@ void InitAscii2KeyCodeTable(){};
 #define kVK_Command             0x37
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED <= 1040 */
 
-char* getKeyName (unsigned int keycode)
+char* getKeyName(unsigned int keycode)
 {
     char* text;
     text = new char[16];
     if (keycode == 8)
-        strcpy (text, "DELETE"); //backspace
+        strcpy(text, "DELETE"); //backspace
     else if (keycode == 9)
-        strcpy (text, "TAB");
+        strcpy(text, "TAB");
     else if (keycode == 13)
-        strcpy (text, "RETURN");
+        strcpy(text, "RETURN");
     else if (keycode == 19)
-        strcpy (text, "PAUSE");
+        strcpy(text, "PAUSE");
     else if (keycode == 27)
-        strcpy (text, "ESCAPE");
+        strcpy(text, "ESCAPE");
 
     //28-30 for mouse buttons
     else if (keycode == 0x01)
-        strcpy (text, "(reserved)"); //"Left Click");
+        strcpy(text, "(reserved)"); //"Left Click");
     else if (keycode == 0x02)
-        strcpy (text, "(reserved)"); //"Right Click");
+        strcpy(text, "(reserved)"); //"Right Click");
     else if (keycode == 0x04)
-        strcpy (text, "(reserved)"); //"Middle Click");
+        strcpy(text, "(reserved)"); //"Middle Click");
 
     else if (keycode == 0x5D)
-        strcpy (text, "HELP"); //"MENU");
+        strcpy(text, "HELP"); //"MENU");
     else if (keycode == 32)
-        strcpy (text, "SPACE");
+        strcpy(text, "SPACE");
     else if (keycode == 33)
-        strcpy (text, "PAGE UP");
+        strcpy(text, "PAGE UP");
     else if (keycode == 34)
-        strcpy (text, "PAGE DOWN");
+        strcpy(text, "PAGE DOWN");
     else if (keycode == 35)
-        strcpy (text, "END");
+        strcpy(text, "END");
     else if (keycode == 36)
-        strcpy (text, "HOME");
+        strcpy(text, "HOME");
     else if (keycode == 37)
-        strcpy (text, "LEFT");
+        strcpy(text, "LEFT");
     else if (keycode == 38)
-        strcpy (text, "UP");
+        strcpy(text, "UP");
     else if (keycode == 39)
-        strcpy (text, "RIGHT");
+        strcpy(text, "RIGHT");
     else if (keycode == 40)
-        strcpy (text, "DOWN");
+        strcpy(text, "DOWN");
     else if (keycode == 0xDB)
-        strcpy (text, "[ {");
+        strcpy(text, "[ {");
     else if (keycode == 0xDC)
-        strcpy (text, "\\ |");
+        strcpy(text, "\\ |");
     else if (keycode == 0xDD)
-        strcpy (text, "] }");
+        strcpy(text, "] }");
     else if (keycode == 44)
-        strcpy (text, "(reserved)"); //"PRINT SCREEN");
+        strcpy(text, "(reserved)"); //"PRINT SCREEN");
     else if (keycode == 45)
-        strcpy (text, "INSERT");
+        strcpy(text, "INSERT");
     else if (keycode == 46)
-        strcpy (text, "FORWARD DELETE");
+        strcpy(text, "FORWARD DELETE");
     else if (keycode == 0xC0)
-        strcpy (text, "` ~");
+        strcpy(text, "` ~");
     else if (keycode == 48)
-        strcpy (text, "0 )");
+        strcpy(text, "0 )");
     else if (keycode == 49)
-        strcpy (text, "1 !");
+        strcpy(text, "1 !");
     else if (keycode == 50)
-        strcpy (text, "2 @");
+        strcpy(text, "2 @");
     else if (keycode == 51)
-        strcpy (text, "3 #");
+        strcpy(text, "3 #");
     else if (keycode == 52)
-        strcpy (text, "4 $");
+        strcpy(text, "4 $");
     else if (keycode == 53)
-        strcpy (text, "5 %");
+        strcpy(text, "5 %");
     else if (keycode == 54)
-        strcpy (text, "6 ^");
+        strcpy(text, "6 ^");
     else if (keycode == 55)
-        strcpy (text, "7 &");
+        strcpy(text, "7 &");
     else if (keycode == 56)
-        strcpy (text, "8 *");
+        strcpy(text, "8 *");
     else if (keycode == 57)
-        strcpy (text, "9 (");
+        strcpy(text, "9 (");
     else if (keycode == 0xBD)
-        strcpy (text, "- _");
+        strcpy(text, "- _");
     else if (keycode == 0xBB)
-        strcpy (text, "= +");
+        strcpy(text, "= +");
     else if (keycode == 0xBC)
-        strcpy (text, ", <");
+        strcpy(text, ", <");
     else if (keycode == 0xBE)
-        strcpy (text, ". >");
+        strcpy(text, ". >");
     else if (keycode == 0xBF)
-        strcpy (text, "/ ?");
+        strcpy(text, "/ ?");
     else if (keycode == 0xBA)
-        strcpy (text, "; :");
+        strcpy(text, "; :");
     else if (keycode == 0xDE)
-        strcpy (text, "' \"");
+        strcpy(text, "' \"");
 
     else if (65 <= keycode && keycode <= 90)
-        sprintf (text, "%c", keycode); //letters
+        sprintf(text, "%c", keycode); //letters
 
     else if (keycode == 0x14)
-        strcpy (text, "(reserved)"); //"CAPS LOCK");
+        strcpy(text, "(reserved)"); //"CAPS LOCK");
     else if (keycode == 0x10)
-        strcpy (text, "SHIFT");
+        strcpy(text, "SHIFT");
     else if (keycode == 0x12)
-        strcpy (text, "CONTROL");
+        strcpy(text, "CONTROL");
     else if (keycode == 0x11)
-        strcpy (text, "OPTION");
+        strcpy(text, "OPTION");
     else if (keycode == 0x5B)
-        strcpy (text, "COMMAND");
+        strcpy(text, "COMMAND");
     else if (keycode == 96)
-        strcpy (text, "NUMPAD 0");
+        strcpy(text, "NUMPAD 0");
     else if (keycode == 97)
-        strcpy (text, "NUMPAD 1");
+        strcpy(text, "NUMPAD 1");
     else if (keycode == 98)
-        strcpy (text, "NUMPAD 2");
+        strcpy(text, "NUMPAD 2");
     else if (keycode == 99)
-        strcpy (text, "NUMPAD 3");
+        strcpy(text, "NUMPAD 3");
     else if (keycode == 100)
-        strcpy (text, "NUMPAD 4");
+        strcpy(text, "NUMPAD 4");
     else if (keycode == 101)
-        strcpy (text, "NUMPAD 5");
+        strcpy(text, "NUMPAD 5");
     else if (keycode == 102)
-        strcpy (text, "NUMPAD 6");
+        strcpy(text, "NUMPAD 6");
     else if (keycode == 103)
-        strcpy (text, "NUMPAD 7");
+        strcpy(text, "NUMPAD 7");
     else if (keycode == 104)
-        strcpy (text, "NUMPAD 8");
+        strcpy(text, "NUMPAD 8");
     else if (keycode == 105)
-        strcpy (text, "NUMPAD 9");
+        strcpy(text, "NUMPAD 9");
     else if (keycode == 106)
-        strcpy (text, "NUMPAD *");
+        strcpy(text, "NUMPAD *");
     else if (keycode == 107)
-        strcpy (text, "NUMPAD +");
+        strcpy(text, "NUMPAD +");
     else if (keycode == 0x90)
-        strcpy (text, "NUMPAD ENTER"); //"NUM LOCK");
+        strcpy(text, "NUMPAD ENTER"); //"NUM LOCK");
     else if (keycode == 109)
-        strcpy (text, "NUMPAD -");
+        strcpy(text, "NUMPAD -");
     else if (keycode == 110)
-        strcpy (text, "NUMPAD .");
+        strcpy(text, "NUMPAD .");
     else if (keycode == 111)
-        strcpy (text, "NUMPAD /");
+        strcpy(text, "NUMPAD /");
     else if (keycode == 112)
-        strcpy (text, "F1");
+        strcpy(text, "F1");
     else if (keycode == 113)
-        strcpy (text, "F2");
+        strcpy(text, "F2");
     else if (keycode == 114)
-        strcpy (text, "F3");
+        strcpy(text, "F3");
     else if (keycode == 115)
-        strcpy (text, "F4");
+        strcpy(text, "F4");
     else if (keycode == 116)
-        strcpy (text, "F5");
+        strcpy(text, "F5");
     else if (keycode == 117)
-        strcpy (text, "F6");
+        strcpy(text, "F6");
     else if (keycode == 118)
-        strcpy (text, "F7");
+        strcpy(text, "F7");
     else if (keycode == 119)
-        strcpy (text, "F8");
+        strcpy(text, "F8");
     else if (keycode == 120)
-        strcpy (text, "F9");
+        strcpy(text, "F9");
     else if (keycode == 121)
-        strcpy (text, "F10");
+        strcpy(text, "F10");
     else if (keycode == 122)
-        strcpy (text, "F11");
+        strcpy(text, "F11");
     else if (keycode == 123)
-        strcpy (text, "F12");
+        strcpy(text, "F12");
     else
-        sprintf (text, "keycode %d", keycode);
+        sprintf(text, "keycode %d", keycode);
     return text;
 }
 
-char* getModifierName (float i)
+char* getModifierName(float i)
 {
     char* Modifier;
     Modifier = new char[24];
-    if (FLOAT_TO_MOD (i) == 0)
-        strcpy (Modifier, "None");
-    else if (FLOAT_TO_MOD (i) == 1)
-        strcpy (Modifier, "Shift");
-    else if (FLOAT_TO_MOD (i) == 2)
-        strcpy (Modifier, "Control");
-    else if (FLOAT_TO_MOD (i) == 3)
-        strcpy (Modifier, "Option");
-    else if (FLOAT_TO_MOD (i) == 4)
-        strcpy (Modifier, "Command");
-    else if (FLOAT_TO_MOD (i) == 5)
-        strcpy (Modifier, "ShiftCtrl");
-    else if (FLOAT_TO_MOD (i) == 6)
-        strcpy (Modifier, "ShiftOption");
-    else if (FLOAT_TO_MOD (i) == 7)
-        strcpy (Modifier, "ShiftCommand");
-    else if (FLOAT_TO_MOD (i) == 8)
-        strcpy (Modifier, "CtrlOption");
-    else if (FLOAT_TO_MOD (i) == 9)
-        strcpy (Modifier, "CtrlCommand");
-    else if (FLOAT_TO_MOD (i) == 10)
-        strcpy (Modifier, "OptionCommand");
-    else if (FLOAT_TO_MOD (i) == 11)
-        strcpy (Modifier, "ShiftCtrlOption");
-    else if (FLOAT_TO_MOD (i) == 12)
-        strcpy (Modifier, "ShiftCtrlCommand");
-    else if (FLOAT_TO_MOD (i) == 13)
-        strcpy (Modifier, "ShiftOptionCommand");
-    else if (FLOAT_TO_MOD (i) == 14)
-        strcpy (Modifier, "CtrlOptionCommand");
-    else if (FLOAT_TO_MOD (i) == 15)
-        strcpy (Modifier, "ShiftCtrlOptionCommand");
+    if (FLOAT_TO_MOD(i) == 0)
+        strcpy(Modifier, "None");
+    else if (FLOAT_TO_MOD(i) == 1)
+        strcpy(Modifier, "Shift");
+    else if (FLOAT_TO_MOD(i) == 2)
+        strcpy(Modifier, "Control");
+    else if (FLOAT_TO_MOD(i) == 3)
+        strcpy(Modifier, "Option");
+    else if (FLOAT_TO_MOD(i) == 4)
+        strcpy(Modifier, "Command");
+    else if (FLOAT_TO_MOD(i) == 5)
+        strcpy(Modifier, "ShiftCtrl");
+    else if (FLOAT_TO_MOD(i) == 6)
+        strcpy(Modifier, "ShiftOption");
+    else if (FLOAT_TO_MOD(i) == 7)
+        strcpy(Modifier, "ShiftCommand");
+    else if (FLOAT_TO_MOD(i) == 8)
+        strcpy(Modifier, "CtrlOption");
+    else if (FLOAT_TO_MOD(i) == 9)
+        strcpy(Modifier, "CtrlCommand");
+    else if (FLOAT_TO_MOD(i) == 10)
+        strcpy(Modifier, "OptionCommand");
+    else if (FLOAT_TO_MOD(i) == 11)
+        strcpy(Modifier, "ShiftCtrlOption");
+    else if (FLOAT_TO_MOD(i) == 12)
+        strcpy(Modifier, "ShiftCtrlCommand");
+    else if (FLOAT_TO_MOD(i) == 13)
+        strcpy(Modifier, "ShiftOptionCommand");
+    else if (FLOAT_TO_MOD(i) == 14)
+        strcpy(Modifier, "CtrlOptionCommand");
+    else if (FLOAT_TO_MOD(i) == 15)
+        strcpy(Modifier, "ShiftCtrlOptionCommand");
     return Modifier;
 }
 
-CGKeyCode keyNameToKeyCode (char* character)
+CGKeyCode keyNameToKeyCode(char* character)
 {
-    if (! strcmp (character, "RETURN"))
+    if (! strcmp(character, "RETURN"))
         return kVK_Return;
-    if (! strcmp (character, "TAB"))
+    if (! strcmp(character, "TAB"))
         return kVK_Tab;
-    if (! strcmp (character, "SPACE"))
+    if (! strcmp(character, "SPACE"))
         return kVK_Space;
-    if (! strcmp (character, "DELETE"))
+    if (! strcmp(character, "DELETE"))
         return kVK_Delete;
-    if (! strcmp (character, "ESCAPE"))
+    if (! strcmp(character, "ESCAPE"))
         return kVK_Escape;
-    if (! strcmp (character, "F1"))
+    if (! strcmp(character, "F1"))
         return kVK_F1;
-    if (! strcmp (character, "F2"))
+    if (! strcmp(character, "F2"))
         return kVK_F2;
-    if (! strcmp (character, "F3"))
+    if (! strcmp(character, "F3"))
         return kVK_F3;
-    if (! strcmp (character, "F4"))
+    if (! strcmp(character, "F4"))
         return kVK_F4;
-    if (! strcmp (character, "F5"))
+    if (! strcmp(character, "F5"))
         return kVK_F5;
-    if (! strcmp (character, "F6"))
+    if (! strcmp(character, "F6"))
         return kVK_F6;
-    if (! strcmp (character, "F7"))
+    if (! strcmp(character, "F7"))
         return kVK_F7;
-    if (! strcmp (character, "F8"))
+    if (! strcmp(character, "F8"))
         return kVK_F8;
-    if (! strcmp (character, "F9"))
+    if (! strcmp(character, "F9"))
         return kVK_F9;
-    if (! strcmp (character, "F10"))
+    if (! strcmp(character, "F10"))
         return kVK_F10;
-    if (! strcmp (character, "F11"))
+    if (! strcmp(character, "F11"))
         return kVK_F11;
-    if (! strcmp (character, "F12"))
+    if (! strcmp(character, "F12"))
         return kVK_F12;
-    if (! strcmp (character, "HELP"))
+    if (! strcmp(character, "HELP"))
         return kVK_Help;
-    if (! strcmp (character, "HOME"))
+    if (! strcmp(character, "HOME"))
         return kVK_Home;
-    if (! strcmp (character, "PAGE UP"))
+    if (! strcmp(character, "PAGE UP"))
         return kVK_PageUp;
-    if (! strcmp (character, "FORWARD DELETE"))
+    if (! strcmp(character, "FORWARD DELETE"))
         return kVK_ForwardDelete;
-    if (! strcmp (character, "END"))
+    if (! strcmp(character, "END"))
         return kVK_End;
-    if (! strcmp (character, "PAGE DOWN"))
+    if (! strcmp(character, "PAGE DOWN"))
         return kVK_PageDown;
-    if (! strcmp (character, "LEFT"))
+    if (! strcmp(character, "LEFT"))
         return kVK_LeftArrow;
-    if (! strcmp (character, "RIGHT"))
+    if (! strcmp(character, "RIGHT"))
         return kVK_RightArrow;
-    if (! strcmp (character, "DOWN"))
+    if (! strcmp(character, "DOWN"))
         return kVK_DownArrow;
-    if (! strcmp (character, "UP"))
+    if (! strcmp(character, "UP"))
         return kVK_UpArrow;
-    if (! strcmp (character, "NUMPAD 0"))
+    if (! strcmp(character, "NUMPAD 0"))
         return kVK_ANSI_Keypad0;
-    if (! strcmp (character, "NUMPAD 1"))
+    if (! strcmp(character, "NUMPAD 1"))
         return kVK_ANSI_Keypad1;
-    if (! strcmp (character, "NUMPAD 2"))
+    if (! strcmp(character, "NUMPAD 2"))
         return kVK_ANSI_Keypad2;
-    if (! strcmp (character, "NUMPAD 3"))
+    if (! strcmp(character, "NUMPAD 3"))
         return kVK_ANSI_Keypad3;
-    if (! strcmp (character, "NUMPAD 4"))
+    if (! strcmp(character, "NUMPAD 4"))
         return kVK_ANSI_Keypad4;
-    if (! strcmp (character, "NUMPAD 5"))
+    if (! strcmp(character, "NUMPAD 5"))
         return kVK_ANSI_Keypad5;
-    if (! strcmp (character, "NUMPAD 6"))
+    if (! strcmp(character, "NUMPAD 6"))
         return kVK_ANSI_Keypad6;
-    if (! strcmp (character, "NUMPAD 7"))
+    if (! strcmp(character, "NUMPAD 7"))
         return kVK_ANSI_Keypad7;
-    if (! strcmp (character, "NUMPAD 8"))
+    if (! strcmp(character, "NUMPAD 8"))
         return kVK_ANSI_Keypad8;
-    if (! strcmp (character, "NUMPAD 9"))
+    if (! strcmp(character, "NUMPAD 9"))
         return kVK_ANSI_Keypad9;
-    if (! strcmp (character, "NUMPAD ."))
+    if (! strcmp(character, "NUMPAD ."))
         return kVK_ANSI_KeypadDecimal;
-    if (! strcmp (character, "NUMPAD /"))
+    if (! strcmp(character, "NUMPAD /"))
         return kVK_ANSI_KeypadDivide;
-    if (! strcmp (character, "NUMPAD ENTER"))
+    if (! strcmp(character, "NUMPAD ENTER"))
         return kVK_ANSI_KeypadEnter;
-    if (! strcmp (character, "NUMPAD -"))
+    if (! strcmp(character, "NUMPAD -"))
         return kVK_ANSI_KeypadMinus;
-    if (! strcmp (character, "NUMPAD *"))
+    if (! strcmp(character, "NUMPAD *"))
         return kVK_ANSI_KeypadMultiply;
-    if (! strcmp (character, "NUMPAD +"))
+    if (! strcmp(character, "NUMPAD +"))
         return kVK_ANSI_KeypadPlus;
-    if (! strcmp (character, "SHIFT"))
+    if (! strcmp(character, "SHIFT"))
         return kVK_Shift;
-    if (! strcmp (character, "OPTION"))
+    if (! strcmp(character, "OPTION"))
         return kVK_Option;
-    if (! strcmp (character, "CONTROL"))
+    if (! strcmp(character, "CONTROL"))
         return kVK_Control;
-    if (! strcmp (character, "COMMAND"))
+    if (! strcmp(character, "COMMAND"))
         return kVK_Command;
-    if (! strcmp (character, "(reserved)"))
+    if (! strcmp(character, "(reserved)"))
         return -1;
-    if (! strcmp (character, "[ {"))
+    if (! strcmp(character, "[ {"))
         return kVK_ANSI_LeftBracket;
-    if (! strcmp (character, "\\ |"))
+    if (! strcmp(character, "\\ |"))
         return kVK_ANSI_Backslash;
-    if (! strcmp (character, "] }"))
+    if (! strcmp(character, "] }"))
         return kVK_ANSI_RightBracket;
-    if (! strcmp (character, "` ~"))
+    if (! strcmp(character, "` ~"))
         return kVK_ANSI_Grave;
-    if (! strcmp (character, "0 )"))
+    if (! strcmp(character, "0 )"))
         return kVK_ANSI_0;
-    if (! strcmp (character, "1 !"))
+    if (! strcmp(character, "1 !"))
         return kVK_ANSI_1;
-    if (! strcmp (character, "2 @"))
+    if (! strcmp(character, "2 @"))
         return kVK_ANSI_2;
-    if (! strcmp (character, "3 #"))
+    if (! strcmp(character, "3 #"))
         return kVK_ANSI_3;
-    if (! strcmp (character, "4 $"))
+    if (! strcmp(character, "4 $"))
         return kVK_ANSI_4;
-    if (! strcmp (character, "5 %"))
+    if (! strcmp(character, "5 %"))
         return kVK_ANSI_5;
-    if (! strcmp (character, "6 ^"))
+    if (! strcmp(character, "6 ^"))
         return kVK_ANSI_6;
-    if (! strcmp (character, "7 &"))
+    if (! strcmp(character, "7 &"))
         return kVK_ANSI_7;
-    if (! strcmp (character, "8 *"))
+    if (! strcmp(character, "8 *"))
         return kVK_ANSI_8;
-    if (! strcmp (character, "9 ("))
+    if (! strcmp(character, "9 ("))
         return kVK_ANSI_9;
-    if (! strcmp (character, "- _"))
+    if (! strcmp(character, "- _"))
         return kVK_ANSI_Minus;
-    if (! strcmp (character, "= +"))
+    if (! strcmp(character, "= +"))
         return kVK_ANSI_Equal;
-    if (! strcmp (character, ", <"))
+    if (! strcmp(character, ", <"))
         return kVK_ANSI_Comma;
-    if (! strcmp (character, ". >"))
+    if (! strcmp(character, ". >"))
         return kVK_ANSI_Period;
-    if (! strcmp (character, "/ ?"))
+    if (! strcmp(character, "/ ?"))
         return kVK_ANSI_Slash;
-    if (! strcmp (character, "; :"))
+    if (! strcmp(character, "; :"))
         return kVK_ANSI_Semicolon;
-    if (! strcmp (character, "' \""))
+    if (! strcmp(character, "' \""))
         return kVK_ANSI_Quote;
-    if (! strcmp (character, "A"))
+    if (! strcmp(character, "A"))
         return kVK_ANSI_A;
-    if (! strcmp (character, "B"))
+    if (! strcmp(character, "B"))
         return kVK_ANSI_B;
-    if (! strcmp (character, "C"))
+    if (! strcmp(character, "C"))
         return kVK_ANSI_C;
-    if (! strcmp (character, "D"))
+    if (! strcmp(character, "D"))
         return kVK_ANSI_D;
-    if (! strcmp (character, "E"))
+    if (! strcmp(character, "E"))
         return kVK_ANSI_E;
-    if (! strcmp (character, "F"))
+    if (! strcmp(character, "F"))
         return kVK_ANSI_F;
-    if (! strcmp (character, "G"))
+    if (! strcmp(character, "G"))
         return kVK_ANSI_G;
-    if (! strcmp (character, "H"))
+    if (! strcmp(character, "H"))
         return kVK_ANSI_H;
-    if (! strcmp (character, "I"))
+    if (! strcmp(character, "I"))
         return kVK_ANSI_I;
-    if (! strcmp (character, "J"))
+    if (! strcmp(character, "J"))
         return kVK_ANSI_J;
-    if (! strcmp (character, "K"))
+    if (! strcmp(character, "K"))
         return kVK_ANSI_K;
-    if (! strcmp (character, "L"))
+    if (! strcmp(character, "L"))
         return kVK_ANSI_L;
-    if (! strcmp (character, "M"))
+    if (! strcmp(character, "M"))
         return kVK_ANSI_M;
-    if (! strcmp (character, "N"))
+    if (! strcmp(character, "N"))
         return kVK_ANSI_N;
-    if (! strcmp (character, "O"))
+    if (! strcmp(character, "O"))
         return kVK_ANSI_O;
-    if (! strcmp (character, "P"))
+    if (! strcmp(character, "P"))
         return kVK_ANSI_P;
-    if (! strcmp (character, "Q"))
+    if (! strcmp(character, "Q"))
         return kVK_ANSI_Q;
-    if (! strcmp (character, "R"))
+    if (! strcmp(character, "R"))
         return kVK_ANSI_R;
-    if (! strcmp (character, "S"))
+    if (! strcmp(character, "S"))
         return kVK_ANSI_S;
-    if (! strcmp (character, "T"))
+    if (! strcmp(character, "T"))
         return kVK_ANSI_T;
-    if (! strcmp (character, "U"))
+    if (! strcmp(character, "U"))
         return kVK_ANSI_U;
-    if (! strcmp (character, "V"))
+    if (! strcmp(character, "V"))
         return kVK_ANSI_V;
-    if (! strcmp (character, "W"))
+    if (! strcmp(character, "W"))
         return kVK_ANSI_W;
-    if (! strcmp (character, "X"))
+    if (! strcmp(character, "X"))
         return kVK_ANSI_X;
-    if (! strcmp (character, "Y"))
+    if (! strcmp(character, "Y"))
         return kVK_ANSI_Y;
-    if (! strcmp (character, "Z"))
+    if (! strcmp(character, "Z"))
         return kVK_ANSI_Z;
 
     return -1;

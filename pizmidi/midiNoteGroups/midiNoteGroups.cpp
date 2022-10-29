@@ -10,9 +10,9 @@
 #include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiNoteGroups (audioMaster);
+    return new MidiNoteGroups(audioMaster);
 }
 
 MidiNoteGroupsProgram::MidiNoteGroupsProgram()
@@ -23,21 +23,21 @@ MidiNoteGroupsProgram::MidiNoteGroupsProgram()
     param[kChannel] = 0.f;
     param[kThru]    = 1.f;
     for (int s = 0; s < kNumSlots; s++)
-        param[kNote + s * 3] = MIDI_TO_FLOAT3 (off);
+        param[kNote + s * 3] = MIDI_TO_FLOAT3(off);
 
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiNoteGroups::MidiNoteGroups (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiNoteGroups::MidiNoteGroups(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiNoteGroupsProgram[numPrograms];
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -45,9 +45,9 @@ MidiNoteGroups::MidiNoteGroups (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -56,16 +56,16 @@ MidiNoteGroups::MidiNoteGroups (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     wasplaying = false;
     isplaying  = false;
     if (programs)
-        setProgram (0);
+        setProgram(0);
 
     init();
 }
@@ -78,42 +78,42 @@ MidiNoteGroups::~MidiNoteGroups()
 }
 
 //------------------------------------------------------------------------
-void MidiNoteGroups::setProgram (VstInt32 program)
+void MidiNoteGroups::setProgram(VstInt32 program)
 {
     MidiNoteGroupsProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
 }
 
 //------------------------------------------------------------------------
-void MidiNoteGroups::setProgramName (char* name)
+void MidiNoteGroups::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiNoteGroups::getProgramName (char* name)
+void MidiNoteGroups::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiNoteGroups::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiNoteGroups::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteGroups::setParameter (VstInt32 index, float value)
+void MidiNoteGroups::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
     {
@@ -136,7 +136,7 @@ void MidiNoteGroups::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiNoteGroups::getParameter (VstInt32 index)
+float MidiNoteGroups::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
         return param[index];
@@ -144,34 +144,34 @@ float MidiNoteGroups::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteGroups::getParameterName (VstInt32 index, char* label)
+void MidiNoteGroups::getParameterName(VstInt32 index, char* label)
 {
     if (index < kNumParams)
     {
         if (index == kProgCh)
-            strcpy (label, "Use ProgCh");
+            strcpy(label, "Use ProgCh");
         else if (index == kChannel)
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
         else if (index == kThru)
-            strcpy (label, "Thru");
+            strcpy(label, "Thru");
 
         else
         {
             for (int i = 0; i < kNumSlots; i++)
             {
                 if (index == kNote + i * 3)
-                    sprintf (label, "Note %d", i + 1);
+                    sprintf(label, "Note %d", i + 1);
                 else if (index == kPlay + i * 3)
-                    sprintf (label, " %d: PlayGroup", i + 1);
+                    sprintf(label, " %d: PlayGroup", i + 1);
                 else if (index == kChoke + i * 3)
-                    sprintf (label, " %d: ChokeGroup", i + 1);
+                    sprintf(label, " %d: ChokeGroup", i + 1);
             }
         }
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiNoteGroups::getParameterDisplay (VstInt32 index, char* text)
+void MidiNoteGroups::getParameterDisplay(VstInt32 index, char* text)
 {
     float v = param[index];
     if (index < kNumParams)
@@ -179,20 +179,20 @@ void MidiNoteGroups::getParameterDisplay (VstInt32 index, char* text)
         if (index == kProgCh)
         {
             if (v < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else
-                strcpy (text, "Yes");
+                strcpy(text, "Yes");
         }
         else if (index == kChannel)
         {
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (v) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(v) + 1);
         }
         else if (index == kThru)
         {
             if (v < 0.5f)
-                strcpy (text, "No");
+                strcpy(text, "No");
             else
-                strcpy (text, "Yes");
+                strcpy(text, "Yes");
         }
 
         else
@@ -201,37 +201,37 @@ void MidiNoteGroups::getParameterDisplay (VstInt32 index, char* text)
             {
                 if (index == kNote + i * 3)
                 {
-                    if (FLOAT_TO_MIDI3 (v) == off)
-                        strcpy (text, "Off");
-                    else if (FLOAT_TO_MIDI3 (v) == learn)
-                        strcpy (text, "Learn Next");
+                    if (FLOAT_TO_MIDI3(v) == off)
+                        strcpy(text, "Off");
+                    else if (FLOAT_TO_MIDI3(v) == learn)
+                        strcpy(text, "Learn Next");
                     else
-                        sprintf (text, "%s (%d)", getNoteName (FLOAT_TO_MIDI3 (v), bottomOctave), FLOAT_TO_MIDI3 (v));
+                        sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI3(v), bottomOctave), FLOAT_TO_MIDI3(v));
                 }
                 else if (index == kPlay + i * 3)
                 {
-                    if (FLOAT_TO_GROUP (v) == -1)
-                        strcpy (text, "None");
+                    if (FLOAT_TO_GROUP(v) == -1)
+                        strcpy(text, "None");
                     else
-                        sprintf (text, "%d", FLOAT_TO_GROUP (v));
+                        sprintf(text, "%d", FLOAT_TO_GROUP(v));
                 }
                 else if (index == kChoke + i * 3)
                 {
-                    if (FLOAT_TO_GROUP (v) == -1)
-                        strcpy (text, "None");
+                    if (FLOAT_TO_GROUP(v) == -1)
+                        strcpy(text, "None");
                     else
-                        sprintf (text, "%d", FLOAT_TO_GROUP (v));
+                        sprintf(text, "%d", FLOAT_TO_GROUP(v));
                 }
             }
         }
     }
 }
 
-void MidiNoteGroups::preProcess (void)
+void MidiNoteGroups::preProcess(void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     if (timeInfo)
     {
@@ -246,7 +246,7 @@ void MidiNoteGroups::preProcess (void)
     _cleanMidiOutBuffers();
 }
 
-void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void MidiNoteGroups::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -259,15 +259,15 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         const int data2   = tomod.midiData[2] & 0x7f;
         const int status  = (tomod.midiData[0] & 0xf0) == MIDI_NOTEON && data2 == 0 ? MIDI_NOTEOFF : tomod.midiData[0] & 0xf0; // scraping  channel
 
-        int listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+        int listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
         bool discard      = param[kThru] < 0.5f;
 
         Slot slot[kNumSlots];
         for (int s = 0; s < kNumSlots; s++)
         {
-            slot[s].note       = FLOAT_TO_MIDI3 (param[kNote + s * 3]);
-            slot[s].playgroup  = FLOAT_TO_GROUP (param[kPlay + s * 3]);
-            slot[s].chokegroup = FLOAT_TO_GROUP (param[kChoke + s * 3]);
+            slot[s].note       = FLOAT_TO_MIDI3(param[kNote + s * 3]);
+            slot[s].playgroup  = FLOAT_TO_GROUP(param[kPlay + s * 3]);
+            slot[s].chokegroup = FLOAT_TO_GROUP(param[kChoke + s * 3]);
         }
 
         if (channel == listenchannel)
@@ -279,7 +279,7 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     if (slot[i].note == learn)
                     {
                         discard = true;
-                        setParameterAutomated (kNote + i * 3, MIDI_TO_FLOAT3 (data1));
+                        setParameterAutomated(kNote + i * 3, MIDI_TO_FLOAT3(data1));
                     }
                     if (data1 == slot[i].note)
                     {
@@ -297,7 +297,7 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         m.midiData[0]  = MIDI_NOTEOFF | channel;
                                         m.midiData[1]  = slot[s].note;
                                         m.midiData[2]  = 0;
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                         notesPlaying[slot[s].note] = false;
                                     }
                                 }
@@ -316,7 +316,7 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         m.midiData[0]  = MIDI_NOTEON | channel;
                                         m.midiData[1]  = slot[s].note;
                                         m.midiData[2]  = data2;
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                         notesPlaying[slot[s].note] = true;
                                     }
                                 }
@@ -349,7 +349,7 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                         m.midiData[0]  = MIDI_NOTEOFF | channel;
                                         m.midiData[1]  = slot[s].note;
                                         m.midiData[2]  = 0;
-                                        outputs[0].push_back (m);
+                                        outputs[0].push_back(m);
                                         notesPlaying[slot[s].note] = false;
                                     }
                                 }
@@ -377,12 +377,12 @@ void MidiNoteGroups::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     }
                 }
                 if (param[kProgCh] >= 0.5f)
-                    setProgram (data1);
+                    setProgram(data1);
             }
         }
 
         if (! discard)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
 
     } //for() inputs loop
 

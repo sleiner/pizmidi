@@ -24,7 +24,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 MidiMonitorPlugin::MidiMonitorPlugin()
-    : loop (0), messages (0)
+    : loop(0), messages(0)
 {
     iter         = 0;
     lastUIWidth  = 392;
@@ -58,7 +58,7 @@ MidiMonitorPlugin::MidiMonitorPlugin()
     mode     = 0.f;
     maxLines = 5000;
 
-    programName = "midiMonitor " + juce::String (JucePlugin_VersionString);
+    programName = "midiMonitor " + juce::String(JucePlugin_VersionString);
 
     if (! loadDefaultFxb())
         loadDefaultFxp();
@@ -66,8 +66,8 @@ MidiMonitorPlugin::MidiMonitorPlugin()
 
 MidiMonitorPlugin::~MidiMonitorPlugin()
 {
-    deleteAndZero (loop);
-    deleteAndZero (messages);
+    deleteAndZero(loop);
+    deleteAndZero(messages);
 }
 
 //==============================================================================
@@ -76,7 +76,7 @@ int MidiMonitorPlugin::getNumParameters()
     return kNumParams;
 }
 
-float MidiMonitorPlugin::getParameter (int index)
+float MidiMonitorPlugin::getParameter(int index)
 {
     switch (index)
     {
@@ -132,7 +132,7 @@ float MidiMonitorPlugin::getParameter (int index)
     }
 }
 
-void MidiMonitorPlugin::setParameter (int index, float newValue)
+void MidiMonitorPlugin::setParameter(int index, float newValue)
 {
     switch (index)
     {
@@ -178,45 +178,45 @@ void MidiMonitorPlugin::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-const juce::String MidiMonitorPlugin::getParameterName (int index)
+const juce::String MidiMonitorPlugin::getParameterName(int index)
 {
     switch (index)
     {
         case kBgHue:
-            return juce::String ("Hue");
+            return juce::String("Hue");
             break;
         case kBgSat:
-            return juce::String ("Saturation");
+            return juce::String("Saturation");
             break;
         case kBgBri:
-            return juce::String ("Brightness");
+            return juce::String("Brightness");
             break;
         case kContrast:
-            return juce::String ("Contrast");
+            return juce::String("Contrast");
             break;
         case kPower:
-            return juce::String ("Power");
+            return juce::String("Power");
             break;
         case kThru:
-            return juce::String ("Thru");
+            return juce::String("Thru");
             break;
         case kBytes:
-            return juce::String ("ShowBytes");
+            return juce::String("ShowBytes");
             break;
         case kWrap:
-            return juce::String ("WordWrap");
+            return juce::String("WordWrap");
             break;
         case kTime:
-            return juce::String ("ShowTime");
+            return juce::String("ShowTime");
             break;
         case kTicks:
-            return juce::String ("TicksPerBeat");
+            return juce::String("TicksPerBeat");
             break;
         case kTimeMode:
-            return juce::String ("TimeMode");
+            return juce::String("TimeMode");
             break;
         case kFrames:
-            return juce::String ("FramesPerSec");
+            return juce::String("FramesPerSec");
             break;
         default:
             return juce::String();
@@ -224,103 +224,103 @@ const juce::String MidiMonitorPlugin::getParameterName (int index)
     }
 }
 
-const juce::String MidiMonitorPlugin::getParameterText (int index)
+const juce::String MidiMonitorPlugin::getParameterText(int index)
 {
     switch (index)
     {
         case kBgHue:
-            return juce::String (roundToInt (100.f * bghue));
+            return juce::String(roundToInt(100.f * bghue));
             break;
         case kBgSat:
-            return juce::String (roundToInt (100.f * bgsat));
+            return juce::String(roundToInt(100.f * bgsat));
             break;
         case kBgBri:
-            return juce::String (roundToInt (100.f * bgbri));
+            return juce::String(roundToInt(100.f * bgbri));
             break;
         case kContrast:
-            return juce::String (roundToInt (100.f * contrast));
+            return juce::String(roundToInt(100.f * contrast));
             break;
         case kPower:
-            return juce::String (power);
+            return juce::String(power);
             break;
         case kThru:
-            return juce::String (thru);
+            return juce::String(thru);
             break;
         case kBytes:
-            return juce::String (bytes);
+            return juce::String(bytes);
             break;
         case kWrap:
-            return juce::String (wrap);
+            return juce::String(wrap);
             break;
         case kTime:
-            return juce::String (showtime);
+            return juce::String(showtime);
             break;
         case kTicks:
-            return juce::String (ticks);
+            return juce::String(ticks);
             break;
         case kTimeMode:
-            return juce::String (mode);
+            return juce::String(mode);
             break;
         case kFrames:
-            return juce::String (frames);
+            return juce::String(frames);
             break;
         default:
             return juce::String();
             break;
     }
 }
-const juce::String MidiMonitorPlugin::getInputChannelName (const int channelIndex) const
+const juce::String MidiMonitorPlugin::getInputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-const juce::String MidiMonitorPlugin::getOutputChannelName (const int channelIndex) const
+const juce::String MidiMonitorPlugin::getOutputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-bool MidiMonitorPlugin::isInputChannelStereoPair (int index) const
+bool MidiMonitorPlugin::isInputChannelStereoPair(int index) const
 {
     return true;
 }
 
-bool MidiMonitorPlugin::isOutputChannelStereoPair (int index) const
+bool MidiMonitorPlugin::isOutputChannelStereoPair(int index) const
 {
     return true;
 }
 
 //==============================================================================
-void MidiMonitorPlugin::prepareToPlay (double sampleRate, int samplesPerBlock)
+void MidiMonitorPlugin::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    midiCollector.reset (sampleRate);
+    midiCollector.reset(sampleRate);
 }
 
 void MidiMonitorPlugin::releaseResources()
 {
-    midiCollector.reset (44100);
+    midiCollector.reset(44100);
 }
 
-void MidiMonitorPlugin::processBlock (juce::AudioSampleBuffer& buffer,
-                                      juce::MidiBuffer& midiMessages)
+void MidiMonitorPlugin::processBlock(juce::AudioSampleBuffer& buffer,
+                                     juce::MidiBuffer& midiMessages)
 {
     ++iter;
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     }
     if (power >= 0.5f)
     {
         juce::AudioPlayHead::CurrentPositionInfo pos;
-        if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
+        if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition(pos))
         {
-            if (memcmp (&pos, &lastPosInfo, sizeof (pos)) != 0)
+            if (memcmp(&pos, &lastPosInfo, sizeof(pos)) != 0)
             {
                 lastPosInfo = pos;
             }
         }
         else
         { //no timeinfo
-            zeromem (&lastPosInfo, sizeof (lastPosInfo));
+            zeromem(&lastPosInfo, sizeof(lastPosInfo));
             lastPosInfo.timeSigNumerator   = 4;
             lastPosInfo.timeSigDenominator = 4;
             lastPosInfo.bpm                = 120;
@@ -369,15 +369,15 @@ void MidiMonitorPlugin::processBlock (juce::AudioSampleBuffer& buffer,
                 //message.setTimeStamp(counter);
                 //midiCollector.addMessageToQueue (message);
 
-                message.setTimeStamp (0);
+                message.setTimeStamp(0);
                 if (getActiveEditor() != 0)
                 {
-                    if (getParameter (kTimeMode) == 1.f)
-                        messages->addEvent (message, (double) iter + (double) samplePos * 0.000001);
+                    if (getParameter(kTimeMode) == 1.f)
+                        messages->addEvent(message, (double) iter + (double) samplePos * 0.000001);
                     else
-                        messages->addEvent (message, lastPosInfo.ppqPosition + ((double) samplePos) * ppqPerSample);
+                        messages->addEvent(message, lastPosInfo.ppqPosition + ((double) samplePos) * ppqPerSample);
                 }
-                loop->addEvent (message, roundToInt ((samples + (double) samplePos) * ppqPerSample * 960.0));
+                loop->addEvent(message, roundToInt((samples + (double) samplePos) * ppqPerSample * 960.0));
                 if (message.isNoteOnOrOff())
                 {
                     loop->updateMatchedPairs();
@@ -393,11 +393,11 @@ void MidiMonitorPlugin::processBlock (juce::AudioSampleBuffer& buffer,
 //==============================================================================
 juce::AudioProcessorEditor* MidiMonitorPlugin::createEditor()
 {
-    return new MidiMonitorEditor (this);
+    return new MidiMonitorEditor(this);
 }
 
 //==============================================================================
-void MidiMonitorPlugin::getStateInformation (juce::MemoryBlock& destData)
+void MidiMonitorPlugin::getStateInformation(juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -405,80 +405,80 @@ void MidiMonitorPlugin::getStateInformation (juce::MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState("MYPLUGINSETTINGS");
 
     // add some attributes to it..
-    xmlState.setAttribute ("pluginVersion", 1);
-    xmlState.setAttribute ("Hue", bghue);
-    xmlState.setAttribute ("Sat", bgsat);
-    xmlState.setAttribute ("Bri", bgbri);
-    xmlState.setAttribute ("Contrast", contrast);
-    xmlState.setAttribute ("Power", power);
-    xmlState.setAttribute ("Thru", thru);
-    xmlState.setAttribute ("ShowBytes", bytes);
-    xmlState.setAttribute ("WordWrap", wrap);
-    xmlState.setAttribute ("ShowTime", showtime);
-    xmlState.setAttribute ("TimeMode", mode);
-    xmlState.setAttribute ("TicksPerBeat", ticks);
-    xmlState.setAttribute ("FramesPerSec", frames);
-    xmlState.setAttribute ("MaxLines", maxLines);
+    xmlState.setAttribute("pluginVersion", 1);
+    xmlState.setAttribute("Hue", bghue);
+    xmlState.setAttribute("Sat", bgsat);
+    xmlState.setAttribute("Bri", bgbri);
+    xmlState.setAttribute("Contrast", contrast);
+    xmlState.setAttribute("Power", power);
+    xmlState.setAttribute("Thru", thru);
+    xmlState.setAttribute("ShowBytes", bytes);
+    xmlState.setAttribute("WordWrap", wrap);
+    xmlState.setAttribute("ShowTime", showtime);
+    xmlState.setAttribute("TimeMode", mode);
+    xmlState.setAttribute("TicksPerBeat", ticks);
+    xmlState.setAttribute("FramesPerSec", frames);
+    xmlState.setAttribute("MaxLines", maxLines);
 
-    xmlState.setAttribute ("useNotes", useNotes);
-    xmlState.setAttribute ("useCC", useCC);
-    xmlState.setAttribute ("usePB", usePB);
-    xmlState.setAttribute ("usePC", usePC);
-    xmlState.setAttribute ("useCP", useCP);
-    xmlState.setAttribute ("usePA", usePA);
-    xmlState.setAttribute ("useClock", useClock);
-    xmlState.setAttribute ("useSysEx", useSysEx);
-    xmlState.setAttribute ("useOther", useOther);
+    xmlState.setAttribute("useNotes", useNotes);
+    xmlState.setAttribute("useCC", useCC);
+    xmlState.setAttribute("usePB", usePB);
+    xmlState.setAttribute("usePC", usePC);
+    xmlState.setAttribute("useCP", useCP);
+    xmlState.setAttribute("usePA", usePA);
+    xmlState.setAttribute("useClock", useClock);
+    xmlState.setAttribute("useSysEx", useSysEx);
+    xmlState.setAttribute("useOther", useOther);
 
-    xmlState.setAttribute ("uiWidth", lastUIWidth);
-    xmlState.setAttribute ("uiHeight", lastUIHeight);
+    xmlState.setAttribute("uiWidth", lastUIWidth);
+    xmlState.setAttribute("uiHeight", lastUIHeight);
 
     // you could also add as many child elements as you need to here..
 
     // then use this helper function to stuff it into the binary blob and return it..
-    copyXmlToBinary (xmlState, destData);
+    copyXmlToBinary(xmlState, destData);
 }
 
-void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
+void MidiMonitorPlugin::setStateInformation(const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary(data, sizeInBytes);
 
     if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            bghue    = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat    = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri    = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
-            contrast = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
-            power    = (float) xmlState->getDoubleAttribute ("Power", power);
-            thru     = (float) xmlState->getDoubleAttribute ("Thru", thru);
-            bytes    = (float) xmlState->getDoubleAttribute ("ShowBytes", bytes);
-            wrap     = (float) xmlState->getDoubleAttribute ("WordWrap", wrap);
-            showtime = (float) xmlState->getDoubleAttribute ("ShowTime", showtime);
-            mode     = (float) xmlState->getDoubleAttribute ("TimeMode", mode);
-            ticks    = (float) xmlState->getDoubleAttribute ("TicksPerBeat", ticks);
-            frames   = (float) xmlState->getDoubleAttribute ("FramesPerSec", frames);
-            maxLines = xmlState->getIntAttribute ("MaxLines", maxLines);
+            bghue    = (float) xmlState->getDoubleAttribute("Hue", bghue);
+            bgsat    = (float) xmlState->getDoubleAttribute("Sat", bgsat);
+            bgbri    = (float) xmlState->getDoubleAttribute("Bri", bgbri);
+            contrast = (float) xmlState->getDoubleAttribute("Contrast", contrast);
+            power    = (float) xmlState->getDoubleAttribute("Power", power);
+            thru     = (float) xmlState->getDoubleAttribute("Thru", thru);
+            bytes    = (float) xmlState->getDoubleAttribute("ShowBytes", bytes);
+            wrap     = (float) xmlState->getDoubleAttribute("WordWrap", wrap);
+            showtime = (float) xmlState->getDoubleAttribute("ShowTime", showtime);
+            mode     = (float) xmlState->getDoubleAttribute("TimeMode", mode);
+            ticks    = (float) xmlState->getDoubleAttribute("TicksPerBeat", ticks);
+            frames   = (float) xmlState->getDoubleAttribute("FramesPerSec", frames);
+            maxLines = xmlState->getIntAttribute("MaxLines", maxLines);
 
-            useNotes = xmlState->getBoolAttribute ("useNotes", true);
-            useCC    = xmlState->getBoolAttribute ("useCC", true);
-            usePB    = xmlState->getBoolAttribute ("usePB", true);
-            usePC    = xmlState->getBoolAttribute ("usePC", true);
-            useCP    = xmlState->getBoolAttribute ("useCP", true);
-            usePA    = xmlState->getBoolAttribute ("usePA", true);
-            useClock = xmlState->getBoolAttribute ("useClock", true);
-            useSysEx = xmlState->getBoolAttribute ("useSysEx", true);
-            useOther = xmlState->getBoolAttribute ("useOther", true);
+            useNotes = xmlState->getBoolAttribute("useNotes", true);
+            useCC    = xmlState->getBoolAttribute("useCC", true);
+            usePB    = xmlState->getBoolAttribute("usePB", true);
+            usePC    = xmlState->getBoolAttribute("usePC", true);
+            useCP    = xmlState->getBoolAttribute("useCP", true);
+            usePA    = xmlState->getBoolAttribute("usePA", true);
+            useClock = xmlState->getBoolAttribute("useClock", true);
+            useSysEx = xmlState->getBoolAttribute("useSysEx", true);
+            useOther = xmlState->getBoolAttribute("useOther", true);
 
-            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
-            lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
+            lastUIWidth  = xmlState->getIntAttribute("uiWidth", lastUIWidth);
+            lastUIHeight = xmlState->getIntAttribute("uiHeight", lastUIHeight);
 
             sendChangeMessage();
         }
@@ -486,27 +486,27 @@ void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
     this->dispatchPendingMessages();
 }
 
-bool MidiMonitorPlugin::writeMidiFile (juce::File mid)
+bool MidiMonitorPlugin::writeMidiFile(juce::File mid)
 {
     juce::MidiFile midifile;
-    midifile.setTicksPerQuarterNote (960);
+    midifile.setTicksPerQuarterNote(960);
     juce::MidiMessageSequence metadata;
 
-    juce::MidiMessage nstart = juce::MidiMessage (0x9f, 62, 1, 0);
-    metadata.addEvent (nstart, 0.0);
+    juce::MidiMessage nstart = juce::MidiMessage(0x9f, 62, 1, 0);
+    metadata.addEvent(nstart, 0.0);
 
     juce::uint8 tn[]            = { 0xFF, 0x03, 11, 'm', 'i', 'd', 'i', 'M', 'o', 'n', 'i', 't', 'o', 'r' };
-    juce::MidiMessage trackname = juce::MidiMessage (tn, 14, 0);
-    loop->addEvent (trackname);
+    juce::MidiMessage trackname = juce::MidiMessage(tn, 14, 0);
+    loop->addEvent(trackname);
 
-    midifile.addTrack (*loop);
+    midifile.addTrack(*loop);
 
     if (mid.exists())
         mid.deleteFile();
     if (mid.create())
     {
-        juce::FileOutputStream file (mid);
-        midifile.writeTo (file);
+        juce::FileOutputStream file(mid);
+        midifile.writeTo(file);
     }
     return true;
 }

@@ -7,9 +7,9 @@
 #include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiExactDelay (audioMaster);
+    return new MidiExactDelay(audioMaster);
 }
 
 MidiExactDelayProgram::MidiExactDelayProgram()
@@ -37,18 +37,18 @@ MidiExactDelayProgram::MidiExactDelayProgram()
         }
     }
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiExactDelay::MidiExactDelay (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiExactDelay::MidiExactDelay(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiExactDelayProgram[numPrograms];
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -56,9 +56,9 @@ MidiExactDelay::MidiExactDelay (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -67,12 +67,12 @@ MidiExactDelay::MidiExactDelay (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
-    srand ((unsigned int) time (NULL));
+    srand((unsigned int) time(NULL));
 
     wasplaying = false;
     isplaying  = false;
@@ -89,35 +89,35 @@ MidiExactDelay::~MidiExactDelay()
 }
 
 //------------------------------------------------------------------------
-void MidiExactDelay::setProgram (VstInt32 program)
+void MidiExactDelay::setProgram(VstInt32 program)
 {
     MidiExactDelayProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
 }
 
 //------------------------------------------------------------------------
-void MidiExactDelay::setProgramName (char* name)
+void MidiExactDelay::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiExactDelay::getProgramName (char* name)
+void MidiExactDelay::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiExactDelay::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiExactDelay::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
@@ -131,7 +131,7 @@ void MidiExactDelay::resume()
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiExactDelay::setParameter (VstInt32 index, float value)
+void MidiExactDelay::setParameter(VstInt32 index, float value)
 {
     MidiExactDelayProgram* ap = &programs[curProgram];
     param[index] = ap->param[index] = value;
@@ -196,187 +196,187 @@ void MidiExactDelay::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiExactDelay::getParameter (VstInt32 index)
+float MidiExactDelay::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiExactDelay::getParameterName (VstInt32 index, char* label)
+void MidiExactDelay::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kSync:
-            strcpy (label, "TimeMode");
+            strcpy(label, "TimeMode");
             break;
         case kMode:
-            strcpy (label, "Mode");
+            strcpy(label, "Mode");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         case kWet:
-            strcpy (label, "Output");
+            strcpy(label, "Output");
             break;
 
         case kSeconds:
-            strcpy (label, "Seconds");
+            strcpy(label, "Seconds");
             break;
         case kTenths:
-            strcpy (label, "Tenths");
+            strcpy(label, "Tenths");
             break;
         case kHundredths:
-            strcpy (label, "Hundredth");
+            strcpy(label, "Hundredth");
             break;
         case kThousandths:
-            strcpy (label, "Thousandths");
+            strcpy(label, "Thousandths");
             break;
 
         case kBars:
-            strcpy (label, "Bars");
+            strcpy(label, "Bars");
             break;
         case kBeats:
-            strcpy (label, "Beats");
+            strcpy(label, "Beats");
             break;
         case kBeatDiv:
-            strcpy (label, "NoteValue");
+            strcpy(label, "NoteValue");
             break;
         case kTicks:
-            strcpy (label, "Ticks");
+            strcpy(label, "Ticks");
             break;
 
         case k1000Samples:
-            strcpy (label, "1000 samples");
+            strcpy(label, "1000 samples");
             break;
         case k100Samples:
-            strcpy (label, "100 samples");
+            strcpy(label, "100 samples");
             break;
         case k10Samples:
-            strcpy (label, "10 samples");
+            strcpy(label, "10 samples");
             break;
         case kSamples:
-            strcpy (label, "samples");
+            strcpy(label, "samples");
             break;
 
         default:
-            strcpy (label, " ");
+            strcpy(label, " ");
             break;
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiExactDelay::getParameterDisplay (VstInt32 index, char* text)
+void MidiExactDelay::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kMode:
             if (param[index] == 0.0f)
-                strcpy (text, "Off");
+                strcpy(text, "Off");
             else if (param[index] < 0.5f)
-                strcpy (text, "Notes Only");
+                strcpy(text, "Notes Only");
             else if (param[index] < 1.0f)
-                strcpy (text, "Notes & CCs");
+                strcpy(text, "Notes & CCs");
             else
-                strcpy (text, "Everything");
+                strcpy(text, "Everything");
             break;
         case kSync:
             if (timebase == sec)
-                strcpy (text, "Seconds");
+                strcpy(text, "Seconds");
             else if (timebase == beat)
-                strcpy (text, "NoteValue");
+                strcpy(text, "NoteValue");
             else
-                strcpy (text, "Samples");
+                strcpy(text, "Samples");
             break;
         case kBeatDiv:
             if (Ticks == 2880.f)
-                strcpy (text, "dotted 2");
+                strcpy(text, "dotted 2");
             else if (Ticks == 2560.f)
-                strcpy (text, "whole triplet");
+                strcpy(text, "whole triplet");
             else if (Ticks == 1920.f)
-                strcpy (text, "2");
+                strcpy(text, "2");
             else if (Ticks == 1440.f)
-                strcpy (text, "Dotted 4");
+                strcpy(text, "Dotted 4");
             else if (Ticks == 1280.f)
-                strcpy (text, "2 Triplet");
+                strcpy(text, "2 Triplet");
             else if (Ticks == 960.f)
-                strcpy (text, "4");
+                strcpy(text, "4");
             else if (Ticks == 720.f)
-                strcpy (text, "Dotted 8");
+                strcpy(text, "Dotted 8");
             else if (Ticks == 640.f)
-                strcpy (text, "4 Triplet");
+                strcpy(text, "4 Triplet");
             else if (Ticks == 480.f)
-                strcpy (text, "8");
+                strcpy(text, "8");
             else if (Ticks == 360.f)
-                strcpy (text, "Dotted 16");
+                strcpy(text, "Dotted 16");
             else if (Ticks == 320.f)
-                strcpy (text, "8 Triplet");
+                strcpy(text, "8 Triplet");
             else if (Ticks == 240.f)
-                strcpy (text, "16");
+                strcpy(text, "16");
             else if (Ticks == 180.f)
-                strcpy (text, "Dotted 32");
+                strcpy(text, "Dotted 32");
             else if (Ticks == 160.f)
-                strcpy (text, "16 Triplet");
+                strcpy(text, "16 Triplet");
             else if (Ticks == 120.f)
-                strcpy (text, "32");
+                strcpy(text, "32");
             else if (Ticks == 90.f)
-                strcpy (text, "Dotted 64");
+                strcpy(text, "Dotted 64");
             else if (Ticks == 80.f)
-                strcpy (text, "32 Triplet");
+                strcpy(text, "32 Triplet");
             else if (Ticks == 60.f)
-                strcpy (text, "64");
+                strcpy(text, "64");
             else if (Ticks == 45.f)
-                strcpy (text, "Dotted 128");
+                strcpy(text, "Dotted 128");
             else if (Ticks == 40.f)
-                strcpy (text, "64 Triplet");
+                strcpy(text, "64 Triplet");
             else if (Ticks == 30.f)
-                strcpy (text, "128");
+                strcpy(text, "128");
             else
-                strcpy (text, "--");
+                strcpy(text, "--");
             break;
         case kBars:
-            sprintf (text, "%d", roundToInt (param[index] * 32.f));
+            sprintf(text, "%d", roundToInt(param[index] * 32.f));
             break;
         case kBeats:
-            sprintf (text, "%d", roundToInt (param[index] * 32.f));
+            sprintf(text, "%d", roundToInt(param[index] * 32.f));
             break;
         case kTicks:
-            sprintf (text, "%d", roundToInt (param[kTicks] * 100.f));
+            sprintf(text, "%d", roundToInt(param[kTicks] * 100.f));
             break;
         case k1000Samples:
-            sprintf (text, "%d000", roundToInt (param[index] * 100.f));
+            sprintf(text, "%d000", roundToInt(param[index] * 100.f));
             break;
         case k100Samples:
-            sprintf (text, "%d00", roundToInt (param[index] * 9.f));
+            sprintf(text, "%d00", roundToInt(param[index] * 9.f));
             break;
         case k10Samples:
-            sprintf (text, "%d0", roundToInt (param[index] * 9.f));
+            sprintf(text, "%d0", roundToInt(param[index] * 9.f));
             break;
         case kSamples:
-            sprintf (text, "%d", roundToInt (param[index] * 9.f));
+            sprintf(text, "%d", roundToInt(param[index] * 9.f));
             break;
         case kSeconds:
-            sprintf (text, "%d s", roundToInt (param[kSeconds] * 100.f));
+            sprintf(text, "%d s", roundToInt(param[kSeconds] * 100.f));
             break;
         case kTenths:
-            sprintf (text, "0.%d s", roundToInt (param[kTenths] * 9.f));
+            sprintf(text, "0.%d s", roundToInt(param[kTenths] * 9.f));
             break;
         case kHundredths:
-            sprintf (text, "0.0%d s", roundToInt (param[kHundredths] * 9.f));
+            sprintf(text, "0.0%d s", roundToInt(param[kHundredths] * 9.f));
             break;
         case kThousandths:
-            sprintf (text, "0.00%d s", roundToInt (param[kThousandths] * 9.f));
+            sprintf(text, "0.00%d s", roundToInt(param[kThousandths] * 9.f));
             break;
         case kWet:
-            sprintf (text, "%d %%", roundToInt (param[index] * 100.f));
+            sprintf(text, "%d %%", roundToInt(param[index] * 100.f));
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                strcpy (text, "All");
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+                strcpy(text, "All");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
             break;
         default:
-            sprintf (text, "%f", param[index]);
+            sprintf(text, "%f", param[index]);
             break;
     }
 }
@@ -386,11 +386,11 @@ void MidiExactDelay::cleanMidiDelayBuffer()
     midiDelayBuffer.clear();
 }
 
-void MidiExactDelay::preProcess (void)
+void MidiExactDelay::preProcess(void)
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     int numerator   = 4;
     int denominator = 4;
@@ -413,40 +413,40 @@ void MidiExactDelay::preProcess (void)
             isplaying = false;
     }
     ppqPerBar           = ((float) numerator * 4.f / (float) denominator);
-    samplesPerBeat      = roundToInt (60.0f * sampleRate / bpm);
-    samplesPerNumerator = roundToInt ((float) samplesPerBeat * (float) numerator * 0.25f);
-    samplesPerTick      = roundToInt ((float) samplesPerBeat / 960.0f);
+    samplesPerBeat      = roundToInt(60.0f * sampleRate / bpm);
+    samplesPerNumerator = roundToInt((float) samplesPerBeat * (float) numerator * 0.25f);
+    samplesPerTick      = roundToInt((float) samplesPerBeat / 960.0f);
 
     _cleanMidiOutBuffers();
 
-    sortMidiEvents (midiDelayBuffer);
+    sortMidiEvents(midiDelayBuffer);
 }
 
-void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void MidiExactDelay::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
-    short listenchannel = FLOAT_TO_CHANNEL (param[kChannel]);
+    short listenchannel = FLOAT_TO_CHANNEL(param[kChannel]);
 
     //calculate delay time
     VstInt32 delay = 0;
     if (timebase == sec)
     {
-        delay = roundToInt ((float) roundToInt (param[kSeconds] * 100.f) * sampleRate);
-        delay += roundToInt ((float) roundToInt (param[kTenths] * 9.f) * sampleRate * 0.1f);
-        delay += roundToInt ((float) roundToInt (param[kHundredths] * 9.f) * sampleRate * 0.01f);
-        delay += roundToInt ((float) roundToInt (param[kThousandths] * 9.f) * sampleRate * 0.001f);
+        delay = roundToInt((float) roundToInt(param[kSeconds] * 100.f) * sampleRate);
+        delay += roundToInt((float) roundToInt(param[kTenths] * 9.f) * sampleRate * 0.1f);
+        delay += roundToInt((float) roundToInt(param[kHundredths] * 9.f) * sampleRate * 0.01f);
+        delay += roundToInt((float) roundToInt(param[kThousandths] * 9.f) * sampleRate * 0.001f);
     }
     else if (timebase == beat)
     {
-        delay = roundToInt ((float) samplesPerBeat * (float) roundToInt (param[kBars] * 32.f) * ppqPerBar);
-        delay += roundToInt ((float) samplesPerNumerator * (float) roundToInt (param[kBeats] * 32.f));
-        delay += roundToInt ((float) samplesPerTick * (Ticks + param[kTicks] * 100.f));
+        delay = roundToInt((float) samplesPerBeat * (float) roundToInt(param[kBars] * 32.f) * ppqPerBar);
+        delay += roundToInt((float) samplesPerNumerator * (float) roundToInt(param[kBeats] * 32.f));
+        delay += roundToInt((float) samplesPerTick * (Ticks + param[kTicks] * 100.f));
     }
     else if (timebase == samp)
     {
-        delay = roundToInt (param[k1000Samples] * 100.f) * 1000;
-        delay += roundToInt (param[k100Samples] * 9.f) * 100;
-        delay += roundToInt (param[k10Samples] * 9.f) * 10;
-        delay += roundToInt (param[kSamples] * 9.f);
+        delay = roundToInt(param[k1000Samples] * 100.f) * 1000;
+        delay += roundToInt(param[k100Samples] * 9.f) * 100;
+        delay += roundToInt(param[k10Samples] * 9.f) * 10;
+        delay += roundToInt(param[kSamples] * 9.f);
     }
 
     //process delay buffer----------------------------------------------------------
@@ -467,31 +467,31 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         {
             //event is due, send it if output>0 and mode is right
             VstMidiEvent out = event;
-            out.midiData[2]  = roundToInt ((float) data2 * param[kWet]);
+            out.midiData[2]  = roundToInt((float) data2 * param[kWet]);
             if (status == MIDI_NOTEON && param[kMode] > 0.0f)
             {
                 if (out.midiData[2] < 1)
                     out.midiData[2] = 1;
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
             }
             else if (status == MIDI_NOTEOFF && param[kMode] > 0.0f)
             {
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
             }
             else if (status == MIDI_CONTROLCHANGE && param[kMode] >= 0.5f)
             {
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
             }
             else if (param[kMode] == 1.0f)
             {
-                outputs[0].push_back (out);
+                outputs[0].push_back(out);
             }
         }
         else
         {
             //not due yet, try next block
             event.deltaFrames -= samples;
-            newBuffer.push_back (event);
+            newBuffer.push_back(event);
         }
     }
     //put leftover messages back into the buffer
@@ -520,45 +520,45 @@ void MidiExactDelay::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
             {
                 // delayed note is within the current block, don't need counter
                 delayed.deltaFrames += delay;
-                delayed.midiData[2] = roundToInt ((float) data2 * param[kWet]);
+                delayed.midiData[2] = roundToInt((float) data2 * param[kWet]);
                 if (status == MIDI_NOTEON)
                 {
                     if (param[kMode] > 0.0f)
                     {
                         if (delayed.midiData[2] < 1)
                             delayed.midiData[2] = 1;
-                        outputs[0].push_back (delayed);
+                        outputs[0].push_back(delayed);
                     }
                 }
                 else if (status == MIDI_NOTEOFF)
                 {
                     if (param[kMode] > 0.0f)
-                        outputs[0].push_back (delayed);
+                        outputs[0].push_back(delayed);
                 }
                 else if (status == MIDI_CONTROLCHANGE)
                 {
                     if (param[kMode] >= 0.5f)
-                        outputs[0].push_back (delayed);
+                        outputs[0].push_back(delayed);
                 }
                 else if (param[kMode] == 1.0f)
                 {
-                    outputs[0].push_back (delayed);
+                    outputs[0].push_back(delayed);
                 }
             }
             else
             {
                 // delayed event is in a future block, so start counter:
                 delayed.deltaFrames = (delay - (samples - delayed.deltaFrames));
-                midiDelayBuffer.push_back (delayed);
+                midiDelayBuffer.push_back(delayed);
             }
         } // if listenchannel==channel
     }     //for() inputs loop
 
-    sortMidiEvents (outputs[0]);
+    sortMidiEvents(outputs[0]);
 
     if (wasplaying && ! isplaying)
     { //just stopped
-        dbg ("stopped");
+        dbg("stopped");
     }
     wasplaying = isplaying;
 }

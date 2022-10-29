@@ -14,9 +14,9 @@ class PizAudioProcessor : public juce::AudioProcessor
 public:
     PizAudioProcessor()
         : AudioProcessor(),
-          bottomOctave (-2),
-          reaper (false),
-          currentPath (((juce::File::getSpecialLocation (juce::File::currentApplicationFile)).getParentDirectory()).getFullPathName())
+          bottomOctave(-2),
+          reaper(false),
+          currentPath(((juce::File::getSpecialLocation(juce::File::currentApplicationFile)).getParentDirectory()).getFullPathName())
     {
     }
 
@@ -27,7 +27,7 @@ public:
             int szout        = 0;
             int reaperOctave = 0;
             void* p          = nullptr;
-            p                = get_config_var ("midioctoffs", &szout);
+            p                = get_config_var("midioctoffs", &szout);
             if (p)
             {
                 reaperOctave = *(int*) p;
@@ -41,26 +41,26 @@ public:
     {
         //look for a default bank
         juce::String defaultBank = currentPath + juce::File::getSeparatorString()
-                                 + juce::File::getSpecialLocation (juce::File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
-        if (juce::File (defaultBank).exists())
+                                 + juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension() + ".fxb";
+        if (juce::File(defaultBank).exists())
         {
-            juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            juce::File (defaultBank).loadFileAsData (bank);
-            bank.removeSection (0, 0xA0);
-            setStateInformation (bank.getData(), (int) bank.getSize());
+            juce::MemoryBlock bank = juce::MemoryBlock(0, true);
+            juce::File(defaultBank).loadFileAsData(bank);
+            bank.removeSection(0, 0xA0);
+            setStateInformation(bank.getData(), (int) bank.getSize());
             return true;
         }
         return false;
     }
 
-    bool loadFxbFile (juce::File file)
+    bool loadFxbFile(juce::File file)
     {
         if (file.existsAsFile())
         {
-            juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            file.loadFileAsData (bank);
-            bank.removeSection (0, 0xA0);
-            setStateInformation (bank.getData(), (int) bank.getSize());
+            juce::MemoryBlock bank = juce::MemoryBlock(0, true);
+            file.loadFileAsData(bank);
+            bank.removeSection(0, 0xA0);
+            setStateInformation(bank.getData(), (int) bank.getSize());
             return true;
         }
         return false;
@@ -70,26 +70,26 @@ public:
     {
         //look for a default patch
         juce::String defaultBank = currentPath + juce::File::getSeparatorString()
-                                 + juce::File::getSpecialLocation (juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
-        if (juce::File (defaultBank).exists())
+                                 + juce::File::getSpecialLocation(juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".fxp";
+        if (juce::File(defaultBank).exists())
         {
-            juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            juce::File (defaultBank).loadFileAsData (bank);
-            bank.removeSection (0, 0x3C);
-            setCurrentProgramStateInformation (bank.getData(), (int) bank.getSize());
+            juce::MemoryBlock bank = juce::MemoryBlock(0, true);
+            juce::File(defaultBank).loadFileAsData(bank);
+            bank.removeSection(0, 0x3C);
+            setCurrentProgramStateInformation(bank.getData(), (int) bank.getSize());
             return true;
         }
         return false;
     }
 
-    bool loadFxpFile (juce::File file)
+    bool loadFxpFile(juce::File file)
     {
         if (file.existsAsFile())
         {
-            juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-            file.loadFileAsData (bank);
-            bank.removeSection (0, 0x3C);
-            setCurrentProgramStateInformation (bank.getData(), (int) bank.getSize());
+            juce::MemoryBlock bank = juce::MemoryBlock(0, true);
+            file.loadFileAsData(bank);
+            bank.removeSection(0, 0x3C);
+            setCurrentProgramStateInformation(bank.getData(), (int) bank.getSize());
             return true;
         }
         return false;
@@ -101,11 +101,11 @@ public:
         return currentPath;
     }
 
-    double (*TimeMap2_timeToBeats) (ReaProject* proj, double tpos, int* measures, int* cml, double* fullbeats, int* cdenom);
+    double (*TimeMap2_timeToBeats)(ReaProject* proj, double tpos, int* measures, int* cml, double* fullbeats, int* cdenom);
     double (*GetPlayPosition)();
     double (*GetPlayPosition2)();
     double (*GetCursorPosition)();
-    void* (*get_config_var) (const char* name, int* szout);
+    void* (*get_config_var)(const char* name, int* szout);
     bool reaper;
     juce::String hostInfo;
 

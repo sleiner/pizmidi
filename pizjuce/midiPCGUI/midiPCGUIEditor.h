@@ -46,26 +46,26 @@ class midiPCGUIEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    midiPCGUIEditor (midiPCGUI* const ownerFilter);
+    midiPCGUIEditor(midiPCGUI* const ownerFilter);
     ~midiPCGUIEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void clickableLabelMouseDown(ClickableLabel* label, const juce::MouseEvent& e) override
     {
     }
-    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override
+    void clickableLabelMouseDoubleClick(ClickableLabel* label, const juce::MouseEvent& e) override
     {
         label->edit();
     }
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void labelTextChanged(juce::Label* labelThatHasChanged) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -113,7 +113,7 @@ private:
     juce::Path internalPath2;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (midiPCGUIEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(midiPCGUIEditor)
 };
 
 //[EndFile] You can add extra defines here...

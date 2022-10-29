@@ -3,41 +3,41 @@
 MidiSostenutoProgram::MidiSostenutoProgram()
 {
     // default Program Values
-    fParam01 = MIDI_TO_FLOAT (66.1);
-    fParam02 = MIDI_TO_FLOAT (0);
-    fParam03 = MIDI_TO_FLOAT (127);
+    fParam01 = MIDI_TO_FLOAT(66.1);
+    fParam02 = MIDI_TO_FLOAT(0);
+    fParam03 = MIDI_TO_FLOAT(127);
     fParam04 = 0.0f;
-    fParam05 = CHANNEL_TO_FLOAT015 (0);
-    strcpy (name, "sostenuto");
+    fParam05 = CHANNEL_TO_FLOAT015(0);
+    strcpy(name, "sostenuto");
 }
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiSostenuto (audioMaster);
+    return new MidiSostenuto(audioMaster);
 }
 
 //-----------------------------------------------------------------------------
-MidiSostenuto::MidiSostenuto (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiSostenuto::MidiSostenuto(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiSostenutoProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fParam01 = defaultBank->GetProgParm (i, 0);
-                    programs[i].fParam02 = defaultBank->GetProgParm (i, 1);
-                    programs[i].fParam03 = defaultBank->GetProgParm (i, 2);
-                    programs[i].fParam04 = defaultBank->GetProgParm (i, 3);
-                    programs[i].fParam05 = defaultBank->GetProgParm (i, 4);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    programs[i].fParam01 = defaultBank->GetProgParm(i, 0);
+                    programs[i].fParam02 = defaultBank->GetProgParm(i, 1);
+                    programs[i].fParam03 = defaultBank->GetProgParm(i, 2);
+                    programs[i].fParam04 = defaultBank->GetProgParm(i, 3);
+                    programs[i].fParam05 = defaultBank->GetProgParm(i, 4);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -46,9 +46,9 @@ MidiSostenuto::MidiSostenuto (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
-            setProgram (0);
+            setProgram(0);
         }
     }
 
@@ -75,42 +75,42 @@ MidiSostenuto::~MidiSostenuto()
 }
 
 //------------------------------------------------------------------------
-void MidiSostenuto::setProgram (VstInt32 program)
+void MidiSostenuto::setProgram(VstInt32 program)
 {
     MidiSostenutoProgram* ap = &programs[program];
     curProgram               = program;
-    setParameter (kParam01, ap->fParam01);
-    setParameter (kParam02, ap->fParam02);
-    setParameter (kParam03, ap->fParam03);
-    setParameter (kParam04, ap->fParam04);
-    setParameter (kParam05, ap->fParam05);
+    setParameter(kParam01, ap->fParam01);
+    setParameter(kParam02, ap->fParam02);
+    setParameter(kParam03, ap->fParam03);
+    setParameter(kParam04, ap->fParam04);
+    setParameter(kParam05, ap->fParam05);
 }
 
 //------------------------------------------------------------------------
-void MidiSostenuto::setProgramName (char* name)
+void MidiSostenuto::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiSostenuto::getProgramName (char* name)
+void MidiSostenuto::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiSostenuto::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiSostenuto::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSostenuto::setParameter (VstInt32 index, float value)
+void MidiSostenuto::setParameter(VstInt32 index, float value)
 {
     MidiSostenutoProgram* ap = &programs[curProgram];
     switch (index)
@@ -136,7 +136,7 @@ void MidiSostenuto::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiSostenuto::getParameter (VstInt32 index)
+float MidiSostenuto::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -164,24 +164,24 @@ float MidiSostenuto::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSostenuto::getParameterName (VstInt32 index, char* label)
+void MidiSostenuto::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kParam01:
-            strcpy (label, "Pedal CC");
+            strcpy(label, "Pedal CC");
             break;
         case kParam02:
-            strcpy (label, "Low Note");
+            strcpy(label, "Low Note");
             break;
         case kParam03:
-            strcpy (label, "High Note");
+            strcpy(label, "High Note");
             break;
         case kParam04:
-            strcpy (label, "Pedal Position");
+            strcpy(label, "Pedal Position");
             break;
         case kParam05:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         default:
             break;
@@ -189,41 +189,41 @@ void MidiSostenuto::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiSostenuto::getParameterDisplay (VstInt32 index, char* text)
+void MidiSostenuto::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kParam01:
-            sprintf (text, "%d", FLOAT_TO_MIDI (fParam01));
+            sprintf(text, "%d", FLOAT_TO_MIDI(fParam01));
             break;
         case kParam02:
-            strcpy (text, getNoteName (FLOAT_TO_MIDI (fParam02), bottomOctave));
+            strcpy(text, getNoteName(FLOAT_TO_MIDI(fParam02), bottomOctave));
             break;
         case kParam03:
-            strcpy (text, getNoteName (FLOAT_TO_MIDI (fParam03), bottomOctave));
+            strcpy(text, getNoteName(FLOAT_TO_MIDI(fParam03), bottomOctave));
             break;
         case kParam04:
-            if (FLOAT_TO_MIDI (fParam04) >= PEDAL_THRESHOLD)
-                strcpy (text, "on");
+            if (FLOAT_TO_MIDI(fParam04) >= PEDAL_THRESHOLD)
+                strcpy(text, "on");
             else
-                strcpy (text, "off");
+                strcpy(text, "off");
             break;
         case kParam05:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (fParam05) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(fParam05) + 1);
             break;
         default:
             break;
     }
 }
 
-void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiSostenuto::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    short outchannel = FLOAT_TO_CHANNEL015 (fParam05);
+    short outchannel = FLOAT_TO_CHANNEL015(fParam05);
     int n;
     discard = 0;
 
     // use "Pedal Position" parameter as the pedal
-    CCvalue_current = FLOAT_TO_MIDI (fParam04);
+    CCvalue_current = FLOAT_TO_MIDI(fParam04);
     if (CCvalue_current >= PEDAL_THRESHOLD && CCvalue_prev < PEDAL_THRESHOLD)
     {
         sostenuto = 1;
@@ -246,7 +246,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                     noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
                     noteoffplease.midiData[1]  = n;
                     noteoffplease.midiData[2]  = 0;
-                    outputs[0].push_back (noteoffplease);
+                    outputs[0].push_back(noteoffplease);
                 }
             }
         }
@@ -263,15 +263,15 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         short channel  = tomod.midiData[0] & 0x0f; // isolating channel
         short data1    = tomod.midiData[1] & 0x7f;
         short data2    = tomod.midiData[2] & 0x7f;
-        short listenCC = FLOAT_TO_MIDI (fParam01);
-        short lownote  = FLOAT_TO_MIDI (fParam02);
-        short highnote = FLOAT_TO_MIDI (fParam03);
+        short listenCC = FLOAT_TO_MIDI(fParam01);
+        short lownote  = FLOAT_TO_MIDI(fParam02);
+        short highnote = FLOAT_TO_MIDI(fParam03);
 
         if (channel == outchannel)
         { //only look at the selected channel
             if (status == MIDI_CONTROLCHANGE && data1 == MIDI_ALL_NOTES_OFF)
             { //handle midi panic
-                setParameter (kParam04, MIDI_TO_FLOAT (0));
+                setParameter(kParam04, MIDI_TO_FLOAT(0));
                 sostenuto = 0;
                 for (n = 0; n < 128; n++)
                 {
@@ -282,7 +282,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
                         noteoffplease.midiData[1]  = n;
                         noteoffplease.midiData[2]  = 0;
-                        outputs[0].push_back (noteoffplease);
+                        outputs[0].push_back(noteoffplease);
                     }
                 }
             }
@@ -315,8 +315,8 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
 
             else if (status == MIDI_CONTROLCHANGE && data1 == listenCC)
             {
-                setParameterAutomated (kParam04, MIDI_TO_FLOAT (data2)); //energyXT2 used to move the slider with the CC. anybody else?
-                discard = 1;                                             //don't send the CC through
+                setParameterAutomated(kParam04, MIDI_TO_FLOAT(data2)); //energyXT2 used to move the slider with the CC. anybody else?
+                discard = 1;                                           //don't send the CC through
                 if (data2 >= PEDAL_THRESHOLD && sostenuto == 0)
                 {
                     sostenuto = 1;
@@ -340,7 +340,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                                 noteoffplease.midiData[0]  = MIDI_NOTEOFF + outchannel;
                                 noteoffplease.midiData[1]  = n;
                                 noteoffplease.midiData[2]  = 0;
-                                outputs[0].push_back (noteoffplease);
+                                outputs[0].push_back(noteoffplease);
                             }
                         }
                     }
@@ -350,7 +350,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
 
         //pushing back our copied midi event from input, modified or not!
         if (discard != 1)
-            outputs[0].push_back (tomod);
+            outputs[0].push_back(tomod);
         //else discard = 0;
 
         //create queued events
@@ -362,7 +362,7 @@ void MidiSostenuto::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 noteonplease.midiData[0]  = MIDI_NOTEON + outchannel;
                 noteonplease.midiData[1]  = n;
                 noteonplease.midiData[2]  = (char) noteon_queue_velocity[n];
-                outputs[0].push_back (noteonplease);
+                outputs[0].push_back(noteonplease);
                 noteon_queue[n] = 0;
             }
         }

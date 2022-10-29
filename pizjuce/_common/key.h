@@ -14,47 +14,47 @@ static juce::XmlElement::TextFormat getXmlFormat()
     return format;
 }
 
-static const juce::String encryptXml (const juce::XmlElement* xml,
-                                      const juce::String& rsaPrivateKey)
+static const juce::String encryptXml(const juce::XmlElement* xml,
+                                     const juce::String& rsaPrivateKey)
 {
     juce::BigInteger val;
 
     if (xml != nullptr)
     {
-        const juce::String s (xml->toString (getXmlFormat()));
-        const juce::MemoryBlock mb (s.toUTF8(), s.length());
+        const juce::String s(xml->toString(getXmlFormat()));
+        const juce::MemoryBlock mb(s.toUTF8(), s.length());
 
-        val.loadFromMemoryBlock (mb);
+        val.loadFromMemoryBlock(mb);
     }
 
-    juce::RSAKey key (rsaPrivateKey);
-    key.applyToValue (val);
+    juce::RSAKey key(rsaPrivateKey);
+    key.applyToValue(val);
 
-    return val.toString (16);
+    return val.toString(16);
 }
 #endif
 
-static std::unique_ptr<juce::XmlElement> decodeEncryptedXml (const juce::String& hexData,
-                                                             const juce::String& rsaPublicKey)
+static std::unique_ptr<juce::XmlElement> decodeEncryptedXml(const juce::String& hexData,
+                                                            const juce::String& rsaPublicKey)
 {
     if (hexData.isEmpty())
         return nullptr;
 
     juce::BigInteger val;
-    val.parseString (hexData, 16);
+    val.parseString(hexData, 16);
 
-    juce::RSAKey key (rsaPublicKey);
-    key.applyToValue (val);
+    juce::RSAKey key(rsaPublicKey);
+    key.applyToValue(val);
 
-    const juce::MemoryBlock mb (val.toMemoryBlock());
-    juce::XmlDocument doc (mb.toString());
+    const juce::MemoryBlock mb(val.toMemoryBlock());
+    juce::XmlDocument doc(mb.toString());
 
     auto xml = doc.getDocumentElement();
 
 #ifdef JUCE_DEBUG
     if (xml != nullptr)
     {
-        DBG (xml->toString (getXmlFormat()));
+        DBG(xml->toString(getXmlFormat()));
     }
 #endif
 

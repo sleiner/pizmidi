@@ -31,20 +31,20 @@ class MidiCurvePrograms : public BankStorage
 public:
     MidiCurvePrograms();
 
-    void set (int prog, const juce::Identifier& name, const juce::var& newValue)
+    void set(int prog, const juce::Identifier& name, const juce::var& newValue)
     {
-        BankStorage::set (0, prog, name.toString(), newValue);
+        BankStorage::set(0, prog, name.toString(), newValue);
     }
-    const juce::var get (int prog, const juce::Identifier& name)
+    const juce::var get(int prog, const juce::Identifier& name)
     {
-        return BankStorage::get (0, prog, name.toString());
+        return BankStorage::get(0, prog, name.toString());
     }
 
-    void loadProgram (int prog, juce::InputStream& stream)
+    void loadProgram(int prog, juce::InputStream& stream)
     {
-        values_.removeChild (values_.getChild (prog), nullptr);
-        values_.addChild (juce::ValueTree::readFromStream (stream), prog, nullptr);
-        values_.getChild (prog).setProperty ("progIndex", prog, nullptr);
+        values_.removeChild(values_.getChild(prog), nullptr);
+        values_.addChild(juce::ValueTree::readFromStream(stream), prog, nullptr);
+        values_.getChild(prog).setProperty("progIndex", prog, nullptr);
     }
 };
 
@@ -58,10 +58,10 @@ public:
     ~MidiCurve() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -97,16 +97,16 @@ public:
         return kNumParams;
     }
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -119,15 +119,15 @@ public:
         return kNumPrograms;
     }
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
-    void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getCurrentProgramStateInformation(juce::MemoryBlock& destData) override;
+    void setCurrentProgramStateInformation(const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     //==============================================================================
     int lastUIWidth, lastUIHeight;
@@ -143,12 +143,12 @@ public:
         }
         int lastCCOut, lastCCIn;
     } lastMsg;
-    float getPointValue (int n, int y);
-    bool isPointActive (int point);
-    bool isPointControl (int point);
-    int getPrevActivePoint (int currentPoint);
-    int getNextActivePoint (int currentPoint);
-    void resetPoints (bool copyToProgram = true);
+    float getPointValue(int n, int y);
+    bool isPointActive(int point);
+    bool isPointControl(int point);
+    int getPrevActivePoint(int currentPoint);
+    int getNextActivePoint(int currentPoint);
+    void resetPoints(bool copyToProgram = true);
     juce::Path path;
 
 private:
@@ -157,15 +157,15 @@ private:
     class midiPoint
     {
     public:
-        midiPoint (float x, float y, bool active, bool control)
+        midiPoint(float x, float y, bool active, bool control)
         {
-            p.setXY (x, y);
+            p.setXY(x, y);
             isControl = control;
             isActive  = active;
         }
         midiPoint()
         {
-            p.setXY (0.f, 0.f);
+            p.setXY(0.f, 0.f);
             isControl = false;
             isActive  = true;
         }
@@ -178,9 +178,9 @@ private:
 
     struct PointComparator
     {
-        int compareElements (midiPoint a, midiPoint b)
+        int compareElements(midiPoint a, midiPoint b)
         {
-            return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f);
+            return juce::roundToInt(a.p.getX() * 127.f) - juce::roundToInt(b.p.getX() * 127.f);
         }
     } pointComparator;
 
@@ -192,12 +192,12 @@ private:
 
     bool init;
 
-    void copySettingsToProgram (int index);
-    float findValue (float input);
-    double linearInterpolate (double x, double y1, double y2, double x1, double x2);
-    int findPBValue (int input);
+    void copySettingsToProgram(int index);
+    float findValue(float input);
+    double linearInterpolate(double x, double y1, double y2, double x1, double x2);
+    int findPBValue(int input);
 
-    JUCE_LEAK_DETECTOR (MidiCurve)
+    JUCE_LEAK_DETECTOR(MidiCurve)
 };
 
 #endif

@@ -9,11 +9,11 @@
 class Module : public XYItem
 {
 public:
-    virtual void mouseDown (const juce::MouseEvent& e);
+    virtual void mouseDown(const juce::MouseEvent& e);
 
-    virtual void mouseDrag (const juce::MouseEvent&);
+    virtual void mouseDrag(const juce::MouseEvent&);
 
-    virtual void mouseUp (const juce::MouseEvent& e);
+    virtual void mouseUp(const juce::MouseEvent& e);
 
     juce::Colour colour;
 

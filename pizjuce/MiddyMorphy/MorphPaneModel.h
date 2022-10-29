@@ -16,20 +16,20 @@ class MorphPaneModel : public ModulePaneModel,
                        public juce::Component
 {
 public:
-    MorphPaneModel (MidiMorph* core);
+    MorphPaneModel(MidiMorph* core);
 
     int getNumModules() override;
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
-    Module* getModule (int index) override;
-    ModuleGUI* createGUI (int index) override;
+    Module* getModule(int index) override;
+    ModuleGUI* createGUI(int index) override;
 
-    void selectionChanged (const juce::Array<ModuleGUI*>& modules) override;
+    void selectionChanged(const juce::Array<ModuleGUI*>& modules) override;
 
-    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+    void labelTextChanged(juce::Label* labelThatHasChanged) override;
 
 private:
     Cursor* cursor;

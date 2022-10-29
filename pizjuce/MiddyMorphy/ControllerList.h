@@ -9,13 +9,13 @@ class ControllerGUI;
 class ControllerList : public juce::ListBoxModel, public juce::ChangeBroadcaster
 {
 public:
-    ControllerList (MidiMorph* core);
+    ControllerList(MidiMorph* core);
 
     ~ControllerList() override;
 
-    juce::Component* refreshComponentForRow (int rowNumber, bool isRowSelected, juce::Component* existingComponentToUpdate) override;
+    juce::Component* refreshComponentForRow(int rowNumber, bool isRowSelected, juce::Component* existingComponentToUpdate) override;
 
-    void paintListBoxItem (int rowNumber, juce::Graphics& g, int width, int height, bool rowIsSelected) override;
+    void paintListBoxItem(int rowNumber, juce::Graphics& g, int width, int height, bool rowIsSelected) override;
 
     int getNumRows() override;
 

@@ -26,601 +26,601 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-AudioToCCEditor::AudioToCCEditor (AudioToCC* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+AudioToCCEditor::AudioToCCEditor(AudioToCC* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    s_Thresh.reset (new DecibelSlider ("slider"));
-    addAndMakeVisible (s_Thresh.get());
-    s_Thresh->setRange (0, 1, 0);
-    s_Thresh->setSliderStyle (juce::Slider::LinearBar);
-    s_Thresh->setTextBoxStyle (juce::Slider::TextBoxBelow, true, 80, 20);
-    s_Thresh->addListener (this);
-    s_Thresh->setSkewFactor (0.6);
-
-    s_Thresh->setBounds (32, 182, 152, 45);
-
-    label20.reset (new juce::Label ("new label",
-                                    TRANS ("Peak")));
-    addAndMakeVisible (label20.get());
-    label20->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label20->setJustificationType (juce::Justification::centred);
-    label20->setEditable (false, false, false);
-    label20->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label20->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label20->setBounds (112, 134, 72, 16);
-
-    clipR.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (clipR.get());
-    clipR->setButtonText (TRANS ("gate"));
-    clipR->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    clipR->addListener (this);
-    clipR->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffc33333));
-    clipR->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
-
-    clipR->setBounds (183, 211, 33, 16);
-
-    clipL.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (clipL.get());
-    clipL->setButtonText (TRANS ("gate"));
-    clipL->setConnectedEdges (juce::Button::ConnectedOnLeft);
-    clipL->addListener (this);
-    clipL->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffc33333));
-    clipL->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
-    clipL->setColour (juce::TextButton::textColourOnId, juce::Colours::black);
-
-    clipL->setBounds (183, 182, 33, 16);
-
-    comboBox.reset (new juce::ComboBox ("new combo box"));
-    addAndMakeVisible (comboBox.get());
-    comboBox->setTooltip (TRANS ("Output Device"));
-    comboBox->setEditableText (false);
-    comboBox->setJustificationType (juce::Justification::centredLeft);
-    comboBox->setTextWhenNothingSelected (TRANS ("--"));
-    comboBox->setTextWhenNoChoicesAvailable (TRANS ("(no choices)"));
-    comboBox->addListener (this);
-
-    comboBox->setBounds (280, 41, 194, 16);
-
-    s_LCC.reset (new VSTSlider ("LCC slider"));
-    addAndMakeVisible (s_LCC.get());
-    s_LCC->setRange (-1, 127, 1);
-    s_LCC->setSliderStyle (juce::Slider::LinearBar);
-    s_LCC->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_LCC->addListener (this);
-
-    s_LCC->setBounds (272, 104, 72, 16);
-
-    s_RCC.reset (new VSTSlider ("RCC slider"));
-    addAndMakeVisible (s_RCC.get());
-    s_RCC->setRange (-1, 127, 1);
-    s_RCC->setSliderStyle (juce::Slider::LinearBar);
-    s_RCC->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_RCC->addListener (this);
-
-    s_RCC->setBounds (272, 128, 72, 16);
-
-    s_Channel.reset (new VSTSlider ("channel slider"));
-    addAndMakeVisible (s_Channel.get());
-    s_Channel->setRange (1, 16, 1);
-    s_Channel->setSliderStyle (juce::Slider::LinearBar);
-    s_Channel->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_Channel->addListener (this);
-
-    s_Channel->setBounds (312, 61, 72, 16);
-
-    b_Stereo.reset (new juce::TextButton ("mono/stereo"));
-    addAndMakeVisible (b_Stereo.get());
-    b_Stereo->setButtonText (TRANS ("Stereo"));
-    b_Stereo->addListener (this);
-    b_Stereo->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffbbbbff));
-
-    b_Stereo->setBounds (400, 61, 72, 16);
-
-    s_Rate.reset (new VSTSlider ("rate slider"));
-    addAndMakeVisible (s_Rate.get());
-    s_Rate->setRange (0, 100, 1);
-    s_Rate->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_Rate->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_Rate->addListener (this);
-
-    s_Rate->setBounds (248, 240, 40, 48);
-
-    s_Inertia.reset (new VSTSlider ("inertia slider"));
-    addAndMakeVisible (s_Inertia.get());
-    s_Inertia->setRange (0, 100, 1);
-    s_Inertia->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_Inertia->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_Inertia->addListener (this);
-
-    s_Inertia->setBounds (296, 240, 40, 48);
-
-    label.reset (new juce::Label ("new label",
-                                  TRANS ("MIDI Out Device:")));
-    addAndMakeVisible (label.get());
-    label->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label->setJustificationType (juce::Justification::centredLeft);
-    label->setEditable (false, false, false);
-    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label->setBounds (275, 29, 150, 8);
-
-    label2.reset (new juce::Label ("new label",
-                                   TRANS ("RMS")));
-    addAndMakeVisible (label2.get());
-    label2->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label2->setJustificationType (juce::Justification::centred);
-    label2->setEditable (false, false, false);
-    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label2->setBounds (32, 132, 72, 16);
-
-    label3.reset (new juce::Label ("new label",
-                                   TRANS ("L CC:")));
-    addAndMakeVisible (label3.get());
-    label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label3->setJustificationType (juce::Justification::centredRight);
-    label3->setEditable (false, false, false);
-    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label3->setBounds (232, 104, 40, 16);
-
-    label4.reset (new juce::Label ("new label",
-                                   TRANS ("R CC:")));
-    addAndMakeVisible (label4.get());
-    label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label4->setJustificationType (juce::Justification::centredRight);
-    label4->setEditable (false, false, false);
-    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label4->setBounds (232, 128, 40, 16);
-
-    label5.reset (new juce::Label ("new label",
-                                   TRANS ("Ch:")));
-    addAndMakeVisible (label5.get());
-    label5->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label5->setJustificationType (juce::Justification::centredRight);
-    label5->setEditable (false, false, false);
-    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label5->setBounds (272, 61, 40, 16);
-
-    label6.reset (new juce::Label ("new label",
-                                   TRANS ("Rate")));
-    addAndMakeVisible (label6.get());
-    label6->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label6->setJustificationType (juce::Justification::centred);
-    label6->setEditable (false, false, false);
-    label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label6->setBounds (248, 224, 40, 16);
-
-    s_Gain.reset (new DecibelSlider ("gain slider"));
-    addAndMakeVisible (s_Gain.get());
-    s_Gain->setRange (0, 32, 0);
-    s_Gain->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_Gain->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_Gain->addListener (this);
-    s_Gain->setSkewFactor (0.333);
-
-    s_Gain->setBounds (32, 78, 72, 88);
-
-    label7.reset (new juce::Label ("new label",
-                                   TRANS ("Inertia")));
-    addAndMakeVisible (label7.get());
-    label7->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label7->setJustificationType (juce::Justification::centred);
-    label7->setEditable (false, false, false);
-    label7->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label7->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label7->setBounds (288, 224, 56, 16);
-
-    s_IndicatorL.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (s_IndicatorL.get());
-    s_IndicatorL->setRange (0, 127, 1);
-    s_IndicatorL->setSliderStyle (juce::Slider::LinearBar);
-    s_IndicatorL->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
-    s_IndicatorL->setColour (juce::Slider::backgroundColourId, juce::Colours::black);
-    s_IndicatorL->setColour (juce::Slider::thumbColourId, juce::Colour (0xff7e7434));
-    s_IndicatorL->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
-    s_IndicatorL->addListener (this);
-
-    s_IndicatorL->setBounds (32, 236, 152, 24);
-
-    s_IndicatorR.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (s_IndicatorR.get());
-    s_IndicatorR->setRange (0, 127, 1);
-    s_IndicatorR->setSliderStyle (juce::Slider::LinearBar);
-    s_IndicatorR->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
-    s_IndicatorR->setColour (juce::Slider::backgroundColourId, juce::Colours::black);
-    s_IndicatorR->setColour (juce::Slider::thumbColourId, juce::Colour (0xff7e7434));
-    s_IndicatorR->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
-    s_IndicatorR->addListener (this);
-
-    s_IndicatorR->setBounds (32, 262, 152, 24);
-
-    toggleButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS ("Automation to host"));
-    toggleButton->addListener (this);
-
-    toggleButton->setBounds (48, 288, 120, 16);
-
-    toggleButton2.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton2.get());
-    toggleButton2->setButtonText (TRANS ("MIDI to host"));
-    toggleButton2->addListener (this);
-
-    toggleButton2->setBounds (384, 25, 88, 16);
-
-    s_Attack.reset (new VSTSlider ("attack slider"));
-    addAndMakeVisible (s_Attack.get());
-    s_Attack->setRange (0, 100, 1);
-    s_Attack->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_Attack->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_Attack->addListener (this);
-
-    s_Attack->setBounds (248, 168, 40, 48);
-
-    s_Release.reset (new VSTSlider ("release slider"));
-    addAndMakeVisible (s_Release.get());
-    s_Release->setRange (0, 100, 1);
-    s_Release->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_Release->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_Release->addListener (this);
-
-    s_Release->setBounds (296, 168, 40, 48);
-
-    label8.reset (new juce::Label ("new label",
-                                   TRANS ("Attack")));
-    addAndMakeVisible (label8.get());
-    label8->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label8->setJustificationType (juce::Justification::centred);
-    label8->setEditable (false, false, false);
-    label8->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label8->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label8->setBounds (240, 152, 56, 16);
-
-    label9.reset (new juce::Label ("new label",
-                                   TRANS ("Release")));
-    addAndMakeVisible (label9.get());
-    label9->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label9->setJustificationType (juce::Justification::centred);
-    label9->setEditable (false, false, false);
-    label9->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label9->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label9->setBounds (288, 152, 56, 16);
-
-    b_Mode.reset (new juce::TextButton ("dB"));
-    addAndMakeVisible (b_Mode.get());
-    b_Mode->setButtonText (TRANS ("Logarithmic"));
-    b_Mode->addListener (this);
-    b_Mode->setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xffbbbbff));
-
-    b_Mode->setBounds (244, -21, 80, 16);
-
-    label10.reset (new juce::Label ("new label",
-                                    TRANS ("Scale:")));
-    addAndMakeVisible (label10.get());
-    label10->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label10->setJustificationType (juce::Justification::centredRight);
-    label10->setEditable (false, false, false);
-    label10->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label10->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label10->setBounds (196, -21, 46, 16);
-
-    label11.reset (new juce::Label ("new label",
-                                    TRANS ("L")));
-    addAndMakeVisible (label11.get());
-    label11->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label11->setJustificationType (juce::Justification::centredRight);
-    label11->setEditable (false, false, false);
-    label11->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label11->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label11->setBounds (16, 240, 16, 16);
-
-    label12.reset (new juce::Label ("new label",
-                                    TRANS ("R")));
-    addAndMakeVisible (label12.get());
-    label12->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label12->setJustificationType (juce::Justification::centredRight);
-    label12->setEditable (false, false, false);
-    label12->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label12->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label12->setBounds (16, 266, 16, 16);
-
-    s_GateLCC.reset (new VSTSlider ("LCC slider"));
-    addAndMakeVisible (s_GateLCC.get());
-    s_GateLCC->setRange (-1, 127, 1);
-    s_GateLCC->setSliderStyle (juce::Slider::LinearBar);
-    s_GateLCC->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_GateLCC->addListener (this);
-
-    s_GateLCC->setBounds (432, 136, 72, 16);
-
-    s_GateCCR.reset (new VSTSlider ("RCC slider"));
-    addAndMakeVisible (s_GateCCR.get());
-    s_GateCCR->setRange (-1, 127, 1);
-    s_GateCCR->setSliderStyle (juce::Slider::LinearBar);
-    s_GateCCR->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_GateCCR->addListener (this);
-
-    s_GateCCR->setBounds (432, 216, 72, 16);
-
-    label13.reset (new juce::Label ("new label",
-                                    TRANS ("Gate L CC:")));
-    addAndMakeVisible (label13.get());
-    label13->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label13->setJustificationType (juce::Justification::centredRight);
-    label13->setEditable (false, false, false);
-    label13->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label13->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label13->setBounds (368, 136, 64, 16);
-
-    label14.reset (new juce::Label ("new label",
-                                    TRANS ("Gate R CC:")));
-    addAndMakeVisible (label14.get());
-    label14->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label14->setJustificationType (juce::Justification::centredRight);
-    label14->setEditable (false, false, false);
-    label14->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label14->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label14->setBounds (368, 216, 64, 16);
-
-    s_OnValueL.reset (new VSTSlider ("LCC slider"));
-    addAndMakeVisible (s_OnValueL.get());
-    s_OnValueL->setRange (-1, 127, 1);
-    s_OnValueL->setSliderStyle (juce::Slider::LinearBar);
-    s_OnValueL->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_OnValueL->addListener (this);
-
-    s_OnValueL->setBounds (432, 160, 72, 16);
-
-    s_OnValueR.reset (new VSTSlider ("RCC slider"));
-    addAndMakeVisible (s_OnValueR.get());
-    s_OnValueR->setRange (-1, 127, 1);
-    s_OnValueR->setSliderStyle (juce::Slider::LinearBar);
-    s_OnValueR->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_OnValueR->addListener (this);
-
-    s_OnValueR->setBounds (432, 240, 72, 16);
-
-    label15.reset (new juce::Label ("new label",
-                                    TRANS ("On Value L:")));
-    addAndMakeVisible (label15.get());
-    label15->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label15->setJustificationType (juce::Justification::centredRight);
-    label15->setEditable (false, false, false);
-    label15->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label15->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label15->setBounds (360, 160, 72, 16);
-
-    label16.reset (new juce::Label ("new label",
-                                    TRANS ("On Value R:")));
-    addAndMakeVisible (label16.get());
-    label16->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label16->setJustificationType (juce::Justification::centredRight);
-    label16->setEditable (false, false, false);
-    label16->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label16->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label16->setBounds (360, 240, 72, 16);
-
-    s_OffValueL.reset (new VSTSlider ("LCC slider"));
-    addAndMakeVisible (s_OffValueL.get());
-    s_OffValueL->setRange (-1, 127, 1);
-    s_OffValueL->setSliderStyle (juce::Slider::LinearBar);
-    s_OffValueL->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_OffValueL->addListener (this);
-
-    s_OffValueL->setBounds (432, 184, 72, 16);
-
-    s_OffValueR.reset (new VSTSlider ("RCC slider"));
-    addAndMakeVisible (s_OffValueR.get());
-    s_OffValueR->setRange (-1, 127, 1);
-    s_OffValueR->setSliderStyle (juce::Slider::LinearBar);
-    s_OffValueR->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
-    s_OffValueR->addListener (this);
-
-    s_OffValueR->setBounds (432, 264, 72, 16);
-
-    label17.reset (new juce::Label ("new label",
-                                    TRANS ("Off Value L:")));
-    addAndMakeVisible (label17.get());
-    label17->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label17->setJustificationType (juce::Justification::centredRight);
-    label17->setEditable (false, false, false);
-    label17->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label17->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label17->setBounds (352, 184, 80, 16);
-
-    label18.reset (new juce::Label ("new label",
-                                    TRANS ("Off Value R:")));
-    addAndMakeVisible (label18.get());
-    label18->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label18->setJustificationType (juce::Justification::centredRight);
-    label18->setEditable (false, false, false);
-    label18->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label18->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label18->setBounds (352, 264, 80, 16);
-
-    label19.reset (new juce::Label ("new label",
-                                    TRANS ("Threshold:")));
-    addAndMakeVisible (label19.get());
-    label19->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label19->setJustificationType (juce::Justification::centredRight);
-    label19->setEditable (false, false, false);
-    label19->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label19->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    label19->setBounds (-1, 196, 64, 16);
-
-    s_PeakGain.reset (new DecibelSlider ("gain slider"));
-    addAndMakeVisible (s_PeakGain.get());
-    s_PeakGain->setRange (0, 32, 0);
-    s_PeakGain->setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    s_PeakGain->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 16);
-    s_PeakGain->addListener (this);
-    s_PeakGain->setSkewFactor (0.333);
-
-    s_PeakGain->setBounds (112, 78, 72, 88);
-
-    s_IndicatorRIn.reset (new DecibelMeter ("new slider"));
-    addAndMakeVisible (s_IndicatorRIn.get());
-    s_IndicatorRIn->setRange (0, 1, 0);
-    s_IndicatorRIn->setSliderStyle (juce::Slider::LinearBar);
-    s_IndicatorRIn->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
-    s_IndicatorRIn->setColour (juce::Slider::backgroundColourId, juce::Colours::black);
-    s_IndicatorRIn->setColour (juce::Slider::thumbColourId, juce::Colour (0xff347e4c));
-    s_IndicatorRIn->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
-    s_IndicatorRIn->addListener (this);
-    s_IndicatorRIn->setSkewFactor (0.6);
-
-    s_IndicatorRIn->setBounds (32, 211, 152, 16);
-
-    s_IndicatorLIn.reset (new DecibelMeter ("new slider"));
-    addAndMakeVisible (s_IndicatorLIn.get());
-    s_IndicatorLIn->setRange (0, 1, 0);
-    s_IndicatorLIn->setSliderStyle (juce::Slider::LinearBar);
-    s_IndicatorLIn->setTextBoxStyle (juce::Slider::TextBoxLeft, true, 80, 20);
-    s_IndicatorLIn->setColour (juce::Slider::backgroundColourId, juce::Colours::black);
-    s_IndicatorLIn->setColour (juce::Slider::thumbColourId, juce::Colour (0xff347e4c));
-    s_IndicatorLIn->setColour (juce::Slider::textBoxTextColourId, juce::Colours::white);
-    s_IndicatorLIn->addListener (this);
-    s_IndicatorLIn->setSkewFactor (0.6);
-
-    s_IndicatorLIn->setBounds (32, 182, 152, 16);
+    s_Thresh.reset(new DecibelSlider("slider"));
+    addAndMakeVisible(s_Thresh.get());
+    s_Thresh->setRange(0, 1, 0);
+    s_Thresh->setSliderStyle(juce::Slider::LinearBar);
+    s_Thresh->setTextBoxStyle(juce::Slider::TextBoxBelow, true, 80, 20);
+    s_Thresh->addListener(this);
+    s_Thresh->setSkewFactor(0.6);
+
+    s_Thresh->setBounds(32, 182, 152, 45);
+
+    label20.reset(new juce::Label("new label",
+                                  TRANS("Peak")));
+    addAndMakeVisible(label20.get());
+    label20->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label20->setJustificationType(juce::Justification::centred);
+    label20->setEditable(false, false, false);
+    label20->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label20->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label20->setBounds(112, 134, 72, 16);
+
+    clipR.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(clipR.get());
+    clipR->setButtonText(TRANS("gate"));
+    clipR->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    clipR->addListener(this);
+    clipR->setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffc33333));
+    clipR->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+
+    clipR->setBounds(183, 211, 33, 16);
+
+    clipL.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(clipL.get());
+    clipL->setButtonText(TRANS("gate"));
+    clipL->setConnectedEdges(juce::Button::ConnectedOnLeft);
+    clipL->addListener(this);
+    clipL->setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffc33333));
+    clipL->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    clipL->setColour(juce::TextButton::textColourOnId, juce::Colours::black);
+
+    clipL->setBounds(183, 182, 33, 16);
+
+    comboBox.reset(new juce::ComboBox("new combo box"));
+    addAndMakeVisible(comboBox.get());
+    comboBox->setTooltip(TRANS("Output Device"));
+    comboBox->setEditableText(false);
+    comboBox->setJustificationType(juce::Justification::centredLeft);
+    comboBox->setTextWhenNothingSelected(TRANS("--"));
+    comboBox->setTextWhenNoChoicesAvailable(TRANS("(no choices)"));
+    comboBox->addListener(this);
+
+    comboBox->setBounds(280, 41, 194, 16);
+
+    s_LCC.reset(new VSTSlider("LCC slider"));
+    addAndMakeVisible(s_LCC.get());
+    s_LCC->setRange(-1, 127, 1);
+    s_LCC->setSliderStyle(juce::Slider::LinearBar);
+    s_LCC->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_LCC->addListener(this);
+
+    s_LCC->setBounds(272, 104, 72, 16);
+
+    s_RCC.reset(new VSTSlider("RCC slider"));
+    addAndMakeVisible(s_RCC.get());
+    s_RCC->setRange(-1, 127, 1);
+    s_RCC->setSliderStyle(juce::Slider::LinearBar);
+    s_RCC->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_RCC->addListener(this);
+
+    s_RCC->setBounds(272, 128, 72, 16);
+
+    s_Channel.reset(new VSTSlider("channel slider"));
+    addAndMakeVisible(s_Channel.get());
+    s_Channel->setRange(1, 16, 1);
+    s_Channel->setSliderStyle(juce::Slider::LinearBar);
+    s_Channel->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_Channel->addListener(this);
+
+    s_Channel->setBounds(312, 61, 72, 16);
+
+    b_Stereo.reset(new juce::TextButton("mono/stereo"));
+    addAndMakeVisible(b_Stereo.get());
+    b_Stereo->setButtonText(TRANS("Stereo"));
+    b_Stereo->addListener(this);
+    b_Stereo->setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffbbbbff));
+
+    b_Stereo->setBounds(400, 61, 72, 16);
+
+    s_Rate.reset(new VSTSlider("rate slider"));
+    addAndMakeVisible(s_Rate.get());
+    s_Rate->setRange(0, 100, 1);
+    s_Rate->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_Rate->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_Rate->addListener(this);
+
+    s_Rate->setBounds(248, 240, 40, 48);
+
+    s_Inertia.reset(new VSTSlider("inertia slider"));
+    addAndMakeVisible(s_Inertia.get());
+    s_Inertia->setRange(0, 100, 1);
+    s_Inertia->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_Inertia->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_Inertia->addListener(this);
+
+    s_Inertia->setBounds(296, 240, 40, 48);
+
+    label.reset(new juce::Label("new label",
+                                TRANS("MIDI Out Device:")));
+    addAndMakeVisible(label.get());
+    label->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label->setJustificationType(juce::Justification::centredLeft);
+    label->setEditable(false, false, false);
+    label->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label->setBounds(275, 29, 150, 8);
+
+    label2.reset(new juce::Label("new label",
+                                 TRANS("RMS")));
+    addAndMakeVisible(label2.get());
+    label2->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label2->setJustificationType(juce::Justification::centred);
+    label2->setEditable(false, false, false);
+    label2->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label2->setBounds(32, 132, 72, 16);
+
+    label3.reset(new juce::Label("new label",
+                                 TRANS("L CC:")));
+    addAndMakeVisible(label3.get());
+    label3->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label3->setJustificationType(juce::Justification::centredRight);
+    label3->setEditable(false, false, false);
+    label3->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label3->setBounds(232, 104, 40, 16);
+
+    label4.reset(new juce::Label("new label",
+                                 TRANS("R CC:")));
+    addAndMakeVisible(label4.get());
+    label4->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label4->setJustificationType(juce::Justification::centredRight);
+    label4->setEditable(false, false, false);
+    label4->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label4->setBounds(232, 128, 40, 16);
+
+    label5.reset(new juce::Label("new label",
+                                 TRANS("Ch:")));
+    addAndMakeVisible(label5.get());
+    label5->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label5->setJustificationType(juce::Justification::centredRight);
+    label5->setEditable(false, false, false);
+    label5->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label5->setBounds(272, 61, 40, 16);
+
+    label6.reset(new juce::Label("new label",
+                                 TRANS("Rate")));
+    addAndMakeVisible(label6.get());
+    label6->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label6->setJustificationType(juce::Justification::centred);
+    label6->setEditable(false, false, false);
+    label6->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label6->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label6->setBounds(248, 224, 40, 16);
+
+    s_Gain.reset(new DecibelSlider("gain slider"));
+    addAndMakeVisible(s_Gain.get());
+    s_Gain->setRange(0, 32, 0);
+    s_Gain->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_Gain->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_Gain->addListener(this);
+    s_Gain->setSkewFactor(0.333);
+
+    s_Gain->setBounds(32, 78, 72, 88);
+
+    label7.reset(new juce::Label("new label",
+                                 TRANS("Inertia")));
+    addAndMakeVisible(label7.get());
+    label7->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label7->setJustificationType(juce::Justification::centred);
+    label7->setEditable(false, false, false);
+    label7->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label7->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label7->setBounds(288, 224, 56, 16);
+
+    s_IndicatorL.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(s_IndicatorL.get());
+    s_IndicatorL->setRange(0, 127, 1);
+    s_IndicatorL->setSliderStyle(juce::Slider::LinearBar);
+    s_IndicatorL->setTextBoxStyle(juce::Slider::TextBoxLeft, true, 80, 20);
+    s_IndicatorL->setColour(juce::Slider::backgroundColourId, juce::Colours::black);
+    s_IndicatorL->setColour(juce::Slider::thumbColourId, juce::Colour(0xff7e7434));
+    s_IndicatorL->setColour(juce::Slider::textBoxTextColourId, juce::Colours::white);
+    s_IndicatorL->addListener(this);
+
+    s_IndicatorL->setBounds(32, 236, 152, 24);
+
+    s_IndicatorR.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(s_IndicatorR.get());
+    s_IndicatorR->setRange(0, 127, 1);
+    s_IndicatorR->setSliderStyle(juce::Slider::LinearBar);
+    s_IndicatorR->setTextBoxStyle(juce::Slider::TextBoxLeft, true, 80, 20);
+    s_IndicatorR->setColour(juce::Slider::backgroundColourId, juce::Colours::black);
+    s_IndicatorR->setColour(juce::Slider::thumbColourId, juce::Colour(0xff7e7434));
+    s_IndicatorR->setColour(juce::Slider::textBoxTextColourId, juce::Colours::white);
+    s_IndicatorR->addListener(this);
+
+    s_IndicatorR->setBounds(32, 262, 152, 24);
+
+    toggleButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton.get());
+    toggleButton->setButtonText(TRANS("Automation to host"));
+    toggleButton->addListener(this);
+
+    toggleButton->setBounds(48, 288, 120, 16);
+
+    toggleButton2.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton2.get());
+    toggleButton2->setButtonText(TRANS("MIDI to host"));
+    toggleButton2->addListener(this);
+
+    toggleButton2->setBounds(384, 25, 88, 16);
+
+    s_Attack.reset(new VSTSlider("attack slider"));
+    addAndMakeVisible(s_Attack.get());
+    s_Attack->setRange(0, 100, 1);
+    s_Attack->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_Attack->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_Attack->addListener(this);
+
+    s_Attack->setBounds(248, 168, 40, 48);
+
+    s_Release.reset(new VSTSlider("release slider"));
+    addAndMakeVisible(s_Release.get());
+    s_Release->setRange(0, 100, 1);
+    s_Release->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_Release->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_Release->addListener(this);
+
+    s_Release->setBounds(296, 168, 40, 48);
+
+    label8.reset(new juce::Label("new label",
+                                 TRANS("Attack")));
+    addAndMakeVisible(label8.get());
+    label8->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label8->setJustificationType(juce::Justification::centred);
+    label8->setEditable(false, false, false);
+    label8->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label8->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label8->setBounds(240, 152, 56, 16);
+
+    label9.reset(new juce::Label("new label",
+                                 TRANS("Release")));
+    addAndMakeVisible(label9.get());
+    label9->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label9->setJustificationType(juce::Justification::centred);
+    label9->setEditable(false, false, false);
+    label9->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label9->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label9->setBounds(288, 152, 56, 16);
+
+    b_Mode.reset(new juce::TextButton("dB"));
+    addAndMakeVisible(b_Mode.get());
+    b_Mode->setButtonText(TRANS("Logarithmic"));
+    b_Mode->addListener(this);
+    b_Mode->setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffbbbbff));
+
+    b_Mode->setBounds(244, -21, 80, 16);
+
+    label10.reset(new juce::Label("new label",
+                                  TRANS("Scale:")));
+    addAndMakeVisible(label10.get());
+    label10->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label10->setJustificationType(juce::Justification::centredRight);
+    label10->setEditable(false, false, false);
+    label10->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label10->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label10->setBounds(196, -21, 46, 16);
+
+    label11.reset(new juce::Label("new label",
+                                  TRANS("L")));
+    addAndMakeVisible(label11.get());
+    label11->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label11->setJustificationType(juce::Justification::centredRight);
+    label11->setEditable(false, false, false);
+    label11->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label11->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label11->setBounds(16, 240, 16, 16);
+
+    label12.reset(new juce::Label("new label",
+                                  TRANS("R")));
+    addAndMakeVisible(label12.get());
+    label12->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label12->setJustificationType(juce::Justification::centredRight);
+    label12->setEditable(false, false, false);
+    label12->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label12->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label12->setBounds(16, 266, 16, 16);
+
+    s_GateLCC.reset(new VSTSlider("LCC slider"));
+    addAndMakeVisible(s_GateLCC.get());
+    s_GateLCC->setRange(-1, 127, 1);
+    s_GateLCC->setSliderStyle(juce::Slider::LinearBar);
+    s_GateLCC->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_GateLCC->addListener(this);
+
+    s_GateLCC->setBounds(432, 136, 72, 16);
+
+    s_GateCCR.reset(new VSTSlider("RCC slider"));
+    addAndMakeVisible(s_GateCCR.get());
+    s_GateCCR->setRange(-1, 127, 1);
+    s_GateCCR->setSliderStyle(juce::Slider::LinearBar);
+    s_GateCCR->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_GateCCR->addListener(this);
+
+    s_GateCCR->setBounds(432, 216, 72, 16);
+
+    label13.reset(new juce::Label("new label",
+                                  TRANS("Gate L CC:")));
+    addAndMakeVisible(label13.get());
+    label13->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label13->setJustificationType(juce::Justification::centredRight);
+    label13->setEditable(false, false, false);
+    label13->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label13->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label13->setBounds(368, 136, 64, 16);
+
+    label14.reset(new juce::Label("new label",
+                                  TRANS("Gate R CC:")));
+    addAndMakeVisible(label14.get());
+    label14->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label14->setJustificationType(juce::Justification::centredRight);
+    label14->setEditable(false, false, false);
+    label14->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label14->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label14->setBounds(368, 216, 64, 16);
+
+    s_OnValueL.reset(new VSTSlider("LCC slider"));
+    addAndMakeVisible(s_OnValueL.get());
+    s_OnValueL->setRange(-1, 127, 1);
+    s_OnValueL->setSliderStyle(juce::Slider::LinearBar);
+    s_OnValueL->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_OnValueL->addListener(this);
+
+    s_OnValueL->setBounds(432, 160, 72, 16);
+
+    s_OnValueR.reset(new VSTSlider("RCC slider"));
+    addAndMakeVisible(s_OnValueR.get());
+    s_OnValueR->setRange(-1, 127, 1);
+    s_OnValueR->setSliderStyle(juce::Slider::LinearBar);
+    s_OnValueR->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_OnValueR->addListener(this);
+
+    s_OnValueR->setBounds(432, 240, 72, 16);
+
+    label15.reset(new juce::Label("new label",
+                                  TRANS("On Value L:")));
+    addAndMakeVisible(label15.get());
+    label15->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label15->setJustificationType(juce::Justification::centredRight);
+    label15->setEditable(false, false, false);
+    label15->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label15->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label15->setBounds(360, 160, 72, 16);
+
+    label16.reset(new juce::Label("new label",
+                                  TRANS("On Value R:")));
+    addAndMakeVisible(label16.get());
+    label16->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label16->setJustificationType(juce::Justification::centredRight);
+    label16->setEditable(false, false, false);
+    label16->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label16->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label16->setBounds(360, 240, 72, 16);
+
+    s_OffValueL.reset(new VSTSlider("LCC slider"));
+    addAndMakeVisible(s_OffValueL.get());
+    s_OffValueL->setRange(-1, 127, 1);
+    s_OffValueL->setSliderStyle(juce::Slider::LinearBar);
+    s_OffValueL->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_OffValueL->addListener(this);
+
+    s_OffValueL->setBounds(432, 184, 72, 16);
+
+    s_OffValueR.reset(new VSTSlider("RCC slider"));
+    addAndMakeVisible(s_OffValueR.get());
+    s_OffValueR->setRange(-1, 127, 1);
+    s_OffValueR->setSliderStyle(juce::Slider::LinearBar);
+    s_OffValueR->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    s_OffValueR->addListener(this);
+
+    s_OffValueR->setBounds(432, 264, 72, 16);
+
+    label17.reset(new juce::Label("new label",
+                                  TRANS("Off Value L:")));
+    addAndMakeVisible(label17.get());
+    label17->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label17->setJustificationType(juce::Justification::centredRight);
+    label17->setEditable(false, false, false);
+    label17->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label17->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label17->setBounds(352, 184, 80, 16);
+
+    label18.reset(new juce::Label("new label",
+                                  TRANS("Off Value R:")));
+    addAndMakeVisible(label18.get());
+    label18->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label18->setJustificationType(juce::Justification::centredRight);
+    label18->setEditable(false, false, false);
+    label18->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label18->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label18->setBounds(352, 264, 80, 16);
+
+    label19.reset(new juce::Label("new label",
+                                  TRANS("Threshold:")));
+    addAndMakeVisible(label19.get());
+    label19->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label19->setJustificationType(juce::Justification::centredRight);
+    label19->setEditable(false, false, false);
+    label19->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label19->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+
+    label19->setBounds(-1, 196, 64, 16);
+
+    s_PeakGain.reset(new DecibelSlider("gain slider"));
+    addAndMakeVisible(s_PeakGain.get());
+    s_PeakGain->setRange(0, 32, 0);
+    s_PeakGain->setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    s_PeakGain->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 16);
+    s_PeakGain->addListener(this);
+    s_PeakGain->setSkewFactor(0.333);
+
+    s_PeakGain->setBounds(112, 78, 72, 88);
+
+    s_IndicatorRIn.reset(new DecibelMeter("new slider"));
+    addAndMakeVisible(s_IndicatorRIn.get());
+    s_IndicatorRIn->setRange(0, 1, 0);
+    s_IndicatorRIn->setSliderStyle(juce::Slider::LinearBar);
+    s_IndicatorRIn->setTextBoxStyle(juce::Slider::TextBoxLeft, true, 80, 20);
+    s_IndicatorRIn->setColour(juce::Slider::backgroundColourId, juce::Colours::black);
+    s_IndicatorRIn->setColour(juce::Slider::thumbColourId, juce::Colour(0xff347e4c));
+    s_IndicatorRIn->setColour(juce::Slider::textBoxTextColourId, juce::Colours::white);
+    s_IndicatorRIn->addListener(this);
+    s_IndicatorRIn->setSkewFactor(0.6);
+
+    s_IndicatorRIn->setBounds(32, 211, 152, 16);
+
+    s_IndicatorLIn.reset(new DecibelMeter("new slider"));
+    addAndMakeVisible(s_IndicatorLIn.get());
+    s_IndicatorLIn->setRange(0, 1, 0);
+    s_IndicatorLIn->setSliderStyle(juce::Slider::LinearBar);
+    s_IndicatorLIn->setTextBoxStyle(juce::Slider::TextBoxLeft, true, 80, 20);
+    s_IndicatorLIn->setColour(juce::Slider::backgroundColourId, juce::Colours::black);
+    s_IndicatorLIn->setColour(juce::Slider::thumbColourId, juce::Colour(0xff347e4c));
+    s_IndicatorLIn->setColour(juce::Slider::textBoxTextColourId, juce::Colours::white);
+    s_IndicatorLIn->addListener(this);
+    s_IndicatorLIn->setSkewFactor(0.6);
+
+    s_IndicatorLIn->setBounds(32, 182, 152, 16);
 
     //[UserPreSize]
-    setMouseClickGrabsKeyboardFocus (false);
+    setMouseClickGrabsKeyboardFocus(false);
 
-    s_LCC->setMouseClickGrabsKeyboardFocus (false);
-    s_RCC->setMouseClickGrabsKeyboardFocus (false);
-    s_Channel->setMouseClickGrabsKeyboardFocus (false);
-    s_Rate->setMouseClickGrabsKeyboardFocus (false);
-    s_Inertia->setMouseClickGrabsKeyboardFocus (false);
-    s_Gain->setMouseClickGrabsKeyboardFocus (false);
-    s_Attack->setMouseClickGrabsKeyboardFocus (false);
-    s_Release->setMouseClickGrabsKeyboardFocus (false);
-    label->setMouseClickGrabsKeyboardFocus (false);
-    label2->setMouseClickGrabsKeyboardFocus (false);
-    label3->setMouseClickGrabsKeyboardFocus (false);
-    label4->setMouseClickGrabsKeyboardFocus (false);
-    label5->setMouseClickGrabsKeyboardFocus (false);
-    label6->setMouseClickGrabsKeyboardFocus (false);
-    label7->setMouseClickGrabsKeyboardFocus (false);
-    label8->setMouseClickGrabsKeyboardFocus (false);
-    label9->setMouseClickGrabsKeyboardFocus (false);
-    label10->setMouseClickGrabsKeyboardFocus (false);
-    label11->setMouseClickGrabsKeyboardFocus (false);
-    label12->setMouseClickGrabsKeyboardFocus (false);
-    s_IndicatorL->setMouseClickGrabsKeyboardFocus (false);
-    s_IndicatorR->setMouseClickGrabsKeyboardFocus (false);
-    b_Stereo->setMouseClickGrabsKeyboardFocus (false);
-    b_Mode->setMouseClickGrabsKeyboardFocus (false);
-    toggleButton->setMouseClickGrabsKeyboardFocus (false);
-    toggleButton2->setMouseClickGrabsKeyboardFocus (false);
-    comboBox->setMouseClickGrabsKeyboardFocus (false);
-    s_GateLCC->setMouseClickGrabsKeyboardFocus (false);
-    s_GateCCR->setMouseClickGrabsKeyboardFocus (false);
-    s_OnValueL->setMouseClickGrabsKeyboardFocus (false);
-    s_OnValueR->setMouseClickGrabsKeyboardFocus (false);
-    s_OffValueL->setMouseClickGrabsKeyboardFocus (false);
-    s_OffValueR->setMouseClickGrabsKeyboardFocus (false);
-    s_Thresh->setMouseClickGrabsKeyboardFocus (false);
-    s_IndicatorLIn->setMouseClickGrabsKeyboardFocus (false);
-    s_IndicatorRIn->setMouseClickGrabsKeyboardFocus (false);
-    label13->setMouseClickGrabsKeyboardFocus (false);
-    label14->setMouseClickGrabsKeyboardFocus (false);
-    label15->setMouseClickGrabsKeyboardFocus (false);
-    label16->setMouseClickGrabsKeyboardFocus (false);
-    label17->setMouseClickGrabsKeyboardFocus (false);
-    label18->setMouseClickGrabsKeyboardFocus (false);
-    label19->setMouseClickGrabsKeyboardFocus (false);
-    clipR->setMouseClickGrabsKeyboardFocus (false);
-    clipL->setMouseClickGrabsKeyboardFocus (false);
+    s_LCC->setMouseClickGrabsKeyboardFocus(false);
+    s_RCC->setMouseClickGrabsKeyboardFocus(false);
+    s_Channel->setMouseClickGrabsKeyboardFocus(false);
+    s_Rate->setMouseClickGrabsKeyboardFocus(false);
+    s_Inertia->setMouseClickGrabsKeyboardFocus(false);
+    s_Gain->setMouseClickGrabsKeyboardFocus(false);
+    s_Attack->setMouseClickGrabsKeyboardFocus(false);
+    s_Release->setMouseClickGrabsKeyboardFocus(false);
+    label->setMouseClickGrabsKeyboardFocus(false);
+    label2->setMouseClickGrabsKeyboardFocus(false);
+    label3->setMouseClickGrabsKeyboardFocus(false);
+    label4->setMouseClickGrabsKeyboardFocus(false);
+    label5->setMouseClickGrabsKeyboardFocus(false);
+    label6->setMouseClickGrabsKeyboardFocus(false);
+    label7->setMouseClickGrabsKeyboardFocus(false);
+    label8->setMouseClickGrabsKeyboardFocus(false);
+    label9->setMouseClickGrabsKeyboardFocus(false);
+    label10->setMouseClickGrabsKeyboardFocus(false);
+    label11->setMouseClickGrabsKeyboardFocus(false);
+    label12->setMouseClickGrabsKeyboardFocus(false);
+    s_IndicatorL->setMouseClickGrabsKeyboardFocus(false);
+    s_IndicatorR->setMouseClickGrabsKeyboardFocus(false);
+    b_Stereo->setMouseClickGrabsKeyboardFocus(false);
+    b_Mode->setMouseClickGrabsKeyboardFocus(false);
+    toggleButton->setMouseClickGrabsKeyboardFocus(false);
+    toggleButton2->setMouseClickGrabsKeyboardFocus(false);
+    comboBox->setMouseClickGrabsKeyboardFocus(false);
+    s_GateLCC->setMouseClickGrabsKeyboardFocus(false);
+    s_GateCCR->setMouseClickGrabsKeyboardFocus(false);
+    s_OnValueL->setMouseClickGrabsKeyboardFocus(false);
+    s_OnValueR->setMouseClickGrabsKeyboardFocus(false);
+    s_OffValueL->setMouseClickGrabsKeyboardFocus(false);
+    s_OffValueR->setMouseClickGrabsKeyboardFocus(false);
+    s_Thresh->setMouseClickGrabsKeyboardFocus(false);
+    s_IndicatorLIn->setMouseClickGrabsKeyboardFocus(false);
+    s_IndicatorRIn->setMouseClickGrabsKeyboardFocus(false);
+    label13->setMouseClickGrabsKeyboardFocus(false);
+    label14->setMouseClickGrabsKeyboardFocus(false);
+    label15->setMouseClickGrabsKeyboardFocus(false);
+    label16->setMouseClickGrabsKeyboardFocus(false);
+    label17->setMouseClickGrabsKeyboardFocus(false);
+    label18->setMouseClickGrabsKeyboardFocus(false);
+    label19->setMouseClickGrabsKeyboardFocus(false);
+    clipR->setMouseClickGrabsKeyboardFocus(false);
+    clipL->setMouseClickGrabsKeyboardFocus(false);
 
-    s_IndicatorL->setInterceptsMouseClicks (false, false);
-    s_IndicatorR->setInterceptsMouseClicks (false, false);
-    s_IndicatorLIn->setInterceptsMouseClicks (false, false);
-    s_IndicatorRIn->setInterceptsMouseClicks (false, false);
+    s_IndicatorL->setInterceptsMouseClicks(false, false);
+    s_IndicatorR->setInterceptsMouseClicks(false, false);
+    s_IndicatorLIn->setInterceptsMouseClicks(false, false);
+    s_IndicatorRIn->setInterceptsMouseClicks(false, false);
 
-    s_LCC->setSliderSnapsToMousePosition (false);
-    s_RCC->setSliderSnapsToMousePosition (false);
-    s_Channel->setSliderSnapsToMousePosition (false);
-    s_GateLCC->setSliderSnapsToMousePosition (false);
-    s_GateCCR->setSliderSnapsToMousePosition (false);
-    s_OnValueL->setSliderSnapsToMousePosition (false);
-    s_OnValueR->setSliderSnapsToMousePosition (false);
-    s_OffValueL->setSliderSnapsToMousePosition (false);
-    s_OffValueR->setSliderSnapsToMousePosition (false);
-    s_Thresh->setSliderSnapsToMousePosition (true);
+    s_LCC->setSliderSnapsToMousePosition(false);
+    s_RCC->setSliderSnapsToMousePosition(false);
+    s_Channel->setSliderSnapsToMousePosition(false);
+    s_GateLCC->setSliderSnapsToMousePosition(false);
+    s_GateCCR->setSliderSnapsToMousePosition(false);
+    s_OnValueL->setSliderSnapsToMousePosition(false);
+    s_OnValueR->setSliderSnapsToMousePosition(false);
+    s_OffValueL->setSliderSnapsToMousePosition(false);
+    s_OffValueR->setSliderSnapsToMousePosition(false);
+    s_Thresh->setSliderSnapsToMousePosition(true);
 
-    s_LCC->setOwner (getAudioProcessor(), kCCL);
-    s_RCC->setOwner (getAudioProcessor(), kCCR);
-    s_Channel->setOwner (getAudioProcessor(), kChannel);
-    s_Rate->setOwner (getAudioProcessor(), kRate);
-    s_Inertia->setOwner (getAudioProcessor(), kSmooth);
+    s_LCC->setOwner(getAudioProcessor(), kCCL);
+    s_RCC->setOwner(getAudioProcessor(), kCCR);
+    s_Channel->setOwner(getAudioProcessor(), kChannel);
+    s_Rate->setOwner(getAudioProcessor(), kRate);
+    s_Inertia->setOwner(getAudioProcessor(), kSmooth);
     //s_Gain->setOwner(getAudioProcessor(),kGain);
-    s_Attack->setOwner (getAudioProcessor(), kAttack);
-    s_Release->setOwner (getAudioProcessor(), kRelease);
-    s_GateLCC->setOwner (getAudioProcessor(), kGateCCL);
-    s_GateCCR->setOwner (getAudioProcessor(), kGateCCR);
-    s_OnValueL->setOwner (getAudioProcessor(), kGateOnValueCCL);
-    s_OnValueR->setOwner (getAudioProcessor(), kGateOnValueCCR);
-    s_OffValueL->setOwner (getAudioProcessor(), kGateOffValueCCL);
-    s_OffValueR->setOwner (getAudioProcessor(), kGateOffValueCCR);
+    s_Attack->setOwner(getAudioProcessor(), kAttack);
+    s_Release->setOwner(getAudioProcessor(), kRelease);
+    s_GateLCC->setOwner(getAudioProcessor(), kGateCCL);
+    s_GateCCR->setOwner(getAudioProcessor(), kGateCCR);
+    s_OnValueL->setOwner(getAudioProcessor(), kGateOnValueCCL);
+    s_OnValueR->setOwner(getAudioProcessor(), kGateOnValueCCR);
+    s_OffValueL->setOwner(getAudioProcessor(), kGateOffValueCCL);
+    s_OffValueR->setOwner(getAudioProcessor(), kGateOffValueCCR);
     //s_Thresh->setOwner(getAudioProcessor(),kGateThreshold);
 
-    s_Gain->setDoubleClickReturnValue (true, 1.f);
-    s_PeakGain->setDoubleClickReturnValue (true, 1.f);
+    s_Gain->setDoubleClickReturnValue(true, 1.f);
+    s_PeakGain->setDoubleClickReturnValue(true, 1.f);
 
-    b_Stereo->setClickingTogglesState (true);
-    b_Mode->setClickingTogglesState (true);
+    b_Stereo->setClickingTogglesState(true);
+    b_Mode->setClickingTogglesState(true);
 
-    comboBox->addItem (L"--", 1);
+    comboBox->addItem(L"--", 1);
     for (int i = 0; i < ownerFilter->devices.size(); i++)
     {
-        comboBox->addItem (ownerFilter->devices[i].name, i + 2);
+        comboBox->addItem(ownerFilter->devices[i].name, i + 2);
     }
-    comboBox->setSelectedId (1);
+    comboBox->setSelectedId(1);
 
     //[/UserPreSize]
 
-    setSize (528, 312);
+    setSize(528, 312);
 
     //[Constructor] You can add your own custom stuff here..
-    ownerFilter->addChangeListener (this);
+    ownerFilter->addChangeListener(this);
     updateParametersFromFilter();
     peakcounter = 0;
-    startTimer (50);
+    startTimer(50);
     //[/Constructor]
 }
 
 AudioToCCEditor::~AudioToCCEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
     //[/Destructor_pre]
 
     s_Thresh       = nullptr;
@@ -676,20 +676,20 @@ AudioToCCEditor::~AudioToCCEditor()
 }
 
 //==============================================================================
-void AudioToCCEditor::paint (juce::Graphics& g)
+void AudioToCCEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colour (0xffd8d8d8));
+    g.fillAll(juce::Colour(0xffd8d8d8));
 
     {
         float x = 24.0f, y = 8.0f, width = 168.0f, height = 48.0f;
         juce::Colour fillColour = juce::Colours::white;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
@@ -697,110 +697,110 @@ void AudioToCCEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         float x = 224.0f, y = 8.0f, width = 296.0f, height = 296.0f;
-        juce::Colour fillColour = juce::Colour (0xffb6b6b6);
+        juce::Colour fillColour = juce::Colour(0xffb6b6b6);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         float x = 363.0f, y = 82.0f, width = 149.0f, height = 214.0f;
-        juce::Colour fillColour = juce::Colour (0xff9a9a9a);
+        juce::Colour fillColour = juce::Colour(0xff9a9a9a);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         float x = 235.0f, y = 82.0f, width = 120.0f, height = 214.0f;
-        juce::Colour fillColour = juce::Colour (0xff9a9a9a);
+        juce::Colour fillColour = juce::Colour(0xff9a9a9a);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         int x = 235, y = 76, width = 117, height = 30;
-        juce::String text (TRANS ("Continuous"));
+        juce::String text(TRANS("Continuous"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 363, y = 76, width = 149, height = 30;
-        juce::String text (TRANS ("Gate"));
+        juce::String text(TRANS("Gate"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 40, y = 16, width = 136, height = 16;
-        juce::String text (TRANS ("Insert Piz Here->"));
+        juce::String text(TRANS("Insert Piz Here->"));
         juce::Colour fillColour = juce::Colours::white;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (11.20f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(11.20f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 235, y = 2, width = 277, height = 30;
-        juce::String text (TRANS ("MIDI"));
+        juce::String text(TRANS("MIDI"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = 40, y = 26, width = 136, height = 24;
-        juce::String text (TRANS ("AudioToCC"));
+        juce::String text(TRANS("AudioToCC"));
         juce::Colour fillColour = juce::Colours::white;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         float x = 24.0f, y = 66.0f, width = 168.0f, height = 110.0f;
-        juce::Colour fillColour = juce::Colour (0xff9a9a9a);
+        juce::Colour fillColour = juce::Colour(0xff9a9a9a);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+        g.setColour(fillColour);
+        g.fillRoundedRectangle(x, y, width, height, 10.000f);
     }
 
     {
         int x = 27, y = 60, width = 165, height = 30;
-        juce::String text (TRANS ("Gain"));
+        juce::String text(TRANS("Gain"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -816,7 +816,7 @@ void AudioToCCEditor::resized()
     //[/UserResized]
 }
 
-void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void AudioToCCEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
@@ -824,43 +824,43 @@ void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == s_Thresh.get())
     {
         //[UserSliderCode_s_Thresh] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateThreshold, (float) (s_Thresh->getValue()));
+        getFilter()->setParameterNotifyingHost(kGateThreshold, (float) (s_Thresh->getValue()));
         //[/UserSliderCode_s_Thresh]
     }
     else if (sliderThatWasMoved == s_LCC.get())
     {
         //[UserSliderCode_s_LCC] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kCCL, s_LCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kCCL, s_LCC->mapToVSTRange());
         //[/UserSliderCode_s_LCC]
     }
     else if (sliderThatWasMoved == s_RCC.get())
     {
         //[UserSliderCode_s_RCC] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kCCR, s_RCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kCCR, s_RCC->mapToVSTRange());
         //[/UserSliderCode_s_RCC]
     }
     else if (sliderThatWasMoved == s_Channel.get())
     {
         //[UserSliderCode_s_Channel] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kChannel, s_Channel->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kChannel, s_Channel->mapToVSTRange());
         //[/UserSliderCode_s_Channel]
     }
     else if (sliderThatWasMoved == s_Rate.get())
     {
         //[UserSliderCode_s_Rate] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kRate, s_Rate->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kRate, s_Rate->mapToVSTRange());
         //[/UserSliderCode_s_Rate]
     }
     else if (sliderThatWasMoved == s_Inertia.get())
     {
         //[UserSliderCode_s_Inertia] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kSmooth, s_Inertia->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kSmooth, s_Inertia->mapToVSTRange());
         //[/UserSliderCode_s_Inertia]
     }
     else if (sliderThatWasMoved == s_Gain.get())
     {
         //[UserSliderCode_s_Gain] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGain, (float) (s_Gain->getValue()) / maxGain);
+        getFilter()->setParameterNotifyingHost(kGain, (float) (s_Gain->getValue()) / maxGain);
         //[/UserSliderCode_s_Gain]
     }
     else if (sliderThatWasMoved == s_IndicatorL.get())
@@ -876,55 +876,55 @@ void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == s_Attack.get())
     {
         //[UserSliderCode_s_Attack] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kAttack, s_Attack->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kAttack, s_Attack->mapToVSTRange());
         //[/UserSliderCode_s_Attack]
     }
     else if (sliderThatWasMoved == s_Release.get())
     {
         //[UserSliderCode_s_Release] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kRelease, s_Release->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kRelease, s_Release->mapToVSTRange());
         //[/UserSliderCode_s_Release]
     }
     else if (sliderThatWasMoved == s_GateLCC.get())
     {
         //[UserSliderCode_s_GateLCC] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateCCL, s_GateLCC->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateCCL, s_GateLCC->mapToVSTRange());
         //[/UserSliderCode_s_GateLCC]
     }
     else if (sliderThatWasMoved == s_GateCCR.get())
     {
         //[UserSliderCode_s_GateCCR] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateCCR, s_GateCCR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateCCR, s_GateCCR->mapToVSTRange());
         //[/UserSliderCode_s_GateCCR]
     }
     else if (sliderThatWasMoved == s_OnValueL.get())
     {
         //[UserSliderCode_s_OnValueL] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateOnValueCCL, s_OnValueL->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateOnValueCCL, s_OnValueL->mapToVSTRange());
         //[/UserSliderCode_s_OnValueL]
     }
     else if (sliderThatWasMoved == s_OnValueR.get())
     {
         //[UserSliderCode_s_OnValueR] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateOnValueCCR, s_OnValueR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateOnValueCCR, s_OnValueR->mapToVSTRange());
         //[/UserSliderCode_s_OnValueR]
     }
     else if (sliderThatWasMoved == s_OffValueL.get())
     {
         //[UserSliderCode_s_OffValueL] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateOffValueCCL, s_OffValueL->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateOffValueCCL, s_OffValueL->mapToVSTRange());
         //[/UserSliderCode_s_OffValueL]
     }
     else if (sliderThatWasMoved == s_OffValueR.get())
     {
         //[UserSliderCode_s_OffValueR] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kGateOffValueCCR, s_OffValueR->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kGateOffValueCCR, s_OffValueR->mapToVSTRange());
         //[/UserSliderCode_s_OffValueR]
     }
     else if (sliderThatWasMoved == s_PeakGain.get())
     {
         //[UserSliderCode_s_PeakGain] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kPeakGain, (float) (s_PeakGain->getValue()) / maxGain);
+        getFilter()->setParameterNotifyingHost(kPeakGain, (float) (s_PeakGain->getValue()) / maxGain);
         //[/UserSliderCode_s_PeakGain]
     }
     else if (sliderThatWasMoved == s_IndicatorRIn.get())
@@ -942,7 +942,7 @@ void AudioToCCEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void AudioToCCEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void AudioToCCEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -950,37 +950,37 @@ void AudioToCCEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == clipR.get())
     {
         //[UserButtonCode_clipR] -- add your button handler code here..
-        getFilter()->setParameter (kGateResetR, 1.f);
+        getFilter()->setParameter(kGateResetR, 1.f);
         //[/UserButtonCode_clipR]
     }
     else if (buttonThatWasClicked == clipL.get())
     {
         //[UserButtonCode_clipL] -- add your button handler code here..
-        getFilter()->setParameter (kGateResetL, 1.f);
+        getFilter()->setParameter(kGateResetL, 1.f);
         //[/UserButtonCode_clipL]
     }
     else if (buttonThatWasClicked == b_Stereo.get())
     {
         //[UserButtonCode_b_Stereo] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kStereo, b_Stereo->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kStereo, b_Stereo->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_b_Stereo]
     }
     else if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kAutomateHost, toggleButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kAutomateHost, toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
     else if (buttonThatWasClicked == toggleButton2.get())
     {
         //[UserButtonCode_toggleButton2] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kMidiToHost, toggleButton2->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kMidiToHost, toggleButton2->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton2]
     }
     else if (buttonThatWasClicked == b_Mode.get())
     {
         //[UserButtonCode_b_Mode] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kMode, b_Mode->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kMode, b_Mode->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_b_Mode]
     }
 
@@ -988,7 +988,7 @@ void AudioToCCEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
+void AudioToCCEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
@@ -998,12 +998,12 @@ void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
         //[UserComboBoxCode_comboBox] -- add your combo box handling code here..
         if (comboBox->getSelectedItemIndex() == 0)
         {
-            getFilter()->setParameter (kDevice, 0.0f);
-            getFilter()->setActiveDevice (comboBox->getText());
+            getFilter()->setParameter(kDevice, 0.0f);
+            getFilter()->setActiveDevice(comboBox->getText());
         }
         else
         {
-            getFilter()->setActiveDevice (comboBox->getText());
+            getFilter()->setActiveDevice(comboBox->getText());
             //getFilter()->setParameter(0,float(comboBox->getSelectedItemIndex()-1)/float(getFilter()->devices.size()-1)+0.00001f);
         }
         //[/UserComboBoxCode_comboBox]
@@ -1014,7 +1014,7 @@ void AudioToCCEditor::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void AudioToCCEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void AudioToCCEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -1026,37 +1026,37 @@ void AudioToCCEditor::updateParametersFromFilter()
 
     float p[numParams];
     filter->getCallbackLock().enter();
-    const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
+    const int newDevice = filter->devices.indexOf(filter->getActiveDevice());
     for (int i = 0; i < numParams; i++)
-        p[i] = filter->getParameter (i);
+        p[i] = filter->getParameter(i);
     const int ccL = filter->lastCCL;
     const int ccR = filter->lastCCR;
     filter->getCallbackLock().exit();
 
-    s_Gain->setValue (p[kGain] * maxGain);
-    s_PeakGain->setValue (p[kPeakGain] * maxGain);
-    s_LCC->setVSTSlider (p[kCCL]);
-    s_RCC->setVSTSlider (p[kCCR]);
-    s_Channel->setVSTSlider (p[kChannel]);
-    s_Rate->setVSTSlider (p[kRate]);
-    s_Inertia->setVSTSlider (p[kSmooth]);
-    s_Attack->setVSTSlider (p[kAttack]);
-    s_Release->setVSTSlider (p[kRelease]);
-    s_GateLCC->setVSTSlider (p[kGateCCL]);
-    s_GateCCR->setVSTSlider (p[kGateCCR]);
-    s_OnValueL->setVSTSlider (p[kGateOnValueCCL]);
-    s_OnValueR->setVSTSlider (p[kGateOnValueCCR]);
-    s_OffValueL->setVSTSlider (p[kGateOffValueCCL]);
-    s_OffValueR->setVSTSlider (p[kGateOffValueCCR]);
-    s_Thresh->setValue (p[kGateThreshold]);
+    s_Gain->setValue(p[kGain] * maxGain);
+    s_PeakGain->setValue(p[kPeakGain] * maxGain);
+    s_LCC->setVSTSlider(p[kCCL]);
+    s_RCC->setVSTSlider(p[kCCR]);
+    s_Channel->setVSTSlider(p[kChannel]);
+    s_Rate->setVSTSlider(p[kRate]);
+    s_Inertia->setVSTSlider(p[kSmooth]);
+    s_Attack->setVSTSlider(p[kAttack]);
+    s_Release->setVSTSlider(p[kRelease]);
+    s_GateLCC->setVSTSlider(p[kGateCCL]);
+    s_GateCCR->setVSTSlider(p[kGateCCR]);
+    s_OnValueL->setVSTSlider(p[kGateOnValueCCL]);
+    s_OnValueR->setVSTSlider(p[kGateOnValueCCR]);
+    s_OffValueL->setVSTSlider(p[kGateOffValueCCL]);
+    s_OffValueR->setVSTSlider(p[kGateOffValueCCR]);
+    s_Thresh->setValue(p[kGateThreshold]);
 
-    comboBox->setSelectedItemIndex (newDevice + 1, juce::dontSendNotification);
-    toggleButton->setToggleState (p[kAutomateHost] >= 0.5f, juce::dontSendNotification);
-    toggleButton2->setToggleState (p[kMidiToHost] >= 0.5f, juce::dontSendNotification);
-    b_Stereo->setToggleState (p[kStereo] >= 0.5f, juce::dontSendNotification);
-    b_Stereo->setButtonText (p[kStereo] >= 0.5f ? "Stereo" : "Mono (L+R)");
-    b_Mode->setToggleState (p[kMode] >= 0.5f, juce::dontSendNotification);
-    b_Mode->setButtonText (p[kMode] >= 0.5f ? "Logarithmic" : "Linear");
+    comboBox->setSelectedItemIndex(newDevice + 1, juce::dontSendNotification);
+    toggleButton->setToggleState(p[kAutomateHost] >= 0.5f, juce::dontSendNotification);
+    toggleButton2->setToggleState(p[kMidiToHost] >= 0.5f, juce::dontSendNotification);
+    b_Stereo->setToggleState(p[kStereo] >= 0.5f, juce::dontSendNotification);
+    b_Stereo->setButtonText(p[kStereo] >= 0.5f ? "Stereo" : "Mono (L+R)");
+    b_Mode->setToggleState(p[kMode] >= 0.5f, juce::dontSendNotification);
+    b_Mode->setButtonText(p[kMode] >= 0.5f ? "Logarithmic" : "Linear");
 }
 
 void AudioToCCEditor::timerCallback()
@@ -1070,23 +1070,23 @@ void AudioToCCEditor::timerCallback()
     const bool gateR = getFilter()->lastGateCCR;
     getFilter()->getCallbackLock().exit();
 
-    s_IndicatorL->setValue (ccL, juce::dontSendNotification);
-    s_IndicatorR->setValue (ccR, juce::dontSendNotification);
-    s_IndicatorLIn->setValue (inL, juce::dontSendNotification);
-    s_IndicatorRIn->setValue (inR, juce::dontSendNotification);
+    s_IndicatorL->setValue(ccL, juce::dontSendNotification);
+    s_IndicatorR->setValue(ccR, juce::dontSendNotification);
+    s_IndicatorLIn->setValue(inL, juce::dontSendNotification);
+    s_IndicatorRIn->setValue(inR, juce::dontSendNotification);
     ++peakcounter;
     if (peakcounter == 2)
     {
         peakcounter = 0;
-        clipL->setToggleState (gateL, juce::dontSendNotification);
-        clipR->setToggleState (gateR, juce::dontSendNotification);
+        clipL->setToggleState(gateL, juce::dontSendNotification);
+        clipR->setToggleState(gateR, juce::dontSendNotification);
     }
     else
     {
         if (gateL)
-            clipL->setToggleState (true, juce::dontSendNotification);
+            clipL->setToggleState(true, juce::dontSendNotification);
         if (gateR)
-            clipR->setToggleState (true, juce::dontSendNotification);
+            clipR->setToggleState(true, juce::dontSendNotification);
     }
 }
 //[/MiscUserCode]

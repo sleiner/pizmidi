@@ -18,47 +18,47 @@ class Scene : public Module,
               public juce::TextEditor::Listener
 {
 public:
-    Scene (const Scene& scene);
+    Scene(const Scene& scene);
 
-    Scene (MidiMorph* core);
+    Scene(MidiMorph* core);
 
     ~Scene() override;
 
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void textEditorTextChanged (juce::TextEditor&) override;
-    void textEditorReturnKeyPressed (juce::TextEditor&) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor&) override;
-    void textEditorFocusLost (juce::TextEditor&) override;
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void textEditorTextChanged(juce::TextEditor&) override;
+    void textEditorReturnKeyPressed(juce::TextEditor&) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor&) override;
+    void textEditorFocusLost(juce::TextEditor&) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
     juce::Array<ControllerValue*> controllerValues;
     float getAffectionRatio();
 
     float getDistanceFromCursor();
 
-    int getValue (const Controller* controller);
+    int getValue(const Controller* controller);
 
     void moved() override;
 
     juce::Colour getColour();
 
-    void setColour (const juce::Colour& colour);
+    void setColour(const juce::Colour& colour);
 
     juce::String getName();
 
-    void setName (juce::String newName);
+    void setName(juce::String newName);
 
-    void addValue (ControllerValue* value);
+    void addValue(ControllerValue* value);
 
     float getAffectionValue();
 
     void distanceFromCursorChanged();
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
-    void getMidiMessages (juce::MidiBuffer& buffer, int pos);
+    void getMidiMessages(juce::MidiBuffer& buffer, int pos);
 
     int getId();
 

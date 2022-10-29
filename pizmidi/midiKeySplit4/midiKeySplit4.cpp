@@ -1,9 +1,9 @@
 #include "midiKeySplit4.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiKeySplit4 (audioMaster);
+    return new MidiKeySplit4(audioMaster);
 }
 
 MidiKeySplit4Program::MidiKeySplit4Program()
@@ -14,28 +14,28 @@ MidiKeySplit4Program::MidiKeySplit4Program()
         switch (i)
         {
             case kOutChannel1:
-                param[i] = CHANNEL_TO_FLOAT015 (0);
+                param[i] = CHANNEL_TO_FLOAT015(0);
                 break;
             case kOutChannel2:
-                param[i] = CHANNEL_TO_FLOAT015 (0);
+                param[i] = CHANNEL_TO_FLOAT015(0);
                 break;
             case kOutChannel3:
-                param[i] = CHANNEL_TO_FLOAT015 (0);
+                param[i] = CHANNEL_TO_FLOAT015(0);
                 break;
             case kOutChannel4:
-                param[i] = CHANNEL_TO_FLOAT015 (0);
+                param[i] = CHANNEL_TO_FLOAT015(0);
                 break;
             case kInChannel:
-                param[i] = CHANNEL_TO_FLOAT015 (0);
+                param[i] = CHANNEL_TO_FLOAT015(0);
                 break;
             case kSplit1:
-                param[i] = MIDI_TO_FLOAT_X (60);
+                param[i] = MIDI_TO_FLOAT_X(60);
                 break;
             case kSplit2:
-                param[i] = MIDI_TO_FLOAT_X (127);
+                param[i] = MIDI_TO_FLOAT_X(127);
                 break;
             case kSplit3:
-                param[i] = MIDI_TO_FLOAT_X (127);
+                param[i] = MIDI_TO_FLOAT_X(127);
                 break;
             case kTransp1:
                 param[i] = 0.5f;
@@ -56,12 +56,12 @@ MidiKeySplit4Program::MidiKeySplit4Program()
         }
     }
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiKeySplit4::MidiKeySplit4 (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiKeySplit4::MidiKeySplit4(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiKeySplit4Program[numPrograms];
 
@@ -72,8 +72,8 @@ MidiKeySplit4::MidiKeySplit4 (audioMasterCallback audioMaster)
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -81,9 +81,9 @@ MidiKeySplit4::MidiKeySplit4 (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -92,10 +92,10 @@ MidiKeySplit4::MidiKeySplit4 (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     init();
@@ -109,40 +109,40 @@ MidiKeySplit4::~MidiKeySplit4()
 }
 
 //------------------------------------------------------------------------
-void MidiKeySplit4::setProgram (VstInt32 program)
+void MidiKeySplit4::setProgram(VstInt32 program)
 {
     MidiKeySplit4Program* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
 }
 
 //------------------------------------------------------------------------
-void MidiKeySplit4::setProgramName (char* name)
+void MidiKeySplit4::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiKeySplit4::getProgramName (char* name)
+void MidiKeySplit4::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiKeySplit4::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiKeySplit4::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiKeySplit4::setParameter (VstInt32 index, float value)
+void MidiKeySplit4::setParameter(VstInt32 index, float value)
 {
     MidiKeySplit4Program* ap = &programs[curProgram];
     param[index] = ap->param[index] = value;
@@ -162,59 +162,59 @@ void MidiKeySplit4::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiKeySplit4::getParameter (VstInt32 index)
+float MidiKeySplit4::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiKeySplit4::getParameterName (VstInt32 index, char* label)
+void MidiKeySplit4::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kInChannel:
-            strcpy (label, "InChannel");
+            strcpy(label, "InChannel");
             break;
         case kOutChannel1:
-            strcpy (label, "1: OutChannel");
+            strcpy(label, "1: OutChannel");
             break;
         case kOutChannel2:
-            strcpy (label, "2: OutChannel");
+            strcpy(label, "2: OutChannel");
             break;
         case kOutChannel3:
-            strcpy (label, "3: OutChannel");
+            strcpy(label, "3: OutChannel");
             break;
         case kOutChannel4:
-            strcpy (label, "4: OutChannel");
+            strcpy(label, "4: OutChannel");
             break;
         case kTransp1:
-            strcpy (label, "1: Transpose");
+            strcpy(label, "1: Transpose");
             break;
         case kTransp2:
-            strcpy (label, "2: Transpose");
+            strcpy(label, "2: Transpose");
             break;
         case kTransp3:
-            strcpy (label, "3: Transpose");
+            strcpy(label, "3: Transpose");
             break;
         case kTransp4:
-            strcpy (label, "4: Transpose");
+            strcpy(label, "4: Transpose");
             break;
         case kSplit1:
-            strcpy (label, "1/2: Split Note");
+            strcpy(label, "1/2: Split Note");
             break;
         case kSplit2:
-            strcpy (label, "2/3: Split Note");
+            strcpy(label, "2/3: Split Note");
             break;
         case kSplit3:
-            strcpy (label, "3/4: Split Note");
+            strcpy(label, "3/4: Split Note");
             break;
         default:
-            sprintf (label, "param %d", index);
+            sprintf(label, "param %d", index);
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiKeySplit4::getParameterDisplay (VstInt32 index, char* text)
+void MidiKeySplit4::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
@@ -222,47 +222,47 @@ void MidiKeySplit4::getParameterDisplay (VstInt32 index, char* text)
         case kOutChannel2:
         case kOutChannel3:
         case kOutChannel4:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                strcpy (text, "As Input");
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+                strcpy(text, "As Input");
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
             break;
         case kInChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[index]) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kTransp1:
         case kTransp2:
         case kTransp3:
         case kTransp4:
-            sprintf (text, "%d", roundToInt (96.f * param[index]) - 48);
+            sprintf(text, "%d", roundToInt(96.f * param[index]) - 48);
             break;
         case kSplit1:
         case kSplit2:
         case kSplit3:
-            if (FLOAT_TO_MIDI_X (param[index]) == learn)
-                strcpy (text, "Learn...");
+            if (FLOAT_TO_MIDI_X(param[index]) == learn)
+                strcpy(text, "Learn...");
             else
-                sprintf (text, "%s (%d)", getNoteName (FLOAT_TO_MIDI_X (param[index]), bottomOctave), FLOAT_TO_MIDI_X (param[index]));
+                sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI_X(param[index]), bottomOctave), FLOAT_TO_MIDI_X(param[index]));
             break;
         default:
-            sprintf (text, "%f", param[index]);
+            sprintf(text, "%f", param[index]);
     }
 }
 
-void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiKeySplit4::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const char ch      = FLOAT_TO_CHANNEL015 (param[kInChannel]);
-    signed char ch1    = FLOAT_TO_CHANNEL (param[kOutChannel1]);
-    signed char ch2    = FLOAT_TO_CHANNEL (param[kOutChannel2]);
-    signed char ch3    = FLOAT_TO_CHANNEL (param[kOutChannel3]);
-    signed char ch4    = FLOAT_TO_CHANNEL (param[kOutChannel4]);
-    const char split1  = FLOAT_TO_MIDI_X (param[kSplit1]);
-    const char split2  = FLOAT_TO_MIDI_X (param[kSplit2]);
-    const char split3  = FLOAT_TO_MIDI_X (param[kSplit3]);
-    const char transp1 = roundToInt (96.f * param[kTransp1]) - 48;
-    const char transp2 = roundToInt (96.f * param[kTransp2]) - 48;
-    const char transp3 = roundToInt (96.f * param[kTransp3]) - 48;
-    const char transp4 = roundToInt (96.f * param[kTransp4]) - 48;
+    const char ch      = FLOAT_TO_CHANNEL015(param[kInChannel]);
+    signed char ch1    = FLOAT_TO_CHANNEL(param[kOutChannel1]);
+    signed char ch2    = FLOAT_TO_CHANNEL(param[kOutChannel2]);
+    signed char ch3    = FLOAT_TO_CHANNEL(param[kOutChannel3]);
+    signed char ch4    = FLOAT_TO_CHANNEL(param[kOutChannel4]);
+    const char split1  = FLOAT_TO_MIDI_X(param[kSplit1]);
+    const char split2  = FLOAT_TO_MIDI_X(param[kSplit2]);
+    const char split3  = FLOAT_TO_MIDI_X(param[kSplit3]);
+    const char transp1 = roundToInt(96.f * param[kTransp1]) - 48;
+    const char transp2 = roundToInt(96.f * param[kTransp2]) - 48;
+    const char transp3 = roundToInt(96.f * param[kTransp3]) - 48;
+    const char transp4 = roundToInt(96.f * param[kTransp4]) - 48;
 
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -293,40 +293,40 @@ void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             {
                 if (split1 == learn)
                 {
-                    setParameterAutomated (kSplit1, MIDI_TO_FLOAT_X (data1));
+                    setParameterAutomated(kSplit1, MIDI_TO_FLOAT_X(data1));
                 }
                 if (split2 == learn)
                 {
-                    setParameterAutomated (kSplit2, MIDI_TO_FLOAT_X (data1));
+                    setParameterAutomated(kSplit2, MIDI_TO_FLOAT_X(data1));
                 }
                 if (split3 == learn)
                 {
-                    setParameterAutomated (kSplit3, MIDI_TO_FLOAT_X (data1));
+                    setParameterAutomated(kSplit3, MIDI_TO_FLOAT_X(data1));
                 }
 
                 if (data1 < split1)
                 {
                     transposed[data1] = transp1;
                     tomod.midiData[0] = status | ch1;
-                    tomod.midiData[1] = midiLimit (data1 + transp1);
+                    tomod.midiData[1] = midiLimit(data1 + transp1);
                 }
                 else if (data1 < split2)
                 {
                     transposed[data1] = transp2;
                     tomod.midiData[0] = status | ch2;
-                    tomod.midiData[1] = midiLimit (data1 + transp2);
+                    tomod.midiData[1] = midiLimit(data1 + transp2);
                 }
                 else if (data1 < split3)
                 {
                     transposed[data1] = transp3;
                     tomod.midiData[0] = status | ch3;
-                    tomod.midiData[1] = midiLimit (data1 + transp3);
+                    tomod.midiData[1] = midiLimit(data1 + transp3);
                 }
                 else
                 {
                     transposed[data1] = transp4;
                     tomod.midiData[0] = status | ch4;
-                    tomod.midiData[1] = midiLimit (data1 + transp4);
+                    tomod.midiData[1] = midiLimit(data1 + transp4);
                 }
             }
             else if (status == MIDI_NOTEOFF)
@@ -334,25 +334,25 @@ void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (data1 < split1)
                 {
                     tomod.midiData[0] = status | ch1;
-                    tomod.midiData[1] = midiLimit (data1 + transposed[data1]);
+                    tomod.midiData[1] = midiLimit(data1 + transposed[data1]);
                     transposed[data1] = -999;
                 }
                 else if (data1 < split2)
                 {
                     tomod.midiData[0] = status | ch2;
-                    tomod.midiData[1] = midiLimit (data1 + transposed[data1]);
+                    tomod.midiData[1] = midiLimit(data1 + transposed[data1]);
                     transposed[data1] = -999;
                 }
                 else if (data1 < split3)
                 {
                     tomod.midiData[0] = status | ch3;
-                    tomod.midiData[1] = midiLimit (data1 + transposed[data1]);
+                    tomod.midiData[1] = midiLimit(data1 + transposed[data1]);
                     transposed[data1] = -999;
                 }
                 else
                 {
                     tomod.midiData[0] = status | ch4;
-                    tomod.midiData[1] = midiLimit (data1 + transposed[data1]);
+                    tomod.midiData[1] = midiLimit(data1 + transposed[data1]);
                     transposed[data1] = -999;
                 }
             }
@@ -361,25 +361,25 @@ void MidiKeySplit4::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 if (data1 < split1)
                 {
                     tomod.midiData[0] = status | ch1;
-                    tomod.midiData[1] = midiLimit (data1 + transp1);
+                    tomod.midiData[1] = midiLimit(data1 + transp1);
                 }
                 else if (data1 < split2)
                 {
                     tomod.midiData[0] = status | ch2;
-                    tomod.midiData[1] = midiLimit (data1 + transp2);
+                    tomod.midiData[1] = midiLimit(data1 + transp2);
                 }
                 else if (data1 < split3)
                 {
                     tomod.midiData[0] = status | ch3;
-                    tomod.midiData[1] = midiLimit (data1 + transp3);
+                    tomod.midiData[1] = midiLimit(data1 + transp3);
                 }
                 else
                 {
                     tomod.midiData[0] = status | ch4;
-                    tomod.midiData[1] = midiLimit (data1 + transp4);
+                    tomod.midiData[1] = midiLimit(data1 + transp4);
                 }
             }
         }
-        outputs[0].push_back (tomod);
+        outputs[0].push_back(tomod);
     }
 }

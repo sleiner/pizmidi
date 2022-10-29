@@ -1,15 +1,15 @@
 #include "PizMidi.h"
 
 //-----------------------------------------------------------------------------
-PizMidi::PizMidi (audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt32 numParams)
-    : AudioEffectX (audioMaster, numPrograms, numParams),
-      _midiEventsIn (0),
-      _midiEventsOut (0),
-      _midiSysexEventsIn (0),
-      _midiSysexEventsOut (0),
-      _vstEventsToHost (0),
-      _vstMidiEventsToHost (0),
-      _vstSysexEventsToHost (0)
+PizMidi::PizMidi(audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt32 numParams)
+    : AudioEffectX(audioMaster, numPrograms, numParams),
+      _midiEventsIn(0),
+      _midiEventsOut(0),
+      _midiSysexEventsIn(0),
+      _midiSysexEventsOut(0),
+      _vstEventsToHost(0),
+      _vstMidiEventsToHost(0),
+      _vstSysexEventsToHost(0)
 {
     numinputs = numoutputs = 0;
     bottomOctave           = -2;
@@ -17,15 +17,15 @@ PizMidi::PizMidi (audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt3
     host      = new char[kVstMaxVendorStrLen + 1];
     bool inst = false;
     bool ignoreDefault;
-    if (getHostVendorString (host))
+    if (getHostVendorString(host))
     {
-        getHostStuff (host, inst, numoutputs, ignoreDefault);
+        getHostStuff(host, inst, numoutputs, ignoreDefault);
     }
     if (! inst && numoutputs)
         numinputs = numoutputs;
-    if (! getHostProductString (host))
-        strcpy (host, "unknown");
-    readIniFile (host, inst, numinputs, numoutputs, bottomOctave, ignoreDefault);
+    if (! getHostProductString(host))
+        strcpy(host, "unknown");
+    readIniFile(host, inst, numinputs, numoutputs, bottomOctave, ignoreDefault);
     delete[] host;
 
 #if ! PLUG_FORCE_EFFECT
@@ -41,10 +41,10 @@ PizMidi::PizMidi (audioMasterCallback audioMaster, VstInt32 numPrograms, VstInt3
 #if PLUG_AUDIO_OUTPUTS
     numoutputs = PLUG_AUDIO_OUTPUTS;
 #endif
-    setNumInputs (numinputs);
-    setNumOutputs (numoutputs);
+    setNumInputs(numinputs);
+    setNumOutputs(numoutputs);
 
-    setUniqueID (PLUG_IDENT);
+    setUniqueID(PLUG_IDENT);
     canProcessReplacing();
     canDoubleReplacing();
 }
@@ -72,50 +72,50 @@ PizMidi::~PizMidi()
 }
 
 //-----------------------------------------------------------------------------------------
-void PizMidi::getParameterLabel (VstInt32 index, char* label)
+void PizMidi::getParameterLabel(VstInt32 index, char* label)
 {
     if (index < numParams)
-        vst_strncpy (label, " ", kVstMaxParamStrLen);
+        vst_strncpy(label, " ", kVstMaxParamStrLen);
 }
 
-void PizMidi::setParameterAutomated (VstInt32 index, float value)
+void PizMidi::setParameterAutomated(VstInt32 index, float value)
 {
-    setParameter (index, value);
+    setParameter(index, value);
     if (audioMaster)
-        audioMaster (&cEffect, audioMasterAutomate, index, 0, 0, value); // value is in opt
+        audioMaster(&cEffect, audioMasterAutomate, index, 0, 0, value); // value is in opt
 }
 
 //-----------------------------------------------------------------------------------------
-bool PizMidi::getVendorString (char* text)
+bool PizMidi::getVendorString(char* text)
 {
-    sprintf (text, PLUG_VENDOR);
+    sprintf(text, PLUG_VENDOR);
     return true;
 }
 
 //-----------------------------------------------------------------------------------------
-bool PizMidi::getProductString (char* text)
+bool PizMidi::getProductString(char* text)
 {
 #ifndef _DEBUG
-    strcpy (text, PLUG_NAME);
+    strcpy(text, PLUG_NAME);
 #else
     char temp[kVstMaxProductStrLen];
-    strcpy (temp, PLUG_NAME);
-    strcat (temp, " debug");
-    strcpy (text, temp);
+    strcpy(temp, PLUG_NAME);
+    strcat(temp, " debug");
+    strcpy(text, temp);
 #endif
     return true;
 }
 
 //-----------------------------------------------------------------------------------------
-bool PizMidi::getEffectName (char* name)
+bool PizMidi::getEffectName(char* name)
 {
 #ifndef _DEBUG
-    strcpy (name, PLUG_NAME);
+    strcpy(name, PLUG_NAME);
 #else
     char temp[kVstMaxProductStrLen];
-    strcpy (temp, PLUG_NAME);
-    strcat (temp, " debug");
-    strcpy (name, temp);
+    strcpy(temp, PLUG_NAME);
+    strcat(temp, " debug");
+    strcpy(name, temp);
 #endif
     return true;
 }
@@ -175,20 +175,20 @@ void PizMidi::copySysex()
     VstSysexEventVec::iterator it;
     for (it = _midiSysexEventsIn->begin(); it < _midiSysexEventsIn->end(); it++)
     {
-        _midiSysexEventsOut->push_back (*it);
+        _midiSysexEventsOut->push_back(*it);
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void PizMidi::setSampleRate (float sampleRateIn)
+void PizMidi::setSampleRate(float sampleRateIn)
 {
-    AudioEffectX::setSampleRate (sampleRateIn);
+    AudioEffectX::setSampleRate(sampleRateIn);
 }
 
 //-----------------------------------------------------------------------------------------
-void PizMidi::setBlockSize (VstInt32 blockSize)
+void PizMidi::setBlockSize(VstInt32 blockSize)
 {
-    AudioEffectX::setBlockSize (blockSize);
+    AudioEffectX::setBlockSize(blockSize);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -198,41 +198,41 @@ void PizMidi::resume()
 }
 
 //-----------------------------------------------------------------------------------------
-VstInt32 PizMidi::canDo (char* text)
+VstInt32 PizMidi::canDo(char* text)
 {
     int result = -1;
 
     if (PLUG_MIDI_OUTPUTS)
     {
-        if (! strcmp (text, "sendVstMidiEvent"))
+        if (! strcmp(text, "sendVstMidiEvent"))
             result = 1;
-        else if (! strcmp (text, "sendVstEvents"))
+        else if (! strcmp(text, "sendVstEvents"))
             result = 1;
     }
 
     if (PLUG_MIDI_INPUTS)
     {
-        if (! strcmp (text, "receiveVstEvents"))
+        if (! strcmp(text, "receiveVstEvents"))
             result = 1;
-        else if (! strcmp (text, "receiveVstMidiEvent"))
+        else if (! strcmp(text, "receiveVstMidiEvent"))
             result = 1;
     }
 
     // VstTimeInfo
-    if (! strcmp (text, "receiveVstTimeInfo"))
+    if (! strcmp(text, "receiveVstTimeInfo"))
         result = 1;
 
-    dbg ("canDo(" << text << "), => " << result);
+    dbg("canDo(" << text << "), => " << result);
     return result; // 0 => don't know
 }
 
 //-----------------------------------------------------------------------------------------
-bool PizMidi::getInputProperties (VstInt32 index, VstPinProperties* properties)
+bool PizMidi::getInputProperties(VstInt32 index, VstPinProperties* properties)
 {
-    dbg ("getInputProperties(" << index << ")");
+    dbg("getInputProperties(" << index << ")");
     if (index < numinputs)
     {
-        strcpy (properties->label, PLUG_NAME);
+        strcpy(properties->label, PLUG_NAME);
         properties->flags |= kVstPinIsActive;
         if (index % 2 == 0)
             properties->flags |= kVstPinIsStereo;
@@ -242,12 +242,12 @@ bool PizMidi::getInputProperties (VstInt32 index, VstPinProperties* properties)
 }
 
 //-----------------------------------------------------------------------------------------
-bool PizMidi::getOutputProperties (VstInt32 index, VstPinProperties* properties)
+bool PizMidi::getOutputProperties(VstInt32 index, VstPinProperties* properties)
 {
-    dbg ("getOutputProperties(" << index << ")");
+    dbg("getOutputProperties(" << index << ")");
     if (index < numoutputs)
     {
-        strcpy (properties->label, PLUG_NAME);
+        strcpy(properties->label, PLUG_NAME);
         properties->flags |= kVstPinIsActive;
         if (index % 2 == 0)
             properties->flags |= kVstPinIsStereo;
@@ -256,7 +256,7 @@ bool PizMidi::getOutputProperties (VstInt32 index, VstPinProperties* properties)
     return false;
 }
 
-void PizMidi::preProcess (void)
+void PizMidi::preProcess(void)
 {
     /*
 	// preparing Proccess
@@ -277,7 +277,7 @@ void PizMidi::preProcess (void)
     _cleanMidiOutBuffers();
 }
 
-void PizMidi::postProcess (void)
+void PizMidi::postProcess(void)
 {
     if (PLUG_MIDI_OUTPUTS)
     {
@@ -308,7 +308,7 @@ void PizMidi::postProcess (void)
             }
             _vstEventsToHost->reserved = 0;
             if (_vstEventsToHost->numEvents > 0)
-                sendVstEventsToHost ((VstEvents*) _vstEventsToHost);
+                sendVstEventsToHost((VstEvents*) _vstEventsToHost);
             left -= _vstEventsToHost->numEvents;
             count += _vstEventsToHost->numEvents;
         }
@@ -337,7 +337,7 @@ void PizMidi::postProcess (void)
             }
             _vstEventsToHost->reserved = 0;
             if (_midiSysexEventsOut[0].size() > 0)
-                sendVstEventsToHost ((VstEvents*) _vstEventsToHost);
+                sendVstEventsToHost((VstEvents*) _vstEventsToHost);
             left -= _vstEventsToHost->numEvents;
             count += _vstEventsToHost->numEvents;
         }
@@ -346,7 +346,7 @@ void PizMidi::postProcess (void)
     _cleanMidiInBuffers();
 }
 
-VstInt32 PizMidi::processEvents (VstEvents* ev)
+VstInt32 PizMidi::processEvents(VstEvents* ev)
 {
     if (PLUG_MIDI_INPUTS)
     {
@@ -357,12 +357,12 @@ VstInt32 PizMidi::processEvents (VstEvents* ev)
             if ((evts->events[i])->type == kVstMidiType)
             {
                 VstMidiEvent* e = (VstMidiEvent*) evts->events[i];
-                _midiEventsIn[0].push_back (*e);
+                _midiEventsIn[0].push_back(*e);
             }
             else if ((evts->events[i])->type == kVstSysExType)
             {
                 VstMidiSysexEvent* e = (VstMidiSysexEvent*) evts->events[i];
-                _midiSysexEventsIn[0].push_back (*e);
+                _midiSysexEventsIn[0].push_back(*e);
             }
         }
 
@@ -374,13 +374,13 @@ VstInt32 PizMidi::processEvents (VstEvents* ev)
 }
 
 //-----------------------------------------------------------------------------------------
-void PizMidi::process (float** inputs, float** outputs, VstInt32 sampleFrames)
+void PizMidi::process(float** inputs, float** outputs, VstInt32 sampleFrames)
 {
     //takes care of VstTimeInfo and such
     preProcess();
 
     //host should have called processEvents before process
-    processMidiEvents (_midiEventsIn, _midiEventsOut, sampleFrames);
+    processMidiEvents(_midiEventsIn, _midiEventsOut, sampleFrames);
     copySysex();
 
     if (numinputs && numoutputs)
@@ -414,13 +414,13 @@ void PizMidi::process (float** inputs, float** outputs, VstInt32 sampleFrames)
 
 //Only modify this if you want to do paralel Audio/Midi
 //-----------------------------------------------------------------------------------------
-void PizMidi::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+void PizMidi::processReplacing(float** inputs, float** outputs, VstInt32 sampleFrames)
 {
     //takes care of VstTimeInfo and such
     preProcess();
 
     //host should have called processEvents before process
-    processMidiEvents (_midiEventsIn, _midiEventsOut, sampleFrames);
+    processMidiEvents(_midiEventsIn, _midiEventsOut, sampleFrames);
     copySysex();
 
     if (numinputs && numoutputs)
@@ -452,13 +452,13 @@ void PizMidi::processReplacing (float** inputs, float** outputs, VstInt32 sample
     postProcess();
 }
 
-void PizMidi::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+void PizMidi::processDoubleReplacing(double** inputs, double** outputs, VstInt32 sampleFrames)
 {
     //takes care of VstTimeInfo and such
     preProcess();
 
     //host should have called processEvents before process
-    processMidiEvents (_midiEventsIn, _midiEventsOut, sampleFrames);
+    processMidiEvents(_midiEventsIn, _midiEventsOut, sampleFrames);
     copySysex();
 
     if (numinputs && numoutputs)

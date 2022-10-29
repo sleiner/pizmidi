@@ -7,26 +7,26 @@ class NumberBox;
 class TextBoxSlider : public juce::Label::Listener, public juce::Label
 {
 public:
-    TextBoxSlider (double initVal);
+    TextBoxSlider(double initVal);
 
     ~TextBoxSlider() override;
 
-    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
-    void labelTextChanged (Label* labelThatHasChanged) override;
+    void labelTextChanged(Label* labelThatHasChanged) override;
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
-    void setRange (double newMin, double newMax, double stepSize, int pixelPerStep);
+    void setRange(double newMin, double newMax, double stepSize, int pixelPerStep);
 
     juce::TextEditor* createEditorComponent() override;
 
-    void paintOverChildren (juce::Graphics& g) override;
+    void paintOverChildren(juce::Graphics& g) override;
 
     double getValue();
 
-    void setValue (double newVal, juce::NotificationType notification);
+    void setValue(double newVal, juce::NotificationType notification);
 
     void resized() override;
 
@@ -43,5 +43,5 @@ private:
 
     double step;
 
-    void setText (const juce::String& newText, juce::NotificationType notification);
+    void setText(const juce::String& newText, juce::NotificationType notification);
 };
