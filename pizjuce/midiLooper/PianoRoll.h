@@ -67,11 +67,24 @@ private:
 class PianoPort : public juce::Viewport, public juce::ChangeBroadcaster
 {
 public:
-    PianoPort (juce::String name) : Viewport (name){};
-    ~PianoPort() override { dispatchPendingMessages(); }
-    void setTimeline (Timeline* t) { timeline = t; }
-    void setPlayline (Component* p) { playline = p; }
-    void setKeyboard (Viewport* kb) { keyboard = kb; }
+    PianoPort (juce::String name)
+        : Viewport (name){};
+    ~PianoPort() override
+    {
+        dispatchPendingMessages();
+    }
+    void setTimeline (Timeline* t)
+    {
+        timeline = t;
+    }
+    void setPlayline (Component* p)
+    {
+        playline = p;
+    }
+    void setKeyboard (Viewport* kb)
+    {
+        keyboard = kb;
+    }
     void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override
     {
         this->getParentComponent()->mouseWheelMove (e, wheel);
@@ -103,7 +116,10 @@ public:
     ~PianoRoll() override;
 
     void setSequence (Loop* sequence_);
-    Loop* getSequence() { return sequence; }
+    Loop* getSequence()
+    {
+        return sequence;
+    }
     void sequenceChanged();
     int getTimeInPixels();
     double pixelsToPpq (float pixels, bool snap, bool round = false);
@@ -138,7 +154,10 @@ public:
         setDisplayLength (juce::jmax (getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
         setSize (juce::jmax (pixelBarLength, getWidth() - pixelBarLength), getHeight());
     }
-    int getDisplayLength() { return (int) (juce::jmax (blankLength, seqLengthInPpq) / getPpqPerBar()); }
+    int getDisplayLength()
+    {
+        return (int) (juce::jmax (blankLength, seqLengthInPpq) / getPpqPerBar());
+    }
 
     void mouseDown (const juce::MouseEvent& e) override;
     void mouseDrag (const juce::MouseEvent& e) override;
@@ -149,9 +168,18 @@ public:
     void paintOverChildren (juce::Graphics& g) override;
     void resized() override;
 
-    bool getSnap() { return snapToGrid; }
-    float getBeatDiv() { return 1.f / noteLength; }
-    void setSnap (bool snap) { snapToGrid = snap; }
+    bool getSnap()
+    {
+        return snapToGrid;
+    }
+    float getBeatDiv()
+    {
+        return 1.f / noteLength;
+    }
+    void setSnap (bool snap)
+    {
+        snapToGrid = snap;
+    }
     void setPlayTime (double timeInPpq)
     {
         const int lastpixels = ppqToPixelsWithOffset (playTime);
@@ -179,14 +207,20 @@ public:
         return timebase * quarterNotesPerBar;
     }
 
-    Component* getPlayline() { return (Component*) playline; }
+    Component* getPlayline()
+    {
+        return (Component*) playline;
+    }
 
     int defaultChannel;
     int timeSigN, timeSigD;
     bool playing;
     bool recording;
 
-    void repaintBG() { bg->repaint(); }
+    void repaintBG()
+    {
+        bg->repaint();
+    }
 
 private:
     juce::Rectangle<int> lasso;
@@ -211,8 +245,13 @@ private:
     class Playbar : public Component
     {
     public:
-        Playbar (PianoRoll* pianoroll) : Component(), roll (pianoroll) {}
-        ~Playbar() override {}
+        Playbar (PianoRoll* pianoroll)
+            : Component(), roll (pianoroll)
+        {
+        }
+        ~Playbar() override
+        {
+        }
         void paint (juce::Graphics& g) override
         {
             g.fillAll (juce::Colour (0x0));
@@ -237,7 +276,9 @@ private:
         {
             setBufferedToImage (true);
         }
-        ~PianoRollBackground() override {}
+        ~PianoRollBackground() override
+        {
+        }
         void paint (juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
@@ -307,7 +348,9 @@ private:
         {
             setBufferedToImage (true);
         }
-        ~PianoRollNotes() override {}
+        ~PianoRollNotes() override
+        {
+        }
         void paint (juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();

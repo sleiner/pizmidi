@@ -12,7 +12,10 @@ Timeline::Timeline()
     setMouseClickGrabsKeyboardFocus (false);
 }
 
-Timeline::~Timeline() { dispatchPendingMessages(); }
+Timeline::~Timeline()
+{
+    dispatchPendingMessages();
+}
 
 void Timeline::paint (juce::Graphics& g)
 {
@@ -25,10 +28,22 @@ void Timeline::paint (juce::Graphics& g)
         g.drawFittedText ("LOOP AREA", (int) getStartPixel(), 0, (int) (getEndPixel() - getStartPixel()), getHeight(), juce::Justification::centred, 2);
     }
 }
-float Timeline::getStartPixel() { return roll->ppqToPixels (loopStart) - scrollOffset; }
-float Timeline::getEndPixel() { return roll->ppqToPixels (loopEnd) - scrollOffset; }
-double Timeline::getLength() { return (loopEnd - loopStart) / 960.0; }
-double Timeline::getStart() { return loopStart / 960.0; }
+float Timeline::getStartPixel()
+{
+    return roll->ppqToPixels (loopStart) - scrollOffset;
+}
+float Timeline::getEndPixel()
+{
+    return roll->ppqToPixels (loopEnd) - scrollOffset;
+}
+double Timeline::getLength()
+{
+    return (loopEnd - loopStart) / 960.0;
+}
+double Timeline::getStart()
+{
+    return loopStart / 960.0;
+}
 
 void Timeline::setLoop (double start, double length)
 {

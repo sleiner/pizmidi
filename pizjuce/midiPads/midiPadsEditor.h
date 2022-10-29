@@ -11,12 +11,18 @@
 class fullScreenContainer : public juce::Component
 {
 public:
-    fullScreenContainer() { bgcolor = juce::Colours::white; }
+    fullScreenContainer()
+    {
+        bgcolor = juce::Colours::white;
+    }
     ~fullScreenContainer() override{};
     juce::Colour bgcolor;
 
 private:
-    void paint (juce::Graphics& g) override { g.fillAll (bgcolor); }
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (bgcolor);
+    }
 };
 
 class midiPadsEditor : public juce::AudioProcessorEditor,
@@ -105,7 +111,10 @@ private:
     int lastTouchedPad;
     int lastPadMenu;
 
-    midiPads* getFilter() const throw() { return (midiPads*) getAudioProcessor(); }
+    midiPads* getFilter() const throw()
+    {
+        return (midiPads*) getAudioProcessor();
+    }
 };
 
 #endif

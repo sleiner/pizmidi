@@ -69,7 +69,10 @@ private:
     juce::ComponentBoundsConstrainer resizeLimits;
     juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
-    PizKeyboard* getFilter() const throw() { return (PizKeyboard*) getAudioProcessor(); }
+    PizKeyboard* getFilter() const throw()
+    {
+        return (PizKeyboard*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

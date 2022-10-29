@@ -111,7 +111,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a CpuRam
     // every time we need it
-    CpuRam* getFilter() const throw() { return (CpuRam*) getAudioProcessor(); }
+    CpuRam* getFilter() const throw()
+    {
+        return (CpuRam*) getAudioProcessor();
+    }
 };
 
 #endif

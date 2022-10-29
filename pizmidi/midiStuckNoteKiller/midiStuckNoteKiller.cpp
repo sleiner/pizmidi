@@ -37,7 +37,9 @@ midiStuckNoteKiller::midiStuckNoteKiller (audioMasterCallback audioMaster)
 }
 
 //-----------------------------------------------------------------------------------------
-midiStuckNoteKiller::~midiStuckNoteKiller() {}
+midiStuckNoteKiller::~midiStuckNoteKiller()
+{
+}
 
 //-----------------------------------------------------------------------------------------
 void midiStuckNoteKiller::setParameter (VstInt32 index, float value)

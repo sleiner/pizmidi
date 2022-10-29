@@ -101,9 +101,10 @@ enum ForceToKeyModes
 class PianoRollSettings
 {
 public:
-    PianoRollSettings (PianoRollSettings* fallback_settings = nullptr) : values_ ("PRSettingsContainer"),
-                                                                         undo_manager_ (nullptr),
-                                                                         fallback_settings_ (fallback_settings)
+    PianoRollSettings (PianoRollSettings* fallback_settings = nullptr)
+        : values_ ("PRSettingsContainer"),
+          undo_manager_ (nullptr),
+          fallback_settings_ (fallback_settings)
     {
         juce::ValueTree tree ("PRSettings");
         values_.addChild (tree, 0, undo_manager_);
@@ -201,11 +202,17 @@ public:
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
-    bool hasEditor (void) const override { return true; }
+    bool hasEditor (void) const override
+    {
+        return true;
+    }
     //==============================================================================
     const juce::String getName() const override;
 
-    int getNumParameters() override { return numParams; }
+    int getNumParameters() override
+    {
+        return numParams;
+    }
     inline float getParameterForSlot (int parameter, int slot)
     {
         if (parameter < numGlobalParams)
@@ -218,7 +225,10 @@ public:
             return getParameter (parameter);
         return getParameter (parameter + curProgram * numParamsPerSlot);
     }
-    inline bool isSlotPlaying (int slot) { return getParameterForSlot (kPlay, slot) >= 0.5f && programs[slot].looplength > 0; }
+    inline bool isSlotPlaying (int slot)
+    {
+        return getParameterForSlot (kPlay, slot) >= 0.5f && programs[slot].looplength > 0;
+    }
     void playSlot (int slot)
     {
         notifyHost (kPlay, slot, 1.f);
@@ -279,12 +289,24 @@ public:
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
-    bool acceptsMidi() const override { return true; }
-    bool producesMidi() const override { return true; }
-    double getTailLengthSeconds() const override { return 0; }
+    bool acceptsMidi() const override
+    {
+        return true;
+    }
+    bool producesMidi() const override
+    {
+        return true;
+    }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return numPrograms; }
+    int getNumPrograms() override
+    {
+        return numPrograms;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override
     {
@@ -381,8 +403,14 @@ public:
     }
     juce::MidiKeyboardState keySelectorState;
 
-    int getNumerator (int slot) { return programs[slot].numerator; }
-    int getDenominator (int slot) { return programs[slot].denominator; }
+    int getNumerator (int slot)
+    {
+        return programs[slot].numerator;
+    }
+    int getDenominator (int slot)
+    {
+        return programs[slot].denominator;
+    }
     void setTimeSig (int slot, int n, int d)
     {
         programs[slot].numerator   = n;
@@ -393,7 +421,10 @@ public:
     PizArray<juce::MidiDeviceInfo> devices;
     void setActiveDevice (juce::String name);
     void setActiveDevice (juce::MidiDeviceInfo device);
-    juce::MidiDeviceInfo getActiveDevice() { return activeDevice; }
+    juce::MidiDeviceInfo getActiveDevice()
+    {
+        return activeDevice;
+    }
     juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
 
     void setPRSetting (const juce::Identifier& name, const juce::var& value, bool updateEditor = true)
@@ -457,14 +488,17 @@ private:
     class TransposeRules
     {
     public:
-        TransposeRules (PizLooper* _plugin, int _slot) : plugin (0), slot (_slot)
+        TransposeRules (PizLooper* _plugin, int _slot)
+            : plugin (0), slot (_slot)
         {
             plugin = _plugin;
             for (int i = 0; i < polyphony; i++)
                 trignote[i] = -1;
             update (true);
         }
-        ~TransposeRules() {}
+        ~TransposeRules()
+        {
+        }
 
         int trignote[polyphony];
         float velscale[polyphony];
@@ -481,7 +515,10 @@ private:
             bool transpose10;
         } rules, oldrules;
 
-        int getSlot() const { return slot; }
+        int getSlot() const
+        {
+            return slot;
+        }
 
         void trigger (int note, float vel, int voice)
         {

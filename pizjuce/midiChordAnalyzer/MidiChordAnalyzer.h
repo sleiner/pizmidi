@@ -49,7 +49,10 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
     int getNumParameters() override;
 
@@ -64,17 +67,38 @@ public:
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
-    bool acceptsMidi() const override { return true; }
-    bool producesMidi() const override { return true; }
+    bool acceptsMidi() const override
+    {
+        return true;
+    }
+    bool producesMidi() const override
+    {
+        return true;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return numProgs; }
-    int getCurrentProgram() override { return curProgram; }
+    int getNumPrograms() override
+    {
+        return numProgs;
+    }
+    int getCurrentProgram() override
+    {
+        return curProgram;
+    }
     void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override { return programs->get (0, index, "Name"); }
-    void changeProgramName (int index, const juce::String& newName) override { programs->set (0, index, "Name", newName); }
+    const juce::String getProgramName (int index) override
+    {
+        return programs->get (0, index, "Name");
+    }
+    void changeProgramName (int index, const juce::String& newName) override
+    {
+        programs->set (0, index, "Name", newName);
+    }
     void copySettingsToProgram (int index);
-    double getTailLengthSeconds() const override { return 0; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;

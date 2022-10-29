@@ -54,7 +54,8 @@ class PadLayouts
     friend class midiPads;
 
 public:
-    PadLayouts() : values_ ("PadLayouts"){};
+    PadLayouts()
+        : values_ ("PadLayouts"){};
     ~PadLayouts(){};
     static void setPadLayout (juce::ValueTree tree, float x, float y, float w, float h)
     {
@@ -165,8 +166,14 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -184,9 +191,15 @@ public:
 #endif
     }
 
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;

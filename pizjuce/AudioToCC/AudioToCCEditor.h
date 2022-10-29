@@ -29,12 +29,15 @@
 class DecibelMeter : public juce::Slider
 {
 public:
-    DecibelMeter (const juce::String& name) : Slider (name)
+    DecibelMeter (const juce::String& name)
+        : Slider (name)
     {
         this->setMouseClickGrabsKeyboardFocus (false);
         this->setInterceptsMouseClicks (false, false);
     }
-    ~DecibelMeter() override {}
+    ~DecibelMeter() override
+    {
+    }
 
     juce::String getTextFromValue (double value) override
     {
@@ -45,11 +48,14 @@ public:
 class DecibelSlider : public juce::Slider
 {
 public:
-    DecibelSlider (const juce::String& name) : juce::Slider (name)
+    DecibelSlider (const juce::String& name)
+        : juce::Slider (name)
     {
         this->setMouseClickGrabsKeyboardFocus (false);
     }
-    ~DecibelSlider() override {}
+    ~DecibelSlider() override
+    {
+    }
 
     juce::String getTextFromValue (double value) override
     {
@@ -101,7 +107,10 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     int peakcounter;
     void updateParametersFromFilter();
-    AudioToCC* getFilter() const throw() { return (AudioToCC*) getAudioProcessor(); }
+    AudioToCC* getFilter() const throw()
+    {
+        return (AudioToCC*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

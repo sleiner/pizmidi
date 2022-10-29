@@ -280,11 +280,20 @@ void Loop::convertTimeBase (short timeBase)
     }
 }
 
-int Loop::getTransposition() { return transpose + octave * 12; }
+int Loop::getTransposition()
+{
+    return transpose + octave * 12;
+}
 
-void Loop::setSemitones (int semitones) { transpose = semitones; }
+void Loop::setSemitones (int semitones)
+{
+    transpose = semitones;
+}
 
-void Loop::setOctaves (int octaves) { octave = octaves; }
+void Loop::setOctaves (int octaves)
+{
+    octave = octaves;
+}
 
 int Loop::getTranspositionOfNote (PizMidiMessageSequence::mehPtr note, int p)
 {

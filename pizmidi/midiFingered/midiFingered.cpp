@@ -44,7 +44,9 @@ MidiFingered::MidiFingered (audioMasterCallback audioMaster)
 }
 
 //-----------------------------------------------------------------------------------------
-MidiFingered::~MidiFingered() {}
+MidiFingered::~MidiFingered()
+{
+}
 
 //------------------------------------------------------------------------
 void MidiFingered::getProgramName (char* name)

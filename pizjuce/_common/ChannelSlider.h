@@ -7,7 +7,8 @@
 class ChannelSlider : public juce::Slider
 {
 public:
-    ChannelSlider (juce::String name) : juce::Slider (name), allText ("Any")
+    ChannelSlider (juce::String name)
+        : juce::Slider (name), allText ("Any")
     {
         this->setRange (0, 16, 1);
     };

@@ -1,6 +1,7 @@
 #include "VSTSlider.h"
 
-VSTSlider::VSTSlider (juce::String name) : Slider (name)
+VSTSlider::VSTSlider (juce::String name)
+    : Slider (name)
 {
     this->ownerPlugin = nullptr;
     this->vstIndex    = -1;

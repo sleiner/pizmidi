@@ -76,12 +76,13 @@ JuceProgram::JuceProgram()
 }
 
 //==============================================================================
-AudioToCC::AudioToCC() : envL (0),
-                         envR (0),
-                         peakenvL (0),
-                         peakenvR (0),
-                         maxAttack (16000),
-                         maxRelease (16000)
+AudioToCC::AudioToCC()
+    : envL (0),
+      envR (0),
+      peakenvL (0),
+      peakenvR (0),
+      maxAttack (16000),
+      maxRelease (16000)
 {
     programs = new JuceProgram[getNumPrograms()];
 

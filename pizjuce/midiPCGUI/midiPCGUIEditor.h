@@ -52,8 +52,13 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override {}
-    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override { label->edit(); }
+    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override
+    {
+    }
+    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override
+    {
+        label->edit();
+    }
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -73,7 +78,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a PizLooper
     // every time we need it..
-    midiPCGUI* getFilter() const throw() { return (midiPCGUI*) getAudioProcessor(); }
+    midiPCGUI* getFilter() const throw()
+    {
+        return (midiPCGUI*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

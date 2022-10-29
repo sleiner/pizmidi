@@ -36,7 +36,8 @@ using juce::jmin;
 class FretsSlider : public juce::Slider
 {
 public:
-    FretsSlider (juce::String name) : juce::Slider (name){};
+    FretsSlider (juce::String name)
+        : juce::Slider (name){};
     ~FretsSlider() override{};
 
     juce::String getTextFromValue (double value) override
@@ -49,7 +50,8 @@ public:
 class StringsSlider : public juce::Slider
 {
 public:
-    StringsSlider (juce::String name) : juce::Slider (name){};
+    StringsSlider (juce::String name)
+        : juce::Slider (name){};
     ~StringsSlider() override{};
 
     juce::String getTextFromValue (double value) override
@@ -63,8 +65,12 @@ class ChordPresetFileFilter : public juce::FileFilter
 {
 public:
     ChordPresetFileFilter()
-        : juce::FileFilter ("midiChords presets") {}
-    ~ChordPresetFileFilter() override {}
+        : juce::FileFilter ("midiChords presets")
+    {
+    }
+    ~ChordPresetFileFilter() override
+    {
+    }
     bool isFileSuitable (const juce::File& file) const override
     {
         return (file.hasFileExtension ("chords")
@@ -605,7 +611,10 @@ private:
         guitar->repaint();
     }
 
-    MidiChords* getFilter() const throw() { return (MidiChords*) getAudioProcessor(); }
+    MidiChords* getFilter() const throw()
+    {
+        return (MidiChords*) getAudioProcessor();
+    }
     int mode;
     ChordPresetFileFilter fileFilter;
     juce::FileBrowserComponent* browser;

@@ -44,8 +44,14 @@ inline float midiToFloat (int n, bool learnspace = true)
     return (float) n * (float) 0.007874015748031496062992125984252;
 }
 
-inline int floatToChannel (float f) { return juce::roundToInt (f * 16.0f); }
-inline float channelToFloat (int c) { return (float) c * 0.0625f; }
+inline int floatToChannel (float f)
+{
+    return juce::roundToInt (f * 16.0f);
+}
+inline float channelToFloat (int c)
+{
+    return (float) c * 0.0625f;
+}
 
 inline int getNoteValue (juce::String noteName)
 {

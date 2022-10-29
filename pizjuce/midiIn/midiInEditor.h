@@ -60,7 +60,10 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     void updateParametersFromFilter();
-    MidiInFilter* getFilter() const throw() { return (MidiInFilter*) getAudioProcessor(); }
+    MidiInFilter* getFilter() const throw()
+    {
+        return (MidiInFilter*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

@@ -83,7 +83,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a DemoJuceFilter
     // every time we need it
-    WebBrowserFilter* getFilter() const throw() { return (WebBrowserFilter*) getAudioProcessor(); }
+    WebBrowserFilter* getFilter() const throw()
+    {
+        return (WebBrowserFilter*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

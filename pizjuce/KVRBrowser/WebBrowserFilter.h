@@ -31,7 +31,10 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
     int getNumParameters() override;
 
@@ -48,14 +51,30 @@ public:
 
     bool acceptsMidi() const override;
     bool producesMidi() const override;
-    double getTailLengthSeconds() const override { return 0; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return 0; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram (int index) override {}
-    const juce::String getProgramName (int index) override { return juce::String(); }
-    void changeProgramName (int index, const juce::String& newName) override {}
+    int getNumPrograms() override
+    {
+        return 0;
+    }
+    int getCurrentProgram() override
+    {
+        return 0;
+    }
+    void setCurrentProgram (int index) override
+    {
+    }
+    const juce::String getProgramName (int index) override
+    {
+        return juce::String();
+    }
+    void changeProgramName (int index, const juce::String& newName) override
+    {
+    }
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
@@ -70,8 +89,14 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
 
-    juce::String getURL() { return URL; }
-    void setURL (const juce::String& newURL) { URL = newURL; }
+    juce::String getURL()
+    {
+        return URL;
+    }
+    void setURL (const juce::String& newURL)
+    {
+        URL = newURL;
+    }
     bool initialPageLoaded;
 
 private:

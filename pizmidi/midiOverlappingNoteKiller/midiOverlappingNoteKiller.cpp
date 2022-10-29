@@ -36,7 +36,9 @@ MidiOverlappingNoteKiller::MidiOverlappingNoteKiller (audioMasterCallback audioM
 }
 
 //-----------------------------------------------------------------------------------------
-MidiOverlappingNoteKiller::~MidiOverlappingNoteKiller() {}
+MidiOverlappingNoteKiller::~MidiOverlappingNoteKiller()
+{
+}
 
 //-----------------------------------------------------------------------------------------
 void MidiOverlappingNoteKiller::setParameter (VstInt32 index, float value)

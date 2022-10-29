@@ -15,14 +15,24 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce = true)
 class PizChord
 {
 public:
-    PizChord() {}
+    PizChord()
+    {
+    }
     PizChord (juce::Array<int> newChord);
-    ~PizChord() {}
+    ~PizChord()
+    {
+    }
 
     void setChord (juce::Array<int> newChord);
     int getSum() const;
-    juce::Array<int> getChord() const { return chord; }
-    juce::Array<int> getPattern() const { return pattern; }
+    juce::Array<int> getChord() const
+    {
+        return chord;
+    }
+    juce::Array<int> getPattern() const
+    {
+        return pattern;
+    }
     juce::String getStringPattern() const;
 
     bool operator<(const PizChord& other)
@@ -57,9 +67,14 @@ class ChordName
 {
 public:
     ChordName (juce::String chordName, juce::String noteString);
-    ~ChordName() {}
+    ~ChordName()
+    {
+    }
     juce::String getName (int rootNote, int bassNote, bool flats);
-    int getRootIndex() { return rootIndex; }
+    int getRootIndex()
+    {
+        return rootIndex;
+    }
 
     bool equals (juce::String& noteString);
     bool equals (juce::Array<int>& chord);

@@ -87,7 +87,10 @@ public:
     {
         length = 960.0 * newLength;
     }
-    double getLength() { return length; }
+    double getLength()
+    {
+        return length;
+    }
 
     int currentIndex;
     int playMode;

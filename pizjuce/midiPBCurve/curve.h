@@ -25,7 +25,9 @@ class JuceProgram
 
 public:
     JuceProgram();
-    ~JuceProgram() {}
+    ~JuceProgram()
+    {
+    }
 
 private:
     float param[kNumParams];
@@ -59,9 +61,18 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -79,7 +90,10 @@ public:
 #endif
     }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
@@ -94,7 +108,10 @@ public:
 
     //==============================================================================
 
-    int getNumPrograms() override { return 128; }
+    int getNumPrograms() override
+    {
+        return 128;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
@@ -150,7 +167,10 @@ private:
 
     struct PointComparator
     {
-        int compareElements (midiPoint a, midiPoint b) { return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f); }
+        int compareElements (midiPoint a, midiPoint b)
+        {
+            return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f);
+        }
     } pointComparator;
 
     juce::Array<midiPoint> points;

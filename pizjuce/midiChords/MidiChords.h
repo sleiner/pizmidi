@@ -58,7 +58,9 @@ struct ChordNote
     {
         c = n = -1;
     }
-    ~ChordNote() {}
+    ~ChordNote()
+    {
+    }
 
     int c;
     int n;
@@ -83,7 +85,9 @@ public:
         stringNotes.addArray (notes);
         numStrings = notes.size();
     }
-    ~GuitarDefinition() {}
+    ~GuitarDefinition()
+    {
+    }
 
     juce::String guitarName;
     int numStrings;
@@ -238,7 +242,10 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
     int getNumParameters() override;
 
@@ -253,16 +260,37 @@ public:
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
-    bool acceptsMidi() const override { return true; }
-    bool producesMidi() const override { return true; }
+    bool acceptsMidi() const override
+    {
+        return true;
+    }
+    bool producesMidi() const override
+    {
+        return true;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return numProgs; }
-    int getCurrentProgram() override { return curProgram; }
+    int getNumPrograms() override
+    {
+        return numProgs;
+    }
+    int getCurrentProgram() override
+    {
+        return curProgram;
+    }
     void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override { return programs->get (index, "Name"); }
-    void changeProgramName (int index, const juce::String& newName) override { programs->set (index, "Name", newName); }
-    double getTailLengthSeconds() const override { return 0; }
+    const juce::String getProgramName (int index) override
+    {
+        return programs->get (index, "Name");
+    }
+    void changeProgramName (int index, const juce::String& newName) override
+    {
+        programs->set (index, "Name", newName);
+    }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
@@ -274,11 +302,20 @@ public:
     juce::MidiKeyboardState progKbState[numProgs][128];
     juce::MidiKeyboardState chordKbState;
     juce::MidiKeyboardState triggerKbState;
-    juce::MidiKeyboardState* getCurrentKbState() { return &(progKbState[curProgram][curTrigger]); }
+    juce::MidiKeyboardState* getCurrentKbState()
+    {
+        return &(progKbState[curProgram][curTrigger]);
+    }
     void selectTrigger (int index);
     void selectChordNote (int index, int note, bool on, int ch = -1);
-    int getCurrentTrigger() { return curTrigger; }
-    bool isTriggerNotePlaying (int channel, int note) { return notePlaying[channel][note]; }
+    int getCurrentTrigger()
+    {
+        return curTrigger;
+    }
+    bool isTriggerNotePlaying (int channel, int note)
+    {
+        return notePlaying[channel][note];
+    }
     bool isTriggerNotePlaying (int note)
     {
         for (int i = 0; i < 16; i++)
@@ -286,7 +323,10 @@ public:
                 return true;
         return false;
     }
-    int getLearnChannel() { return learnchan; }
+    int getLearnChannel()
+    {
+        return learnchan;
+    }
     void setNoteBypassed (int note, bool bypass)
     {
         programs->set (curProgram, "Bypassed" + juce::String (note), bypass);
@@ -313,7 +353,10 @@ public:
         else
             stopPlayingFromGUI = true;
     }
-    bool isPreviewChordPlaying() { return playFromGUI; }
+    bool isPreviewChordPlaying()
+    {
+        return playFromGUI;
+    }
     void translateToGuitarChord (bool force = false);
     void setGuitarView (bool on)
     {

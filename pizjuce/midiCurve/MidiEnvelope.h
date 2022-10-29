@@ -13,7 +13,9 @@ public:
         inmsg  = -1;
         outmsg = -1;
     }
-    ~MidiIndicator() override {}
+    ~MidiIndicator() override
+    {
+    }
 
     void paint (juce::Graphics& g) override
     {

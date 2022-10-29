@@ -16,7 +16,10 @@ public:
     void buttonClicked (juce::Button*);
     void setColour (const juce::Colour&);
     void setTextColour (const juce::Colour&);
-    int getIndex() { return index; }
+    int getIndex()
+    {
+        return index;
+    }
     juce::String getIconPath();
     void setIconPath (juce::String name);
     void setText (const juce::String& name);

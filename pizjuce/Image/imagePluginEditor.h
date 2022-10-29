@@ -73,7 +73,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a imagePluginFilter
     // every time we need it
-    imagePluginFilter* getFilter() const throw() { return (imagePluginFilter*) getAudioProcessor(); }
+    imagePluginFilter* getFilter() const throw()
+    {
+        return (imagePluginFilter*) getAudioProcessor();
+    }
 };
 
 #endif

@@ -9,7 +9,8 @@
 class NoteSlider : public juce::Slider
 {
 public:
-    NoteSlider (juce::String name) : juce::Slider (name), allText ("Off"), bottomOctave (-2)
+    NoteSlider (juce::String name)
+        : juce::Slider (name), allText ("Off"), bottomOctave (-2)
     {
         this->setRange (-1, 127, 1);
     };

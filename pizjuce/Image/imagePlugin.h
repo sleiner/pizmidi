@@ -46,7 +46,10 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -63,10 +66,19 @@ public:
         return false;
 #endif
     }
-    bool hasEditor() const override { return true; }
-    double getTailLengthSeconds() const override { return 0; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
@@ -81,7 +93,10 @@ public:
 
     //==============================================================================
 
-    int getNumPrograms() override { return 128; }
+    int getNumPrograms() override
+    {
+        return 128;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
@@ -98,7 +113,10 @@ public:
     void clearAllImages();
 
     void setCurrentBank (int index, int program = -1);
-    int getCurrentBank() { return curBank; }
+    int getCurrentBank()
+    {
+        return curBank;
+    }
 
     void setNoteInput (bool use)
     {
@@ -112,8 +130,14 @@ public:
         programs->setGlobal ("usePC", use);
     }
 
-    bool getUsePC() { return usePC; }
-    bool getNoteInput() { return noteInput; }
+    bool getUsePC()
+    {
+        return usePC;
+    }
+    bool getNoteInput()
+    {
+        return noteInput;
+    }
 
     //==============================================================================
     // These properties are public so that our editor component can access them

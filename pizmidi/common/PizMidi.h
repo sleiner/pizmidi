@@ -68,7 +68,9 @@ public:
 
 protected:
     bool init();
-    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames) {}
+    virtual void processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+    {
+    }
 
     virtual void preProcess();
     virtual void postProcess();

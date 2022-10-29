@@ -44,10 +44,22 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool acceptsMidi() const override { return JucePlugin_WantsMidiInput != 0; }
-    bool producesMidi() const override { return JucePlugin_ProducesMidiOutput != 0; }
-    bool hasEditor() const override { return true; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool acceptsMidi() const override
+    {
+        return JucePlugin_WantsMidiInput != 0;
+    }
+    bool producesMidi() const override
+    {
+        return JucePlugin_ProducesMidiOutput != 0;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
     int getNumParameters() override;
 
@@ -62,12 +74,29 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override { return kNumPrograms; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram (int index) override {}
-    const juce::String getProgramName (int index) override { return programName; }
-    void changeProgramName (int index, const juce::String& newName) override { programName = newName; }
-    double getTailLengthSeconds() const override { return 0; }
+    int getNumPrograms() override
+    {
+        return kNumPrograms;
+    }
+    int getCurrentProgram() override
+    {
+        return 0;
+    }
+    void setCurrentProgram (int index) override
+    {
+    }
+    const juce::String getProgramName (int index) override
+    {
+        return programName;
+    }
+    void changeProgramName (int index, const juce::String& newName) override
+    {
+        programName = newName;
+    }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
@@ -79,8 +108,14 @@ public:
     bool useNotes, useCC, usePB, usePA, useCP, usePC, useSysEx, useOther, useClock;
     juce::AudioPlayHead::CurrentPositionInfo lastPosInfo;
 
-    juce::MidiMessageCollector* getMessageCollector() { return &midiCollector; }
-    juce::MidiMessageSequence* getMessages() { return messages; }
+    juce::MidiMessageCollector* getMessageCollector()
+    {
+        return &midiCollector;
+    }
+    juce::MidiMessageSequence* getMessages()
+    {
+        return messages;
+    }
 
     bool writeMidiFile (juce::File mid);
     void clearLoop();
@@ -89,9 +124,18 @@ public:
         maxLines = juce::jlimit (1, 5000000, lines);
         sendChangeMessage();
     }
-    int getMaxLines() { return maxLines; }
-    int getTimeSigNumerator() { return n; }
-    int getTimeSigDenominator() { return d; }
+    int getMaxLines()
+    {
+        return maxLines;
+    }
+    int getTimeSigNumerator()
+    {
+        return n;
+    }
+    int getTimeSigDenominator()
+    {
+        return d;
+    }
 
 private:
     float bghue;

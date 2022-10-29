@@ -67,8 +67,14 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -86,7 +92,10 @@ public:
 #endif
     }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
@@ -98,11 +107,17 @@ public:
     const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
-    double getTailLengthSeconds() const override { return 0; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
 
-    int getNumPrograms() override { return kNumPrograms; }
+    int getNumPrograms() override
+    {
+        return kNumPrograms;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
@@ -119,8 +134,13 @@ public:
     class LastMsgToDisplay : public ChangeBroadcaster
     {
     public:
-        LastMsgToDisplay() { lastCCOut = lastCCIn = -1; }
-        ~LastMsgToDisplay() override {}
+        LastMsgToDisplay()
+        {
+            lastCCOut = lastCCIn = -1;
+        }
+        ~LastMsgToDisplay() override
+        {
+        }
         int lastCCOut, lastCCIn;
     } lastMsg;
     float getPointValue (int n, int y);
@@ -158,7 +178,10 @@ private:
 
     struct PointComparator
     {
-        int compareElements (midiPoint a, midiPoint b) { return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f); }
+        int compareElements (midiPoint a, midiPoint b)
+        {
+            return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f);
+        }
     } pointComparator;
 
     juce::Array<midiPoint> points;

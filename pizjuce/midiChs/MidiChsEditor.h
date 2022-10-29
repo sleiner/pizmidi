@@ -64,7 +64,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a MidiChsProcessor
     // every time we need it..
-    MidiChsProcessor* getFilter() const throw() { return (MidiChsProcessor*) getAudioProcessor(); }
+    MidiChsProcessor* getFilter() const throw()
+    {
+        return (MidiChsProcessor*) getAudioProcessor();
+    }
 };
 
 #endif

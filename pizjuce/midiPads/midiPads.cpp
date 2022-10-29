@@ -159,7 +159,10 @@ midiPads::~midiPads()
 }
 
 //==============================================================================
-float midiPads::getParameter (int index) { return param[index]; }
+float midiPads::getParameter (int index)
+{
+    return param[index];
+}
 
 void midiPads::setParameter (int index, float newValue)
 {

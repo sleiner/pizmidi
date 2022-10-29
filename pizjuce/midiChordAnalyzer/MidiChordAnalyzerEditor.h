@@ -134,7 +134,10 @@ private:
     void updateParametersFromFilter();
     int numHeldNotes;
 
-    MidiChordAnalyzer* getFilter() const throw() { return (MidiChordAnalyzer*) getAudioProcessor(); }
+    MidiChordAnalyzer* getFilter() const throw()
+    {
+        return (MidiChordAnalyzer*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

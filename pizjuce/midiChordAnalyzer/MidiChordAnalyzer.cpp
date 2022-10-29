@@ -44,7 +44,8 @@ void MidiChordAnalyzerPrograms::loadDefaultValues()
 }
 
 //==============================================================================
-MidiChordAnalyzer::MidiChordAnalyzer() : programs (0), curProgram (0)
+MidiChordAnalyzer::MidiChordAnalyzer()
+    : programs (0), curProgram (0)
 {
     DBG ("MidiChordAnalyzer()");
 

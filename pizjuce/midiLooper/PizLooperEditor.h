@@ -38,7 +38,9 @@ public:
         s = &state;
         this->setColour (MidiKeyboardComponent::textLabelColourId, juce::Colours::transparentBlack);
     }
-    ~KeySelector() override {}
+    ~KeySelector() override
+    {
+    }
 
 private:
     bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
@@ -94,7 +96,9 @@ public:
     void mouseDrag (const juce::MouseEvent& e) override;
     void mouseDown (const juce::MouseEvent& e) override;
     void mouseUp (const juce::MouseEvent& e) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override {}
+    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override
+    {
+    }
     void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override
     {
         if (label == nameLabel.get())
@@ -135,7 +139,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a PizLooper
     // every time we need it..
-    PizLooper* getFilter() const throw() { return (PizLooper*) getAudioProcessor(); }
+    PizLooper* getFilter() const throw()
+    {
+        return (PizLooper*) getAudioProcessor();
+    }
     //[/UserVariables]
 
     //==============================================================================

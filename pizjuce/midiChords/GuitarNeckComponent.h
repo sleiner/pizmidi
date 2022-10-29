@@ -23,17 +23,28 @@ public:
         fret   = f;
         string = s;
     }
-    ~FrettedNote() {}
+    ~FrettedNote()
+    {
+    }
 
-    bool isValid() const { return fret >= 0 && string >= 0; }
+    bool isValid() const
+    {
+        return fret >= 0 && string >= 0;
+    }
     void invalidate()
     {
         fret   = -1;
         string = -1;
     }
 
-    bool operator!= (FrettedNote const& other) { return other.fret != this->fret || other.string != this->string; }
-    bool operator== (FrettedNote const& other) { return other.fret == this->fret && other.string == this->string; }
+    bool operator!= (FrettedNote const& other)
+    {
+        return other.fret != this->fret || other.string != this->string;
+    }
+    bool operator== (FrettedNote const& other)
+    {
+        return other.fret == this->fret && other.string == this->string;
+    }
 
     int fret;
     int string;
@@ -62,20 +73,38 @@ public:
         repaint();
     }
 
-    void setFlats (bool flats) { showFlats = flats; }
+    void setFlats (bool flats)
+    {
+        showFlats = flats;
+    }
     void setVelocity (float velocity);
     void setMidiChannel (int midiChannelNumber);
-    int getMidiChannel() const noexcept { return midiChannel; }
+    int getMidiChannel() const noexcept
+    {
+        return midiChannel;
+    }
     void setMidiChannelsToDisplay (int midiChannelMask);
-    int getMidiChannelsToDisplay() const noexcept { return midiInChannelMask; }
+    int getMidiChannelsToDisplay() const noexcept
+    {
+        return midiInChannelMask;
+    }
 
     void setAvailableRange (int lowestNote,
                             int highestNote);
-    int getRangeStart() const noexcept { return rangeStart; }
-    int getRangeEnd() const noexcept { return rangeEnd; }
+    int getRangeStart() const noexcept
+    {
+        return rangeStart;
+    }
+    int getRangeEnd() const noexcept
+    {
+        return rangeEnd;
+    }
 
     void setLowestVisibleFret (int fretNumber);
-    int getLowestVisibleFret() const noexcept { return firstFret; }
+    int getLowestVisibleFret() const noexcept
+    {
+        return firstFret;
+    }
 
     void drawNote (int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
 
@@ -123,9 +152,15 @@ public:
     /** This returns the value set by setOctaveForMiddleC().
         @see setOctaveForMiddleC
     */
-    int getOctaveForMiddleC() const noexcept { return octaveNumForMiddleC; }
+    int getOctaveForMiddleC() const noexcept
+    {
+        return octaveNumForMiddleC;
+    }
 
-    int getNote (FrettedNote n) { return stringNote[n.string] + n.fret; }
+    int getNote (FrettedNote n)
+    {
+        return stringNote[n.string] + n.fret;
+    }
     int getStringFret (int string);
 
     //==============================================================================

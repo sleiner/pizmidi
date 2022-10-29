@@ -30,7 +30,8 @@
 class PianoPort : public juce::Viewport
 {
 public:
-    PianoPort (juce::String name) : Viewport (name){};
+    PianoPort (juce::String name)
+        : Viewport (name){};
     void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override
     {
         this->getParentComponent()->mouseWheelMove (e, d);
@@ -77,7 +78,10 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MidiStep* getFilter() const throw() { return (MidiStep*) getAudioProcessor(); }
+    MidiStep* getFilter() const throw()
+    {
+        return (MidiStep*) getAudioProcessor();
+    }
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void updateParameters (bool updateLoop = false);
     juce::ComponentBoundsConstrainer resizeLimits;

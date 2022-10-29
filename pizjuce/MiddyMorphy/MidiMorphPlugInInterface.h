@@ -70,9 +70,15 @@ public:
 
     const juce::String getName() const override;
 
-    double getTailLengthSeconds() const override { return 0; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
 private:
     double sendPos;

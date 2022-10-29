@@ -73,7 +73,10 @@ private:
 
     void updateParametersFromFilter();
 
-    BigClockFilter* getFilter() const throw() { return (BigClockFilter*) getAudioProcessor(); }
+    BigClockFilter* getFilter() const throw()
+    {
+        return (BigClockFilter*) getAudioProcessor();
+    }
 
     JUCE_LEAK_DETECTOR (BigClockEditor)
 };

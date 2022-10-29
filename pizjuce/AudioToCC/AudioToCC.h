@@ -99,7 +99,9 @@ class JuceProgram
 
 public:
     JuceProgram();
-    ~JuceProgram() {}
+    ~JuceProgram()
+    {
+    }
 
 private:
     float param[numParams];
@@ -127,8 +129,14 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -158,10 +166,16 @@ public:
     const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
-    double getTailLengthSeconds() const override { return 0; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return 16; }
+    int getNumPrograms() override
+    {
+        return 16;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
@@ -173,7 +187,10 @@ public:
 
     void setActiveDevice (juce::String name);
     void setActiveDevice (juce::MidiDeviceInfo const& device);
-    juce::MidiDeviceInfo getActiveDevice() { return activeDevice; }
+    juce::MidiDeviceInfo getActiveDevice()
+    {
+        return activeDevice;
+    }
     juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
 
     PizArray<juce::MidiDeviceInfo> devices;

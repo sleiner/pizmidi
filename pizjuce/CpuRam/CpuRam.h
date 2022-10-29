@@ -26,9 +26,18 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -60,11 +69,24 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram (int index) override {}
-    const juce::String getProgramName (int index) override { return juce::String(); }
-    void changeProgramName (int index, const juce::String& newName) override {}
+    int getNumPrograms() override
+    {
+        return 1;
+    }
+    int getCurrentProgram() override
+    {
+        return 0;
+    }
+    void setCurrentProgram (int index) override
+    {
+    }
+    const juce::String getProgramName (int index) override
+    {
+        return juce::String();
+    }
+    void changeProgramName (int index, const juce::String& newName) override
+    {
+    }
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;

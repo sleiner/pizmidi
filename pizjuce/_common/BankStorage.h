@@ -22,8 +22,14 @@ public:
     void dumpTo (juce::MemoryBlock& destination);
     void dumpProgramTo (int bank, int program, juce::MemoryBlock& destination);
 
-    int getNumBanks() const { return numBanks_; }
-    int getNumPrograms() const { return numPrograms_; }
+    int getNumBanks() const
+    {
+        return numBanks_;
+    }
+    int getNumPrograms() const
+    {
+        return numPrograms_;
+    }
 
 protected:
     juce::ValueTree values_;

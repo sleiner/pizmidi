@@ -58,7 +58,10 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
+    MidiCurve* getFilter() const throw()
+    {
+        return (MidiCurve*) getAudioProcessor();
+    }
     void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void updateParameters();
     juce::ComponentBoundsConstrainer resizeLimits;

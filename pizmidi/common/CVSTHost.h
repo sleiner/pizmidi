@@ -269,9 +269,15 @@ public:
     CFxBank (char* pszFile = 0);
     CFxBank (int nPrograms, int nParams);
     CFxBank (int nChunkSize);
-    CFxBank (CFxBank const& org) { DoCopy (org); }
+    CFxBank (CFxBank const& org)
+    {
+        DoCopy (org);
+    }
     virtual ~CFxBank();
-    CFxBank& operator= (CFxBank const& org) { return DoCopy (org); }
+    CFxBank& operator= (CFxBank const& org)
+    {
+        return DoCopy (org);
+    }
 
 public:
     bool SetSize (int nPrograms, int nParams);
@@ -279,8 +285,14 @@ public:
     bool LoadBank (char* pszFile);
     bool SaveBank (char* pszFile);
     void Unload();
-    bool IsLoaded() { return ! ! bBank; }
-    bool IsChunk() { return bChunk; }
+    bool IsLoaded()
+    {
+        return ! ! bBank;
+    }
+    bool IsChunk()
+    {
+        return bChunk;
+    }
 
     // access functions
 public:

@@ -30,7 +30,10 @@ class midiPCGUIProgram
 public:
     midiPCGUIProgram();
     ~midiPCGUIProgram(){};
-    void setName (juce::String newName) { name = newName; }
+    void setName (juce::String newName)
+    {
+        name = newName;
+    }
 
 private:
     float param[numParams];
@@ -57,11 +60,26 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
-    bool acceptsMidi() const override { return true; }
-    bool producesMidi() const override { return true; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
+    bool acceptsMidi() const override
+    {
+        return true;
+    }
+    bool producesMidi() const override
+    {
+        return true;
+    }
 
     int getNumParameters() override;
 
@@ -77,7 +95,10 @@ public:
     bool isOutputChannelStereoPair (int index) const override;
 
     //==============================================================================
-    int getNumPrograms() override { return 128; }
+    int getNumPrograms() override
+    {
+        return 128;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;

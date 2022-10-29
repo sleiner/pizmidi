@@ -87,7 +87,8 @@ JuceProgram::~JuceProgram()
 }
 
 //==============================================================================
-PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
+PizLooper::PizLooper()
+    : programs (0), slotLimit (numSlots)
 {
     DBG ("PizLooper()");
     init             = true;
@@ -1389,7 +1390,10 @@ bool PizLooper::readMidiFile (int index, juce::String progname, juce::File mid)
     return true;
 }
 
-Loop* PizLooper::getActiveLoop() { return &(programs[curProgram].loop); }
+Loop* PizLooper::getActiveLoop()
+{
+    return &(programs[curProgram].loop);
+}
 
 void PizLooper::updateLoopInfo()
 {

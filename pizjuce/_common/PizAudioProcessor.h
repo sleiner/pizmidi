@@ -12,10 +12,11 @@ class ReaProject;
 class PizAudioProcessor : public juce::AudioProcessor
 {
 public:
-    PizAudioProcessor() : AudioProcessor(),
-                          bottomOctave (-2),
-                          reaper (false),
-                          currentPath (((juce::File::getSpecialLocation (juce::File::currentApplicationFile)).getParentDirectory()).getFullPathName())
+    PizAudioProcessor()
+        : AudioProcessor(),
+          bottomOctave (-2),
+          reaper (false),
+          currentPath (((juce::File::getSpecialLocation (juce::File::currentApplicationFile)).getParentDirectory()).getFullPathName())
     {
     }
 
@@ -95,7 +96,10 @@ public:
     }
 
     int bottomOctave;
-    juce::String getCurrentPath() { return currentPath; }
+    juce::String getCurrentPath()
+    {
+        return currentPath;
+    }
 
     double (*TimeMap2_timeToBeats) (ReaProject* proj, double tpos, int* measures, int* cml, double* fullbeats, int* cdenom);
     double (*GetPlayPosition)();

@@ -95,7 +95,8 @@ void MidiChordsPrograms::loadDefaults()
 }
 
 //==============================================================================
-MidiChords::MidiChords() : programs (0), curProgram (0)
+MidiChords::MidiChords()
+    : programs (0), curProgram (0)
 {
     DBG ("MidiChords()");
 

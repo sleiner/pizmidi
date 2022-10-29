@@ -24,7 +24,10 @@ public:
         repaint();
         sendChangeMessage();
     }
-    int getKeyPressBaseOctave() { return baseOctave; }
+    int getKeyPressBaseOctave()
+    {
+        return baseOctave;
+    }
     bool toggle;
     void drawBlackNote (int midiNoteNumber, juce::Graphics& g, juce::Rectangle<float> area, bool isDown, bool isOver, const juce::Colour& textColour)
     {

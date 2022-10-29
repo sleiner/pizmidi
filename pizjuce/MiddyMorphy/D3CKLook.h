@@ -7,7 +7,10 @@
 class D3CKLook : public juce::LookAndFeel_V1
 {
 public:
-    D3CKLook() : juce::LookAndFeel_V1() {}
+    D3CKLook()
+        : juce::LookAndFeel_V1()
+    {
+    }
 
     int getDefaultScrollbarWidth() override;
 

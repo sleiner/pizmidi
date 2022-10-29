@@ -13,7 +13,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new imagePluginFilter();
 }
 
-ImageBank::ImageBank() : BankStorage ("ImageBank")
+ImageBank::ImageBank()
+    : BankStorage ("ImageBank")
 {
     loadDefaultValues();
 }

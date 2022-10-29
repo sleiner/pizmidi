@@ -28,7 +28,9 @@ class JuceProgram
 
 public:
     JuceProgram();
-    ~JuceProgram() {}
+    ~JuceProgram()
+    {
+    }
 
 private:
     float param[kNumParams];
@@ -57,9 +59,18 @@ public:
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+    bool hasEditor() const override
+    {
+        return true;
+    }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -77,7 +88,10 @@ public:
 #endif
     }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
@@ -92,7 +106,10 @@ public:
 
     //==============================================================================
 
-    int getNumPrograms() override { return 1; }
+    int getNumPrograms() override
+    {
+        return 1;
+    }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
@@ -109,7 +126,10 @@ public:
     int lastUIWidth, lastUIHeight;
     juce::String loopDir;
     int activeLoop;
-    Loop* getActiveLoop() { return loop[activeLoop]; }
+    Loop* getActiveLoop()
+    {
+        return loop[activeLoop];
+    }
     bool writeMidiFile (int index, juce::File& file);
     bool readMidiFile (int index, juce::File& mid);
     juce::MidiKeyboardState keyboardState;
