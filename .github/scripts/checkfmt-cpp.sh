@@ -26,7 +26,7 @@ for commit in $(git rev-list --reverse "${from_sha}..${to_sha}"); do
     predecessor=$(git rev-parse -q --verify "${commit}~1") || echo "Predecessor to \"${commit}\" was not found"
 
     echo "Checking diff between ${predecessor} and ${commit}..."
-    diff=$(git-clang-format --quiet --diff "${predecessor}" "${commit}" --extensions "h,hh,hpp,c,cc,cpp" -- .)
+    diff=$(git-clang-format --quiet --diff "${predecessor}" "${commit}" --extensions "h,hh,hpp,c,cc,cpp" -- .) || :
     if [ -n "${diff}" ]; then
         echo "=> ${commit} was not formatted correctly:"
         echo "${diff}"
