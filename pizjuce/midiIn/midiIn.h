@@ -1,14 +1,13 @@
 #ifndef MIDIINPLUGINFILTER_H
 #define MIDIINPLUGINFILTER_H
 
-#include <memory>
+#include "../_common/PizArray.h"
+#include "../_common/PizAudioProcessor.h"
 
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_core/juce_core.h>
 #include <juce_events/juce_events.h>
-
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include <memory>
 
 enum
 {

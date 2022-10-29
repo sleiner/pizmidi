@@ -8,6 +8,7 @@ http://www.anticore.org/jucetice/
 ==============================================================================
 */
 #include "MidiMonitor.h"
+
 #include "MidiMonitorEditor.h"
 
 using juce::roundToInt;

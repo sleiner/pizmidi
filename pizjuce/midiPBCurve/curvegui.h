@@ -20,13 +20,13 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_audio_processors/juce_audio_processors.h>
-#include <juce_events/juce_events.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/ChannelSlider.h"
 #include "curve.h"
 #include "MidiEnvelope.h"
+
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 //[/Headers]
 

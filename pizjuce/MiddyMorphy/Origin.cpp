@@ -1,5 +1,6 @@
 
 #include "Origin.h"
+
 #include "ZoomingShiftingComponent.h"
 
 Origin::Origin()

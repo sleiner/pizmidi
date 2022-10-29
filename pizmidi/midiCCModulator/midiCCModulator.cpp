@@ -1,5 +1,7 @@
 #include "midiCCModulator.hpp"
+
 #include "../common/MIDI.h"
+
 #include <cstdlib>
 
 //for seeding rand()

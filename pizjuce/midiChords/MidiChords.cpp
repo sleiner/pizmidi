@@ -1,4 +1,5 @@
 #include "MidiChords.h"
+
 #include "MidiChordsEditor.h"
 
 using juce::jlimit;

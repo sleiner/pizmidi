@@ -1,8 +1,8 @@
 #pragma once
 
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "ZoomableShiftableComponent.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class Module;
 class ModulePane;

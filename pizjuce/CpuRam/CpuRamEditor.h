@@ -1,11 +1,11 @@
 #ifndef DEMOJUCEPLUGINEDITOR_H
 #define DEMOJUCEPLUGINEDITOR_H
 
-#include <juce_gui_basics/juce_gui_basics.h>
-#include <juce_gui_extra/juce_gui_extra.h>
-
 #include "CpuRam.h"
 #include "cputime.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 class CpuGraph : public juce::Component
 {

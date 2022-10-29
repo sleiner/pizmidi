@@ -1,4 +1,5 @@
 #include "MidiChordAnalyzer.h"
+
 #include "MidiChordAnalyzerEditor.h"
 
 using juce::roundToInt;

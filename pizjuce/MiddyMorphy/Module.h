@@ -1,10 +1,10 @@
 #pragma once
 
+#include "XYItem.h"
+
 #include <juce_core/juce_core.h>
 #include <juce_graphics/juce_graphics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "XYItem.h"
 
 class Module : public XYItem
 {

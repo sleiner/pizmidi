@@ -1,12 +1,12 @@
 #ifndef MIDIPADSPLUGINEDITOR_H
 #define MIDIPADSPLUGINEDITOR_H
 
+#include "MidiPad.h"
+#include "midiPads.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
-#include "MidiPad.h"
-#include "midiPads.h"
 
 class fullScreenContainer : public juce::Component
 {

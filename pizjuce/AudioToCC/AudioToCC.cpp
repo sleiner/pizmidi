@@ -1,4 +1,5 @@
 #include "AudioToCC.h"
+
 #include "../_common/midistuff.h"
 #include "AudioToCCEditor.h"
 

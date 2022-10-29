@@ -1,4 +1,5 @@
 #include "imagePlugin.h"
+
 #include "imagePluginEditor.h"
 
 using juce::roundToInt;

@@ -1,5 +1,6 @@
 
 #include "MidiMorphPlugInInterface.h"
+
 #include "MidiMorphGUI.h"
 
 using juce::jmax;

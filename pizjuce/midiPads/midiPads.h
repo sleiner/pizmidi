@@ -1,10 +1,10 @@
 #ifndef MIDIPADSPLUGINFILTER_H
 #define MIDIPADSPLUGINFILTER_H
 
+#include "../_common/PizAudioProcessor.h"
+
 #include <juce_core/juce_core.h>
 #include <juce_data_structures/juce_data_structures.h>
-
-#include "../_common/PizAudioProcessor.h"
 
 #define midiScaler (0.007874016f)
 

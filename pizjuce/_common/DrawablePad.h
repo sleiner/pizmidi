@@ -1,9 +1,8 @@
 #ifndef MIDIPADS_DRAWABLEPAD_H
 #define MIDIPADS_DRAWABLEPAD_H
 
-#include <memory>
-
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <memory>
 
 class DrawablePad : public juce::Button
 {

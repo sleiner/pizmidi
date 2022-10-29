@@ -20,10 +20,10 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ******************************************************************************/
 
+#include "CVSTHost.h" /* private prototypes                */
+
 #include <math.h>  /* math prototypes                   */
 #include <stdio.h> /* file I/O prototypes               */
-
-#include "CVSTHost.h" /* private prototypes                */
 
 /*****************************************************************************/
 /* Global Data                                                               */

@@ -1,9 +1,9 @@
 #ifndef MIDICHSPLUGINEDITOR_H
 #define MIDICHSPLUGINEDITOR_H
 
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "MidiChsProcessor.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 //==============================================================================
 /**

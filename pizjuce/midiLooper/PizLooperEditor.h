@@ -20,14 +20,13 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_audio_utils/juce_audio_utils.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/ClickableLabel.h"
 #include "../_common/VSTSlider.h"
-
 #include "PianoRoll.h"
 #include "PizLooper.h"
+
+#include <juce_audio_utils/juce_audio_utils.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class KeySelector : public juce::MidiKeyboardComponent
 {

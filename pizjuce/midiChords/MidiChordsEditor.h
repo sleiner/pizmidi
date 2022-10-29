@@ -20,16 +20,15 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_audio_utils/juce_audio_utils.h>
-#include <juce_core/juce_core.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/ChannelSlider.h"
 #include "../_common/NoteSlider.h"
 #include "../_common/VSTSlider.h"
-
 #include "GuitarNeckComponent.h"
 #include "MidiChords.h"
+
+#include <juce_audio_utils/juce_audio_utils.h>
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 using juce::jmin;
 

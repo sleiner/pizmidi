@@ -1,10 +1,10 @@
 #ifndef IMAGEPLUGINFILTER_H
 #define IMAGEPLUGINFILTER_H
 
-#include <juce_data_structures/juce_data_structures.h>
-
 #include "../_common/BankStorage.h"
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_data_structures/juce_data_structures.h>
 
 enum parameters
 {

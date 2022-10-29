@@ -1,11 +1,11 @@
 #ifndef PIZ_PIANO_ROLL_HEADER
 #define PIZ_PIANO_ROLL_HEADER
 
+#include "MidiLoop.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "MidiLoop.h"
 
 class PianoRoll;
 

@@ -1,10 +1,10 @@
 #ifndef BIGCLOCKPLUGINEDITOR_H
 #define BIGCLOCKPLUGINEDITOR_H
 
+#include "BigClock.h"
+
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
-#include "BigClock.h"
 
 class TimeDisplay : public juce::Button
 {

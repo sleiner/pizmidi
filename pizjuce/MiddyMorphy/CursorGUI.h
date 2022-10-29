@@ -1,8 +1,8 @@
 #pragma once
 
-#include <juce_events/juce_events.h>
-
 #include "ModuleGUI.h"
+
+#include <juce_events/juce_events.h>
 
 class Cursor;
 

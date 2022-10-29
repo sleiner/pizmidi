@@ -1,4 +1,5 @@
 #include "midiAudioToCC.hpp"
+
 #include <cstdlib>
 #include <math.h>
 #include <stdio.h>

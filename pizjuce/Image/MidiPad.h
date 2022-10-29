@@ -1,9 +1,9 @@
 #ifndef imagePluginFilter_PAD_H
 #define imagePluginFilter_PAD_H
 
-#include <memory>
-
 #include "../_common/PizAudioProcessor.h"
+
+#include <memory>
 
 class MidiPad : public juce::Button
 {

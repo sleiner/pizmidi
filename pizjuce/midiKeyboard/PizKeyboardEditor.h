@@ -20,12 +20,12 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "PizKeyboard.h"
+#include "PizKeyboardComponent.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "PizKeyboard.h"
-#include "PizKeyboardComponent.h"
 
 //[/Headers]
 

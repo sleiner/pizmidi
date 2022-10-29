@@ -1,4 +1,5 @@
 #include "step.h"
+
 #include "stepgui.h"
 
 using juce::roundToInt;

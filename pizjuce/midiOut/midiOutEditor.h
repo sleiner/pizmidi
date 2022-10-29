@@ -20,10 +20,10 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "midiOut.h"
 #include "MidiPad.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 //[/Headers]
 

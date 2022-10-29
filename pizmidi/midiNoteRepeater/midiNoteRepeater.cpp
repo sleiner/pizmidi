@@ -1,9 +1,8 @@
 #include "midiNoteRepeater.hpp"
 
 //for fmod()
-#include <cmath>
-
 #include <bitset>
+#include <cmath>
 
 //for seeding rand()
 #include <time.h>

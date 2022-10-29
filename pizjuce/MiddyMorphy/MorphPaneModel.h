@@ -1,11 +1,11 @@
 #pragma once
 
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "ModuleGUI.h"
 #include "ModulePaneModel.h"
 #include "Scene.h"
 #include "TextBoxSlider.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class Cursor;
 class MidiMorph;

@@ -1,9 +1,9 @@
 #ifndef imagePluginFilter_PAD_H
 #define imagePluginFilter_PAD_H
 
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/DrawablePad.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class MidiPad : public juce::Component,
                 public juce::Button::Listener,

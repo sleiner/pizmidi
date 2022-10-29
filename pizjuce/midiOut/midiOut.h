@@ -1,12 +1,11 @@
 #ifndef MIDIOUTPLUGINFILTER_H
 #define MIDIOUTPLUGINFILTER_H
 
-#include <memory>
-
-#include <juce_audio_devices/juce_audio_devices.h>
-
 #include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <memory>
 
 enum parameters
 {

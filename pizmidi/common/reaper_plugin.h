@@ -44,6 +44,7 @@ typedef double ReaSample;
 
 #else
 #include "../WDL/swell/swell.h"
+
 #include <pthread.h>
 
 #define REAPER_PLUGIN_DLL_EXPORT __attribute__((visibility("default")))

@@ -1,5 +1,6 @@
 
 #include "ModulePane.h"
+
 #include "Module.h"
 #include "ModuleGUI.h"
 #include "ModulePaneModel.h"

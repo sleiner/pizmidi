@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include <utility>
-
 #include <juce_core/juce_core.h>
+#include <utility>
 
 template <typename ElementType,
           typename TypeOfCriticalSectionToUse = juce::DummyCriticalSection,

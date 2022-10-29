@@ -1,10 +1,10 @@
 #ifndef GUITAR_NECK_COMPONENT_H
 #define GUITAR_NECK_COMPONENT_H
 
+#include "../_common/midistuff.h"
+
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "../_common/midistuff.h"
 
 #define maxFrets   (32)
 #define maxStrings (16)

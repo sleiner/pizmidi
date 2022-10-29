@@ -20,11 +20,11 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_audio_utils/juce_audio_utils.h>
-
 #include "../_common/ChannelSlider.h"
 #include "../_common/VSTSlider.h"
 #include "MidiChordAnalyzer.h"
+
+#include <juce_audio_utils/juce_audio_utils.h>
 
 class MidiChordAnalyzerEditor;
 

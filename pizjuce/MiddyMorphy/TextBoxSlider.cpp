@@ -1,5 +1,6 @@
 
 #include "TextBoxSlider.h"
+
 #include "NumberBox.h"
 
 using juce::jmax;

@@ -1,13 +1,13 @@
 
 #include "MorphPaneModel.h"
 
-#include <juce_events/juce_events.h>
-
 #include "Cursor.h"
 #include "CursorGUI.h"
 #include "MidiMorph.h"
 #include "Module.h"
 #include "TextBoxSlider.h"
+
+#include <juce_events/juce_events.h>
 
 using juce::roundToInt;
 

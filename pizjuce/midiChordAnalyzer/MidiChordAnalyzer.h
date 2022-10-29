@@ -1,14 +1,14 @@
 #ifndef MidiChordAnalyzerPLUGINFILTER_H
 #define MidiChordAnalyzerPLUGINFILTER_H
 
-#include <juce_data_structures/juce_data_structures.h>
-#include <juce_events/juce_events.h>
-
 #include "../_common/BankStorage.h"
 #include "../_common/ChordFunctions.h"
 #include "../_common/key.h"
 #include "../_common/midistuff.h"
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_data_structures/juce_data_structures.h>
+#include <juce_events/juce_events.h>
 
 enum parameters
 {

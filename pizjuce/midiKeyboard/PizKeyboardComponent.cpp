@@ -1,4 +1,5 @@
 #include "PizKeyboardComponent.h"
+
 #include "PizKeyboardEditor.h"
 
 PizKeyboardComponent::PizKeyboardComponent(juce::MidiKeyboardState& state, const Orientation orientation)

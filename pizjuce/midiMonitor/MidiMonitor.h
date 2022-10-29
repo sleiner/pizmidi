@@ -1,9 +1,9 @@
 #ifndef MIDIMONITORPLUGINFILTER_H
 #define MIDIMONITORPLUGINFILTER_H
 
-#include <juce_audio_devices/juce_audio_devices.h>
-
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_audio_devices/juce_audio_devices.h>
 
 enum parameters
 {

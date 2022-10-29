@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Module.h"
+
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
-#include "Module.h"
 
 class MidiMorph;
 class ControllerValue;

@@ -2,9 +2,9 @@
 //for sort()
 #include <algorithm>
 //for seeding rand()
-#include <time.h>
-
 #include "midiChordSplit.hpp"
+
+#include <time.h>
 
 //-------------------------------------------------------------------------------------------------------
 AudioEffect* createEffectInstance(audioMasterCallback audioMaster)

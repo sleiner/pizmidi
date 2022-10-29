@@ -1,5 +1,6 @@
 
 #include "CursorGUI.h"
+
 #include "Cursor.h"
 
 CursorGUI::CursorGUI(Cursor* cursor)

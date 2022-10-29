@@ -1,9 +1,8 @@
 #ifndef MIDIPADS_PAD_H
 #define MIDIPADS_PAD_H
 
-#include <memory>
-
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <memory>
 
 #define midiScaler (0.007874016f)
 

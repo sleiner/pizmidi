@@ -20,11 +20,11 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_core/juce_core.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/VSTSlider.h"
 #include "AudioToCC.h"
+
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class DecibelMeter : public juce::Slider
 {

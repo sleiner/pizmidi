@@ -1,4 +1,5 @@
 #include "midiIn.h"
+
 #include "midiInEditor.h"
 
 using juce::roundToInt;

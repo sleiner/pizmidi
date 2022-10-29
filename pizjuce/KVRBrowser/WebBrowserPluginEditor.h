@@ -20,10 +20,10 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "WebBrowserFilter.h"
+
 #include <juce_events/juce_events.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
-#include "WebBrowserFilter.h"
 
 class MyBrowser : public juce::WebBrowserComponent,
                   public juce::ChangeBroadcaster

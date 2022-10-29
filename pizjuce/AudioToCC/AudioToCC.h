@@ -32,13 +32,12 @@
 #ifndef AUDIOTOCCPLUGINFILTER_H
 #define AUDIOTOCCPLUGINFILTER_H
 
-#include <memory>
+#include "../_common/PizArray.h"
+#include "../_common/PizAudioProcessor.h"
 
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_core/juce_core.h>
-
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include <memory>
 
 #define goodXmlChars "abcdefghijklmnopqrstuvwxyz0123456789"
 

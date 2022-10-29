@@ -1,13 +1,13 @@
 #ifndef IMAGEPLUGINEDITOR_H
 #define IMAGEPLUGINEDITOR_H
 
-#include <juce_audio_processors/juce_audio_processors.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-#include <juce_gui_extra/juce_gui_extra.h>
-
 #include "../_common/ChannelSlider.h"
 #include "imagePlugin.h"
 #include "MidiPad.h"
+
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 class imagePluginEditor : public juce::AudioProcessorEditor,
                           public juce::Button::Listener,

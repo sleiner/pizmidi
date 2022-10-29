@@ -1,5 +1,6 @@
 
 #include "ZoomableShiftableComponent.h"
+
 #include "ZoomingShiftingComponent.h"
 
 using juce::roundToInt;

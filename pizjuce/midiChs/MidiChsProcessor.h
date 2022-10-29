@@ -1,9 +1,9 @@
 #ifndef MIDICHSPLUGINFILTER_H
 #define MIDICHSPLUGINFILTER_H
 
-#include <juce_events/juce_events.h>
-
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_events/juce_events.h>
 
 //==============================================================================
 class MidiChsProcessor : public PizAudioProcessor,

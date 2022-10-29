@@ -2,10 +2,10 @@
 #define CPURAMPLUGINFILTER_H
 #define _WIN32_WINNT 0x0501
 
+#include "../_common/PizAudioProcessor.h"
+
 #include <juce_events/juce_events.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
-#include "../_common/PizAudioProcessor.h"
 
 //==============================================================================
 class CpuRam : public PizAudioProcessor,

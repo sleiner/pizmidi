@@ -1,9 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include <juce_core/juce_core.h>
 #include <juce_cryptography/juce_cryptography.h>
+#include <memory>
 
 #ifndef MRALIASPRO
 

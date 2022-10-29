@@ -1,8 +1,8 @@
 #pragma once
 
-#include <juce_events/juce_events.h>
-
 #include "Module.h"
+
+#include <juce_events/juce_events.h>
 
 class MidiMorph;
 

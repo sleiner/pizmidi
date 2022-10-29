@@ -1,4 +1,5 @@
 #include "curve.h"
+
 #include "curvegui.h"
 
 using juce::roundToInt;
