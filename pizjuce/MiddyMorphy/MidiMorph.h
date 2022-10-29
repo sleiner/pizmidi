@@ -1,28 +1,14 @@
 #pragma once
 
-#include "juce_audio_basics/juce_audio_basics.h"
-#include "juce_core/juce_core.h"
-#include "juce_events/juce_events.h"
+#include <juce_audio_basics/juce_audio_basics.h>
+#include <juce_core/juce_core.h>
+#include <juce_events/juce_events.h>
 
 #include "Controller.h"
 #include "Scene.h"
 
 class Cursor;
-namespace juce
-{
-class XmlElement;
-}
-namespace juce
-{
-class MidiMessage;
-}
-namespace juce
-{
-class MidiBuffer;
-}
 class ControllerValue;
-
-using namespace juce;
 
 class MidiMorph : public juce::ChangeBroadcaster
 {
@@ -30,7 +16,7 @@ public:
     MidiMorph();
     ~MidiMorph() override;
 
-    OwnedArray<Scene> scenes;
+    juce::OwnedArray<Scene> scenes;
     Cursor* cursor;
 
     int refreshRate;
@@ -44,16 +30,10 @@ public:
     float getCursorXRatio();
     float getCursorYRatio();
 
-    //-can happen by input or slider movement.
-    //
-    //-if a scene is selected, (or multiple scenes) the value for that controller gets set.
-    //-if no scene is selected and auto key is on, a scene gets added.
     void controllerChanged (const Controller* controllerThatHasChanged);
 
-    //send interpolated controller vaules  that actually differ from the last output to midi out
     void distancesChanged();
 
-    //foreach scene : moved();
     void cursorChanged();
 
     void showControllers (bool show);
@@ -64,14 +44,6 @@ public:
     int getControllerCCNo (int index);
     int getControllerValue (int index);
 
-    //if controller != cursor controller
-    //if   controller is in list
-    //	if - scene/s is selected, .> set/add value for selected scenes/s
-    //	else if  "autokey" is on, ->add scene at cursor pos, select scene, set/add value for cursor,
-    //
-    //else if "autolearn" is on add controller.
-    //		if - scene/s is selected, .> set/add value for selected scenes/s
-    //		else if no scene is selected && "autokey" is on, ->add scene at cursor pos, select scene, set/add value for cursor
     void onMidiEvent (juce::MidiMessage& events);
 
     void getMidiMessages (int offset, juce::MidiBuffer& buffer);
@@ -82,9 +54,9 @@ public:
 
     int getNumSelectedScenes();
 
-    void setSelectedScenes (Array<Scene*>& scenes);
+    void setSelectedScenes (juce::Array<Scene*>& scenes);
 
-    Array<Scene*>* getSelectedScenes();
+    juce::Array<Scene*>* getSelectedScenes();
 
     Scene* getSelectedScene (int index);
 
@@ -94,9 +66,9 @@ public:
 
     void removeScene (Scene* scene);
 
-    OwnedArray<Controller>* getControllers();
+    juce::OwnedArray<Controller>* getControllers();
 
-    juce::XmlElement* getXml (const juce::String tagname);
+    juce::XmlElement* getXml (juce::String tagname);
 
     void setFromXml (juce::XmlElement* xmlData);
 
@@ -122,7 +94,7 @@ public:
 
     bool hasNewMidi();
 
-    OwnedArray<Scene>* getScenes();
+    juce::OwnedArray<Scene>* getScenes();
 
     void sendChangeMessage (void* ptr);
 
@@ -139,8 +111,8 @@ public:
     void* currentChangeBroadcastRecipient;
 
 private:
-    OwnedArray<Controller> controllers;
-    Array<Scene*> selectedScenes;
+    juce::OwnedArray<Controller> controllers;
+    juce::Array<Scene*> selectedScenes;
     juce::XmlElement* guiState;
     bool valuesChanged;
     bool valueChanged;

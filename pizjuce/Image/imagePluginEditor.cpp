@@ -1,10 +1,13 @@
 #include "imagePluginEditor.h"
 
+using juce::jmin;
+using juce::roundToInt;
+
 //==============================================================================
 imagePluginEditor::imagePluginEditor (imagePluginFilter* const ownerFilter)
     : AudioProcessorEditor (ownerFilter),
-      bankSlider (0),
-      progSlider (0),
+      bankSlider (nullptr),
+      progSlider (nullptr),
       textEditor (0)
 {
     setMouseClickGrabsKeyboardFocus (false);
@@ -17,7 +20,7 @@ imagePluginEditor::imagePluginEditor (imagePluginFilter* const ownerFilter)
     imagepad->addMouseListener (this, true);
     imagepad->addKeyListener (this);
 
-    textEditor = new TextEditor ("text editor");
+    textEditor = new juce::TextEditor ("text editor");
     textEditor->setMultiLine (true);
     textEditor->setReturnKeyStartsNewLine (true);
     textEditor->setReadOnly (false);
@@ -27,50 +30,50 @@ imagePluginEditor::imagePluginEditor (imagePluginFilter* const ownerFilter)
     textEditor->setSelectAllWhenFocused (true);
     textEditor->addListener (this);
     textEditor->setText (getFilter()->text);
-    textEditor->setColour (TextEditor::outlineColourId, Colours::black);
+    textEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
 
-    bankSlider = new Slider ("bank");
+    bankSlider = new juce::Slider ("bank");
     bankSlider->setRange (0, 127, 1);
-    bankSlider->setSliderStyle (Slider::IncDecButtons);
-    bankSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 40, 20);
+    bankSlider->setSliderStyle (juce::Slider::IncDecButtons);
+    bankSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 40, 20);
     bankSlider->addListener (this);
 
-    progSlider = new Slider ("program");
+    progSlider = new juce::Slider ("program");
     progSlider->setRange (0, 127, 1);
-    progSlider->setSliderStyle (Slider::IncDecButtons);
-    progSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 40, 20);
+    progSlider->setSliderStyle (juce::Slider::IncDecButtons);
+    progSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 40, 20);
     progSlider->addListener (this);
 
     chanSlider = new ChannelSlider ("channel");
-    chanSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 40, 20);
+    chanSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 40, 20);
     chanSlider->addListener (this);
 
-    container->addAndMakeVisible (label = new Label ("new label",
-                                                     "Insert Piz Here->  image v" + String (JucePlugin_VersionString) + "\n\n- Double-click to toggle full-screen\n- Drag & drop to load images (png/jpg/gif/svg)\n- Supports MIDI Program Change"));
-    label->setFont (Font (15.0000f, Font::plain));
-    label->setJustificationType (Justification::centredLeft);
+    container->addAndMakeVisible (label = new juce::Label ("new label",
+                                                           "Insert Piz Here->  image v" + juce::String (JucePlugin_VersionString) + "\n\n- Double-click to toggle full-screen\n- Drag & drop to load images (png/jpg/gif/svg)\n- Supports MIDI Program Change"));
+    label->setFont (juce::Font (15.0000f, juce::Font::plain));
+    label->setJustificationType (juce::Justification::centredLeft);
     label->setEditable (false, false, false);
-    label->setColour (Label::backgroundColourId, Colour (0xc7f3ef9f));
-    label->setColour (Label::textColourId, Colours::black);
-    label->setColour (Label::outlineColourId, Colours::black);
-    label->setColour (TextEditor::textColourId, Colours::black);
-    label->setColour (TextEditor::backgroundColourId, Colour (0x0));
+    label->setColour (juce::Label::backgroundColourId, juce::Colour (0xc7f3ef9f));
+    label->setColour (juce::Label::textColourId, juce::Colours::black);
+    label->setColour (juce::Label::outlineColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x0));
     label->setMouseClickGrabsKeyboardFocus (false);
     label->addMouseListener (this, false);
     label->setVisible (false);
 
-    colourSelector = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace);
-    colourSelector->setName (String ("color"));
+    colourSelector = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace);
+    colourSelector->setName (juce::String ("color"));
     colourSelector->setCurrentColour (getFilter()->bgcolor);
     colourSelector->addChangeListener (this);
 
-    textColourSelector = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace);
-    textColourSelector->setName (String ("textcolor"));
+    textColourSelector = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace);
+    textColourSelector->setName (juce::String ("textcolor"));
     textColourSelector->setCurrentColour (getFilter()->textcolor);
     textColourSelector->addChangeListener (this);
 
     // add the triangular resizer component for the bottom-right of the UI
-    container->addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    container->addAndMakeVisible (resizer = new juce::ResizableCornerComponent (this, &resizeLimits));
     resizer->setMouseClickGrabsKeyboardFocus (false);
     resizeLimits.setSizeLimits (50, 50, 1600, 1600);
 
@@ -119,9 +122,9 @@ imagePluginEditor::~imagePluginEditor()
 }
 
 //==============================================================================
-void imagePluginEditor::paint (Graphics& g)
+void imagePluginEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (Colour (0x00000000));
+    g.fillAll (juce::Colour (0x00000000));
 }
 
 void imagePluginEditor::resized()
@@ -133,7 +136,7 @@ void imagePluginEditor::resized()
     }
     else
     {
-        auto* display = Desktop::getInstance().getDisplays().getDisplayForPoint (Point<int> (container->getScreenX(), container->getScreenY()), false);
+        auto* display = juce::Desktop::getInstance().getDisplays().getDisplayForPoint (juce::Point<int> (container->getScreenX(), container->getScreenY()), false);
         if (display != nullptr)
         {
             container->setBounds (display->userArea);
@@ -158,14 +161,14 @@ void imagePluginEditor::resized()
     getFilter()->lastUIHeight = getHeight();
 }
 
-void imagePluginEditor::buttonClicked (Button* buttonThatWasClicked)
+void imagePluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
 }
 
-bool imagePluginEditor::keyPressed (const KeyPress& key, Component* originatingComponent)
+bool imagePluginEditor::keyPressed (const juce::KeyPress& key, Component* originatingComponent)
 {
     int prog = getFilter()->getCurrentProgram();
-    if (key.isKeyCode (KeyPress::pageUpKey))
+    if (key.isKeyCode (juce::KeyPress::pageUpKey))
     {
         prog++;
         if (prog == getFilter()->getNumPrograms())
@@ -174,7 +177,7 @@ bool imagePluginEditor::keyPressed (const KeyPress& key, Component* originatingC
         getFilter()->updateHostDisplay();
         return true;
     }
-    else if (key.isKeyCode (KeyPress::pageDownKey))
+    else if (key.isKeyCode (juce::KeyPress::pageDownKey))
     {
         if (prog == 0)
             prog = getFilter()->getNumPrograms();
@@ -186,15 +189,15 @@ bool imagePluginEditor::keyPressed (const KeyPress& key, Component* originatingC
     return false;
 }
 
-void imagePluginEditor::buttonStateChanged (Button* buttonThatWasClicked)
+void imagePluginEditor::buttonStateChanged (juce::Button* buttonThatWasClicked)
 {
     getFilter()->icon = imagepad->getIconPath();
     if (imagepad->isDown())
     {
-        ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+        juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
         if (mousebutton.isPopupMenu())
         {
-            PopupMenu m, sub1, sub2, sub3, subB, subP, subC;
+            juce::PopupMenu m, sub1, sub2, sub3, subB, subP, subC;
             m.addSectionHeader ("Text:");
             m.addCustomItem (1234, *textEditor, 200, 72, false);
             m.addSeparator();
@@ -227,24 +230,24 @@ void imagePluginEditor::buttonStateChanged (Button* buttonThatWasClicked)
             {
                 if (result == 66)
                 {
-                    getFilter()->icon = String ("");
+                    getFilter()->icon = juce::String ("");
                     imagepad->setImages (0);
                     imagepad->setIconPath ("");
                     imagepad->repaint();
                 }
                 else if (result == 99999)
                 {
-                    FileChooser myChooser ("Load image...",
-                                           File (getFilter()->iconPath),
-                                           "*.png;*.gif;*.svg;*.jpg");
+                    juce::FileChooser myChooser ("Load image...",
+                                                 juce::File (getFilter()->iconPath),
+                                                 "*.png;*.gif;*.svg;*.jpg");
 
                     if (myChooser.browseForFileToOpen())
                     {
-                        File file (myChooser.getResult());
+                        juce::File file (myChooser.getResult());
                         if (imagepad->setImageFromFile (file))
                         {
                             //save the relative path
-                            imagepad->setIconPath (file.getRelativePathFrom (File (getFilter()->iconPath)));
+                            imagepad->setIconPath (file.getRelativePathFrom (juce::File (getFilter()->iconPath)));
                             getFilter()->icon = imagepad->getIconPath();
                         }
                     }
@@ -281,7 +284,7 @@ void imagePluginEditor::buttonStateChanged (Button* buttonThatWasClicked)
     }
 }
 
-void imagePluginEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void imagePluginEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     if (sliderThatWasMoved == bankSlider)
     {
@@ -300,18 +303,18 @@ void imagePluginEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 }
 
-void imagePluginEditor::mouseDown (const MouseEvent& e)
+void imagePluginEditor::mouseDown (const juce::MouseEvent& e)
 {
     if (e.eventComponent == label)
         label->setVisible (false);
 }
 
-void imagePluginEditor::mouseDoubleClick (const MouseEvent& e)
+void imagePluginEditor::mouseDoubleClick (const juce::MouseEvent& e)
 {
     if (! fullscreen)
     {
         container->addToDesktop (0);
-        Desktop::getInstance().setKioskModeComponent (container, false);
+        juce::Desktop::getInstance().setKioskModeComponent (container, false);
         container->enterModalState (false);
         fullscreen = true;
         resized();
@@ -319,7 +322,7 @@ void imagePluginEditor::mouseDoubleClick (const MouseEvent& e)
     else
     {
         container->exitModalState (0);
-        Desktop::getInstance().setKioskModeComponent (0);
+        juce::Desktop::getInstance().setKioskModeComponent (0);
         this->addChildComponent (container);
         fullscreen = false;
         resized();
@@ -327,7 +330,7 @@ void imagePluginEditor::mouseDoubleClick (const MouseEvent& e)
     getFilter()->fullscreen = fullscreen;
 }
 
-void imagePluginEditor::textEditorTextChanged (TextEditor& editor)
+void imagePluginEditor::textEditorTextChanged (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -337,7 +340,7 @@ void imagePluginEditor::textEditorTextChanged (TextEditor& editor)
     }
 }
 
-void imagePluginEditor::textEditorReturnKeyPressed (TextEditor& editor)
+void imagePluginEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -345,25 +348,25 @@ void imagePluginEditor::textEditorReturnKeyPressed (TextEditor& editor)
         imagepad->setButtonText (textEditor->getText());
         imagepad->repaint();
         getFilter()->text = textEditor->getText();
-        PopupMenu::dismissAllActiveMenus();
+        juce::PopupMenu::dismissAllActiveMenus();
     }
 }
 
-void imagePluginEditor::textEditorEscapeKeyPressed (TextEditor& editor)
+void imagePluginEditor::textEditorEscapeKeyPressed (juce::TextEditor& editor)
 {
-    PopupMenu::dismissAllActiveMenus();
+    juce::PopupMenu::dismissAllActiveMenus();
     textEditor->setText (getFilter()->text);
     imagepad->repaint();
 }
 
-void imagePluginEditor::textEditorFocusLost (TextEditor& editor)
+void imagePluginEditor::textEditorFocusLost (juce::TextEditor& editor)
 {
     getFilter()->text = textEditor->getText();
 }
 
-bool imagePluginEditor::isInterestedInFileDrag (const StringArray& files)
+bool imagePluginEditor::isInterestedInFileDrag (const juce::StringArray& files)
 {
-    File file = File (files.joinIntoString (String(), 0, 1));
+    juce::File file = juce::File (files.joinIntoString (juce::String(), 0, 1));
     if (file.hasFileExtension ("png") || file.hasFileExtension ("gif") || file.hasFileExtension ("jpg") || file.hasFileExtension ("svg"))
         return true;
     return false;
@@ -373,19 +376,19 @@ void imagePluginEditor::filesDropped (const juce::StringArray& filenames, int mo
 {
     if (isInterestedInFileDrag (filenames))
     {
-        String filename = filenames.joinIntoString (String(), 0, 1);
-        File file       = File (filename);
+        juce::String filename = filenames.joinIntoString (juce::String(), 0, 1);
+        juce::File file       = juce::File (filename);
         if (imagepad->setImageFromFile (file))
         {
             //save the relative path
-            imagepad->setIconPath (file.getRelativePathFrom (File (getFilter()->iconPath)));
+            imagepad->setIconPath (file.getRelativePathFrom (juce::File (getFilter()->iconPath)));
             getFilter()->icon = imagepad->getIconPath();
         }
     }
 }
 
 //==============================================================================
-void imagePluginEditor::changeListenerCallback (ChangeBroadcaster* source)
+void imagePluginEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -393,13 +396,13 @@ void imagePluginEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else if (source == colourSelector)
     {
-        ColourSelector* cs = (ColourSelector*) source;
+        auto* cs = (juce::ColourSelector*) source;
         imagepad->setColour (cs->getCurrentColour());
         getFilter()->bgcolor = cs->getCurrentColour();
     }
     else if (source == textColourSelector)
     {
-        ColourSelector* cs = (ColourSelector*) source;
+        auto* cs = (juce::ColourSelector*) source;
         imagepad->setTextColour (cs->getCurrentColour());
         getFilter()->textcolor = cs->getCurrentColour();
     }
@@ -416,19 +419,18 @@ void imagePluginEditor::updateParametersFromFilter()
     imagePluginFilter* const filter = getFilter();
     // we use this lock to make sure the processBlock() method isn't writing to the
     // lastMidiMessage variable while we're trying to read it, but be extra-careful to
-    // only hold the lock for a minimum amount of time..
+    // only hold the lock for a minimum amount of time
     filter->getCallbackLock().enter();
 
-    // take a local copy of the info we need while we've got the lock..
+    // take a local copy of the info we need while we've got the lock
 
-    const String t         = filter->text;
-    const String icon      = filter->icon;
-    const Colour bgcolor   = filter->bgcolor;
-    const Colour textcolor = filter->textcolor;
-    const int bank         = filter->getCurrentBank();
-    const int prog         = filter->getCurrentProgram();
-    const float chan       = filter->getParameter (kChannel);
-    //fullscreen = filter->fullscreen;
+    const juce::String t         = filter->text;
+    const juce::String icon      = filter->icon;
+    const juce::Colour bgcolor   = filter->bgcolor;
+    const juce::Colour textcolor = filter->textcolor;
+    const int bank               = filter->getCurrentBank();
+    const int prog               = filter->getCurrentProgram();
+    const float chan             = filter->getParameter (kChannel);
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
@@ -437,16 +439,16 @@ void imagePluginEditor::updateParametersFromFilter()
 
     if (icon.isEmpty())
     {
-        imagepad->setImages (0);
-        imagepad->setIconPath (String());
+        imagepad->setImages (nullptr);
+        imagepad->setIconPath (juce::String());
     }
     else
     {
-        String fullpath = icon;
-        if (! File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
-            fullpath = getFilter()->iconPath + File::getSeparatorString() + icon;
-        if (! imagepad->setImageFromFile (File::getCurrentWorkingDirectory().getChildFile (fullpath)))
-            imagepad->setImages (0);
+        juce::String fullpath = icon;
+        if (! juce::File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
+            fullpath = getFilter()->iconPath + juce::File::getSeparatorString() + icon;
+        if (! imagepad->setImageFromFile (juce::File::getCurrentWorkingDirectory().getChildFile (fullpath)))
+            imagepad->setImages (nullptr);
         imagepad->setIconPath (icon);
     }
 
@@ -456,9 +458,9 @@ void imagePluginEditor::updateParametersFromFilter()
     imagepad->setTextColour (textcolor);
     colourSelector->setCurrentColour (bgcolor);
     textColourSelector->setCurrentColour (textcolor);
-    bankSlider->setValue (bank, dontSendNotification);
-    progSlider->setValue (prog, dontSendNotification);
-    chanSlider->setValue (chan * 16.0, dontSendNotification);
+    bankSlider->setValue (bank, juce::dontSendNotification);
+    progSlider->setValue (prog, juce::dontSendNotification);
+    chanSlider->setValue (chan * 16.0, juce::dontSendNotification);
 
     setSize (filter->lastUIWidth,
              filter->lastUIHeight);

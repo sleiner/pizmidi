@@ -2,6 +2,9 @@
 #include "../_common/midistuff.h"
 #include "AudioToCCEditor.h"
 
+using juce::jlimit;
+using juce::roundToInt;
+
 EnvelopeFollower::EnvelopeFollower()
 {
     envelope = 0;
@@ -82,8 +85,8 @@ AudioToCC::AudioToCC() : envL (0),
 {
     programs = new JuceProgram[getNumPrograms()];
 
-    devices     = MidiOutput::getAvailableDevices();
-    midiOutput  = NULL;
+    devices     = juce::MidiOutput::getAvailableDevices();
+    midiOutput  = nullptr;
     lastCCL     = 0;
     lastCCR     = 0;
     oldenv[0]   = 0;
@@ -116,7 +119,7 @@ AudioToCC::AudioToCC() : envL (0),
     {
         for (int i = 0; i < getNumPrograms(); i++)
         {
-            programs[i].name = String ("Program ") + String (i + 1);
+            programs[i].name = juce::String ("Program ") + juce::String (i + 1);
         }
     }
     setCurrentProgram (0);
@@ -192,12 +195,12 @@ void AudioToCC::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-void AudioToCC::setActiveDevice (String name)
+void AudioToCC::setActiveDevice (juce::String name)
 {
     setActiveDevice (getDeviceByName (name));
 }
 
-void AudioToCC::setActiveDevice (MidiDeviceInfo const& device)
+void AudioToCC::setActiveDevice (juce::MidiDeviceInfo const& device)
 {
     activeDevice                = device;
     programs[curProgram].device = device;
@@ -215,18 +218,18 @@ void AudioToCC::setActiveDevice (MidiDeviceInfo const& device)
         param[kDevice] = programs[curProgram].param[kDevice] = (float) index / (float) (devices.size() - 1);
         if (midiOutput)
             midiOutput->stopBackgroundThread();
-        midiOutput = MidiOutput::openDevice (device.identifier);
+        midiOutput = juce::MidiOutput::openDevice (device.identifier);
         midiOutput->startBackgroundThread();
     }
 }
 
-MidiDeviceInfo AudioToCC::getDeviceByName (String name) const
+juce::MidiDeviceInfo AudioToCC::getDeviceByName (juce::String name) const
 {
     return devices.findIf ([&] (auto const& device)
                            { return name == device.name; });
 }
 
-const String AudioToCC::getParameterName (int index)
+const juce::String AudioToCC::getParameterName (int index)
 {
     if (index == kGain)
         return "RMSGain";
@@ -282,96 +285,96 @@ const String AudioToCC::getParameterName (int index)
         return "L Gate Reset";
     else if (index == kGateResetR)
         return "R Gate Reset";
-    return String();
+    return juce::String();
 }
 
-const String AudioToCC::getParameterText (int index)
+const juce::String AudioToCC::getParameterText (int index)
 {
     if (index == kGain || index == kPeakGain)
-        return param[index] == 0.f ? String ("-inf") : String (20.f * log10 (param[index] * maxGain), 1) + " dB";
+        return param[index] == 0.f ? juce::String ("-inf") : juce::String (20.f * log10 (param[index] * maxGain), 1) + " dB";
     else if (index == kAttack)
-        return String (roundToInt (param[kAttack] * 100.f));
+        return juce::String (roundToInt (param[kAttack] * 100.f));
     else if (index == kRelease)
-        return String (roundToInt (param[kRelease] * 100.f));
+        return juce::String (roundToInt (param[kRelease] * 100.f));
     else if (index == kDevice)
     {
         if (param[kDevice] > 0.0)
             return devices[roundToInt (param[kDevice] * (devices.size() - 1))].name;
         else
-            return String ("--");
+            return juce::String ("--");
     }
     else if (index == kCCL || index == kCCR)
     {
         const int v = floatToMidi (param[index]);
-        return v < 0 ? "Off" : String (floatToMidi (param[index]));
+        return v < 0 ? "Off" : juce::String (floatToMidi (param[index]));
     }
     else if (index == kStereo)
     {
         if (param[kStereo] < 0.5f)
-            return String ("Mono (L+R)");
+            return juce::String ("Mono (L+R)");
         else
-            return String ("Stereo");
+            return juce::String ("Stereo");
     }
     else if (index == kChannel)
-        return String (roundToInt (param[index] * 15.0) + 1);
+        return juce::String (roundToInt (param[index] * 15.0) + 1);
     else if (index == kAutomateHost)
     {
         if (param[kAutomateHost] < 0.5f)
-            return String ("Off");
+            return juce::String ("Off");
         else
-            return String ("On");
+            return juce::String ("On");
     }
     else if (index == kMode)
     {
         if (param[kMode] >= 0.5f)
-            return String ("Logarithmic");
+            return juce::String ("Logarithmic");
         else
-            return String ("Linear");
+            return juce::String ("Linear");
     }
     else if (index == kMidiToHost)
     {
         if (param[kMidiToHost] < 0.5f)
-            return String ("Off");
+            return juce::String ("Off");
         else
-            return String ("On");
+            return juce::String ("On");
     }
     else if (index == kGateThreshold)
     {
         if (param[index] == 0.f)
             return "Off";
-        return String (20.f * log10 (param[index]), 1) + " dB";
+        return juce::String (20.f * log10 (param[index]), 1) + " dB";
     }
     else if (index == kGateCCL || index == kGateCCR)
     {
         const int v = floatToMidi (param[index]);
-        return v < 0 ? "Off" : String (floatToMidi (param[index]));
+        return v < 0 ? "Off" : juce::String (floatToMidi (param[index]));
     }
     else if (index == kGateOnValueCCL || index == kGateOnValueCCR)
     {
         const int v = floatToMidi (param[index]);
-        return v < 0 ? "Off" : String (floatToMidi (param[index]));
+        return v < 0 ? "Off" : juce::String (floatToMidi (param[index]));
     }
     else if (index == kGateOffValueCCL || index == kGateOffValueCCR)
     {
         const int v = floatToMidi (param[index]);
-        return v < 0 ? "Off" : String (floatToMidi (param[index]));
+        return v < 0 ? "Off" : juce::String (floatToMidi (param[index]));
     }
     else if (index == kRate)
     {
-        return String ((param[index] == 1.f ? 1.0 / getSampleRate() : (1.0f - param[index]) * 0.0025f + 0.001f) * 1000, 1) + " ms";
+        return juce::String ((param[index] == 1.f ? 1.0 / getSampleRate() : (1.0f - param[index]) * 0.0025f + 0.001f) * 1000, 1) + " ms";
     }
     else
-        return String (roundToInt (param[index] * 100.f));
+        return juce::String (roundToInt (param[index] * 100.f));
 }
 
-const String AudioToCC::getInputChannelName (const int channelIndex) const
+const juce::String AudioToCC::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String AudioToCC::getOutputChannelName (const int channelIndex) const
+const juce::String AudioToCC::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool AudioToCC::isInputChannelStereoPair (int index) const
@@ -399,12 +402,12 @@ void AudioToCC::setCurrentProgram (int index)
     sendChangeMessage();
 }
 
-void AudioToCC::changeProgramName (int index, const String& newName)
+void AudioToCC::changeProgramName (int index, const juce::String& newName)
 {
     programs[curProgram].name = newName;
 }
 
-const String AudioToCC::getProgramName (int index)
+const juce::String AudioToCC::getProgramName (int index)
 {
     return programs[index].name;
 }
@@ -452,8 +455,8 @@ int AudioToCC::smooth (int data, int old, int older, float inertia)
     return data;
 }
 
-void AudioToCC::processBlock (AudioSampleBuffer& buffer,
-                              MidiBuffer& midiMessages)
+void AudioToCC::processBlock (juce::AudioSampleBuffer& buffer,
+                              juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -488,7 +491,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
     {
         if (gateccL >= 0 && gateOffValueL >= 0)
         {
-            MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccL, gateOffValueL);
+            juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccL, gateOffValueL);
             if (midiOutput)
                 midiOutput->sendMessageNow (cc);
             if (param[kMidiToHost] >= 0.5f)
@@ -504,7 +507,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
     {
         if (gateccR >= 0 && gateOffValueR >= 0)
         {
-            MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccR, gateOffValueR);
+            juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccR, gateOffValueR);
             if (midiOutput)
                 midiOutput->sendMessageNow (cc);
             if (param[kMidiToHost] >= 0.5f)
@@ -534,7 +537,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
             {
                 if (gateOnValueL >= 0)
                 {
-                    MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccL, gateOnValueL);
+                    juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccL, gateOnValueL);
                     if (midiOutput)
                         midiOutput->sendMessageNow (cc);
                     if (param[kMidiToHost] >= 0.5f)
@@ -548,7 +551,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
             {
                 if (gateOffValueL >= 0)
                 {
-                    MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccL, gateOffValueL);
+                    juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccL, gateOffValueL);
                     if (midiOutput)
                         midiOutput->sendMessageNow (cc);
                     if (param[kMidiToHost] >= 0.5f)
@@ -601,7 +604,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
             {
                 if (ccL >= 0)
                 {
-                    MidiMessage cc (0xB0 | Ch, ccL, data2);
+                    juce::MidiMessage cc (0xB0 | Ch, ccL, data2);
                     if (midiOutput)
                         midiOutput->sendMessageNow (cc);
                     if (param[kMidiToHost] >= 0.5f)
@@ -630,7 +633,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 {
                     if (gateOnValueR >= 0)
                     {
-                        MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccR, gateOnValueR);
+                        juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccR, gateOnValueR);
                         if (midiOutput)
                             midiOutput->sendMessageNow (cc);
                         if (param[kMidiToHost] >= 0.5f)
@@ -644,7 +647,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 {
                     if (gateOffValueR >= 0)
                     {
-                        MidiMessage cc = MidiMessage::controllerEvent (Ch + 1, gateccR, gateOffValueR);
+                        juce::MidiMessage cc = juce::MidiMessage::controllerEvent (Ch + 1, gateccR, gateOffValueR);
                         if (midiOutput)
                             midiOutput->sendMessageNow (cc);
                         if (param[kMidiToHost] >= 0.5f)
@@ -693,7 +696,7 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
                 {
                     if (ccR >= 0)
                     {
-                        MidiMessage cc (0xB0 | Ch, ccR, data2);
+                        juce::MidiMessage cc (0xB0 | Ch, ccR, data2);
                         if (midiOutput)
                             midiOutput->sendMessageNow (cc);
                         if (param[kMidiToHost] >= 0.5f)
@@ -713,20 +716,20 @@ void AudioToCC::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* AudioToCC::createEditor()
+juce::AudioProcessorEditor* AudioToCC::createEditor()
 {
     return new AudioToCCEditor (this);
 }
 
 //==============================================================================
-void AudioToCC::getStateInformation (MemoryBlock& destData)
+void AudioToCC::getStateInformation (juce::MemoryBlock& destData)
 {
-    XmlElement xmlState ("PizAudioToCCSettings");
+    juce::XmlElement xmlState ("PizAudioToCCSettings");
     xmlState.setAttribute ("pluginVersion", 3);
     xmlState.setAttribute ("program", getCurrentProgram());
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        XmlElement* prog = new XmlElement ("Program");
+        auto* prog = new juce::XmlElement ("Program");
         prog->setAttribute ("index", p);
         JuceProgram* program = &programs[p];
         for (int i = 0; i < (numParams - 2); i++)

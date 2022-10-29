@@ -1,5 +1,7 @@
 #include "MidiLoop.h"
 
+using juce::jlimit;
+
 Loop::Loop()
     : PizMidiMessageSequence(),
       currentIndex (0),
@@ -80,7 +82,7 @@ bool Loop::findNextNote()
     return false;
 }
 
-void Loop::playAllNotesAtCurrentTime (MidiBuffer& buffer, int sample_number, int velocity)
+void Loop::playAllNotesAtCurrentTime (juce::MidiBuffer& buffer, int sample_number, int velocity)
 {
     if (findNextNote())
     {
@@ -97,9 +99,9 @@ void Loop::playAllNotesAtCurrentTime (MidiBuffer& buffer, int sample_number, int
     }
 }
 
-void Loop::sendCurrentNoteToBuffer (MidiBuffer& buffer, int sample_number, int velocity)
+void Loop::sendCurrentNoteToBuffer (juce::MidiBuffer& buffer, int sample_number, int velocity)
 {
-    MidiMessage m = this->getEventPointer (currentIndex)->message;
+    juce::MidiMessage m = this->getEventPointer (currentIndex)->message;
     //playingNote[m.getNoteNumber()][m.getChannel()-1][0] = jlimit(0,127,m.getNoteNumber()+getTransposition());
     m.setNoteNumber (jlimit (0, 127, m.getNoteNumber() + getTransposition()));
     m.setVelocity ((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
@@ -162,7 +164,7 @@ void Loop::resetNotes()
     }
 }
 
-void Loop::sendNoteOffMessagesToBuffer (MidiBuffer& buffer, int sample_number)
+void Loop::sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_number)
 {
     for (int ch = 0; ch < 16; ch++)
     {
@@ -178,7 +180,7 @@ void Loop::sendNoteOffMessagesToBuffer (MidiBuffer& buffer, int sample_number)
     }
 }
 
-MidiMessage Loop::getCurrentMessage()
+juce::MidiMessage Loop::getCurrentMessage()
 {
     if (currentIndex >= this->getNumEvents())
         currentIndex = 0;
@@ -192,7 +194,7 @@ double Loop::getCurrentTime()
 
 void Loop::cleanZeroLengthNotes()
 {
-    Array<int> matchedNoteOffs;
+    juce::Array<int> matchedNoteOffs;
     for (int i = 0; i < getNumEvents(); i++)
     {
         if (getEventPointer (i)->message.isNoteOn())

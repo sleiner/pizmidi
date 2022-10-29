@@ -4,12 +4,12 @@
 #include "curve.h"
 
 //==============================================================================
-class MidiEnvelope : public Component
+class MidiEnvelope : public juce::Component
 {
 public:
     //==============================================================================
     MidiEnvelope (const int envelopeType,
-                  AudioProcessorEditor* owner,
+                  juce::AudioProcessorEditor* owner,
                   MidiCurve* plugin);
     ~MidiEnvelope() override;
 
@@ -17,33 +17,33 @@ public:
     void updateParameters (const bool repaintComponent = true);
 
     //==============================================================================
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    void mouseMove (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseMove (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
 
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     void resized() override;
     float getValue (float input);
 
 protected:
     int findPointByMousePos (const int x, const int y);
 
-    AudioProcessorEditor* owner;
+    juce::AudioProcessorEditor* owner;
     MidiCurve* plugin;
 
     int draggingPoint;
     int hoveringPoint;
-    Point<float> mouseDownPoint;
+    juce::Point<float> mouseDownPoint;
     float points[MAX_ENVELOPE_POINTS][2];
     float oldpoints[MAX_ENVELOPE_POINTS][2];
     void setPointActive (int point, bool active);
     bool isPointActive (int point);
     void setPointControl (int point, bool control);
     bool isPointControl (int point);
-    Label* labelX;
-    Label* labelY;
+    juce::Label* labelX;
+    juce::Label* labelY;
     int findInactivePoint();
     int addPoint (float x, float y, bool control = false);
 };

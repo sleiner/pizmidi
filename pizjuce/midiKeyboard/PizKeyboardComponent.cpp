@@ -1,14 +1,14 @@
 #include "PizKeyboardComponent.h"
 #include "PizKeyboardEditor.h"
 
-PizKeyboardComponent::PizKeyboardComponent (MidiKeyboardState& state, const Orientation orientation)
+PizKeyboardComponent::PizKeyboardComponent (juce::MidiKeyboardState& state, const Orientation orientation)
     : MidiKeyboardComponent (state, orientation),
       drawQwerty (false),
       drawNoteNumber (false)
 {
     s = &state;
-    for (int i = String (keymap).length(); --i >= 0;)
-        setKeyPressForNote (KeyPress (keymap[i], 0, 0), i);
+    for (int i = juce::String (keymap).length(); --i >= 0;)
+        setKeyPressForNote (juce::KeyPress (keymap[i], 0, 0), i);
     setKeyPressBaseOctave (4);
 }
 
@@ -56,7 +56,7 @@ bool PizKeyboardComponent::keyStateChanged (bool isKeyDown)
     return MidiKeyboardComponent::keyStateChanged (isKeyDown);
 }
 
-bool PizKeyboardComponent::mouseDownOnKey (int midiNoteNumber, const MouseEvent& e)
+bool PizKeyboardComponent::mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e)
 {
     midiKeyboardEditor* editor = ((midiKeyboardEditor*) (this->getParentComponent()));
     if (e.mods.isAltDown())

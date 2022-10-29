@@ -23,6 +23,7 @@
 #include "midiInEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -98,7 +99,7 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
     setMouseClickGrabsKeyboardFocus (false);
 
     comboBox->setMouseClickGrabsKeyboardFocus (false);
-    comboBox->addItem (String ("--"), 1);
+    comboBox->addItem (juce::String ("--"), 1);
     for (int i = 0; i < ownerFilter->devices.size(); i++)
     {
         comboBox->addItem (ownerFilter->devices[i].name, i + 2);
@@ -108,7 +109,7 @@ MidiInEditor::MidiInEditor (MidiInFilter* const ownerFilter)
     imagepad->setTriggeredOnMouseDown (true);
     imagepad->addButtonListener (this);
     imagepad->drawableButton->Label = "";
-    imagepad->setButtonText (String());
+    imagepad->setButtonText (juce::String());
 
     hostButton->setMouseClickGrabsKeyboardFocus (false);
     //[/UserPreSize]
@@ -208,15 +209,15 @@ void MidiInEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MidiInEditor::buttonStateChanged (Button* buttonThatWasClicked)
+void MidiInEditor::buttonStateChanged (juce::Button* buttonThatWasClicked)
 {
     getFilter()->icon = imagepad->drawableButton->getName();
     if (imagepad->drawableButton->isDown())
     {
-        ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+        juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
         if (mousebutton.isPopupMenu())
         {
-            PopupMenu m, sub1;
+            juce::PopupMenu m, sub1;
             m.addItem (66, "Clear Image");
             m.addSeparator();
 
@@ -225,8 +226,8 @@ void MidiInEditor::buttonStateChanged (Button* buttonThatWasClicked)
             {
                 if (result == 66)
                 {
-                    getFilter()->icon = String ("");
-                    imagepad->drawableButton->setImages (0);
+                    getFilter()->icon = juce::String ("");
+                    imagepad->drawableButton->setImages (nullptr);
                     imagepad->drawableButton->setName ("");
                 }
             }
@@ -235,7 +236,7 @@ void MidiInEditor::buttonStateChanged (Button* buttonThatWasClicked)
 }
 
 //==============================================================================
-void MidiInEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiInEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     updateParametersFromFilter();
 }
@@ -250,29 +251,29 @@ void MidiInEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
 
     // take a local copy of the info we need while we've got the lock..
-    const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
-    const float hostin  = filter->getParameter (kHostIn);
-    const String icon   = filter->icon;
-    const int channel   = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const int newDevice     = filter->devices.indexOf (filter->getActiveDevice());
+    const float hostin      = filter->getParameter (kHostIn);
+    const juce::String icon = filter->icon;
+    const int channel       = roundToInt (filter->getParameter (kChannel) * 16.f);
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    comboBox->setSelectedItemIndex (newDevice + 1, dontSendNotification);
-    channelBox->setSelectedItemIndex (channel, dontSendNotification);
+    comboBox->setSelectedItemIndex (newDevice + 1, juce::dontSendNotification);
+    channelBox->setSelectedItemIndex (channel, juce::dontSendNotification);
 
-    hostButton->setToggleState (hostin >= 0.5f, dontSendNotification);
+    hostButton->setToggleState (hostin >= 0.5f, juce::dontSendNotification);
 
-    String fullpath = icon;
-    if (! File (fullpath).existsAsFile())
-        fullpath = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                 + File::getSeparatorString() + icon;
-    auto image = Drawable::createFromImageFile (File (fullpath));
+    juce::String fullpath = icon;
+    if (! juce::File (fullpath).existsAsFile())
+        fullpath = ((juce::File::getSpecialLocation (juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+                 + juce::File::getSeparatorString() + icon;
+    auto image = juce::Drawable::createFromImageFile (juce::File (fullpath));
     if (image != nullptr)
     {
         imagepad->drawableButton->setImages (image.get());
         imagepad->drawableButton->setName (icon);
-        imagepad->setButtonText (String());
+        imagepad->setButtonText (juce::String());
     }
     else
         imagepad->setButtonText ("IPH\nmidiIn\n1.2");

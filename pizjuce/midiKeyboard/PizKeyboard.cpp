@@ -5,6 +5,8 @@
 #include "PizKeyboard.h"
 #include "PizKeyboardEditor.h"
 
+using juce::roundToInt;
+
 bool PizKeyboard::isCapsLockOn()
 {
     // TODO: WTF?
@@ -56,12 +58,12 @@ PizKeyboard::PizKeyboard()
     lastProgram    = 0;
     curProgram     = 0;
 
-    ccqwertyState[0] = KeyPress::isKeyCurrentlyDown (KeyPress::tabKey);
-    ccqwertyState[1] = KeyPress::isKeyCurrentlyDown (KeyPress::createFromDescription ("`").getKeyCode());
+    ccqwertyState[0] = juce::KeyPress::isKeyCurrentlyDown (juce::KeyPress::tabKey);
+    ccqwertyState[1] = juce::KeyPress::isKeyCurrentlyDown (juce::KeyPress::createFromDescription ("`").getKeyCode());
     ccState[0]       = false;
     ccState[1]       = false;
     for (int i = keymapLength; --i >= 0;)
-        qwertyState[i] = KeyPress::isKeyCurrentlyDown (keymap[i]);
+        qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown (keymap[i]);
 }
 
 PizKeyboard::~PizKeyboard()
@@ -70,7 +72,7 @@ PizKeyboard::~PizKeyboard()
 }
 
 //==============================================================================
-const String PizKeyboard::getName() const
+const juce::String PizKeyboard::getName() const
 {
     return "midiKeyboard";
 }
@@ -180,7 +182,7 @@ void PizKeyboard::setParameter (int index, float newValue)
     }
 }
 
-const String PizKeyboard::getParameterName (int index)
+const juce::String PizKeyboard::getParameterName (int index)
 {
     if (index == kWidth)
         return "KeyWidth";
@@ -206,17 +208,17 @@ const String PizKeyboard::getParameterName (int index)
         return "Reset";
     if (index == kShowNumbers)
         return "ShowNumbers";
-    return String();
+    return juce::String();
 }
 
-const String PizKeyboard::getParameterText (int index)
+const juce::String PizKeyboard::getParameterText (int index)
 {
     if (index == kWidth)
-        return String (width, 2);
+        return juce::String (width, 2);
     if (index == kChannel)
-        return String (channel + 1);
+        return juce::String (channel + 1);
     if (index == kVelocity)
-        return String (roundToInt (velocity * 127.f));
+        return juce::String (roundToInt (velocity * 127.f));
     if (index == kUseY)
         return useY ? "Yes" : "No";
     if (index == kToggleInput)
@@ -235,17 +237,17 @@ const String PizKeyboard::getParameterText (int index)
         return "--->";
     if (index == kShowNumbers)
         return showNumbers ? "Yes" : "No";
-    return String();
+    return juce::String();
 }
 
-const String PizKeyboard::getInputChannelName (const int channelIndex) const
+const juce::String PizKeyboard::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String PizKeyboard::getOutputChannelName (const int channelIndex) const
+const juce::String PizKeyboard::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool PizKeyboard::isInputChannelStereoPair (int index) const
@@ -280,10 +282,10 @@ void PizKeyboard::releaseResources()
     // spare memory, etc.
 }
 
-void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
-                                MidiBuffer& midiMessages)
+void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
+                                juce::MidiBuffer& midiMessages)
 {
-    MidiBuffer output;
+    juce::MidiBuffer output;
     if (lastProgram != curProgram)
     {
         for (int ch = 1; ch <= 16; ch++)
@@ -317,7 +319,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
             for (int n = 0; n < 128; n++)
             {
                 if (progKbState[curProgram].isNoteOn (ch, n))
-                    output.addEvent (MidiMessage::noteOff (ch, n), 0);
+                    output.addEvent (juce::MidiMessage::noteOff (ch, n), 0);
             }
         }
         progKbState[curProgram].reset();
@@ -343,26 +345,26 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
         //}
         for (int i = keymapLength; --i >= 0;)
         {
-            if (qwertyState[i] != KeyPress::isKeyCurrentlyDown (keymap[i]))
+            if (qwertyState[i] != juce::KeyPress::isKeyCurrentlyDown (keymap[i]))
             {
                 const int note = 12 * octave + i;
-                if (KeyPress::isKeyCurrentlyDown (keymap[i]) != progKbState[curProgram].isNoteOn (channel + 1, note)
-                    && ! ModifierKeys::getCurrentModifiers().isAnyModifierKeyDown())
+                if (juce::KeyPress::isKeyCurrentlyDown (keymap[i]) != progKbState[curProgram].isNoteOn (channel + 1, note)
+                    && ! juce::ModifierKeys::getCurrentModifiers().isAnyModifierKeyDown())
                 {
-                    if (KeyPress::isKeyCurrentlyDown (keymap[i]))
+                    if (juce::KeyPress::isKeyCurrentlyDown (keymap[i]))
                     {
-                        editorKbState.noteOn (channel + 1, note, ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
+                        editorKbState.noteOn (channel + 1, note, juce::ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
                     }
                     else if (! toggle)
                     {
                         editorKbState.noteOff (channel + 1, note, 1.f);
                     }
                 }
-                else if (toggle && KeyPress::isKeyCurrentlyDown (keymap[i]) && progKbState[curProgram].isNoteOn (channel + 1, note))
+                else if (toggle && juce::KeyPress::isKeyCurrentlyDown (keymap[i]) && progKbState[curProgram].isNoteOn (channel + 1, note))
                 {
                     editorKbState.noteOff (channel + 1, note, 1.f);
                 }
-                qwertyState[i] = KeyPress::isKeyCurrentlyDown (keymap[i]);
+                qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown (keymap[i]);
             }
         }
     }
@@ -381,7 +383,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
                 {
                     skip = true;
                     if (progKbState[curProgram].isNoteOn (m.getChannel(), m.getNoteNumber()))
-                        output.addEvent (MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
+                        output.addEvent (juce::MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
                     else
                         output.addEvent (m, sample);
                 }
@@ -400,7 +402,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
                         for (int n = 0; n < 128; n++)
                         {
                             if (progKbState[lastProgram].isNoteOn (ch, n))
-                                output.addEvent (MidiMessage::noteOff (ch, n), sample);
+                                output.addEvent (juce::MidiMessage::noteOff (ch, n), sample);
                         }
                     }
                     editorKbState.reset();
@@ -411,7 +413,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
                             if (progKbState[curProgram].isNoteOn (ch, n))
                             {
                                 editorKbState.noteOn (ch, n, velocity);
-                                output.addEvent (MidiMessage::noteOn (ch, n, velocity), sample);
+                                output.addEvent (juce::MidiMessage::noteOn (ch, n, velocity), sample);
                             }
                         }
                     }
@@ -434,7 +436,7 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
             for (int n = 0; n < 128; n++)
             {
                 if (progKbState[curProgram].isNoteOn (ch, n))
-                    output.addEvent (MidiMessage::noteOn (ch, n, velocity), 0);
+                    output.addEvent (juce::MidiMessage::noteOn (ch, n, velocity), 0);
             }
         }
     }
@@ -451,13 +453,13 @@ void PizKeyboard::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* PizKeyboard::createEditor()
+juce::AudioProcessorEditor* PizKeyboard::createEditor()
 {
     return new midiKeyboardEditor (this);
 }
 
 //==============================================================================
-void PizKeyboard::getStateInformation (MemoryBlock& destData)
+void PizKeyboard::getStateInformation (juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -465,7 +467,7 @@ void PizKeyboard::getStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     // add some attributes to it..
     xmlState.setAttribute ("pluginVersion", 2);
@@ -496,7 +498,7 @@ void PizKeyboard::setStateInformation (const void* data, int sizeInBytes)
     // use this helper function to get the XML from this binary blob..
     auto xmlState = getXmlFromBinary (data, sizeInBytes);
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))

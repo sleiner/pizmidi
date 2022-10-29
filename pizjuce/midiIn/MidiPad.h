@@ -1,39 +1,39 @@
 #ifndef imagePluginFilter_PAD_H
 #define imagePluginFilter_PAD_H
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/DrawablePad.h"
 
-class MidiPad : public Component,
-                public Button::Listener,
-                public FileDragAndDropTarget
+class MidiPad : public juce::Component,
+                public juce::Button::Listener,
+                public juce::FileDragAndDropTarget
 {
 public:
     //==============================================================================
     MidiPad();
     ~MidiPad() override;
 
-    void paint (Graphics&) override;
+    void paint (juce::Graphics&) override;
     void resized() override;
-    void buttonClicked (Button*) override;
-    void filesDropped (const StringArray& files, int x, int y) override;
-    bool isInterestedInFileDrag (const StringArray& files) override;
-    void setButtonText (const String&);
-    void setTooltip (String text);
-    void setColour (const Colour&);
+    void buttonClicked (juce::Button*) override;
+    void filesDropped (const juce::StringArray& files, int x, int y) override;
+    bool isInterestedInFileDrag (const juce::StringArray& files) override;
+    void setButtonText (const juce::String&);
+    void setTooltip (juce::String text);
+    void setColour (const juce::Colour&);
     void setTriggeredOnMouseDown (const bool);
-    void addButtonListener (Button::Listener* const);
+    void addButtonListener (juce::Button::Listener* const);
     void clearIcon();
 
     DrawablePad* drawableButton;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private : Label* label;
+private:
+    juce::Label* label;
     MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
+
+    JUCE_LEAK_DETECTOR (MidiPad)
 };
 
 #endif

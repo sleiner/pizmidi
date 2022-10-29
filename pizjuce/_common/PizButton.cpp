@@ -27,7 +27,7 @@
 
 //==============================================================================
 PizButton::PizButton()
-    : Button (juce::String())
+    : juce::Button (juce::String())
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]

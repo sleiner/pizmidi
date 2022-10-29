@@ -1,21 +1,21 @@
 #ifndef IMAGEPLUGINEDITOR_H
 #define IMAGEPLUGINEDITOR_H
 
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_gui_basics/juce_gui_basics.h"
-#include "juce_gui_extra/juce_gui_extra.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 #include "../_common/ChannelSlider.h"
 #include "imagePlugin.h"
 #include "MidiPad.h"
 
-class imagePluginEditor : public AudioProcessorEditor,
-                          public Button::Listener,
-                          public Slider::Listener,
-                          public TextEditor::Listener,
-                          public ChangeListener,
-                          public KeyListener,
-                          public FileDragAndDropTarget
+class imagePluginEditor : public juce::AudioProcessorEditor,
+                          public juce::Button::Listener,
+                          public juce::Slider::Listener,
+                          public juce::TextEditor::Listener,
+                          public juce::ChangeListener,
+                          public juce::KeyListener,
+                          public juce::FileDragAndDropTarget
 
 {
 public:
@@ -33,46 +33,46 @@ public:
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void buttonClicked (Button*) override;
-    void buttonStateChanged (Button* buttonThatWasClicked) override;
-    bool keyPressed (const KeyPress& key, Component* originatingComponent) override;
-    void textEditorTextChanged (TextEditor& editor) override;
-    void textEditorReturnKeyPressed (TextEditor& editor) override;
-    void textEditorEscapeKeyPressed (TextEditor& editor) override;
-    void textEditorFocusLost (TextEditor& editor) override;
-    void filesDropped (const StringArray& files, int x, int y) override;
-    bool isInterestedInFileDrag (const StringArray& files) override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void buttonClicked (juce::Button*) override;
+    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
+    bool keyPressed (const juce::KeyPress& key, Component* originatingComponent) override;
+    void textEditorTextChanged (juce::TextEditor& editor) override;
+    void textEditorReturnKeyPressed (juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed (juce::TextEditor& editor) override;
+    void textEditorFocusLost (juce::TextEditor& editor) override;
+    void filesDropped (const juce::StringArray& files, int x, int y) override;
+    bool isInterestedInFileDrag (const juce::StringArray& files) override;
+    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (Graphics&) override;
+    void paint (juce::Graphics&) override;
 
     /** Standard Juce resize callback. */
     void resized() override;
-    Colour color, color2;
+    juce::Colour color, color2;
 
 private:
     //==============================================================================
     MidiPad* imagepad;
-    TextEditor* textEditor;
-    ColourSelector* colourSelector;
-    ColourSelector* textColourSelector;
-    Slider* bankSlider;
-    Slider* progSlider;
+    juce::TextEditor* textEditor;
+    juce::ColourSelector* colourSelector;
+    juce::ColourSelector* textColourSelector;
+    juce::Slider* bankSlider;
+    juce::Slider* progSlider;
     ChannelSlider* chanSlider;
-    ResizableCornerComponent* resizer;
-    ComponentBoundsConstrainer resizeLimits;
+    juce::ResizableCornerComponent* resizer;
+    juce::ComponentBoundsConstrainer resizeLimits;
     void updateParametersFromFilter();
     Component* container;
-    Label* label;
+    juce::Label* label;
     bool fullscreen;
 
     // handy wrapper method to avoid having to cast the filter to a imagePluginFilter
-    // every time we need it..
+    // every time we need it
     imagePluginFilter* getFilter() const throw() { return (imagePluginFilter*) getAudioProcessor(); }
 };
 

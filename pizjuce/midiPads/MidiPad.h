@@ -3,13 +3,11 @@
 
 #include <memory>
 
-#include "juce_gui_basics/juce_gui_basics.h"
-
-using namespace juce;
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #define midiScaler (0.007874016f)
 
-class MidiPad : public Button
+class MidiPad : public juce::Button
 {
 public:
     //==============================================================================
@@ -18,33 +16,33 @@ public:
 
     void resized() override;
     void buttonClicked (Button*);
-    void setColour (const Colour&);
+    void setColour (const juce::Colour&);
     bool isPlaying;
     void setXFloat (float v) { x = v; }
     void setYFloat (float v) { y = v; }
     void setXInt (int v) { x = v * midiScaler; }
     void setYInt (int v) { y = v * midiScaler; }
     int getIndex() { return index; }
-    String getIconPath();
-    void setIconPath (String name);
-    void setText (const String& name);
-    String getText();
+    juce::String getIconPath();
+    void setIconPath (juce::String name);
+    void setText (const juce::String& name);
+    juce::String getText();
 
     //==============================================================================
-    void setImages (const Drawable* normalImage);
-    bool setImageFromFile (File file);
+    void setImages (const juce::Drawable* normalImage);
+    bool setImageFromFile (juce::File file);
 
     //==============================================================================
-    void setBackgroundColours (const Colour& toggledOffColour,
-                               const Colour& toggledOnColour);
+    void setBackgroundColours (const juce::Colour& toggledOffColour,
+                               const juce::Colour& toggledOnColour);
 
-    const Colour& getBackgroundColour() const throw();
+    const juce::Colour& getBackgroundColour() const throw();
 
     //==============================================================================
-    const Drawable* getCurrentImage() const throw();
-    const Drawable* getNormalImage() const throw();
+    const juce::Drawable* getCurrentImage() const throw();
+    const juce::Drawable* getNormalImage() const throw();
 
-    String Description;
+    juce::String Description;
     bool showx, showy;
     float roundness;
     bool showdot;
@@ -54,17 +52,15 @@ public:
     void setHex (bool newhex);
     bool isHex();
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
+protected:
+    void
+        drawButtonBackground (juce::Graphics& g,
+                              Button& button,
+                              const juce::Colour& backgroundColour,
+                              bool isMouseOverButton,
+                              bool isButtonDown);
 
-        protected : void
-                    drawButtonBackground (Graphics& g,
-                                          Button& button,
-                                          const Colour& backgroundColour,
-                                          bool isMouseOverButton,
-                                          bool isButtonDown);
-
-    void paintButton (Graphics& g,
+    void paintButton (juce::Graphics& g,
                       bool isMouseOverButton,
                       bool isButtonDown) override;
 
@@ -74,16 +70,18 @@ private:
     float y;
     int index;
     bool hitTest (int x, int y) override;
-    std::unique_ptr<Drawable> normalImage;
-    Colour backgroundOff, backgroundOn;
-    Path hexpath;
+    std::unique_ptr<juce::Drawable> normalImage;
+    juce::Colour backgroundOff, backgroundOn;
+    juce::Path hexpath;
     bool hex;
     void deleteImages();
-    String iconPath;
-    Label* text;
+    juce::String iconPath;
+    juce::Label* text;
 
     MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
+
+    JUCE_LEAK_DETECTOR (MidiPad)
 };
 
 #endif

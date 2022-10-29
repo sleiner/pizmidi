@@ -20,9 +20,9 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "PizKeyboard.h"
 #include "PizKeyboardComponent.h"
@@ -50,11 +50,11 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     friend class PizKeyboardComponent;
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void mouseUp (const MouseEvent& e) override;
-    bool keyPressed (const KeyPress& key, Component* originatingComponent) override
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    bool keyPressed (const juce::KeyPress& key, Component* originatingComponent) override
     {
-        DBG (String (key.getKeyCode()) + " " + key.getTextDescription());
+        DBG (juce::String (key.getKeyCode()) + " " + key.getTextDescription());
         return false;
     }
     //[/UserMethods]
@@ -66,8 +66,8 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    ComponentBoundsConstrainer resizeLimits;
-    TooltipWindow tooltipWindow;
+    juce::ComponentBoundsConstrainer resizeLimits;
+    juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
     PizKeyboard* getFilter() const throw() { return (PizKeyboard*) getAudioProcessor(); }
     //[/UserVariables]
@@ -81,7 +81,7 @@ private:
     std::unique_ptr<juce::ToggleButton> inputToggleButton;
     std::unique_ptr<juce::TextButton> aboutButton;
     std::unique_ptr<juce::TextButton> hideButton;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<PizKeyboardComponent> midiKeyboard;
     std::unique_ptr<juce::TextEditor> aboutBox;
     std::unique_ptr<juce::ToggleButton> useProgCh;

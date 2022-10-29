@@ -1,9 +1,7 @@
 #ifndef PIZ_MIDI_LOOP_HEADER
 #define PIZ_MIDI_LOOP_HEADER
 
-#include "juce_audio_basics/juce_audio_basics.h"
-
-using namespace juce;
+#include <juce_audio_basics/juce_audio_basics.h>
 
 enum playmodes
 {
@@ -15,7 +13,7 @@ enum playmodes
     numPlayModes
 };
 
-class Loop : public MidiMessageSequence
+class Loop : public juce::MidiMessageSequence
 {
 public:
     Loop()
@@ -103,7 +101,7 @@ public:
         return false;
     }
 
-    void playAllNotesAtCurrentTime (MidiBuffer& buffer, int sample_number, int velocity)
+    void playAllNotesAtCurrentTime (juce::MidiBuffer& buffer, int sample_number, int velocity)
     {
         if (findNextNote())
         {
@@ -120,11 +118,11 @@ public:
         }
     }
 
-    void sendCurrentNoteToBuffer (MidiBuffer& buffer, int sample_number, int velocity)
+    void sendCurrentNoteToBuffer (juce::MidiBuffer& buffer, int sample_number, int velocity)
     {
-        MidiMessage m                                      = this->getEventPointer (currentIndex)->message;
-        playingNote[m.getNoteNumber()][m.getChannel() - 1] = jlimit (0, 127, m.getNoteNumber() + transpose);
-        m.setNoteNumber (jlimit (0, 127, m.getNoteNumber() + transpose));
+        juce::MidiMessage m                                = this->getEventPointer (currentIndex)->message;
+        playingNote[m.getNoteNumber()][m.getChannel() - 1] = juce::jlimit (0, 127, m.getNoteNumber() + transpose);
+        m.setNoteNumber (juce::jlimit (0, 127, m.getNoteNumber() + transpose));
         m.setVelocity ((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
         if (outChannel > 0)
             m.setChannel (outChannel);
@@ -156,7 +154,7 @@ public:
         }
     }
 
-    void sendNoteOffMessagesToBuffer (MidiBuffer& buffer, int sample_number)
+    void sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_number)
     {
         for (int ch = 0; ch < 16; ch++)
         {
@@ -165,14 +163,14 @@ public:
                 if (isNotePlaying (i, ch))
                 {
                     int channel = outChannel > 0 ? outChannel - 1 : ch;
-                    buffer.addEvent (MidiMessage (MIDI_NOTEOFF + channel, playingNote[i][ch], 0), sample_number);
+                    buffer.addEvent (juce::MidiMessage (MIDI_NOTEOFF + channel, playingNote[i][ch], 0), sample_number);
                     playingNote[i][ch] = NOT_PLAYING;
                 }
             }
         }
     }
 
-    MidiMessage getCurrentMessage()
+    juce::MidiMessage getCurrentMessage()
     {
         if (currentIndex >= this->getNumEvents())
             currentIndex = 0;

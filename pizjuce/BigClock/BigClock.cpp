@@ -1,6 +1,8 @@
 #include "BigClock.h"
 #include "BigClockEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /**
     This function must be implemented to create the actual plugin object that
@@ -18,7 +20,7 @@ BigClockFilter::BigClockFilter()
     runwatch     = false;
     rectime      = 0;
     watchtime    = 0;
-    plugintime   = Time::getMillisecondCounter();
+    plugintime   = juce::Time::getMillisecondCounter();
     mode         = 0;
     barsbeats    = 1.0f;
     look         = 1.0f;
@@ -33,7 +35,7 @@ BigClockFilter::BigClockFilter()
 
     sampleRate = getSampleRate();
 
-    bgcolor = Colour (0xffb8bcc0);
+    bgcolor = juce::Colour (0xffb8bcc0);
 
     zeromem (&lastPosInfo, sizeof (lastPosInfo));
     lastPosInfo.timeSigNumerator   = 4;
@@ -42,7 +44,7 @@ BigClockFilter::BigClockFilter()
 
     loadDefaultFxp();
 
-    lastTimerTime = Time::getMillisecondCounter();
+    lastTimerTime = juce::Time::getMillisecondCounter();
     startTimer (10);
 }
 
@@ -177,7 +179,7 @@ void BigClockFilter::setParameter (int index, float newValue)
     }
 }
 
-const String BigClockFilter::getParameterName (int index)
+const juce::String BigClockFilter::getParameterName (int index)
 {
     if (index == 0)
         return L"mode";
@@ -200,102 +202,102 @@ const String BigClockFilter::getParameterName (int index)
     if (index == 9)
         return L"runwatch";
     else
-        return String();
+        return juce::String();
 }
 
-const String BigClockFilter::getParameterText (int index)
+const juce::String BigClockFilter::getParameterText (int index)
 {
     if (index == 0)
     {
         if (barsbeats >= 0.5f)
-            return String (L"bar/beat/tick");
+            return juce::String (L"bar/beat/tick");
         else
-            return String (L"hour/min/sec");
+            return juce::String (L"hour/min/sec");
     }
     else if (index == 1)
-        return String (look, 2);
+        return juce::String (look, 2);
     else if (index == 2)
     {
         if (showms >= 0.5f)
-            return String (L"yes");
+            return juce::String (L"yes");
         else
-            return String (L"no");
+            return juce::String (L"no");
     }
     else if (index == 3)
     {
         if (showhrs >= 0.5f)
-            return String (L"yes");
+            return juce::String (L"yes");
         else
-            return String (L"no");
+            return juce::String (L"no");
     }
     else if (index == 4)
     {
         if (ticks == 0.0)
-            return String (L"960");
+            return juce::String (L"960");
         else if (ticks < 0.1)
-            return String (L"768");
+            return juce::String (L"768");
         else if (ticks < 0.2)
-            return String (L"480");
+            return juce::String (L"480");
         else if (ticks < 0.3)
-            return String (L"384");
+            return juce::String (L"384");
         else if (ticks < 0.4)
-            return String (L"240");
+            return juce::String (L"240");
         else if (ticks < 0.5)
-            return String (L"192");
+            return juce::String (L"192");
         else if (ticks < 0.6)
-            return String (L"120");
+            return juce::String (L"120");
         else if (ticks < 0.65)
-            return String (L"100");
+            return juce::String (L"100");
         else if (ticks < 0.7)
-            return String (L"96");
+            return juce::String (L"96");
         else if (ticks < 0.8)
-            return String (L"48");
+            return juce::String (L"48");
         else if (ticks < 0.9)
-            return String (L"16");
+            return juce::String (L"16");
         else if (ticks < 1.0)
-            return String (L"4");
+            return juce::String (L"4");
         else
-            return String (L"hide ticks");
+            return juce::String (L"hide ticks");
     }
     else if (index == 5)
     {
         if (frames == 0.0)
-            return String (L"ms (1000)");
+            return juce::String (L"ms (1000)");
         else if (frames < 0.1)
-            return String (L"10");
+            return juce::String (L"10");
         else if (frames < 0.2)
-            return String (L"15");
+            return juce::String (L"15");
         else if (frames < 0.3)
-            return String (L"24");
+            return juce::String (L"24");
         else if (frames < 0.4)
-            return String (L"25");
+            return juce::String (L"25");
         else if (frames < 0.5)
-            return String (L"29.97 Drop");
+            return juce::String (L"29.97 Drop");
         else if (frames < 0.6)
-            return String (L"30");
+            return juce::String (L"30");
         else if (frames < 0.7)
-            return String (L"50");
+            return juce::String (L"50");
         else if (frames < 0.8)
-            return String (L"60");
+            return juce::String (L"60");
         else if (frames < 0.9)
-            return String (L"75");
+            return juce::String (L"75");
         else if (frames < 1.0)
-            return String (L"100");
+            return juce::String (L"100");
         else
-            return String (L"120");
+            return juce::String (L"120");
     }
     else
-        return String();
+        return juce::String();
 }
 
-const String BigClockFilter::getInputChannelName (const int channelIndex) const
+const juce::String BigClockFilter::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String BigClockFilter::getOutputChannelName (const int channelIndex) const
+const juce::String BigClockFilter::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool BigClockFilter::isInputChannelStereoPair (int index) const
@@ -311,7 +313,6 @@ bool BigClockFilter::isOutputChannelStereoPair (int index) const
 //==============================================================================
 void BigClockFilter::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // do your pre-playback setup stuff here..
     this->sampleRate = sampleRate;
 }
 
@@ -321,8 +322,8 @@ void BigClockFilter::releaseResources()
     // spare memory, etc.
 }
 
-void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
-                                   MidiBuffer& midiMessages)
+void BigClockFilter::processBlock (juce::AudioSampleBuffer& buffer,
+                                   juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
@@ -330,9 +331,9 @@ void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
     }
 
     //sampleRate=getSampleRate();
-    AudioPlayHead::CurrentPositionInfo pos;
+    juce::AudioPlayHead::CurrentPositionInfo pos;
 
-    if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
+    if (getPlayHead() != nullptr && getPlayHead()->getCurrentPosition (pos))
     {
         if (memcmp (&pos, &lastPosInfo, sizeof (pos)) != 0)
         {
@@ -361,15 +362,15 @@ void BigClockFilter::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* BigClockFilter::createEditor()
+juce::AudioProcessorEditor* BigClockFilter::createEditor()
 {
     return new BigClockEditor (this);
 }
 
 //==============================================================================
-void BigClockFilter::getStateInformation (MemoryBlock& destData)
+void BigClockFilter::getStateInformation (juce::MemoryBlock& destData)
 {
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("barsbeats", barsbeats);
@@ -391,7 +392,7 @@ void BigClockFilter::getStateInformation (MemoryBlock& destData)
 
     for (int i = 0; i < cues.size(); i++)
     {
-        XmlElement* xmlCue = new XmlElement ("Cue");
+        auto* xmlCue = new juce::XmlElement ("Cue");
         xmlCue->setAttribute ("time", cues[i]->time);
         xmlCue->setAttribute ("ppq", cues[i]->ppq);
         xmlCue->setAttribute ("text", cues[i]->text);
@@ -405,15 +406,15 @@ void BigClockFilter::getStateInformation (MemoryBlock& destData)
 void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
 {
     cues.clear();
-    // use this helper function to get the XML from this binary blob..
+    // use this helper function to get the XML from this binary blob
     auto const xmlState = getXmlFromBinary (data, sizeInBytes);
 
     if (xmlState != 0)
     {
-        // check that it's the right type of xml..
+        // check that it's the right type of xml
         if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
-            // ok, now pull out our parameters..
+            // ok, now pull out our parameters
             barsbeats  = (float) xmlState->getDoubleAttribute ("gainLeve", barsbeats);
             barsbeats  = (float) xmlState->getDoubleAttribute ("barsbeats", barsbeats);
             look       = (float) xmlState->getDoubleAttribute ("contrast", look);
@@ -431,7 +432,7 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
 
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bgcolor      = Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
+            bgcolor      = juce::Colour (xmlState->getIntAttribute ("bgcolor", bgcolor.getARGB()));
 
             for (auto* e : xmlState->getChildIterator())
             {
@@ -451,9 +452,9 @@ void BigClockFilter::setStateInformation (const void* data, int sizeInBytes)
     }
 }
 
-void BigClockFilter::saveCues (File cuefile)
+void BigClockFilter::saveCues (juce::File cuefile)
 {
-    XmlElement xmlState ("BigClockCues");
+    juce::XmlElement xmlState ("BigClockCues");
 
     double fps;
     if (getParameter (kFrames) == 0.0)
@@ -482,7 +483,7 @@ void BigClockFilter::saveCues (File cuefile)
         fps = 120.0;
     for (int i = 0; i < cues.size(); i++)
     {
-        XmlElement* xmlCue = new XmlElement ("Cue");
+        auto* xmlCue = new juce::XmlElement ("Cue");
         if (getParameter (kBarsBeats) < 0.5f)
             xmlCue->setAttribute ("time", secondsToSmpteString (cues[i]->time, fps));
         else
@@ -493,13 +494,13 @@ void BigClockFilter::saveCues (File cuefile)
     }
     if (getParameter (kBarsBeats) < 0.5f)
     {
-        XmlElement* fr = new XmlElement ("FrameRate");
+        auto* fr = new juce::XmlElement ("FrameRate");
         fr->setAttribute ("rate", fps);
         xmlState.addChildElement (fr);
     }
     else
     {
-        XmlElement* ts = new XmlElement ("TimeSig");
+        auto* ts = new juce::XmlElement ("TimeSig");
         ts->setAttribute ("numerator", lastPosInfo.timeSigNumerator);
         ts->setAttribute ("denominator", lastPosInfo.timeSigDenominator);
         xmlState.addChildElement (ts);
@@ -531,7 +532,7 @@ void BigClockFilter::saveCues (File cuefile)
             tpb = 4.0;
         else
             tpb = 0.0;
-        XmlElement* ticks = new XmlElement ("TicksPerBeat");
+        auto* ticks = new juce::XmlElement ("TicksPerBeat");
         ticks->setAttribute ("value", tpb);
         xmlState.addChildElement (ticks);
     }
@@ -539,10 +540,10 @@ void BigClockFilter::saveCues (File cuefile)
     xmlState.writeTo (cuefile);
 }
 
-void BigClockFilter::loadCues (File cuefile)
+void BigClockFilter::loadCues (juce::File cuefile)
 {
-    String xml = cuefile.loadFileAsString();
-    XmlDocument xmldoc (xml);
+    juce::String xml = cuefile.loadFileAsString();
+    juce::XmlDocument xmldoc (xml);
     auto const xmlState = xmldoc.getDocumentElement();
     if (xmlState != 0)
     {
@@ -633,7 +634,7 @@ void BigClockFilter::loadCues (File cuefile)
     }
 }
 
-void BigClockFilter::addCue (double time, double ppq, String text)
+void BigClockFilter::addCue (double time, double ppq, juce::String text)
 {
     cue* newcue = new cue (time, ppq, text);
     cues.addSorted (c, newcue);
@@ -645,7 +646,7 @@ void BigClockFilter::setCueEnabled (int index, bool state)
     cues[index]->enabled = state;
 }
 
-String BigClockFilter::getCue (double ppq, bool barsbeats)
+juce::String BigClockFilter::getCue (double ppq, bool barsbeats)
 {
     for (int i = cues.size() - 1; i >= 0; i--)
     {
@@ -678,7 +679,7 @@ String BigClockFilter::getCue (double ppq, bool barsbeats)
             }
         }
     }
-    return String();
+    return juce::String();
 }
 
 const double BigClockFilter::secondsToPpq (const double seconds, const double bpm)
@@ -687,11 +688,11 @@ const double BigClockFilter::secondsToPpq (const double seconds, const double bp
 }
 
 //==============================================================================
-const String BigClockFilter::ppqToString (const double sppq,
-                                          const int numerator,
-                                          const int denominator,
-                                          const double bpm,
-                                          const bool mode)
+const juce::String BigClockFilter::ppqToString (const double sppq,
+                                                const int numerator,
+                                                const int denominator,
+                                                const double bpm,
+                                                const bool mode)
 {
     if (numerator == 0 || denominator == 0)
         return L"1|1|0";
@@ -770,15 +771,15 @@ const String BigClockFilter::ppqToString (const double sppq,
         ticks = (int) tpb - ticks - 1;
     }
 
-    long double seconds = (long double) (sppq * 60.0 / bpm);
+    auto seconds = (long double) (sppq * 60.0 / bpm);
     //if (playing) seconds = sec;
     //else seconds =
 
-    const long double absSecs = fabs (seconds);
-    const uint64 samples      = roundToInt (sampleRate * absSecs);
+    const long double absSecs  = fabs (seconds);
+    const juce::uint64 samples = roundToInt (sampleRate * absSecs);
 
     if (getParameter (kSamples))
-        return sign + String (samples);
+        return sign + juce::String (samples);
     else
     {
         int hours;
@@ -795,68 +796,68 @@ const String BigClockFilter::ppqToString (const double sppq,
             mins = (int) (absSecs / 60.0);
         const int secs = ((int) absSecs) % 60;
 
-        String s1;
+        juce::String s1;
         if (showhrs)
         {
             if (showms)
             {
                 if (fps == 1000.0)
-                    s1 = String::formatted (L"%s%02d:%02d:%02d.%03d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * 1000) % 1000);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d.%03d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * 1000) % 1000);
                 else if (fps <= 10.0)
-                    s1 = String::formatted (L"%s%02d:%02d:%02d:%.1d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%.1d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
                     {
-                        int64 frameNumber = int64 (absSecs * 29.97);
+                        auto frameNumber = juce::int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
                         int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
                         int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
-                        s1 = String::formatted (L"%s%02d;%02d;%02d;%.2d",
-                                                sign,
-                                                dhours,
-                                                dminutes,
-                                                dseconds,
-                                                frames);
+                        s1 = juce::String::formatted (L"%s%02d;%02d;%02d;%.2d",
+                                                      sign,
+                                                      dhours,
+                                                      dminutes,
+                                                      dseconds,
+                                                      frames);
                     }
                     else
-                        s1 = String::formatted (L"%s%02d:%02d:%02d:%.2d",
-                                                sign,
-                                                hours,
-                                                mins,
-                                                secs,
-                                                int64 (absSecs * fps) % (int) fps);
+                        s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%.2d",
+                                                      sign,
+                                                      hours,
+                                                      mins,
+                                                      secs,
+                                                      juce::int64 (absSecs * fps) % (int) fps);
                 }
                 else
-                    s1 = String::formatted (L"%s%02d:%02d:%02d:%03d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%03d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 if (showsubfr >= 0.5f)
-                    s1 += String (L"::") + String::formatted (L"%02d", (int64 (absSecs * fps * 100.0) % 100));
+                    s1 += juce::String (L"::") + juce::String::formatted (L"%02d", (juce::int64 (absSecs * fps * 100.0) % 100));
             }
             else
             {
-                s1 = String::formatted (L"%s%02d:%02d:%02d",
-                                        sign,
-                                        hours,
-                                        mins,
-                                        secs);
+                s1 = juce::String::formatted (L"%s%02d:%02d:%02d",
+                                              sign,
+                                              hours,
+                                              mins,
+                                              secs);
             }
         }
         else
@@ -864,59 +865,59 @@ const String BigClockFilter::ppqToString (const double sppq,
             if (showms)
             {
                 if (fps == 1000.0)
-                    s1 = String::formatted (L"%s%d:%02d.%03d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * 1000) % 1000);
+                    s1 = juce::String::formatted (L"%s%d:%02d.%03d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * 1000) % 1000);
                 else if (fps <= 10.0)
-                    s1 = String::formatted (L"%s%d:%02d:%.1d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%d:%02d:%.1d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
                     {
-                        int64 frameNumber = int64 (absSecs * 29.97);
+                        auto frameNumber = juce::int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
                         int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
 
-                        s1 = String::formatted (L"%s%d:%02d;%.2d",
-                                                sign,
-                                                dminutes,
-                                                dseconds,
-                                                frames);
+                        s1 = juce::String::formatted (L"%s%d:%02d;%.2d",
+                                                      sign,
+                                                      dminutes,
+                                                      dseconds,
+                                                      frames);
                     }
                     else
-                        s1 = String::formatted (L"%s%d:%02d:%.2d",
-                                                sign,
-                                                mins,
-                                                secs,
-                                                int64 (absSecs * fps) % (int) fps);
+                        s1 = juce::String::formatted (L"%s%d:%02d:%.2d",
+                                                      sign,
+                                                      mins,
+                                                      secs,
+                                                      juce::int64 (absSecs * fps) % (int) fps);
                 }
                 else
-                    s1 = String::formatted (L"%s%d:%02d:%03d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%d:%02d:%03d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 if (showsubfr >= 0.5f)
-                    s1 += String (L"::") + String::formatted (L"%02d", (int64 (absSecs * fps * 100.0) % 100));
+                    s1 += juce::String (L"::") + juce::String::formatted (L"%02d", (juce::int64 (absSecs * fps * 100.0) % 100));
             }
             else
             {
-                s1 = String::formatted (L"%s%d:%02d",
-                                        sign,
-                                        mins,
-                                        secs);
+                s1 = juce::String::formatted (L"%s%d:%02d",
+                                              sign,
+                                              mins,
+                                              secs);
             }
         }
 
-        String padding = String();
+        juce::String padding = juce::String();
         if (ticks < 10 && tpb > 100.0)
             padding = L"00";
         else if (ticks < 100 && tpb > 100.0)
@@ -924,7 +925,7 @@ const String BigClockFilter::ppqToString (const double sppq,
         else if (ticks < 10 && tpb >= 10.0)
             padding = L"0";
 
-        String s;
+        juce::String s;
         if (tpb > 0.0)
             s << (bar == 0 ? L"" : sign) << bar << L"|" << beat << L"|" << padding << ticks;
         else
@@ -936,9 +937,9 @@ const String BigClockFilter::ppqToString (const double sppq,
     }
 }
 
-double BigClockFilter::smpteStringToSeconds (String smpte, double fps)
+double BigClockFilter::smpteStringToSeconds (juce::String smpte, double fps)
 {
-    StringArray smpteArray;
+    juce::StringArray smpteArray;
     smpteArray.addTokens (smpte, ":;", "");
     return smpteArray[0].getDoubleValue() * 60 * 60 //hours
          + smpteArray[1].getDoubleValue() * 60      //minutes
@@ -946,7 +947,7 @@ double BigClockFilter::smpteStringToSeconds (String smpte, double fps)
          + smpteArray[3].getDoubleValue() / fps;    //frames
 }
 
-String BigClockFilter::secondsToSmpteString (double seconds, double fps)
+juce::String BigClockFilter::secondsToSmpteString (double seconds, double fps)
 {
     if (fps < 0)
     {
@@ -988,38 +989,38 @@ String BigClockFilter::secondsToSmpteString (double seconds, double fps)
     {
         if (fps == 29.97)
         {
-            int64 frameNumber = int64 (seconds * 29.97);
+            auto frameNumber = juce::int64 (seconds * 29.97);
             frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
             int frames   = int (frameNumber % 30);
             int dseconds = int ((frameNumber / 30) % 60);
             int dminutes = int (((frameNumber / 30) / 60) % 60);
             int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
-            return String::formatted (L"%s%02d;%02d;%02d;%.2d",
-                                      sign,
-                                      dhours,
-                                      dminutes,
-                                      dseconds,
-                                      frames);
+            return juce::String::formatted (L"%s%02d;%02d;%02d;%.2d",
+                                            sign,
+                                            dhours,
+                                            dminutes,
+                                            dseconds,
+                                            frames);
         }
         else
-            return String::formatted (L"%s%02d:%02d:%02d:%.2d",
-                                      sign,
-                                      hours,
-                                      mins,
-                                      secs,
-                                      int64 (absSecs * fps) % (int) fps);
+            return juce::String::formatted (L"%s%02d:%02d:%02d:%.2d",
+                                            sign,
+                                            hours,
+                                            mins,
+                                            secs,
+                                            juce::int64 (absSecs * fps) % (int) fps);
     }
     else
-        return String::formatted (L"%s%02d:%02d:%02d:%03d",
-                                  sign,
-                                  hours,
-                                  mins,
-                                  secs,
-                                  int64 (absSecs * fps) % (int) fps);
+        return juce::String::formatted (L"%s%02d:%02d:%02d:%03d",
+                                        sign,
+                                        hours,
+                                        mins,
+                                        secs,
+                                        juce::int64 (absSecs * fps) % (int) fps);
 }
 
-double BigClockFilter::barsbeatsStringToPpq (String barsbeats, int n, int d)
+double BigClockFilter::barsbeatsStringToPpq (juce::String barsbeats, int n, int d)
 {
     float tpb;
     if (getParameter (kTicks) == 0.0)
@@ -1049,14 +1050,14 @@ double BigClockFilter::barsbeatsStringToPpq (String barsbeats, int n, int d)
     else
         tpb = 0.0;
 
-    StringArray smpteArray;
+    juce::StringArray smpteArray;
     smpteArray.addTokens (barsbeats, ":", "");
     const double ppqPerBar  = ((double) n * 4.0 / (double) d);
     const double ppqPerBeat = 4.0 / (double) d;
     return (smpteArray[0].getIntValue() - 1) * ppqPerBar + (smpteArray[1].getIntValue() - 1) * ppqPerBeat + smpteArray[2].getDoubleValue() / tpb;
 }
 
-String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
+juce::String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
 {
     const double ppqPerBar = ((double) n * 4.0 / (double) d);
     double beats           = (fmod (ppq, ppqPerBar) / ppqPerBar) * n;
@@ -1093,7 +1094,7 @@ String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
     const int beat  = ((int) beats) + 1;
     const int ticks = ((int) (fmod (beats, 1.0) * tpb));
 
-    String padding = String();
+    juce::String padding = juce::String();
     if (ticks < 10 && tpb > 100.0)
         padding = L"00";
     else if (ticks < 100 && tpb > 100.0)
@@ -1101,7 +1102,7 @@ String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
     else if (ticks < 10 && tpb >= 10.0)
         padding = L"0";
 
-    String s;
+    juce::String s;
     if (tpb > 0.0)
         s << bar << L":" << beat << L":" << padding << ticks;
     else
@@ -1112,6 +1113,6 @@ String BigClockFilter::ppqToBarsbeatsString (double ppq, int n, int d)
 void BigClockFilter::timerCallback()
 {
     if (runwatch)
-        watchtime += Time::getMillisecondCounter() - lastTimerTime;
-    lastTimerTime = Time::getMillisecondCounter();
+        watchtime += juce::Time::getMillisecondCounter() - lastTimerTime;
+    lastTimerTime = juce::Time::getMillisecondCounter();
 }

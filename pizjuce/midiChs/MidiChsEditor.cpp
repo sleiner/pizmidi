@@ -6,44 +6,44 @@ MidiChsEditor::MidiChsEditor (MidiChsProcessor* const ownerFilter)
 {
     setMouseClickGrabsKeyboardFocus (false);
 
-    bgcolor = Colour (getFilter()->getParameter (18), getFilter()->getParameter (19), getFilter()->getParameter (20), 1.0f);
-    fgcolor = Colour (bgcolor.contrasting (getFilter()->getParameter (21)));
+    bgcolor = juce::Colour (getFilter()->getParameter (18), getFilter()->getParameter (19), getFilter()->getParameter (20), 1.0f);
+    fgcolor = juce::Colour (bgcolor.contrasting (getFilter()->getParameter (21)));
 
-    addAndMakeVisible (resetButton = new TextButton ("reset"));
+    addAndMakeVisible (resetButton = new juce::TextButton ("reset"));
     resetButton->setButtonText ("Reset");
     resetButton->addListener (this);
-    resetButton->setColour (TextButton::buttonColourId, bgcolor);
-    resetButton->setColour (TextButton::textColourOnId, fgcolor);
-    resetButton->setColour (TextButton::textColourOffId, fgcolor);
+    resetButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    resetButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    resetButton->setColour (juce::TextButton::textColourOffId, fgcolor);
     resetButton->setMouseClickGrabsKeyboardFocus (false);
 
-    addAndMakeVisible (clearButton = new TextButton ("clear"));
+    addAndMakeVisible (clearButton = new juce::TextButton ("clear"));
     clearButton->setButtonText ("Clear");
     clearButton->addListener (this);
-    clearButton->setColour (TextButton::buttonColourId, bgcolor);
-    clearButton->setColour (TextButton::textColourOnId, fgcolor);
-    clearButton->setColour (TextButton::textColourOffId, fgcolor);
+    clearButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    clearButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    clearButton->setColour (juce::TextButton::textColourOffId, fgcolor);
     clearButton->setMouseClickGrabsKeyboardFocus (false);
 
     for (int i = 0; i < 16; i++)
     {
-        addAndMakeVisible (slider[i] = new Slider ("new slider"));
+        addAndMakeVisible (slider[i] = new juce::Slider ("new slider"));
         slider[i]->setRange (0, 16, 1);
-        slider[i]->setSliderStyle (Slider::LinearBar);
-        slider[i]->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-        slider[i]->setColour (Slider::thumbColourId, Colour (0x5effff));
-        slider[i]->setColour (Slider::trackColourId, Colour (0x5e2b2b));
-        slider[i]->setColour (Slider::textBoxTextColourId, fgcolor);
-        slider[i]->setColour (Slider::textBoxOutlineColourId, Colour (0xff808080));
+        slider[i]->setSliderStyle (juce::Slider::LinearBar);
+        slider[i]->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+        slider[i]->setColour (juce::Slider::thumbColourId, juce::Colour (0x5effff));
+        slider[i]->setColour (juce::Slider::trackColourId, juce::Colour (0x5e2b2b));
+        slider[i]->setColour (juce::Slider::textBoxTextColourId, fgcolor);
+        slider[i]->setColour (juce::Slider::textBoxOutlineColourId, juce::Colour (0xff808080));
         slider[i]->setValue ((getFilter()->getParameter (i)) * 16.0);
         slider[i]->addListener (this);
         slider[i]->setMouseClickGrabsKeyboardFocus (false);
 
-        addAndMakeVisible (label[i] = new Label ("new label", String (i + 1)));
-        label[i]->setFont (Font (15.0000f, Font::plain));
-        label[i]->setJustificationType (Justification::centred);
+        addAndMakeVisible (label[i] = new juce::Label ("new label", juce::String (i + 1)));
+        label[i]->setFont (juce::Font (15.0000f, juce::Font::plain));
+        label[i]->setJustificationType (juce::Justification::centred);
         label[i]->setEditable (false, false, false);
-        label[i]->setColour (Label::textColourId, fgcolor);
+        label[i]->setColour (juce::Label::textColourId, fgcolor);
         label[i]->setMouseClickGrabsKeyboardFocus (false);
     }
 
@@ -65,7 +65,7 @@ MidiChsEditor::~MidiChsEditor()
 }
 
 //==============================================================================
-void MidiChsEditor::paint (Graphics& g)
+void MidiChsEditor::paint (juce::Graphics& g)
 {
     g.fillAll (bgcolor);
 }
@@ -88,7 +88,7 @@ void MidiChsEditor::resized()
     getFilter()->lastUIHeight = getHeight();
 }
 
-void MidiChsEditor::buttonClicked (Button* buttonThatWasClicked)
+void MidiChsEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     if (buttonThatWasClicked == resetButton)
     {
@@ -105,7 +105,7 @@ void MidiChsEditor::buttonClicked (Button* buttonThatWasClicked)
         }
     }
 }
-void MidiChsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void MidiChsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     for (int i = 0; i < 16; i++)
     {
@@ -116,7 +116,7 @@ void MidiChsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 }
 //==============================================================================
-void MidiChsEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiChsEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     // this is the filter telling us that it's changed, so we'll update our
     // display of the time, midi message, etc.
@@ -149,14 +149,14 @@ void MidiChsEditor::updateParametersFromFilter()
 
     // ..and after releasing the lock, we're free to do the time-consuming UI stuff..
 
-    bgcolor = Colour (hue, sat, bri, 1.0f);
-    fgcolor = Colour (bgcolor.contrasting (contrast));
+    bgcolor = juce::Colour (hue, sat, bri, 1.0f);
+    fgcolor = juce::Colour (bgcolor.contrasting (contrast));
 
     for (int i = 0; i < 16; i++)
     {
-        slider[i]->setValue ((float) ((int) (ch[i] * 16.0)), dontSendNotification);
-        slider[i]->setColour (Slider::textBoxTextColourId, fgcolor);
-        label[i]->setColour (Label::textColourId, fgcolor);
+        slider[i]->setValue ((float) ((int) (ch[i] * 16.0)), juce::dontSendNotification);
+        slider[i]->setColour (juce::Slider::textBoxTextColourId, fgcolor);
+        label[i]->setColour (juce::Label::textColourId, fgcolor);
     }
     if (reset == 1.0f)
     {
@@ -170,10 +170,10 @@ void MidiChsEditor::updateParametersFromFilter()
         getFilter()->setParameterNotifyingHost (17, 0.0f);
         clearButton->triggerClick();
     }
-    resetButton->setColour (TextButton::textColourOnId, fgcolor);
-    resetButton->setColour (TextButton::buttonColourId, bgcolor);
-    clearButton->setColour (TextButton::textColourOnId, fgcolor);
-    clearButton->setColour (TextButton::buttonColourId, bgcolor);
+    resetButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    resetButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    clearButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    clearButton->setColour (juce::TextButton::buttonColourId, bgcolor);
     repaint();
     setSize (filter->lastUIWidth, filter->lastUIHeight);
 }

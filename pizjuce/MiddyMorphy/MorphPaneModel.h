@@ -1,6 +1,6 @@
 #pragma once
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "ModuleGUI.h"
 #include "ModulePaneModel.h"
@@ -11,30 +11,28 @@ class Cursor;
 class MidiMorph;
 class Module;
 
-using namespace juce;
-
 class MorphPaneModel : public ModulePaneModel,
-                       public Label::Listener,
-                       public Component
+                       public juce::Label::Listener,
+                       public juce::Component
 {
-private:
-    Cursor* cursor;
-    MidiMorph* core;
-    TextBoxSlider* rateBox;
-
 public:
     MorphPaneModel (MidiMorph* core);
 
     int getNumModules() override;
 
-    void mouseDown (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
 
     Module* getModule (int index) override;
     ModuleGUI* createGUI (int index) override;
 
-    void selectionChanged (const Array<ModuleGUI*>& modules) override;
+    void selectionChanged (const juce::Array<ModuleGUI*>& modules) override;
 
-    void labelTextChanged (Label* labelThatHasChanged) override;
+    void labelTextChanged (juce::Label* labelThatHasChanged) override;
+
+private:
+    Cursor* cursor;
+    MidiMorph* core;
+    TextBoxSlider* rateBox;
 };

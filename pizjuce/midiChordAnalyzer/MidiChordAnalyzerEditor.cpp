@@ -23,6 +23,7 @@
 #include "MidiChordAnalyzerEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -460,9 +461,9 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
     learnChanSlider->setMouseClickGrabsKeyboardFocus (false);
     pizButton->setMouseClickGrabsKeyboardFocus (false);
     chordNameLabel->setMouseClickGrabsKeyboardFocus (false);
-    chordNameLabel->setText (" ", dontSendNotification);
+    chordNameLabel->setText (" ", juce::dontSendNotification);
     flatsButton->setMouseClickGrabsKeyboardFocus (false);
-    chordKeyboard->setMouseCursor (MouseCursor::PointingHandCursor);
+    chordKeyboard->setMouseCursor (juce::MouseCursor::PointingHandCursor);
     numHeldNotes = 0;
 
     learnChanSlider->setAllText ("All");
@@ -478,7 +479,7 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor (MidiChordAnalyzer* const owner
     setSize (600, 180);
 
     //[Constructor] You can add your own custom stuff here..
-    versionLabel->setText (JucePlugin_VersionString, dontSendNotification);
+    versionLabel->setText (JucePlugin_VersionString, juce::dontSendNotification);
     ownerFilter->addChangeListener (this);
     updateParametersFromFilter();
     //[/Constructor]
@@ -633,25 +634,25 @@ void MidiChordAnalyzerEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_copyButton] -- add your button handler code here..
         const int channel = roundToInt (getFilter()->getParameter (kChannel) * 16.f);
-        String chordString; // = String(0) + ":";
+        juce::String chordString;
         for (int n = 0; n < 128; n++)
         {
             for (int c = 1; c <= 16; c++)
             {
                 if ((channel == 0 || channel == c) && getFilter()->chordKbState.isNoteOn (c, n))
                 {
-                    chordString += getNoteName (n, getFilter()->bottomOctave) + "." + String (c) + " ";
+                    chordString += getNoteName (n, getFilter()->bottomOctave) + "." + juce::String (c) + " ";
                 }
             }
         }
-        SystemClipboard::copyTextToClipboard (chordString);
+        juce::SystemClipboard::copyTextToClipboard (chordString);
         //[/UserButtonCode_copyButton]
     }
 
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        URL ("http://thepiz.org/plugins/?p=midiChordAnalyzer").launchInDefaultBrowser();
+        juce::URL ("http://thepiz.org/plugins/?p=midiChordAnalyzer").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
@@ -674,19 +675,19 @@ void MidiChordAnalyzerEditor::sliderValueChanged (juce::Slider* sliderThatWasMov
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
-void MidiChordAnalyzerEditor::mouseDown (const MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseDown (const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::mouseDoubleClick (const MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseDoubleClick (const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::mouseUp (const MouseEvent& e)
+void MidiChordAnalyzerEditor::mouseUp (const juce::MouseEvent& e)
 {
 }
 
-void MidiChordAnalyzerEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiChordAnalyzerEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -698,8 +699,8 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
     const bool flats                = filter->getParameter (kFlats) > 0;
     const int chordChan             = roundToInt (filter->getParameter (kChannel) * 16.f);
 
-    learnChanSlider->setValue (chordChan, dontSendNotification);
-    flatsButton->setToggleState (flats, dontSendNotification);
+    learnChanSlider->setValue (chordChan, juce::dontSendNotification);
+    flatsButton->setToggleState (flats, juce::dontSendNotification);
     if (chordChan == 0)
         chordKeyboard->setMidiChannelsToDisplay (0xffff);
     else
@@ -707,12 +708,12 @@ void MidiChordAnalyzerEditor::updateParametersFromFilter()
 
     if (numHeldNotes < chordKeyboard->getNumHeldNotes (chordChan))
     {
-        chordNameLabel->setText (getCurrentChordName (chordChan), dontSendNotification);
-        Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
+        chordNameLabel->setText (getCurrentChordName (chordChan), juce::dontSendNotification);
+        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
     }
     else if (getCurrentChordName (chordChan) == " ")
     {
-        Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
+        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
     }
     else
         startTimer (100);
@@ -724,19 +725,19 @@ void MidiChordAnalyzerEditor::timerCallback()
     const int chordChan = roundToInt (getFilter()->getParameter (kChannel) * 16.f);
     if (getCurrentChordName (chordChan) == " ")
     {
-        Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
+        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 0.f, 500, false, 2.0, 0.5);
     }
     else
     {
-        chordNameLabel->setText (getCurrentChordName (chordChan), dontSendNotification);
-        Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
+        chordNameLabel->setText (getCurrentChordName (chordChan), juce::dontSendNotification);
+        juce::Desktop::getInstance().getAnimator().animateComponent (chordNameLabel.get(), chordNameLabel->getBounds(), 1.f, 0, false, 1.0, 1.0);
     }
     stopTimer();
 }
 
-String const MidiChordAnalyzerEditor::getCurrentChordName (int channel)
+juce::String const MidiChordAnalyzerEditor::getCurrentChordName (int channel)
 {
-    Array<int> chord;
+    juce::Array<int> chord;
     for (int n = 0; n < 128; n++)
     {
         for (int c = 1; c <= 16; c++)

@@ -5,9 +5,7 @@
 
 #include "../_common/PizAudioProcessor.h"
 
-using namespace juce;
-
-class MidiPad : public Button
+class MidiPad : public juce::Button
 {
 public:
     //==============================================================================
@@ -15,54 +13,53 @@ public:
     ~MidiPad() override;
 
     void resized() override;
-    void buttonClicked (Button*);
-    void setColour (const Colour&);
-    void setTextColour (const Colour&);
+    void buttonClicked (juce::Button*);
+    void setColour (const juce::Colour&);
+    void setTextColour (const juce::Colour&);
     int getIndex() { return index; }
-    String getIconPath();
-    void setIconPath (String name);
-    void setText (const String& name);
-    void setButtonText (const String& newText);
-    String getText();
+    juce::String getIconPath();
+    void setIconPath (juce::String name);
+    void setText (const juce::String& name);
+    void setButtonText (const juce::String& newText);
+    juce::String getText();
 
     //==============================================================================
-    void setImages (const Drawable* normalImage);
-    bool setImageFromFile (File file);
+    void setImages (const juce::Drawable* normalImage);
+    bool setImageFromFile (juce::File file);
 
     //==============================================================================
-    const Drawable* getCurrentImage() const throw();
-    const Drawable* getNormalImage() const throw();
-    const Colour& getBackgroundColour() const throw();
+    const juce::Drawable* getCurrentImage() const throw();
+    const juce::Drawable* getNormalImage() const throw();
+    const juce::Colour& getBackgroundColour() const throw();
 
-    String Description;
+    juce::String Description;
     float imageSize;
     void setCenteredText (bool centered);
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
+protected:
+    void drawButtonBackground (juce::Graphics& g,
+                               Button& button,
+                               const juce::Colour& backgroundColour,
+                               bool isMouseOverButton,
+                               bool isButtonDown);
 
-        protected : void
-                    drawButtonBackground (Graphics& g,
-                                          Button& button,
-                                          const Colour& backgroundColour,
-                                          bool isMouseOverButton,
-                                          bool isButtonDown);
-
-    void paintButton (Graphics& g,
+    void paintButton (juce::Graphics& g,
                       bool isMouseOverButton,
                       bool isButtonDown) override;
 
 private:
     bool centeredText;
     int index;
-    std::unique_ptr<Drawable> normalImage;
-    Colour bgColour, textColour;
+    std::unique_ptr<juce::Drawable> normalImage;
+    juce::Colour bgColour, textColour;
     void deleteImages();
-    String iconPath;
-    Label* text;
+    juce::String iconPath;
+    juce::Label* text;
 
     MidiPad (const MidiPad&);
     const MidiPad& operator= (const MidiPad&);
+
+    JUCE_LEAK_DETECTOR (MidiPad)
 };
 
 #endif

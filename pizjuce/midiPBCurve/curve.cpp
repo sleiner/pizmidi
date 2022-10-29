@@ -1,6 +1,8 @@
 #include "curve.h"
 #include "curvegui.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /*
     This function must be implemented to create the actual plugin object that
@@ -48,7 +50,7 @@ MidiCurve::MidiCurve()
     {
         for (int i = 0; i < getNumPrograms(); i++)
         {
-            programs[i].name = String ("Program ") + String (i + 1);
+            programs[i].name = juce::String ("Program ") + juce::String (i + 1);
         }
     }
     //start up with the first program
@@ -91,40 +93,40 @@ void MidiCurve::setParameter (int index, float newValue)
     }
 }
 
-const String MidiCurve::getParameterName (int index)
+const juce::String MidiCurve::getParameterName (int index)
 {
     if (index == kChannel)
         return "Channel";
-    return "param" + String (index);
+    return "param" + juce::String (index);
 }
 
-const String MidiCurve::getParameterText (int index)
+const juce::String MidiCurve::getParameterText (int index)
 {
     if (index == kChannel)
     {
         if (roundToInt (param[kChannel] * 16.0f) == 0)
-            return String ("Any");
+            return juce::String ("Any");
         else
-            return String (roundToInt (param[kChannel] * 16.0f));
+            return juce::String (roundToInt (param[kChannel] * 16.0f));
     }
     else if (index < getNumParameters())
-        return String (roundToInt (127.f * param[index]));
+        return juce::String (roundToInt (127.f * param[index]));
     else
-        return String();
+        return juce::String();
 }
 
-const String MidiCurve::getInputChannelName (const int channelIndex) const
+const juce::String MidiCurve::getInputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
-const String MidiCurve::getOutputChannelName (const int channelIndex) const
+const juce::String MidiCurve::getOutputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
 bool MidiCurve::isInputChannelStereoPair (int index) const
@@ -162,17 +164,17 @@ void MidiCurve::setCurrentProgram (int index)
     sendChangeMessage();
 }
 
-void MidiCurve::changeProgramName (int index, const String& newName)
+void MidiCurve::changeProgramName (int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
         programs[index].name = newName;
 }
 
-const String MidiCurve::getProgramName (int index)
+const juce::String MidiCurve::getProgramName (int index)
 {
     if (index < getNumPrograms())
         return programs[index].name;
-    return String();
+    return juce::String();
 }
 
 int MidiCurve::getCurrentProgram()
@@ -206,7 +208,7 @@ float MidiCurve::getPointValue (int n, int y)
 
 float MidiCurve::findValue (float input)
 {
-    PathFlatteningIterator it (path, {}, (float) midiScaler);
+    juce::PathFlatteningIterator it (path, {}, (float) midiScaler);
     while (it.next())
     {
         if (it.x1 == input)
@@ -227,15 +229,15 @@ double MidiCurve::linearInterpolate (double x, double y1, double y2, double x1, 
     return slope * x + y0;
 }
 
-void MidiCurve::processBlock (AudioSampleBuffer& buffer,
-                              MidiBuffer& midiMessages)
+void MidiCurve::processBlock (juce::AudioSampleBuffer& buffer,
+                              juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
     const int channel = roundToInt (param[kChannel] * 16.0f);
-    MidiBuffer output;
+    juce::MidiBuffer output;
     for (auto&& msgMetadata : midiMessages)
     {
         auto midi_message  = msgMetadata.getMessage();
@@ -247,12 +249,12 @@ void MidiCurve::processBlock (AudioSampleBuffer& buffer,
             {
                 if (param[kPitchBend] >= 0.5f)
                 {
-                    int v             = midi_message.getPitchWheelValue();
-                    const uint8* data = midi_message.getRawData();
-                    lastCCIn          = v;
-                    v                 = roundToInt (16383.f * findValue (v * (float) 0.00006103888));
-                    lastCCOut         = v;
-                    MidiMessage out   = MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
+                    int v                   = midi_message.getPitchWheelValue();
+                    const juce::uint8* data = midi_message.getRawData();
+                    lastCCIn                = v;
+                    v                       = roundToInt (16383.f * findValue (v * (float) 0.00006103888));
+                    lastCCOut               = v;
+                    juce::MidiMessage out   = juce::MidiMessage (data[0], v & 0x007f, (v & 0x3f80) >> 7);
                     output.addEvent (out, sample_number);
                     sendChangeMessage();
                 }
@@ -279,7 +281,7 @@ void MidiCurve::updatePath()
         midiPoint p = midiPoint (param[i * 2], param[i * 2 + 1], isPointActive (i), isPointControl (i));
         points.addSorted (pointComparator, p);
     }
-    Path myPath;
+    juce::Path myPath;
     if (points[0].isActive)
     {
         myPath.startNewSubPath (0.f, getPointValue (0, 1));
@@ -370,13 +372,13 @@ bool MidiCurve::isPointControl (int point)
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiCurve::createEditor()
+juce::AudioProcessorEditor* MidiCurve::createEditor()
 {
     return new CurveEditor (this);
 }
 
 //==============================================================================
-void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
+void MidiCurve::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
@@ -387,7 +389,7 @@ void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     // add some attributes to it..
     xmlState.setAttribute ("pluginVersion", 1);
@@ -397,7 +399,7 @@ void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
 
     for (int i = 0; i < kNumParams; i++)
     {
-        xmlState.setAttribute (String (i), param[i]);
+        xmlState.setAttribute (juce::String (i), param[i]);
     }
 
     xmlState.setAttribute ("uiWidth", lastUIWidth);
@@ -406,22 +408,22 @@ void MidiCurve::getCurrentProgramStateInformation (MemoryBlock& destData)
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xmlState, destData);
 }
-void MidiCurve::getStateInformation (MemoryBlock& destData)
+void MidiCurve::getStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
     programs[curProgram].lastUIWidth  = lastUIWidth;
 
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
     xmlState.setAttribute ("pluginVersion", 1);
     xmlState.setAttribute ("program", getCurrentProgram());
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        String prefix = "P" + String (p) + ".";
+        juce::String prefix = "P" + juce::String (p) + ".";
         xmlState.setAttribute (prefix + "progname", programs[p].name);
         for (int i = 0; i < kNumParams; i++)
         {
-            xmlState.setAttribute (prefix + String (i), programs[p].param[i]);
+            xmlState.setAttribute (prefix + juce::String (i), programs[p].param[i]);
         }
         xmlState.setAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
         xmlState.setAttribute (prefix + "uiHeight", programs[p].lastUIHeight);
@@ -443,7 +445,7 @@ void MidiCurve::setCurrentProgramStateInformation (const void* data, int sizeInB
             changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
             for (int i = 0; i < kNumParams; i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
             }
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
             lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
@@ -463,10 +465,10 @@ void MidiCurve::setStateInformation (const void* data, int sizeInBytes)
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
-                String prefix = "P" + String (p) + ".";
+                juce::String prefix = "P" + juce::String (p) + ".";
                 for (int i = 0; i < kNumParams; i++)
                 {
-                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
+                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs[p].param[i]);
                 }
                 programs[p].lastUIWidth  = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
                 programs[p].lastUIHeight = xmlState->getIntAttribute (prefix + "uiHeight", programs[p].lastUIHeight);

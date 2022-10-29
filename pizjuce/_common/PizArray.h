@@ -5,7 +5,7 @@
 
 #include <utility>
 
-#include "juce_core/juce_core.h"
+#include <juce_core/juce_core.h>
 
 template <typename ElementType,
           typename TypeOfCriticalSectionToUse = juce::DummyCriticalSection,

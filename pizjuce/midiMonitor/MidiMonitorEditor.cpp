@@ -23,6 +23,7 @@
 #include "MidiMonitorEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -87,7 +88,7 @@ MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
 
     lightnessSlider->setBounds (288, -16, 40, 12);
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
     saveButton.reset (new juce::TextButton ("save"));
@@ -164,10 +165,10 @@ MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
     aboutBox->setVisible (false);
     aboutBox->addMouseListener (this, false);
 
-    addAndMakeVisible (maxLinesEditor = new Slider (L"new slider"));
+    addAndMakeVisible (maxLinesEditor = new juce::Slider (L"new slider"));
     maxLinesEditor->setRange (1, 500000, 1);
-    maxLinesEditor->setSliderStyle (Slider::LinearHorizontal);
-    maxLinesEditor->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    maxLinesEditor->setSliderStyle (juce::Slider::LinearHorizontal);
+    maxLinesEditor->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     maxLinesEditor->addListener (this);
     maxLinesEditor->setSkewFactor (0.2);
 
@@ -190,8 +191,8 @@ MidiMonitorEditor::MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter)
     startTimer (1000 / 10); // 10fps
     numLines = 0;
 
-    bgcolor = Colour (getFilter()->getParameter (0), getFilter()->getParameter (1), getFilter()->getParameter (2), 1.0f);
-    fgcolor = Colour (bgcolor.contrasting (getFilter()->getParameter (3)));
+    bgcolor = juce::Colour (getFilter()->getParameter (0), getFilter()->getParameter (1), getFilter()->getParameter (2), 1.0f);
+    fgcolor = juce::Colour (bgcolor.contrasting (getFilter()->getParameter (3)));
 #if 0
     //[/UserPreSize]
 
@@ -239,7 +240,7 @@ MidiMonitorEditor::~MidiMonitorEditor()
 void MidiMonitorEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
-    g.fillAll (Colour (bgcolor.contrasting (0.2f * (getFilter()->getParameter (3)))));
+    g.fillAll (juce::Colour (bgcolor.contrasting (0.2f * (getFilter()->getParameter (3)))));
 #if 0
     //[/UserPrePaint]
 
@@ -307,11 +308,11 @@ void MidiMonitorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == saveButton.get())
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
-        FileChooser myChooser ("Save MIDI file/log...", File ("midiMonitorLog"), "*.txt; *.mid");
+        juce::FileChooser myChooser ("Save MIDI file/log...", juce::File ("midiMonitorLog"), "*.txt; *.mid");
 
         if (myChooser.browseForFileToSave (true))
         {
-            File logFile (myChooser.getResult());
+            juce::File logFile (myChooser.getResult());
             if (logFile.getFileExtension().isEmpty())
             {
                 getFilter()->writeMidiFile (logFile.withFileExtension ("mid"));
@@ -329,7 +330,7 @@ void MidiMonitorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == menuButton.get())
     {
         //[UserButtonCode_menuButton] -- add your button handler code here..
-        PopupMenu m, sub2, sub3;
+        juce::PopupMenu m, sub2, sub3;
         m.addSectionHeader ("Time Mode:");
         m.addItem (101, "Bars|Beats|Ticks", true, timemode == 0);
         float ppqn = getFilter()->getParameter (kTicks);
@@ -370,15 +371,15 @@ void MidiMonitorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         m.addSeparator();
 
         m.addSectionHeader ("Filter Events:");
-        m.addItem (1, String ("Notes"), true, getFilter()->useNotes);
-        m.addItem (2, String ("CCs"), true, getFilter()->useCC);
-        m.addItem (3, String ("Pitch Wheel"), true, getFilter()->usePB);
-        m.addItem (4, String ("Program Change"), true, getFilter()->usePC);
-        m.addItem (5, String ("Poly Aftertouch"), true, getFilter()->usePA);
-        m.addItem (6, String ("Channel Pressure"), true, getFilter()->useCP);
-        m.addItem (7, String ("Clock"), true, getFilter()->useClock);
-        m.addItem (8, String ("SysEx"), true, getFilter()->useSysEx);
-        m.addItem (9, String ("Other"), true, getFilter()->useOther);
+        m.addItem (1, juce::String ("Notes"), true, getFilter()->useNotes);
+        m.addItem (2, juce::String ("CCs"), true, getFilter()->useCC);
+        m.addItem (3, juce::String ("Pitch Wheel"), true, getFilter()->usePB);
+        m.addItem (4, juce::String ("Program Change"), true, getFilter()->usePC);
+        m.addItem (5, juce::String ("Poly Aftertouch"), true, getFilter()->usePA);
+        m.addItem (6, juce::String ("Channel Pressure"), true, getFilter()->useCP);
+        m.addItem (7, juce::String ("Clock"), true, getFilter()->useClock);
+        m.addItem (8, juce::String ("SysEx"), true, getFilter()->useSysEx);
+        m.addItem (9, juce::String ("Other"), true, getFilter()->useOther);
         m.addSeparator();
         m.addItem (9999, "About...");
 
@@ -528,7 +529,7 @@ void MidiMonitorEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == colorButton.get())
     {
         //[UserButtonCode_colorButton] -- add your button handler code here..
-        PopupMenu m;
+        juce::PopupMenu m;
         m.addCustomItem (-1, *hueSlider, 100, 16, false);
         m.addCustomItem (-1, *saturationSlider, 100, 16, false);
         m.addCustomItem (-1, *lightnessSlider, 100, 16, false);
@@ -582,7 +583,7 @@ void MidiMonitorEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MidiMonitorEditor::mouseDown (const MouseEvent& e)
+void MidiMonitorEditor::mouseDown (const juce::MouseEvent& e)
 {
     if (e.eventComponent == aboutBox.get())
     {
@@ -593,25 +594,25 @@ void MidiMonitorEditor::mouseDown (const MouseEvent& e)
 void MidiMonitorEditor::timerCallback()
 {
     int hours, minutes, seconds, frames;
-    MidiMessage::SmpteTimecodeType timeCode;
+    juce::MidiMessage::SmpteTimecodeType timeCode;
     bool showtime = getFilter()->getParameter (kTime) >= 0.5f;
 
     getFilter()->getCallbackLock().enter();
-    MidiMessageSequence messages (*getFilter()->getMessages());
+    juce::MidiMessageSequence messages (*getFilter()->getMessages());
     getFilter()->getMessages()->clear();
     getFilter()->getCallbackLock().exit();
 
     for (int i = 0; i < messages.getNumEvents(); i++)
     {
-        String midiLine = String();
-        MidiMessage msg = messages.getEventPointer (i)->message;
+        juce::String midiLine = juce::String();
+        juce::MidiMessage msg = messages.getEventPointer (i)->message;
         {
             bool ignore = true;
             if (msg.isNoteOnOrOff() && getFilter()->useNotes)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
                 midiLine += "Note ";
                 if (msg.isNoteOn())
                 {
@@ -621,65 +622,65 @@ void MidiMonitorEditor::timerCallback()
                 {
                     midiLine += "Off: ";
                 }
-                midiLine += MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
-                          + " (" + String (msg.getNoteNumber()) + "), Velocity: "
-                          + String (msg.getVelocity());
+                midiLine += juce::MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
+                          + " (" + juce::String (msg.getNoteNumber()) + "), Velocity: "
+                          + juce::String (msg.getVelocity());
             }
             else if (msg.isController() && getFilter()->useCC)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
-                midiLine += "CC #" + String (msg.getControllerNumber());
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
+                midiLine += "CC #" + juce::String (msg.getControllerNumber());
                 auto controllerDescription = msg.getControllerName (msg.getControllerNumber());
                 if (controllerDescription != nullptr)
                 {
-                    midiLine += " (" + String (controllerDescription) + "),";
+                    midiLine += " (" + juce::String (controllerDescription) + "),";
                 }
-                midiLine += " Value: " + String (msg.getControllerValue());
+                midiLine += " Value: " + juce::String (msg.getControllerValue());
             }
             else if (msg.isPitchWheel() && getFilter()->usePB)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
-                midiLine += "Pitch Wheel: " + String (msg.getPitchWheelValue());
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
+                midiLine += "Pitch Wheel: " + juce::String (msg.getPitchWheelValue());
                 if (msg.getPitchWheelValue() == 0x2000)
                     midiLine += " (Center)";
                 else if (msg.getPitchWheelValue() > 0x2000)
-                    midiLine += " (+" + String (msg.getPitchWheelValue() - 0x2000) + ")";
+                    midiLine += " (+" + juce::String (msg.getPitchWheelValue() - 0x2000) + ")";
                 else
-                    midiLine += " (" + String (msg.getPitchWheelValue() - 0x2000) + ")";
+                    midiLine += " (" + juce::String (msg.getPitchWheelValue() - 0x2000) + ")";
             }
             else if (msg.isAftertouch() && getFilter()->usePA)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
                 midiLine += "Poly Aftertouch: "
-                          + MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
-                          + " (" + String (msg.getNoteNumber()) + "), Value: "
-                          + String (msg.getAfterTouchValue());
+                          + juce::MidiMessage::getMidiNoteName (msg.getNoteNumber(), true, true, 3)
+                          + " (" + juce::String (msg.getNoteNumber()) + "), Value: "
+                          + juce::String (msg.getAfterTouchValue());
             }
             else if (msg.isChannelPressure() && getFilter()->useCP)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
-                midiLine += "Channel Pressure: " + String (msg.getChannelPressureValue());
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
+                midiLine += "Channel Pressure: " + juce::String (msg.getChannelPressureValue());
             }
             else if (msg.isProgramChange() && getFilter()->usePC)
             {
                 ignore = false;
                 if (msg.getChannel() > 0)
-                    midiLine = "Ch." + String (msg.getChannel()) + "  ";
-                midiLine += "Program Change: " + String (msg.getProgramChangeNumber() + 1);
+                    midiLine = "Ch." + juce::String (msg.getChannel()) + "  ";
+                midiLine += "Program Change: " + juce::String (msg.getProgramChangeNumber() + 1);
             }
             else if (msg.isSysEx() && getFilter()->useSysEx)
             {
                 ignore   = false;
                 midiLine = "Sysex: ";
-                midiLine += String (msg.getSysExDataSize());
+                midiLine += juce::String (msg.getSysExDataSize());
                 midiLine += " bytes";
             }
             else if (msg.isTimeSignatureMetaEvent() && getFilter()->useOther)
@@ -689,15 +690,15 @@ void MidiMonitorEditor::timerCallback()
                 msg.getTimeSignatureInfo (newNumerator, newDenominator);
 
                 midiLine = "Time Signature: ";
-                midiLine += String (newNumerator);
+                midiLine += juce::String (newNumerator);
                 midiLine += " / ";
-                midiLine += String (newDenominator);
+                midiLine += juce::String (newDenominator);
             }
             else if (msg.isTempoMetaEvent() && getFilter()->useOther)
             {
                 ignore   = false;
                 midiLine = "Tempo: ";
-                midiLine += String (msg.getTempoSecondsPerQuarterNote());
+                midiLine += juce::String (msg.getTempoSecondsPerQuarterNote());
                 //midiLine += " ";
                 //midiLine += String (msg.getTempoMetaEventTickLength (ticksPerQuarterNote));
             }
@@ -708,28 +709,28 @@ void MidiMonitorEditor::timerCallback()
 
                 switch (msg.getMidiMachineControlCommand())
                 {
-                    case MidiMessage::mmc_stop:
+                    case juce::MidiMessage::mmc_stop:
                         midiLine += "stop";
                         break;
-                    case MidiMessage::mmc_play:
+                    case juce::MidiMessage::mmc_play:
                         midiLine += "play";
                         break;
-                    case MidiMessage::mmc_deferredplay:
+                    case juce::MidiMessage::mmc_deferredplay:
                         midiLine += "deferredplay";
                         break;
-                    case MidiMessage::mmc_fastforward:
+                    case juce::MidiMessage::mmc_fastforward:
                         midiLine += "fastforward";
                         break;
-                    case MidiMessage::mmc_rewind:
+                    case juce::MidiMessage::mmc_rewind:
                         midiLine += "rewind";
                         break;
-                    case MidiMessage::mmc_recordStart:
+                    case juce::MidiMessage::mmc_recordStart:
                         midiLine += "recordStart";
                         break;
-                    case MidiMessage::mmc_recordStop:
+                    case juce::MidiMessage::mmc_recordStop:
                         midiLine += "recordStop";
                         break;
-                    case MidiMessage::mmc_pause:
+                    case juce::MidiMessage::mmc_pause:
                         midiLine += "pause";
                         break;
                 }
@@ -753,15 +754,15 @@ void MidiMonitorEditor::timerCallback()
             {
                 ignore   = false;
                 midiLine = "Song Position: ";
-                midiLine += String (msg.getSongPositionPointerMidiBeat());
+                midiLine += juce::String (msg.getSongPositionPointerMidiBeat());
             }
             else if (msg.isQuarterFrame() && getFilter()->useOther)
             {
                 ignore   = false;
                 midiLine = "MTC Quarter Frame: ";
-                midiLine += String (msg.getQuarterFrameSequenceNumber());
+                midiLine += juce::String (msg.getQuarterFrameSequenceNumber());
                 midiLine += " ";
-                midiLine += String (msg.getQuarterFrameValue());
+                midiLine += juce::String (msg.getQuarterFrameValue());
             }
             else if (msg.isFullFrame() && getFilter()->useOther)
             {
@@ -770,27 +771,27 @@ void MidiMonitorEditor::timerCallback()
 
                 msg.getFullFrameParameters (hours, minutes, seconds, frames, timeCode);
 
-                midiLine += String (hours);
+                midiLine += juce::String (hours);
                 midiLine += ":";
-                midiLine += String (minutes);
+                midiLine += juce::String (minutes);
                 midiLine += ":";
-                midiLine += String (seconds);
+                midiLine += juce::String (seconds);
                 midiLine += ":";
-                midiLine += String (frames);
+                midiLine += juce::String (frames);
 
                 midiLine += " timecode: ";
                 switch (timeCode)
                 {
-                    case MidiMessage::fps24:
+                    case juce::MidiMessage::fps24:
                         midiLine += "fps24";
                         break;
-                    case MidiMessage::fps25:
+                    case juce::MidiMessage::fps25:
                         midiLine += "fps25";
                         break;
-                    case MidiMessage::fps30drop:
+                    case juce::MidiMessage::fps30drop:
                         midiLine += "fps30drop";
                         break;
-                    case MidiMessage::fps30:
+                    case juce::MidiMessage::fps30:
                         midiLine += "fps30";
                         break;
                 }
@@ -799,13 +800,13 @@ void MidiMonitorEditor::timerCallback()
             {
                 ignore   = false;
                 midiLine = "MMC GOTO: ";
-                midiLine += String (hours);
+                midiLine += juce::String (hours);
                 midiLine += ":";
-                midiLine += String (minutes);
+                midiLine += juce::String (minutes);
                 midiLine += ":";
-                midiLine += String (seconds);
+                midiLine += juce::String (seconds);
                 midiLine += ":";
-                midiLine += String (frames);
+                midiLine += juce::String (frames);
             }
             else if (msg.isMidiClock() && getFilter()->useClock)
             {
@@ -830,7 +831,7 @@ void MidiMonitorEditor::timerCallback()
             else if (getFilter()->useOther)
             {
                 ignore = false;
-                midiLine += "??? (" + String (msg.getRawDataSize()) + " bytes)";
+                midiLine += "??? (" + juce::String (msg.getRawDataSize()) + " bytes)";
             }
 
             if (! ignore)
@@ -839,7 +840,7 @@ void MidiMonitorEditor::timerCallback()
                 {
                     //int end = midiOutputEditor->getText().upToFirstOccurrenceOf("\n",true,true).length();
                     //const Range<int> firstLine(0,end);
-                    midiOutputEditor->setHighlightedRegion (Range<int> (0, midiOutputEditor->getText().upToFirstOccurrenceOf ("\n", true, true).length()));
+                    midiOutputEditor->setHighlightedRegion (juce::Range<int> (0, midiOutputEditor->getText().upToFirstOccurrenceOf ("\n", true, true).length()));
                     midiOutputEditor->setReadOnly (false);
                     midiOutputEditor->cut();
                     midiOutputEditor->setReadOnly (true);
@@ -851,19 +852,19 @@ void MidiMonitorEditor::timerCallback()
 
                 if (showbytes)
                 {
-                    Font defaultFont   = midiOutputEditor->getFont();
-                    String bytesString = numLines > 1 ? "\n" : String();
-                    bytesString += String::toHexString (msg.getRawData(), msg.getRawDataSize()).toUpperCase() + "  ";
-                    midiOutputEditor->setFont (Font ("Courier New", midiOutputEditor->getFont().getHeight(), Font::plain));
+                    juce::Font defaultFont   = midiOutputEditor->getFont();
+                    juce::String bytesString = numLines > 1 ? "\n" : juce::String();
+                    bytesString += juce::String::toHexString (msg.getRawData(), msg.getRawDataSize()).toUpperCase() + "  ";
+                    midiOutputEditor->setFont (juce::Font ("Courier New", midiOutputEditor->getFont().getHeight(), juce::Font::plain));
                     midiOutputEditor->insertTextAtCaret (bytesString);
                     midiOutputEditor->setFont (defaultFont);
                 }
                 if (showtime)
                 {
-                    String timeString = (numLines > 1 && ! showbytes) ? "\n" : String();
+                    juce::String timeString = (numLines > 1 && ! showbytes) ? "\n" : juce::String();
                     timeString += ppqToString (msg.getTimeStamp(), getFilter()->getTimeSigNumerator(), getFilter()->getTimeSigDenominator(), getFilter()->lastPosInfo.bpm) + "  ";
-                    Font defaultFont = midiOutputEditor->getFont();
-                    midiOutputEditor->setFont (Font ("Courier New", midiOutputEditor->getFont().getHeight(), Font::bold));
+                    juce::Font defaultFont = midiOutputEditor->getFont();
+                    midiOutputEditor->setFont (juce::Font ("Courier New", midiOutputEditor->getFont().getHeight(), juce::Font::bold));
                     midiOutputEditor->insertTextAtCaret (timeString);
                     midiOutputEditor->setFont (defaultFont);
                 }
@@ -876,7 +877,7 @@ void MidiMonitorEditor::timerCallback()
 }
 
 //==============================================================================
-void MidiMonitorEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiMonitorEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     updateParametersFromFilter();
 }
@@ -912,57 +913,57 @@ void MidiMonitorEditor::updateParametersFromFilter()
         timemode = 2;
 
     //set sliders
-    hueSlider->setValue (hue, sendNotification);
-    saturationSlider->setValue (sat, sendNotification);
-    lightnessSlider->setValue (bri, sendNotification);
+    hueSlider->setValue (hue, juce::sendNotification);
+    saturationSlider->setValue (sat, juce::sendNotification);
+    lightnessSlider->setValue (bri, juce::sendNotification);
     //slider4->setValue(contrast,sendNotification);
-    maxLinesEditor->setValue (maxLines, dontSendNotification);
+    maxLinesEditor->setValue (maxLines, juce::dontSendNotification);
 
     //set button states
     if (power >= 0.5f)
     {
         powerButton->setButtonText ("on");
-        powerButton->setToggleState (true, dontSendNotification);
+        powerButton->setToggleState (true, juce::dontSendNotification);
     }
     else
     {
         powerButton->setButtonText ("off");
-        powerButton->setToggleState (false, dontSendNotification);
+        powerButton->setToggleState (false, juce::dontSendNotification);
     }
-    thruButton->setToggleState (thru >= 0.5f, dontSendNotification);
-    wrapButton->setToggleState (wrap >= 0.5f, dontSendNotification);
-    bytesButton->setToggleState (showbytes, dontSendNotification);
-    timeButton->setToggleState (showtime, dontSendNotification);
+    thruButton->setToggleState (thru >= 0.5f, juce::dontSendNotification);
+    wrapButton->setToggleState (wrap >= 0.5f, juce::dontSendNotification);
+    bytesButton->setToggleState (showbytes, juce::dontSendNotification);
+    timeButton->setToggleState (showtime, juce::dontSendNotification);
 
     setSize (filter->lastUIWidth, filter->lastUIHeight);
 
     //set colors
-    bgcolor = Colour (hue, sat, bri, 1.0f);
-    fgcolor = Colour (bgcolor.contrasting (contrast));
+    bgcolor = juce::Colour (hue, sat, bri, 1.0f);
+    fgcolor = juce::Colour (bgcolor.contrasting (contrast));
 
-    clearButton->setColour (TextButton::textColourOnId, fgcolor);
-    clearButton->setColour (TextButton::textColourOffId, fgcolor);
-    clearButton->setColour (TextButton::buttonColourId, bgcolor);
-    saveButton->setColour (TextButton::textColourOnId, fgcolor);
-    saveButton->setColour (TextButton::textColourOffId, fgcolor);
-    saveButton->setColour (TextButton::buttonColourId, bgcolor);
-    menuButton->setColour (TextButton::textColourOnId, fgcolor);
-    menuButton->setColour (TextButton::textColourOffId, fgcolor);
-    menuButton->setColour (TextButton::buttonColourId, bgcolor);
-    colorButton->setColour (TextButton::textColourOnId, fgcolor);
-    colorButton->setColour (TextButton::textColourOffId, fgcolor);
-    colorButton->setColour (TextButton::buttonColourId, bgcolor);
+    clearButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    clearButton->setColour (juce::TextButton::textColourOffId, fgcolor);
+    clearButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    saveButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    saveButton->setColour (juce::TextButton::textColourOffId, fgcolor);
+    saveButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    menuButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    menuButton->setColour (juce::TextButton::textColourOffId, fgcolor);
+    menuButton->setColour (juce::TextButton::buttonColourId, bgcolor);
+    colorButton->setColour (juce::TextButton::textColourOnId, fgcolor);
+    colorButton->setColour (juce::TextButton::textColourOffId, fgcolor);
+    colorButton->setColour (juce::TextButton::buttonColourId, bgcolor);
 
-    midiOutputEditor->setColour (TextEditor::backgroundColourId, bgcolor);
-    midiOutputEditor->setColour (TextEditor::textColourId, fgcolor);
+    midiOutputEditor->setColour (juce::TextEditor::backgroundColourId, bgcolor);
+    midiOutputEditor->setColour (juce::TextEditor::textColourId, fgcolor);
     midiOutputEditor->setMultiLine (true, wrap >= 0.5f);
     repaint();
 }
 
-const String MidiMonitorEditor::ppqToString (const double sppq,
-                                             const int numerator,
-                                             const int denominator,
-                                             const double bpm)
+const juce::String MidiMonitorEditor::ppqToString (const double sppq,
+                                                   const int numerator,
+                                                   const int denominator,
+                                                   const double bpm)
 {
     const wchar_t* const sign = (sppq < 0) ? L"-" : L"";
     const long double absSecs = fabs (sppq * 60.0 / bpm);
@@ -970,13 +971,13 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
     if (timemode == 2)
     {
         //buffer #/sample delta
-        return "b." + String ((int) sppq) + " s." + String (roundToInt (fmod (sppq, 1.0) * 1000000)).paddedLeft ('0', 4);
+        return "b." + juce::String ((int) sppq) + " s." + juce::String (roundToInt (fmod (sppq, 1.0) * 1000000)).paddedLeft ('0', 4);
     }
     else if (timemode == 3)
     {
         //total samples
-        const uint64 samples = roundToInt (getFilter()->getSampleRate() * absSecs);
-        return sign + String (samples);
+        const juce::uint64 samples = roundToInt (getFilter()->getSampleRate() * absSecs);
+        return sign + juce::String (samples);
     }
     else if (timemode == 0)
     {
@@ -1036,7 +1037,7 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
             ticks = (int) tpb - ticks - 1;
         }
 
-        String padding = String();
+        juce::String padding = juce::String();
         if (ticks < 10 && tpb > 100.0)
             padding = L"00";
         else if (ticks < 100 && tpb > 100.0)
@@ -1044,11 +1045,11 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
         else if (ticks < 10 && tpb >= 10.0)
             padding = L"0";
 
-        String s;
+        juce::String s;
         if (tpb > 0.0)
-            return (bar == 0 ? L"" : sign) + String (bar) + "|" + String (beat) + "|" + padding + String (ticks);
+            return (bar == 0 ? L"" : sign) + juce::String (bar) + "|" + juce::String (beat) + "|" + padding + juce::String (ticks);
         else
-            return (bar == 0 ? L"" : sign) + String (bar) + "|" + String (beat);
+            return (bar == 0 ? L"" : sign) + juce::String (bar) + "|" + juce::String (beat);
     }
     else
     {
@@ -1100,68 +1101,68 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
             mins = (int) (absSecs / 60.0);
         const int secs = ((int) absSecs) % 60;
 
-        String s1;
+        juce::String s1;
         if (showhrs)
         {
             if (showms)
             {
                 if (fps == 1000.0)
-                    s1 = String::formatted (L"%s%02d:%02d:%02d.%03d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * 1000) % 1000);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d.%03d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * 1000) % 1000);
                 else if (fps <= 10.0)
-                    s1 = String::formatted (L"%s%02d:%02d:%02d:%.1d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%.1d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
                     {
-                        int64 frameNumber = int64 (absSecs * 29.97);
+                        juce::int64 frameNumber = juce::int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
                         int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
                         int dhours   = int ((((frameNumber / 30) / 60) / 60) % 24);
 
-                        s1 = String::formatted (L"%s%02d;%02d;%02d;%.2d",
-                                                sign,
-                                                dhours,
-                                                dminutes,
-                                                dseconds,
-                                                frames);
+                        s1 = juce::String::formatted (L"%s%02d;%02d;%02d;%.2d",
+                                                      sign,
+                                                      dhours,
+                                                      dminutes,
+                                                      dseconds,
+                                                      frames);
                     }
                     else
-                        s1 = String::formatted (L"%s%02d:%02d:%02d:%.2d",
-                                                sign,
-                                                hours,
-                                                mins,
-                                                secs,
-                                                int64 (absSecs * fps) % (int) fps);
+                        s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%.2d",
+                                                      sign,
+                                                      hours,
+                                                      mins,
+                                                      secs,
+                                                      juce::int64 (absSecs * fps) % (int) fps);
                 }
                 else
-                    s1 = String::formatted (L"%s%02d:%02d:%02d:%03d",
-                                            sign,
-                                            hours,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%02d:%02d:%02d:%03d",
+                                                  sign,
+                                                  hours,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 if (showsubfr)
-                    s1 += String (L"::") + String::formatted (L"%02d", (int64 (absSecs * fps * 100.0) % 100));
+                    s1 += juce::String (L"::") + juce::String::formatted (L"%02d", (juce::int64 (absSecs * fps * 100.0) % 100));
             }
             else
             {
-                s1 = String::formatted (L"%s%02d:%02d:%02d",
-                                        sign,
-                                        hours,
-                                        mins,
-                                        secs);
+                s1 = juce::String::formatted (L"%s%02d:%02d:%02d",
+                                              sign,
+                                              hours,
+                                              mins,
+                                              secs);
             }
         }
         else
@@ -1169,55 +1170,55 @@ const String MidiMonitorEditor::ppqToString (const double sppq,
             if (showms)
             {
                 if (fps == 1000.0)
-                    s1 = String::formatted (L"%s%d:%02d.%03d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * 1000) % 1000);
+                    s1 = juce::String::formatted (L"%s%d:%02d.%03d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * 1000) % 1000);
                 else if (fps <= 10.0)
-                    s1 = String::formatted (L"%s%d:%02d:%.1d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%d:%02d:%.1d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 else if (fps <= 100.0)
                 {
                     if (dropframe)
                     {
-                        int64 frameNumber = int64 (absSecs * 29.97);
+                        juce::int64 frameNumber = juce::int64 (absSecs * 29.97);
                         frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
                         int frames   = int (frameNumber % 30);
                         int dseconds = int ((frameNumber / 30) % 60);
                         int dminutes = int (((frameNumber / 30) / 60) % 60);
 
-                        s1 = String::formatted (L"%s%d:%02d;%.2d",
-                                                sign,
-                                                dminutes,
-                                                dseconds,
-                                                frames);
+                        s1 = juce::String::formatted (L"%s%d:%02d;%.2d",
+                                                      sign,
+                                                      dminutes,
+                                                      dseconds,
+                                                      frames);
                     }
                     else
-                        s1 = String::formatted (L"%s%d:%02d:%.2d",
-                                                sign,
-                                                mins,
-                                                secs,
-                                                int64 (absSecs * fps) % (int) fps);
+                        s1 = juce::String::formatted (L"%s%d:%02d:%.2d",
+                                                      sign,
+                                                      mins,
+                                                      secs,
+                                                      juce::int64 (absSecs * fps) % (int) fps);
                 }
                 else
-                    s1 = String::formatted (L"%s%d:%02d:%03d",
-                                            sign,
-                                            mins,
-                                            secs,
-                                            int64 (absSecs * fps) % (int) fps);
+                    s1 = juce::String::formatted (L"%s%d:%02d:%03d",
+                                                  sign,
+                                                  mins,
+                                                  secs,
+                                                  juce::int64 (absSecs * fps) % (int) fps);
                 if (showsubfr)
-                    s1 += String (L"::") + String::formatted (L"%02d", (int64 (absSecs * fps * 100.0) % 100));
+                    s1 += juce::String (L"::") + juce::String::formatted (L"%02d", (juce::int64 (absSecs * fps * 100.0) % 100));
             }
             else
             {
-                s1 = String::formatted (L"%s%d:%02d",
-                                        sign,
-                                        mins,
-                                        secs);
+                s1 = juce::String::formatted (L"%s%d:%02d",
+                                              sign,
+                                              mins,
+                                              secs);
             }
         }
         return s1;

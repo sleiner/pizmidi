@@ -3,17 +3,16 @@
 #include "Module.h"
 #include "ModulePane.h"
 
+using juce::roundToInt;
+
 ModuleGUI::ModuleGUI (Module* module)
 {
-    // Bouml preserved body begin 0003C20D
     this->module = module;
     this->setMouseClickGrabsKeyboardFocus (false);
-    // Bouml preserved body end 0003C20D
 }
 
-void ModuleGUI::mouseDrag (const MouseEvent& e)
+void ModuleGUI::mouseDrag (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003B80D
     module->mouseDrag (e);
     if (e.mods.isLeftButtonDown())
     {
@@ -27,15 +26,12 @@ void ModuleGUI::mouseDrag (const MouseEvent& e)
         else
             pane->mouseDrag (e.getEventRelativeTo (pane));
     }
-
-    // Bouml preserved body end 0003B80D
 }
 
-void ModuleGUI::mouseUp (const MouseEvent& e)
+void ModuleGUI::mouseUp (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003B88D
     module->mouseUp (e);
-    //pane->mouseUp(e.getEventRelativeTo(pane));
+
     if (e.mods.isLeftButtonDown() && (e.mods.isAltDown() || e.mods.isCtrlDown()))
     {
         if (e.mods.isCtrlDown())
@@ -47,13 +43,10 @@ void ModuleGUI::mouseUp (const MouseEvent& e)
             pane->selectedModules.deselectAll();
         }
     }
-
-    // Bouml preserved body end 0003B88D
 }
 
-void ModuleGUI::mouseDown (const MouseEvent& e)
+void ModuleGUI::mouseDown (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003B90D
     module->mouseDown (e);
     pane->mouseDown (e.getEventRelativeTo (pane));
     if (e.mods.isLeftButtonDown() && (e.mods.isAltDown() || e.mods.isCtrlDown()))
@@ -67,78 +60,58 @@ void ModuleGUI::mouseDown (const MouseEvent& e)
     }
     else if (e.mods.isRightButtonDown())
     {
-        //this->selectionBool = pane->selectedModules.addToSelectionOnMouseDown(this,e.mods);
         this->toFront (true);
     }
-    // Bouml preserved body end 0003B90D
 }
 
-void ModuleGUI::setOriginalBounds (const Rectangle<int> bounds)
+void ModuleGUI::setOriginalBounds (const juce::Rectangle<int> bounds)
 {
-    // Bouml preserved body begin 0003DF8D
     module->setXY ((float) bounds.getX(), (float) bounds.getY());
-    // Bouml preserved body end 0003DF8D
 }
 
-Rectangle<int> ModuleGUI::getOriginalBounds()
+juce::Rectangle<int> ModuleGUI::getOriginalBounds()
 {
-    // Bouml preserved body begin 0003DA8D
-    return Rectangle<int> (roundToInt (module->getX()), roundToInt (module->getY()), module->size, module->size);
-    // Bouml preserved body end 0003DA8D
+    return { roundToInt (module->getX()), roundToInt (module->getY()), module->size, module->size };
 }
 
-//==============================================================================
-
-void ModuleGUI::paint (Graphics& g)
+void ModuleGUI::paint (juce::Graphics& g)
 {
-    // Bouml preserved body begin 0003DC0D
     int s = getWidth();
     g.setColour (module->colour);
     g.fillEllipse (2.f, 2.f, (float) (s - 4), (float) (s - 4));
     if (isSelected())
     {
-        g.setColour (Colours::black);
+        g.setColour (juce::Colours::black);
         g.drawEllipse (2, 2, (float) (s - 4), (float) (s - 4), 2);
     }
 
-    g.setColour (Colours::white);
-    g.setFont (g.getCurrentFont().withHeight (s * 0.4f).withStyle (Font::bold));
-    g.drawFittedText (module->name, 0, 0, s, s, Justification::centred, 1);
-    // Bouml preserved body end 0003DC0D
+    g.setColour (juce::Colours::white);
+    g.setFont (g.getCurrentFont().withHeight (s * 0.4f).withStyle (juce::Font::bold));
+    g.drawFittedText (module->name, 0, 0, s, s, juce::Justification::centred, 1);
 }
 
-void ModuleGUI::setPane (ModulePane* pane)
+void ModuleGUI::setPane (ModulePane* paneToSet)
 {
-    // Bouml preserved body begin 0003DD0D
-    this->pane = pane;
-    // Bouml preserved body end 0003DD0D
+    this->pane = paneToSet;
 }
 
 void ModuleGUI::startDrag (juce::MouseEvent const& e)
 {
-    // Bouml preserved body begin 0003DE0D
     this->dragger.startDraggingComponent (this, e);
-    // Bouml preserved body end 0003DE0D
 }
 
-void ModuleGUI::drag (const MouseEvent& e)
+void ModuleGUI::drag (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003DE8D
     dragger.dragComponent (this, e, nullptr);
     refreshOriginalBounds();
-    // Bouml preserved body end 0003DE8D
 }
 
 bool ModuleGUI::isSelected()
 {
-    // Bouml preserved body begin 0003E40D
     return this->pane->selectedModules.isSelected (this);
-    // Bouml preserved body end 0003E40D
 }
 
 Module* ModuleGUI::getModule()
 {
-    // Bouml preserved body begin 0003E88D
     return module;
-    // Bouml preserved body end 0003E88D
 }

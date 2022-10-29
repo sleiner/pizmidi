@@ -20,9 +20,9 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/ClickableLabel.h"
 #include "../_common/VSTSlider.h"
@@ -51,9 +51,9 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void clickableLabelMouseDown (ClickableLabel* label, const MouseEvent& e) override {}
-    void clickableLabelMouseDoubleClick (ClickableLabel* label, const MouseEvent& e) override { label->edit(); }
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void clickableLabelMouseDown (ClickableLabel* label, const juce::MouseEvent& e) override {}
+    void clickableLabelMouseDoubleClick (ClickableLabel* label, const juce::MouseEvent& e) override { label->edit(); }
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -66,7 +66,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     //    ResizableCornerComponent* resizer;
     //    ComponentBoundsConstrainer resizeLimits;
-    TooltipWindow tooltipWindow;
+    juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
 
     bool minimized;

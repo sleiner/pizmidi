@@ -1,5 +1,10 @@
 #include "MidiPad.h"
 
+using juce::jlimit;
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
+
 MidiPad::MidiPad (int _index)
     : Button ("MidiPad"),
       normalImage (nullptr),
@@ -7,8 +12,8 @@ MidiPad::MidiPad (int _index)
       text (nullptr)
 
 {
-    backgroundOff = Colour (0xffbbbbff);
-    backgroundOn  = Colour (0xff3333ff);
+    backgroundOff = juce::Colour (0xffbbbbff);
+    backgroundOn  = juce::Colour (0xff3333ff);
 
     Description  = "x:0 y:0";
     showdot      = false;
@@ -24,9 +29,9 @@ MidiPad::MidiPad (int _index)
     isPlaying    = false;
     setMouseClickGrabsKeyboardFocus (false);
 
-    addAndMakeVisible (text = new Label ("label", ""));
+    addAndMakeVisible (text = new juce::Label ("label", ""));
     text->setMouseClickGrabsKeyboardFocus (false);
-    text->setJustificationType (Justification::centredTop);
+    text->setJustificationType (juce::Justification::centredTop);
     text->setEditable (false, false, false);
     text->setInterceptsMouseClicks (false, false);
 
@@ -45,14 +50,14 @@ void MidiPad::deleteImages()
     normalImage.reset();
 }
 
-bool MidiPad::setImageFromFile (File file)
+bool MidiPad::setImageFromFile (juce::File file)
 {
     if (file.exists())
     {
         deleteImages();
 
-        normalImage = Drawable::createFromImageFile (file);
-        if (normalImage != 0)
+        normalImage = juce::Drawable::createFromImageFile (file);
+        if (normalImage != nullptr)
         {
             repaint();
         }
@@ -63,28 +68,28 @@ bool MidiPad::setImageFromFile (File file)
     return false;
 }
 
-void MidiPad::setImages (const Drawable* normal)
+void MidiPad::setImages (const juce::Drawable* normal)
 {
     deleteImages();
-    if (normal != 0)
+    if (normal != nullptr)
     {
         normalImage = normal->createCopy();
     }
     repaint();
 }
 
-void MidiPad::setIconPath (String name)
+void MidiPad::setIconPath (juce::String name)
 {
     iconPath = name;
 }
 
-String MidiPad::getIconPath()
+juce::String MidiPad::getIconPath()
 {
     return iconPath;
 }
 
-void MidiPad::setBackgroundColours (const Colour& toggledOffColour,
-                                    const Colour& toggledOnColour)
+void MidiPad::setBackgroundColours (const juce::Colour& toggledOffColour,
+                                    const juce::Colour& toggledOnColour)
 {
     if (backgroundOff != toggledOffColour) // || backgroundOn != toggledOnColour)
     {
@@ -95,15 +100,15 @@ void MidiPad::setBackgroundColours (const Colour& toggledOffColour,
     }
 }
 
-const Colour& MidiPad::getBackgroundColour() const throw()
+const juce::Colour& MidiPad::getBackgroundColour() const throw()
 {
     return getToggleState() ? backgroundOn
                             : backgroundOff;
 }
 
-void MidiPad::drawButtonBackground (Graphics& g,
+void MidiPad::drawButtonBackground (juce::Graphics& g,
                                     Button& button,
-                                    const Colour& backgroundColour,
+                                    const juce::Colour& backgroundColour,
                                     bool isMouseOverButton,
                                     bool isButtonDown)
 {
@@ -114,7 +119,7 @@ void MidiPad::drawButtonBackground (Graphics& g,
     roundness            = jlimit (0.f, 1.f, roundness);
     const int cornerSize = jmin (roundToInt (width * roundness),
                                  roundToInt (height * roundness));
-    Colour bc (backgroundColour);
+    juce::Colour bc (backgroundColour);
     if (isMouseOverButton)
     {
         if (isButtonDown)
@@ -130,31 +135,31 @@ void MidiPad::drawButtonBackground (Graphics& g,
         g.setColour (bc);
         g.fillPath (hexpath);
         g.setColour (bc.contrasting().withAlpha ((isMouseOverButton) ? 0.6f : 0.4f));
-        g.strokePath (hexpath, PathStrokeType ((isMouseOverButton) ? 2.0f : 1.4f));
+        g.strokePath (hexpath, juce::PathStrokeType ((isMouseOverButton) ? 2.0f : 1.4f));
     }
     else
     {
-        Path p;
+        juce::Path p;
         p.addRoundedRectangle (indent, indent, width - indent * 2.0f, height - indent * 2.0f, (float) cornerSize);
         g.setColour (bc);
         g.fillPath (p);
         g.setColour (bc.contrasting().withAlpha ((isMouseOverButton) ? 0.6f : 0.4f));
-        g.strokePath (p, PathStrokeType ((isMouseOverButton) ? 2.0f : 1.4f));
+        g.strokePath (p, juce::PathStrokeType ((isMouseOverButton) ? 2.0f : 1.4f));
     }
 }
 
-void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void MidiPad::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
-    Rectangle<float> imageSpace;
+    juce::Rectangle<float> imageSpace;
     const float insetX = getWidth() * (1.f - imageSize) * 0.5f;
     const float insetY = getHeight() * (1.f - imageSize) * 0.5f;
     imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
     MidiPad::drawButtonBackground (g, *this, getBackgroundColour(), isMouseOverButton, isButtonDown);
 
-    g.setImageResamplingQuality (Graphics::highResamplingQuality);
+    g.setImageResamplingQuality (juce::Graphics::highResamplingQuality);
     g.setOpacity (1.0f);
 
-    const Drawable* imageToDraw = 0;
+    const juce::Drawable* imageToDraw = nullptr;
 
     if (isEnabled())
     {
@@ -172,32 +177,32 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
         //}
     }
 
-    if (imageToDraw != 0)
+    if (imageToDraw != nullptr)
     {
         imageToDraw->drawWithin (g,
                                  imageSpace,
-                                 RectanglePlacement::centred,
+                                 juce::RectanglePlacement::centred,
                                  1.f);
     }
 
     if (showvalues)
     {
         float fontsize = jmax (0.5f, jmin ((float) (proportionOfWidth (0.2f)), (float) (proportionOfHeight (0.15f))));
-        g.setFont (Font (fontsize * 0.9f, Font::plain));
+        g.setFont (juce::Font (fontsize * 0.9f, juce::Font::plain));
         g.setColour (getBackgroundColour().contrasting (0.8f));
-        String xy = String();
+        juce::String xy = juce::String();
         if (showx && showy)
-            xy = "x:" + String ((int) (x * 127.1)) + " y:" + String ((int) (y * 127.1));
+            xy = "x:" + juce::String ((int) (x * 127.1)) + " y:" + juce::String ((int) (y * 127.1));
         else if (showx)
-            xy = "x:" + String ((int) (x * 127.1));
+            xy = "x:" + juce::String ((int) (x * 127.1));
         else if (showy)
-            xy = "y:" + String ((int) (y * 127.1));
+            xy = "y:" + juce::String ((int) (y * 127.1));
         g.drawFittedText (xy,
                           proportionOfWidth (0.0447f),
                           proportionOfHeight (0.8057f),
                           proportionOfWidth (0.9137f),
                           proportionOfHeight (0.1355f),
-                          Justification::centred,
+                          juce::Justification::centred,
                           1);
     }
     if (showdot)
@@ -205,12 +210,12 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
         x              = jlimit (0.f, 1.f, x);
         y              = jlimit (0.f, 1.f, y);
         float diameter = jlimit (10.f, jmax (10.f, jmin (getHeight(), getWidth()) * 0.4f), jmax ((float) (proportionOfHeight (0.125f)), (float) (proportionOfWidth (0.125f))));
-        g.setColour (Colour (0x88faa52a));
+        g.setColour (juce::Colour (0x88faa52a));
         g.fillEllipse ((float) (proportionOfWidth (x)) - diameter * 0.5f,
                        (float) (proportionOfHeight (1.0f - y)) - diameter * 0.5f,
                        diameter,
                        diameter);
-        g.setColour (Colour (0x99a52a88));
+        g.setColour (juce::Colour (0x99a52a88));
         g.drawEllipse ((float) (proportionOfWidth (x)) - diameter * 0.5f,
                        (float) (proportionOfHeight (1.0f - y)) - diameter * 0.5f,
                        diameter,
@@ -222,12 +227,12 @@ void MidiPad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDow
 void MidiPad::setColour (const juce::Colour& colour)
 {
     setBackgroundColours (colour, colour);
-    text->setColour (Label::textColourId, colour.contrasting (0.8f));
+    text->setColour (juce::Label::textColourId, colour.contrasting (0.8f));
 }
 
 void MidiPad::setCenteredText (bool centered)
 {
-    text->setJustificationType (centered ? Justification::centred : Justification::centredTop);
+    text->setJustificationType (centered ? juce::Justification::centred : juce::Justification::centredTop);
 }
 
 void MidiPad::resized()
@@ -245,7 +250,7 @@ void MidiPad::resized()
     }
     text->setBounds (4, 4, getWidth() - 8, getHeight() - 8);
     float fontsize = jmax (5.f, jmin ((float) (proportionOfWidth (0.2f)), (float) (proportionOfHeight (0.15f))));
-    text->setFont (Font (fontsize, Font::bold));
+    text->setFont (juce::Font (fontsize, juce::Font::bold));
 }
 
 void MidiPad::setHex (bool newhex)
@@ -254,7 +259,7 @@ void MidiPad::setHex (bool newhex)
     repaint();
 }
 
-const Drawable* MidiPad::getCurrentImage() const throw()
+const juce::Drawable* MidiPad::getCurrentImage() const throw()
 {
     //if (isDown())
     //    return getDownImage();
@@ -265,7 +270,7 @@ const Drawable* MidiPad::getCurrentImage() const throw()
     return getNormalImage();
 }
 
-const Drawable* MidiPad::getNormalImage() const throw()
+const juce::Drawable* MidiPad::getNormalImage() const throw()
 {
     return
         //(getToggleState() && normalImageOn != 0) ? normalImageOn :
@@ -308,12 +313,12 @@ bool MidiPad::hitTest (int x, int y)
         return true;
 }
 
-void MidiPad::setText (const String& name)
+void MidiPad::setText (const juce::String& name)
 {
-    text->setText (name, dontSendNotification);
+    text->setText (name, juce::dontSendNotification);
 }
 
-String MidiPad::getText()
+juce::String MidiPad::getText()
 {
     return text->getText();
 }

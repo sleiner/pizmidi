@@ -1,6 +1,9 @@
 #include "PizLooper.h"
-
 #include <vector>
+
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
 
 void PizLooper::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -18,7 +21,7 @@ void PizLooper::killNotes (int slot)
     kill_all_notes[slot] = true;
 }
 
-void PizLooper::endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int slot, int voice, bool kill)
+void PizLooper::endHangingNotesInLoop (juce::MidiBuffer& buffer, int samplePos, int slot, int voice, bool kill)
 {
     noteOffBuffer[slot].clear();
     if (slot == curProgram)
@@ -32,8 +35,8 @@ void PizLooper::endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int sl
         const int numNotes = programs[slot].loop.playingNotes[voice].size();
         for (int i = numNotes; --i >= 0;)
         {
-            LoopNote n          = programs[slot].loop.playingNotes[voice].getUnchecked (i);
-            MidiMessage noteoff = MidiMessage::noteOff (n.lastOutputChannel, n.lastOutputNoteNumber);
+            LoopNote n                = programs[slot].loop.playingNotes[voice].getUnchecked (i);
+            juce::MidiMessage noteoff = juce::MidiMessage::noteOff (n.lastOutputChannel, n.lastOutputNoteNumber);
             buffer.addEvent (noteoff, samplePos);
             DBG ("ending note");
             --playingNote[noteoff.getChannel() - 1][noteoff.getNoteNumber()];
@@ -52,7 +55,7 @@ void PizLooper::endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int sl
                 while (playingNote[ch][n] > 0)
                 {
                     --playingNote[ch][n];
-                    MidiMessage noteoff = MidiMessage::noteOff (ch + 1, n);
+                    juce::MidiMessage noteoff = juce::MidiMessage::noteOff (ch + 1, n);
                     buffer.addEvent (noteoff, samplePos);
                     DBG ("killing note");
                 }
@@ -61,7 +64,7 @@ void PizLooper::endHangingNotesInLoop (MidiBuffer& buffer, int samplePos, int sl
     }
 }
 
-void PizLooper::transposePlayingNotes (MidiBuffer& buffer, int samplePos, int slot, int voice, int numSamples)
+void PizLooper::transposePlayingNotes (juce::MidiBuffer& buffer, int samplePos, int slot, int voice, int numSamples)
 {
     samplePos     = jmax (0, samplePos);
     int numVoices = voice == -1 ? polyphony : 1;
@@ -79,13 +82,13 @@ void PizLooper::transposePlayingNotes (MidiBuffer& buffer, int samplePos, int sl
             const int newNote = tRules[slot]->getTransposedNote (n.note->message.getNoteNumber(), voice, kill, channel);
             if (oldNote != newNote)
             {
-                buffer.addEvent (MidiMessage::noteOff (channel, oldNote), jmax (0, samplePos - 1));
+                buffer.addEvent (juce::MidiMessage::noteOff (channel, oldNote), jmax (0, samplePos - 1));
                 DBG ("transposing note (end old)");
                 --playingNote[channel - 1][oldNote];
                 int offIndex = getIndexOfNoteOff (n.note, slot, voice);
                 if (! kill)
                 {
-                    buffer.addEvent (MidiMessage::noteOn (channel, newNote, n.note->message.getVelocity()), jmin (samplePos + 1, numSamples - 1));
+                    buffer.addEvent (juce::MidiMessage::noteOn (channel, newNote, n.note->message.getVelocity()), jmin (samplePos + 1, numSamples - 1));
                     DBG ("transposing note (start new)");
                     programs[slot].loop.sentNoteAs (n.note, voice, newNote, channel, n.noteOffSample);
                     if (offIndex != -1)
@@ -106,15 +109,15 @@ void PizLooper::transposePlayingNotes (MidiBuffer& buffer, int samplePos, int sl
     }
 }
 
-void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void PizLooper::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
     // time info
     bool wasplaying;
-    AudioPlayHead::CurrentPositionInfo pos;
-    if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
+    juce::AudioPlayHead::CurrentPositionInfo pos;
+    if (getPlayHead() != nullptr && getPlayHead()->getCurrentPosition (pos))
         wasplaying = lastPosInfo.isPlaying || lastPosInfo.isRecording;
     else
     { //no timeinfo
@@ -196,10 +199,10 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
     std::vector<bool> usedForScale (numevents, false);
     std::vector<bool> usedForTranspose (numevents, false);
 
-    MidiBuffer kbBuffer;
+    juce::MidiBuffer kbBuffer;
     kbstate.processNextMidiBuffer (kbBuffer, 0, buffer.getNumSamples(), true);
 
-    MidiBuffer midiout;
+    juce::MidiBuffer midiout;
     for (int slot = 0; slot < slotLimit; slot++)
     {
         Loop* loop = &(programs[slot].loop);
@@ -330,8 +333,8 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                             // prevent hanging notes in the loop
                             if (recNoteOn[slot][ch][i] >= 0)
                             {
-                                DBG ("hanging rec note " + String (ppq - measureDubFromHere[slot]));
-                                loop->addEvent (MidiMessage::noteOff (ch + 1, i),
+                                DBG ("hanging rec note " + juce::String (ppq - measureDubFromHere[slot]));
+                                loop->addEvent (juce::MidiMessage::noteOff (ch + 1, i),
                                                 (int) ((ppq - measureDubFromHere[slot]) * 960.0));
                                 loop->updateMatchedPairs();
                                 recNoteOn[slot][ch][i] = -1;
@@ -378,19 +381,19 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                     loop->clear();
                     oldloop[slot].clear();
                     programs[slot].measureFromHere = ppqOfLastStep;
-                    DBG ("measureFromHere = ppqOfLastStep = " + String (ppqOfLastStep));
+                    DBG ("measureFromHere = ppqOfLastStep = " + juce::String (ppqOfLastStep));
                     if (! overdub || loop->getNumEvents() == 0)
                     {
                         programs[slot].looplength = 0;
                         recstart[slot]            = ppq + receventoffset;
                         programs[slot].loopstart  = recstart[slot] - programs[slot].measureFromHere;
-                        DBG ("loopstart=" + String (programs[slot].loopstart));
+                        DBG ("loopstart=" + juce::String (programs[slot].loopstart));
                     }
                     //move the start ahead if near the next step (and not in sample sync mode)
                     if ((recstart[slot] - ppqOfLastStep) > looplengthstep * 0.875 && param[kSync] < 0.5f)
                     {
                         programs[slot].measureFromHere += looplengthstep;
-                        DBG ("measureFromHere += looplengthstep = " + String (programs[slot].measureFromHere));
+                        DBG ("measureFromHere += looplengthstep = " + juce::String (programs[slot].measureFromHere));
                         programs[slot].loopstart = 0; //programs[slot].measureFromHere;
                         recstart[slot]           = programs[slot].measureFromHere;
                     }
@@ -400,14 +403,14 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                         {
                             if (hanging[slot].count[ch][i] > 0)
                             {
-                                MidiMessage noteon = MidiMessage (0x90 | ch, i, hanging[slot].vel[ch][i], 0);
+                                juce::MidiMessage noteon = juce::MidiMessage (0x90 | ch, i, hanging[slot].vel[ch][i], 0);
                                 loop->addEvent (noteon, roundToInt ((getLoopStart (slot)) * 960.0) - (int) (programs[slot].measureFromHere * 960.0));
                                 loop->updateMatchedPairs();
                             }
                         }
                     }
                     measureDubFromHere[slot] = programs[slot].measureFromHere;
-                    DBG ("measureDubFromHere = measureFromHere = " + String (measureDubFromHere[slot]));
+                    DBG ("measureDubFromHere = measureFromHere = " + juce::String (measureDubFromHere[slot]));
                 }
                 else
                 { //overdub
@@ -415,7 +418,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                     recstart[slot] = ppq + receventoffset;
                     //loopstart=recstart;
                     measureDubFromHere[slot] = getPpqOfLastLoopStart (ppq, slot);
-                    DBG ("measureDubFromHere = ppqOfLastLoopStart = " + String (measureDubFromHere[slot]));
+                    DBG ("measureDubFromHere = ppqOfLastLoopStart = " + juce::String (measureDubFromHere[slot]));
                     //if ((recstart[slot]-ppqOfLastStep)>looplengthstep*0.5f && param[kSync]<0.5f) {
                     //	measureDubFromHere[slot] += looplengthstep;
                     //	DBG("measureDubFromHere += looplengthstep = " + String(measureDubFromHere[slot]));
@@ -427,8 +430,8 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                         {
                             if (hanging[slot].count[ch][i] > 0 && recNoteOn[slot][ch][i] == -1)
                             {
-                                DBG ("creating noteon at " + String (getLoopStart (slot) - programs[slot].measureFromHere));
-                                MidiMessage noteon = MidiMessage (0x90 | ch, i, hanging[slot].vel[ch][i], 0);
+                                DBG ("creating noteon at " + juce::String (getLoopStart (slot) - programs[slot].measureFromHere));
+                                juce::MidiMessage noteon = juce::MidiMessage (0x90 | ch, i, hanging[slot].vel[ch][i], 0);
                                 loop->addEvent (noteon, roundToInt ((recstart[slot]) * 960.0) - (int) (measureDubFromHere[slot] * 960.0));
                                 loop->updateMatchedPairs();
                             }
@@ -661,7 +664,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                 if ((isForChannel || (slot == curProgram && param[kMonitor] >= 0.5f)) && ! dontrecord)
                 {
                     //message is recorded here!
-                    MidiMessage m (midi_message);
+                    juce::MidiMessage m (midi_message);
                     if (param[kMonitor] >= 0.5f && param[kThru] >= 0.5f && channel > 0 && slot == curProgram)
                     {
                         m.setChannel (channel + 1);
@@ -863,10 +866,10 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                         bool stopPlaying      = false;
                         double lastLoopTime   = -1;
                         //int s = ;
-                        int64 startSample = (int) (samplesPerPpq * ppq);
-                        int64 endSample   = startSample + buffer.getNumSamples() - 1;
-                        int stopAtSample  = buffer.getNumSamples();
-                        int banana        = 0;
+                        juce::int64 startSample = (int) (samplesPerPpq * ppq);
+                        juce::int64 endSample   = startSample + buffer.getNumSamples() - 1;
+                        int stopAtSample        = buffer.getNumSamples();
+                        int banana              = 0;
 #if 0
 						if (barTriggerSample[slot][instance]>endSample) {
 							//waiting for next bar, don't start yet
@@ -1233,7 +1236,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                                         {
                                             if (lastPlayedIndex[slot][instance] < index)
                                             {
-                                                DBG ("playing loop event " + String (index) + " at time " + String (loop->getEventTime (index)));
+                                                DBG ("playing loop event " + juce::String (index) + " at time " + juce::String (loop->getEventTime (index)));
                                                 playLoopEvent (slot, instance, index, channel, stretch, i, samplesPerPpq, midiout);
                                                 lastPlayedIndex[slot][instance] = index;
                                             }
@@ -1268,7 +1271,7 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
                 //update GUI
                 if (slot == curProgram && currentPoly[slot] > 0)
                 {
-                    info->s = "Playing (Poly=" + String (currentPoly[slot]) + ", Loop=" + String (1 + lastLoopCount[slot][0]) + ")";
+                    info->s = "Playing (Poly=" + juce::String (currentPoly[slot]) + ", Loop=" + juce::String (1 + lastLoopCount[slot][0]) + ")";
                     info->sendChangeMessage();
                 }
             }
@@ -1284,12 +1287,12 @@ void PizLooper::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessage
     midiMessages = midiout;
 
     if (midiOutput)
-        midiOutput->sendBlockOfMessages (midiMessages, Time::getMillisecondCounterHiRes() + 1.0, getSampleRate());
+        midiOutput->sendBlockOfMessages (midiMessages, juce::Time::getMillisecondCounterHiRes() + 1.0, getSampleRate());
 
     samples += buffer.getNumSamples();
 }
 
-void PizLooper::processNoteOffBuffer (int slot, MidiBuffer& midiout, int numSamples)
+void PizLooper::processNoteOffBuffer (int slot, juce::MidiBuffer& midiout, int numSamples)
 {
     Loop* loop = &(programs[slot].loop);
     for (int i = noteOffBuffer[slot].size(); --i >= 0;)
@@ -1300,7 +1303,7 @@ void PizLooper::processNoteOffBuffer (int slot, MidiBuffer& midiout, int numSamp
             if (e->noteOffSample < numSamples)
             {
                 jassert (e->noteOffSample >= 0);
-                midiout.addEvent (MidiMessage::noteOff (e->lastOutputChannel, e->lastOutputNoteNumber), jmax (0, e->noteOffSample));
+                midiout.addEvent (juce::MidiMessage::noteOff (e->lastOutputChannel, e->lastOutputNoteNumber), jmax (0, e->noteOffSample));
                 DBG ("noteoff from buffer");
                 --playingNote[e->lastOutputChannel - 1][e->lastOutputNoteNumber];
                 loop->setNoteOff (e->note);
@@ -1314,14 +1317,14 @@ void PizLooper::processNoteOffBuffer (int slot, MidiBuffer& midiout, int numSamp
         }
         else
         {
-            DBG ("unmatched noteoff " + String (e->lastOutputNoteNumber) + " in buffer "
-                 + String (noteOffBuffer[slot].size()));
+            DBG ("unmatched noteoff " + juce::String (e->lastOutputNoteNumber) + " in buffer "
+                 + juce::String (noteOffBuffer[slot].size()));
             noteOffBuffer[slot].remove (i);
         }
     }
 }
 
-bool PizLooper::isNoteTriggeringAnySlot (MidiMessage const& message)
+bool PizLooper::isNoteTriggeringAnySlot (juce::MidiMessage const& message)
 {
     if (message.isNoteOnOrOff())
     {
@@ -1360,7 +1363,7 @@ bool PizLooper::isNoteTriggeringAnySlot (MidiMessage const& message)
     return false;
 }
 
-bool PizLooper::processTriggerNote (const int slot, MidiMessage& message, int root, MidiBuffer& midiout, const int sample, const double ppqOfNextBar, const double ppqPerSample, const double ppqOfLastStep, const double looplengthstep)
+bool PizLooper::processTriggerNote (const int slot, juce::MidiMessage& message, int root, juce::MidiBuffer& midiout, const int sample, const double ppqOfNextBar, const double ppqPerSample, const double ppqOfLastStep, const double looplengthstep)
 {
     if (! message.isForChannel (roundToInt (getParameterForSlot (kTrigChan, slot) * 15.0f) + 1))
         return false;
@@ -1534,13 +1537,13 @@ bool PizLooper::processTriggerNote (const int slot, MidiMessage& message, int ro
     return usedNote;
 }
 
-void PizLooper::playLoopEvent (int slot, int instance, int eventindex, int channel, double stretch, int samplepos, double samplesPerPpq, MidiBuffer& midiout)
+void PizLooper::playLoopEvent (int slot, int instance, int eventindex, int channel, double stretch, int samplepos, double samplesPerPpq, juce::MidiBuffer& midiout)
 {
-    Loop* loop         = &(programs[slot].loop);
-    double eventTime   = loop->getEventTime (eventindex);
-    Loop::mehPtr e     = loop->getEventPointer (eventindex);
-    MidiMessage msgout = e->message;
-    const uint8* data  = msgout.getRawData();
+    Loop* loop               = &(programs[slot].loop);
+    double eventTime         = loop->getEventTime (eventindex);
+    Loop::mehPtr e           = loop->getEventPointer (eventindex);
+    juce::MidiMessage msgout = e->message;
+    const juce::uint8* data  = msgout.getRawData();
     if ((channel == -1
          || msgout.isForChannel (channel + 1)
          || getParameterForSlot (kFiltChan, slot) < 0.5f)
@@ -1563,10 +1566,10 @@ void PizLooper::playLoopEvent (int slot, int instance, int eventindex, int chann
             {
                 if (loop->isNotePlaying (e, instance))
                 {
-                    midiout.addEvent (MidiMessage::noteOff (loop->getChannelOfNote (e, instance), loop->getTranspositionOfNote (e, instance)), jmax (0, samplepos - 1));
+                    midiout.addEvent (juce::MidiMessage::noteOff (loop->getChannelOfNote (e, instance), loop->getTranspositionOfNote (e, instance)), jmax (0, samplepos - 1));
                     noteOffBuffer[slot].remove (getIndexOfNoteOff (e, slot, instance));
-                    DBG ("note " + String (loop->getTranspositionOfNote (e, instance)) + " already playing"
-                         + String (noteOffBuffer[slot].size()));
+                    DBG ("note " + juce::String (loop->getTranspositionOfNote (e, instance)) + " already playing"
+                         + juce::String (noteOffBuffer[slot].size()));
                 }
                 int newNote          = tRules[slot]->getTransposedNote (note, instance, kill, outputchannel);
                 const float velscale = tRules[slot]->velscale[instance];
@@ -1672,7 +1675,7 @@ double PizLooper::getPpqOfLastLoopStart (double ppq, int slot)
         return floor (ppq / (looplengthstep)) * looplengthstep;
 }
 
-void PizLooper::recordMessage (const MidiMessage& midi_message, int slot, bool playing, double ppq, double eventoffset, double ppqPerSample, int sample_number)
+void PizLooper::recordMessage (const juce::MidiMessage& midi_message, int slot, bool playing, double ppq, double eventoffset, double ppqPerSample, int sample_number)
 {
     const int eventchan = midi_message.getChannel() - 1;
     const int notenum   = midi_message.getNoteNumber();

@@ -61,15 +61,15 @@ public:
 
     void startRecording();
     bool findNextNote();
-    void playAllNotesAtCurrentTime (MidiBuffer& buffer, int sample_number, int velocity);
-    void sendCurrentNoteToBuffer (MidiBuffer& buffer, int sample_number, int velocity);
+    void playAllNotesAtCurrentTime (juce::MidiBuffer& buffer, int sample_number, int velocity);
+    void sendCurrentNoteToBuffer (juce::MidiBuffer& buffer, int sample_number, int velocity);
     bool isNotePlaying (PizMidiMessageSequence::mehPtr note, int p);
     bool isNotePlaying (PizMidiMessageSequence::mehPtr note);
     bool isTriggerNote (int note);
     void setTriggerNote (int note);
     void resetNotes();
-    void sendNoteOffMessagesToBuffer (MidiBuffer& buffer, int sample_number);
-    MidiMessage getCurrentMessage();
+    void sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_number);
+    juce::MidiMessage getCurrentMessage();
     double getCurrentTime();
     int getIndexOfNote (int noteNumber, double time, bool exact = false);
     void convertTimeBase (short timeBase);
@@ -100,7 +100,7 @@ public:
     float velocitySensitivity;
     double chordTolerance;
     double Qdelta[128][16]; // quantization shift for each note (to shift noteoff the same amount)
-    Array<LoopNote> playingNotes[polyphony];
+    juce::Array<LoopNote> playingNotes[polyphony];
 
 private:
     double length;

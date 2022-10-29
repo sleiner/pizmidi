@@ -20,21 +20,19 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_utils/juce_audio_utils.h"
+#include <juce_audio_utils/juce_audio_utils.h>
 
 #include "../_common/ChannelSlider.h"
 #include "../_common/VSTSlider.h"
 #include "MidiChordAnalyzer.h"
 
-using namespace juce;
-
 class MidiChordAnalyzerEditor;
-class ChordAnalyzerKeyboardComponent : public MidiKeyboardComponent
+class ChordAnalyzerKeyboardComponent : public juce::MidiKeyboardComponent
 {
 public:
-    ChordAnalyzerKeyboardComponent (MidiKeyboardState& kbstate, MidiChordAnalyzer* ownerFilter)
+    ChordAnalyzerKeyboardComponent (juce::MidiKeyboardState& kbstate, MidiChordAnalyzer* ownerFilter)
         : MidiKeyboardComponent (kbstate, MidiKeyboardComponent::horizontalKeyboard),
-          owner (0)
+          owner (nullptr)
     {
         owner = ownerFilter;
         s     = &kbstate;
@@ -62,9 +60,9 @@ public:
 
 private:
     MidiChordAnalyzer* owner;
-    MidiKeyboardState* s;
+    juce::MidiKeyboardState* s;
 
-    bool mouseDownOnKey (int midiNoteNumber, const MouseEvent& e) override
+    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
     {
         MidiChordAnalyzerEditor* editor = ((MidiChordAnalyzerEditor*) (this->getParentComponent()));
         if (e.mods.isPopupMenu())
@@ -113,11 +111,11 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     friend class ChordAnalyzerKeyboardComponent;
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    String const getCurrentChordName (int channel);
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    juce::String const getCurrentChordName (int channel);
     void timerCallback() override;
     //[/UserMethods]
 
@@ -132,7 +130,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    TooltipWindow tooltipWindow;
+    juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
     int numHeldNotes;
 

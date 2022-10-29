@@ -27,6 +27,7 @@ inline int combineBytes (int lsb, int msb)
 #include "midiPCGUIEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -733,12 +734,12 @@ void midiPCGUIEditor::paint (juce::Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     if (minimized)
     {
-        g.fillAll (Colour (0xff464646));
+        g.fillAll (juce::Colour (0xff464646));
 
-        g.setColour (Colour (0xffe6e6e6));
+        g.setColour (juce::Colour (0xffe6e6e6));
         g.fillRoundedRectangle (4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
 
-        g.setColour (Colour (0xffbababa));
+        g.setColour (juce::Colour (0xffbababa));
         g.fillRoundedRectangle (14.0f, 13.0f, 282.0f, 255.0f, 10.0000f);
     }
     else
@@ -832,8 +833,8 @@ void midiPCGUIEditor::resized()
     label6->setVisible (! minimized);
     if (minimized)
     {
-        ProgramName->setFont (Font (32.f, Font::bold));
-        PCDisplay->setFont (Font (128.f, Font::bold));
+        ProgramName->setFont (juce::Font (32.f, juce::Font::bold));
+        PCDisplay->setFont (juce::Font (128.f, juce::Font::bold));
 
         b_Inc->setBounds (159, 228, 40, 24);
         b_Dec->setBounds (119, 228, 40, 24);
@@ -844,8 +845,8 @@ void midiPCGUIEditor::resized()
     }
     else
     {
-        ProgramName->setFont (Font (18.f, Font::bold));
-        PCDisplay->setFont (Font (63.3f, Font::bold));
+        ProgramName->setFont (juce::Font (18.f, juce::Font::bold));
+        PCDisplay->setFont (juce::Font (63.3f, juce::Font::bold));
     }
     repaint();
     //[/UserResized]
@@ -1021,7 +1022,7 @@ void midiPCGUIEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
-void midiPCGUIEditor::changeListenerCallback (ChangeBroadcaster* source)
+void midiPCGUIEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -1044,38 +1045,38 @@ void midiPCGUIEditor::updateParametersFromFilter()
     // take a local copy of the info we need while we've got the lock..
     for (int i = 0; i < numParams; i++)
         param[i] = filter->getParameter (i);
-    const int channel = roundToInt (param[kChannel] * 15.0f);
-    const int p       = filter->actualProgram[channel];
-    const int msb     = filter->actualBankMSB[channel];
-    const int lsb     = filter->actualBankLSB[channel];
-    const String name = filter->getMidiProgName (channel, combineBytes (lsb - 1, msb - 1), p - 1);
+    const int channel       = roundToInt (param[kChannel] * 15.0f);
+    const int p             = filter->actualProgram[channel];
+    const int msb           = filter->actualBankMSB[channel];
+    const int lsb           = filter->actualBankLSB[channel];
+    const juce::String name = filter->getMidiProgName (channel, combineBytes (lsb - 1, msb - 1), p - 1);
 
-    // ..release the lock ASAP
+    // release the lock ASAP
     filter->getCallbackLock().exit();
 
     // ..and after releasing the lock, we're free to do the time-consuming UI stuff..
 
     //prog name
-    ProgramName->setText (name, dontSendNotification);
+    ProgramName->setText (name, juce::dontSendNotification);
     //toggle buttons
-    b_PCListen->setToggleState (param[kPCListen] >= 0.5f, dontSendNotification);
-    b_Thru->setToggleState (param[kThru] >= 0.5f, dontSendNotification);
+    b_PCListen->setToggleState (param[kPCListen] >= 0.5f, juce::dontSendNotification);
+    b_Thru->setToggleState (param[kThru] >= 0.5f, juce::dontSendNotification);
 
     if (param[kMode] < 0.5f)
     {
         b_Mode->setButtonText ("Direct");
-        b_Mode->setToggleState (true, dontSendNotification);
-        s_Program->setColour (Slider::thumbColourId, Colours::coral);
-        s_BankMSB->setColour (Slider::thumbColourId, Colours::coral);
-        s_BankLSB->setColour (Slider::thumbColourId, Colours::coral);
+        b_Mode->setToggleState (true, juce::dontSendNotification);
+        s_Program->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
+        s_BankMSB->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
+        s_BankLSB->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
     }
     else
     {
         b_Mode->setButtonText ("Triggered");
-        b_Mode->setToggleState (false, dontSendNotification);
-        s_Program->setColour (Slider::thumbColourId, Colour (getLookAndFeel().findColour (Slider::thumbColourId)));
-        s_BankMSB->setColour (Slider::thumbColourId, Colour (getLookAndFeel().findColour (Slider::thumbColourId)));
-        s_BankLSB->setColour (Slider::thumbColourId, Colour (getLookAndFeel().findColour (Slider::thumbColourId)));
+        b_Mode->setToggleState (false, juce::dontSendNotification);
+        s_Program->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
+        s_BankMSB->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
+        s_BankLSB->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
     }
 
     //sliders
@@ -1083,9 +1084,9 @@ void midiPCGUIEditor::updateParametersFromFilter()
     s_BankMSB->setVSTSlider (param[kBankMSB]);
     s_BankLSB->setVSTSlider (param[kBankLSB]);
     s_Channel->setVSTSlider (param[kChannel]);
-    PCDisplay->setText (String (p), dontSendNotification);
-    PCDisplay2->setText (String (msb), dontSendNotification);
-    PCDisplay3->setText (String (lsb), dontSendNotification);
+    PCDisplay->setText (juce::String (p), juce::dontSendNotification);
+    PCDisplay2->setText (juce::String (msb), juce::dontSendNotification);
+    PCDisplay3->setText (juce::String (lsb), juce::dontSendNotification);
     minimized = param[kMinimize] >= 0.5f;
 }
 //[/MiscUserCode]

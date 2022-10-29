@@ -1,88 +1,88 @@
 #ifndef MIDIPADSPLUGINEDITOR_H
 #define MIDIPADSPLUGINEDITOR_H
 
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_gui_basics/juce_gui_basics.h"
-#include "juce_gui_extra/juce_gui_extra.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 
 #include "MidiPad.h"
 #include "midiPads.h"
 
-class fullScreenContainer : public Component
+class fullScreenContainer : public juce::Component
 {
 public:
-    fullScreenContainer() { bgcolor = Colours::white; }
+    fullScreenContainer() { bgcolor = juce::Colours::white; }
     ~fullScreenContainer() override{};
-    Colour bgcolor;
+    juce::Colour bgcolor;
 
 private:
-    void paint (Graphics& g) override { g.fillAll (bgcolor); }
+    void paint (juce::Graphics& g) override { g.fillAll (bgcolor); }
 };
 
-class midiPadsEditor : public AudioProcessorEditor,
-                       public ChangeListener,
-                       public Button::Listener,
-                       public Slider::Listener,
-                       public TextEditor::Listener,
-                       public FileDragAndDropTarget
+class midiPadsEditor : public juce::AudioProcessorEditor,
+                       public juce::ChangeListener,
+                       public juce::Button::Listener,
+                       public juce::Slider::Listener,
+                       public juce::TextEditor::Listener,
+                       public juce::FileDragAndDropTarget
 {
 public:
     midiPadsEditor (midiPads* const ownerFilter);
     ~midiPadsEditor() override;
 
     //==============================================================================
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-    void buttonClicked (Button*) override;
-    void buttonStateChanged (Button*) override;
-    void sliderValueChanged (Slider*) override;
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
-    void textEditorTextChanged (TextEditor&) override;
-    void textEditorReturnKeyPressed (TextEditor&) override;
-    void textEditorEscapeKeyPressed (TextEditor&) override;
-    void textEditorFocusLost (TextEditor&) override;
-    void filesDropped (const StringArray& files, int x, int y) override;
-    bool isInterestedInFileDrag (const StringArray& files) override;
-    void paint (Graphics&) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void buttonClicked (juce::Button*) override;
+    void buttonStateChanged (juce::Button*) override;
+    void sliderValueChanged (juce::Slider*) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void textEditorTextChanged (juce::TextEditor&) override;
+    void textEditorReturnKeyPressed (juce::TextEditor&) override;
+    void textEditorEscapeKeyPressed (juce::TextEditor&) override;
+    void textEditorFocusLost (juce::TextEditor&) override;
+    void filesDropped (const juce::StringArray& files, int x, int y) override;
+    bool isInterestedInFileDrag (const juce::StringArray& files) override;
+    void paint (juce::Graphics&) override;
     void resized() override;
 
-    Colour color, color2;
+    juce::Colour color, color2;
 
 private:
     //==============================================================================
     MidiPad* midiPad[numPads];
 
-    ColourSelector* colourSelector1;
-    Slider* vSlider;
-    Slider* nSlider;
-    Slider* ySlider;
-    Slider* oSlider;
-    Slider* triggerSlider;
-    Slider* xSlider;
-    Slider* xoSlider;
-    Slider* roundnessSlider;
-    Slider* iconSizeSlider;
-    Slider* cSlider;
-    Slider* icSlider;
-    Slider* hueSlider;
-    Slider* saturationSlider;
-    Slider* brigtnessSlider;
-    Slider* padOpacitySlider;
-    Slider* globalRoundnessSlider;
-    Slider* globalIconSizeSlider;
-    Slider* velocitySlider;
-    Slider* valueSlider;
-    TextEditor* textEditor;
-    TextButton* menuButton;
+    juce::ColourSelector* colourSelector1;
+    juce::Slider* vSlider;
+    juce::Slider* nSlider;
+    juce::Slider* ySlider;
+    juce::Slider* oSlider;
+    juce::Slider* triggerSlider;
+    juce::Slider* xSlider;
+    juce::Slider* xoSlider;
+    juce::Slider* roundnessSlider;
+    juce::Slider* iconSizeSlider;
+    juce::Slider* cSlider;
+    juce::Slider* icSlider;
+    juce::Slider* hueSlider;
+    juce::Slider* saturationSlider;
+    juce::Slider* brigtnessSlider;
+    juce::Slider* padOpacitySlider;
+    juce::Slider* globalRoundnessSlider;
+    juce::Slider* globalIconSizeSlider;
+    juce::Slider* velocitySlider;
+    juce::Slider* valueSlider;
+    juce::TextEditor* textEditor;
+    juce::TextButton* menuButton;
     fullScreenContainer* container;
     Component* padEditor;
-    ResizableCornerComponent* resizer;
-    ComponentBoundsConstrainer resizeLimits;
-    TooltipWindow tooltipWindow;
+    juce::ResizableCornerComponent* resizer;
+    juce::ComponentBoundsConstrainer resizeLimits;
+    juce::TooltipWindow tooltipWindow;
 
-    PopupMenu m, sub1, sub2, sub3, icons, layout, presets, fileMenu;
+    juce::PopupMenu m, sub1, sub2, sub3, icons, layout, presets, fileMenu;
 
     void updateParametersFromFilter();
     void padTriggered();
@@ -101,7 +101,7 @@ private:
     bool automateHost;
     bool dragging;
     bool resizing;
-    Point<int> dragstart;
+    juce::Point<int> dragstart;
     int lastTouchedPad;
     int lastPadMenu;
 

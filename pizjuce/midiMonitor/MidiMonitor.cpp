@@ -10,6 +10,8 @@ http://www.anticore.org/jucetice/
 #include "MidiMonitor.h"
 #include "MidiMonitorEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /**
     This function must be implemented to create the actual plugin object that
@@ -27,8 +29,8 @@ MidiMonitorPlugin::MidiMonitorPlugin()
     iter         = 0;
     lastUIWidth  = 392;
     lastUIHeight = 250;
-    loop         = new MidiMessageSequence();
-    messages     = new MidiMessageSequence();
+    loop         = new juce::MidiMessageSequence();
+    messages     = new juce::MidiMessageSequence();
 
     useNotes = true;
     useCC    = true;
@@ -56,7 +58,7 @@ MidiMonitorPlugin::MidiMonitorPlugin()
     mode     = 0.f;
     maxLines = 5000;
 
-    programName = "midiMonitor " + String (JucePlugin_VersionString);
+    programName = "midiMonitor " + juce::String (JucePlugin_VersionString);
 
     if (! loadDefaultFxb())
         loadDefaultFxp();
@@ -176,105 +178,105 @@ void MidiMonitorPlugin::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-const String MidiMonitorPlugin::getParameterName (int index)
+const juce::String MidiMonitorPlugin::getParameterName (int index)
 {
     switch (index)
     {
         case kBgHue:
-            return String ("Hue");
+            return juce::String ("Hue");
             break;
         case kBgSat:
-            return String ("Saturation");
+            return juce::String ("Saturation");
             break;
         case kBgBri:
-            return String ("Brightness");
+            return juce::String ("Brightness");
             break;
         case kContrast:
-            return String ("Contrast");
+            return juce::String ("Contrast");
             break;
         case kPower:
-            return String ("Power");
+            return juce::String ("Power");
             break;
         case kThru:
-            return String ("Thru");
+            return juce::String ("Thru");
             break;
         case kBytes:
-            return String ("ShowBytes");
+            return juce::String ("ShowBytes");
             break;
         case kWrap:
-            return String ("WordWrap");
+            return juce::String ("WordWrap");
             break;
         case kTime:
-            return String ("ShowTime");
+            return juce::String ("ShowTime");
             break;
         case kTicks:
-            return String ("TicksPerBeat");
+            return juce::String ("TicksPerBeat");
             break;
         case kTimeMode:
-            return String ("TimeMode");
+            return juce::String ("TimeMode");
             break;
         case kFrames:
-            return String ("FramesPerSec");
+            return juce::String ("FramesPerSec");
             break;
         default:
-            return String();
+            return juce::String();
             break;
     }
 }
 
-const String MidiMonitorPlugin::getParameterText (int index)
+const juce::String MidiMonitorPlugin::getParameterText (int index)
 {
     switch (index)
     {
         case kBgHue:
-            return String (roundToInt (100.f * bghue));
+            return juce::String (roundToInt (100.f * bghue));
             break;
         case kBgSat:
-            return String (roundToInt (100.f * bgsat));
+            return juce::String (roundToInt (100.f * bgsat));
             break;
         case kBgBri:
-            return String (roundToInt (100.f * bgbri));
+            return juce::String (roundToInt (100.f * bgbri));
             break;
         case kContrast:
-            return String (roundToInt (100.f * contrast));
+            return juce::String (roundToInt (100.f * contrast));
             break;
         case kPower:
-            return String (power);
+            return juce::String (power);
             break;
         case kThru:
-            return String (thru);
+            return juce::String (thru);
             break;
         case kBytes:
-            return String (bytes);
+            return juce::String (bytes);
             break;
         case kWrap:
-            return String (wrap);
+            return juce::String (wrap);
             break;
         case kTime:
-            return String (showtime);
+            return juce::String (showtime);
             break;
         case kTicks:
-            return String (ticks);
+            return juce::String (ticks);
             break;
         case kTimeMode:
-            return String (mode);
+            return juce::String (mode);
             break;
         case kFrames:
-            return String (frames);
+            return juce::String (frames);
             break;
         default:
-            return String();
+            return juce::String();
             break;
     }
 }
-const String MidiMonitorPlugin::getInputChannelName (const int channelIndex) const
+const juce::String MidiMonitorPlugin::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String MidiMonitorPlugin::getOutputChannelName (const int channelIndex) const
+const juce::String MidiMonitorPlugin::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool MidiMonitorPlugin::isInputChannelStereoPair (int index) const
@@ -298,8 +300,8 @@ void MidiMonitorPlugin::releaseResources()
     midiCollector.reset (44100);
 }
 
-void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
-                                      MidiBuffer& midiMessages)
+void MidiMonitorPlugin::processBlock (juce::AudioSampleBuffer& buffer,
+                                      juce::MidiBuffer& midiMessages)
 {
     ++iter;
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
@@ -308,7 +310,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
     }
     if (power >= 0.5f)
     {
-        AudioPlayHead::CurrentPositionInfo pos;
+        juce::AudioPlayHead::CurrentPositionInfo pos;
         if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
         {
             if (memcmp (&pos, &lastPosInfo, sizeof (pos)) != 0)
@@ -334,7 +336,7 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
         n = lastPosInfo.timeSigNumerator;
         d = lastPosInfo.timeSigDenominator;
 
-        double counter = Time::getMillisecondCounterHiRes();
+        double counter = juce::Time::getMillisecondCounterHiRes();
         for (auto&& msgMetadata : midiMessages)
         {
             auto message   = msgMetadata.getMessage();
@@ -389,13 +391,13 @@ void MidiMonitorPlugin::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiMonitorPlugin::createEditor()
+juce::AudioProcessorEditor* MidiMonitorPlugin::createEditor()
 {
     return new MidiMonitorEditor (this);
 }
 
 //==============================================================================
-void MidiMonitorPlugin::getStateInformation (MemoryBlock& destData)
+void MidiMonitorPlugin::getStateInformation (juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -403,7 +405,7 @@ void MidiMonitorPlugin::getStateInformation (MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
 
     // add some attributes to it..
     xmlState.setAttribute ("pluginVersion", 1);
@@ -484,17 +486,17 @@ void MidiMonitorPlugin::setStateInformation (const void* data, int sizeInBytes)
     this->dispatchPendingMessages();
 }
 
-bool MidiMonitorPlugin::writeMidiFile (File mid)
+bool MidiMonitorPlugin::writeMidiFile (juce::File mid)
 {
-    MidiFile midifile;
+    juce::MidiFile midifile;
     midifile.setTicksPerQuarterNote (960);
-    MidiMessageSequence metadata;
+    juce::MidiMessageSequence metadata;
 
-    MidiMessage nstart = MidiMessage (0x9f, 62, 1, 0);
+    juce::MidiMessage nstart = juce::MidiMessage (0x9f, 62, 1, 0);
     metadata.addEvent (nstart, 0.0);
 
-    uint8 tn[]            = { 0xFF, 0x03, 11, 'm', 'i', 'd', 'i', 'M', 'o', 'n', 'i', 't', 'o', 'r' };
-    MidiMessage trackname = MidiMessage (tn, 14, 0);
+    juce::uint8 tn[]            = { 0xFF, 0x03, 11, 'm', 'i', 'd', 'i', 'M', 'o', 'n', 'i', 't', 'o', 'r' };
+    juce::MidiMessage trackname = juce::MidiMessage (tn, 14, 0);
     loop->addEvent (trackname);
 
     midifile.addTrack (*loop);
@@ -503,7 +505,7 @@ bool MidiMonitorPlugin::writeMidiFile (File mid)
         mid.deleteFile();
     if (mid.create())
     {
-        FileOutputStream file (mid);
+        juce::FileOutputStream file (mid);
         midifile.writeTo (file);
     }
     return true;

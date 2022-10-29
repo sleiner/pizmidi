@@ -1,21 +1,14 @@
 
 #include "Module.h"
 
-void Module::mouseDown (const MouseEvent&)
+void Module::mouseDown (const juce::MouseEvent&)
 {
-    // Bouml preserved body begin 0003F60D
-
-    // Bouml preserved body end 0003F60D
 }
 
-void Module::mouseDrag (const MouseEvent&)
+void Module::mouseDrag (const juce::MouseEvent&)
 {
-    // Bouml preserved body begin 0003F68D
-    // Bouml preserved body end 0003F68D
 }
 
-void Module::mouseUp (const MouseEvent& e)
+void Module::mouseUp (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 0003F70D
-    // Bouml preserved body end 0003F70D
 }

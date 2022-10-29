@@ -1,6 +1,8 @@
 #include "PizLooper.h"
 #include "PizLooperEditor.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
@@ -74,7 +76,7 @@ JuceProgram::JuceProgram()
     measureFromHere = 0;
 
     numerator = denominator = 4;
-    device                  = MidiDeviceInfo();
+    device                  = juce::MidiDeviceInfo();
 
     //program name
     name = "Default";
@@ -106,12 +108,12 @@ PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
     }
     lastUIWidth  = 800;
     lastUIHeight = 487;
-    devices      = MidiOutput::getAvailableDevices();
+    devices      = juce::MidiOutput::getAvailableDevices();
     recCC = playCC = -1;
     midiOutput     = NULL;
     info           = new Info();
-    loopDir        = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-            + File::getSeparatorString() + String ("midiloops");
+    loopDir        = ((juce::File::getSpecialLocation (juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+            + juce::File::getSeparatorString() + juce::String ("midiloops");
 
     //look for a default bank
     if (! loadDefaultFxb())
@@ -120,7 +122,7 @@ PizLooper::PizLooper() : programs (0), slotLimit (numSlots)
         for (int i = 0; i < getNumPrograms(); i++)
         {
             // name programs "Loop 1" - "Loop 128" and then look for midi files "Loop 1.mid" etc.
-            programs[i].name = String ("Loop ") + String (i + 1);
+            programs[i].name = juce::String ("Loop ") + juce::String (i + 1);
             for (int p = 0; p < numGlobalParams; p++)
                 param[p] = programs[i].param[p];
             for (int p = 0; p < numParamsPerSlot; p++)
@@ -207,7 +209,7 @@ PizLooper::~PizLooper()
 }
 
 //==============================================================================
-const String PizLooper::getName() const
+const juce::String PizLooper::getName() const
 {
     return JucePlugin_Name;
 }
@@ -262,12 +264,12 @@ void PizLooper::setParameter (int index, float newValue)
                 {
                     if (newValue == 1.0f)
                     {
-                        writeMidiFile (curProgram, File (loopDir), true);
+                        writeMidiFile (curProgram, juce::File (loopDir), true);
                         param[kSave] = 0.f;
                     }
                     else if (newValue == 0.9f)
                     {
-                        writeMidiFile (curProgram, File (loopDir), false);
+                        writeMidiFile (curProgram, juce::File (loopDir), false);
                         param[kSave] = 0.f;
                     }
                 }
@@ -404,25 +406,25 @@ void PizLooper::setActiveSlot (int slot)
                 keySelectorState.noteOn (1, i, 1.f);
         }
         kbstate.reset();
-        info->s = (getParameterForSlot (kPlay, slot) >= 0.5f) ? "Playing (" + String (currentPoly[slot]) + ")" : "Stopped";
+        info->s = (getParameterForSlot (kPlay, slot) >= 0.5f) ? "Playing (" + juce::String (currentPoly[slot]) + ")" : "Stopped";
         newLoop = true;
         sendChangeMessage();
     }
 }
 
-void PizLooper::setActiveDevice (String name)
+void PizLooper::setActiveDevice (juce::String name)
 {
     setActiveDevice (getDeviceByName (name));
 }
 
-void PizLooper::setActiveDevice (MidiDeviceInfo device)
+void PizLooper::setActiveDevice (juce::MidiDeviceInfo device)
 {
     getCallbackLock().enter();
     if (midiOutput != nullptr)
     {
         midiOutput->stopBackgroundThread();
     }
-    midiOutput = MidiOutput::openDevice (device.identifier);
+    midiOutput = juce::MidiOutput::openDevice (device.identifier);
     if (midiOutput != nullptr)
     {
         midiOutput->startBackgroundThread();
@@ -439,295 +441,295 @@ void PizLooper::setActiveDevice (MidiDeviceInfo device)
         programs[i].device = device;
 }
 
-MidiDeviceInfo PizLooper::getDeviceByName (String name) const
+juce::MidiDeviceInfo PizLooper::getDeviceByName (juce::String name) const
 {
     return devices.findIf ([&] (auto const& device)
                            { return name == device.name; });
 }
 
-const String PizLooper::getParameterName (int index)
+const juce::String PizLooper::getParameterName (int index)
 {
     if (index == kThru)
-        return String ("MidiThru");
+        return juce::String ("MidiThru");
     if (index == kMonitor)
-        return String ("Monitor");
+        return juce::String ("Monitor");
     if (index == kFile)
-        return String ("File");
+        return juce::String ("File");
     if (index == kSave)
-        return String ("Save");
+        return juce::String ("Save");
     if (index == kSync)
-        return String ("SyncMode");
+        return juce::String ("SyncMode");
     if (index == kRecStep)
-        return String ("LoopStepsize");
+        return juce::String ("LoopStepsize");
     if (index == kQuantize)
-        return String ("InputQuantize");
+        return juce::String ("InputQuantize");
     if (index == kFixedLength)
-        return String ("FixedLengh");
+        return juce::String ("FixedLengh");
     if (index == kRecMode)
-        return String ("RecMode");
+        return juce::String ("RecMode");
     if (index == kSingleLoop)
-        return String ("SingleMode");
+        return juce::String ("SingleMode");
     if (index == kPlayMain)
-        return String ("MasterPlay");
+        return juce::String ("MasterPlay");
     if (index == kRecordMain)
-        return String ("MasterRecord");
+        return juce::String ("MasterRecord");
     if (index == kMasterVelocity)
-        return String ("MasterVelocity");
+        return juce::String ("MasterVelocity");
     if (index == kMasterTranspose)
-        return String ("MasterTranspose");
+        return juce::String ("MasterTranspose");
     if (index == kMidiOutDevice)
-        return String ("MidiOutDevice");
+        return juce::String ("MidiOutDevice");
     if (index == kParamsToHost)
-        return String ("HostAutomation");
+        return juce::String ("HostAutomation");
     if (index == kPlayCC)
-        return String ("MasterPlayCC");
+        return juce::String ("MasterPlayCC");
     if (index == kRecCC)
-        return String ("MasterRecCC");
+        return juce::String ("MasterRecCC");
     for (int i = 0; i < numSlots; i++)
     {
         int p = index - i * numParamsPerSlot;
         switch (p)
         {
             case kRecord:
-                return String ("Record") + String (i + 1);
+                return juce::String ("Record") + juce::String (i + 1);
             case kPlay:
-                return String ("Play") + String (i + 1);
+                return juce::String ("Plajuce::y") + juce::String (i + 1);
             case kTranspose:
-                return String ("Transpose") + String (i + 1);
+                return juce::String ("Transpose") + juce::String (i + 1);
             case kOctave:
-                return String ("OctaveShift") + String (i + 1);
+                return juce::String ("OctaveShift") + juce::String (i + 1);
             case kVelocity:
-                return String ("VelocityScale") + String (i + 1);
+                return juce::String ("VelocityScale") + juce::String (i + 1);
             case kVeloSens:
-                return String ("VelocitySens") + String (i + 1);
+                return juce::String ("VelocitySens") + juce::String (i + 1);
             case kShift:
-                return String ("BeatShift") + String (i + 1);
+                return juce::String ("BeatShift") + juce::String (i + 1);
             case kLoopStart:
-                return String ("LoopStart") + String (i + 1);
+                return juce::String ("LoopStart") + juce::String (i + 1);
             case kLoopEnd:
-                return String ("LoopEnd") + String (i + 1);
+                return juce::String ("LoopEnd") + juce::String (i + 1);
             case kStretch:
-                return String ("Stretch") + String (i + 1);
+                return juce::String ("Stretch") + juce::String (i + 1);
             case kTrigger:
-                return String ("LoopMode") + String (i + 1);
+                return juce::String ("LoopMode") + juce::String (i + 1);
             case kNoteTrig:
-                return String ("NoteTrigger") + String (i + 1);
+                return juce::String ("NoteTrigger") + juce::String (i + 1);
             case kRoot:
-                return String ("RootNote") + String (i + 1);
+                return juce::String ("RootNote") + juce::String (i + 1);
             case kNLow:
-                return String ("LowNote") + String (i + 1);
+                return juce::String ("LowNote") + juce::String (i + 1);
             case kNHigh:
-                return String ("HighNote") + String (i + 1);
+                return juce::String ("HighNote") + juce::String (i + 1);
             case kChannel:
-                return String ("Channel") + String (i + 1);
+                return juce::String ("Channel") + juce::String (i + 1);
             case kTrigChan:
-                return String ("NoteTrigChannel") + String (i + 1);
+                return juce::String ("NoteTrigChannel") + juce::String (i + 1);
             case kFiltChan:
-                return String ("ChannelMode") + String (i + 1);
+                return juce::String ("ChannelMode") + juce::String (i + 1);
             case kFullRelease:
-                return String ("FullRelease") + String (i + 1);
+                return juce::String ("FullRelease") + juce::String (i + 1);
             case kWaitForBar:
-                return String ("WaitForBar") + String (i + 1);
+                return juce::String ("WaitForBar") + juce::String (i + 1);
             case kNumLoops:
-                return String ("NumLoops") + String (i + 1);
+                return juce::String ("NumLoops") + juce::String (i + 1);
             case kNextSlot:
-                return String ("NextSlot") + String (i + 1);
+                return juce::String ("NextSlot") + juce::String (i + 1);
             case kPlayGroup:
-                return String ("PlayGroup") + String (i + 1);
+                return juce::String ("PlayGroup") + juce::String (i + 1);
             case kMuteGroup:
-                return String ("MuteGroup") + String (i + 1);
+                return juce::String ("MuteGroup") + juce::String (i + 1);
             case kForceToKey:
-                return String ("ForceToScale") + String (i + 1);
+                return juce::String ("ForceToScale") + juce::String (i + 1);
             case kForceToScaleMode:
-                return String ("ForceMode") + String (i + 1);
+                return juce::String ("ForceMode") + juce::String (i + 1);
             case kScaleChannel:
-                return String ("ScaleChannel") + String (i + 1);
+                return juce::String ("ScaleChannel") + juce::String (i + 1);
             case kTransposeChannel:
-                return String ("TransposeChannel") + String (i + 1);
+                return juce::String ("TransposeChannel") + juce::String (i + 1);
             case kUseScaleChannel:
-                return String ("UseScaleChan") + String (i + 1);
+                return juce::String ("UseScaleChan") + juce::String (i + 1);
             case kUseTrChannel:
-                return String ("UseTransChan") + String (i + 1);
+                return juce::String ("UseTransChan") + juce::String (i + 1);
             case kNote0:
-                return String ("C") + String (i + 1);
+                return juce::String ("C") + juce::String (i + 1);
             case kNote1:
-                return String ("Csharp") + String (i + 1);
+                return juce::String ("Csharp") + juce::String (i + 1);
             case kNote2:
-                return String ("D") + String (i + 1);
+                return juce::String ("D") + juce::String (i + 1);
             case kNote3:
-                return String ("Dsharp") + String (i + 1);
+                return juce::String ("Dsharp") + juce::String (i + 1);
             case kNote4:
-                return String ("E") + String (i + 1);
+                return juce::String ("E") + juce::String (i + 1);
             case kNote5:
-                return String ("F") + String (i + 1);
+                return juce::String ("F") + juce::String (i + 1);
             case kNote6:
-                return String ("Fsharp") + String (i + 1);
+                return juce::String ("Fsharp") + juce::String (i + 1);
             case kNote7:
-                return String ("G") + String (i + 1);
+                return juce::String ("G") + juce::String (i + 1);
             case kNote8:
-                return String ("Gsharp") + String (i + 1);
+                return juce::String ("Gsharp") + juce::String (i + 1);
             case kNote9:
-                return String ("A") + String (i + 1);
+                return juce::String ("A") + juce::String (i + 1);
             case kNote10:
-                return String ("Asharp") + String (i + 1);
+                return juce::String ("Asharp") + juce::String (i + 1);
             case kNote11:
-                return String ("B") + String (i + 1);
+                return juce::String ("B") + juce::String (i + 1);
             case kImmediateTranspose:
-                return String ("SplitTrnsp") + String (i + 1);
+                return juce::String ("SplitTrnsp") + juce::String (i + 1);
             case kTranspose10:
-                return String ("Ch10Transpose") + String (i + 1);
+                return juce::String ("Ch10Transpose") + juce::String (i + 1);
             case kReverse:
-                return String ("Reverse") + String (i + 1);
+                return juce::String ("Reverse") + juce::String (i + 1);
             case kNoteToggle:
-                return String ("NoteToggle") + String (i + 1);
+                return juce::String ("NoteToggle") + juce::String (i + 1);
             default:
                 break;
         }
     }
-    return String();
+    return juce::String();
 }
 
-const String PizLooper::getParameterText (int index)
+const juce::String PizLooper::getParameterText (int index)
 {
     if (index == kMasterVelocity)
-        return String (roundToInt (getParameter (index) * 200.f)) + String ("%");
+        return juce::String (roundToInt (getParameter (index) * 200.f)) + juce::String ("%");
     if (index == kThru)
     {
         if (getParameter (index) < 0.5f)
-            return String ("Off");
-        return String ("On");
+            return juce::String ("Off");
+        return juce::String ("On");
     }
     if (index == kMonitor)
     {
         if (getParameter (index) < 0.5f)
-            return String ("Off");
-        return String ("On");
+            return juce::String ("Off");
+        return juce::String ("On");
     }
     if (index == kSingleLoop)
     {
         if (getParameter (index) < 0.5f)
-            return String ("Multi");
-        return String ("Single");
+            return juce::String ("Multi");
+        return juce::String ("Single");
     }
     if (index == kPlayMain)
     {
         if (getParameter (index) < 0.5f)
-            return String ("Stopped");
-        return String ("Playing");
+            return juce::String ("Stopped");
+        return juce::String ("Playing");
     }
     if (index == kRecordMain)
     {
         if (getParameter (index) < 0.5f)
-            return String ("Off");
-        return String ("Recording");
+            return juce::String ("Off");
+        return juce::String ("Recording");
     }
     if (index == kPlayCC)
     {
         if (playCC == -2)
-            return String ("Learn...");
+            return juce::String ("Learn...");
         if (playCC == -1)
-            return String ("No CC");
-        return "CC " + String (playCC);
+            return juce::String ("No CC");
+        return "CC " + juce::String (playCC);
     }
     if (index == kRecCC)
     {
         if (recCC == -2)
-            return String ("Learn...");
+            return juce::String ("Learn...");
         if (recCC == -1)
-            return String ("No CC");
-        return "CC " + String (recCC);
+            return juce::String ("No CC");
+        return "CC " + juce::String (recCC);
     }
     if (index == kFile)
     {
         if (getParameter (index) < 0.4f)
-            return String ("<-Clear");
+            return juce::String ("<-Clear");
         if (getParameter (index) > 0.6f)
-            return String ("Load->");
+            return juce::String ("Load->");
         if (getParameter (index) == 0.0f)
-            return String ("Clear!");
+            return juce::String ("Clear!");
         if (getParameter (index) == 1.0f)
-            return String ("Load!");
-        return String ("<-Clear/Load->");
+            return juce::String ("Load!");
+        return juce::String ("<-Clear/Load->");
     }
     if (index == kSave)
     {
-        return String ("Save->");
+        return juce::String ("Save->");
     }
     if (index == kSync)
     {
         if (getParameter (index) < 0.25f)
-            return String ("PPQ (Host 0)");
+            return juce::String ("PPQ (Host 0)");
         if (getParameter (index) < 0.5f)
-            return String ("PPQ (Recstart)");
-        return String ("Sample");
+            return juce::String ("PPQ (Recstart)");
+        return juce::String ("Sample");
     }
     if (index == kRecStep)
     {
         if (getParameter (index) < 0.1)
-            return String ("1 Bar");
+            return juce::String ("1 Bar");
         if (getParameter (index) < 0.2)
-            return String ("3 Beats");
+            return juce::String ("3 Beats");
         if (getParameter (index) < 0.3)
-            return String ("2 Beats");
+            return juce::String ("2 Beats");
         if (getParameter (index) < 0.4)
-            return String ("1 Beat");
+            return juce::String ("1 Beat");
         if (getParameter (index) < 0.5)
-            return String ("8th Note");
+            return juce::String ("8th Note");
         if (getParameter (index) < 0.6)
-            return String ("16th Note");
-        return String ("1 Tick");
+            return juce::String ("16th Note");
+        return juce::String ("1 Tick");
     }
     if (index == kQuantize)
     {
         if (getParameter (index) == 0.0)
-            return String ("Off");
+            return juce::String ("Off");
         if (getParameter (index) < 0.3)
-            return String ("8th");
+            return juce::String ("8th");
         if (getParameter (index) < 0.6)
-            return String ("16th");
+            return juce::String ("16th");
         if (getParameter (index) < 0.9)
-            return String ("32nd");
-        return String ("64th");
+            return juce::String ("32nd");
+        return juce::String ("64th");
     }
     if (index == kFixedLength)
     {
         const int l = roundToInt (getParameter (index) * 32);
         if (l == 0)
-            return String ("Manual");
+            return juce::String ("Manual");
         if (getParameter (kRecStep) < 0.1)
-            return String (l) + String (" Bar") + (l > 1 ? "s" : "");
+            return juce::String (l) + juce::String (" Bar") + (l > 1 ? "s" : "");
         if (getParameter (kRecStep) < 0.2)
-            return String (l * 3) + String (" Beats");
+            return juce::String (l * 3) + juce::String (" Beats");
         if (getParameter (kRecStep) < 0.3)
-            return String (l * 2) + String (" Beats");
+            return juce::String (l * 2) + juce::String (" Beats");
         if (getParameter (kRecStep) < 0.4)
-            return String (l) + String (" Beat") + (l > 1 ? "s" : "");
+            return juce::String (l) + juce::String (" Beat") + (l > 1 ? "s" : "");
         if (getParameter (kRecStep) < 0.5)
-            return String (l) + String (" 8th Note") + (l > 1 ? "s" : "");
+            return juce::String (l) + juce::String (" 8th Note") + (l > 1 ? "s" : "");
         if (getParameter (kRecStep) < 0.6)
-            return String (l) + String (" 16th Note") + (l > 1 ? "s" : "");
+            return juce::String (l) + juce::String (" 16th Note") + (l > 1 ? "s" : "");
         else
-            return String (l) + String (" Tick") + (l > 1 ? "s" : "");
+            return juce::String (l) + juce::String (" Tick") + (l > 1 ? "s" : "");
     }
     if (index == kRecMode)
     {
         if (getParameter (index) < 0.5)
-            return String ("Replace");
+            return juce::String ("Replace");
         if (getParameter (index) < 0.8)
-            return String ("Overdub(Keep Length)");
-        return String ("Overdub");
+            return juce::String ("Overdub(Keep Length)");
+        return juce::String ("Overdub");
     }
     if (index == kMasterTranspose)
     {
         if (roundToInt (getParameter (index) * 24.0f) - 12 < 1)
-            return String (roundToInt (getParameter (index) * 24.0f) - 12);
-        return String ("+") + String (roundToInt (getParameter (index) * 24.0f) - 12);
+            return juce::String (roundToInt (getParameter (index) * 24.0f) - 12);
+        return juce::String ("+") + juce::String (roundToInt (getParameter (index) * 24.0f) - 12);
     }
     if (index == kMidiOutDevice)
     {
         if (param[kMidiOutDevice] > 0.f)
-            return String ("On");
-        return String ("Off");
+            return juce::String ("On");
+        return juce::String ("Off");
     }
 
     for (int i = 0; i < numSlots; i++)
@@ -748,173 +750,173 @@ const String PizLooper::getParameterText (int index)
             case kImmediateTranspose:
             case kTranspose10:
                 if (getParameter (index) < 0.5)
-                    return String ("Off");
-                return String ("On");
+                    return juce::String ("Off");
+                return juce::String ("On");
             case kParamsToHost:
                 if (! getParameter (index))
-                    return String ("Off");
+                    return juce::String ("Off");
                 if (getParameter (index) < 0.5f)
-                    return String ("Only From GUI");
-                return String ("Always");
+                    return juce::String ("Only From GUI");
+                return juce::String ("Always");
             case kTranspose:
                 value = roundToInt (getParameter (index) * 24.0f) - 12;
                 if (value < 1)
-                    return String (value);
-                return String ("+") + String (value);
+                    return juce::String (value);
+                return juce::String ("+") + juce::String (value);
             case kOctave:
                 value = roundToInt (getParameter (index) * 8.0f) - 4;
                 if (value < 1)
-                    return String (value);
-                return String ("+") + String (value);
+                    return juce::String (value);
+                return juce::String ("+") + juce::String (value);
             case kVelocity:
             case kVeloSens:
-                return String (roundToInt (getParameter (index) * 200.f)) + String ("%");
+                return juce::String (roundToInt (getParameter (index) * 200.f)) + juce::String ("%");
             case kShift:
                 value = roundToInt (getParameter (index) * 16.0f) - 8;
                 if (value < 1)
-                    return String (value);
-                return String ("+") + String (value);
+                    return juce::String (value);
+                return juce::String ("+") + juce::String (value);
             case kLoopStart:
                 value = roundToInt (getParameter (index) * 16.0f) - 8;
                 if (value < 1)
-                    return String (value);
-                return String ("+") + String (value);
+                    return juce::String (value);
+                return juce::String ("+") + juce::String (value);
             case kLoopEnd:
                 value = roundToInt (getParameter (index) * 16.0f) - 8;
                 if (value < 1)
-                    return String (value);
-                return String ("+") + String (value);
+                    return juce::String (value);
+                return juce::String ("+") + juce::String (value);
             case kStretch:
                 if (getParameter (index) == 0.00f)
-                    return String ("x 1/16");
+                    return juce::String ("x 1/16");
                 if (getParameter (index) <= 0.05f)
-                    return String ("x 1/12");
+                    return juce::String ("x 1/12");
                 if (getParameter (index) <= 0.10f)
-                    return String ("x 1/8");
+                    return juce::String ("x 1/8");
                 if (getParameter (index) <= 0.15f)
-                    return String ("x 1/6");
+                    return juce::String ("x 1/6");
                 if (getParameter (index) <= 0.20f)
-                    return String ("x 1/5");
+                    return juce::String ("x 1/5");
                 if (getParameter (index) <= 0.25f)
-                    return String ("x 1/4");
+                    return juce::String ("x 1/4");
                 if (getParameter (index) <= 0.30f)
-                    return String ("x 1/3");
+                    return juce::String ("x 1/3");
                 if (getParameter (index) <= 0.35f)
-                    return String ("x 1/2");
+                    return juce::String ("x 1/2");
                 if (getParameter (index) <= 0.40f)
-                    return String ("x 2/3");
+                    return juce::String ("x 2/3");
                 if (getParameter (index) <= 0.45f)
-                    return String ("x 3/4");
+                    return juce::String ("x 3/4");
                 if (getParameter (index) <= 0.50f)
-                    return String ("x 1.0");
+                    return juce::String ("x 1.0");
                 if (getParameter (index) <= 0.55f)
-                    return String ("x 1.33");
+                    return juce::String ("x 1.33");
                 if (getParameter (index) <= 0.60f)
-                    return String ("x 1.5");
+                    return juce::String ("x 1.5");
                 if (getParameter (index) <= 0.65f)
-                    return String ("x 2.0");
+                    return juce::String ("x 2.0");
                 if (getParameter (index) <= 0.70f)
-                    return String ("x 3.0");
+                    return juce::String ("x 3.0");
                 if (getParameter (index) <= 0.75f)
-                    return String ("x 4.0");
+                    return juce::String ("x 4.0");
                 if (getParameter (index) <= 0.80f)
-                    return String ("x 5.0");
+                    return juce::String ("x 5.0");
                 if (getParameter (index) <= 0.85f)
-                    return String ("x 6.0");
+                    return juce::String ("x 6.0");
                 if (getParameter (index) <= 0.90f)
-                    return String ("x 8.0");
+                    return juce::String ("x 8.0");
                 if (getParameter (index) <= 0.95f)
-                    return String ("x 12.0");
-                /*if (getParameter(index)<1.0f)*/ return String ("x 16.0");
+                    return juce::String ("x 12.0");
+                return juce::String ("x 16.0");
             case kTrigger:
                 if (getParameter (index) == 0.0f)
-                    return String ("Loop after rec");
+                    return juce::String ("Loop after rec");
                 if (getParameter (index) < 0.1f)
-                    return String ("Sync loop");
+                    return juce::String ("Sync loop");
                 if (getParameter (index) < 0.2f)
-                    return String ("Unsync 1-shot");
+                    return juce::String ("Unsync 1-shot");
                 if (getParameter (index) < 0.3f)
-                    return String ("Unsync loop");
+                    return juce::String ("Unsync loop");
                 //if (getParameter(index)<0.5f) return String("sync 1-shot");
-                return String();
+                return juce::String();
             case kNoteTrig:
                 if (getParameter (index) == 0.0f)
-                    return String ("Off");
+                    return juce::String ("Off");
                 if (getParameter (index) < 0.1f)
-                    return String ("Mono (Transpose)");
+                    return juce::String ("Mono (Transpose)");
                 if (getParameter (index) < 0.2f)
-                    return String ("Poly (Transpose)");
+                    return juce::String ("Poly (Transpose)");
                 if (getParameter (index) < 0.3f)
-                    return String ("Mono (Orig. Key)");
+                    return juce::String ("Mono (Orig. Key)");
                 //if (getParameter(index)<0.4f) return String("Poly (Orig. Key)");
-                return String();
+                return juce::String();
             case kRoot:
             case kNLow:
             case kNHigh:
                 value = floatToMidi (getParameter (index));
                 if (value == -1)
-                    return String ("Waiting...");
-                return String (value) + String (" (") + getNoteName (value, bottomOctave) + String (")");
+                    return juce::String ("Waiting...");
+                return juce::String (value) + juce::String (" (") + getNoteName (value, bottomOctave) + juce::String (")");
             case kChannel:
                 if (roundToInt (getParameter (index) * 16.0f) == 0)
-                    return String ("All");
-                return String (roundToInt (getParameter (index) * 16.0f));
+                    return juce::String ("All");
+                return juce::String (roundToInt (getParameter (index) * 16.0f));
             case kNumLoops:
                 if (roundToInt (getParameter (index) * 64.0f) == 0)
-                    return String ("Forever");
-                return "x" + String (roundToInt (getParameter (index) * 64.0f));
+                    return juce::String ("Forever");
+                return "x" + juce::String (roundToInt (getParameter (index) * 64.0f));
             case kNextSlot:
                 if (roundToInt (getParameter (index) * (float) numSlots) == 0)
-                    return String ("Stop");
-                return "Play Slot " + String (roundToInt (getParameter (index) * (float) numSlots));
+                    return juce::String ("Stop");
+                return "Play Slot " + juce::String (roundToInt (getParameter (index) * (float) numSlots));
             case kMuteGroup:
             case kPlayGroup:
                 if (roundToInt (getParameter (index) * 16.0f) == 0)
-                    return String ("Off");
-                return String (roundToInt (getParameter (index) * 16.0f));
+                    return juce::String ("Off");
+                return juce::String (roundToInt (getParameter (index) * 16.0f));
             case kTrigChan:
-                return String (roundToInt (getParameter (index) * 15.0f) + 1);
+                return juce::String (roundToInt (getParameter (index) * 15.0f) + 1);
             case kFiltChan:
                 if (getParameter (index) < 0.5f)
-                    return String ("Transform");
-                return String ("Filter");
+                    return juce::String ("Transform");
+                return juce::String ("Filter");
             case kWaitForBar:
                 if (getParameter (index) < 0.5f)
-                    return String ("No");
-                return String ("Yes");
+                    return juce::String ("No");
+                return juce::String ("Yes");
             case kScaleChannel:
                 //if (roundToInt(getParameter(index)*16.0f)==0) return String("Off");
-                return String (roundToInt (getParameter (index) * 15.0f) + 1);
+                return juce::String (roundToInt (getParameter (index) * 15.0f) + 1);
             case kTransposeChannel:
                 //if (roundToInt(getParameter(index)*16.0f)==0) return String("Off");
-                return String (roundToInt (getParameter (index) * 15.0f) + 1);
+                return juce::String (roundToInt (getParameter (index) * 15.0f) + 1);
             case kForceToScaleMode:
                 int mode;
                 mode = roundToInt (getParameter (index) * (float) (numForceToKeyModes - 1));
                 if (mode == nearest)
-                    return String ("Nearest");
+                    return juce::String ("Nearest");
                 else if (mode == alwaysup)
-                    return String ("Up");
+                    return juce::String ("Up");
                 else if (mode == alwaysdown)
-                    return String ("Down");
+                    return juce::String ("Down");
                 else if (mode == block)
-                    return String ("Block");
-                return String();
+                    return juce::String ("Block");
+                return juce::String();
             default:
                 break;
         }
     }
-    return String();
+    return juce::String();
 }
 
-const String PizLooper::getInputChannelName (const int channelIndex) const
+const juce::String PizLooper::getInputChannelName (const int channelIndex) const
 {
-    return String ("Input") + String (channelIndex + 1);
+    return juce::String ("Input") + juce::String (channelIndex + 1);
 }
 
-const String PizLooper::getOutputChannelName (const int channelIndex) const
+const juce::String PizLooper::getOutputChannelName (const int channelIndex) const
 {
-    return String ("Output") + String (channelIndex + 1);
+    return juce::String ("Output") + juce::String (channelIndex + 1);
 }
 
 bool PizLooper::isInputChannelStereoPair (int index) const
@@ -970,7 +972,7 @@ void PizLooper::resetCurrentProgram (int index)
     }
 }
 
-void PizLooper::changeProgramName (int index, const String& newName)
+void PizLooper::changeProgramName (int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
     {
@@ -980,13 +982,13 @@ void PizLooper::changeProgramName (int index, const String& newName)
     }
 }
 
-const String PizLooper::getProgramName (int index)
+const juce::String PizLooper::getProgramName (int index)
 {
     if (index < getNumPrograms())
     {
         return programs[index].name;
     }
-    return String();
+    return juce::String();
 }
 
 int PizLooper::getCurrentProgram()
@@ -995,7 +997,7 @@ int PizLooper::getCurrentProgram()
 }
 
 //==============================================================================
-AudioProcessorEditor* PizLooper::createEditor()
+juce::AudioProcessorEditor* PizLooper::createEditor()
 {
 #if JucePlugin_NoEditor
     return 0;
@@ -1005,7 +1007,7 @@ AudioProcessorEditor* PizLooper::createEditor()
 }
 
 //==============================================================================
-void PizLooper::getStateInformation (MemoryBlock& destData)
+void PizLooper::getStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     for (int i = 0; i < 12; i++)
@@ -1018,13 +1020,13 @@ void PizLooper::getStateInformation (MemoryBlock& destData)
     {
         if (programs[i].loop.getNumEvents() > 0)
         {
-            MemoryBlock midiData (512, true);
-            MemoryOutputStream m (midiData, false);
+            juce::MemoryBlock midiData (512, true);
+            juce::MemoryOutputStream m (midiData, false);
 
-            MidiFile midifile;
+            juce::MidiFile midifile;
             midifile.setTicksPerQuarterNote (960);
 
-            MidiMessageSequence midi (programs[i].loop.getAsJuceSequence());
+            juce::MidiMessageSequence midi (programs[i].loop.getAsJuceSequence());
             midifile.addTrack (midi);
             midifile.writeTo (m);
             int dataSize = (int) midiData.getSize();
@@ -1038,9 +1040,9 @@ void PizLooper::getStateInformation (MemoryBlock& destData)
         }
     }
 
-    MemoryBlock xmlData (512);
+    juce::MemoryBlock xmlData (512);
 
-    XmlElement xmlState ("midiLooperSettings");
+    juce::XmlElement xmlState ("midiLooperSettings");
     xmlState.setAttribute ("pluginVersion", 4);
     xmlState.setAttribute ("program", getCurrentProgram());
     for (int i = 0; i < numGlobalParams; i++)
@@ -1051,8 +1053,8 @@ void PizLooper::getStateInformation (MemoryBlock& destData)
     xmlState.setAttribute ("uiHeight", lastUIHeight);
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        XmlElement* xmlProgram = new XmlElement ("Slot" + String (p));
-        xmlProgram->setAttribute (String ("name"), programs[p].name);
+        auto* xmlProgram = new juce::XmlElement ("Slot" + juce::String (p));
+        xmlProgram->setAttribute (juce::String ("name"), programs[p].name);
         for (int i = 0; i < numParamsPerSlot; i++)
         {
             int index = i + curProgram * numParamsPerSlot + numGlobalParams;
@@ -1075,7 +1077,7 @@ void PizLooper::getStateInformation (MemoryBlock& destData)
     destData.append (xmlData.getData(), xmlData.getSize());
 #ifdef _DEBUG
     // TODO: macOS/Linux compatibility
-    xmlState.writeTo (File ("C:\\loopergetState.xml"));
+    xmlState.writeTo (juce::File ("C:\\loopergetState.xml"));
 #endif
 }
 
@@ -1098,7 +1100,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
     auto xmlState = getXmlFromBinary (data, sizeInBytes);
     if (xmlState == 0)
     {
-        uint8* datab      = (uint8*) data;
+        auto* datab       = (juce::uint8*) data;
         int totalMidiSize = 0;
         bool oldBank      = false;
         for (int i = 0; i < numPrograms; i++)
@@ -1117,15 +1119,15 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 if (midiSize > 0)
                 {
                     totalMidiSize += sizeof (midiSize);
-                    MemoryInputStream m (datab, midiSize, true);
-                    MidiFile midifile;
+                    juce::MemoryInputStream m (datab, midiSize, true);
+                    juce::MidiFile midifile;
                     if (midifile.readFrom (m))
                     {
                         programs[i].loop.addSequence (*midifile.getTrack (midifile.getNumTracks() - 1), 0, 0, midifile.getLastTimestamp() + 1);
                         programs[i].loop.updateMatchedPairs();
-                        uint8 bogus[3] = { 0xff, 0x2f, 0x00 };
-                        int lastIndex  = programs[i].loop.getNumEvents() - 1;
-                        const uint8* lastmsg; /* = programs[i].loop.getEventPointer(lastIndex)->message.getRawData();*/
+                        juce::uint8 bogus[3] = { 0xff, 0x2f, 0x00 };
+                        int lastIndex        = programs[i].loop.getNumEvents() - 1;
+                        const juce::uint8* lastmsg; /* = programs[i].loop.getEventPointer(lastIndex)->message.getRawData();*/
                         bool done = false;
                         while (lastIndex >= 0 && ! done)
                         {
@@ -1159,7 +1161,7 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 }
                 lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
                 lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-                XmlElement* xmlProgram (xmlState->getChildByName ("Slot" + String (p)));
+                juce::XmlElement* xmlProgram (xmlState->getChildByName ("Slot" + juce::String (p)));
                 if (xmlProgram)
                 {
                     for (int i = numGlobalParams; i < numParamsPerSlot + numGlobalParams; i++)
@@ -1171,12 +1173,12 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                     param[kRecord + numParamsPerSlot * p] = programs[p].param[kRecord] = 0.0f;
                     param[kFile] = programs[p].param[kFile] = 0.5f;
                     param[kSave] = programs[p].param[kSave] = 0.f;
-                    setLoopLength (p, xmlProgram->getDoubleAttribute (String ("looplength"), getLoopLength (p)));
-                    setLoopStart (p, xmlProgram->getDoubleAttribute (String ("loopstart1"), getLoopStart (p)));
-                    programs[p].measureFromHere = xmlProgram->getDoubleAttribute (String ("measureFromHere"), programs[p].measureFromHere);
+                    setLoopLength (p, xmlProgram->getDoubleAttribute (juce::String ("looplength"), getLoopLength (p)));
+                    setLoopStart (p, xmlProgram->getDoubleAttribute (juce::String ("loopstart1"), getLoopStart (p)));
+                    programs[p].measureFromHere = xmlProgram->getDoubleAttribute (juce::String ("measureFromHere"), programs[p].measureFromHere);
                     programs[p].denominator     = xmlProgram->getIntAttribute ("denominator", programs[p].denominator);
                     programs[p].numerator       = xmlProgram->getIntAttribute ("numerator", programs[p].numerator);
-                    programs[p].name            = xmlProgram->getStringAttribute (String ("name"), programs[p].name);
+                    programs[p].name            = xmlProgram->getStringAttribute (juce::String ("name"), programs[p].name);
                     programs[p].loop.setSemitones (roundToInt (param[kTranspose + numParamsPerSlot * p] * 24.f) - 12);
                     programs[p].loop.setOctaves (roundToInt (param[kOctave + numParamsPerSlot * p] * 8.f) - 4);
                     programs[p].device = getDeviceByName (xmlProgram->getStringAttribute ("device", programs[p].device.name));
@@ -1188,13 +1190,13 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 }
             }
             init = true;
-            resetCurrentProgram (xmlState->getIntAttribute (String ("program"), curProgram));
+            resetCurrentProgram (xmlState->getIntAttribute (juce::String ("program"), curProgram));
         }
         else if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
             for (int p = 0; p < 16; p++)
             {
-                String prefix = String ("Program") + String (p) + String ("_");
+                juce::String prefix = juce::String ("Program") + juce::String (p) + juce::String ("_");
                 for (int i = 0; i < numParamsPerSlot + numGlobalParams; i++)
                 {
                     if (i < numGlobalParams)
@@ -1205,14 +1207,14 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 param[kRecord + numParamsPerSlot * p] = programs[p].param[kRecord] = 0.0f;
                 param[kFile] = programs[p].param[kFile] = 0.5f;
                 param[kSave] = programs[p].param[kSave] = 0.f;
-                setLoopLength (p, xmlState->getDoubleAttribute (String ("looplength"), getLoopLength (p)));
-                setLoopStart (p, xmlState->getDoubleAttribute (String ("loopstart1"), getLoopStart (p)));
-                programs[p].measureFromHere = xmlState->getDoubleAttribute (prefix + String ("measureFromHere"), programs[p].measureFromHere);
+                setLoopLength (p, xmlState->getDoubleAttribute (juce::String ("looplength"), getLoopLength (p)));
+                setLoopStart (p, xmlState->getDoubleAttribute (juce::String ("loopstart1"), getLoopStart (p)));
+                programs[p].measureFromHere = xmlState->getDoubleAttribute (prefix + juce::String ("measureFromHere"), programs[p].measureFromHere);
                 lastUIWidth                 = xmlState->getIntAttribute (prefix + "uiWidth", lastUIWidth);
                 lastUIHeight                = xmlState->getIntAttribute (prefix + "uiHeight", lastUIHeight);
                 programs[p].denominator     = xmlState->getIntAttribute (prefix + "denominator", programs[p].denominator);
                 programs[p].numerator       = xmlState->getIntAttribute (prefix + "numerator", programs[p].numerator);
-                programs[p].name            = xmlState->getStringAttribute (prefix + String ("progname"), programs[p].name);
+                programs[p].name            = xmlState->getStringAttribute (prefix + juce::String ("progname"), programs[p].name);
                 programs[p].loop.setSemitones (roundToInt (param[kTranspose + numParamsPerSlot * p] * 24.f) - 12);
                 programs[p].loop.setOctaves (roundToInt (param[kOctave + numParamsPerSlot * p] * 8.f) - 4);
                 programs[p].device = getDeviceByName (xmlState->getStringAttribute (prefix + "device", programs[p].device.name));
@@ -1220,69 +1222,69 @@ void PizLooper::setStateInformation (const void* data, int sizeInBytes)
                 readMidiFile (p, programs[p].name);
             }
             init = true;
-            resetCurrentProgram (xmlState->getIntAttribute (String ("program"), curProgram));
+            resetCurrentProgram (xmlState->getIntAttribute (juce::String ("program"), curProgram));
         }
 #ifdef _DEBUG
-        xmlState->writeTo (File ("C:\\loopersetState.xml"));
+        xmlState->writeTo (juce::File ("C:\\loopersetState.xml"));
 #endif
     }
 }
 
 //==============================================================================
-bool PizLooper::writeMidiFile (int index, File file, bool IncrementFilename)
+bool PizLooper::writeMidiFile (int index, juce::File file, bool IncrementFilename)
 {
-    MidiFile midifile;
+    juce::MidiFile midifile;
     midifile.setTicksPerQuarterNote (960);
 
-    uint8 dd = 0;
-    int d    = getDenominator (index);
+    juce::uint8 dd = 0;
+    int d          = getDenominator (index);
     while (d > 1)
     {
         d = d >> 1;
         dd++;
     }
 
-    MidiMessageSequence timesigtrack;
-    uint8 ts[] = { 0xFF, 0x58, 0x04, (uint8) getNumerator (index), dd, 0x18, 0x08 };
-    timesigtrack.addEvent (MidiMessage (ts, 7, 0));
+    juce::MidiMessageSequence timesigtrack;
+    juce::uint8 ts[] = { 0xFF, 0x58, 0x04, (juce::uint8) getNumerator (index), dd, 0x18, 0x08 };
+    timesigtrack.addEvent (juce::MidiMessage (ts, 7, 0));
     midifile.addTrack (timesigtrack);
 
-    MidiMessageSequence metadata;
-    uint8 ID[] = { 0xFF, 0x03, 9, 'l', 'o', 'o', 'p', ' ', 'a', 'r', 'e', 'a' };
-    metadata.addEvent (MidiMessage (ID, 12, 0));
+    juce::MidiMessageSequence metadata;
+    juce::uint8 ID[] = { 0xFF, 0x03, 9, 'l', 'o', 'o', 'p', ' ', 'a', 'r', 'e', 'a' };
+    metadata.addEvent (juce::MidiMessage (ID, 12, 0));
     int ls = roundToInt ((programs[index].loopstart - programs[index].measureFromHere) * 960.0);
-    metadata.addEvent (MidiMessage (0x9f, 62, 1, 0), (double) ls);
+    metadata.addEvent (juce::MidiMessage (0x9f, 62, 1, 0), (double) ls);
     int ll = int ((programs[index].looplength) * 960.0);
-    metadata.addEvent (MidiMessage (0x8f, 62, 1, 0), (double) (ls + ll));
+    metadata.addEvent (juce::MidiMessage (0x8f, 62, 1, 0), (double) (ls + ll));
     metadata.updateMatchedPairs();
     midifile.addTrack (metadata);
 
-    uint8 tn[] = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
-    programs[index].loop.addEvent (MidiMessage (tn, 7, 0));
+    juce::uint8 tn[] = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
+    programs[index].loop.addEvent (juce::MidiMessage (tn, 7, 0));
     midifile.addTrack (programs[index].loop.getAsJuceSequence());
 
-    if (! File (loopDir).exists())
-        File (loopDir).createDirectory();
+    if (! juce::File (loopDir).exists())
+        juce::File (loopDir).createDirectory();
     if (file.isDirectory())
     {
-        String filename = file.getFullPathName() + File::getSeparatorString() + getProgramName (index);
+        juce::String filename = file.getFullPathName() + juce::File::getSeparatorString() + getProgramName (index);
         if (IncrementFilename)
             filename << "_" << FilenameIndex++;
         filename << ".mid";
-        file = File (filename);
+        file = juce::File (filename);
     }
     if (! file.deleteFile())
-        file.copyFileTo (File (file.getParentDirectory().getFullPathName()
-                               + File::getSeparatorString() + file.getFileNameWithoutExtension() + String ("_old.mid")));
+        file.copyFileTo (juce::File (file.getParentDirectory().getFullPathName()
+                                     + juce::File::getSeparatorString() + file.getFileNameWithoutExtension() + juce::String ("_old.mid")));
     if (file.create())
     {
-        FileOutputStream f (file);
+        juce::FileOutputStream f (file);
         midifile.writeTo (f);
     }
     return true;
 }
 
-void PizLooper::loadMidiFile (File file)
+void PizLooper::loadMidiFile (juce::File file)
 {
     if (readMidiFile (curProgram, getProgramName (curProgram), file))
     {
@@ -1292,30 +1294,30 @@ void PizLooper::loadMidiFile (File file)
     }
 }
 
-bool PizLooper::readMidiFile (int index, String progname, File mid)
+bool PizLooper::readMidiFile (int index, juce::String progname, juce::File mid)
 {
     double ppqPerBar = 4.0;
     double l         = ppqPerBar * (double) getPRSetting ("bars");
     if (! mid.exists())
     {
-        String path = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                    + File::getSeparatorString() + String ("midiloops");
-        mid = File (path + File::getSeparatorString() + getProgramName (index) + String (".mid"));
+        juce::String path = ((juce::File::getSpecialLocation (juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+                          + juce::File::getSeparatorString() + juce::String ("midiloops");
+        mid = juce::File (path + juce::File::getSeparatorString() + getProgramName (index) + juce::String (".mid"));
     }
     if (mid.exists())
     {
         programs[index].loop.clear();
         programs[index].looplength = 0;
         programs[index].loopstart  = 0;
-        MidiFile midifile;
+        juce::MidiFile midifile;
         {
-            FileInputStream f (mid);
+            juce::FileInputStream f (mid);
             midifile.readFrom (f);
         }
         //look for time signature & tempo
         for (int i = 0; i < midifile.getTrack (0)->getNumEvents(); i++)
         {
-            const MidiMessage ID = midifile.getTrack (0)->getEventPointer (i)->message;
+            const juce::MidiMessage ID = midifile.getTrack (0)->getEventPointer (i)->message;
             if (ID.isTimeSignatureMetaEvent())
             {
                 ID.getTimeSignatureInfo (programs[index].numerator, programs[index].denominator);
@@ -1333,21 +1335,21 @@ bool PizLooper::readMidiFile (int index, String progname, File mid)
         {
             for (int t = 0; t < midifile.getNumTracks(); t++)
             {
-                bool loopAreaTrack               = false;
-                const MidiMessageSequence* track = midifile.getTrack (t);
+                bool loopAreaTrack                     = false;
+                const juce::MidiMessageSequence* track = midifile.getTrack (t);
                 for (int i = 0; i < track->getNumEvents(); i++)
                 {
-                    const MidiMessage ID = track->getEventPointer (i)->message;
+                    const juce::MidiMessage ID = track->getEventPointer (i)->message;
                     if (ID.isTrackNameEvent())
                     {
-                        if (ID.getTextFromTextMetaEvent() == String ("loop area"))
+                        if (ID.getTextFromTextMetaEvent() == juce::String ("loop area"))
                         {
                             //track->convertTimeBase(midifile.getTimeFormat());
                             double t1 = 0;
                             double t2 = 0;
                             for (int e = 0; e < track->getNumEvents(); e++)
                             {
-                                MidiMessage mm = track->getEventPointer (e)->message;
+                                juce::MidiMessage mm = track->getEventPointer (e)->message;
                                 if (mm.isNoteOn())
                                 {
                                     t1 = mm.getTimeStamp();

@@ -22,11 +22,11 @@ enum parameters
 };
 
 static const char* const keymap = "zsxdcvgbhnjmq2w3er5t6y7ui9o0p[+]";
-static const int keymapLength   = String (keymap).length();
+static const int keymapLength   = juce::String (keymap).length();
 
 //==============================================================================
 class PizKeyboard : public PizAudioProcessor,
-                    public ChangeBroadcaster
+                    public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -37,14 +37,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override;
+    const juce::String getName() const override;
     bool hasEditor() const override { return true; }
 
     int getNumParameters() override;
@@ -52,11 +52,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -72,11 +72,11 @@ public:
         lastProgram = curProgram;
         curProgram  = index;
     }
-    const String getProgramName (int index) override { return "State " + String (index + 1); }
-    void changeProgramName (int index, const String& newName) override {}
+    const juce::String getProgramName (int index) override { return "State " + juce::String (index + 1); }
+    void changeProgramName (int index, const juce::String& newName) override {}
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
@@ -84,8 +84,8 @@ public:
 
     // this is kept up to date with the midi messages that arrive, and the UI component
     // registers with it so it can represent the incoming messages
-    MidiKeyboardState progKbState[128];
-    MidiKeyboardState editorKbState;
+    juce::MidiKeyboardState progKbState[128];
+    juce::MidiKeyboardState editorKbState;
 
     // these are used to persist the UI's size - the values are stored along with the
     // filter's other parameters, and the UI component will update them when it gets
@@ -94,10 +94,8 @@ public:
     int keyPosition;
     int octave;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private : int lastProgram;
+private:
+    int lastProgram;
     int curProgram;
     float width;
     float velocity;
@@ -117,6 +115,8 @@ public:
     bool ccState[2];
 
     bool isCapsLockOn();
+
+    JUCE_LEAK_DETECTOR (PizKeyboard)
 };
 
 #endif

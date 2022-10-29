@@ -20,18 +20,18 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_events/juce_events.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/ChannelSlider.h"
 #include "PianoRoll.h"
 #include "step.h"
-class PianoPort : public Viewport
+class PianoPort : public juce::Viewport
 {
 public:
-    PianoPort (String name) : Viewport (name){};
-    void mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& d) override
+    PianoPort (juce::String name) : Viewport (name){};
+    void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override
     {
         this->getParentComponent()->mouseWheelMove (e, d);
     }
@@ -62,12 +62,12 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    bool isInterestedInFileDrag (const StringArray& files) override;
-    void filesDropped (const StringArray& filenames, int mouseX, int mouseY) override;
+    bool isInterestedInFileDrag (const juce::StringArray& files) override;
+    void filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY) override;
     void timerCallback() override;
     void zoomIn (int centerPixel);
     void zoomOut (int centerPixel);
-    void mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
+    void mouseWheelMove (const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -78,18 +78,18 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiStep* getFilter() const throw() { return (MidiStep*) getAudioProcessor(); }
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void updateParameters (bool updateLoop = false);
-    ComponentBoundsConstrainer resizeLimits;
+    juce::ComponentBoundsConstrainer resizeLimits;
     PianoRoll* pianoRoll;
-    TextButton* getButtonByIndex (int i);
-    void recArmButtonClicked (Button* buttonThatWasClicked);
+    juce::TextButton* getButtonByIndex (int i);
+    void recArmButtonClicked (juce::Button* buttonThatWasClicked);
     int lastActiveLoop;
     //[/UserVariables]
 
     //==============================================================================
     std::unique_ptr<juce::GroupComponent> activeLoopLabel;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<PianoPort> viewport;
     std::unique_ptr<juce::TextButton> recordButton;
     std::unique_ptr<ChannelSlider> outChannelSlider;

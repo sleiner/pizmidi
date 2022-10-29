@@ -23,6 +23,8 @@
 #include "PizKeyboardEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::jmax;
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -109,11 +111,11 @@ midiKeyboardEditor::midiKeyboardEditor (PizKeyboard* const ownerFilter)
 
     hideButton->setBounds (498, 1, 14, 14);
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
     resizer->setName ("new component");
 
-    midiKeyboard.reset (new PizKeyboardComponent (ownerFilter->editorKbState, MidiKeyboardComponent::horizontalKeyboard));
+    midiKeyboard.reset (new PizKeyboardComponent (ownerFilter->editorKbState, juce::MidiKeyboardComponent::horizontalKeyboard));
     addAndMakeVisible (midiKeyboard.get());
 
     aboutBox.reset (new juce::TextEditor ("Instructions"));
@@ -236,7 +238,7 @@ void midiKeyboardEditor::paint (juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     if (getFilter()->getParameter (kHidePanel))
-        g.fillAll (Colour (0xff8c8c8c));
+        g.fillAll (juce::Colour (0xff8c8c8c));
     else
     {
         //[/UserPrePaint]
@@ -384,7 +386,7 @@ void midiKeyboardEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void midiKeyboardEditor::mouseUp (const MouseEvent& e)
+void midiKeyboardEditor::mouseUp (const juce::MouseEvent& e)
 {
     if (e.eventComponent == this)
     {
@@ -415,7 +417,7 @@ void midiKeyboardEditor::mouseUp (const MouseEvent& e)
     }
 }
 
-void midiKeyboardEditor::changeListenerCallback (ChangeBroadcaster* source)
+void midiKeyboardEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == midiKeyboard.get())
     {
@@ -449,20 +451,20 @@ void midiKeyboardEditor::updateParametersFromFilter()
 
     filter->getCallbackLock().exit();
 
-    useProgCh->setToggleState (progch, dontSendNotification);
-    useCapsLock->setToggleState (capslock, dontSendNotification);
-    grabQwertyButton->setToggleState (qwerty, dontSendNotification);
-    showNumbersButton->setToggleState (showNumbers, dontSendNotification);
+    useProgCh->setToggleState (progch, juce::dontSendNotification);
+    useCapsLock->setToggleState (capslock, juce::dontSendNotification);
+    grabQwertyButton->setToggleState (qwerty, juce::dontSendNotification);
+    showNumbersButton->setToggleState (showNumbers, juce::dontSendNotification);
     midiKeyboard->setDrawNoteNumber (showNumbers);
     midiKeyboard->setDrawQwerty (qwerty);
     if (qwerty)
         midiKeyboard->grabKeyboardFocus();
     midiKeyboard->setMidiChannelsToDisplay (1 << ch);
     midiKeyboard->setMidiChannel (ch + 1);
-    chSlider->setValue (ch + 1, dontSendNotification);
-    yButton->setToggleState (useY, dontSendNotification);
+    chSlider->setValue (ch + 1, juce::dontSendNotification);
+    yButton->setToggleState (useY, juce::dontSendNotification);
     velocitySlider->setValue (velocity);
-    inputToggleButton->setToggleState (toggle, dontSendNotification);
+    inputToggleButton->setToggleState (toggle, juce::dontSendNotification);
     setMouseClickGrabsKeyboardFocus (qwerty);
     midiKeyboard->setMouseClickGrabsKeyboardFocus (qwerty);
     midiKeyboard->toggle = toggle;
@@ -470,7 +472,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
     midiKeyboard->setLowestVisibleKey (keyPos);
     midiKeyboard->setKeyWidth (jmax ((float) getWidth() / 76.f, keywidth * 150.0f + 5.0f));
     midiKeyboard->setScrollButtonsVisible (keywidth > 0.f);
-    keyWidthSlider->setValue (keywidth * 100.f, dontSendNotification);
+    keyWidthSlider->setValue (keywidth * 100.f, juce::dontSendNotification);
 
     keyWidthSlider->setVisible (! hide);
     chSlider->setVisible (! hide);

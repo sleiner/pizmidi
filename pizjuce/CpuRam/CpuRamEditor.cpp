@@ -6,25 +6,25 @@ CpuRamEditor::CpuRamEditor (CpuRam* const ownerFilter)
 {
     setMouseClickGrabsKeyboardFocus (false);
 
-    addAndMakeVisible (infoLabel = new Label (String ("CPU"), String()));
+    addAndMakeVisible (infoLabel = new juce::Label (juce::String ("CPU"), juce::String()));
     infoLabel->setMouseClickGrabsKeyboardFocus (false);
     infoLabel->setInterceptsMouseClicks (false, false);
 
-    addAndMakeVisible (memLabel2 = new Label (String ("RAM"), String()));
+    addAndMakeVisible (memLabel2 = new juce::Label (juce::String ("RAM"), juce::String()));
     memLabel2->setMouseClickGrabsKeyboardFocus (false);
     memLabel2->setInterceptsMouseClicks (false, false);
 
-    addAndMakeVisible (slider = new Slider (String ("interval")));
+    addAndMakeVisible (slider = new juce::Slider (juce::String ("interval")));
     slider->setMouseClickGrabsKeyboardFocus (false);
-    slider->setSliderStyle (Slider::LinearBar);
+    slider->setSliderStyle (juce::Slider::LinearBar);
     slider->setRange (300, 2000, 1);
-    slider->setTextValueSuffix (String (" ms"));
+    slider->setTextValueSuffix (juce::String (" ms"));
     slider->addListener (this);
 
     addAndMakeVisible (graph = new CpuGraph());
 
-    colourSelector = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace);
-    colourSelector->setName (String ("color"));
+    colourSelector = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace);
+    colourSelector->setName (juce::String ("color"));
     colourSelector->setCurrentColour (getFilter()->bgcolor);
     colourSelector->addChangeListener (this);
 
@@ -59,7 +59,7 @@ CpuRamEditor::~CpuRamEditor()
 }
 
 //==============================================================================
-void CpuRamEditor::paint (Graphics& g)
+void CpuRamEditor::paint (juce::Graphics& g)
 {
     g.fillAll (getFilter()->bgcolor);
 }
@@ -89,7 +89,7 @@ void CpuRamEditor::resized()
     //getFilter()->lastUIHeight = h;
 }
 
-void CpuRamEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void CpuRamEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     getFilter()->setParameterNotifyingHost (0, (float) (sliderThatWasMoved->getValue() - 300) / 1700.0f);
 }
@@ -113,11 +113,11 @@ void CpuRamEditor::timerCallback()
     updateParametersFromFilter();
 }
 
-void CpuRamEditor::mouseUp (const MouseEvent& e)
+void CpuRamEditor::mouseUp (const juce::MouseEvent& e)
 {
     if (e.mods.isPopupMenu())
     {
-        PopupMenu m;
+        juce::PopupMenu m;
         colourSelector->setCurrentColour (getFilter()->bgcolor);
         m.addItem (3, "Show Graph", true, getFilter()->showGraph);
         m.addSectionHeader ("Interval");
@@ -133,7 +133,7 @@ void CpuRamEditor::mouseUp (const MouseEvent& e)
 }
 
 //==============================================================================
-void CpuRamEditor::changeListenerCallback (ChangeBroadcaster* source)
+void CpuRamEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -141,11 +141,11 @@ void CpuRamEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else
     {
-        ColourSelector* cs   = (ColourSelector*) source;
+        auto* cs             = (juce::ColourSelector*) source;
         getFilter()->bgcolor = (cs->getCurrentColour());
-        infoLabel->setColour (Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));
-        memLabel2->setColour (Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));
-        slider->setColour (Slider::textBoxTextColourId, getFilter()->bgcolor.contrasting (0.8f));
+        infoLabel->setColour (juce::Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));
+        memLabel2->setColour (juce::Label::textColourId, getFilter()->bgcolor.contrasting (0.8f));
+        slider->setColour (juce::Slider::textBoxTextColourId, getFilter()->bgcolor.contrasting (0.8f));
         repaint();
     }
 }
@@ -160,18 +160,18 @@ void CpuRamEditor::updateParametersFromFilter()
     float cpu = CPULoad();
     graph->addPoint (cpu * 0.01f);
     if (getFilter()->showGraph)
-        infoLabel->setText (String ("CPU Load: ") + String (cpu, 1) + String ("%"), dontSendNotification);
+        infoLabel->setText (juce::String ("CPU Load: ") + juce::String (cpu, 1) + juce::String ("%"), juce::dontSendNotification);
     else
-        infoLabel->setText (String ("CPU: ") + String (cpu, 1) + String ("%"), dontSendNotification);
+        infoLabel->setText (juce::String ("CPU: ") + juce::String (cpu, 1) + juce::String ("%"), juce::dontSendNotification);
 
-    memLabel2->setText (String ("Free RAM: ") + String ((int) RAMLoad().ullAvailPhys / 1048576) + String ("MB"), dontSendNotification);
+    memLabel2->setText (juce::String ("Free RAM: ") + juce::String ((int) RAMLoad().ullAvailPhys / 1048576) + juce::String ("MB"), juce::dontSendNotification);
 
-    infoLabel->setColour (Label::textColourId, filter->bgcolor.contrasting (0.8f));
-    memLabel2->setColour (Label::textColourId, filter->bgcolor.contrasting (0.8f));
-    slider->setColour (Slider::textBoxTextColourId, filter->bgcolor.contrasting (0.8f));
+    infoLabel->setColour (juce::Label::textColourId, filter->bgcolor.contrasting (0.8f));
+    memLabel2->setColour (juce::Label::textColourId, filter->bgcolor.contrasting (0.8f));
+    slider->setColour (juce::Slider::textBoxTextColourId, filter->bgcolor.contrasting (0.8f));
 
     float interval = filter->getParameter (0) * 1700.0f + 300.0f;
-    slider->setValue (interval, dontSendNotification);
+    slider->setValue (interval, juce::dontSendNotification);
     startTimer ((int) interval);
     pu.setInterval ((int) interval);
 

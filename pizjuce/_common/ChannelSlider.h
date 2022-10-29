@@ -1,8 +1,8 @@
 #ifndef PIZ_CHANNEL_SLIDER_HEADER
 #define PIZ_CHANNEL_SLIDER_HEADER
 
-#include "juce_core/juce_core.h"
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class ChannelSlider : public juce::Slider
 {

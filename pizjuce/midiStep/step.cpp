@@ -1,6 +1,8 @@
 #include "step.h"
 #include "stepgui.h"
 
+using juce::roundToInt;
+
 //==============================================================================
 /*
     This function must be implemented to create the actual plugin object that
@@ -49,21 +51,21 @@ MidiStep::MidiStep()
     for (int i = 0; i < numLoops; i++)
         loop.add (new Loop());
 
-    loopDir = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-            + File::getSeparatorString() + "midiStep";
-    String defaultBank = loopDir + File::getSeparatorString() + "default.fxb";
-    programs           = new JuceProgram[getNumPrograms()];
-    if (File (defaultBank).exists())
+    loopDir = ((juce::File::getSpecialLocation (juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+            + juce::File::getSeparatorString() + "midiStep";
+    juce::String defaultBank = loopDir + juce::File::getSeparatorString() + "default.fxb";
+    programs                 = new JuceProgram[getNumPrograms()];
+    if (juce::File (defaultBank).exists())
     {
-        MemoryBlock bank = MemoryBlock (0, true);
-        File (defaultBank).loadFileAsData (bank);
+        juce::MemoryBlock bank = juce::MemoryBlock (0, true);
+        juce::File (defaultBank).loadFileAsData (bank);
         bank.removeSection (0, 0xA0);
         setStateInformation (bank.getData(), (int) bank.getSize());
     }
     else
         (loadDefaultFxb());
 
-    if (File (loopDir).findChildFiles (midiFiles, File::findFiles, true, "*.mid"))
+    if (juce::File (loopDir).findChildFiles (midiFiles, juce::File::findFiles, true, "*.mid"))
     {
         //for (int i=0;i<midiFiles.size();i++)
         //{
@@ -109,7 +111,7 @@ void MidiStep::setParameter (int index, float newValue)
     }
 }
 
-const String MidiStep::getParameterName (int index)
+const juce::String MidiStep::getParameterName (int index)
 {
     if (index == kRecord)
         return "Record";
@@ -121,7 +123,7 @@ const String MidiStep::getParameterName (int index)
         return "Thru";
     else
     {
-        String loopnum = String ((index - kNumGlobalParams) % 16 + 1);
+        juce::String loopnum = juce::String ((index - kNumGlobalParams) % 16 + 1);
         if (index < kChannel)
             return "RecArm" + loopnum;
         if (index < kTriggerKey)
@@ -133,76 +135,76 @@ const String MidiStep::getParameterName (int index)
         if (index < kNumParams)
             return "OutChannel" + loopnum;
     }
-    return String();
+    return juce::String();
 }
 
-const String MidiStep::getParameterText (int index)
+const juce::String MidiStep::getParameterText (int index)
 {
     if (index == kRecord)
     {
-        return param[kRecord] < 0.5f ? String ("Off") : String ("On");
+        return param[kRecord] < 0.5f ? juce::String ("Off") : juce::String ("On");
     }
     if (index == kRecActive)
     {
-        return param[kRecActive] < 0.5f ? String ("Off") : String ("On");
+        return param[kRecActive] < 0.5f ? juce::String ("Off") : juce::String ("On");
     }
     if (index == kActiveLoop)
     {
         if (roundToInt (param[kActiveLoop] * 16.0f) == 0)
-            return String ("Any");
+            return juce::String ("Any");
         else
-            return String (roundToInt (param[kActiveLoop] * 16.0f));
+            return juce::String (roundToInt (param[kActiveLoop] * 16.0f));
     }
     if (index == kThru)
     {
-        return param[kThru] < 0.5f ? String ("Off") : String ("On");
+        return param[kThru] < 0.5f ? juce::String ("Off") : juce::String ("On");
     }
     else
     {
         if (index < kChannel)
         { //rec arm
-            return param[index] < 0.5f ? String ("Off") : String ("On");
+            return param[index] < 0.5f ? juce::String ("Off") : juce::String ("On");
         }
         if (index < kTriggerKey)
         { //in channel
             if (roundToInt (param[index] * 16.0f) == 0)
-                return String ("Any");
+                return juce::String ("Any");
             else
-                return String (roundToInt (param[index] * 16.0f));
+                return juce::String (roundToInt (param[index] * 16.0f));
         }
         if (index < kTranspose)
         { //trigger key
             if (floatToMidi (param[index], true) < 0)
-                return String ("Learn...");
-            return String (floatToMidi (param[index], true));
+                return juce::String ("Learn...");
+            return juce::String (floatToMidi (param[index], true));
         }
         if (index < kOutChannel)
         { //transpose
-            return String (roundToInt (param[index] * 96.f) - 48);
+            return juce::String (roundToInt (param[index] * 96.f) - 48);
         }
         if (index < kNumParams)
         { //out channel
             if (roundToInt (param[index] * 16.0f) == 0)
-                return String ("No Change");
+                return juce::String ("No Change");
             else
-                return String (roundToInt (param[index] * 16.0f));
+                return juce::String (roundToInt (param[index] * 16.0f));
         }
     }
-    return String();
+    return juce::String();
 }
 
-const String MidiStep::getInputChannelName (const int channelIndex) const
+const juce::String MidiStep::getInputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
-const String MidiStep::getOutputChannelName (const int channelIndex) const
+const juce::String MidiStep::getOutputChannelName (const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
-        return String (JucePlugin_Name) + String (" ") + String (channelIndex + 1);
-    return String();
+        return juce::String (JucePlugin_Name) + juce::String (" ") + juce::String (channelIndex + 1);
+    return juce::String();
 }
 
 bool MidiStep::isInputChannelStereoPair (int index) const
@@ -239,17 +241,17 @@ void MidiStep::setCurrentProgram (int index)
     sendChangeMessage();
 }
 
-void MidiStep::changeProgramName (int index, const String& newName)
+void MidiStep::changeProgramName (int index, const juce::String& newName)
 {
     if (index < getNumPrograms())
         programs[index].name = newName;
 }
 
-const String MidiStep::getProgramName (int index)
+const juce::String MidiStep::getProgramName (int index)
 {
     if (index < getNumPrograms())
         return programs[index].name;
-    return String();
+    return juce::String();
 }
 
 int MidiStep::getCurrentProgram()
@@ -269,8 +271,8 @@ void MidiStep::releaseResources()
     // spare memory, etc.
 }
 
-void MidiStep::processBlock (AudioSampleBuffer& buffer,
-                             MidiBuffer& midiMessages)
+void MidiStep::processBlock (juce::AudioSampleBuffer& buffer,
+                             juce::MidiBuffer& midiMessages)
 {
     const int sampleFrames = buffer.getNumSamples();
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
@@ -278,7 +280,7 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
         buffer.clear (i, 0, sampleFrames);
     }
 
-    AudioPlayHead::CurrentPositionInfo pos;
+    juce::AudioPlayHead::CurrentPositionInfo pos;
     if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
     {
         if (memcmp (&pos, &lastPosInfo, sizeof (pos)) != 0)
@@ -300,7 +302,7 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
     //}
 
     //const int channel = floatToChannel(param[kChannel]);
-    MidiBuffer output;
+    juce::MidiBuffer output;
 
     for (int i = 0; i < numLoops; i++)
     {
@@ -412,13 +414,13 @@ void MidiStep::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiStep::createEditor()
+juce::AudioProcessorEditor* MidiStep::createEditor()
 {
     return new StepEditor (this);
 }
 
 //==============================================================================
-void MidiStep::getStateInformation (MemoryBlock& destData)
+void MidiStep::getStateInformation (juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
     programs[curProgram].lastUIHeight = lastUIHeight;
@@ -427,13 +429,13 @@ void MidiStep::getStateInformation (MemoryBlock& destData)
     //save patterns
     for (int i = 0; i < numLoops; i++)
     {
-        MemoryBlock midiData (512, true);
-        MemoryOutputStream m (midiData, false);
+        juce::MemoryBlock midiData (512, true);
+        juce::MemoryOutputStream m (midiData, false);
 
-        MidiFile midifile;
+        juce::MidiFile midifile;
         midifile.setTicksPerQuarterNote (960);
 
-        MidiMessageSequence midi (*loop[i]);
+        juce::MidiMessageSequence midi (*loop[i]);
         midifile.addTrack (midi);
         midifile.writeTo (m);
         size_t dataSize = midiData.getSize();
@@ -441,18 +443,18 @@ void MidiStep::getStateInformation (MemoryBlock& destData)
         destData.append (midiData.getData(), dataSize);
     }
 
-    MemoryBlock xmlData (512);
+    juce::MemoryBlock xmlData (512);
 
-    XmlElement xmlState ("midiStepSettings");
+    juce::XmlElement xmlState ("midiStepSettings");
     xmlState.setAttribute ("pluginVersion", 2);
     xmlState.setAttribute ("program", getCurrentProgram());
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        String prefix = "P" + String (p) + "_";
+        juce::String prefix = "P" + juce::String (p) + "_";
         xmlState.setAttribute (prefix + "progname", programs[p].name);
         for (int i = 0; i < kNumParams; i++)
         {
-            xmlState.setAttribute (prefix + String (i), programs[p].param[i]);
+            xmlState.setAttribute (prefix + juce::String (i), programs[p].param[i]);
         }
         xmlState.setAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
         xmlState.setAttribute (prefix + "uiHeight", programs[p].lastUIHeight);
@@ -463,16 +465,16 @@ void MidiStep::getStateInformation (MemoryBlock& destData)
 
 void MidiStep::setStateInformation (const void* data, int sizeInBytes)
 {
-    uint8* datab      = (uint8*) data;
-    int totalMidiSize = 0;
+    juce::uint8* datab = (juce::uint8*) data;
+    int totalMidiSize  = 0;
     for (int i = 0; i < numLoops; i++)
     {
         loop[i]->clear();
         int midiSize = *((int*) datab);
         datab += sizeof (int);
         totalMidiSize += sizeof (midiSize);
-        MemoryInputStream m (datab, midiSize, true);
-        MidiFile midifile;
+        juce::MemoryInputStream m (datab, midiSize, true);
+        juce::MidiFile midifile;
         if (midifile.readFrom (m))
         {
             loop[i]->addSequence (*midifile.getTrack (midifile.getNumTracks() - 1), 0, 0, midifile.getLastTimestamp() + 1);
@@ -492,10 +494,10 @@ void MidiStep::setStateInformation (const void* data, int sizeInBytes)
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
-                String prefix = "P" + String (p) + "_";
+                juce::String prefix = "P" + juce::String (p) + "_";
                 for (int i = 0; i < kNumParams; i++)
                 {
-                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + String (i), programs[p].param[i]);
+                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs[p].param[i]);
                 }
                 programs[p].lastUIWidth  = xmlState->getIntAttribute (prefix + "uiWidth", programs[p].lastUIWidth);
                 programs[p].lastUIHeight = xmlState->getIntAttribute (prefix + "uiHeight", programs[p].lastUIHeight);
@@ -508,14 +510,14 @@ void MidiStep::setStateInformation (const void* data, int sizeInBytes)
 }
 
 //==============================================================================
-bool MidiStep::writeMidiFile (int index, File& file)
+bool MidiStep::writeMidiFile (int index, juce::File& file)
 {
-    MidiFile midifile;
+    juce::MidiFile midifile;
     midifile.setTicksPerQuarterNote (960);
 
-    MidiMessageSequence midi (*loop[index]);
-    uint8 tn[]            = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
-    MidiMessage trackname = MidiMessage (tn, 7, 0);
+    juce::MidiMessageSequence midi (*loop[index]);
+    juce::uint8 tn[]            = { 0xFF, 0x03, 4, 'l', 'o', 'o', 'p' };
+    juce::MidiMessage trackname = juce::MidiMessage (tn, 7, 0);
     midi.addEvent (trackname);
 
     midifile.addTrack (midi);
@@ -525,19 +527,19 @@ bool MidiStep::writeMidiFile (int index, File& file)
             return false;
     if (file.create())
     {
-        FileOutputStream fo (file);
+        juce::FileOutputStream fo (file);
         if (midifile.writeTo (fo))
             return true;
     }
     return false;
 }
 
-bool MidiStep::readMidiFile (int index, File& mid)
+bool MidiStep::readMidiFile (int index, juce::File& mid)
 {
     if (mid.exists())
     {
-        MidiFile midifile;
-        FileInputStream fi (mid);
+        juce::MidiFile midifile;
+        juce::FileInputStream fi (mid);
         if (midifile.readFrom (fi))
         {
             loop[index]->clear();

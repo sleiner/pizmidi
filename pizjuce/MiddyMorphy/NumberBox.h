@@ -1,12 +1,9 @@
 #pragma once
 
-#include "juce_gui_basics/juce_gui_basics.h"
-
-using namespace juce;
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class NumberBox : public juce::TextEditor
 {
 public:
-    // Component::keyPressed  (  const KeyPress &  key   )
-    bool keyPressed (const KeyPress& key) override;
+    bool keyPressed (const juce::KeyPress& key) override;
 };

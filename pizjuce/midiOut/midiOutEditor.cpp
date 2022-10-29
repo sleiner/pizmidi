@@ -23,6 +23,7 @@
 #include "midiOutEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using juce::roundToInt;
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -114,7 +115,7 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
     setMouseClickGrabsKeyboardFocus (false);
 
     comboBox->setMouseClickGrabsKeyboardFocus (false);
-    comboBox->addItem (String ("--"), 1);
+    comboBox->addItem (juce::String ("--"), 1);
     for (int i = 0; i < ownerFilter->devices.size(); i++)
     {
         comboBox->addItem (ownerFilter->devices[i].name, i + 2);
@@ -123,7 +124,7 @@ MidiOutEditor::MidiOutEditor (MidiOutFilter* const ownerFilter)
 
     imagepad->setTriggeredOnMouseDown (true);
     imagepad->addButtonListener (this);
-    imagepad->drawableButton->Label = String ("Drag\nIcon");
+    imagepad->drawableButton->Label = juce::String ("Drag\nIcon");
 
     clockButton->setMouseClickGrabsKeyboardFocus (false);
     mtcButton->setMouseClickGrabsKeyboardFocus (false);
@@ -239,15 +240,15 @@ void MidiOutEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked)
+void MidiOutEditor::buttonStateChanged (juce::Button* buttonThatWasClicked)
 {
     getFilter()->icon = imagepad->drawableButton->getName();
     if (imagepad->drawableButton->isDown())
     {
-        ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+        juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
         if (mousebutton.isPopupMenu())
         {
-            PopupMenu m, sub1;
+            juce::PopupMenu m, sub1;
             //m.addItem(0,"Text:",false);
             //m.addCustomItem (1, textEditor, 200 , 24, false);
             //m.addSeparator();
@@ -262,7 +263,7 @@ void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked)
             {
                 if (result == 66)
                 {
-                    getFilter()->icon = String ("");
+                    getFilter()->icon = juce::String ("");
                     imagepad->clearIcon();
                 }
             }
@@ -271,7 +272,7 @@ void MidiOutEditor::buttonStateChanged (Button* buttonThatWasClicked)
 }
 
 //==============================================================================
-void MidiOutEditor::changeListenerCallback (ChangeBroadcaster* source)
+void MidiOutEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParametersFromFilter();
@@ -287,33 +288,33 @@ void MidiOutEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
 
     // take a local copy of the info we need while we've got the lock..
-    const int newDevice = filter->devices.indexOf (filter->getActiveDevice());
-    const float clock   = filter->getParameter (kClock);
-    const float mtc     = filter->getParameter (kMTC);
-    const float hostout = filter->getParameter (kHostOut);
-    const int channel   = roundToInt (filter->getParameter (kChannel) * 16.f);
-    const String icon   = filter->icon;
+    const int newDevice     = filter->devices.indexOf (filter->getActiveDevice());
+    const float clock       = filter->getParameter (kClock);
+    const float mtc         = filter->getParameter (kMTC);
+    const float hostout     = filter->getParameter (kHostOut);
+    const int channel       = roundToInt (filter->getParameter (kChannel) * 16.f);
+    const juce::String icon = filter->icon;
 
     // ..release the lock ASAP
     filter->getCallbackLock().exit();
 
-    comboBox->setSelectedItemIndex (newDevice + 1, dontSendNotification);
-    channelBox->setSelectedItemIndex (channel, dontSendNotification);
+    comboBox->setSelectedItemIndex (newDevice + 1, juce::dontSendNotification);
+    channelBox->setSelectedItemIndex (channel, juce::dontSendNotification);
 
-    clockButton->setToggleState (clock >= 0.5f, dontSendNotification);
-    mtcButton->setToggleState (mtc >= 0.5f, dontSendNotification);
-    hostButton->setToggleState (hostout >= 0.5f, dontSendNotification);
+    clockButton->setToggleState (clock >= 0.5f, juce::dontSendNotification);
+    mtcButton->setToggleState (mtc >= 0.5f, juce::dontSendNotification);
+    hostButton->setToggleState (hostout >= 0.5f, juce::dontSendNotification);
 
-    String fullpath = icon;
-    if (! File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
-        fullpath = ((File::getSpecialLocation (File::currentExecutableFile)).getParentDirectory()).getFullPathName()
-                 + File::getSeparatorString() + icon;
-    auto image = Drawable::createFromImageFile (File (fullpath));
+    juce::String fullpath = icon;
+    if (! juce::File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
+        fullpath = ((juce::File::getSpecialLocation (juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
+                 + juce::File::getSeparatorString() + icon;
+    auto image = juce::Drawable::createFromImageFile (juce::File (fullpath));
     if (image)
     {
         imagepad->drawableButton->setImages (image.get());
         imagepad->drawableButton->setName (icon);
-        imagepad->setButtonText (String());
+        imagepad->setButtonText (juce::String());
     }
     else
         imagepad->setButtonText ("IPH\nmidiOut\n1.3");

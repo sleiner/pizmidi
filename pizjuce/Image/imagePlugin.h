@@ -1,12 +1,10 @@
 #ifndef IMAGEPLUGINFILTER_H
 #define IMAGEPLUGINFILTER_H
 
-#include "juce_data_structures/juce_data_structures.h"
+#include <juce_data_structures/juce_data_structures.h>
 
 #include "../_common/BankStorage.h"
 #include "../_common/PizAudioProcessor.h"
-
-using namespace juce;
 
 enum parameters
 {
@@ -30,7 +28,7 @@ private:
 
 */
 class imagePluginFilter : public PizAudioProcessor,
-                          public ChangeBroadcaster
+                          public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -41,14 +39,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -73,11 +71,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -86,16 +84,16 @@ public:
     int getNumPrograms() override { return 128; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    void setBankColours (Colour colour, Colour text);
+    void setBankColours (juce::Colour colour, juce::Colour text);
     void applySizeToBank (int h, int w);
     void clearAllImages();
 
@@ -125,17 +123,17 @@ public:
     // filter's other parameters, and the UI component will update them when it gets
     // resized.
     int lastUIWidth, lastUIHeight;
-    Colour bgcolor;
-    Colour textcolor;
-    String icon;
-    String text;
+    juce::Colour bgcolor;
+    juce::Colour textcolor;
+    juce::String icon;
+    juce::String text;
     bool fullscreen;
-    String iconPath;
+    juce::String iconPath;
 
     //==============================================================================
-    juce_UseDebuggingNewOperator
 
-        private : float param[kNumParams];
+private:
+    float param[kNumParams];
 
     //JuceProgram *programs;
     ImageBank* programs;
@@ -145,6 +143,8 @@ public:
     bool usePC;
 
     bool init;
+
+    JUCE_LEAK_DETECTOR (imagePluginFilter)
 };
 
 #endif

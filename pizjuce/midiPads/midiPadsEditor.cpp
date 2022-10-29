@@ -3,6 +3,10 @@ midiPads
 ==============================================================================*/
 #include "midiPadsEditor.h"
 
+using juce::jmax;
+using juce::jmin;
+using juce::roundToInt;
+
 //==============================================================================
 midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
     : AudioProcessorEditor (ownerFilter),
@@ -30,11 +34,11 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
         usex[i]       = getFilter()->UseX[i];
         usey[i]       = getFilter()->UseY[i];
         container->addAndMakeVisible (midiPad[i] = new MidiPad (i));
-        midiPad[i]->setButtonText (String());
+        midiPad[i]->setButtonText (juce::String());
         midiPad[i]->setTriggeredOnMouseDown (false);
         midiPad[i]->addListener (this);
         midiPad[i]->addMouseListener (this, true);
-        midiPad[i]->setToggleState (getFilter()->togglestate[i], dontSendNotification);
+        midiPad[i]->setToggleState (getFilter()->togglestate[i], juce::dontSendNotification);
         sending[i] = false;
 
         midiPad[i]->showdot = getFilter()->toggle[i];
@@ -59,57 +63,57 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
         lastx[i] = 0;
         lasty[i] = 0;
     }
-    padEditor->addAndMakeVisible (vSlider = new Slider ("new slider"));
+    padEditor->addAndMakeVisible (vSlider = new juce::Slider ("new slider"));
     vSlider->setRange (0, 127, 1);
-    vSlider->setSliderStyle (Slider::LinearBar);
-    vSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    vSlider->setSliderStyle (juce::Slider::LinearBar);
+    vSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     vSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (nSlider = new Slider ("note slider"));
+    padEditor->addAndMakeVisible (nSlider = new juce::Slider ("note slider"));
     nSlider->setRange (0, 127, 1);
-    nSlider->setSliderStyle (Slider::LinearBar);
-    nSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    nSlider->setSliderStyle (juce::Slider::LinearBar);
+    nSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     nSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (ySlider = new Slider ("y-cc slider"));
+    padEditor->addAndMakeVisible (ySlider = new juce::Slider ("y-cc slider"));
     ySlider->setRange (0, 127, 1);
-    ySlider->setSliderStyle (Slider::LinearBar);
-    ySlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    ySlider->setSliderStyle (juce::Slider::LinearBar);
+    ySlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     ySlider->addListener (this);
 
-    padEditor->addAndMakeVisible (oSlider = new Slider ("new slider"));
+    padEditor->addAndMakeVisible (oSlider = new juce::Slider ("new slider"));
     oSlider->setRange (0, 127, 1);
-    oSlider->setSliderStyle (Slider::LinearBar);
-    oSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    oSlider->setSliderStyle (juce::Slider::LinearBar);
+    oSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     oSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (triggerSlider = new Slider ("new slider"));
+    padEditor->addAndMakeVisible (triggerSlider = new juce::Slider ("new slider"));
     triggerSlider->setRange (0, 127, 1);
-    triggerSlider->setSliderStyle (Slider::LinearBar);
-    triggerSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    triggerSlider->setSliderStyle (juce::Slider::LinearBar);
+    triggerSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     triggerSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (xSlider = new Slider ("new slider"));
+    padEditor->addAndMakeVisible (xSlider = new juce::Slider ("new slider"));
     xSlider->setRange (0, 127, 1);
-    xSlider->setSliderStyle (Slider::LinearBar);
-    xSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    xSlider->setSliderStyle (juce::Slider::LinearBar);
+    xSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     xSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (xoSlider = new Slider ("new slider"));
+    padEditor->addAndMakeVisible (xoSlider = new juce::Slider ("new slider"));
     xoSlider->setRange (0, 127, 1);
-    xoSlider->setSliderStyle (Slider::LinearBar);
-    xoSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    xoSlider->setSliderStyle (juce::Slider::LinearBar);
+    xoSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     xoSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (roundnessSlider = new Slider ("Pad Roundness"));
+    padEditor->addAndMakeVisible (roundnessSlider = new juce::Slider ("Pad Roundness"));
     roundnessSlider->setRange (0, 0.5, 0);
-    roundnessSlider->setSliderStyle (Slider::LinearBar);
-    roundnessSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    roundnessSlider->setSliderStyle (juce::Slider::LinearBar);
+    roundnessSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     roundnessSlider->setTooltip ("Pad Roundness");
     roundnessSlider->setMouseClickGrabsKeyboardFocus (false);
     roundnessSlider->addListener (this);
 
-    padEditor->addAndMakeVisible (textEditor = new TextEditor ("text editor"));
+    padEditor->addAndMakeVisible (textEditor = new juce::TextEditor ("text editor"));
     textEditor->setMultiLine (true);
     textEditor->setReturnKeyStartsNewLine (true);
     textEditor->setReadOnly (false);
@@ -118,108 +122,108 @@ midiPadsEditor::midiPadsEditor (midiPads* const ownerFilter)
     textEditor->setPopupMenuEnabled (false);
     textEditor->setSelectAllWhenFocused (true);
     textEditor->addListener (this);
-    textEditor->setColour (TextEditor::outlineColourId, Colours::black);
+    textEditor->setColour (juce::TextEditor::outlineColourId, juce::Colours::black);
 
-    padEditor->addAndMakeVisible (colourSelector1 = new ColourSelector (ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace));
+    padEditor->addAndMakeVisible (colourSelector1 = new juce::ColourSelector (juce::ColourSelector::showColourAtTop | juce::ColourSelector::showSliders | juce::ColourSelector::showColourspace));
     colourSelector1->setName ("Pad Color");
     colourSelector1->addChangeListener (this);
 
-    padEditor->addAndMakeVisible (iconSizeSlider = new Slider ("Icon Size"));
+    padEditor->addAndMakeVisible (iconSizeSlider = new juce::Slider ("Icon Size"));
     iconSizeSlider->setRange (0.1, 1.0, 0);
-    iconSizeSlider->setSliderStyle (Slider::LinearBar);
-    iconSizeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    iconSizeSlider->setSliderStyle (juce::Slider::LinearBar);
+    iconSizeSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     iconSizeSlider->setTooltip ("Icon Size");
     iconSizeSlider->setMouseClickGrabsKeyboardFocus (false);
     iconSizeSlider->addListener (this);
 
-    container->addAndMakeVisible (hueSlider = new Slider ("Hue"));
+    container->addAndMakeVisible (hueSlider = new juce::Slider ("Hue"));
     hueSlider->setTooltip ("Hue");
     hueSlider->setRange (0, 1, 0);
-    hueSlider->setSliderStyle (Slider::LinearBar);
-    hueSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    hueSlider->setSliderStyle (juce::Slider::LinearBar);
+    hueSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     hueSlider->addListener (this);
     hueSlider->setMouseClickGrabsKeyboardFocus (false);
 
-    container->addAndMakeVisible (saturationSlider = new Slider ("Saturation"));
+    container->addAndMakeVisible (saturationSlider = new juce::Slider ("Saturation"));
     saturationSlider->setTooltip ("Saturation");
     saturationSlider->setRange (0, 1, 0);
-    saturationSlider->setSliderStyle (Slider::LinearBar);
-    saturationSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    saturationSlider->setSliderStyle (juce::Slider::LinearBar);
+    saturationSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     saturationSlider->addListener (this);
     saturationSlider->setMouseClickGrabsKeyboardFocus (false);
 
-    container->addAndMakeVisible (brigtnessSlider = new Slider ("Brightness"));
+    container->addAndMakeVisible (brigtnessSlider = new juce::Slider ("Brightness"));
     brigtnessSlider->setTooltip ("Brightness");
     brigtnessSlider->setRange (0, 1, 0);
-    brigtnessSlider->setSliderStyle (Slider::LinearBar);
-    brigtnessSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    brigtnessSlider->setSliderStyle (juce::Slider::LinearBar);
+    brigtnessSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     brigtnessSlider->addListener (this);
     brigtnessSlider->setMouseClickGrabsKeyboardFocus (false);
 
-    container->addAndMakeVisible (padOpacitySlider = new Slider ("Pad Opacity"));
+    container->addAndMakeVisible (padOpacitySlider = new juce::Slider ("Pad Opacity"));
     padOpacitySlider->setTooltip ("Pad Opacity");
     padOpacitySlider->setRange (0, 1, 0);
-    padOpacitySlider->setSliderStyle (Slider::LinearBar);
-    padOpacitySlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    padOpacitySlider->setSliderStyle (juce::Slider::LinearBar);
+    padOpacitySlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     padOpacitySlider->addListener (this);
     padOpacitySlider->setMouseClickGrabsKeyboardFocus (false);
 
-    container->addAndMakeVisible (globalRoundnessSlider = new Slider ("Pad Roundness"));
+    container->addAndMakeVisible (globalRoundnessSlider = new juce::Slider ("Pad Roundness"));
     globalRoundnessSlider->setTooltip ("Pad Roundness");
     globalRoundnessSlider->setRange (0, 0.5, 0);
-    globalRoundnessSlider->setSliderStyle (Slider::LinearBar);
-    globalRoundnessSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    globalRoundnessSlider->setSliderStyle (juce::Slider::LinearBar);
+    globalRoundnessSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     globalRoundnessSlider->setMouseClickGrabsKeyboardFocus (false);
     globalRoundnessSlider->addListener (this);
 
-    container->addAndMakeVisible (globalIconSizeSlider = new Slider ("Icon Size"));
+    container->addAndMakeVisible (globalIconSizeSlider = new juce::Slider ("Icon Size"));
     globalIconSizeSlider->setTooltip ("Icon Size");
     globalIconSizeSlider->setRange (0.1, 1.0, 0);
-    globalIconSizeSlider->setSliderStyle (Slider::LinearBar);
-    globalIconSizeSlider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    globalIconSizeSlider->setSliderStyle (juce::Slider::LinearBar);
+    globalIconSizeSlider->setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
     globalIconSizeSlider->setMouseClickGrabsKeyboardFocus (false);
     globalIconSizeSlider->addListener (this);
 
-    container->addAndMakeVisible (velocitySlider = new Slider ("Velocity Scale"));
+    container->addAndMakeVisible (velocitySlider = new juce::Slider ("Velocity Scale"));
     velocitySlider->setTooltip ("Velocity Scale Factor");
     velocitySlider->setRange (0, 2, 0.01);
-    velocitySlider->setSliderStyle (Slider::LinearBar);
-    velocitySlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    velocitySlider->setSliderStyle (juce::Slider::LinearBar);
+    velocitySlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     velocitySlider->setMouseClickGrabsKeyboardFocus (false);
     velocitySlider->addListener (this);
 
-    container->addAndMakeVisible (valueSlider = new Slider ("CC Value Scale"));
+    container->addAndMakeVisible (valueSlider = new juce::Slider ("CC Value Scale"));
     valueSlider->setTooltip ("CC Value Scale Factor");
     valueSlider->setRange (0, 2, 0.01);
-    valueSlider->setSliderStyle (Slider::LinearBar);
-    valueSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    valueSlider->setSliderStyle (juce::Slider::LinearBar);
+    valueSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     valueSlider->setMouseClickGrabsKeyboardFocus (false);
     valueSlider->addListener (this);
 
-    container->addAndMakeVisible (menuButton = new TextButton ("Menu Button"));
+    container->addAndMakeVisible (menuButton = new juce::TextButton ("Menu Button"));
     menuButton->setButtonText ("menu");
     menuButton->addListener (this);
     menuButton->setTriggeredOnMouseDown (true);
     menuButton->setMouseClickGrabsKeyboardFocus (false);
 
-    container->addAndMakeVisible (icSlider = new Slider ("new slider"));
+    container->addAndMakeVisible (icSlider = new juce::Slider ("new slider"));
     icSlider->setRange (1, 16, 1);
-    icSlider->setSliderStyle (Slider::LinearBar);
-    icSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    icSlider->setSliderStyle (juce::Slider::LinearBar);
+    icSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     icSlider->setMouseClickGrabsKeyboardFocus (false);
     icSlider->addListener (this);
 
-    container->addAndMakeVisible (cSlider = new Slider ("new slider"));
+    container->addAndMakeVisible (cSlider = new juce::Slider ("new slider"));
     cSlider->setRange (1, 16, 1);
-    cSlider->setSliderStyle (Slider::LinearBar);
-    cSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    cSlider->setSliderStyle (juce::Slider::LinearBar);
+    cSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     cSlider->setMouseClickGrabsKeyboardFocus (false);
     cSlider->addListener (this);
 
     squares = 16;
 
     // add the triangular resizer component for the bottom-right of the UI
-    container->addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
+    container->addAndMakeVisible (resizer = new juce::ResizableCornerComponent (this, &resizeLimits));
     resizer->setMouseClickGrabsKeyboardFocus (false);
     resizeLimits.setSizeLimits (50, 50, 1600, 1600);
 
@@ -272,7 +276,7 @@ midiPadsEditor::~midiPadsEditor()
 }
 
 //==============================================================================
-void midiPadsEditor::paint (Graphics& g)
+void midiPadsEditor::paint (juce::Graphics& g)
 {
     g.fillAll (color);
     for (int i = 0; i < numPads; i++)
@@ -304,7 +308,7 @@ void midiPadsEditor::resized()
     {
         float xscale  = (float) container->getWidth() / (float) getWidth();
         float yscale  = (float) container->getHeight() / (float) getHeight();
-        auto* display = Desktop::getInstance().getDisplays().getDisplayForPoint (container->getScreenPosition(), false);
+        auto* display = juce::Desktop::getInstance().getDisplays().getDisplayForPoint (container->getScreenPosition(), false);
         if (display != nullptr)
         {
             container->setBounds (display->userArea);
@@ -328,7 +332,7 @@ void midiPadsEditor::resized()
 }
 
 //-------------------------------------------------------------------------------
-void midiPadsEditor::mouseDrag (const MouseEvent& e)
+void midiPadsEditor::mouseDrag (const juce::MouseEvent& e)
 {
     if (e.eventComponent->getName().compare ("MidiPad"))
         return;
@@ -379,10 +383,10 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
         {
             if (midiPad[i]->isMouseButtonDown())
             {
-                bool usex                = getFilter()->UseX[i];
-                bool usey                = getFilter()->UseY[i];
-                bool useaft              = getFilter()->getParameter (kSendAft) >= 0.5;
-                ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+                bool usex                      = getFilter()->UseX[i];
+                bool usey                      = getFilter()->UseY[i];
+                bool useaft                    = getFilter()->getParameter (kSendAft) >= 0.5;
+                juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
                 //this->setWantsKeyboardFocus(false);
                 if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown())
                 {
@@ -396,7 +400,7 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
                 {
                     if (usex || usey || useaft)
                     {
-                        Point<int> xy = midiPad[i]->getMouseXYRelative();
+                        juce::Point<int> xy = midiPad[i]->getMouseXYRelative();
                         //measure y from the bottom, make into range 0..1
                         float fy = 1.0f - (((float) (xy.getY())) / ((float) (midiPad[i]->getHeight())));
                         float fx = (((float) (xy.getX())) / ((float) (midiPad[i]->getWidth())));
@@ -506,13 +510,13 @@ void midiPadsEditor::mouseDrag (const MouseEvent& e)
     }
 }
 
-void midiPadsEditor::mouseDown (const MouseEvent& e)
+void midiPadsEditor::mouseDown (const juce::MouseEvent& e)
 {
     dragging = false;
     resizing = false;
 }
 
-void midiPadsEditor::mouseDoubleClick (const MouseEvent& e)
+void midiPadsEditor::mouseDoubleClick (const juce::MouseEvent& e)
 {
     if (e.eventComponent == container && ! fullscreen && getFilter()->editmode)
     {
@@ -550,7 +554,7 @@ void midiPadsEditor::mouseDoubleClick (const MouseEvent& e)
     }
 }
 
-void midiPadsEditor::mouseUp (const MouseEvent& e)
+void midiPadsEditor::mouseUp (const juce::MouseEvent& e)
 {
     if (e.eventComponent->getName().compare ("MidiPad"))
         return;
@@ -597,7 +601,7 @@ void midiPadsEditor::mouseUp (const MouseEvent& e)
     }
 }
 
-void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedown
+void midiPadsEditor::buttonStateChanged (juce::Button* buttonThatWasClicked) //mousedown
 {
     if (buttonThatWasClicked->getName().compare ("MidiPad"))
         return;
@@ -612,7 +616,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
         bool usexpb = getFilter()->UseXPB[i];
         bool toggle = getFilter()->toggle[i];
         //middle/ctrl click midi learn
-        ModifierKeys mousebutton = ModifierKeys::getCurrentModifiers();
+        juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();
         if (mousebutton.isMiddleButtonDown() || mousebutton.isCommandDown())
         {
             if (mousebutton.isAltDown() && mousebutton.isShiftDown())
@@ -635,15 +639,15 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                 bool iscc   = getFilter()->Ytype[i] == 1;
                 colourSelector1->setCurrentColour (getFilter()->padcolor[i]);
                 textEditor->setText (getFilter()->text[i], false);
-                vSlider->setValue (getFilter()->Ydata2[i], dontSendNotification);
-                oSlider->setValue (getFilter()->Yoff[i], dontSendNotification);
-                nSlider->setValue (getFilter()->Ydata1[i], dontSendNotification);
-                ySlider->setValue (getFilter()->Ycc[i], dontSendNotification);
-                xSlider->setValue (getFilter()->Xcc[i], dontSendNotification);
-                xoSlider->setValue (getFilter()->Xoff[i], dontSendNotification);
-                triggerSlider->setValue (getFilter()->trigger[i], dontSendNotification);
-                roundnessSlider->setValue (getFilter()->roundness[i], dontSendNotification);
-                iconSizeSlider->setValue (getFilter()->iconsize[i], dontSendNotification);
+                vSlider->setValue (getFilter()->Ydata2[i], juce::dontSendNotification);
+                oSlider->setValue (getFilter()->Yoff[i], juce::dontSendNotification);
+                nSlider->setValue (getFilter()->Ydata1[i], juce::dontSendNotification);
+                ySlider->setValue (getFilter()->Ycc[i], juce::dontSendNotification);
+                xSlider->setValue (getFilter()->Xcc[i], juce::dontSendNotification);
+                xoSlider->setValue (getFilter()->Xoff[i], juce::dontSendNotification);
+                triggerSlider->setValue (getFilter()->trigger[i], juce::dontSendNotification);
+                roundnessSlider->setValue (getFilter()->roundness[i], juce::dontSendNotification);
+                iconSizeSlider->setValue (getFilter()->iconsize[i], juce::dontSendNotification);
                 bool centered = getFilter()->centeredText[i];
 
                 m.clear();
@@ -652,9 +656,9 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                 sub3.clear();
                 icons.clear();
                 icons.addItem (99999, "Load...");
-                Array<File> iconFiles;
+                juce::Array<juce::File> iconFiles;
                 int j = 0;
-                for (auto&& entry : RangedDirectoryIterator (File (getFilter()->iconPath), true))
+                for (auto&& entry : juce::RangedDirectoryIterator (juce::File (getFilter()->iconPath), true))
                 {
                     if (entry.getFile().hasFileExtension ("svg")
                         || entry.getFile().hasFileExtension ("png")
@@ -683,14 +687,14 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                 m.addCustomItem (-1, *iconSizeSlider, 64, 16, false);
                 m.addSeparator();
 
-                m.addItem (2, String ("Note"), true, ! iscc);
-                m.addItem (3, String ("CC"), true, iscc);
-                m.addItem (4, String ("Use Y-Position"), true, usey);
-                m.addItem (7, String ("Send Y-CC with Note"), true, useycc);
-                m.addItem (5, String ("Use X-Position"), true, usex);
-                m.addItem (8, String ("X is Pitch Bend"), usex, usexpb);
-                m.addItem (6, String ("Send Off Values"), true, useoff);
-                m.addItem (9, String ("Toggle Mode"), true, toggle);
+                m.addItem (2, juce::String ("Note"), true, ! iscc);
+                m.addItem (3, juce::String ("CC"), true, iscc);
+                m.addItem (4, juce::String ("Use Y-Position"), true, usey);
+                m.addItem (7, juce::String ("Send Y-CC with Note"), true, useycc);
+                m.addItem (5, juce::String ("Use X-Position"), true, usex);
+                m.addItem (8, juce::String ("X is Pitch Bend"), usex, usexpb);
+                m.addItem (6, juce::String ("Send Off Values"), true, useoff);
+                m.addItem (9, juce::String ("Toggle Mode"), true, toggle);
                 sub2.addItem (-1, "Note #:", false);
                 sub2.addCustomItem (-1, *nSlider, 64, 16, false);
                 sub2.addItem (-1, "Y-CC #:", false);
@@ -723,22 +727,22 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                         if (pad->setImageFromFile (iconFiles[result]))
                         {
                             //save the relative path
-                            pad->setIconPath (iconFiles[result].getRelativePathFrom (File (getFilter()->iconPath)));
+                            pad->setIconPath (iconFiles[result].getRelativePathFrom (juce::File (getFilter()->iconPath)));
                             getFilter()->icon[pad->getIndex()] = pad->getIconPath();
                         }
                     }
                     else if (result == 99999)
                     {
-                        FileChooser myChooser ("Load icon...",
-                                               File (getFilter()->iconPath),
-                                               "*.png;*.gif;*.svg;*.jpg");
+                        juce::FileChooser myChooser ("Load icon...",
+                                                     juce::File (getFilter()->iconPath),
+                                                     "*.png;*.gif;*.svg;*.jpg");
 
                         if (myChooser.browseForFileToOpen())
                         {
-                            File file (myChooser.getResult());
+                            juce::File file (myChooser.getResult());
                             if (pad->setImageFromFile (file))
                             {
-                                pad->setIconPath (file.getRelativePathFrom (File (getFilter()->iconPath)));
+                                pad->setIconPath (file.getRelativePathFrom (juce::File (getFilter()->iconPath)));
                                 getFilter()->icon[pad->getIndex()] = pad->getIconPath();
                             }
                         }
@@ -749,7 +753,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                         {
                             getFilter()->Ytype[i] = 0;
                             midiPad[i]->setYInt (getFilter()->Ydata2[i]);
-                            midiPad[i]->setButtonText ("CC " + String (getFilter()->Ydata1[i]));
+                            midiPad[i]->setButtonText ("CC " + juce::String (getFilter()->Ydata1[i]));
                         }
                         else
                         {
@@ -758,7 +762,7 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                                 midiPad[i]->setYInt (getFilter()->Yoff[i]);
                             else
                                 midiPad[i]->setYInt (getFilter()->Ydata2[i]);
-                            midiPad[i]->setButtonText (MidiMessage::getMidiNoteName (getFilter()->Ydata1[i], true, true, 3));
+                            midiPad[i]->setButtonText (juce::MidiMessage::getMidiNoteName (getFilter()->Ydata1[i], true, true, 3));
                         }
                     }
                     else if (result == 4)
@@ -873,9 +877,9 @@ void midiPadsEditor::buttonStateChanged (Button* buttonThatWasClicked) //mousedo
                     }
                     else if (result == 66)
                     {
-                        getFilter()->icon[i] = String();
+                        getFilter()->icon[i] = juce::String();
                         pad->setImages (0);
-                        pad->setIconPath (String());
+                        pad->setIconPath (juce::String());
                     }
                     else if (result == 88)
                         getFilter()->midilisten[i] = 1.0f;
@@ -919,7 +923,7 @@ void midiPadsEditor::sendMidi (int i, bool shiftclicked)
     if (getFilter()->togglestate[i])
     {
         getFilter()->togglestate[i] = false;
-        midiPad[i]->setToggleState (false, dontSendNotification);
+        midiPad[i]->setToggleState (false, juce::dontSendNotification);
         sendMidiOff (i);
         sending[i] = false;
         return;
@@ -929,19 +933,19 @@ void midiPadsEditor::sendMidi (int i, bool shiftclicked)
         for (int n = 0; n < numPads; n++)
         {
             getFilter()->togglestate[n] = false;
-            midiPad[n]->setToggleState (false, dontSendNotification);
+            midiPad[n]->setToggleState (false, juce::dontSendNotification);
         }
     }
     if (getFilter()->toggle[i] || shiftclicked)
     {
         dontsend                    = true;
         getFilter()->togglestate[i] = true;
-        midiPad[i]->setToggleState (true, dontSendNotification);
+        midiPad[i]->setToggleState (true, juce::dontSendNotification);
     }
     midiPad[i]->isPlaying = true;
     if (! getFilter()->triggered[i])
     {
-        Point<int> xy = midiPad[i]->getMouseXYRelative();
+        juce::Point<int> xy = midiPad[i]->getMouseXYRelative();
         //measure y from the bottom, make into range 0..1
         float fy = 1.0f - (((float) (xy.getY())) / ((float) (midiPad[i]->getHeight())));
         float fx = (((float) (xy.getX())) / ((float) (midiPad[i]->getWidth())));
@@ -981,13 +985,13 @@ void midiPadsEditor::sendMidi (int i, bool shiftclicked)
     sending[i] = false;
 }
 
-void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
+void midiPadsEditor::buttonClicked (juce::Button* buttonThatWasClicked) //mouseup
 {
     if (buttonThatWasClicked == menuButton)
     {
-        Array<File> layoutFiles, presetFiles;
-        File (getFilter()->layoutPath).findChildFiles (layoutFiles, File::findFiles, true, "*.mpadl");
-        File (getFilter()->presetPath).findChildFiles (presetFiles, File::findFiles, true, "*.mpads");
+        juce::Array<juce::File> layoutFiles, presetFiles;
+        juce::File (getFilter()->layoutPath).findChildFiles (layoutFiles, juce::File::findFiles, true, "*.mpadl");
+        juce::File (getFilter()->presetPath).findChildFiles (presetFiles, juce::File::findFiles, true, "*.mpads");
         //main menu
         bool sendoffvalue  = true;
         bool useyvalue     = true;
@@ -1027,35 +1031,35 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
         presets.clear();
         fileMenu.clear();
 
-        m.addItem (1001, String ("Full Screen"), true, fullscreen);
-        m.addItem (33, String ("Edit Mode"), true, editmode);
+        m.addItem (1001, juce::String ("Full Screen"), true, fullscreen);
+        m.addItem (33, juce::String ("Edit Mode"), true, editmode);
         m.addSeparator();
         for (int i = 0; i < layoutFiles.size(); i++)
             layout.addItem (100000 + i, layoutFiles[i].getFileNameWithoutExtension());
 #ifdef _DEBUG
-        layout.addItem (18, String ("1 Pad"), true);
-        layout.addItem (17, String ("4 Pads"), true);
-        layout.addItem (19, String ("4 Sliders"), true);
-        layout.addItem (10, String ("10 Pads"), true);
-        layout.addItem (14, String ("2 Pads, 12 Sliders"), true);
-        layout.addItem (20, String ("16 Pads"), true);
-        layout.addItem (21, String ("16 Sliders"), true);
-        layout.addItem (22, String ("64 Pads"), true);
-        layout.addItem (23, String ("8 Ch Mixer"), true);
-        layout.addItem (24, String ("Hexagons"), true);
-        layout.addItem (28, String ("2 XY, 5 Sliders, 21 Buttons"));
-        layout.addItem (52, String ("2 XY, 49 Buttons"), true);
-        layout.addItem (46, String ("12 Sliders, 2 XY, 25 Buttons"));
-        layout.addItem (48, String ("6 Mixer Blocks"), true);
-        layout.addItem (64, String ("8 Mixer Blocks w/sends"), true);
-        layout.addItem (55, String ("1 XY, 6 Sliders, 48 Buttons"), true);
+        layout.addItem (18, juce::String ("1 Pad"), true);
+        layout.addItem (17, juce::String ("4 Pads"), true);
+        layout.addItem (19, juce::String ("4 Sliders"), true);
+        layout.addItem (10, juce::String ("10 Pads"), true);
+        layout.addItem (14, juce::String ("2 Pads, 12 Sliders"), true);
+        layout.addItem (20, juce::String ("16 Pads"), true);
+        layout.addItem (21, juce::String ("16 Sliders"), true);
+        layout.addItem (22, juce::String ("64 Pads"), true);
+        layout.addItem (23, juce::String ("8 Ch Mixer"), true);
+        layout.addItem (24, juce::String ("Hexagons"), true);
+        layout.addItem (28, juce::String ("2 XY, 5 Sliders, 21 Buttons"));
+        layout.addItem (52, juce::String ("2 XY, 49 Buttons"), true);
+        layout.addItem (46, juce::String ("12 Sliders, 2 XY, 25 Buttons"));
+        layout.addItem (48, juce::String ("6 Mixer Blocks"), true);
+        layout.addItem (64, juce::String ("8 Mixer Blocks w/sends"), true);
+        layout.addItem (55, juce::String ("1 XY, 6 Sliders, 48 Buttons"), true);
 #endif
-        layout.addItem (9998, String ("Load..."), true);
-        layout.addItem (9999, String ("Save..."), true);
+        layout.addItem (9998, juce::String ("Load..."), true);
+        layout.addItem (9999, juce::String ("Save..."), true);
         m.addSubMenu ("Layout", layout);
         m.addItem (111, "Clear all icons");
-        m.addItem (7, String ("Show Dots"), true, showalldots);
-        m.addItem (77, String ("Show Values"), true, showallvalues);
+        m.addItem (7, juce::String ("Show Dots"), true, showalldots);
+        m.addItem (77, juce::String ("Show Values"), true, showallvalues);
         m.addItem (33333, "Centered Text", true, centeredNames);
 
         m.addItem (-1, "Pad Roundness:", false);
@@ -1064,16 +1068,16 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
         m.addCustomItem (-1, *globalIconSizeSlider, 64, 16, false);
         m.addSeparator();
 
-        m.addItem (1, String ("Send off values"), true, sendoffvalue);
-        m.addItem (2, String ("Use Midi Triggering"), true, triggering);
-        m.addItem (3, String ("Use Input Velocity"), triggering, useinvel);
+        m.addItem (1, juce::String ("Send off values"), true, sendoffvalue);
+        m.addItem (2, juce::String ("Use Midi Triggering"), true, triggering);
+        m.addItem (3, juce::String ("Use Input Velocity"), triggering, useinvel);
         //m.addItem (222, String("Piezo Mode"), triggering, noteontrig);
-        m.addItem (4, String ("Use Y-Position"), true, useyvalue);
-        m.addItem (5, String ("Use X-Position"), true, usexvalue);
-        m.addItem (6, String ("Send Aftertouch"), true, useaft);
-        m.addItem (8, String ("Mono Mode"), true, monomode);
-        m.addItem (9, String ("Use mouseup anywhere"), true, usemouseup);
-        m.addItem (50, String ("Midi Thru"), true, thru);
+        m.addItem (4, juce::String ("Use Y-Position"), true, useyvalue);
+        m.addItem (5, juce::String ("Use X-Position"), true, usexvalue);
+        m.addItem (6, juce::String ("Send Aftertouch"), true, useaft);
+        m.addItem (8, juce::String ("Mono Mode"), true, monomode);
+        m.addItem (9, juce::String ("Use mouseup anywhere"), true, usemouseup);
+        m.addItem (50, juce::String ("Midi Thru"), true, thru);
         m.addSeparator();
         m.addItem (-1, "In Channel:", false);
         m.addCustomItem (-1, *icSlider, 64, 16, false);
@@ -1083,12 +1087,12 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
         for (int i = 0; i < presetFiles.size(); i++)
             presets.addItem (200000 + i, presetFiles[i].getFileNameWithoutExtension());
         m.addSubMenu ("Presets", presets);
-        fileMenu.addItem (5473, String ("Save Bank..."));
-        fileMenu.addItem (54731, String ("Save Patch..."));
-        fileMenu.addItem (9999, String ("Save Layout..."));
-        fileMenu.addItem (1042, String ("Load Bank/Patch..."));
+        fileMenu.addItem (5473, juce::String ("Save Bank..."));
+        fileMenu.addItem (54731, juce::String ("Save Patch..."));
+        fileMenu.addItem (9999, juce::String ("Save Layout..."));
+        fileMenu.addItem (1042, juce::String ("Load Bank/Patch..."));
         m.addSubMenu ("Save/Load", fileMenu);
-        m.addItem (-1, String ("- midiPads ") + String (JucePlugin_VersionString) + String (" -"), false);
+        m.addItem (-1, juce::String ("- midiPads ") + juce::String (JucePlugin_VersionString) + juce::String (" -"), false);
 
         int result = m.showAt (menuButton);
         if (result > 0)
@@ -1120,14 +1124,14 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 9999)
             {
-                FileChooser myChooser ("Save layout...",
-                                       File (getFilter()->layoutPath + File::getSeparatorString()
-                                             + getFilter()->getProgramName (getFilter()->getCurrentProgram())
-                                             + ".mpadl"),
-                                       "*.mpadl");
+                juce::FileChooser myChooser ("Save layout...",
+                                             juce::File (getFilter()->layoutPath + juce::File::getSeparatorString()
+                                                         + getFilter()->getProgramName (getFilter()->getCurrentProgram())
+                                                         + ".mpadl"),
+                                             "*.mpadl");
                 if (myChooser.browseForFileToSave (true))
                 {
-                    File file (myChooser.getResult());
+                    juce::File file (myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension ("mpadl"))
                         file = file.withFileExtension ("mpadl");
@@ -1137,26 +1141,26 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 9998)
             {
-                FileChooser myChooser ("Load layout...",
-                                       File (getFilter()->layoutPath),
-                                       "*.mpadl");
+                juce::FileChooser myChooser ("Load layout...",
+                                             juce::File (getFilter()->layoutPath),
+                                             "*.mpadl");
 
                 if (myChooser.browseForFileToOpen())
                 {
-                    File file (myChooser.getResult());
+                    juce::File file (myChooser.getResult());
                     getFilter()->loadXmlLayout (file);
                     resized();
                 }
             }
             else if (result == 5473)
             {
-                FileChooser myChooser ("Save bank...",
-                                       File (getFilter()->bankPath + File::getSeparatorString() + "midiPads.mpadb"),
-                                       "*.mpadb");
+                juce::FileChooser myChooser ("Save bank...",
+                                             juce::File (getFilter()->bankPath + juce::File::getSeparatorString() + "midiPads.mpadb"),
+                                             "*.mpadb");
 
                 if (myChooser.browseForFileToSave (true))
                 {
-                    File file (myChooser.getResult());
+                    juce::File file (myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension ("mpadb"))
                         file = file.withFileExtension ("mpadb");
@@ -1166,16 +1170,16 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 54731)
             {
-                FileChooser myChooser ("Save patch...",
-                                       File (getFilter()->presetPath
-                                             + File::getSeparatorString()
-                                             + getFilter()->getProgramName (getFilter()->getCurrentProgram())
-                                             + ".mpads"),
-                                       "*.mpads");
+                juce::FileChooser myChooser ("Save patch...",
+                                             juce::File (getFilter()->presetPath
+                                                         + juce::File::getSeparatorString()
+                                                         + getFilter()->getProgramName (getFilter()->getCurrentProgram())
+                                                         + ".mpads"),
+                                             "*.mpads");
 
                 if (myChooser.browseForFileToSave (true))
                 {
-                    File file (myChooser.getResult());
+                    juce::File file (myChooser.getResult());
                     //getFilter()->patchPath = file.getParentDirectory().getFullPathName();
                     if (! file.hasFileExtension ("mpads"))
                         file = file.withFileExtension ("mpads");
@@ -1185,13 +1189,13 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
             else if (result == 1042)
             {
-                FileChooser myChooser ("Load bank/patch...",
-                                       File (getFilter()->pluginPath),
-                                       "*.mpads;*.mpadb;*.mpadl;*.fxb;*.fxp");
+                juce::FileChooser myChooser ("Load bank/patch...",
+                                             juce::File (getFilter()->pluginPath),
+                                             "*.mpads;*.mpadb;*.mpadl;*.fxb;*.fxp");
 
                 if (myChooser.browseForFileToOpen())
                 {
-                    File file (myChooser.getResult());
+                    juce::File file (myChooser.getResult());
                     if (file.hasFileExtension ("mpadb"))
                         getFilter()->loadXmlBank (file);
                     else if (file.hasFileExtension ("mpads"))
@@ -1239,13 +1243,13 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
                 if (! fullscreen)
                 {
                     container->addToDesktop (0);
-                    Desktop::getInstance().setKioskModeComponent (container, false);
+                    juce::Desktop::getInstance().setKioskModeComponent (container, false);
                     fullscreen = true;
                     resized();
                 }
                 else
                 {
-                    Desktop::getInstance().setKioskModeComponent (0);
+                    juce::Desktop::getInstance().setKioskModeComponent (0);
                     this->addChildComponent (container);
                     fullscreen = false;
                     resized();
@@ -1524,9 +1528,9 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             {
                 for (int i = 0; i < numPads; i++)
                 {
-                    getFilter()->icon[i] = String();
+                    getFilter()->icon[i] = juce::String();
                     midiPad[i]->setImages (0);
-                    midiPad[i]->setIconPath (String());
+                    midiPad[i]->setIconPath (juce::String());
                 }
             }
             else if (result == 33)
@@ -1554,7 +1558,7 @@ void midiPadsEditor::buttonClicked (Button* buttonThatWasClicked) //mouseup
             }
         }
     }
-    else if (! ModifierKeys::getCurrentModifiers().isAltDown())
+    else if (! juce::ModifierKeys::getCurrentModifiers().isAltDown())
     {
         if (! dontsend)
         {
@@ -1599,11 +1603,11 @@ void midiPadsEditor::sendMidiOff (int i)
     }
 }
 
-void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+void midiPadsEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     if (sliderThatWasMoved == hueSlider)
     {
-        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = juce::Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
         color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bghue = (float) (hueSlider->getValue());
@@ -1611,7 +1615,7 @@ void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     }
     else if (sliderThatWasMoved == saturationSlider)
     {
-        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = juce::Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
         color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bgsat = (float) (saturationSlider->getValue());
@@ -1619,7 +1623,7 @@ void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     }
     else if (sliderThatWasMoved == brigtnessSlider)
     {
-        color              = Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
+        color              = juce::Colour ((float) hueSlider->getValue(), (float) saturationSlider->getValue(), (float) brigtnessSlider->getValue(), 1.0f);
         container->bgcolor = color;
         color2             = color.contrasting ((float) padOpacitySlider->getValue());
         getFilter()->bgbri = (float) brigtnessSlider->getValue();
@@ -1727,7 +1731,7 @@ void midiPadsEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 }
 
-void midiPadsEditor::textEditorTextChanged (TextEditor& editor)
+void midiPadsEditor::textEditorTextChanged (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -1736,7 +1740,7 @@ void midiPadsEditor::textEditorTextChanged (TextEditor& editor)
     }
 }
 
-void midiPadsEditor::textEditorReturnKeyPressed (TextEditor& editor)
+void midiPadsEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -1746,7 +1750,7 @@ void midiPadsEditor::textEditorReturnKeyPressed (TextEditor& editor)
     }
 }
 
-void midiPadsEditor::textEditorEscapeKeyPressed (TextEditor& editor)
+void midiPadsEditor::textEditorEscapeKeyPressed (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -1755,7 +1759,7 @@ void midiPadsEditor::textEditorEscapeKeyPressed (TextEditor& editor)
     }
 }
 
-void midiPadsEditor::textEditorFocusLost (TextEditor& editor)
+void midiPadsEditor::textEditorFocusLost (juce::TextEditor& editor)
 {
     if (&editor == textEditor)
     {
@@ -1766,7 +1770,7 @@ void midiPadsEditor::textEditorFocusLost (TextEditor& editor)
 }
 
 //==============================================================================
-void midiPadsEditor::changeListenerCallback (ChangeBroadcaster* source)
+void midiPadsEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -1787,7 +1791,7 @@ void midiPadsEditor::changeListenerCallback (ChangeBroadcaster* source)
     }
     else if (source == colourSelector1)
     {
-        ColourSelector* cs = (ColourSelector*) source;
+        auto* cs = (juce::ColourSelector*) source;
         midiPad[lastPadMenu]->setColour (cs->getCurrentColour().withAlpha (getFilter()->contrast));
         getFilter()->padcolor[lastPadMenu] = cs->getCurrentColour();
     }
@@ -1802,7 +1806,7 @@ void midiPadsEditor::padTriggered()
         memcpy (triggered, getFilter()->triggered, sizeof (triggered));
         getFilter()->getCallbackLock().exit();
         for (int i = 0; i < numPads; i++)
-            midiPad[i]->setState (triggered[i] ? Button::buttonDown : Button::buttonNormal);
+            midiPad[i]->setState (triggered[i] ? juce::Button::buttonDown : juce::Button::buttonNormal);
     }
     else
     {
@@ -1832,9 +1836,9 @@ void midiPadsEditor::dotMoved (int pad)
     getFilter()->dotmoved[pad] = false;
 }
 
-bool midiPadsEditor::isInterestedInFileDrag (const StringArray& files)
+bool midiPadsEditor::isInterestedInFileDrag (const juce::StringArray& files)
 {
-    File file = File (files.joinIntoString (String(), 0, 1));
+    juce::File file = juce::File (files.joinIntoString (juce::String(), 0, 1));
     if (file.hasFileExtension ("png") || file.hasFileExtension ("gif") || file.hasFileExtension ("jpg") || file.hasFileExtension ("svg") || file.hasFileExtension ("mpads") || file.hasFileExtension ("mpadb") || file.hasFileExtension ("fxb") || file.hasFileExtension ("fxp"))
         return true;
     return false;
@@ -1844,8 +1848,8 @@ void midiPadsEditor::filesDropped (const juce::StringArray& filenames, int mouse
 {
     if (isInterestedInFileDrag (filenames))
     {
-        String filename = filenames.joinIntoString (String(), 0, 1);
-        File file       = File (filename);
+        juce::String filename = filenames.joinIntoString (juce::String(), 0, 1);
+        juce::File file       = juce::File (filename);
         if (file.hasFileExtension ("mpads"))
         {
             getFilter()->loadXmlPatch (getFilter()->getCurrentProgram(), file);
@@ -1880,7 +1884,7 @@ void midiPadsEditor::filesDropped (const juce::StringArray& filenames, int mouse
                 if (pad->setImageFromFile (file))
                 {
                     //save the relative path
-                    pad->setIconPath (file.getRelativePathFrom (File (getFilter()->iconPath)));
+                    pad->setIconPath (file.getRelativePathFrom (juce::File (getFilter()->iconPath)));
                     getFilter()->icon[pad->getIndex()] = pad->getIconPath();
                 }
             }
@@ -1905,9 +1909,9 @@ void midiPadsEditor::updateParametersFromFilter()
     bool usex[numPads];
     bool usey[numPads];
     bool useoff[numPads];
-    String t[numPads];
-    String icon[numPads];
-    Colour padcolor[numPads];
+    juce::String t[numPads];
+    juce::String icon[numPads];
+    juce::Colour padcolor[numPads];
     bool toggle[numPads];
     bool tstate[numPads];
     float roundness[numPads];
@@ -1967,15 +1971,15 @@ void midiPadsEditor::updateParametersFromFilter()
         if (icon[i].isEmpty())
         {
             midiPad[i]->setImages (0);
-            midiPad[i]->setIconPath (String());
+            midiPad[i]->setIconPath (juce::String());
         }
         else
         {
-            String fullpath = icon[i];
-            if (! File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
-                fullpath = getFilter()->iconPath + File::getSeparatorString() + icon[i];
+            juce::String fullpath = icon[i];
+            if (! juce::File::getCurrentWorkingDirectory().getChildFile (fullpath).existsAsFile())
+                fullpath = getFilter()->iconPath + juce::File::getSeparatorString() + icon[i];
             //Drawable* image = Drawable::createFromImageFile(File(fullpath));
-            if (! midiPad[i]->setImageFromFile (File (fullpath)))
+            if (! midiPad[i]->setImageFromFile (juce::File (fullpath)))
                 midiPad[i]->setImages (0);
             midiPad[i]->setIconPath (icon[i]);
         }
@@ -1986,7 +1990,7 @@ void midiPadsEditor::updateParametersFromFilter()
         midiPad[i]->setColour (padcolor[i].withAlpha (contrast));
         midiPad[i]->roundness = roundness[i];
         midiPad[i]->imageSize = iconsize[i];
-        midiPad[i]->setToggleState (tstate[i], dontSendNotification);
+        midiPad[i]->setToggleState (tstate[i], juce::dontSendNotification);
         midiPad[i]->setText (t[i]);
         midiPad[i]->setCenteredText (centered[i]);
 
@@ -2027,21 +2031,21 @@ void midiPadsEditor::updateParametersFromFilter()
             }
         }
         if (newMidiType[i] == 1)
-            midiPad[i]->setButtonText ("CC " + String (newMidiData[i]));
+            midiPad[i]->setButtonText ("CC " + juce::String (newMidiData[i]));
         else
-            midiPad[i]->setButtonText (MidiMessage::getMidiNoteName (newMidiData[i], true, true, 3));
+            midiPad[i]->setButtonText (juce::MidiMessage::getMidiNoteName (newMidiData[i], true, true, 3));
     }
 
-    color              = Colour (hue, sat, bri, 1.0f);
+    color              = juce::Colour (hue, sat, bri, 1.0f);
     container->bgcolor = color;
-    color2             = Colour (color.contrasting (contrast));
+    color2             = juce::Colour (color.contrasting (contrast));
 
-    hueSlider->setValue (hue, dontSendNotification);
-    saturationSlider->setValue (sat, dontSendNotification);
-    brigtnessSlider->setValue (bri, dontSendNotification);
-    padOpacitySlider->setValue (contrast, dontSendNotification);
-    globalRoundnessSlider->setValue (roundness[0], dontSendNotification);
-    globalIconSizeSlider->setValue (iconsize[0], dontSendNotification);
+    hueSlider->setValue (hue, juce::dontSendNotification);
+    saturationSlider->setValue (sat, juce::dontSendNotification);
+    brigtnessSlider->setValue (bri, juce::dontSendNotification);
+    padOpacitySlider->setValue (contrast, juce::dontSendNotification);
+    globalRoundnessSlider->setValue (roundness[0], juce::dontSendNotification);
+    globalIconSizeSlider->setValue (iconsize[0], juce::dontSendNotification);
 
     if (! editmode)
     {
@@ -2060,10 +2064,10 @@ void midiPadsEditor::updateParametersFromFilter()
         padOpacitySlider->setVisible (true);
     }
 
-    velocitySlider->setValue (newVelocity * 2.0, dontSendNotification);
-    valueSlider->setValue (newCCValue * 2.0, dontSendNotification);
-    icSlider->setValue ((float) (1 + (int) (newInCh * 15.1)), dontSendNotification);
-    cSlider->setValue ((float) (1 + (int) (newOutCh * 15.1)), dontSendNotification);
+    velocitySlider->setValue (newVelocity * 2.0, juce::dontSendNotification);
+    valueSlider->setValue (newCCValue * 2.0, juce::dontSendNotification);
+    icSlider->setValue ((float) (1 + (int) (newInCh * 15.1)), juce::dontSendNotification);
+    cSlider->setValue ((float) (1 + (int) (newOutCh * 15.1)), juce::dontSendNotification);
 
     if (getWidth() != filter->lastUIWidth || getHeight() != filter->lastUIHeight)
         setSize (filter->lastUIWidth, filter->lastUIHeight);

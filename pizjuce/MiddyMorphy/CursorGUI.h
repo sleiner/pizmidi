@@ -1,34 +1,26 @@
 #pragma once
 
-#include "juce_events/juce_events.h"
+#include <juce_events/juce_events.h>
 
 #include "ModuleGUI.h"
 
 class Cursor;
 
-using namespace juce;
-
 class CursorGUI : public ModuleGUI, public juce::ChangeListener
 {
+public:
+    CursorGUI (Cursor* cursor);
+    ~CursorGUI() override;
+
+    void paint (juce::Graphics& g) override;
+
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+
 private:
     juce::ComponentDragger dragger;
-
-public:
-    void paint (Graphics& g) override;
-
-    CursorGUI (Cursor* cursor);
-
-    void mouseDown (const MouseEvent& e) override;
-
-    void mouseDrag (const MouseEvent& e) override;
-
-    void mouseUp (const MouseEvent& e) override;
-
-    void changeListenerCallback (ChangeBroadcaster* source) override;
-
-private:
     Cursor* cursor;
-
-public:
-    ~CursorGUI() override;
 };

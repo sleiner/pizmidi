@@ -31,7 +31,7 @@ private:
     float param[kNumParams];
 
     int lastUIWidth, lastUIHeight;
-    String name;
+    juce::String name;
 };
 
 //==============================================================================
@@ -41,7 +41,7 @@ private:
 
 */
 class MidiCurve : public PizAudioProcessor,
-                  public ChangeBroadcaster
+                  public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -52,15 +52,15 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (AudioSampleBuffer& buffer,
-                       MidiBuffer& midiMessages) override;
+    void processBlock (juce::AudioSampleBuffer& buffer,
+                       juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
     double getTailLengthSeconds() const override { return 0; }
-    const String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return JucePlugin_Name; }
     bool hasEditor() const override { return true; }
     bool acceptsMidi() const override
     {
@@ -84,11 +84,11 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
 
-    const String getParameterName (int index) override;
-    const String getParameterText (int index) override;
+    const juce::String getParameterName (int index) override;
+    const juce::String getParameterText (int index) override;
 
-    const String getInputChannelName (int channelIndex) const override;
-    const String getOutputChannelName (int channelIndex) const override;
+    const juce::String getInputChannelName (int channelIndex) const override;
+    const juce::String getOutputChannelName (int channelIndex) const override;
     bool isInputChannelStereoPair (int index) const override;
     bool isOutputChannelStereoPair (int index) const override;
 
@@ -97,13 +97,13 @@ public:
     int getNumPrograms() override { return 128; }
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    const juce::String getProgramName (int index) override;
+    void changeProgramName (int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (MemoryBlock& destData) override;
+    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
     void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (MemoryBlock& destData) override;
+    void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
@@ -121,12 +121,10 @@ public:
     int getPrevActivePoint (int currentPoint);
     int getNextActivePoint (int currentPoint);
     void resetPoints();
-    Path path;
+    juce::Path path;
 
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
-        private : float param[kNumParams];
+private:
+    float param[kNumParams];
 
     class midiPoint
     {
@@ -145,17 +143,17 @@ public:
         }
         ~midiPoint(){};
 
-        Point<float> p;
+        juce::Point<float> p;
         bool isControl;
         bool isActive;
     };
 
     struct PointComparator
     {
-        int compareElements (midiPoint a, midiPoint b) { return roundToInt (a.p.getX() * 127.f) - roundToInt (b.p.getX() * 127.f); }
+        int compareElements (midiPoint a, midiPoint b) { return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f); }
     } pointComparator;
 
-    Array<midiPoint> points;
+    juce::Array<midiPoint> points;
     void updatePath();
 
     JuceProgram* programs;
@@ -165,6 +163,8 @@ public:
 
     float findValue (float input);
     double linearInterpolate (double x, double y1, double y2, double x1, double x2);
+
+    JUCE_LEAK_DETECTOR (MidiCurve)
 };
 
 #endif

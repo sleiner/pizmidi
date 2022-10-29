@@ -4,9 +4,10 @@
 #include "ControllerValue.h"
 #include "MidiMorph.h"
 
+using juce::roundToInt;
+
 ControllerGUI::ControllerGUI (Controller* controller, MidiMorph* core)
 {
-    // Bouml preserved body begin 00033A8D
     this->controller = controller;
     this->core       = core;
 
@@ -22,20 +23,20 @@ ControllerGUI::ControllerGUI (Controller* controller, MidiMorph* core)
     ccNo->setRange (0, 127, 1, 2);
     ccNo->addListener (this);
 
-    addAndMakeVisible (this->name = new TextEditor());
+    addAndMakeVisible (this->name = new juce::TextEditor());
     name->setSelectAllWhenFocused (true);
-    name->setColour (TextEditor::outlineColourId, Colour (0.f, 0, 0, 0.f));
-    name->setColour (TextEditor::backgroundColourId, Colour (0.f, 0, 0, 0.f));
-    name->setColour (TextEditor::focusedOutlineColourId, Colour (0.f, 0, 0, 0.f));
-    name->setColour (TextEditor::highlightColourId, Colours::white);
-    name->setFont (Font (10));
+    name->setColour (juce::TextEditor::outlineColourId, juce::Colour (0.f, 0, 0, 0.f));
+    name->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0.f, 0, 0, 0.f));
+    name->setColour (juce::TextEditor::focusedOutlineColourId, juce::Colour (0.f, 0, 0, 0.f));
+    name->setColour (juce::TextEditor::highlightColourId, juce::Colours::white);
+    name->setFont (juce::Font (10));
     name->setInputRestrictions (32);
     name->addListener (this);
 
-    addAndMakeVisible (labCc = new Label ("", "cc:"));
-    addAndMakeVisible (labCh = new Label ("", "ch:"));
-    labCc->setFont (Font (10));
-    labCh->setFont (Font (10));
+    addAndMakeVisible (labCc = new juce::Label ("", "cc:"));
+    addAndMakeVisible (labCh = new juce::Label ("", "ch:"));
+    labCc->setFont (juce::Font (10));
+    labCh->setFont (juce::Font (10));
 
     setOpaque (true);
 
@@ -45,29 +46,21 @@ ControllerGUI::ControllerGUI (Controller* controller, MidiMorph* core)
     refreshControllerData();
 
     core->addChangeListener (this);
-
-    //controller->addChangeListener(this);
-    // Bouml preserved body end 00033A8D
 }
 
 ControllerGUI::~ControllerGUI()
 {
-    // Bouml preserved body begin 0003EF0D
     core->removeChangeListener (this);
-    //controller->removeChangeListener(this);
     deleteAndZero (value);
     deleteAndZero (channel);
     deleteAndZero (ccNo);
     deleteAndZero (name);
     deleteAndZero (labCc);
     deleteAndZero (labCh);
-    //deleteAndZero(test);
-    // Bouml preserved body end 0003EF0D
 }
 
 void ControllerGUI::resized()
 {
-    // Bouml preserved body begin 00033B0D
     int left       = roundToInt ((float) getWidth() * 0.30f);
     int right      = getWidth() - left;
     int h2         = getHeight() / 2;
@@ -85,33 +78,27 @@ void ControllerGUI::resized()
 
     labCc->setBounds (right2, h2, rightdelta, h2);
     ccNo->setBounds (right3, h2, rightdelta, h2);
-    // Bouml preserved body end 00033B0D
 }
 
 //==============================================================================
 
-void ControllerGUI::paint (Graphics& g)
+void ControllerGUI::paint (juce::Graphics& g)
 {
-    // Bouml preserved body begin 00033B8D
-    g.fillAll (Colours::lightgrey);
-    // Bouml preserved body end 00033B8D
+    g.fillAll (juce::Colours::lightgrey);
 }
 
 //==============================================================================
 
-void ControllerGUI::paintOverChildren (Graphics& g)
+void ControllerGUI::paintOverChildren (juce::Graphics& g)
 {
-    // Bouml preserved body begin 00033F0D
     g.drawRoundedRectangle (0, 0, (float) getWidth(), (float) getHeight(), 2, 2);
-    // Bouml preserved body end 00033F0D
 }
 
-void ControllerGUI::mouseUp (const MouseEvent& e)
+void ControllerGUI::mouseUp (const juce::MouseEvent& e)
 {
-    // Bouml preserved body begin 00033F8D
     if (e.mods.isRightButtonDown())
     {
-        PopupMenu menu;
+        juce::PopupMenu menu;
         menu.addItem (1, "remove controller");
         menu.addItem (2, "add controller");
         int result = menu.show();
@@ -126,118 +113,84 @@ void ControllerGUI::mouseUp (const MouseEvent& e)
             core->addController (cc + 1, ch);
         }
     }
-    // Bouml preserved body end 00033F8D
 }
 
-//()=
-void ControllerGUI::sliderValueChanged (Slider* slider)
+void ControllerGUI::sliderValueChanged (juce::Slider* slider)
 {
-    // Bouml preserved body begin 00034C0D
-    // Bouml preserved body end 00034C0D
 }
 
 void ControllerGUI::setSelected (bool shouldDrawSelected)
 {
-    // Bouml preserved body begin 00033E8D
     this->isSelected = true;
-    // Bouml preserved body end 00033E8D
 }
 
-void ControllerGUI::changeListenerCallback (ChangeBroadcaster* source)
+void ControllerGUI::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
-    // Bouml preserved body begin 0003EA8D
-    //if(objectThatHasChanged == controller)
-    //{
-    //	refreshControllerData();
-    //	this->repaint();
-    //}
-    //else if(objectThatHasChanged == core->getSelectedScenes())
-    //{
-    //	refreshControllerData();
-    //	this->repaint();
-    //}
-    //else if(objectThatHasChanged == core->getCursor())
-    //{
     refreshControllerData();
-
-    //}
-    // Bouml preserved body end 0003EA8D
 }
 
 void ControllerGUI::refreshControllerData()
 {
-    // Bouml preserved body begin 0003F38D
     if (core->getNumSelectedScenes() > 0)
     {
         if (controller->getValue (core->getSelectedScene (0)) != 0)
         {
-            this->value->setValue (controller->getValue (core->getSelectedScene (0))->getValue(), dontSendNotification);
+            this->value->setValue (controller->getValue (core->getSelectedScene (0))->getValue(), juce::dontSendNotification);
         }
         else
         {
-            this->value->setValue (0, dontSendNotification);
+            this->value->setValue (0, juce::dontSendNotification);
         }
     }
     else
     {
-        this->value->setValue (controller->getInterpolatedValue(), dontSendNotification);
+        this->value->setValue (controller->getInterpolatedValue(), juce::dontSendNotification);
     }
-    this->channel->setValue (controller->getChannel(), dontSendNotification);
-    this->ccNo->setValue (controller->getCcNo(), dontSendNotification);
+    this->channel->setValue (controller->getChannel(), juce::dontSendNotification);
+    this->ccNo->setValue (controller->getCcNo(), juce::dontSendNotification);
     this->name->setText (controller->getName(), false);
     int state = controller->getState();
     switch (state)
     {
         case Controller::undefined:
-            value->setColour (Label::textColourId, Colours::blue);
+            value->setColour (juce::Label::textColourId, juce::Colours::blue);
             break;
         case Controller::mutival:
-            value->setColour (Label::textColourId, Colours::red);
+            value->setColour (juce::Label::textColourId, juce::Colours::red);
             break;
         case Controller::defined:
-            value->setColour (Label::textColourId, Colours::black);
+            value->setColour (juce::Label::textColourId, juce::Colours::black);
             break;
     }
 
     this->repaint();
-    // Bouml preserved body end 0003F38D
 }
 
-void ControllerGUI::textEditorTextChanged (TextEditor& editor)
+void ControllerGUI::textEditorTextChanged (juce::TextEditor& editor)
 {
-    // Bouml preserved body begin 0004178D
     if (&editor == name)
     {
         controller->setName (editor.getText());
     }
-    // Bouml preserved body end 0004178D
 }
 
-//  (       )
-void ControllerGUI::textEditorReturnKeyPressed (TextEditor& editor)
+void ControllerGUI::textEditorReturnKeyPressed (juce::TextEditor& editor)
 {
-    // Bouml preserved body begin 0004180D
-    // Bouml preserved body end 0004180D
 }
 
-void ControllerGUI::textEditorEscapeKeyPressed (TextEditor& editor)
+void ControllerGUI::textEditorEscapeKeyPressed (juce::TextEditor& editor)
 {
-    // Bouml preserved body begin 0004188D
-    // Bouml preserved body end 0004188D
 }
 
-void ControllerGUI::textEditorFocusLost (TextEditor& editor)
+void ControllerGUI::textEditorFocusLost (juce::TextEditor& editor)
 {
-    // Bouml preserved body begin 0004190D
-    // Bouml preserved body end 0004190D
 }
 
-void ControllerGUI::labelTextChanged (Label* labelThatHasChanged)
+void ControllerGUI::labelTextChanged (juce::Label* labelThatHasChanged)
 {
-    // Bouml preserved body begin 00048A0D
     if (labelThatHasChanged == value)
     {
-        controller->setValue (roundToInt (value->getValue()));
+        controller->setValueInSelectedScenes (roundToInt (value->getValue()));
         repaint();
     }
     else if (labelThatHasChanged == ccNo)
@@ -248,10 +201,4 @@ void ControllerGUI::labelTextChanged (Label* labelThatHasChanged)
     {
         controller->channel = roundToInt (channel->getValue());
     }
-    //else if(labelThatHasChanged = test)
-    //{
-
-    //}
-
-    // Bouml preserved body end 00048A0D
 }

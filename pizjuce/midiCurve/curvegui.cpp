@@ -54,7 +54,7 @@ CurveEditor::CurveEditor (MidiCurve* const ownerFilter)
     label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    resizer.reset (new ResizableCornerComponent (this, &resizeLimits));
+    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
     addAndMakeVisible (resizer.get());
 
     velocityButton.reset (new juce::ToggleButton ("new toggle button"));
@@ -309,7 +309,7 @@ void CurveEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
+void CurveEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
         updateParameters();
@@ -320,9 +320,9 @@ void CurveEditor::changeListenerCallback (ChangeBroadcaster* source)
         const int lastout = getFilter()->lastMsg.lastCCOut;
         getFilter()->getCallbackLock().exit();
         if (lastin != -1)
-            label->setText ("In: " + String (lastin), dontSendNotification);
+            label->setText ("In: " + juce::String (lastin), juce::dontSendNotification);
         if (lastout != -1)
-            label2->setText ("Out: " + String (lastout), dontSendNotification);
+            label2->setText ("Out: " + juce::String (lastout), juce::dontSendNotification);
         curve->repaintIndicator (lastin, lastout);
     }
 }
@@ -345,13 +345,13 @@ void CurveEditor::updateParameters()
     const float p_pitchbend       = filter->getParameter (kPitchBend);
     filter->getCallbackLock().exit();
 
-    slider->setValue (p_ccnumber * slider->getMaximum(), dontSendNotification);
-    channelSlider->setValue (p_channel * channelSlider->getMaximum(), dontSendNotification);
+    slider->setValue (p_ccnumber * slider->getMaximum(), juce::dontSendNotification);
+    channelSlider->setValue (p_channel * channelSlider->getMaximum(), juce::dontSendNotification);
 
-    velocityButton->setToggleState (p_velocity >= 0.5f, dontSendNotification);
-    ccButton->setToggleState (p_cc >= 0.5f, dontSendNotification);
-    aftertouchButton->setToggleState (p_aftertouch >= 0.5f, dontSendNotification);
-    channelPressureButton->setToggleState (p_channelpressure >= 0.5f, dontSendNotification);
+    velocityButton->setToggleState (p_velocity >= 0.5f, juce::dontSendNotification);
+    ccButton->setToggleState (p_cc >= 0.5f, juce::dontSendNotification);
+    aftertouchButton->setToggleState (p_aftertouch >= 0.5f, juce::dontSendNotification);
+    channelPressureButton->setToggleState (p_channelpressure >= 0.5f, juce::dontSendNotification);
 
     curve->updateParameters (true);
 

@@ -20,7 +20,7 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../_common/ChannelSlider.h"
 #include "curve.h"
@@ -35,8 +35,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class CurveEditor : public AudioProcessorEditor,
-                    public ChangeListener,
+class CurveEditor : public juce::AudioProcessorEditor,
+                    public juce::ChangeListener,
                     public juce::Button::Listener,
                     public juce::Slider::Listener
 {
@@ -57,16 +57,16 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
     void updateParameters();
-    ComponentBoundsConstrainer resizeLimits;
+    juce::ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]
 
     //==============================================================================
     std::unique_ptr<MidiEnvelope> curve;
     std::unique_ptr<juce::Label> label;
     std::unique_ptr<juce::Label> label2;
-    std::unique_ptr<ResizableCornerComponent> resizer;
+    std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<juce::ToggleButton> velocityButton;
     std::unique_ptr<juce::ToggleButton> ccButton;
     std::unique_ptr<juce::Slider> slider;

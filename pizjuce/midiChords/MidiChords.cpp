@@ -1,6 +1,10 @@
 #include "MidiChords.h"
 #include "MidiChordsEditor.h"
 
+using juce::jlimit;
+using juce::jmax;
+using juce::roundToInt;
+
 //==============================================================================
 /**
     This function must be implemented to create a new instance of your
@@ -48,7 +52,7 @@ void MidiChordsPrograms::loadDefaults()
             set (p, "VelRamp", 0.5f);
             set (p, "Accel", 0.5f);
 
-            set (p, "Name", "Program " + String (p + 1));
+            set (p, "Name", "Program " + juce::String (p + 1));
             set (p, "lastUIWidth", 600);
             set (p, "lastUIHeight", 400);
             set (p, "lastTrigger", 60);
@@ -75,9 +79,9 @@ void MidiChordsPrograms::loadDefaults()
 
             for (int t = 0; t < 128; t++)
             {
-                set (p, "Bypassed" + String (t), false);
-                set (p, "StrumUp" + String (t), true);
-                ValueTree noteMatrix ("NoteMatrix_T" + String (t));
+                set (p, "Bypassed" + juce::String (t), false);
+                set (p, "StrumUp" + juce::String (t), true);
+                juce::ValueTree noteMatrix ("NoteMatrix_T" + juce::String (t));
                 //for (int c=0;c<16;c++) {
                 //	noteMatrix.setProperty("Ch"+String(c)+"_0-31", 0, 0);
                 //	noteMatrix.setProperty("Ch"+String(c)+"_32-63", 0, 0);
@@ -95,15 +99,15 @@ MidiChords::MidiChords() : programs (0), curProgram (0)
 {
     DBG ("MidiChords()");
 
-    dataPath = getCurrentPath() + File::getSeparatorString() + "midiChords";
-    if (! File (dataPath).exists())
+    dataPath = getCurrentPath() + juce::File::getSeparatorString() + "midiChords";
+    if (! juce::File (dataPath).exists())
     {
-        dataPath = File::getSpecialLocation (File::userApplicationDataDirectory).getFullPathName()
-                 + File::getSeparatorString() + "pizmidi" + File::getSeparatorString() + "midiChords";
-        if (! File (dataPath).exists())
+        dataPath = juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory).getFullPathName()
+                 + juce::File::getSeparatorString() + "pizmidi" + juce::File::getSeparatorString() + "midiChords";
+        if (! juce::File (dataPath).exists())
         {
-            dataPath = File::getSpecialLocation (File::commonApplicationDataDirectory).getFullPathName()
-                     + File::getSeparatorString() + "pizmidi" + File::getSeparatorString() + "midiChords";
+            dataPath = juce::File::getSpecialLocation (juce::File::commonApplicationDataDirectory).getFullPathName()
+                     + juce::File::getSeparatorString() + "pizmidi" + juce::File::getSeparatorString() + "midiChords";
         }
     }
 
@@ -158,11 +162,11 @@ MidiChords::~MidiChords()
 {
     DBG ("~MidiChords()");
     if (programs)
-        deleteAndZero (programs);
+        juce::deleteAndZero (programs);
 }
 
 //==============================================================================
-const String MidiChords::getName() const
+const juce::String MidiChords::getName() const
 {
     return JucePlugin_Name;
 }
@@ -389,7 +393,7 @@ void MidiChords::setParameter (int index, float newValue)
     }
 }
 
-const String MidiChords::getParameterName (int index)
+const juce::String MidiChords::getParameterName (int index)
 {
     if (index == kChannel)
         return "Channel";
@@ -429,17 +433,17 @@ const String MidiChords::getParameterName (int index)
         return "VelRamp";
     if (index == kAccel)
         return "Accel";
-    return String();
+    return juce::String();
 }
 
-const String MidiChords::getParameterText (int index)
+const juce::String MidiChords::getParameterText (int index)
 {
     if (index == kChannel)
-        return channel == 0 ? "Any" : String (channel);
+        return channel == 0 ? "Any" : juce::String (channel);
     if (index == kLearnChannel)
-        return learnchan == 0 ? "All" : String (learnchan);
+        return learnchan == 0 ? "All" : juce::String (learnchan);
     if (index == kOutChannel)
-        return outchan == 0 ? "Multi" : String (outchan);
+        return outchan == 0 ? "Multi" : juce::String (outchan);
     if (index == kUseProgCh)
         return usepc ? "Yes" : "No";
     if (index == kLearnChord)
@@ -449,8 +453,8 @@ const String MidiChords::getParameterText (int index)
     if (index == kTranspose)
     {
         if (transpose > 0)
-            return "+" + String (transpose);
-        return String (transpose);
+            return "+" + juce::String (transpose);
+        return juce::String (transpose);
     }
     if (index == kMode)
     {
@@ -462,13 +466,13 @@ const String MidiChords::getParameterText (int index)
             return "Global";
     }
     if (index == kRoot)
-        return String (root);
+        return juce::String (root);
     if (index == kGuess)
         return guess ? "Yes" : "No";
     if (index == kFlats)
         return flats ? "Yes" : "No";
     if (index == kVelocity)
-        return String (previewVel);
+        return juce::String (previewVel);
     if (index == kInputTranspose)
         return inputtranspose ? "Yes" : "No";
     if (index == kToAllChannels)
@@ -476,34 +480,34 @@ const String MidiChords::getParameterText (int index)
     if (index == kStrum)
         return strum ? "On" : "Off";
     if (index == kSpeed)
-        return String (roundToInt (fSpeed * 100.f)) + "%";
+        return juce::String (roundToInt (fSpeed * 100.f)) + "%";
     if (index == kMaxDelay)
-        return String (roundToInt (1000.f * (0.1f + 2.9f * fMaxDelay))) + " ms";
+        return juce::String (roundToInt (1000.f * (0.1f + 2.9f * fMaxDelay))) + " ms";
     if (index == kVelRamp)
     {
         const int ramp = roundToInt (fVelRamp * 200.f) - 100;
         if (ramp > 0)
-            return "+" + String (ramp);
-        return String (ramp);
+            return "+" + juce::String (ramp);
+        return juce::String (ramp);
     }
     if (index == kAccel)
     {
         const int accel = roundToInt (fAccel * 200.f) - 100;
         if (accel > 0)
-            return "+" + String (accel);
-        return String (accel);
+            return "+" + juce::String (accel);
+        return juce::String (accel);
     }
-    return String();
+    return juce::String();
 }
 
-const String MidiChords::getInputChannelName (const int channelIndex) const
+const juce::String MidiChords::getInputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
-const String MidiChords::getOutputChannelName (const int channelIndex) const
+const juce::String MidiChords::getOutputChannelName (const int channelIndex) const
 {
-    return String (channelIndex + 1);
+    return juce::String (channelIndex + 1);
 }
 
 bool MidiChords::isInputChannelStereoPair (int index) const
@@ -526,11 +530,11 @@ void MidiChords::releaseResources()
     delayBuffer.clear();
 }
 
-void MidiChords::processBlock (AudioSampleBuffer& buffer,
-                               MidiBuffer& midiMessages)
+void MidiChords::processBlock (juce::AudioSampleBuffer& buffer,
+                               juce::MidiBuffer& midiMessages)
 {
     bool wasplaying;
-    AudioPlayHead::CurrentPositionInfo pos;
+    juce::AudioPlayHead::CurrentPositionInfo pos;
     if (getPlayHead() != 0 && getPlayHead()->getCurrentPosition (pos))
         wasplaying = lastPosInfo.isPlaying || lastPosInfo.isRecording;
     else
@@ -549,13 +553,13 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
     if (delayBuffer.getNumEvents() == 0)
         expectingDelayedNotes = false;
 
-    MidiBuffer output;
+    juce::MidiBuffer output;
     if ((playFromGUI != playingFromGUI) || stopPlayingFromGUI)
     {
         int ch = jmax (channel, 1);
         if (playFromGUI && ! playingFromGUI)
         {
-            midiMessages.addEvent (MidiMessage::noteOn (ch, curTrigger, (uint8) previewVel), 0);
+            midiMessages.addEvent (juce::MidiMessage::noteOn (ch, curTrigger, (juce::uint8) previewVel), 0);
             playingFromGUI    = true;
             playFromGUI       = false;
             playButtonTrigger = curTrigger;
@@ -563,7 +567,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 
         else if (stopPlayingFromGUI)
         {
-            midiMessages.addEvent (MidiMessage::noteOff (ch, playButtonTrigger), 0);
+            midiMessages.addEvent (juce::MidiMessage::noteOff (ch, playButtonTrigger), 0);
             playingFromGUI     = false;
             playFromGUI        = false;
             stopPlayingFromGUI = false;
@@ -593,10 +597,10 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                 }
                 else
                 {
-                    blockOriginalEvent = true;
-                    const int ch       = m.getChannel() - 1;
-                    const int tnote    = inputtranspose ? (m.getNoteNumber() - transpose) : m.getNoteNumber();
-                    const uint8 v      = m.getVelocity();
+                    blockOriginalEvent  = true;
+                    const int ch        = m.getChannel() - 1;
+                    const int tnote     = inputtranspose ? (m.getNoteNumber() - transpose) : m.getNoteNumber();
+                    const juce::uint8 v = m.getVelocity();
                     if (! learn)
                     {
                         bool triggered = false;
@@ -639,7 +643,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                                     {
                                         if (! strum)
                                         {
-                                            output.addEvent (MidiMessage::noteOn (outputChannel, newNote, v), sample);
+                                            output.addEvent (juce::MidiMessage::noteOn (outputChannel, newNote, v), sample);
                                             noteDelay[outputChannel - 1][newNote]        = 0;
                                             noteOrigPos[outputChannel - 1][newNote]      = totalSamples + sample;
                                             chordNotePlaying[outputChannel - 1][newNote] = true;
@@ -653,7 +657,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                         {
                             int chordpos   = 0;
                             int heldnotes  = playingChord[tnote].size();
-                            bool upstroke  = programs->get (curProgram, "StrumUp" + String (trigger));
+                            bool upstroke  = programs->get (curProgram, "StrumUp" + juce::String (trigger));
                             float accel    = (2.f * fAccel - 1.f);
                             float maxmax   = (float) getSampleRate() * (0.1f + 2.9f * fMaxDelay);
                             float maxdelay = (1.f - fSpeed) * maxmax;
@@ -668,7 +672,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                                 if (playingChord[tnote].size() > 1)
                                 {
                                     const float x = (float) (chordpos) / (float) (heldnotes - 1);
-                                    delay         = roundToInt ((accel * 0.3f * sin (MathConstants<float>::pi * x) + x) * maxdelay);
+                                    delay         = roundToInt ((accel * 0.3f * sin (juce::MathConstants<float>::pi * x) + x) * maxdelay);
                                     velocity += roundToInt ((2.f * fVelRamp - 1.f) * (x * 127.f - 64.f));
                                     velocity = jlimit (1, 127, velocity);
                                     //float veldelay = 1.f-(fVelToSpeed)*MIDI_TO_FLOAT(strumvel);
@@ -677,8 +681,8 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                                 if (delay > 0)
                                 {
                                     if (chordNotePlaying[c - 1][n])
-                                        delayBuffer.addEvent (MidiMessage::noteOff (c, n), sample + delay - 1);
-                                    delayBuffer.addEvent (MidiMessage::noteOn (c, n, (uint8) velocity), sample + delay);
+                                        delayBuffer.addEvent (juce::MidiMessage::noteOff (c, n), sample + delay - 1);
+                                    delayBuffer.addEvent (juce::MidiMessage::noteOn (c, n, (juce::uint8) velocity), sample + delay);
                                     expectingDelayedNotes = true;
                                 }
                                 else
@@ -691,9 +695,9 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                                             s2 += 1;
                                         if (sample == buffer.getNumSamples() - 1)
                                             s -= 1;
-                                        output.addEvent (MidiMessage::noteOff (c, n), s);
+                                        output.addEvent (juce::MidiMessage::noteOff (c, n), s);
                                     }
-                                    output.addEvent (MidiMessage::noteOn (c, n, (uint8) velocity), s2);
+                                    output.addEvent (juce::MidiMessage::noteOn (c, n, (juce::uint8) velocity), s2);
                                     chordNotePlaying[c - 1][n] = true;
                                     sample                     = s2;
                                 }
@@ -723,7 +727,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                     {
                         if (outputNote[ch][note] != -1)
                         {
-                            output.addEvent (MidiMessage::noteOff (ch + 1, outputNote[ch][note]), sample);
+                            output.addEvent (juce::MidiMessage::noteOff (ch + 1, outputNote[ch][note]), sample);
                             outputNote[ch][note] = -1;
                         }
                     }
@@ -750,11 +754,11 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                             {
                                 if (delay > 0)
                                 {
-                                    delayBuffer.addEvent (MidiMessage::noteOff (c + 1, chordNote), sample + delay);
+                                    delayBuffer.addEvent (juce::MidiMessage::noteOff (c + 1, chordNote), sample + delay);
                                 }
                                 else
                                 {
-                                    output.addEvent (MidiMessage::noteOff (c + 1, chordNote), sample);
+                                    output.addEvent (juce::MidiMessage::noteOff (c + 1, chordNote), sample);
                                     chordNotePlaying[c][chordNote] = false;
                                 }
                             }
@@ -789,10 +793,10 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
         {
             if (m.isNoteOn())
             {
-                blockOriginalEvent = true;
-                const int ch       = m.getChannel();
-                const int tnote    = m.getNoteNumber();
-                const uint8 v      = m.getVelocity();
+                blockOriginalEvent  = true;
+                const int ch        = m.getChannel();
+                const int tnote     = m.getNoteNumber();
+                const juce::uint8 v = m.getVelocity();
                 if (learn)
                 {
                     if (learning == 0)
@@ -809,7 +813,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                         newNote += 12 * (tnote % 12);
                     if (newNote < 128 && newNote >= 0)
                     {
-                        output.addEvent (MidiMessage::noteOn (ch, newNote, v), sample);
+                        output.addEvent (juce::MidiMessage::noteOn (ch, newNote, v), sample);
                         outputNote[ch][tnote] = newNote;
                     }
                 }
@@ -824,7 +828,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                     learning--;
                     if (outputNote[ch][note] < 128 && outputNote[ch][note] >= 0)
                     {
-                        output.addEvent (MidiMessage::noteOff (ch, outputNote[ch][note]), sample);
+                        output.addEvent (juce::MidiMessage::noteOff (ch, outputNote[ch][note]), sample);
                         outputNote[ch][note] = -1;
                     }
                     if (learning < 1)
@@ -838,7 +842,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 
     //process delay buffer----------------------------------------------------------
     expectingDelayedNotes = false;
-    MidiBuffer newBuffer;
+    juce::MidiBuffer newBuffer;
     for (auto&& msgMetadata : delayBuffer)
     {
         auto m      = msgMetadata.getMessage();
@@ -852,7 +856,7 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
                 if (chordNotePlaying[m.getChannel() - 1][m.getNoteNumber()])
                 {
                     ignoreNextNoteOff[m.getChannel() - 1].add (m.getNoteNumber());
-                    output.addEvent (MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
+                    output.addEvent (juce::MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
                 }
                 output.addEvent (m, sample);
                 chordNotePlaying[m.getChannel() - 1][m.getNoteNumber()] = true;
@@ -896,19 +900,19 @@ void MidiChords::processBlock (AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-AudioProcessorEditor* MidiChords::createEditor()
+juce::AudioProcessorEditor* MidiChords::createEditor()
 {
     return new MidiChordsEditor (this);
 }
 
 //==============================================================================
-void MidiChords::getStateInformation (MemoryBlock& destData)
+void MidiChords::getStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpTo (destData);
 }
 
-void MidiChords::getCurrentProgramStateInformation (MemoryBlock& destData)
+void MidiChords::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
 {
     copySettingsToProgram (curProgram);
     programs->dumpProgramTo (0, curProgram, destData);
@@ -916,8 +920,8 @@ void MidiChords::getCurrentProgramStateInformation (MemoryBlock& destData)
 
 void MidiChords::setStateInformation (const void* data, int sizeInBytes)
 {
-    MemoryInputStream m (data, sizeInBytes, false);
-    ValueTree vt = ValueTree::readFromStream (m);
+    juce::MemoryInputStream m (data, sizeInBytes, false);
+    juce::ValueTree vt = juce::ValueTree::readFromStream (m);
 
     programs->loadFrom (vt);
     if (vt.isValid())
@@ -954,28 +958,28 @@ void MidiChords::setStateInformation (const void* data, int sizeInBytes)
                         {
                             if (n < 32)
                             {
-                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + String (trigger) + "_0-31", 0);
+                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + juce::String (trigger) + "_0-31", 0);
                                 if ((state & (1 << n)) != 0)
                                     programs->setChordNote (index, trigger, ch + 1, n, true);
                             }
                             else if (n < 64)
                             {
                                 int note  = n - 32;
-                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + String (trigger) + "_32-63", 0);
+                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + juce::String (trigger) + "_32-63", 0);
                                 if ((state & (1 << note)) != 0)
                                     programs->setChordNote (index, trigger, ch + 1, n, true);
                             }
                             else if (n < 96)
                             {
                                 int note  = n - 64;
-                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + String (trigger) + "_64-95", 0);
+                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + juce::String (trigger) + "_64-95", 0);
                                 if ((state & (1 << note)) != 0)
                                     programs->setChordNote (index, trigger, ch + 1, n, true);
                             }
                             else if (n < 128)
                             {
                                 int note  = n - 96;
-                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + String (trigger) + "_96-127", 0);
+                                int state = vt.getChild (index).getChild (ch).getProperty ("T" + juce::String (trigger) + "_96-127", 0);
                                 if ((state & (1 << note)) != 0)
                                     programs->setChordNote (index, trigger, ch + 1, n, true);
                             }
@@ -991,8 +995,8 @@ void MidiChords::setStateInformation (const void* data, int sizeInBytes)
 
 void MidiChords::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
 {
-    MemoryInputStream m (data, sizeInBytes, false);
-    ValueTree vt = ValueTree::readFromStream (m);
+    juce::MemoryInputStream m (data, sizeInBytes, false);
+    juce::ValueTree vt = juce::ValueTree::readFromStream (m);
     if ((int) vt.getProperty ("Velocity") == 0)
         vt.setProperty ("Velocity", 100, 0);
 
@@ -1024,28 +1028,28 @@ void MidiChords::setCurrentProgramStateInformation (const void* data, int sizeIn
                 {
                     if (n < 32)
                     {
-                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + String (trigger) + "_0-31", 0);
+                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + juce::String (trigger) + "_0-31", 0);
                         if ((state & (1 << n)) != 0)
                             programs->setChordNote (curProgram, trigger, ch + 1, n, true);
                     }
                     else if (n < 64)
                     {
                         int note  = n - 32;
-                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + String (trigger) + "_32-63", 0);
+                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + juce::String (trigger) + "_32-63", 0);
                         if ((state & (1 << note)) != 0)
                             programs->setChordNote (curProgram, trigger, ch + 1, n, true);
                     }
                     else if (n < 96)
                     {
                         int note  = n - 64;
-                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + String (trigger) + "_64-95", 0);
+                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + juce::String (trigger) + "_64-95", 0);
                         if ((state & (1 << note)) != 0)
                             programs->setChordNote (curProgram, trigger, ch + 1, n, true);
                     }
                     else if (n < 128)
                     {
                         int note  = n - 96;
-                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + String (trigger) + "_96-127", 0);
+                        int state = vt.getChild (curProgram).getChild (ch).getProperty ("T" + juce::String (trigger) + "_96-127", 0);
                         if ((state & (1 << note)) != 0)
                             programs->setChordNote (curProgram, trigger, ch + 1, n, true);
                     }
@@ -1416,9 +1420,9 @@ void MidiChords::applyChannelToChord()
     }
 }
 
-void MidiChords::savePreset (String name)
+void MidiChords::savePreset (juce::String name)
 {
-    String contents = "Mode:";
+    juce::String contents = "Mode:";
     switch (mode)
     {
         case Global:
@@ -1443,25 +1447,25 @@ void MidiChords::savePreset (String name)
                 {
                     if (! usingTrigger)
                     {
-                        contents += String (t) + ":";
+                        contents += juce::String (t) + ":";
                         if (getGuitarView())
                             contents += " guitar";
                         usingTrigger = true;
                     }
-                    contents += String (" ") + String (n - t) + "." + String (c);
+                    contents += juce::String (" ") + juce::String (n - t) + "." + juce::String (c);
                 }
             }
         }
         if (usingTrigger)
             contents += "\n";
     }
-    File chordFile (dataPath + File::getSeparatorString() + "mappings" + File::getSeparatorString() + name + ".chords");
+    juce::File chordFile (dataPath + juce::File::getSeparatorString() + "mappings" + juce::File::getSeparatorString() + name + ".chords");
 
-    FileChooser myChooser ("Save preset...", chordFile, "*.chords");
+    juce::FileChooser myChooser ("Save preset...", chordFile, "*.chords");
 
     if (myChooser.browseForFileToSave (true))
     {
-        File file (myChooser.getResult());
+        juce::File file (myChooser.getResult());
         if (! file.hasFileExtension ("chords"))
             file = file.withFileExtension ("chords");
 
@@ -1470,7 +1474,7 @@ void MidiChords::savePreset (String name)
     }
 }
 
-bool MidiChords::readKeyFile (File file)
+bool MidiChords::readKeyFile (juce::File file)
 {
     DBG ("readKeyFile()");
     bool copy = false;
@@ -1480,9 +1484,9 @@ bool MidiChords::readKeyFile (File file)
     }
     else
     {
-        file = File (dataPath + File::getSeparatorString() + "midiChordsKey.txt");
+        file = juce::File (dataPath + juce::File::getSeparatorString() + "midiChordsKey.txt");
         if (! file.exists())
-            file = File (getCurrentPath() + File::getSeparatorString() + "midiChordsKey.txt");
+            file = juce::File (getCurrentPath() + juce::File::getSeparatorString() + "midiChordsKey.txt");
         //if (!file.exists())
         //	file = File(folderPath+File::getSeparatorString()+"midiChordsKey.txt");
     }
@@ -1491,8 +1495,8 @@ bool MidiChords::readKeyFile (File file)
     {
         if (file.hasFileExtension ("zip"))
         {
-            if (ZipFile (file).uncompressTo (File (dataPath)))
-                file = File (dataPath + File::getSeparatorString() + "midiChordsKey.txt");
+            if (juce::ZipFile (file).uncompressTo (juce::File (dataPath)))
+                file = juce::File (dataPath + juce::File::getSeparatorString() + "midiChordsKey.txt");
         }
         auto xmlKey = decodeEncryptedXml (file.loadFileAsString(), "3,5097efd7266b329e878e65129df0c8fe3ffc188abd24625e3709c65b304f5e2bdfa157e6c3cc6de5c29e36138c29f2516b56c55827aa238135bf1e23b6cab4f7");
         if (! xmlKey->getStringAttribute ("product").compare ("midiChords 1.x")
@@ -1502,7 +1506,7 @@ bool MidiChords::readKeyFile (File file)
             demo = false;
             //infoString = "Registered to " + xmlKey->getStringAttribute("username");
             if (copy)
-                file.copyFileTo (File (dataPath + File::getSeparatorString() + "midiChordsKey.txt"));
+                file.copyFileTo (juce::File (dataPath + juce::File::getSeparatorString() + "midiChordsKey.txt"));
             sendChangeMessage();
         }
         else
@@ -1515,33 +1519,33 @@ bool MidiChords::readKeyFile (File file)
     return false;
 }
 
-void MidiChords::readChorderPreset (File file)
+void MidiChords::readChorderPreset (juce::File file)
 {
-    XmlDocument xmlDoc (file);
+    juce::XmlDocument xmlDoc (file);
     auto e (xmlDoc.getDocumentElement());
     if (e != nullptr)
     {
-        MemoryBlock data;
+        juce::MemoryBlock data;
         data.loadFromHexString (e->getAllSubText());
 
         struct ChorderMapping
         {
-            uint32 header0;
-            uint8 kbSect0[16];
-            uint32 header1;
-            uint8 kbSect1[16];
-            uint32 header2;
-            uint8 kbSect2[16];
-            uint32 header3;
-            uint8 kbSect3[16];
-            uint32 header4;
-            uint8 kbSect4[16];
-            uint32 header5;
-            uint8 kbSect5[16];
-            uint32 header6;
-            uint8 kbSect6[16];
-            uint32 header7;
-            uint8 kbSect7[16];
+            juce::uint32 header0;
+            juce::uint8 kbSect0[16];
+            juce::uint32 header1;
+            juce::uint8 kbSect1[16];
+            juce::uint32 header2;
+            juce::uint8 kbSect2[16];
+            juce::uint32 header3;
+            juce::uint8 kbSect3[16];
+            juce::uint32 header4;
+            juce::uint8 kbSect4[16];
+            juce::uint32 header5;
+            juce::uint8 kbSect5[16];
+            juce::uint32 header6;
+            juce::uint8 kbSect6[16];
+            juce::uint32 header7;
+            juce::uint8 kbSect7[16];
         };
 
         int ch = jmax (learnchan, 1);
@@ -1630,8 +1634,8 @@ void MidiChords::translateToGuitarChord (bool force)
     memset (tempState, 0, sizeof (tempState));
     const int numFrets   = (int) programs->get (curProgram, "NumFrets");
     const int numStrings = (int) programs->get (curProgram, "NumStrings");
-    Array<int> unusedNotes;
-    Array<int> unusedStrings;
+    juce::Array<int> unusedNotes;
+    juce::Array<int> unusedStrings;
     for (int s = 0; s < numStrings; s++)
         unusedStrings.add (s);
 
@@ -1644,7 +1648,7 @@ void MidiChords::translateToGuitarChord (bool force)
             int s            = 0;
             while (s < numStrings && ! foundString)
             {
-                zeroFretNote = (int) programs->get (curProgram, "String" + String (s));
+                zeroFretNote = (int) programs->get (curProgram, "String" + juce::String (s));
                 if (n >= zeroFretNote && n <= zeroFretNote + numFrets && unusedStrings.contains (s))
                 {
                     tempState[s][n] = true;
@@ -1666,7 +1670,7 @@ void MidiChords::translateToGuitarChord (bool force)
         {
             for (int i = 0; i < unusedStrings.size(); i++)
             {
-                int zeroFretNote = (int) programs->get (curProgram, "String" + String (unusedStrings[i]));
+                int zeroFretNote = (int) programs->get (curProgram, "String" + juce::String (unusedStrings[i]));
                 if (n >= zeroFretNote && n <= zeroFretNote + numFrets && unusedStrings.contains (0))
                 {
                     tempState[unusedStrings[i]][n] = true;
@@ -1699,12 +1703,12 @@ void MidiChords::translateToGuitarChord (bool force)
 void MidiChords::fillGuitarPresetList()
 {
     guitarPresets.clearQuick();
-    File chordPath (dataPath + File::getSeparatorString() + "guitars");
-    Array<File> files;
-    chordPath.findChildFiles (files, File::findFiles, true);
+    juce::File chordPath (dataPath + juce::File::getSeparatorString() + "guitars");
+    juce::Array<juce::File> files;
+    chordPath.findChildFiles (files, juce::File::findFiles, true);
     for (int i = 0; i < files.size(); i++)
     {
-        StringArray lines;
+        juce::StringArray lines;
         lines.addLines (files[i].loadFileAsString());
         lines.sort (true);
         for (int line = 0; line < lines.size(); line++)
@@ -1713,9 +1717,9 @@ void MidiChords::fillGuitarPresetList()
             {
                 if (! lines[line].startsWithChar (';'))
                 {
-                    StringArray s;
+                    juce::StringArray s;
                     s.addTokens (lines[line], ",", "\"");
-                    Array<int> notes;
+                    juce::Array<int> notes;
                     for (int n = 3; n < s.size(); n++)
                         notes.add (s[n].trim().getIntValue());
                     guitarPresets.add (GuitarDefinition (s[0].trim().removeCharacters ("\""), s[1].trim(), s[2].trim().upToFirstOccurrenceOf (" frets", false, true).getIntValue(), notes));

@@ -1,7 +1,7 @@
 #include "DrawablePad.h"
 
 //==============================================================================
-DrawablePad::DrawablePad (const String& name)
+DrawablePad::DrawablePad (const juce::String& name)
     : Button (name),
       //buttonState(buttonNormal),
       normalImage (nullptr),
@@ -14,8 +14,8 @@ DrawablePad::DrawablePad (const String& name)
       disabledImageOn (nullptr)
 {
     setSize (200, 200);
-    backgroundOff = Colour (0xffbbbbff);
-    backgroundOn  = Colour (0xff3333ff);
+    backgroundOff = juce::Colour (0xffbbbbff);
+    backgroundOn  = juce::Colour (0xff3333ff);
     Label         = "Pad";
     setMouseClickGrabsKeyboardFocus (false);
 }
@@ -32,14 +32,14 @@ void DrawablePad::deleteImages()
     disabledImageOn.reset();
 }
 
-void DrawablePad::setImages (const Drawable* normal,
-                             const Drawable* over,
-                             const Drawable* down,
-                             const Drawable* disabled,
-                             const Drawable* normalOn,
-                             const Drawable* overOn,
-                             const Drawable* downOn,
-                             const Drawable* disabledOn)
+void DrawablePad::setImages (const juce::Drawable* normal,
+                             const juce::Drawable* over,
+                             const juce::Drawable* down,
+                             const juce::Drawable* disabled,
+                             const juce::Drawable* normalOn,
+                             const juce::Drawable* overOn,
+                             const juce::Drawable* downOn,
+                             const juce::Drawable* disabledOn)
 {
     deleteImages();
 
@@ -65,24 +65,24 @@ void DrawablePad::setImages (const Drawable* normal,
     repaint();
 }
 
-static std::unique_ptr<Drawable> drawableFromFile (const File& f)
+static std::unique_ptr<juce::Drawable> drawableFromFile (const juce::File& f)
 {
     if (f.exists())
     {
-        return Drawable::createFromImageFile (f);
+        return juce::Drawable::createFromImageFile (f);
     }
 
     return nullptr;
 }
 
-void DrawablePad::setImages (const File normalImage,
-                             const File overImage,
-                             const File downImage,
-                             const File disabledImage,
-                             const File normalImageOn,
-                             const File overImageOn,
-                             const File downImageOn,
-                             const File disabledImageOn)
+void DrawablePad::setImages (const juce::File normalImage,
+                             const juce::File overImage,
+                             const juce::File downImage,
+                             const juce::File disabledImage,
+                             const juce::File normalImageOn,
+                             const juce::File overImageOn,
+                             const juce::File downImageOn,
+                             const juce::File disabledImageOn)
 {
     setImagesFromUptr (drawableFromFile (normalImage),
                        drawableFromFile (overImage),
@@ -94,8 +94,8 @@ void DrawablePad::setImages (const File normalImage,
                        drawableFromFile (disabledImageOn));
 }
 
-void DrawablePad::setBackgroundColours (const Colour& toggledOffColour,
-                                        const Colour& toggledOnColour)
+void DrawablePad::setBackgroundColours (const juce::Colour& toggledOffColour,
+                                        const juce::Colour& toggledOnColour)
 {
     if (backgroundOff != toggledOffColour
         || backgroundOn != toggledOnColour)
@@ -107,31 +107,31 @@ void DrawablePad::setBackgroundColours (const Colour& toggledOffColour,
     }
 }
 
-const Colour& DrawablePad::getBackgroundColour() const throw()
+const juce::Colour& DrawablePad::getBackgroundColour() const throw()
 {
     return getToggleState() ? backgroundOn
                             : backgroundOff;
 }
 
-void DrawablePad::drawButtonBackground (Graphics& g,
+void DrawablePad::drawButtonBackground (juce::Graphics& g,
                                         Button& button,
-                                        const Colour& backgroundColour,
+                                        const juce::Colour& backgroundColour,
                                         bool isMouseOverButton,
                                         bool isButtonDown)
 {
 }
 
-void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void DrawablePad::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
-    Rectangle<int> imageSpace;
+    juce::Rectangle<int> imageSpace;
     const int insetX = getWidth() / 100;
     const int insetY = getHeight() / 100;
     imageSpace.setBounds (insetX, insetY, getWidth() - insetX * 2, getHeight() - insetY * 2);
 
-    g.setImageResamplingQuality (Graphics::highResamplingQuality);
+    g.setImageResamplingQuality (juce::Graphics::highResamplingQuality);
     g.setOpacity (1.0f);
 
-    const Drawable* imageToDraw = nullptr;
+    const juce::Drawable* imageToDraw = nullptr;
 
     if (isEnabled())
     {
@@ -151,10 +151,10 @@ void DrawablePad::paintButton (Graphics& g, bool isMouseOverButton, bool isButto
 
     if (imageToDraw != nullptr)
     {
-        g.fillAll (Colours::transparentBlack);
+        g.fillAll (juce::Colours::transparentBlack);
         imageToDraw->drawWithin (g,
                                  imageSpace.toFloat(),
-                                 RectanglePlacement::centred,
+                                 juce::RectanglePlacement::centred,
                                  1.f);
     }
     else
@@ -171,7 +171,7 @@ void DrawablePad::resized()
 {
 }
 
-const Drawable* DrawablePad::getCurrentImage() const throw()
+const juce::Drawable* DrawablePad::getCurrentImage() const throw()
 {
     if (isDown())
         return getDownImage();
@@ -182,15 +182,15 @@ const Drawable* DrawablePad::getCurrentImage() const throw()
     return getNormalImage();
 }
 
-const Drawable* DrawablePad::getNormalImage() const throw()
+const juce::Drawable* DrawablePad::getNormalImage() const throw()
 {
     return (getToggleState() && normalImageOn != nullptr) ? normalImageOn.get()
                                                           : normalImage.get();
 }
 
-const Drawable* DrawablePad::getOverImage() const throw()
+const juce::Drawable* DrawablePad::getOverImage() const throw()
 {
-    const Drawable* d = normalImage.get();
+    const juce::Drawable* d = normalImage.get();
 
     if (getToggleState())
     {
@@ -210,9 +210,9 @@ const Drawable* DrawablePad::getOverImage() const throw()
     return d;
 }
 
-const Drawable* DrawablePad::getDownImage() const throw()
+const juce::Drawable* DrawablePad::getDownImage() const throw()
 {
-    const Drawable* d = normalImage.get();
+    const juce::Drawable* d = normalImage.get();
 
     if (getToggleState())
     {
