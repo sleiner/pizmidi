@@ -358,6 +358,7 @@ void CurveEditor::updateParameters()
     setSize(w, h);
     resized();
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

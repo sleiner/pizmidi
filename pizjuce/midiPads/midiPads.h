@@ -57,6 +57,7 @@ public:
     PadLayouts()
         : values_("PadLayouts"){};
     ~PadLayouts(){};
+
     static void setPadLayout(juce::ValueTree tree, float x, float y, float w, float h)
     {
         tree.setProperty("x", x, nullptr);
@@ -80,18 +81,22 @@ class MidiPadsPrograms
 
 public:
     MidiPadsPrograms();
+
     void set(int prog, const juce::Identifier& name, const juce::var& newValue)
     {
         values_.getChild(prog).getChildWithName("GlobalValues").setProperty(name, newValue, nullptr);
     }
+
     const juce::var get(int prog, const juce::Identifier& name)
     {
         return values_.getChild(prog).getChildWithName("GlobalValues").getProperty(name);
     }
+
     void setForPad(int prog, int pad, const juce::Identifier& name, const juce::var& newValue)
     {
         values_.getChild(prog).getChild(pad).setProperty(name, newValue, nullptr);
     }
+
     void setPadLayout(int prog, int pad, float x, float y, float w, float h)
     {
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("x", x, nullptr);
@@ -99,24 +104,29 @@ public:
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("w", w, nullptr);
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("h", h, nullptr);
     }
+
     void setPadPosition(int prog, int pad, float x, float y)
     {
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("x", x, nullptr);
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("y", y, nullptr);
     }
+
     void setPadSize(int prog, int pad, float w, float h)
     {
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("w", w, nullptr);
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("h", h, nullptr);
     }
+
     void setPadVisible(int prog, int pad, bool visibility)
     {
         values_.getChild(prog).getChildWithName("Layout").getChild(pad).setProperty("visible", visibility, nullptr);
     }
+
     bool getPadVisible(int prog, int pad)
     {
         return values_.getChild(prog).getChildWithName("Layout").getChild(pad).getProperty("visible");
     }
+
     juce::Rectangle<float> getPadBounds(int prog, int pad)
     {
         return { values_.getChild(prog).getChildWithName("Layout").getChild(pad).getProperty("x"),
@@ -124,6 +134,7 @@ public:
                  values_.getChild(prog).getChildWithName("Layout").getChild(pad).getProperty("w"),
                  values_.getChild(prog).getChildWithName("Layout").getChild(pad).getProperty("h") };
     }
+
     const juce::var getForPad(int prog, int pad, const juce::Identifier& name)
     {
         return values_.getChild(prog).getChild(pad).getProperty(name);
@@ -170,10 +181,12 @@ public:
     {
         return 0;
     }
+
     const juce::String getName() const override
     {
         return JucePlugin_Name;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -182,6 +195,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -278,19 +292,23 @@ public:
 
     bool isPadVisible(int index);
     void setPadVisible(int index, bool visibility);
+
     void setLayout(int prog, int layoutIndex)
     {
         int index = programs->values_.getChild(prog).indexOf(programs->values_.getChild(prog).getChildWithName("Layout"));
         programs->values_.getChild(prog).removeChild(index, nullptr);
         programs->values_.getChild(prog).addChild(layouts->values_.getChild(layoutIndex).createCopy(), index, nullptr);
     }
+
     void loadXmlLayout(juce::File file);
     void saveXmlLayout(juce::File file);
     void copyPadSettings(int source, int dest);
+
     void setProperty(int pad, const juce::Identifier& name, const juce::var& newValue)
     {
         programs->setForPad(curProgram, pad, name, newValue);
     }
+
     const juce::var getProperty(int pad, const juce::Identifier& name, const juce::var defaultReturnValue = 0)
     {
         return programs->getForPad(curProgram, pad, name, defaultReturnValue);

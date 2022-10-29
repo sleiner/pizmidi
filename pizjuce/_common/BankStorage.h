@@ -26,6 +26,7 @@ public:
     {
         return numBanks_;
     }
+
     int getNumPrograms() const
     {
         return numPrograms_;

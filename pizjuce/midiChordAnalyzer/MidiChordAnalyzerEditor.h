@@ -27,6 +27,7 @@
 #include "MidiChordAnalyzer.h"
 
 class MidiChordAnalyzerEditor;
+
 class ChordAnalyzerKeyboardComponent : public juce::MidiKeyboardComponent
 {
 public:
@@ -39,6 +40,7 @@ public:
         this->setMidiChannel(1);
         this->setLowestVisibleKey(36);
     }
+
     ~ChordAnalyzerKeyboardComponent() override{};
 
     int getNumHeldNotes(int channel)
@@ -85,6 +87,7 @@ private:
         return true;
     }
 };
+
 //[/Headers]
 
 #include "../_common/PizButton.h"
@@ -138,6 +141,7 @@ private:
     {
         return (MidiChordAnalyzer*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

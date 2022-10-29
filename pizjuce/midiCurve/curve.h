@@ -35,6 +35,7 @@ public:
     {
         BankStorage::set(0, prog, name.toString(), newValue);
     }
+
     const juce::var get(int prog, const juce::Identifier& name)
     {
         return BankStorage::get(0, prog, name.toString());
@@ -71,10 +72,12 @@ public:
     {
         return JucePlugin_Name;
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -83,6 +86,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -107,6 +111,7 @@ public:
     const juce::String getOutputChannelName(int channelIndex) const override;
     bool isInputChannelStereoPair(int index) const override;
     bool isOutputChannelStereoPair(int index) const override;
+
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -118,6 +123,7 @@ public:
     {
         return kNumPrograms;
     }
+
     int getCurrentProgram() override;
     void setCurrentProgram(int index) override;
     const juce::String getProgramName(int index) override;
@@ -131,6 +137,7 @@ public:
 
     //==============================================================================
     int lastUIWidth, lastUIHeight;
+
     class LastMsgToDisplay : public ChangeBroadcaster
     {
     public:
@@ -138,11 +145,14 @@ public:
         {
             lastCCOut = lastCCIn = -1;
         }
+
         ~LastMsgToDisplay() override
         {
         }
+
         int lastCCOut, lastCCIn;
     } lastMsg;
+
     float getPointValue(int n, int y);
     bool isPointActive(int point);
     bool isPointControl(int point);
@@ -163,12 +173,14 @@ private:
             isControl = control;
             isActive  = active;
         }
+
         midiPoint()
         {
             p.setXY(0.f, 0.f);
             isControl = false;
             isActive  = true;
         }
+
         ~midiPoint(){};
 
         juce::Point<float> p;

@@ -269,6 +269,7 @@ const juce::String MidiMonitorPlugin::getParameterText(int index)
             break;
     }
 }
+
 const juce::String MidiMonitorPlugin::getInputChannelName(const int channelIndex) const
 {
     return juce::String(channelIndex + 1);

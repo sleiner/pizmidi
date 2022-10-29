@@ -345,6 +345,7 @@ void CurveEditor::updateParameters()
 
     setSize(getFilter()->lastUIWidth, getFilter()->lastUIHeight);
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

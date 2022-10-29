@@ -105,6 +105,7 @@ void MidiChsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
         }
     }
 }
+
 void MidiChsEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     for (int i = 0; i < 16; i++)
@@ -115,6 +116,7 @@ void MidiChsEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
         }
     }
 }
+
 //==============================================================================
 void MidiChsEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {

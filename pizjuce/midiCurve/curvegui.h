@@ -25,6 +25,7 @@
 #include "../_common/ChannelSlider.h"
 #include "curve.h"
 #include "MidiEnvelope.h"
+
 //[/Headers]
 
 //==============================================================================
@@ -60,6 +61,7 @@ private:
     {
         return (MidiCurve*) getAudioProcessor();
     }
+
     void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void updateParameters();
     juce::ComponentBoundsConstrainer resizeLimits;

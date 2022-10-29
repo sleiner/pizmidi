@@ -28,6 +28,7 @@ public:
                    const juce::Drawable* overImageOn     = 0,
                    const juce::Drawable* downImageOn     = 0,
                    const juce::Drawable* disabledImageOn = 0);
+
     void setImagesFromUptr(std::unique_ptr<juce::Drawable> normalImage,
                            std::unique_ptr<juce::Drawable> overImage       = nullptr,
                            std::unique_ptr<juce::Drawable> downImage       = nullptr,
@@ -48,6 +49,7 @@ public:
                          downImageOn.get(),
                          disabledImageOn.get());
     }
+
     void deleteImages();
 
     //==============================================================================

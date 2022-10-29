@@ -26,6 +26,7 @@
 using juce::jmax;
 using juce::jmin;
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -4024,6 +4025,7 @@ void PizLooperEditor::labelTextChanged(juce::Label* labelThatHasChanged)
 void PizLooperEditor::buttonStateChanged(juce::Button* button)
 {
 }
+
 void PizLooperEditor::mouseDown(const juce::MouseEvent& e)
 {
     int index = getButtonIndex(e.eventComponent);

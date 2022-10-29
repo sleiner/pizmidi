@@ -12,6 +12,7 @@ public:
     {
         this->setRange(0, 16, 1);
     };
+
     ~ChannelSlider(){};
 
     juce::String getTextFromValue(double value)

@@ -363,6 +363,7 @@ const juce::String MidiChsProcessor::getParameterText(int index)
             break;
     }
 }
+
 const juce::String MidiChsProcessor::getInputChannelName(const int channelIndex) const
 {
     return juce::String(channelIndex + 1);

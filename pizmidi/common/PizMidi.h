@@ -48,6 +48,7 @@ public:
     virtual VstInt32 canDo(char* text);
     virtual bool getInputProperties(VstInt32 index, VstPinProperties* properties);
     virtual bool getOutputProperties(VstInt32 index, VstPinProperties* properties);
+
     virtual VstInt32 getNumMidiInputChannels()
     {
 #if PLUG_MIDI_INPUTS
@@ -68,6 +69,7 @@ public:
 
 protected:
     bool init();
+
     virtual void processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
     {
     }

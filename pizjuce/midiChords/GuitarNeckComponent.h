@@ -18,11 +18,13 @@ public:
         fret   = -1;
         string = -1;
     }
+
     FrettedNote(int f, int s)
     {
         fret   = f;
         string = s;
     }
+
     ~FrettedNote()
     {
     }
@@ -31,6 +33,7 @@ public:
     {
         return fret >= 0 && string >= 0;
     }
+
     void invalidate()
     {
         fret   = -1;
@@ -41,6 +44,7 @@ public:
     {
         return other.fret != this->fret || other.string != this->string;
     }
+
     bool operator==(FrettedNote const& other)
     {
         return other.fret == this->fret && other.string == this->string;
@@ -62,11 +66,13 @@ public:
 
     void setNumStrings(int n);
     void setNumFrets(int n);
+
     void setDotSize(float diameter)
     {
         dotSize = diameter;
         repaint();
     }
+
     void setStringNote(int string, int note)
     {
         stringNote[string] = note;
@@ -77,13 +83,17 @@ public:
     {
         showFlats = flats;
     }
+
     void setVelocity(float velocity);
     void setMidiChannel(int midiChannelNumber);
+
     int getMidiChannel() const noexcept
     {
         return midiChannel;
     }
+
     void setMidiChannelsToDisplay(int midiChannelMask);
+
     int getMidiChannelsToDisplay() const noexcept
     {
         return midiInChannelMask;
@@ -91,16 +101,19 @@ public:
 
     void setAvailableRange(int lowestNote,
                            int highestNote);
+
     int getRangeStart() const noexcept
     {
         return rangeStart;
     }
+
     int getRangeEnd() const noexcept
     {
         return rangeEnd;
     }
 
     void setLowestVisibleFret(int fretNumber);
+
     int getLowestVisibleFret() const noexcept
     {
         return firstFret;
@@ -109,6 +122,7 @@ public:
     void drawNote(int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
 
     const juce::String getNoteText(const int fret, const int string);
+
     //==============================================================================
     /** A set of colour IDs to use to change the colour of various aspects of the keyboard.
 
@@ -161,6 +175,7 @@ public:
     {
         return stringNote[n.string] + n.fret;
     }
+
     int getStringFret(int string);
 
     //==============================================================================

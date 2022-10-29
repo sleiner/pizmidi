@@ -24,6 +24,7 @@
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -278,6 +279,7 @@ void MidiInEditor::updateParametersFromFilter()
     else
         imagepad->setButtonText("IPH\nmidiIn\n1.2");
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

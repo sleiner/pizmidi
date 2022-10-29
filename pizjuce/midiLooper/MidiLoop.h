@@ -33,6 +33,7 @@ struct LoopNote
         noteOffSample        = -1;
         voice                = -1;
     }
+
     LoopNote(PizMidiMessageSequence::mehPtr object, int n, int ch, int offSample, int v)
     {
         note                 = object;
@@ -41,10 +42,12 @@ struct LoopNote
         noteOffSample        = offSample;
         voice                = v;
     }
+
     void subtractFromTime(int samples)
     {
         noteOffSample -= samples;
     }
+
     PizMidiMessageSequence::mehPtr note;
     int lastOutputNoteNumber;
     int lastOutputChannel;
@@ -83,10 +86,12 @@ public:
     void sentNoteAs(PizMidiMessageSequence::mehPtr note, int p, int sentNoteNumber, int sentChannel, int offSample);
     //void setNoteChannel(MidiEventHolder* note, int p);
     void cleanZeroLengthNotes();
+
     void setLength(double newLength)
     {
         length = 960.0 * newLength;
     }
+
     double getLength()
     {
         return length;

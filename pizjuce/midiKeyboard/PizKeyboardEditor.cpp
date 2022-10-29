@@ -25,6 +25,7 @@
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::jmax;
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -496,6 +497,7 @@ void midiKeyboardEditor::updateParametersFromFilter()
 
     setSize(w, h);
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

@@ -16,12 +16,14 @@ struct PizNote
         object = nullptr;
         length = -1;
     }
+
     PizNote(PizMidiMessageSequence::mehPtr _object)
     {
         object = _object;
         jassert(_object->noteOffObject != nullptr);
         length = _object->noteOffObject != nullptr ? _object->noteOffObject->message.getTimeStamp() - _object->message.getTimeStamp() : 0;
     }
+
     void updateLength()
     {
         if (object->message.isNoteOn())
@@ -69,22 +71,27 @@ class PianoPort : public juce::Viewport, public juce::ChangeBroadcaster
 public:
     PianoPort(juce::String name)
         : Viewport(name){};
+
     ~PianoPort() override
     {
         dispatchPendingMessages();
     }
+
     void setTimeline(Timeline* t)
     {
         timeline = t;
     }
+
     void setPlayline(Component* p)
     {
         playline = p;
     }
+
     void setKeyboard(Viewport* kb)
     {
         keyboard = kb;
     }
+
     void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override
     {
         this->getParentComponent()->mouseWheelMove(e, wheel);
@@ -116,10 +123,12 @@ public:
     ~PianoRoll() override;
 
     void setSequence(Loop* sequence_);
+
     Loop* getSequence()
     {
         return sequence;
     }
+
     void sequenceChanged();
     int getTimeInPixels();
     double pixelsToPpq(float pixels, bool snap, bool round = false);
@@ -130,11 +139,13 @@ public:
     double blankLength;
     float pixelsPerPpq;
     float getNoteHeight();
+
     void setDisplayLength(double ppq)
     {
         blankLength = ppq;
         sequenceChanged();
     }
+
     void setDisplayLength(int bars)
     {
         int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
@@ -142,18 +153,21 @@ public:
         sequenceChanged();
         setSize((int) ppqToPixels(juce::jmax(blankLength, seqLengthInPpq)), getHeight());
     }
+
     void addBar()
     {
         int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
         setDisplayLength(seqLengthInPpq + getPpqPerBar());
         setSize(getWidth() + pixelBarLength, getHeight());
     }
+
     void removeBar()
     {
         int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
         setDisplayLength(juce::jmax(getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
         setSize(juce::jmax(pixelBarLength, getWidth() - pixelBarLength), getHeight());
     }
+
     int getDisplayLength()
     {
         return (int) (juce::jmax(blankLength, seqLengthInPpq) / getPpqPerBar());
@@ -172,14 +186,17 @@ public:
     {
         return snapToGrid;
     }
+
     float getBeatDiv()
     {
         return 1.f / noteLength;
     }
+
     void setSnap(bool snap)
     {
         snapToGrid = snap;
     }
+
     void setPlayTime(double timeInPpq)
     {
         const int lastpixels = ppqToPixelsWithOffset(playTime);
@@ -191,17 +208,21 @@ public:
             playline->repaint(pixels, 0, 1, getHeight());
         }
     }
+
     void setTimeSig(int n, int d);
+
     void setPlaying(bool isPlaying)
     {
         playing = isPlaying;
         playline->repaint();
     }
+
     void setRecording(bool isRecording)
     {
         recording = isRecording;
         playline->repaint();
     }
+
     double getPpqPerBar()
     {
         return timebase * quarterNotesPerBar;
@@ -226,6 +247,7 @@ private:
     juce::Rectangle<int> lasso;
     juce::Array<PizMidiMessageSequence::mehPtr> selectedNotes;
     juce::Array<PizNote> selectedNoteLengths;
+
     void addToSelection(PizMidiMessageSequence::mehPtr note)
     {
         if (note->message.isNoteOn())
@@ -236,6 +258,7 @@ private:
             selectedNoteLengths.add(PizNote(note));
         }
     }
+
     void clearSelection()
     {
         selectedNotes.clear();
@@ -249,9 +272,11 @@ private:
             : Component(), roll(pianoroll)
         {
         }
+
         ~Playbar() override
         {
         }
+
         void paint(juce::Graphics& g) override
         {
             g.fillAll(juce::Colour(0x0));
@@ -276,9 +301,11 @@ private:
         {
             setBufferedToImage(true);
         }
+
         ~PianoRollBackground() override
         {
         }
+
         void paint(juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
@@ -348,9 +375,11 @@ private:
         {
             setBufferedToImage(true);
         }
+
         ~PianoRollNotes() override
         {
         }
+
         void paint(juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();

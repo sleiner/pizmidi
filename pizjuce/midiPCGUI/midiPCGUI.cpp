@@ -320,6 +320,7 @@ bool midiPCGUI::isOutputChannelStereoPair(int index) const
     else
         return false;
 }
+
 void midiPCGUI::setCurrentProgram(int index)
 {
     midiPCGUIProgram* ap = &programs[index];
@@ -348,11 +349,13 @@ int midiPCGUI::getCurrentProgram()
 {
     return curProgram;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* midiPCGUI::createEditor()
 {
     return new midiPCGUIEditor(this);
 }
+
 //==============================================================================
 void midiPCGUI::prepareToPlay(double sampleRate, int samplesPerBlock)
 {

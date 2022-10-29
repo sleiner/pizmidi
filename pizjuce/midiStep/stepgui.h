@@ -27,16 +27,19 @@
 #include "../_common/ChannelSlider.h"
 #include "PianoRoll.h"
 #include "step.h"
+
 class PianoPort : public juce::Viewport
 {
 public:
     PianoPort(juce::String name)
         : Viewport(name){};
+
     void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override
     {
         this->getParentComponent()->mouseWheelMove(e, d);
     }
 };
+
 //[/Headers]
 
 #include "../_common/PizButton.h"
@@ -82,6 +85,7 @@ private:
     {
         return (MidiStep*) getAudioProcessor();
     }
+
     void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void updateParameters(bool updateLoop = false);
     juce::ComponentBoundsConstrainer resizeLimits;

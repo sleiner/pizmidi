@@ -5,12 +5,14 @@ PizChord::PizChord(juce::Array<int> newChord)
     chord.addArray(newChord);
     makeIntervalPattern();
 }
+
 void PizChord::setChord(juce::Array<int> newChord)
 {
     chord.clear();
     chord.addArray(newChord);
     makeIntervalPattern();
 }
+
 int PizChord::getSum() const
 {
     int sum = 0;
@@ -18,6 +20,7 @@ int PizChord::getSum() const
         sum += pattern[i];
     return sum;
 }
+
 juce::String PizChord::getStringPattern() const
 {
     juce::String p;
@@ -27,6 +30,7 @@ juce::String PizChord::getStringPattern() const
     }
     return p;
 }
+
 void PizChord::makeIntervalPattern()
 {
     if (chord.size() < 2)
@@ -74,14 +78,17 @@ bool ChordName::equals(juce::String& noteString)
 {
     return getIntervalString(noteString) == pattern;
 }
+
 bool ChordName::equals(juce::Array<int>& chord)
 {
     return getIntervalString(chord).equalsIgnoreCase(pattern);
 }
+
 bool ChordName::equals2(juce::String& intervalString)
 {
     return intervalString.equalsIgnoreCase(pattern);
 }
+
 juce::String ChordName::getIntervalString(juce::String noteString)
 {
     juce::String p;

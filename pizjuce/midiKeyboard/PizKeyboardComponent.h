@@ -11,12 +11,14 @@ class PizKeyboardComponent : public juce::MidiKeyboardComponent
 public:
     PizKeyboardComponent(juce::MidiKeyboardState& state, const Orientation orientation);
     bool keyStateChanged(bool isKeyDown) override;
+
     void setKeyPressForNote(const juce::KeyPress& key, const int midiNoteOffsetFromC)
     {
         MidiKeyboardComponent::setKeyPressForNote(key, midiNoteOffsetFromC);
         _keyPressNotes.add(midiNoteOffsetFromC);
         _keyPresses.add(key);
     }
+
     void setKeyPressBaseOctave(int newOctaveNumber)
     {
         baseOctave = newOctaveNumber;
@@ -24,11 +26,14 @@ public:
         repaint();
         sendChangeMessage();
     }
+
     int getKeyPressBaseOctave()
     {
         return baseOctave;
     }
+
     bool toggle;
+
     void drawBlackNote(int midiNoteNumber, juce::Graphics& g, juce::Rectangle<float> area, bool isDown, bool isOver, const juce::Colour& textColour)
     {
         auto x = area.getX(), y = area.getY(), w = area.getWidth(), h = area.getHeight();
@@ -57,6 +62,7 @@ public:
             g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
         }
     }
+
     void drawWhiteNote(int midiNoteNumber, juce::Graphics& g, juce::Rectangle<float> area, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
     {
         auto x = area.getX(), y = area.getY(), w = area.getWidth(), h = area.getHeight();

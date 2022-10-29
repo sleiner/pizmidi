@@ -33,6 +33,7 @@ public:
     {
         resetNotes();
     }
+
     Loop(MidiMessageSequence sequence, int triggerNote_, int transpose_ = 0, bool playMode_ = 0)
         : MidiMessageSequence(sequence),
           currentIndex(0),
@@ -50,6 +51,7 @@ public:
     {
         resetNotes();
     }
+
     ~Loop(){};
 
     int currentIndex;

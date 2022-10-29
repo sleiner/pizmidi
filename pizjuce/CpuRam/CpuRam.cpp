@@ -118,6 +118,7 @@ const juce::String CpuRam::getParameterText(int index)
     else
         return juce::String();
 }
+
 const juce::String CpuRam::getInputChannelName(const int channelIndex) const
 {
     return juce::String(channelIndex + 1);

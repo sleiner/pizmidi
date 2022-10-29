@@ -42,6 +42,7 @@ typedef int VstInt32; /* this one's heavily used in V2.4++ */
 
 #if ! defined(VST_2_1_EXTENSIONS)
 struct VstFileSelect;
+
 //---Structure and enum used for keyUp/keyDown-----
 struct VstKeyCode
 {
@@ -213,14 +214,17 @@ enum /* V2.4 dispatcher opcodes           */
     effGetNumMidiOutputChannels,
     effNumV2_4Opcodes
 };
+
 enum /* V2.4 flags                        */
 {
     effFlagsCanDoubleReplacing = 1 << 12,
 };
+
 enum VstMidiEventFlags /* V2.4 MIDI Event flags             */
 {
     kVstMidiEventIsRealtime = 1 << 0
 };
+
 enum VstAutomationStates /* V2.4 automation state definitions */
 {
     kVstAutomationUnsupported = 0,
@@ -269,11 +273,14 @@ public:
     CFxBank(char* pszFile = 0);
     CFxBank(int nPrograms, int nParams);
     CFxBank(int nChunkSize);
+
     CFxBank(CFxBank const& org)
     {
         DoCopy(org);
     }
+
     virtual ~CFxBank();
+
     CFxBank& operator=(CFxBank const& org)
     {
         return DoCopy(org);
@@ -285,10 +292,12 @@ public:
     bool LoadBank(char* pszFile);
     bool SaveBank(char* pszFile);
     void Unload();
+
     bool IsLoaded()
     {
         return ! ! bBank;
     }
+
     bool IsChunk()
     {
         return bChunk;
@@ -302,12 +311,14 @@ public:
             return 0;
         return ((SFxBase*) bBank)->version;
     }
+
     long GetFxID()
     {
         if (! bBank)
             return 0;
         return ((SFxBase*) bBank)->fxID;
     }
+
     void SetFxID(long id)
     {
         if (bBank)
@@ -316,12 +327,14 @@ public:
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
                 GetProgram(i)->fxID = id;
     }
+
     long GetFxVersion()
     {
         if (! bBank)
             return 0;
         return ((SFxBase*) bBank)->fxVersion;
     }
+
     void SetFxVersion(long v)
     {
         if (bBank)
@@ -330,30 +343,35 @@ public:
             for (int i = GetNumPrograms() - 1; i >= 0; i--)
                 GetProgram(i)->fxVersion = v;
     }
+
     long GetNumPrograms()
     {
         if (! bBank)
             return 0;
         return ((SFxBankBase*) bBank)->numPrograms;
     }
+
     long GetNumParams()
     {
         if (bChunk)
             return 0;
         return GetProgram(0)->numParams;
     }
+
     long GetChunkSize()
     {
         if (! bChunk)
             return 0;
         return ((SFxBankChunk*) bBank)->size;
     }
+
     void* GetChunk()
     {
         if (! bChunk)
             return 0;
         return ((SFxBankChunk*) bBank)->chunk;
     }
+
     bool SetChunk(void* chunk)
     {
         if (! bChunk)
@@ -371,6 +389,7 @@ public:
             return NULL;
         return p->prgName;
     }
+
     void SetProgramName(int nProgram, char* name = "")
     {
         SFxProgram* p = GetProgram(nProgram);
@@ -379,6 +398,7 @@ public:
         strncpy(p->prgName, name, sizeof(p->prgName));
         p->prgName[sizeof(p->prgName) - 1] = '\0';
     }
+
     float GetProgParm(int nProgram, int nParm)
     {
         SFxProgram* p = GetProgram(nProgram);
@@ -390,6 +410,7 @@ public:
         return p->params[nParm];
 #endif
     }
+
     bool SetProgParm(int nProgram, int nParm, float val = 0.0)
     {
         SFxProgram* p = GetProgram(nProgram);

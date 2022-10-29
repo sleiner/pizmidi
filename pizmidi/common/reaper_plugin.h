@@ -68,10 +68,12 @@ typedef double ReaSample;
 #if defined(__ppc__)
 
 #define REAPER_BIG_ENDIAN
+
 static int REAPER_MAKELEINT(int x)
 {
     return ((((x)) & 0xff) << 24) | ((((x)) & 0xff00) << 8) | ((((x)) & 0xff0000) >> 8) | ((((x)) & 0xff000000) >> 24);
 }
+
 static void REAPER_MAKELEINTMEM(void* buf)
 {
     char* p  = (char*) buf;
@@ -82,6 +84,7 @@ static void REAPER_MAKELEINTMEM(void* buf)
     p[1]     = p[2];
     p[2]     = tmp;
 }
+
 static void REAPER_MAKELEINTMEM8(void* buf)
 {
     char* p  = (char*) buf;
@@ -98,6 +101,7 @@ static void REAPER_MAKELEINTMEM8(void* buf)
     p[3]     = p[4];
     p[4]     = tmp;
 }
+
 #define REAPER_FOURCC(d, c, b, a) (((unsigned int) (d) &0xff) | (((unsigned int) (c) &0xff) << 8) | (((unsigned int) (b) &0xff) << 16) | (((unsigned int) (a) &0xff) << 24))
 
 #else
@@ -149,6 +153,7 @@ typedef struct reaper_plugin_info_t
 
 #ifndef _WDL_PROJECTSTATECONTEXT_DEFINED_
 #define _REAPER_PLUGIN_PROJECTSTATECONTEXT_DEFINED_
+
 class ProjectStateContext // this is also defined in WDL, need to keep these interfaces identical
 {
 public:
@@ -223,6 +228,7 @@ typedef struct
         PEAKTRANSFER_WAVEFORM_MODE = 1,
         PEAKTRANSFER_MIDI_MODE     = 2
     };
+
     int output_mode; // see enum above
 
     double absolute_time_s;
@@ -265,34 +271,43 @@ public:
     virtual PCM_source* Duplicate() = 0;
 
     virtual bool IsAvailable() = 0;
+
     virtual void SetAvailable(bool avail)
     {
     } // optional, if called with avail=false, close files/etc, and so on
+
     virtual const char* GetType() = 0;
+
     virtual const char* GetFileName()
     {
         return NULL;
-    };                                               // return NULL if no filename (not purely a file)
+    }; // return NULL if no filename (not purely a file)
+
     virtual bool SetFileName(const char* newfn) = 0; // return TRUE if supported, this will only be called when offline
 
     virtual PCM_source* GetSource()
     {
         return NULL;
     }
+
     virtual void SetSource(PCM_source* src)
     {
     }
+
     virtual int GetNumChannels()   = 0; // return number of channels
     virtual double GetSampleRate() = 0; // returns preferred sample rate. if < 1.0 then it is assumed to be silent (or MIDI)
     virtual double GetLength()     = 0; // length in seconds
+
     virtual double GetLengthBeats()
     {
         return -1.0;
     } // length in beats if supported
+
     virtual int GetBitsPerSample()
     {
         return 0;
     } // returns bits/sample, if available. only used for metadata purposes, since everything returns as doubles anyway
+
     virtual double GetPreferredPosition()
     {
         return -1.0;
@@ -391,6 +406,7 @@ enum
     RAWMIDI_NOTESONLY  = 1,
     RAWMIDI_UNFILTERED = 2
 };
+
 #define PCM_SOURCE_EXT_GETRAWMIDIEVENTS 0x90009 // parm1 = (PCM_source_transfer_t *), parm2 = RAWMIDI flags
 
 #define PCM_SOURCE_EXT_SETRESAMPLEMODE      0x9000A // parm1= mode to pass to resampler->Extended(RESAMPLE_EXT_SETRSMODE,mode,0,0)
@@ -478,19 +494,23 @@ public:
     {
         m_st = 0.0;
     }
+
     virtual ~PCM_sink()
     {
     }
 
     virtual void GetOutputInfoString(char* buf, int buflen) = 0;
+
     virtual double GetStartTime()
     {
         return m_st;
     }
+
     virtual void SetStartTime(double st)
     {
         m_st = st;
     }
+
     virtual const char* GetFileName() = 0; // get filename, if applicable (otherwise "")
     virtual int GetNumChannels()      = 0; // return number of channels
     virtual double GetLength()        = 0; // length in seconds, so far
@@ -498,6 +518,7 @@ public:
 
     virtual void WriteMIDI(MIDI_eventlist* events, int len, double samplerate)                = 0;
     virtual void WriteDoubles(ReaSample** samples, int len, int nch, int offset, int spacing) = 0;
+
     virtual bool WantMIDI()
     {
         return 0;
@@ -507,6 +528,7 @@ public:
     {
         return 0;
     }
+
     virtual void GetPeakInfo(PCM_source_peaktransfer_t* block)
     {
     } // allow getting of peaks thus far
@@ -566,6 +588,7 @@ public:
     virtual ~REAPER_Resample_Interface()
     {
     }
+
     virtual void SetRates(double rate_in, double rate_out) = 0;
     virtual void Reset()                                   = 0;
 
@@ -578,6 +601,7 @@ public:
         return 0;
     } // return 0 if unsupported
 };
+
 #define RESAMPLE_EXT_SETRSMODE   0x1000 // parm1 == (int)resamplemode, or -1 for project default
 #define RESAMPLE_EXT_SETFEEDMODE 0x1001 // parm1 = nonzero to set ResamplePrepare's out_samples to refer to request a specific number of input samples
 
@@ -940,6 +964,7 @@ enum
     SCREENSET_ACTION_NOMOVE      = 5, //return 1 if no move desired
     SCREENSET_ACTION_GETHASH     = 6, //return hash string
 };
+
 typedef LRESULT (*screensetCallbackFunc)(int action, char* id, void* param, int param2);
 
 // This are managed using screenset_register() etc
@@ -959,9 +984,11 @@ public:
     virtual void BeginBlock()
     {
     } // outputs can implement these if they wish to have timed block sends
+
     virtual void EndBlock(int length, double srate, double curtempo)
     {
     }
+
     virtual void SendMsg(MIDI_event_t* msg, int frame_offset)                                     = 0; // frame_offset can be <0 for "instant" if supported
     virtual void Send(unsigned char status, unsigned char d1, unsigned char d2, int frame_offset) = 0; // frame_offset can be <0 for "instant" if supported
 };
@@ -1006,6 +1033,7 @@ public:
     IReaperControlSurface()
     {
     }
+
     virtual ~IReaperControlSurface()
     {
     }
@@ -1026,37 +1054,48 @@ public:
     virtual void SetTrackListChange()
     {
     }
+
     virtual void SetSurfaceVolume(MediaTrack* trackid, double volume)
     {
     }
+
     virtual void SetSurfacePan(MediaTrack* trackid, double pan)
     {
     }
+
     virtual void SetSurfaceMute(MediaTrack* trackid, bool mute)
     {
     }
+
     virtual void SetSurfaceSelected(MediaTrack* trackid, bool selected)
     {
     }
+
     virtual void SetSurfaceSolo(MediaTrack* trackid, bool solo)
     {
     }
+
     virtual void SetSurfaceRecArm(MediaTrack* trackid, bool recarm)
     {
     }
+
     virtual void SetPlayState(bool play, bool pause, bool rec)
     {
     }
+
     virtual void SetRepeatState(bool rep)
     {
     }
+
     virtual void SetTrackTitle(MediaTrack* trackid, const char* title)
     {
     }
+
     virtual bool GetTouchState(MediaTrack* trackid, int isPan)
     {
         return false;
     }
+
     virtual void SetAutoMode(int mode)
     {
     } // automation mode for current track

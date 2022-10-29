@@ -22,12 +22,14 @@ inline int combineBytes(int lsb, int msb)
 {
     return ((msb & 0x7f) << 7) | (lsb & 0x7f);
 }
+
 //[/Headers]
 
 #include "midiPCGUIEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -1089,6 +1091,7 @@ void midiPCGUIEditor::updateParametersFromFilter()
     PCDisplay3->setText(juce::String(lsb), juce::dontSendNotification);
     minimized = param[kMinimize] >= 0.5f;
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

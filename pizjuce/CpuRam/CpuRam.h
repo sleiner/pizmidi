@@ -30,14 +30,17 @@ public:
     {
         return 0;
     }
+
     const juce::String getName() const override
     {
         return JucePlugin_Name;
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -46,6 +49,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -73,17 +77,21 @@ public:
     {
         return 1;
     }
+
     int getCurrentProgram() override
     {
         return 0;
     }
+
     void setCurrentProgram(int index) override
     {
     }
+
     const juce::String getProgramName(int index) override
     {
         return juce::String();
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
     }

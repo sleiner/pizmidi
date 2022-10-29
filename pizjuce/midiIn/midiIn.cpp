@@ -152,6 +152,7 @@ bool MidiInFilter::isOutputChannelStereoPair(int index) const
     else
         return false;
 }
+
 void MidiInFilter::setCurrentProgram(int index)
 {
     if (! init)
@@ -184,11 +185,13 @@ int MidiInFilter::getCurrentProgram()
 {
     return curProgram;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* MidiInFilter::createEditor()
 {
     return new MidiInEditor(this);
 }
+
 //==============================================================================
 void MidiInFilter::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
@@ -263,6 +266,7 @@ void MidiInFilter::getCurrentProgramStateInformation(juce::MemoryBlock& destData
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary(xmlState, destData);
 }
+
 void MidiInFilter::getStateInformation(juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program

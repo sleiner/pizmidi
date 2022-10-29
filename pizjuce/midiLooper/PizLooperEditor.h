@@ -38,6 +38,7 @@ public:
         s = &state;
         this->setColour(MidiKeyboardComponent::textLabelColourId, juce::Colours::transparentBlack);
     }
+
     ~KeySelector() override
     {
     }
@@ -55,6 +56,7 @@ private:
         }
         return false;
     }
+
     juce::MidiKeyboardState* s;
 };
 
@@ -96,14 +98,17 @@ public:
     void mouseDrag(const juce::MouseEvent& e) override;
     void mouseDown(const juce::MouseEvent& e) override;
     void mouseUp(const juce::MouseEvent& e) override;
+
     void clickableLabelMouseDown(ClickableLabel* label, const juce::MouseEvent& e) override
     {
     }
+
     void clickableLabelMouseDoubleClick(ClickableLabel* label, const juce::MouseEvent& e) override
     {
         if (label == nameLabel.get())
             label->edit();
     }
+
     void handleNoteOn(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     //[/UserMethods]
@@ -143,6 +148,7 @@ private:
     {
         return (PizLooper*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

@@ -96,6 +96,7 @@ public:
     }
 
     int bottomOctave;
+
     juce::String getCurrentPath()
     {
         return currentPath;

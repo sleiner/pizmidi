@@ -30,6 +30,7 @@ class midiPCGUIProgram
 public:
     midiPCGUIProgram();
     ~midiPCGUIProgram(){};
+
     void setName(juce::String newName)
     {
         name = newName;
@@ -64,18 +65,22 @@ public:
     {
         return 0;
     }
+
     const juce::String getName() const override
     {
         return JucePlugin_Name;
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     bool acceptsMidi() const override
     {
         return true;
     }
+
     bool producesMidi() const override
     {
         return true;
@@ -99,14 +104,17 @@ public:
     {
         return 128;
     }
+
     int getCurrentProgram() override;
     void setCurrentProgram(int index) override;
     const juce::String getProgramName(int index) override;
     void changeProgramName(int index, const juce::String& newName) override;
+
     void setMidiProgName(int channel, int bank, int prog, const juce::String& newName)
     {
         progNames.setNameFor(channel, bank, prog, newName);
     }
+
     juce::String getMidiProgName(int channel, int bank, int prog)
     {
         return progNames.getNameFor(channel, bank, prog);
@@ -129,6 +137,7 @@ private:
     // this is our gain - the UI and the host can access this by getting/setting
     // parameter 0.
     float param[numParams];
+
     struct MidiProgName
     {
         MidiProgName()
@@ -138,6 +147,7 @@ private:
             program = -1;
             name    = juce::String();
         }
+
         MidiProgName(int c, int b, int p, const juce::String& n)
         {
             channel = c;
@@ -145,6 +155,7 @@ private:
             program = p;
             name    = n;
         }
+
         ~MidiProgName(){};
         int channel;
         int bank;
@@ -159,6 +170,7 @@ private:
     public:
         ProgNames(){};
         ~ProgNames(){};
+
         juce::String getNameFor(int c, int b, int p)
         {
             for (int i = 0; i < names.size(); i++)
@@ -218,6 +230,7 @@ private:
         continuous,
         triggered
     };
+
     char mode;
     bool trigger, inc, dec, triggerbank;
     int program, bankmsb, banklsb;

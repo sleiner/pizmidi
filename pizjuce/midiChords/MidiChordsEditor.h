@@ -68,15 +68,18 @@ public:
         : juce::FileFilter("midiChords presets")
     {
     }
+
     ~ChordPresetFileFilter() override
     {
     }
+
     bool isFileSuitable(const juce::File& file) const override
     {
         return (file.hasFileExtension("chords")
                 || file.hasFileExtension("fxp")
                 || file.hasFileExtension("xml"));
     }
+
     bool isDirectorySuitable(const juce::File& file) const override
     {
         return true;
@@ -157,6 +160,7 @@ public:
         this->setMidiChannel(1);
         this->setLowestVisibleKey(36);
     }
+
     void drawBlackNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
     {
         juce::Colour c(textColour);
@@ -236,6 +240,7 @@ public:
         //g.setColour (textColour);
         //g.drawFittedText (String(midiNoteNumber), x + 2, y + 2, w - 4, h - 16, Justification::centredBottom, 1);
     }
+
     /*
 	void handleNoteOn(MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity)
 	{
@@ -338,6 +343,7 @@ public:
         this->setMidiChannel(1);
         this->setLowestVisibleKey(36);
     }
+
     void drawBlackNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& textColour)
     {
         const int mode = juce::roundToInt(owner->getParameter(kMode) * (numModes - 1));
@@ -392,6 +398,7 @@ public:
             g.drawFittedText(juce::String(midiNoteNumber), x + 2, y + 2, w - 4, h - 4, juce::Justification::centredBottom, 1);
         }
     }
+
     void drawWhiteNote(int midiNoteNumber, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour)
     {
         const int mode = juce::roundToInt(owner->getParameter(kMode) * (numModes - 1));
@@ -615,6 +622,7 @@ private:
     {
         return (MidiChords*) getAudioProcessor();
     }
+
     int mode;
     ChordPresetFileFilter fileFilter;
     juce::FileBrowserComponent* browser;

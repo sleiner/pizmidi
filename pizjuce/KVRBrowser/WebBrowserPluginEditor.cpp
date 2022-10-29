@@ -252,6 +252,7 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
 
     setSize(filter->lastUIWidth, filter->lastUIHeight);
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

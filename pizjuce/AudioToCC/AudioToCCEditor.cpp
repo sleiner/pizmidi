@@ -1089,6 +1089,7 @@ void AudioToCCEditor::timerCallback()
             clipR->setToggleState(true, juce::dontSendNotification);
     }
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

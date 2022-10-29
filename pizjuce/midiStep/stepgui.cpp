@@ -25,6 +25,7 @@
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::jlimit;
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -1016,6 +1017,7 @@ void StepEditor::zoomOut(int centerPixel)
     pianoRoll->setSize(roundToInt((float) pianoRoll->getWidth() * 0.9f), pianoRoll->getHeight());
     viewport->setViewPosition(jlimit(0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

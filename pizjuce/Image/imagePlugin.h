@@ -50,6 +50,7 @@ public:
     {
         return JucePlugin_Name;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -58,6 +59,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -66,10 +68,12 @@ public:
         return false;
 #endif
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -97,6 +101,7 @@ public:
     {
         return 128;
     }
+
     int getCurrentProgram() override;
     void setCurrentProgram(int index) override;
     const juce::String getProgramName(int index) override;
@@ -113,6 +118,7 @@ public:
     void clearAllImages();
 
     void setCurrentBank(int index, int program = -1);
+
     int getCurrentBank()
     {
         return curBank;
@@ -134,6 +140,7 @@ public:
     {
         return usePC;
     }
+
     bool getNoteInput()
     {
         return noteInput;

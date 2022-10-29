@@ -35,6 +35,7 @@ public:
         this->setMouseClickGrabsKeyboardFocus(false);
         this->setInterceptsMouseClicks(false, false);
     }
+
     ~DecibelMeter() override
     {
     }
@@ -53,6 +54,7 @@ public:
     {
         this->setMouseClickGrabsKeyboardFocus(false);
     }
+
     ~DecibelSlider() override
     {
     }
@@ -61,6 +63,7 @@ public:
     {
         return value == 0.0 ? "-inf" : juce::String(20.0 * log10(value), 1) + " dB";
     }
+
     double getValueFromText(const juce::String& text) override
     {
         if (text.equalsIgnoreCase("-inf"))
@@ -69,6 +72,7 @@ public:
         return pow(10, dB / 20.0);
     }
 };
+
 //[/Headers]
 
 //==============================================================================
@@ -107,10 +111,12 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     int peakcounter;
     void updateParametersFromFilter();
+
     AudioToCC* getFilter() const throw()
     {
         return (AudioToCC*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

@@ -45,6 +45,7 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
+
     bool hasEditor() const override
     {
         return true;
@@ -71,23 +72,28 @@ public:
     {
         return 128;
     }
+
     int getCurrentProgram() override
     {
         return curProgram;
     }
+
     double getTailLengthSeconds() const override
     {
         return 0;
     }
+
     void setCurrentProgram(int index) override
     {
         lastProgram = curProgram;
         curProgram  = index;
     }
+
     const juce::String getProgramName(int index) override
     {
         return "State " + juce::String(index + 1);
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
     }

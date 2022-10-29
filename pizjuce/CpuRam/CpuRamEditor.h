@@ -16,6 +16,7 @@ public:
             points[i] = 0.f;
         setMouseClickGrabsKeyboardFocus(false);
     }
+
     ~CpuGraph() override{};
 
     void addPoint(float value)
@@ -31,7 +32,9 @@ private:
     {
         numPoints = 128
     };
+
     float points[numPoints];
+
     void paint(juce::Graphics& g) override
     {
         g.fillAll(juce::Colours::black);

@@ -49,6 +49,7 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
+
     bool hasEditor() const override
     {
         return true;
@@ -71,6 +72,7 @@ public:
     {
         return true;
     }
+
     bool producesMidi() const override
     {
         return true;
@@ -81,20 +83,26 @@ public:
     {
         return numProgs;
     }
+
     int getCurrentProgram() override
     {
         return curProgram;
     }
+
     void setCurrentProgram(int index) override;
+
     const juce::String getProgramName(int index) override
     {
         return programs->get(0, index, "Name");
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
         programs->set(0, index, "Name", newName);
     }
+
     void copySettingsToProgram(int index);
+
     double getTailLengthSeconds() const override
     {
         return 0;

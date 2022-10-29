@@ -14,6 +14,7 @@ public:
     {
         this->setRange(-1, 127, 1);
     };
+
     ~NoteSlider(){};
 
     juce::String getTextFromValue(double value)
@@ -44,6 +45,7 @@ public:
         allText = text;
         updateText();
     }
+
     void setBottomOctave(int o)
     {
         bottomOctave = o;

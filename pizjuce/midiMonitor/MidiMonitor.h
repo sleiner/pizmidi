@@ -25,6 +25,7 @@ enum parameters
     kNumParams,
     kNumPrograms = 1
 };
+
 //==============================================================================
 class MidiMonitorPlugin : public PizAudioProcessor,
                           public juce::ChangeBroadcaster
@@ -48,14 +49,17 @@ public:
     {
         return JucePlugin_Name;
     }
+
     bool acceptsMidi() const override
     {
         return JucePlugin_WantsMidiInput != 0;
     }
+
     bool producesMidi() const override
     {
         return JucePlugin_ProducesMidiOutput != 0;
     }
+
     bool hasEditor() const override
     {
         return true;
@@ -78,21 +82,26 @@ public:
     {
         return kNumPrograms;
     }
+
     int getCurrentProgram() override
     {
         return 0;
     }
+
     void setCurrentProgram(int index) override
     {
     }
+
     const juce::String getProgramName(int index) override
     {
         return programName;
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
         programName = newName;
     }
+
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -112,6 +121,7 @@ public:
     {
         return &midiCollector;
     }
+
     juce::MidiMessageSequence* getMessages()
     {
         return messages;
@@ -119,19 +129,23 @@ public:
 
     bool writeMidiFile(juce::File mid);
     void clearLoop();
+
     void setMaxLines(int lines)
     {
         maxLines = juce::jlimit(1, 5000000, lines);
         sendChangeMessage();
     }
+
     int getMaxLines()
     {
         return maxLines;
     }
+
     int getTimeSigNumerator()
     {
         return n;
     }
+
     int getTimeSigDenominator()
     {
         return d;

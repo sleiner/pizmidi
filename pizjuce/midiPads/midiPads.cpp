@@ -704,6 +704,7 @@ void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& m
     midiMessages.clear();
     midiMessages = midiout;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* midiPads::createEditor()
 {

@@ -167,6 +167,7 @@ void DrawablePad::paintButton(juce::Graphics& g, bool isMouseOverButton, bool is
         //				Justification::centred, true);
     }
 }
+
 void DrawablePad::resized()
 {
 }

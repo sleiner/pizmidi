@@ -54,10 +54,12 @@ struct ChordNote
         c = channel;
         n = note;
     }
+
     ChordNote()
     {
         c = n = -1;
     }
+
     ~ChordNote()
     {
     }
@@ -85,6 +87,7 @@ public:
         stringNotes.addArray(notes);
         numStrings = notes.size();
     }
+
     ~GuitarDefinition()
     {
     }
@@ -242,6 +245,7 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
+
     bool hasEditor() const override
     {
         return true;
@@ -264,6 +268,7 @@ public:
     {
         return true;
     }
+
     bool producesMidi() const override
     {
         return true;
@@ -274,19 +279,24 @@ public:
     {
         return numProgs;
     }
+
     int getCurrentProgram() override
     {
         return curProgram;
     }
+
     void setCurrentProgram(int index) override;
+
     const juce::String getProgramName(int index) override
     {
         return programs->get(index, "Name");
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
         programs->set(index, "Name", newName);
     }
+
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -302,20 +312,25 @@ public:
     juce::MidiKeyboardState progKbState[numProgs][128];
     juce::MidiKeyboardState chordKbState;
     juce::MidiKeyboardState triggerKbState;
+
     juce::MidiKeyboardState* getCurrentKbState()
     {
         return &(progKbState[curProgram][curTrigger]);
     }
+
     void selectTrigger(int index);
     void selectChordNote(int index, int note, bool on, int ch = -1);
+
     int getCurrentTrigger()
     {
         return curTrigger;
     }
+
     bool isTriggerNotePlaying(int channel, int note)
     {
         return notePlaying[channel][note];
     }
+
     bool isTriggerNotePlaying(int note)
     {
         for (int i = 0; i < 16; i++)
@@ -323,18 +338,22 @@ public:
                 return true;
         return false;
     }
+
     int getLearnChannel()
     {
         return learnchan;
     }
+
     void setNoteBypassed(int note, bool bypass)
     {
         programs->set(curProgram, "Bypassed" + juce::String(note), bypass);
     }
+
     bool isNoteBypassed(int note)
     {
         return programs->get(curProgram, "Bypassed" + juce::String(note));
     }
+
     void clearAllChords();
     void resetAllChords();
     void copyChordToAllTriggers(bool absolute);
@@ -346,6 +365,7 @@ public:
     void applyChannelToChord();
     juce::String getCurrentChordName();
     void savePreset(juce::String name);
+
     void playCurrentChord(bool on)
     {
         if (on)
@@ -353,11 +373,14 @@ public:
         else
             stopPlayingFromGUI = true;
     }
+
     bool isPreviewChordPlaying()
     {
         return playFromGUI;
     }
+
     void translateToGuitarChord(bool force = false);
+
     void setGuitarView(bool on)
     {
         if (getGuitarView())
@@ -368,34 +391,41 @@ public:
             translateToGuitarChord();
         }
     }
+
     bool getGuitarView()
     {
         return programs->get(curProgram, "GuitarView");
     }
+
     void setSavedGuitarVoicing(bool isValid)
     {
         savedGuitarVoicing[curTrigger] = isValid;
     }
+
     void setStringValue(int string, int note, bool translate)
     {
         programs->set(curProgram, "String" + juce::String(string), note);
         if (translate)
             translateToGuitarChord();
     }
+
     int getStringValue(int string)
     {
         return programs->get(curProgram, "String" + juce::String(string));
     }
+
     void setNumFrets(int frets, bool translate)
     {
         programs->set(curProgram, "NumFrets", frets);
         if (translate)
             translateToGuitarChord();
     }
+
     int getNumFrets()
     {
         return programs->get(curProgram, "NumFrets");
     }
+
     void setNumStrings(int strings, bool translate)
     {
         int n = getNumStrings();
@@ -415,19 +445,23 @@ public:
         if (translate)
             translateToGuitarChord();
     }
+
     int getNumStrings()
     {
         return programs->get(curProgram, "NumStrings");
     }
+
     void setStrumDirection(bool up)
     {
         programs->set(curProgram, "StrumUp" + juce::String(curTrigger), up);
         sendChangeMessage();
     }
+
     bool getStrumDirection()
     {
         return programs->get(curProgram, "StrumUp" + juce::String(curTrigger));
     }
+
     void readChorderPreset(juce::File file);
     bool readKeyFile(juce::File file = juce::File());
     bool demo;

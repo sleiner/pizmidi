@@ -15,6 +15,7 @@ public:
     {
         bgcolor = juce::Colours::white;
     }
+
     ~fullScreenContainer() override{};
     juce::Colour bgcolor;
 

@@ -24,6 +24,7 @@
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -590,6 +591,7 @@ void MidiMonitorEditor::mouseDown(const juce::MouseEvent& e)
         aboutBox->setVisible(false);
     }
 }
+
 //==============================================================================
 void MidiMonitorEditor::timerCallback()
 {
@@ -1224,6 +1226,7 @@ const juce::String MidiMonitorEditor::ppqToString(const double sppq,
         return s1;
     }
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

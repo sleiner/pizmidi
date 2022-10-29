@@ -214,6 +214,7 @@ bool MidiOutFilter::isOutputChannelStereoPair(int index) const
     else
         return false;
 }
+
 void MidiOutFilter::setCurrentProgram(int index)
 {
     if (! init)
@@ -246,11 +247,13 @@ int MidiOutFilter::getCurrentProgram()
 {
     return curProgram;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* MidiOutFilter::createEditor()
 {
     return new MidiOutEditor(this);
 }
+
 //==============================================================================
 void MidiOutFilter::prepareToPlay(double sampleRate, int samplesPerBlock)
 {

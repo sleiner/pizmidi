@@ -42,6 +42,7 @@ public:
         fr   = 0.0;
         rate = 24.0;
     }
+
     smpte(int h, int m, int s, double f, double r = 24.0)
     {
         hr = h;
@@ -49,7 +50,9 @@ public:
         sc = s, fr = f;
         rate = r;
     }
+
     ~smpte(){};
+
     long double getTimeInSeconds()
     {
         if (rate == 29.97)
@@ -58,6 +61,7 @@ public:
         }
         return 3600.0 * (long double) hr + 60.0 * (long double) mn + (long double) sc + (long double) (fr / rate);
     }
+
     juce::int64 getCurrentFrame()
     {
         if (rate == 29.97)
@@ -68,6 +72,7 @@ public:
         }
         return juce::int64(this->getTimeInSeconds() * rate);
     }
+
     int getSubFrames()
     {
         return (int) ((fr * 100.0)) % 100;
@@ -88,6 +93,7 @@ public:
     double ppq;
     juce::String text;
     bool enabled;
+
     cue()
     {
         time    = 0.0;
@@ -95,6 +101,7 @@ public:
         ppq     = 0.0;
         enabled = true;
     }
+
     cue(double t, double p, juce::String s, bool e = true)
     {
         time    = t;
@@ -102,6 +109,7 @@ public:
         ppq     = p;
         enabled = e;
     }
+
     ~cue(){};
 };
 
@@ -144,14 +152,17 @@ public:
     {
         return JucePlugin_Name;
     }
+
     double getTailLengthSeconds() const override
     {
         return 0;
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -160,6 +171,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -187,17 +199,21 @@ public:
     {
         return 1;
     }
+
     int getCurrentProgram() override
     {
         return 0;
     }
+
     void setCurrentProgram(int index) override
     {
     }
+
     const juce::String getProgramName(int index) override
     {
         return juce::String();
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
     }

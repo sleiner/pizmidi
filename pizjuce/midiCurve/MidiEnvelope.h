@@ -13,6 +13,7 @@ public:
         inmsg  = -1;
         outmsg = -1;
     }
+
     ~MidiIndicator() override
     {
     }
@@ -59,6 +60,7 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
     float getValue(float input);
+
     void repaintIndicator(int in, int out)
     {
         indicator->inmsg  = in;

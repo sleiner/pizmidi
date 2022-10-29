@@ -26,6 +26,7 @@
 
 #include "midiIn.h"
 #include "MidiPad.h"
+
 //[/Headers]
 
 //==============================================================================
@@ -60,10 +61,12 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     void updateParametersFromFilter();
+
     MidiInFilter* getFilter() const throw()
     {
         return (MidiInFilter*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

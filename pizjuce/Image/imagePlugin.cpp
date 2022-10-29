@@ -247,6 +247,7 @@ void imagePluginFilter::processBlock(juce::AudioSampleBuffer& buffer,
     }
     midiMessages.clear();
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* imagePluginFilter::createEditor()
 {
@@ -295,6 +296,7 @@ void imagePluginFilter::getCurrentProgramStateInformation(juce::MemoryBlock& des
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary(xmlState, destData);
 }
+
 void imagePluginFilter::getStateInformation(juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program

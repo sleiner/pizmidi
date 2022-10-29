@@ -85,6 +85,7 @@ XT2TransportControl::XT2TransportControl(audioMasterCallback audioMaster)
 
 //finds the energyXT window by title:
 HWND xtWindow = NULL;
+
 BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 {
     char String[255];
@@ -141,6 +142,7 @@ void XT2TransportControl::XT2_Transport(int button)
 #include <X11/extensions/XTest.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
+
 //figure out linux method here
 
 void XT2TransportControl::XT2_Transport(int button)

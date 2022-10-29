@@ -24,6 +24,7 @@
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -748,6 +749,7 @@ juce::String const MidiChordAnalyzerEditor::getCurrentChordName(int channel)
     }
     return getFirstRecognizedChord(chord, getFilter()->getParameter(kFlats) > 0.f);
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

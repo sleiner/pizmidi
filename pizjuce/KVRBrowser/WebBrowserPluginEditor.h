@@ -87,6 +87,7 @@ private:
     {
         return (WebBrowserFilter*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

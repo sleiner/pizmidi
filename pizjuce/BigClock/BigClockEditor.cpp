@@ -385,6 +385,7 @@ void BigClockEditor::buttonStateChanged(juce::Button* buttonThatWasClicked)
         }
     }
 }
+
 void BigClockEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     juce::ModifierKeys mousebutton = juce::ModifierKeys::getCurrentModifiers();

@@ -25,6 +25,7 @@ class JuceProgram
 
 public:
     JuceProgram();
+
     ~JuceProgram()
     {
     }
@@ -65,14 +66,17 @@ public:
     {
         return 0;
     }
+
     const juce::String getName() const override
     {
         return JucePlugin_Name;
     }
+
     bool hasEditor() const override
     {
         return true;
     }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -81,6 +85,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -112,6 +117,7 @@ public:
     {
         return 128;
     }
+
     int getCurrentProgram() override;
     void setCurrentProgram(int index) override;
     const juce::String getProgramName(int index) override;
@@ -152,12 +158,14 @@ private:
             isControl = control;
             isActive  = active;
         }
+
         midiPoint()
         {
             p.setXY(0.f, 0.f);
             isControl = false;
             isActive  = true;
         }
+
         ~midiPoint(){};
 
         juce::Point<float> p;

@@ -26,6 +26,7 @@
 
 #include "PizKeyboard.h"
 #include "PizKeyboardComponent.h"
+
 //[/Headers]
 
 //==============================================================================
@@ -52,11 +53,13 @@ public:
     friend class PizKeyboardComponent;
     void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void mouseUp(const juce::MouseEvent& e) override;
+
     bool keyPressed(const juce::KeyPress& key, Component* originatingComponent) override
     {
         DBG(juce::String(key.getKeyCode()) + " " + key.getTextDescription());
         return false;
     }
+
     //[/UserMethods]
 
     void paint(juce::Graphics& g) override;
@@ -69,10 +72,12 @@ private:
     juce::ComponentBoundsConstrainer resizeLimits;
     juce::TooltipWindow tooltipWindow;
     void updateParametersFromFilter();
+
     PizKeyboard* getFilter() const throw()
     {
         return (PizKeyboard*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

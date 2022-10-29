@@ -22,6 +22,7 @@ MidiChordAnalyzerPrograms::MidiChordAnalyzerPrograms()
         juce::ValueTree progv("ProgValues");
     }
 }
+
 void MidiChordAnalyzerPrograms::loadDefaultValues()
 {
     setGlobal("lastProgram", 0);

@@ -24,6 +24,7 @@
 
 #include "midiOut.h"
 #include "MidiPad.h"
+
 //[/Headers]
 
 //==============================================================================
@@ -58,10 +59,12 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     void updateParametersFromFilter();
+
     MidiOutFilter* getFilter() const throw()
     {
         return (MidiOutFilter*) getAudioProcessor();
     }
+
     //[/UserVariables]
 
     //==============================================================================

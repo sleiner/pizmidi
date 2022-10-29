@@ -55,6 +55,7 @@ void GuitarNeckComponent::setNumStrings(int n)
     dotSize    = jmax(15.f, jmin(25.f, (float) getFretWidth(numFrets), (float) getHeight() / (float) numStrings));
     repaint();
 }
+
 void GuitarNeckComponent::setNumFrets(int n)
 {
     numFrets = jmin(n, maxFrets);

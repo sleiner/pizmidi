@@ -31,6 +31,7 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
+
     bool hasEditor() const override
     {
         return true;
@@ -51,6 +52,7 @@ public:
 
     bool acceptsMidi() const override;
     bool producesMidi() const override;
+
     double getTailLengthSeconds() const override
     {
         return 0;
@@ -61,17 +63,21 @@ public:
     {
         return 0;
     }
+
     int getCurrentProgram() override
     {
         return 0;
     }
+
     void setCurrentProgram(int index) override
     {
     }
+
     const juce::String getProgramName(int index) override
     {
         return juce::String();
     }
+
     void changeProgramName(int index, const juce::String& newName) override
     {
     }
@@ -93,10 +99,12 @@ public:
     {
         return URL;
     }
+
     void setURL(const juce::String& newURL)
     {
         URL = newURL;
     }
+
     bool initialPageLoaded;
 
 private:

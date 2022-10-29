@@ -25,6 +25,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "MidiMonitor.h"
+
 //[/Headers]
 
 //==============================================================================
@@ -71,6 +72,7 @@ private:
     int maxLines;
 
     void updateParametersFromFilter();
+
     MidiMonitorPlugin* getFilter() const throw()
     {
         return (MidiMonitorPlugin*) getAudioProcessor();

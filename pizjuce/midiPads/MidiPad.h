@@ -18,26 +18,32 @@ public:
     void buttonClicked(Button*);
     void setColour(const juce::Colour&);
     bool isPlaying;
+
     void setXFloat(float v)
     {
         x = v;
     }
+
     void setYFloat(float v)
     {
         y = v;
     }
+
     void setXInt(int v)
     {
         x = v * midiScaler;
     }
+
     void setYInt(int v)
     {
         y = v * midiScaler;
     }
+
     int getIndex()
     {
         return index;
     }
+
     juce::String getIconPath();
     void setIconPath(juce::String name);
     void setText(const juce::String& name);

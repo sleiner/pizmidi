@@ -37,6 +37,7 @@ inline int floatToMidi(float f, bool learnspace = true)
         return juce::roundToInt(f * 128.f) - 1;
     return juce::roundToInt(f * 127.f);
 }
+
 inline float midiToFloat(int n, bool learnspace = true)
 {
     if (learnspace)
@@ -48,6 +49,7 @@ inline int floatToChannel(float f)
 {
     return juce::roundToInt(f * 16.0f);
 }
+
 inline float channelToFloat(int c)
 {
     return (float) c * 0.0625f;
