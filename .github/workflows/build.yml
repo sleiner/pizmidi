@@ -58,7 +58,7 @@ jobs:
                     libglu1-mesa-dev mesa-common-dev \
                     ninja-build
             - name: Checkout pizmidi
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
             - name: "Ccache"
               uses: hendrikmuhs/ccache-action@1ed7eb5b4b2afeceab143d0caa0d7fa87c33047b # v1.0.5
               if: env.CCACHE_AVAILABLE == 'true'
