@@ -530,8 +530,6 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             {
                                 newdata = (low1 + high1) / 2;
                             }
-                            //else if (fRangeMode1<0.3f)
-                            //else newdata = MAP_TO_MIDI(data1,low1,high1,0,127);
                             else
                             {
                                 newdata = MAP_TO_MIDI(data1, low1, high1, lolimit1, hilimit1);
@@ -544,7 +542,7 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             {
                                 newdata = 0;
                             }
-                            //if (FLOAT_TO_MIDI2(fNCC)==0) discard=true;
+
                             // create new message
                             VstMidiEvent NCC = inputs[0][i];
                             NCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);
@@ -571,8 +569,6 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             {
                                 newdata = (low2 + high2) / 2;
                             }
-                            //else if (fRangeMode1<0.3f)
-                            //else newdata = MAP_TO_MIDI(data2,low1,high1,0,127);
                             else
                             {
                                 newdata = MAP_TO_MIDI(data2, low2, high2, lolimit2, hilimit2);
@@ -585,6 +581,7 @@ void MidiNotesToCC::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* 
                             {
                                 newdata = 0;
                             }
+
                             // create new message
                             VstMidiEvent VCC = inputs[0][i];
                             VCC.midiData[0]  = MIDI_CONTROLCHANGE | (chout - 1);

@@ -252,10 +252,6 @@ void MidiConverter::setParameter(VstInt32 index, float value)
             {
                 inmode = clock;
             }
-            //else if (param[kIn]<0.9f)  inmode=undefined;
-            //else if (param[kIn]<0.96f) inmode=undefined;
-            //else if (param[kIn]<1.0f)  inmode=undefined;
-            //else                       inmode=undefined;
             if (lastinmode != inmode)
             {
                 updateDisplay();
@@ -380,8 +376,6 @@ void MidiConverter::setParameter(VstInt32 index, float value)
             {
                 outmode = songselect;
             }
-            //else if (param[kOut]<1.0f)  outmode=undefined;
-            //else                        outmode=undefined;
             if (lastoutmode != outmode)
             {
                 updateDisplay();
