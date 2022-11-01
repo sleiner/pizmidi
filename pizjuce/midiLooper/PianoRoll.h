@@ -1,11 +1,11 @@
 #ifndef PIZ_PIANO_ROLL_HEADER
 #define PIZ_PIANO_ROLL_HEADER
 
+#include "MidiLoop.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "MidiLoop.h"
 
 class PianoRoll;
 
@@ -16,17 +16,19 @@ struct PizNote
         object = nullptr;
         length = -1;
     }
-    PizNote (PizMidiMessageSequence::mehPtr _object)
+
+    PizNote(PizMidiMessageSequence::mehPtr _object)
     {
         object = _object;
-        jassert (_object->noteOffObject != nullptr);
+        jassert(_object->noteOffObject != nullptr);
         length = _object->noteOffObject != nullptr ? _object->noteOffObject->message.getTimeStamp() - _object->message.getTimeStamp() : 0;
     }
+
     void updateLength()
     {
         if (object->message.isNoteOn())
         {
-            jassert (object->noteOffObject != nullptr);
+            jassert(object->noteOffObject != nullptr);
             length = object->noteOffObject != nullptr ? object->noteOffObject->message.getTimeStamp() - object->message.getTimeStamp() : 0;
         }
     }
@@ -43,18 +45,18 @@ public:
     Timeline();
     ~Timeline() override;
 
-    void setPianoRoll (PianoRoll* pr);
+    void setPianoRoll(PianoRoll* pr);
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     float getStartPixel();
     float getEndPixel();
     double getLength();
     double getStart();
 
-    void setLoop (double start, double length);
+    void setLoop(double start, double length);
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
     int scrollOffset;
 
@@ -67,22 +69,40 @@ private:
 class PianoPort : public juce::Viewport, public juce::ChangeBroadcaster
 {
 public:
-    PianoPort (juce::String name) : Viewport (name){};
-    ~PianoPort() override { dispatchPendingMessages(); }
-    void setTimeline (Timeline* t) { timeline = t; }
-    void setPlayline (Component* p) { playline = p; }
-    void setKeyboard (Viewport* kb) { keyboard = kb; }
-    void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override
+    PianoPort(juce::String name)
+        : Viewport(name){};
+
+    ~PianoPort() override
     {
-        this->getParentComponent()->mouseWheelMove (e, wheel);
+        dispatchPendingMessages();
     }
 
-    void visibleAreaChanged (const juce::Rectangle<int>& newVisibleArea) override
+    void setTimeline(Timeline* t)
+    {
+        timeline = t;
+    }
+
+    void setPlayline(Component* p)
+    {
+        playline = p;
+    }
+
+    void setKeyboard(Viewport* kb)
+    {
+        keyboard = kb;
+    }
+
+    void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override
+    {
+        this->getParentComponent()->mouseWheelMove(e, wheel);
+    }
+
+    void visibleAreaChanged(const juce::Rectangle<int>& newVisibleArea) override
     {
         timeline->scrollOffset = newVisibleArea.getX();
         timeline->repaint();
-        playline->setBounds (newVisibleArea);
-        keyboard->setViewPosition (0, newVisibleArea.getY());
+        playline->setBounds(newVisibleArea);
+        keyboard->setViewPosition(0, newVisibleArea.getY());
         sendChangeMessage();
     }
 
@@ -99,109 +119,148 @@ class PianoRoll : public juce::Component,
     friend class PianoPort;
 
 public:
-    PianoRoll (juce::AudioProcessor* _plugin, juce::AudioProcessorEditor* _owner, Timeline* _timeline);
+    PianoRoll(juce::AudioProcessor* _plugin, juce::AudioProcessorEditor* _owner, Timeline* _timeline);
     ~PianoRoll() override;
 
-    void setSequence (Loop* sequence_);
-    Loop* getSequence() { return sequence; }
+    void setSequence(Loop* sequence_);
+
+    Loop* getSequence()
+    {
+        return sequence;
+    }
+
     void sequenceChanged();
     int getTimeInPixels();
-    double pixelsToPpq (float pixels, bool snap, bool round = false);
-    float ppqToPixels (double ppq);
-    int ppqToPixelsWithOffset (double ppq);
-    double snapPpqToGrid (double ppq, bool round = false);
-    void setNoteLength (float beatDiv);
+    double pixelsToPpq(float pixels, bool snap, bool round = false);
+    float ppqToPixels(double ppq);
+    int ppqToPixelsWithOffset(double ppq);
+    double snapPpqToGrid(double ppq, bool round = false);
+    void setNoteLength(float beatDiv);
     double blankLength;
     float pixelsPerPpq;
     float getNoteHeight();
-    void setDisplayLength (double ppq)
+
+    void setDisplayLength(double ppq)
     {
         blankLength = ppq;
         sequenceChanged();
     }
-    void setDisplayLength (int bars)
+
+    void setDisplayLength(int bars)
     {
-        int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
+        int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
         blankLength        = getPpqPerBar() * bars;
         sequenceChanged();
-        setSize ((int) ppqToPixels (juce::jmax (blankLength, seqLengthInPpq)), getHeight());
+        setSize((int) ppqToPixels(juce::jmax(blankLength, seqLengthInPpq)), getHeight());
     }
+
     void addBar()
     {
-        int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
-        setDisplayLength (seqLengthInPpq + getPpqPerBar());
-        setSize (getWidth() + pixelBarLength, getHeight());
+        int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
+        setDisplayLength(seqLengthInPpq + getPpqPerBar());
+        setSize(getWidth() + pixelBarLength, getHeight());
     }
+
     void removeBar()
     {
-        int pixelBarLength = (int) ppqToPixels (getPpqPerBar());
-        setDisplayLength (juce::jmax (getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
-        setSize (juce::jmax (pixelBarLength, getWidth() - pixelBarLength), getHeight());
+        int pixelBarLength = (int) ppqToPixels(getPpqPerBar());
+        setDisplayLength(juce::jmax(getPpqPerBar(), seqLengthInPpq - getPpqPerBar()));
+        setSize(juce::jmax(pixelBarLength, getWidth() - pixelBarLength), getHeight());
     }
-    int getDisplayLength() { return (int) (juce::jmax (blankLength, seqLengthInPpq) / getPpqPerBar()); }
 
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
+    int getDisplayLength()
+    {
+        return (int) (juce::jmax(blankLength, seqLengthInPpq) / getPpqPerBar());
+    }
+
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     //void mouseMove (const MouseEvent& e);
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
 
-    void paintOverChildren (juce::Graphics& g) override;
+    void paintOverChildren(juce::Graphics& g) override;
     void resized() override;
 
-    bool getSnap() { return snapToGrid; }
-    float getBeatDiv() { return 1.f / noteLength; }
-    void setSnap (bool snap) { snapToGrid = snap; }
-    void setPlayTime (double timeInPpq)
+    bool getSnap()
     {
-        const int lastpixels = ppqToPixelsWithOffset (playTime);
-        const int pixels     = ppqToPixelsWithOffset (timeInPpq);
+        return snapToGrid;
+    }
+
+    float getBeatDiv()
+    {
+        return 1.f / noteLength;
+    }
+
+    void setSnap(bool snap)
+    {
+        snapToGrid = snap;
+    }
+
+    void setPlayTime(double timeInPpq)
+    {
+        const int lastpixels = ppqToPixelsWithOffset(playTime);
+        const int pixels     = ppqToPixelsWithOffset(timeInPpq);
         if (pixels != lastpixels)
         {
             playTime = timeInPpq;
-            playline->repaint (lastpixels, 0, 1, getHeight());
-            playline->repaint (pixels, 0, 1, getHeight());
+            playline->repaint(lastpixels, 0, 1, getHeight());
+            playline->repaint(pixels, 0, 1, getHeight());
         }
     }
-    void setTimeSig (int n, int d);
-    void setPlaying (bool isPlaying)
+
+    void setTimeSig(int n, int d);
+
+    void setPlaying(bool isPlaying)
     {
         playing = isPlaying;
         playline->repaint();
     }
-    void setRecording (bool isRecording)
+
+    void setRecording(bool isRecording)
     {
         recording = isRecording;
         playline->repaint();
     }
+
     double getPpqPerBar()
     {
         return timebase * quarterNotesPerBar;
     }
 
-    Component* getPlayline() { return (Component*) playline; }
+    Component* getPlayline()
+    {
+        return (Component*) playline;
+    }
 
     int defaultChannel;
     int timeSigN, timeSigD;
     bool playing;
     bool recording;
 
-    void repaintBG() { bg->repaint(); }
+    void repaintBG()
+    {
+        bg->repaint();
+    }
 
 private:
     juce::Rectangle<int> lasso;
     juce::Array<PizMidiMessageSequence::mehPtr> selectedNotes;
     juce::Array<PizNote> selectedNoteLengths;
-    void addToSelection (PizMidiMessageSequence::mehPtr note)
+
+    void addToSelection(PizMidiMessageSequence::mehPtr note)
     {
         if (note->message.isNoteOn())
         {
             if (note->noteOffObject == nullptr)
+            {
                 sequence->updateMatchedPairs();
-            selectedNotes.addIfNotAlreadyThere (note);
-            selectedNoteLengths.add (PizNote (note));
+            }
+            selectedNotes.addIfNotAlreadyThere(note);
+            selectedNoteLengths.add(PizNote(note));
         }
     }
+
     void clearSelection()
     {
         selectedNotes.clear();
@@ -211,18 +270,25 @@ private:
     class Playbar : public Component
     {
     public:
-        Playbar (PianoRoll* pianoroll) : Component(), roll (pianoroll) {}
-        ~Playbar() override {}
-        void paint (juce::Graphics& g) override
+        Playbar(PianoRoll* pianoroll)
+            : Component(), roll(pianoroll)
         {
-            g.fillAll (juce::Colour (0x0));
+        }
+
+        ~Playbar() override
+        {
+        }
+
+        void paint(juce::Graphics& g) override
+        {
+            g.fillAll(juce::Colour(0x0));
             //if (sequence->isRecording) {
             //	g.setColour(Colours::red);
             //	g.drawVerticalLine((int)((float)sequence->recTime*(float)getWidth()/seqLengthInPpq),0.f,(float)getHeight());
             //}
             //else {
-            g.setColour (juce::Colours::green);
-            g.drawVerticalLine ((int) roll->ppqToPixelsWithOffset (roll->playTime), 0.f, (float) getHeight());
+            g.setColour(juce::Colours::green);
+            g.drawVerticalLine((int) roll->ppqToPixelsWithOffset(roll->playTime), 0.f, (float) getHeight());
             //}
         }
 
@@ -235,10 +301,14 @@ private:
     public:
         PianoRollBackground()
         {
-            setBufferedToImage (true);
+            setBufferedToImage(true);
         }
-        ~PianoRollBackground() override {}
-        void paint (juce::Graphics& g) override
+
+        ~PianoRollBackground() override
+        {
+        }
+
+        void paint(juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
             int n                 = 0;
@@ -247,22 +317,28 @@ private:
 
             while (y > 0)
             {
-                if (getNoteNameWithoutOctave (n).contains ("#"))
-                    g.setColour (juce::Colours::lightgrey);
-                else if (n == 60)
-                    g.setColour (juce::Colours::yellow);
-                else
-                    g.setColour (juce::Colours::white);
-                g.fillRect (0.f, y - yinc, (float) getWidth(), yinc);
-                if (getNoteNameWithoutOctave (n).contains ("F") && ! getNoteNameWithoutOctave (n).contains ("#"))
+                if (getNoteNameWithoutOctave(n).contains("#"))
                 {
-                    g.setColour (juce::Colours::grey);
-                    g.drawLine (0.f, y, (float) getWidth(), y, 1);
+                    g.setColour(juce::Colours::lightgrey);
                 }
-                if (getNoteNameWithoutOctave (n).contains ("C") && ! getNoteNameWithoutOctave (n).contains ("#"))
+                else if (n == 60)
                 {
-                    g.setColour (juce::Colours::black);
-                    g.drawLine (0.f, y, (float) getWidth(), y, 1);
+                    g.setColour(juce::Colours::yellow);
+                }
+                else
+                {
+                    g.setColour(juce::Colours::white);
+                }
+                g.fillRect(0.f, y - yinc, (float) getWidth(), yinc);
+                if (getNoteNameWithoutOctave(n).contains("F") && ! getNoteNameWithoutOctave(n).contains("#"))
+                {
+                    g.setColour(juce::Colours::grey);
+                    g.drawLine(0.f, y, (float) getWidth(), y, 1);
+                }
+                if (getNoteNameWithoutOctave(n).contains("C") && ! getNoteNameWithoutOctave(n).contains("#"))
+                {
+                    g.setColour(juce::Colours::black);
+                    g.drawLine(0.f, y, (float) getWidth(), y, 1);
                 }
                 n++;
                 y -= yinc;
@@ -271,10 +347,10 @@ private:
             while (x < getWidth())
             {
                 //draw grid
-                if (! (fmod (x, roll->barSize) < 0.0001) && ! (fmod (x, roll->beatSize) < 0.0001))
+                if (! (fmod(x, roll->barSize) < 0.0001) && ! (fmod(x, roll->beatSize) < 0.0001))
                 {
-                    g.setColour (juce::Colours::lightgrey);
-                    g.drawLine (x, 0.f, x, (float) getHeight());
+                    g.setColour(juce::Colours::lightgrey);
+                    g.drawLine(x, 0.f, x, (float) getHeight());
                 }
                 x += roll->gridSize;
             }
@@ -282,10 +358,10 @@ private:
             while (x < getWidth())
             {
                 //draw beats
-                if (! (fmod (x, roll->barSize) < 0.0001))
+                if (! (fmod(x, roll->barSize) < 0.0001))
                 {
-                    g.setColour (juce::Colours::grey);
-                    g.drawLine (x, 0.f, x, (float) getHeight());
+                    g.setColour(juce::Colours::grey);
+                    g.drawLine(x, 0.f, x, (float) getHeight());
                 }
                 x += roll->beatSize;
             }
@@ -293,8 +369,8 @@ private:
             while (x < getWidth())
             {
                 //draw bars
-                g.setColour (juce::Colours::black);
-                g.drawLine (x, 0.f, x, (float) getHeight());
+                g.setColour(juce::Colours::black);
+                g.drawLine(x, 0.f, x, (float) getHeight());
                 x += roll->barSize;
             }
         }
@@ -305,10 +381,14 @@ private:
     public:
         PianoRollNotes()
         {
-            setBufferedToImage (true);
+            setBufferedToImage(true);
         }
-        ~PianoRollNotes() override {}
-        void paint (juce::Graphics& g) override
+
+        ~PianoRollNotes() override
+        {
+        }
+
+        void paint(juce::Graphics& g) override
         {
             const PianoRoll* roll = (PianoRoll*) getParentComponent();
             if (roll->barSize > 0)
@@ -317,48 +397,48 @@ private:
                 {
                     for (int i = 0; i < roll->sequence->getNumEvents(); i++)
                     {
-                        if (roll->sequence->getEventPointer (i)->message.isNoteOn() /* && (i-9999!=hoveringNote)*/)
+                        if (roll->sequence->getEventPointer(i)->message.isNoteOn() /* && (i-9999!=hoveringNote)*/)
                         {
-                            float noteLength = (float) (juce::jmax (1.0, (roll->sequence->getEventTime (roll->sequence->getIndexOfMatchingKeyUp (i)) - roll->sequence->getEventTime (i))) * (double) getWidth() / roll->seqLengthInPpq);
+                            float noteLength = (float) (juce::jmax(1.0, (roll->sequence->getEventTime(roll->sequence->getIndexOfMatchingKeyUp(i)) - roll->sequence->getEventTime(i))) * (double) getWidth() / roll->seqLengthInPpq);
                             //if (i==sequence->indexOfLastNoteOn
                             //	|| abs(sequence->getEventTime(i)-sequence->getEventTime(sequence->indexOfLastNoteOn))<sequence->chordTolerance)
                             //	g.setColour(Colours::blue);
                             //else
-                            if (roll->selectedNotes.contains (roll->sequence->getEventPointer (i)))
+                            if (roll->selectedNotes.contains(roll->sequence->getEventPointer(i)))
                             {
                                 //outline of original note position
-                                g.setColour (juce::Colours::blue);
-                                g.drawRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
-                                            (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
-                                            noteLength,
-                                            roll->yinc);
+                                g.setColour(juce::Colours::blue);
+                                g.drawRect((float) getWidth() * (float) (roll->sequence->getEventTime(i) / roll->seqLengthInPpq),
+                                           (float) getHeight() - (float) (roll->sequence->getEventPointer(i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
+                                           noteLength,
+                                           roll->yinc);
 
                                 //dragging note position
-                                const double newTime = (float) ((roll->sequence->getEventTime (i) + roll->draggingNoteTimeDelta));
-                                const float newNote  = (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber() + roll->draggingNoteTransposition);
-                                g.setColour (juce::Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
-                                g.fillRect ((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
-                                            (float) getHeight() - newNote * roll->yinc - roll->yinc,
-                                            noteLength,
-                                            roll->yinc);
-                                g.setColour (juce::Colours::red);
-                                g.drawRect ((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
-                                            (float) getHeight() - newNote * roll->yinc - roll->yinc,
-                                            noteLength,
-                                            roll->yinc);
+                                const double newTime = (float) ((roll->sequence->getEventTime(i) + roll->draggingNoteTimeDelta));
+                                const float newNote  = (float) (roll->sequence->getEventPointer(i)->message.getNoteNumber() + roll->draggingNoteTransposition);
+                                g.setColour(juce::Colours::darkgoldenrod.withAlpha(roll->sequence->getEventPointer(i)->message.getFloatVelocity()));
+                                g.fillRect((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
+                                           (float) getHeight() - newNote * roll->yinc - roll->yinc,
+                                           noteLength,
+                                           roll->yinc);
+                                g.setColour(juce::Colours::red);
+                                g.drawRect((float) getWidth() * (float) (newTime / roll->seqLengthInPpq),
+                                           (float) getHeight() - newNote * roll->yinc - roll->yinc,
+                                           noteLength,
+                                           roll->yinc);
                             }
                             else
                             {
-                                g.setColour (juce::Colours::darkgoldenrod.withAlpha (roll->sequence->getEventPointer (i)->message.getFloatVelocity()));
-                                g.fillRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
-                                            (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
-                                            noteLength,
-                                            roll->yinc);
-                                g.setColour (juce::Colours::black);
-                                g.drawRect ((float) getWidth() * (float) (roll->sequence->getEventTime (i) / roll->seqLengthInPpq),
-                                            (float) getHeight() - (float) (roll->sequence->getEventPointer (i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
-                                            noteLength,
-                                            roll->yinc);
+                                g.setColour(juce::Colours::darkgoldenrod.withAlpha(roll->sequence->getEventPointer(i)->message.getFloatVelocity()));
+                                g.fillRect((float) getWidth() * (float) (roll->sequence->getEventTime(i) / roll->seqLengthInPpq),
+                                           (float) getHeight() - (float) (roll->sequence->getEventPointer(i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
+                                           noteLength,
+                                           roll->yinc);
+                                g.setColour(juce::Colours::black);
+                                g.drawRect((float) getWidth() * (float) (roll->sequence->getEventTime(i) / roll->seqLengthInPpq),
+                                           (float) getHeight() - (float) (roll->sequence->getEventPointer(i)->message.getNoteNumber()) * roll->yinc - roll->yinc,
+                                           noteLength,
+                                           roll->yinc);
                             }
                         }
                     }

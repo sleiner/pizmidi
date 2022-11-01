@@ -10,32 +10,34 @@
 #include <string>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiProgramChange (audioMaster);
+    return new MidiProgramChange(audioMaster);
 }
 
 MidiProgramChangeProgram::MidiProgramChangeProgram()
 {
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kThru]    = 1.f;
     param[kTrigger] = 0.4f;
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiProgramChangeProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -43,9 +45,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                     programs[i].param[kCurrentProgram] = (float) i / 127.f;
                 }
             }
@@ -55,17 +57,19 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     trigger = false;
-    memset (trig, 0, sizeof (trig));
+    memset(trig, 0, sizeof(trig));
     senttrig = false;
     for (int i = 0; i < kNumParams; i++)
+    {
         automated[i] = false;
+    }
 
     wait         = false;
     delaytime    = (int) (sampleRate * 0.002f);
@@ -73,7 +77,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
     triggerdelta = 0;
 
     if (programs)
-        setProgram (0);
+    {
+        setProgram(0);
+    }
 
     init();
 }
@@ -82,73 +88,79 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
 MidiProgramChange::~MidiProgramChange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::setProgram (VstInt32 prog)
+void MidiProgramChange::setProgram(VstInt32 prog)
 {
     MidiProgramChangeProgram* ap = &programs[prog];
     curProgram                   = prog;
     settingProgram               = true;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameterAutomated (i, ap->param[i]);
+        setParameterAutomated(i, ap->param[i]);
     }
     trigger        = true;
     settingProgram = false;
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::setProgramName (char* name)
+void MidiProgramChange::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::getProgramName (char* name)
+void MidiProgramChange::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiProgramChange::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiProgramChange::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::setSampleRate (float sampleRateIn)
+void MidiProgramChange::setSampleRate(float sampleRateIn)
 {
-    PizMidi::setSampleRate (sampleRateIn);
+    PizMidi::setSampleRate(sampleRateIn);
     delaytime = (int) (sampleRate * 0.002f);
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::setParameter (VstInt32 index, float value)
+void MidiProgramChange::setParameter(VstInt32 index, float value)
 {
     MidiProgramChangeProgram* ap = &programs[curProgram];
     if (index == kCurrentProgram && ! settingProgram)
     {
-        setProgram (roundToInt (value * (kNumPrograms - 1)));
+        setProgram(roundToInt(value * (kNumPrograms - 1)));
     }
     if (index == kThru)
     {
         thru         = value >= 0.5f;
         param[index] = value;
         for (int i = 0; i < kNumPrograms; i++)
+        {
             programs[i].param[index] = value;
+        }
     }
     else if (index == kChannel)
     {
         param[index] = value;
         for (int i = 0; i < kNumPrograms; i++)
+        {
             programs[i].param[index] = value;
+        }
     }
     else if (index == kTrigger)
     {
@@ -157,15 +169,19 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
         { // && !senttrig) {
             trigger = true;
             for (int ch = 0; ch < 16; ch++)
+            {
                 trig[ch] = true;
+            }
             senttrig = true;
         }
         else if (value < 1.f && senttrig)
+        {
             senttrig = false;
+        }
     }
     else if (index >= kProgram && index < kProgram + 16)
     {
-        program[index - kProgram] = FLOAT_TO_MIDI2 (value);
+        program[index - kProgram] = FLOAT_TO_MIDI2(value);
         trigger                   = true;
         trig[index - kProgram]    = true;
         param[index] = ap->param[index] = value;
@@ -173,73 +189,85 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiProgramChange::getParameter (VstInt32 index)
+float MidiProgramChange::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::getParameterName (VstInt32 index, char* label)
+void MidiProgramChange::getParameterName(VstInt32 index, char* label)
 {
     if (index == kThru)
     {
-        strcpy (label, "Thru");
+        strcpy(label, "Thru");
     }
     else if (index >= kProgram && index < kProgram + 16)
     {
-        sprintf (label, "Ch.%d Prog.", index - kProgram + 1);
+        sprintf(label, "Ch.%d Prog.", index - kProgram + 1);
     }
     else if (index == kChannel)
     {
-        strcpy (label, "InChannel");
+        strcpy(label, "InChannel");
     }
     else if (index == kTrigger)
     {
-        strcpy (label, "Trigger");
+        strcpy(label, "Trigger");
     }
     else if (index == kCurrentProgram)
     {
-        strcpy (label, "CurrentProgram");
+        strcpy(label, "CurrentProgram");
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::getParameterDisplay (VstInt32 index, char* text)
+void MidiProgramChange::getParameterDisplay(VstInt32 index, char* text)
 {
     if (index == kThru)
     {
         if (thru)
-            strcpy (text, "Yes");
+        {
+            strcpy(text, "Yes");
+        }
         else
-            strcpy (text, "No");
+        {
+            strcpy(text, "No");
+        }
     }
     else if (index >= kProgram && index < kProgram + 16)
     {
         if (program[index - kProgram] == 0)
-            strcpy (text, "Off");
+        {
+            strcpy(text, "Off");
+        }
         else
-            sprintf (text, "%d", program[index - kProgram]);
+        {
+            sprintf(text, "%d", program[index - kProgram]);
+        }
     }
     else if (index == kChannel)
     {
-        sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[index]) + 1);
+        sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
     }
     else if (index == kTrigger)
     {
         if (param[index] == 1.f)
-            strcpy (text, "Triggered!");
+        {
+            strcpy(text, "Triggered!");
+        }
         else
-            strcpy (text, "Trigger-->");
+        {
+            strcpy(text, "Trigger-->");
+        }
     }
     else if (index == kCurrentProgram)
     {
-        sprintf (text, "%d: %s", curProgram + 1, programs[curProgram].name);
+        sprintf(text, "%d: %s", curProgram + 1, programs[curProgram].name);
     }
 }
 
-void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
-    char listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+    char listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
 
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -259,13 +287,15 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
         {
             if (status == MIDI_PROGRAMCHANGE)
             {
-                setProgram (data1);
+                setProgram(data1);
                 updateDisplay();
                 discard = true;
             }
         } // if listenchannel==channel
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     if (trigger)
@@ -280,8 +310,8 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                 progch.midiData[1] = program[ch] - 1;
                 progch.midiData[2] = 0x0;
                 progch.deltaFrames = triggerdelta;
-                outputs[0].push_back (progch);
-                setParameterAutomated (kTrigger, 0.4f);
+                outputs[0].push_back(progch);
+                setParameterAutomated(kTrigger, 0.4f);
             }
             trig[ch] = false;
         }

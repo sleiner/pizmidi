@@ -4,38 +4,38 @@ using juce::jlimit;
 
 Loop::Loop()
     : PizMidiMessageSequence(),
-      currentIndex (0),
-      triggerNote (60),
-      transpose (0),
-      octave (0),
-      playMode (0),
-      isRecording (false),
-      isRecArmed (false),
-      recChannel (0),
-      outChannel (0),
-      recTime (0),
-      indexOfLastNoteOn (-1),
-      velocitySensitivity (1.f),
-      chordTolerance (120.0),
-      length (0)
+      currentIndex(0),
+      triggerNote(60),
+      transpose(0),
+      octave(0),
+      playMode(0),
+      isRecording(false),
+      isRecArmed(false),
+      recChannel(0),
+      outChannel(0),
+      recTime(0),
+      indexOfLastNoteOn(-1),
+      velocitySensitivity(1.f),
+      chordTolerance(120.0),
+      length(0)
 {
     resetNotes();
 }
 
-Loop::Loop (PizMidiMessageSequence sequence, int triggerNote_, int transpose_, bool playMode_)
-    : PizMidiMessageSequence (sequence),
-      currentIndex (0),
-      triggerNote (triggerNote_),
-      transpose (transpose_),
-      playMode (playMode_),
-      isRecording (false),
-      isRecArmed (false),
-      recChannel (0),
-      outChannel (0),
-      recTime (0),
-      indexOfLastNoteOn (-1),
-      velocitySensitivity (1.f),
-      chordTolerance (120.0)
+Loop::Loop(PizMidiMessageSequence sequence, int triggerNote_, int transpose_, bool playMode_)
+    : PizMidiMessageSequence(sequence),
+      currentIndex(0),
+      triggerNote(triggerNote_),
+      transpose(transpose_),
+      playMode(playMode_),
+      isRecording(false),
+      isRecArmed(false),
+      recChannel(0),
+      outChannel(0),
+      recTime(0),
+      indexOfLastNoteOn(-1),
+      velocitySensitivity(1.f),
+      chordTolerance(120.0)
 {
     resetNotes();
 }
@@ -56,15 +56,17 @@ void Loop::startRecording()
 bool Loop::findNextNote()
 {
     if (currentIndex >= getNumEvents())
+    {
         currentIndex = 0;
-    if (this->getEventPointer (currentIndex)->message.isNoteOn())
+    }
+    if (this->getEventPointer(currentIndex)->message.isNoteOn())
     {
         return true;
     }
     ++currentIndex;
     while (currentIndex < getNumEvents())
     {
-        if (this->getEventPointer (currentIndex)->message.isNoteOn())
+        if (this->getEventPointer(currentIndex)->message.isNoteOn())
         {
             return true;
         }
@@ -73,7 +75,7 @@ bool Loop::findNextNote()
     currentIndex = 0;
     while (currentIndex < getNumEvents())
     {
-        if (this->getEventPointer (currentIndex)->message.isNoteOn())
+        if (this->getEventPointer(currentIndex)->message.isNoteOn())
         {
             return true;
         }
@@ -82,65 +84,73 @@ bool Loop::findNextNote()
     return false;
 }
 
-void Loop::playAllNotesAtCurrentTime (juce::MidiBuffer& buffer, int sample_number, int velocity)
+void Loop::playAllNotesAtCurrentTime(juce::MidiBuffer& buffer, int sample_number, int velocity)
 {
     if (findNextNote())
     {
-        sendCurrentNoteToBuffer (buffer, sample_number, velocity);
+        sendCurrentNoteToBuffer(buffer, sample_number, velocity);
 
         const double time = getCurrentTime();
         ++currentIndex;
-        while (abs (getCurrentTime() - time) < chordTolerance)
+        while (abs(getCurrentTime() - time) < chordTolerance)
         {
-            if (this->getEventPointer (currentIndex)->message.isNoteOn())
-                sendCurrentNoteToBuffer (buffer, sample_number, velocity);
+            if (this->getEventPointer(currentIndex)->message.isNoteOn())
+            {
+                sendCurrentNoteToBuffer(buffer, sample_number, velocity);
+            }
             ++currentIndex;
         }
     }
 }
 
-void Loop::sendCurrentNoteToBuffer (juce::MidiBuffer& buffer, int sample_number, int velocity)
+void Loop::sendCurrentNoteToBuffer(juce::MidiBuffer& buffer, int sample_number, int velocity)
 {
-    juce::MidiMessage m = this->getEventPointer (currentIndex)->message;
+    juce::MidiMessage m = this->getEventPointer(currentIndex)->message;
     //playingNote[m.getNoteNumber()][m.getChannel()-1][0] = jlimit(0,127,m.getNoteNumber()+getTransposition());
-    m.setNoteNumber (jlimit (0, 127, m.getNoteNumber() + getTransposition()));
-    m.setVelocity ((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
+    m.setNoteNumber(jlimit(0, 127, m.getNoteNumber() + getTransposition()));
+    m.setVelocity((((float) velocity * midiScaler * velocitySensitivity) + (1.f - velocitySensitivity)));
     if (outChannel > 0)
-        m.setChannel (outChannel);
-    buffer.addEvent (m, sample_number);
+    {
+        m.setChannel(outChannel);
+    }
+    buffer.addEvent(m, sample_number);
     indexOfLastNoteOn = currentIndex;
 }
 
-bool Loop::isNotePlaying (PizMidiMessageSequence::mehPtr note, int p)
+bool Loop::isNotePlaying(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
     {
-        if (playingNotes[p].getReference (i).note == note
-            || playingNotes[p].getReference (i).note->noteOffObject == note)
-            return true;
-    }
-    return false;
-}
-
-bool Loop::isNotePlaying (PizMidiMessageSequence::mehPtr note)
-{
-    for (int p = 0; p < polyphony; p++)
-    {
-        for (int i = 0; i < playingNotes[p].size(); i++)
+        if (playingNotes[p].getReference(i).note == note
+            || playingNotes[p].getReference(i).note->noteOffObject == note)
         {
-            if (playingNotes[p].getReference (i).voice == p && (playingNotes[p].getReference (i).note == note || playingNotes[p].getReference (i).note->noteOffObject == note))
-                return true;
+            return true;
         }
     }
     return false;
 }
 
-bool Loop::isTriggerNote (int note)
+bool Loop::isNotePlaying(PizMidiMessageSequence::mehPtr note)
+{
+    for (int p = 0; p < polyphony; p++)
+    {
+        for (int i = 0; i < playingNotes[p].size(); i++)
+        {
+            if (playingNotes[p].getReference(i).voice == p && (playingNotes[p].getReference(i).note == note || playingNotes[p].getReference(i).note->noteOffObject == note))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Loop::isTriggerNote(int note)
 {
     return note == triggerNote;
 }
 
-void Loop::setTriggerNote (int note)
+void Loop::setTriggerNote(int note)
 {
     triggerNote = note;
 }
@@ -164,7 +174,7 @@ void Loop::resetNotes()
     }
 }
 
-void Loop::sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_number)
+void Loop::sendNoteOffMessagesToBuffer(juce::MidiBuffer& buffer, int sample_number)
 {
     for (int ch = 0; ch < 16; ch++)
     {
@@ -183,13 +193,15 @@ void Loop::sendNoteOffMessagesToBuffer (juce::MidiBuffer& buffer, int sample_num
 juce::MidiMessage Loop::getCurrentMessage()
 {
     if (currentIndex >= this->getNumEvents())
+    {
         currentIndex = 0;
-    return this->getEventPointer (currentIndex)->message;
+    }
+    return this->getEventPointer(currentIndex)->message;
 }
 
 double Loop::getCurrentTime()
 {
-    return this->getEventTime (currentIndex);
+    return this->getEventTime(currentIndex);
 }
 
 void Loop::cleanZeroLengthNotes()
@@ -197,27 +209,29 @@ void Loop::cleanZeroLengthNotes()
     juce::Array<int> matchedNoteOffs;
     for (int i = 0; i < getNumEvents(); i++)
     {
-        if (getEventPointer (i)->message.isNoteOn())
+        if (getEventPointer(i)->message.isNoteOn())
         {
-            if (getEventTime (i) == getTimeOfMatchingKeyUp (i) || getTimeOfMatchingKeyUp (i) == 0.0)
+            if (getEventTime(i) == getTimeOfMatchingKeyUp(i) || getTimeOfMatchingKeyUp(i) == 0.0)
             {
                 //zero length note
-                deleteEvent (i, (getTimeOfMatchingKeyUp (i) != 0.0));
+                deleteEvent(i, (getTimeOfMatchingKeyUp(i) != 0.0));
                 updateMatchedPairs();
             }
         }
     }
     for (int i = 0; i < getNumEvents(); i++)
     {
-        if (getEventPointer (i)->message.isNoteOn() && getIndexOfMatchingKeyUp (i) != -1)
-            matchedNoteOffs.add (getIndexOfMatchingKeyUp (i));
+        if (getEventPointer(i)->message.isNoteOn() && getIndexOfMatchingKeyUp(i) != -1)
+        {
+            matchedNoteOffs.add(getIndexOfMatchingKeyUp(i));
+        }
     }
     for (int i = 0; i < getNumEvents(); i++)
     {
-        if (getEventPointer (i)->message.isNoteOff() && ! matchedNoteOffs.contains (i))
+        if (getEventPointer(i)->message.isNoteOff() && ! matchedNoteOffs.contains(i))
         {
             //unmatched note-off
-            deleteEvent (i, false);
+            deleteEvent(i, false);
             updateMatchedPairs();
             break;
         }
@@ -225,15 +239,15 @@ void Loop::cleanZeroLengthNotes()
     //updateMatchedPairs();
 }
 
-int Loop::getIndexOfNote (int noteNumber, double time, bool exact)
+int Loop::getIndexOfNote(int noteNumber, double time, bool exact)
 {
     if (! exact)
     {
         for (int i = 0; i < getNumEvents(); i++)
         {
-            if (getEventPointer (i)->message.isNoteOn()
-                && getEventPointer (i)->message.getNoteNumber() == noteNumber
-                && (getEventTime (i) <= time && getTimeOfMatchingKeyUp (i) > time))
+            if (getEventPointer(i)->message.isNoteOn()
+                && getEventPointer(i)->message.getNoteNumber() == noteNumber
+                && (getEventTime(i) <= time && getTimeOfMatchingKeyUp(i) > time))
             {
                 return i;
             }
@@ -243,9 +257,9 @@ int Loop::getIndexOfNote (int noteNumber, double time, bool exact)
     {
         for (int i = 0; i < getNumEvents(); i++)
         {
-            if (getEventPointer (i)->message.isNoteOn()
-                && getEventPointer (i)->message.getNoteNumber() == noteNumber
-                && fabs (getEventTime (i) - time) < 1.0)
+            if (getEventPointer(i)->message.isNoteOn()
+                && getEventPointer(i)->message.getNoteNumber() == noteNumber
+                && fabs(getEventTime(i) - time) < 1.0)
             {
                 return i;
             }
@@ -254,14 +268,14 @@ int Loop::getIndexOfNote (int noteNumber, double time, bool exact)
     return No_Note;
 }
 
-void Loop::convertTimeBase (short timeBase)
+void Loop::convertTimeBase(short timeBase)
 {
     if (timeBase > 0 && timeBase != 960)
     {
         double factor = 960.0 / (double) timeBase;
         for (int i = 0; i < getNumEvents(); i++)
         {
-            getEventPointer (i)->message.setTimeStamp (getEventPointer (i)->message.getTimeStamp() * factor);
+            getEventPointer(i)->message.setTimeStamp(getEventPointer(i)->message.getTimeStamp() * factor);
         }
     }
     else
@@ -280,58 +294,85 @@ void Loop::convertTimeBase (short timeBase)
     }
 }
 
-int Loop::getTransposition() { return transpose + octave * 12; }
+int Loop::getTransposition()
+{
+    return transpose + octave * 12;
+}
 
-void Loop::setSemitones (int semitones) { transpose = semitones; }
+void Loop::setSemitones(int semitones)
+{
+    transpose = semitones;
+}
 
-void Loop::setOctaves (int octaves) { octave = octaves; }
+void Loop::setOctaves(int octaves)
+{
+    octave = octaves;
+}
 
-int Loop::getTranspositionOfNote (PizMidiMessageSequence::mehPtr note, int p)
+int Loop::getTranspositionOfNote(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
-        if (playingNotes[p].getReference (i).note == note
-            || playingNotes[p].getReference (i).note->noteOffObject == note)
-            return playingNotes[p].getReference (i).lastOutputNoteNumber;
+    {
+        if (playingNotes[p].getReference(i).note == note
+            || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
+            return playingNotes[p].getReference(i).lastOutputNoteNumber;
+        }
+    }
     return NOT_PLAYING;
 }
 
-int Loop::getChannelOfNote (PizMidiMessageSequence::mehPtr note, int p)
+int Loop::getChannelOfNote(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
-        if (playingNotes[p].getReference (i).note == note
-            || playingNotes[p].getReference (i).note->noteOffObject == note)
-            return playingNotes[p].getReference (i).lastOutputChannel;
+    {
+        if (playingNotes[p].getReference(i).note == note
+            || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
+            return playingNotes[p].getReference(i).lastOutputChannel;
+        }
+    }
     return NOT_PLAYING;
 }
 
-void Loop::setNoteOff (PizMidiMessageSequence::mehPtr note, int p)
+void Loop::setNoteOff(PizMidiMessageSequence::mehPtr note, int p)
 {
     for (int i = 0; i < playingNotes[p].size(); i++)
-        if (playingNotes[p].getReference (i).note == note
-            || playingNotes[p].getReference (i).note->noteOffObject == note)
-            playingNotes[p].remove (i);
+    {
+        if (playingNotes[p].getReference(i).note == note
+            || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
+            playingNotes[p].remove(i);
+        }
+    }
 }
 
-void Loop::setNoteOff (PizMidiMessageSequence::mehPtr note)
+void Loop::setNoteOff(PizMidiMessageSequence::mehPtr note)
 {
     for (int p = 0; p < polyphony; p++)
     {
         for (int i = 0; i < playingNotes[p].size(); i++)
-            if (playingNotes[p].getReference (i).voice == p && (playingNotes[p].getReference (i).note == note || playingNotes[p].getReference (i).note->noteOffObject == note))
-                playingNotes[p].remove (i);
+        {
+            if (playingNotes[p].getReference(i).voice == p && (playingNotes[p].getReference(i).note == note || playingNotes[p].getReference(i).note->noteOffObject == note))
+            {
+                playingNotes[p].remove(i);
+            }
+        }
     }
 }
 
-void Loop::sentNoteAs (PizMidiMessageSequence::mehPtr note, int p, int sentNoteNumber, int sentNoteChannel, int offSample)
+void Loop::sentNoteAs(PizMidiMessageSequence::mehPtr note, int p, int sentNoteNumber, int sentNoteChannel, int offSample)
 {
-    jassert (sentNoteChannel > 0);
+    jassert(sentNoteChannel > 0);
     for (int i = 0; i < playingNotes[p].size(); i++)
     {
-        if (playingNotes[p].getReference (i).note == note
-            || playingNotes[p].getReference (i).note->noteOffObject == note)
-            playingNotes[p].remove (i);
+        if (playingNotes[p].getReference(i).note == note
+            || playingNotes[p].getReference(i).note->noteOffObject == note)
+        {
+            playingNotes[p].remove(i);
+        }
     }
-    playingNotes[p].add (LoopNote (note, sentNoteNumber, sentNoteChannel, offSample, p));
+    playingNotes[p].add(LoopNote(note, sentNoteNumber, sentNoteChannel, offSample, p));
 }
 
 //void Loop::setNoteChannel(int n, int ch, int p, int channel) {

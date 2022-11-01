@@ -1,11 +1,11 @@
 #include "ControllerValue.h"
 
-#include <juce_audio_basics/juce_audio_basics.h>
-
 #include "Controller.h"
 #include "Scene.h"
 
-ControllerValue::ControllerValue (Controller* controller, Scene* scene)
+#include <juce_audio_basics/juce_audio_basics.h>
+
+ControllerValue::ControllerValue(Controller* controller, Scene* scene)
 {
     this->scene      = scene;
     this->controller = controller;
@@ -13,11 +13,11 @@ ControllerValue::ControllerValue (Controller* controller, Scene* scene)
 
 ControllerValue::~ControllerValue()
 {
-    scene->controllerValues.removeAllInstancesOf (this);
-    controller->removeValue (this);
+    scene->controllerValues.removeAllInstancesOf(this);
+    controller->removeValue(this);
 }
 
-void ControllerValue::setValue (int newValue)
+void ControllerValue::setValue(int newValue)
 {
     this->value = newValue;
 }
@@ -37,10 +37,10 @@ Controller* ControllerValue::getController()
     return controller;
 }
 
-void ControllerValue::getMidiMessage (juce::MidiBuffer& buffer, int pos)
+void ControllerValue::getMidiMessage(juce::MidiBuffer& buffer, int pos)
 {
     if (controller->hasNewMidi())
     {
-        buffer.addEvent (juce::MidiMessage::controllerEvent (controller->getChannel(), controller->getCcNo(), value), pos);
+        buffer.addEvent(juce::MidiMessage::controllerEvent(controller->getChannel(), controller->getCcNo(), value), pos);
     }
 }

@@ -1,37 +1,43 @@
 #include "ChordFunctions.h"
 
-PizChord::PizChord (juce::Array<int> newChord)
+PizChord::PizChord(juce::Array<int> newChord)
 {
-    chord.addArray (newChord);
+    chord.addArray(newChord);
     makeIntervalPattern();
 }
-void PizChord::setChord (juce::Array<int> newChord)
+
+void PizChord::setChord(juce::Array<int> newChord)
 {
     chord.clear();
-    chord.addArray (newChord);
+    chord.addArray(newChord);
     makeIntervalPattern();
 }
+
 int PizChord::getSum() const
 {
     int sum = 0;
     for (int i = 0; i < pattern.size(); i++)
+    {
         sum += pattern[i];
+    }
     return sum;
 }
+
 juce::String PizChord::getStringPattern() const
 {
     juce::String p;
     for (int i = 0; i < pattern.size(); i++)
     {
-        p += juce::String (pattern[i]) + ",";
+        p += juce::String(pattern[i]) + ",";
     }
     return p;
 }
+
 void PizChord::makeIntervalPattern()
 {
     if (chord.size() < 2)
     {
-        pattern.add (0);
+        pattern.add(0);
         return;
     }
     int interval = 0;
@@ -39,8 +45,10 @@ void PizChord::makeIntervalPattern()
     {
         interval = chord[i + 1] - chord[i];
         while (interval < 0)
+        {
             interval += 12;
-        pattern.add (interval);
+        }
+        pattern.add(interval);
     }
 }
 
@@ -49,82 +57,97 @@ bool operator<(const PizChord& first, const PizChord& second)
     int f = first.getSum();
     int s = second.getSum();
     if (f != s)
+    {
         return f < s;
+    }
 
     return first.getStringPattern() < second.getStringPattern();
 }
 
-ChordName::ChordName (juce::String chordName, juce::String noteString)
+ChordName::ChordName(juce::String chordName, juce::String noteString)
 {
     name    = chordName;
-    pattern = getIntervalString (noteString);
+    pattern = getIntervalString(noteString);
 }
 
-juce::String ChordName::getName (int rootNote, int bassNote, bool flats)
+juce::String ChordName::getName(int rootNote, int bassNote, bool flats)
 {
     if (name == "dim7" || name == "+")
+    {
         rootNote = bassNote;
-    juce::String chordName = getNoteNameWithoutOctave (rootNote, ! flats) + name;
+    }
+    juce::String chordName = getNoteNameWithoutOctave(rootNote, ! flats) + name;
     if (bassNote % 12 != rootNote % 12)
-        chordName += "/" + getNoteNameWithoutOctave (bassNote, ! flats);
+    {
+        chordName += "/" + getNoteNameWithoutOctave(bassNote, ! flats);
+    }
     return chordName;
 }
 
-bool ChordName::equals (juce::String& noteString)
+bool ChordName::equals(juce::String& noteString)
 {
-    return getIntervalString (noteString) == pattern;
+    return getIntervalString(noteString) == pattern;
 }
-bool ChordName::equals (juce::Array<int>& chord)
+
+bool ChordName::equals(juce::Array<int>& chord)
 {
-    return getIntervalString (chord).equalsIgnoreCase (pattern);
+    return getIntervalString(chord).equalsIgnoreCase(pattern);
 }
-bool ChordName::equals2 (juce::String& intervalString)
+
+bool ChordName::equals2(juce::String& intervalString)
 {
-    return intervalString.equalsIgnoreCase (pattern);
+    return intervalString.equalsIgnoreCase(pattern);
 }
-juce::String ChordName::getIntervalString (juce::String noteString)
+
+juce::String ChordName::getIntervalString(juce::String noteString)
 {
     juce::String p;
     juce::StringArray a;
-    a.addTokens (noteString, ",", juce::String());
+    a.addTokens(noteString, ",", juce::String());
 
     juce::Array<int> temp;
     for (int i = 0; i < a.size(); i++)
     {
-        temp.add (getNoteValue (a[i]));
+        temp.add(getNoteValue(a[i]));
     }
     root                     = temp[0];
-    juce::Array<int> stacked = getAsStackedChord (temp);
+    juce::Array<int> stacked = getAsStackedChord(temp);
     for (int i = 0; i < stacked.size(); i++)
     {
         if (stacked[i] == root)
+        {
             rootIndex = i;
+        }
         if (i < stacked.size() - 1)
         {
             int interval = stacked[i + 1] - stacked[i];
             while (interval < 0)
+            {
                 interval += 12;
-            p += juce::String (interval) + ",";
+            }
+            p += juce::String(interval) + ",";
         }
     }
     return p;
 }
 
-juce::String ChordName::getIntervalString (juce::Array<int> chord)
+juce::String ChordName::getIntervalString(juce::Array<int> chord)
 {
-    juce::Array<int> newChord = getAsStackedChord (chord);
+    juce::Array<int> newChord = getAsStackedChord(chord);
     juce::String p;
     for (int i = 0; i < chord.size() - 1; i++)
     {
         int interval = chord[i + 1] - chord[i];
         while (interval < 0)
+        {
             interval += 12;
-        p += juce::String (interval) + ",";
+        }
+        p += juce::String(interval) + ",";
     }
     return p;
 }
 
-juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
+juce::Array<int> getAsStackedChord(juce::Array<int>& chord, bool reduce)
 {
     juce::Array<int> temp;
     if (reduce)
@@ -132,17 +155,21 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
         //remove duplicate notes
         for (int i = 0; i < chord.size(); i++)
         {
-            temp.addIfNotAlreadyThere (chord[i] % 12);
+            temp.addIfNotAlreadyThere(chord[i] % 12);
         }
         if (temp.size() == 1)
+        {
             return temp;
+        }
     }
     else
-        temp.addArray (chord);
+    {
+        temp.addArray(chord);
+    }
 
     //sort
     juce::DefaultElementComparator<int> intsorter;
-    temp.sort (intsorter);
+    temp.sort(intsorter);
 
     int Minimum = -1;
     //the base chord is the one with the minimal energy function
@@ -150,14 +177,14 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
     //hence, the canonic chord is the chord in which the notes lie as closely spaced as possible
     juce::Array<PizChord> MinimumEnergyChordList;
 
-    PizChord tempChord0 (temp);
+    PizChord tempChord0(temp);
     //DBG("permutation: " + tempChord0.getStringPattern());
     Minimum = tempChord0.getSum();
-    MinimumEnergyChordList.add (tempChord0);
+    MinimumEnergyChordList.add(tempChord0);
 
-    while (std::next_permutation (temp.begin(), temp.end()))
+    while (std::next_permutation(temp.begin(), temp.end()))
     {
-        PizChord tempChord (temp);
+        PizChord tempChord(temp);
         //DBG("permutation: " + tempChord.getStringPattern());
         int S = tempChord.getSum();
         if (S < Minimum || Minimum == -1)
@@ -165,12 +192,12 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
             //new minimum found => discard what we found up to now
             Minimum = S;
             MinimumEnergyChordList.clear();
-            MinimumEnergyChordList.add (tempChord);
+            MinimumEnergyChordList.add(tempChord);
         }
         else if (S == Minimum)
         {
             //another chord with minimum energy => add it to the list
-            MinimumEnergyChordList.add (tempChord);
+            MinimumEnergyChordList.add(tempChord);
         }
     }
     //now we face a problem: multiple minimum energy chords can exist if more than 3 notes are present
@@ -178,7 +205,7 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
     //what note names are used. Normal "sort" will sort alphabetically. This is unusable.
     //We need to sort on the interval patterns instead, but return the chord that corresponds to the pattern.
     juce::DefaultElementComparator<PizChord> sorter;
-    MinimumEnergyChordList.sort (sorter);
+    MinimumEnergyChordList.sort(sorter);
     //DBG("picked" + MinimumEnergyChordList.getFirst().getStringPattern());
     return MinimumEnergyChordList.getFirst().getChord();
 }
@@ -186,92 +213,94 @@ juce::Array<int> getAsStackedChord (juce::Array<int>& chord, bool reduce)
 void fillChordDatabase()
 {
     if (ChordNames.size() > 0)
+    {
         return;
-    ChordNames.add (ChordName ("", "c,e,g"));
-    ChordNames.add (ChordName ("5", "c,g"));
-    ChordNames.add (ChordName ("6(no3)", "c,g,a"));
-    ChordNames.add (ChordName ("Maj7", "c,e,g,b"));
-    ChordNames.add (ChordName ("Maj7(#11)", "c,e,f#,b"));
-    ChordNames.add (ChordName ("add9", "c,e,g,d"));
-    ChordNames.add (ChordName ("Maj7(9)", "c,d,e,b"));
-    ChordNames.add (ChordName ("6(9)", "c,d,e,a"));
-    ChordNames.add (ChordName ("+", "c,e,g#"));
-    ChordNames.add (ChordName ("m", "c,eb,g"));
-    ChordNames.add (ChordName ("madd9", "c,eb,g,d"));
-    ChordNames.add (ChordName ("m7", "c,eb,g,bb"));
-    ChordNames.add (ChordName ("m7(9)", "c,d,eb,bb"));
-    ChordNames.add (ChordName ("mMaj7", "c,eb,g,b"));
-    ChordNames.add (ChordName ("mMaj7(9)", "c,d,eb,b"));
-    ChordNames.add (ChordName ("dim", "c,eb,f#"));
-    ChordNames.add (ChordName ("dim7", "c,eb,f#,a"));
-    ChordNames.add (ChordName ("7", "c,e,g,bb"));
-    ChordNames.add (ChordName ("7(no5)", "c,e,bb"));
-    ChordNames.add (ChordName ("7sus4", "c,f,g,bb"));
-    ChordNames.add (ChordName ("7(b5)", "c,e,f#,bb"));
-    ChordNames.add (ChordName ("7(9)", "c,d,e,bb"));
-    ChordNames.add (ChordName ("7(13)", "c,e,a,bb"));
-    ChordNames.add (ChordName ("7(b9)", "c,c#,e,bb"));
-    ChordNames.add (ChordName ("+7", "c,e,g#,bb")); //7(b13)
-    ChordNames.add (ChordName ("7(#9)", "c,eb,e,bb"));
-    ChordNames.add (ChordName ("sus4", "c,f,g"));
-    ChordNames.add (ChordName ("6add9", "c,e,g,a,d"));
-    ChordNames.add (ChordName ("Maj9", "c,e,g,b,d"));
-    ChordNames.add (ChordName ("9", "c,e,g,bb,d"));
-    ChordNames.add (ChordName ("13", "c,e,g,bb,d,a"));
-    ChordNames.add (ChordName ("13", "c,e,g,bb,d,f,a"));
-    ChordNames.add (ChordName ("13", "c,e,bb,d,a"));
-    ChordNames.add (ChordName ("m6", "c,eb,g,a"));
-    ChordNames.add (ChordName ("m6add9", "c,eb,g,a,d"));
-    ChordNames.add (ChordName ("m6/9", "c,eb,a,d"));
-    ChordNames.add (ChordName ("m7add13", "c,eb,g,a,bb"));
-    ChordNames.add (ChordName ("m9", "c,eb,g,bb,d"));
-    ChordNames.add (ChordName ("m11", "c,eb,g,bb,d,f"));
-    ChordNames.add (ChordName ("m11", "c,eb,bb,d,f"));
-    ChordNames.add (ChordName ("m13", "c,eb,g,bb,d,f,a"));
-    ChordNames.add (ChordName ("m9/Maj7", "c,eb,g,b,d"));
-    ChordNames.add (ChordName ("m9(b5)", "c,eb,gb,bb,d"));
-    ChordNames.add (ChordName ("m11(b5)", "c,eb,gb,bb,d,f"));
-    ChordNames.add (ChordName ("Maj7(#5)", "c,e,g#,b"));
-    ChordNames.add (ChordName ("Maj7(#11)", "c,e,g,b,f#"));
-    ChordNames.add (ChordName ("Maj9(#11)", "c,e,g,b,d,f#"));
-    ChordNames.add (ChordName ("7(b9)", "c,e,g,bb,db"));
-    ChordNames.add (ChordName ("7(#9)", "c,e,g,bb,d#"));
-    ChordNames.add (ChordName ("7(#5)(#9)", "c,e,g#,bb,d#"));
-    ChordNames.add (ChordName ("7(#11)", "c,e,g,bb,f#"));
-    ChordNames.add (ChordName ("9(#11)", "c,e,g,bb,d,f#"));
-    ChordNames.add (ChordName ("7(b9)(#11)", "c,e,g,bb,db,f#"));
-    ChordNames.add (ChordName ("13b5", "c,e,gb,bb,d,a"));
-    ChordNames.add (ChordName ("13b5", "c,e,gb,bb,d,f,a"));
-    ChordNames.add (ChordName ("13b9", "c,e,g,bb,db,a"));
-    ChordNames.add (ChordName ("13b9", "c,e,g,bb,db,f,a"));
-    ChordNames.add (ChordName ("13#11", "c,e,g,bb,d,f#,a"));
-    ChordNames.add (ChordName ("7(no3)", "c,g,bb"));
-    ChordNames.add (ChordName ("Maj7(no5)", "c,e,b"));
+    }
+    ChordNames.add(ChordName("", "c,e,g"));
+    ChordNames.add(ChordName("5", "c,g"));
+    ChordNames.add(ChordName("6(no3)", "c,g,a"));
+    ChordNames.add(ChordName("Maj7", "c,e,g,b"));
+    ChordNames.add(ChordName("Maj7(#11)", "c,e,f#,b"));
+    ChordNames.add(ChordName("add9", "c,e,g,d"));
+    ChordNames.add(ChordName("Maj7(9)", "c,d,e,b"));
+    ChordNames.add(ChordName("6(9)", "c,d,e,a"));
+    ChordNames.add(ChordName("+", "c,e,g#"));
+    ChordNames.add(ChordName("m", "c,eb,g"));
+    ChordNames.add(ChordName("madd9", "c,eb,g,d"));
+    ChordNames.add(ChordName("m7", "c,eb,g,bb"));
+    ChordNames.add(ChordName("m7(9)", "c,d,eb,bb"));
+    ChordNames.add(ChordName("mMaj7", "c,eb,g,b"));
+    ChordNames.add(ChordName("mMaj7(9)", "c,d,eb,b"));
+    ChordNames.add(ChordName("dim", "c,eb,f#"));
+    ChordNames.add(ChordName("dim7", "c,eb,f#,a"));
+    ChordNames.add(ChordName("7", "c,e,g,bb"));
+    ChordNames.add(ChordName("7(no5)", "c,e,bb"));
+    ChordNames.add(ChordName("7sus4", "c,f,g,bb"));
+    ChordNames.add(ChordName("7(b5)", "c,e,f#,bb"));
+    ChordNames.add(ChordName("7(9)", "c,d,e,bb"));
+    ChordNames.add(ChordName("7(13)", "c,e,a,bb"));
+    ChordNames.add(ChordName("7(b9)", "c,c#,e,bb"));
+    ChordNames.add(ChordName("+7", "c,e,g#,bb")); //7(b13)
+    ChordNames.add(ChordName("7(#9)", "c,eb,e,bb"));
+    ChordNames.add(ChordName("sus4", "c,f,g"));
+    ChordNames.add(ChordName("6add9", "c,e,g,a,d"));
+    ChordNames.add(ChordName("Maj9", "c,e,g,b,d"));
+    ChordNames.add(ChordName("9", "c,e,g,bb,d"));
+    ChordNames.add(ChordName("13", "c,e,g,bb,d,a"));
+    ChordNames.add(ChordName("13", "c,e,g,bb,d,f,a"));
+    ChordNames.add(ChordName("13", "c,e,bb,d,a"));
+    ChordNames.add(ChordName("m6", "c,eb,g,a"));
+    ChordNames.add(ChordName("m6add9", "c,eb,g,a,d"));
+    ChordNames.add(ChordName("m6/9", "c,eb,a,d"));
+    ChordNames.add(ChordName("m7add13", "c,eb,g,a,bb"));
+    ChordNames.add(ChordName("m9", "c,eb,g,bb,d"));
+    ChordNames.add(ChordName("m11", "c,eb,g,bb,d,f"));
+    ChordNames.add(ChordName("m11", "c,eb,bb,d,f"));
+    ChordNames.add(ChordName("m13", "c,eb,g,bb,d,f,a"));
+    ChordNames.add(ChordName("m9/Maj7", "c,eb,g,b,d"));
+    ChordNames.add(ChordName("m9(b5)", "c,eb,gb,bb,d"));
+    ChordNames.add(ChordName("m11(b5)", "c,eb,gb,bb,d,f"));
+    ChordNames.add(ChordName("Maj7(#5)", "c,e,g#,b"));
+    ChordNames.add(ChordName("Maj7(#11)", "c,e,g,b,f#"));
+    ChordNames.add(ChordName("Maj9(#11)", "c,e,g,b,d,f#"));
+    ChordNames.add(ChordName("7(b9)", "c,e,g,bb,db"));
+    ChordNames.add(ChordName("7(#9)", "c,e,g,bb,d#"));
+    ChordNames.add(ChordName("7(#5)(#9)", "c,e,g#,bb,d#"));
+    ChordNames.add(ChordName("7(#11)", "c,e,g,bb,f#"));
+    ChordNames.add(ChordName("9(#11)", "c,e,g,bb,d,f#"));
+    ChordNames.add(ChordName("7(b9)(#11)", "c,e,g,bb,db,f#"));
+    ChordNames.add(ChordName("13b5", "c,e,gb,bb,d,a"));
+    ChordNames.add(ChordName("13b5", "c,e,gb,bb,d,f,a"));
+    ChordNames.add(ChordName("13b9", "c,e,g,bb,db,a"));
+    ChordNames.add(ChordName("13b9", "c,e,g,bb,db,f,a"));
+    ChordNames.add(ChordName("13#11", "c,e,g,bb,d,f#,a"));
+    ChordNames.add(ChordName("7(no3)", "c,g,bb"));
+    ChordNames.add(ChordName("Maj7(no5)", "c,e,b"));
 
-    ChordNames.add (ChordName ("13b5b9", "c,e,gb,bb,db,a"));
-    ChordNames.add (ChordName ("13b5b9", "c,e,gb,bb,db,f,a"));
+    ChordNames.add(ChordName("13b5b9", "c,e,gb,bb,db,a"));
+    ChordNames.add(ChordName("13b5b9", "c,e,gb,bb,db,f,a"));
 
-    ChordNames.add (ChordName ("7#9#11", "c,e,g,bb,d#,f#"));
-    ChordNames.add (ChordName ("add#9", "c,e,g,d#"));
-    ChordNames.add (ChordName ("addb9", "c,e,g,db"));
-    ChordNames.add (ChordName ("11", "c,g,bb,d,f"));
-    ChordNames.add (ChordName ("11", "c,e,g,bb,d,f"));
-    ChordNames.add (ChordName ("add11", "c,e,g,f"));
-    ChordNames.add (ChordName ("Maj11", "c,e,g,b,d,f"));
-    ChordNames.add (ChordName ("Maj7add11", "c,e,g,b,f"));
-    ChordNames.add (ChordName ("7add11", "c,e,g,bb,f"));
-    ChordNames.add (ChordName ("m7b9", "c,eb,g,bb,db"));
-    ChordNames.add (ChordName ("+Maj9", "c,e,g#,b,d"));
-    ChordNames.add (ChordName ("+9", "c,e,g#,bb,d"));
-    ChordNames.add (ChordName ("mMaj11", "c,eb,g,b,d,f"));
-    ChordNames.add (ChordName ("+Maj11", "c,e,g#,b,d,f"));
-    ChordNames.add (ChordName ("+13", "c,e,g#,bb,d,f,a"));
-    ChordNames.add (ChordName ("+Maj13", "c,e,g#,b,d,f,a"));
-    ChordNames.add (ChordName ("Maj7sus4", "c,f,g,b"));
-    ChordNames.add (ChordName ("Maj9sus4", "c,f,g,b,d"));
-    ChordNames.add (ChordName ("7add13", "c,e,g,bb,a"));
-    ChordNames.add (ChordName ("mMaj7add11", "c,eb,g,b,f"));
-    ChordNames.add (ChordName ("7add11", "c,e,g,bb,f"));
+    ChordNames.add(ChordName("7#9#11", "c,e,g,bb,d#,f#"));
+    ChordNames.add(ChordName("add#9", "c,e,g,d#"));
+    ChordNames.add(ChordName("addb9", "c,e,g,db"));
+    ChordNames.add(ChordName("11", "c,g,bb,d,f"));
+    ChordNames.add(ChordName("11", "c,e,g,bb,d,f"));
+    ChordNames.add(ChordName("add11", "c,e,g,f"));
+    ChordNames.add(ChordName("Maj11", "c,e,g,b,d,f"));
+    ChordNames.add(ChordName("Maj7add11", "c,e,g,b,f"));
+    ChordNames.add(ChordName("7add11", "c,e,g,bb,f"));
+    ChordNames.add(ChordName("m7b9", "c,eb,g,bb,db"));
+    ChordNames.add(ChordName("+Maj9", "c,e,g#,b,d"));
+    ChordNames.add(ChordName("+9", "c,e,g#,bb,d"));
+    ChordNames.add(ChordName("mMaj11", "c,eb,g,b,d,f"));
+    ChordNames.add(ChordName("+Maj11", "c,e,g#,b,d,f"));
+    ChordNames.add(ChordName("+13", "c,e,g#,bb,d,f,a"));
+    ChordNames.add(ChordName("+Maj13", "c,e,g#,b,d,f,a"));
+    ChordNames.add(ChordName("Maj7sus4", "c,f,g,b"));
+    ChordNames.add(ChordName("Maj9sus4", "c,f,g,b,d"));
+    ChordNames.add(ChordName("7add13", "c,e,g,bb,a"));
+    ChordNames.add(ChordName("mMaj7add11", "c,eb,g,b,f"));
+    ChordNames.add(ChordName("7add11", "c,e,g,bb,f"));
 
     //ChordNames.add(ChordName("(It+6)"		, "ab,c,f#"));
     //ChordNames.add(ChordName("(Fr+6)"		, "ab,c,d,f#"));
@@ -300,10 +329,12 @@ void fillChordDatabase()
     //ChordNames.add(ChordName("m7(no5)"      , "c,eb,bb"));
 }
 
-juce::String getIntervalName (int semitones)
+juce::String getIntervalName(int semitones)
 {
     while (semitones > 21)
+    {
         semitones -= 12;
+    }
 
     switch (semitones)
     {
@@ -356,82 +387,104 @@ juce::String getIntervalName (int semitones)
     }
 }
 
-juce::String listNoteNames (juce::Array<int> chord, bool flats)
+juce::String listNoteNames(juce::Array<int> chord, bool flats)
 {
     juce::String s;
     for (int i = 0; i < chord.size() - 1; i++)
-        s += getNoteNameWithoutOctave (chord[i], ! flats) + ", ";
-    s += getNoteNameWithoutOctave (chord[chord.size() - 1], ! flats);
+    {
+        s += getNoteNameWithoutOctave(chord[i], ! flats) + ", ";
+    }
+    s += getNoteNameWithoutOctave(chord[chord.size() - 1], ! flats);
     return s;
 }
 
-juce::String getFirstRecognizedChord (juce::Array<int> chord, bool flats)
+juce::String getFirstRecognizedChord(juce::Array<int> chord, bool flats)
 {
     if (chord.size() == 0)
+    {
         return " ";
+    }
     if (chord.size() == 2)
-        return getIntervalName (chord[1] - chord[0]) + " (" + listNoteNames (chord, flats) + ")";
+    {
+        return getIntervalName(chord[1] - chord[0]) + " (" + listNoteNames(chord, flats) + ")";
+    }
 
     juce::Array<int> temp;
     for (int i = 0; i < chord.size(); i++)
     {
-        temp.addIfNotAlreadyThere (chord[i] % 12);
+        temp.addIfNotAlreadyThere(chord[i] % 12);
     }
 
     if (temp.size() >= 9)
-        return getNoteNameWithoutOctave (chord[0], ! flats) + " Note Soup";
+    {
+        return getNoteNameWithoutOctave(chord[0], ! flats) + " Note Soup";
+    }
 
-    juce::Array<int> stackedChord = getAsStackedChord (temp, false);
+    juce::Array<int> stackedChord = getAsStackedChord(temp, false);
     if (stackedChord.size() == 1)
-        return "(" + getNoteNameWithoutOctave (stackedChord[0], ! flats) + ")";
+    {
+        return "(" + getNoteNameWithoutOctave(stackedChord[0], ! flats) + ")";
+    }
 
-    juce::String s = ChordName::getIntervalString (stackedChord);
+    juce::String s = ChordName::getIntervalString(stackedChord);
     for (int i = 0; i < ChordNames.size(); i++)
     {
-        if (ChordNames.getReference (i).equals2 (s))
+        if (ChordNames.getReference(i).equals2(s))
         {
-            return ChordNames.getReference (i).getName (stackedChord[ChordNames.getReference (i).getRootIndex()], chord[0], flats);
+            return ChordNames.getReference(i).getName(stackedChord[ChordNames.getReference(i).getRootIndex()], chord[0], flats);
         }
     }
-    return "(" + listNoteNames (temp, flats) + ")"; // "Unknown chord";
+    return "(" + listNoteNames(temp, flats) + ")"; // "Unknown chord";
 }
 
-juce::String getIntervalStringFromNoteNames (int root, juce::String noteString, int bottomOctave)
+juce::String getIntervalStringFromNoteNames(int root, juce::String noteString, int bottomOctave)
 {
-    bool multichannel = noteString.contains (".");
+    bool multichannel = noteString.contains(".");
     juce::StringArray sa;
-    sa.addTokens (noteString, " ,", juce::String());
+    sa.addTokens(noteString, " ,", juce::String());
     bool absolute;
-    int bass = getNoteValue (sa[0].upToFirstOccurrenceOf (".", false, false), bottomOctave, absolute);
+    int bass = getNoteValue(sa[0].upToFirstOccurrenceOf(".", false, false), bottomOctave, absolute);
     int last = 0;
     juce::String string;
     if (bass != NOT_A_NOTE)
     {
-        int channel = multichannel ? sa[0].fromFirstOccurrenceOf (".", false, false).getIntValue() : 0;
+        int channel = multichannel ? sa[0].fromFirstOccurrenceOf(".", false, false).getIntValue() : 0;
 
         if (! absolute)
         {
             root %= 12;
             if (bass > root)
+            {
                 bass -= 12;
+            }
             last = bass - root;
             if (channel > 0)
-                string += juce::String (last) + "." + juce::String (channel);
+            {
+                string += juce::String(last) + "." + juce::String(channel);
+            }
             else
-                string += juce::String (last);
+            {
+                string += juce::String(last);
+            }
             for (int i = 1; i < sa.size(); i++)
             {
-                const int note = getNoteValue (sa[i].upToFirstOccurrenceOf (".", false, false));
+                const int note = getNoteValue(sa[i].upToFirstOccurrenceOf(".", false, false));
                 if (note != NOT_A_NOTE)
                 {
                     int step = note - root;
                     while (step - last < 0)
+                    {
                         step += 12;
-                    channel = sa[i].fromFirstOccurrenceOf (".", false, false).getIntValue();
+                    }
+                    channel = sa[i].fromFirstOccurrenceOf(".", false, false).getIntValue();
                     if (channel > 0)
-                        string += " " + juce::String (step) + "." + juce::String (channel);
+                    {
+                        string += " " + juce::String(step) + "." + juce::String(channel);
+                    }
                     else
-                        string += " " + juce::String (step);
+                    {
+                        string += " " + juce::String(step);
+                    }
                     last = step;
                 }
             }
@@ -440,22 +493,32 @@ juce::String getIntervalStringFromNoteNames (int root, juce::String noteString, 
         {
             last = bass - root;
             if (channel > 0)
-                string += juce::String (last) + "." + juce::String (channel);
+            {
+                string += juce::String(last) + "." + juce::String(channel);
+            }
             else
-                string += juce::String (last);
+            {
+                string += juce::String(last);
+            }
             for (int i = 1; i < sa.size(); i++)
             {
-                const int note = getNoteValue (sa[i].upToFirstOccurrenceOf (".", false, false), bottomOctave, absolute);
+                const int note = getNoteValue(sa[i].upToFirstOccurrenceOf(".", false, false), bottomOctave, absolute);
                 if (note != NOT_A_NOTE)
                 {
                     int step = note - root;
                     while (step - last < 0)
+                    {
                         step += 12;
-                    channel = sa[i].fromFirstOccurrenceOf (".", false, false).getIntValue();
+                    }
+                    channel = sa[i].fromFirstOccurrenceOf(".", false, false).getIntValue();
                     if (channel > 0)
-                        string += " " + juce::String (step) + "." + juce::String (channel);
+                    {
+                        string += " " + juce::String(step) + "." + juce::String(channel);
+                    }
                     else
-                        string += " " + juce::String (step);
+                    {
+                        string += " " + juce::String(step);
+                    }
                     last = step;
                 }
             }
@@ -464,27 +527,39 @@ juce::String getIntervalStringFromNoteNames (int root, juce::String noteString, 
     else
     {
         root %= 12;
-        bass = getIntervalValue (sa[0].upToFirstOccurrenceOf (".", false, false));
+        bass = getIntervalValue(sa[0].upToFirstOccurrenceOf(".", false, false));
         if (bass > root)
+        {
             bass -= 12;
+        }
         last        = bass - root;
-        int channel = multichannel ? sa[0].fromFirstOccurrenceOf (".", false, false).getIntValue() : 0;
+        int channel = multichannel ? sa[0].fromFirstOccurrenceOf(".", false, false).getIntValue() : 0;
         if (channel > 0)
-            string += juce::String (last) + "." + juce::String (channel);
+        {
+            string += juce::String(last) + "." + juce::String(channel);
+        }
         else
-            string += juce::String (last);
+        {
+            string += juce::String(last);
+        }
         for (int i = 1; i < sa.size(); i++)
         {
-            const int note = getIntervalValue (sa[i].upToFirstOccurrenceOf (".", false, false));
+            const int note = getIntervalValue(sa[i].upToFirstOccurrenceOf(".", false, false));
             if (note != NOT_A_NOTE)
             {
                 int step = note - root;
                 while (step - last < 0)
+                {
                     step += 12;
+                }
                 if (channel > 0)
-                    string += " " + juce::String (step) + "." + juce::String (channel);
+                {
+                    string += " " + juce::String(step) + "." + juce::String(channel);
+                }
                 else
-                    string += " " + juce::String (step);
+                {
+                    string += " " + juce::String(step);
+                }
                 last = step;
             }
         }

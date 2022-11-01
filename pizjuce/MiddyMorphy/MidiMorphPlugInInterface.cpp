@@ -1,5 +1,6 @@
 
 #include "MidiMorphPlugInInterface.h"
+
 #include "MidiMorphGUI.h"
 
 using juce::jmax;
@@ -23,33 +24,33 @@ MidiMorphPlugInInterface::~MidiMorphPlugInInterface()
 {
 }
 
-void MidiMorphPlugInInterface::prepareToPlay (double sampleRate, int estimatedSamplesPerBlock)
+void MidiMorphPlugInInterface::prepareToPlay(double sampleRate, int estimatedSamplesPerBlock)
 {
 }
 
-const juce::String MidiMorphPlugInInterface::getInputChannelName (const int channelIndex) const
+const juce::String MidiMorphPlugInInterface::getInputChannelName(const int channelIndex) const
 {
-    return "getInputChannelName(" + juce::String (channelIndex) + ")";
+    return "getInputChannelName(" + juce::String(channelIndex) + ")";
 }
 
-const juce::String MidiMorphPlugInInterface::getOutputChannelName (const int channelIndex) const
+const juce::String MidiMorphPlugInInterface::getOutputChannelName(const int channelIndex) const
 {
-    return "getOutputChannelName(" + juce::String (channelIndex) + ")";
+    return "getOutputChannelName(" + juce::String(channelIndex) + ")";
 }
 
-bool MidiMorphPlugInInterface::isInputChannelStereoPair (int index) const
+bool MidiMorphPlugInInterface::isInputChannelStereoPair(int index) const
 {
     return true;
 }
 
-bool MidiMorphPlugInInterface::isOutputChannelStereoPair (int index) const
+bool MidiMorphPlugInInterface::isOutputChannelStereoPair(int index) const
 {
     return true;
 }
 
 juce::AudioProcessorEditor* MidiMorphPlugInInterface::createEditor()
 {
-    return new MidiMorphGUI (this);
+    return new MidiMorphGUI(this);
 }
 
 int MidiMorphPlugInInterface::getNumParameters()
@@ -57,7 +58,7 @@ int MidiMorphPlugInInterface::getNumParameters()
     return 2;
 }
 
-const juce::String MidiMorphPlugInInterface::getParameterName (int parameterIndex)
+const juce::String MidiMorphPlugInInterface::getParameterName(int parameterIndex)
 {
     if (parameterIndex == 0)
     {
@@ -70,7 +71,7 @@ const juce::String MidiMorphPlugInInterface::getParameterName (int parameterInde
     return juce::String();
 }
 
-float MidiMorphPlugInInterface::getParameter (int parameterIndex)
+float MidiMorphPlugInInterface::getParameter(int parameterIndex)
 {
     if (parameterIndex == 0)
     {
@@ -83,27 +84,27 @@ float MidiMorphPlugInInterface::getParameter (int parameterIndex)
     return 0.f;
 }
 
-const juce::String MidiMorphPlugInInterface::getParameterText (int parameterIndex)
+const juce::String MidiMorphPlugInInterface::getParameterText(int parameterIndex)
 {
-    return juce::String (getParameter (parameterIndex));
+    return juce::String(getParameter(parameterIndex));
 }
 
-void MidiMorphPlugInInterface::setParameter (int parameterIndex, float newValue)
+void MidiMorphPlugInInterface::setParameter(int parameterIndex, float newValue)
 {
-    if (newValue != getParameter (parameterIndex))
+    if (newValue != getParameter(parameterIndex))
     {
         if (parameterIndex == 0)
         {
-            core.setCursorXRatio (newValue);
+            core.setCursorXRatio(newValue);
         }
         else if (parameterIndex == 1)
         {
-            core.setCursorYRatio (newValue);
+            core.setCursorYRatio(newValue);
         }
     }
 }
 
-bool MidiMorphPlugInInterface::isParameterAutomatable (int parameterIndex)
+bool MidiMorphPlugInInterface::isParameterAutomatable(int parameterIndex)
 {
     return true;
 }
@@ -118,38 +119,38 @@ int MidiMorphPlugInInterface::getCurrentProgram()
     return 0;
 }
 
-void MidiMorphPlugInInterface::setCurrentProgram (int index)
+void MidiMorphPlugInInterface::setCurrentProgram(int index)
 {
 }
 
-const juce::String MidiMorphPlugInInterface::getProgramName (int index)
+const juce::String MidiMorphPlugInInterface::getProgramName(int index)
 {
-    return "getProgramName(" + juce::String (index) + ")";
+    return "getProgramName(" + juce::String(index) + ")";
 }
 
-void MidiMorphPlugInInterface::changeProgramName (int index, const juce::String& newName)
+void MidiMorphPlugInInterface::changeProgramName(int index, const juce::String& newName)
 {
 }
 
-void MidiMorphPlugInInterface::setStateInformation (const void* data, int sizeInBytes)
+void MidiMorphPlugInInterface::setStateInformation(const void* data, int sizeInBytes)
 {
-    auto state = AudioProcessor::getXmlFromBinary (data, sizeInBytes);
+    auto state = AudioProcessor::getXmlFromBinary(data, sizeInBytes);
     if (state != nullptr)
     {
-        core.setFromXml (state.get());
+        core.setFromXml(state.get());
     }
 }
 
-void MidiMorphPlugInInterface::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages)
+void MidiMorphPlugInInterface::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages)
 {
     for (auto&& m : midiMessages)
     {
         auto msg = m.getMessage();
-        core.onMidiEvent (msg);
+        core.onMidiEvent(msg);
     }
 
     int delta;
-    int stepSize = core.getUpdateRateSmpls (roundToInt (getSampleRate()));
+    int stepSize = core.getUpdateRateSmpls(roundToInt(getSampleRate()));
 
     double newSamplepos = samplePos + buffer.getNumSamples();
 
@@ -157,17 +158,17 @@ void MidiMorphPlugInInterface::processBlock (juce::AudioSampleBuffer& buffer, ju
 
     while (sendPos <= newSamplepos && core.hasNewMidi())
     {
-        delta = roundToInt (jmax ((double) 0, sendPos - samplePos));
-        core.getMidiMessages (delta, midiMessages);
+        delta = roundToInt(jmax((double) 0, sendPos - samplePos));
+        core.getMidiMessages(delta, midiMessages);
 
         sendPos += stepSize;
     }
     samplePos += buffer.getNumSamples();
 }
 
-void MidiMorphPlugInInterface::getStateInformation (juce::MemoryBlock& destData)
+void MidiMorphPlugInInterface::getStateInformation(juce::MemoryBlock& destData)
 {
-    juce::AudioProcessor::copyXmlToBinary (*core.getXml ("midimorph"), destData);
+    juce::AudioProcessor::copyXmlToBinary(*core.getXml("midimorph"), destData);
 }
 
 void MidiMorphPlugInInterface::releaseResources()

@@ -1,31 +1,31 @@
 #include "midiChordHold.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiChordHold (audioMaster);
+    return new MidiChordHold(audioMaster);
 }
 
 //-----------------------------------------------------------------------------
-MidiChordHold::MidiChordHold (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, 1, kNumParams)
+MidiChordHold::MidiChordHold(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, 1, kNumParams)
 {
-    CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-    if (readDefaultBank (PLUG_NAME, defaultBank))
+    CFxBank* defaultBank = new CFxBank(numPrograms, numParams);
+    if (readDefaultBank(PLUG_NAME, defaultBank))
     {
         if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
         {
             for (int i = 0; i < kNumParams; i++)
             {
-                param[i] = defaultBank->GetProgParm (0, i);
+                param[i] = defaultBank->GetProgParm(0, i);
             }
-            strcpy (_programName, defaultBank->GetProgramName (0));
+            strcpy(_programName, defaultBank->GetProgramName(0));
         }
     }
     else
     {
         // built-in programs
-        strcpy (_programName, "Chord Holder"); // default program name
+        strcpy(_programName, "Chord Holder"); // default program name
         param[kParam01] = 1.0f;
         param[kChannel] = 0.0f;
     }
@@ -34,13 +34,15 @@ MidiChordHold::MidiChordHold (audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
     }
 
     holding     = false;
     waiting     = true;
     wasOn       = false;
-    lastChannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+    lastChannel = FLOAT_TO_CHANNEL015(param[kChannel]);
 
     init();
 }
@@ -51,30 +53,34 @@ MidiChordHold::~MidiChordHold()
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChordHold::setParameter (VstInt32 index, float value)
+void MidiChordHold::setParameter(VstInt32 index, float value)
 {
     if (index < kNumParams)
+    {
         param[index] = value;
+    }
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiChordHold::getParameter (VstInt32 index)
+float MidiChordHold::getParameter(VstInt32 index)
 {
     if (index < kNumParams)
+    {
         return param[index];
+    }
     return 0;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChordHold::getParameterName (VstInt32 index, char* label)
+void MidiChordHold::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kParam01:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         default:
             break;
@@ -82,27 +88,31 @@ void MidiChordHold::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChordHold::getParameterDisplay (VstInt32 index, char* text)
+void MidiChordHold::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kParam01:
             if (param[index] < 0.5)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         case kChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[kChannel]) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[kChannel]) + 1);
             break;
         default:
             break;
     }
 }
 
-void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiChordHold::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int inputChannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+    const int inputChannel = FLOAT_TO_CHANNEL015(param[kChannel]);
     const bool on          = param[kParam01] >= 0.5f;
 
     if ((! on && wasOn) || (inputChannel != lastChannel))
@@ -121,7 +131,7 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         kill.midiData[1] = n;
                         kill.midiData[2] = 0;
                         kill.deltaFrames = 0;
-                        outputs[0].push_back (kill);
+                        outputs[0].push_back(kill);
                         held_notes[n][c] = false;
                     }
                 }
@@ -145,7 +155,9 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         bool discard = false;
 
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         if (status == MIDI_NOTEON)
         {
@@ -162,13 +174,13 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             kill.midiData[0]  = MIDI_NOTEOFF | channel;
                             kill.midiData[1]  = n;
                             kill.midiData[2]  = 0;
-                            outputs[0].push_back (kill);
+                            outputs[0].push_back(kill);
                             held_notes[n][channel] = false;
                         }
                     }
                     holding = false;
                     waiting = true;
-                    dbg ("next chord, wait for noteoff");
+                    dbg("next chord, wait for noteoff");
                 }
             }
             held_notes[data1][channel] = true;
@@ -181,23 +193,25 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     //ignore noteoff
                     discard = true;
-                    dbg ("holding");
+                    dbg("holding");
                 }
                 else if (waiting)
                 {
                     holding = true;
                     waiting = false;
                     discard = true;
-                    dbg ("waiting (noteoff)");
+                    dbg("waiting (noteoff)");
                 }
                 else
                 {
                     held_notes[data1][channel] = false;
-                    dbg ("not holding or waiting");
+                    dbg("not holding or waiting");
                 }
             }
             else
+            {
                 held_notes[data1][channel] = false;
+            }
         }
         else if (status == MIDI_CONTROLCHANGE)
         {
@@ -214,7 +228,7 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             kill.midiData[1] = n;
                             kill.midiData[2] = 0;
                             kill.deltaFrames = 0;
-                            outputs[0].push_back (kill);
+                            outputs[0].push_back(kill);
                             held_notes[n][c] = false;
                         }
                     }
@@ -224,7 +238,9 @@ void MidiChordHold::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             }
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     }
     wasOn = on;
 }

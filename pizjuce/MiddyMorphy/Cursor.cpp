@@ -1,8 +1,9 @@
 
 #include "Cursor.h"
+
 #include "MidiMorph.h"
 
-Cursor::Cursor (MidiMorph* core)
+Cursor::Cursor(MidiMorph* core)
 {
     this->core = core;
     this->size = 50;

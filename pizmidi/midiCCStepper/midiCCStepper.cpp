@@ -1,9 +1,9 @@
 #include "midiCCStepper.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiCCStepper (audioMaster);
+    return new MidiCCStepper(audioMaster);
 }
 
 MidiCCStepperProgram::MidiCCStepperProgram()
@@ -35,17 +35,19 @@ MidiCCStepperProgram::MidiCCStepperProgram()
         }
     }
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiCCStepper::MidiCCStepper (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams)
+MidiCCStepper::MidiCCStepper(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams)
 {
     programs = new MidiCCStepperProgram[numPrograms];
 
     if (programs)
-        setProgram (0);
+    {
+        setProgram(0);
+    }
 
     lastTime = 0 - samplesPerStep;
 
@@ -56,44 +58,48 @@ MidiCCStepper::MidiCCStepper (audioMasterCallback audioMaster)
 MidiCCStepper::~MidiCCStepper()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiCCStepper::setProgram (VstInt32 program)
+void MidiCCStepper::setProgram(VstInt32 program)
 {
     MidiCCStepperProgram* ap = &programs[program];
 
     curProgram = program;
     for (int i = 0; i < kNumParams; i++)
-        setParameter (i, ap->param[i]);
+    {
+        setParameter(i, ap->param[i]);
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiCCStepper::setProgramName (char* name)
+void MidiCCStepper::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiCCStepper::getProgramName (char* name)
+void MidiCCStepper::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiCCStepper::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiCCStepper::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCStepper::setParameter (VstInt32 index, float value)
+void MidiCCStepper::setParameter(VstInt32 index, float value)
 {
     MidiCCStepperProgram* ap = &programs[curProgram];
     param[index] = ap->param[index] = value;
@@ -101,57 +107,105 @@ void MidiCCStepper::setParameter (VstInt32 index, float value)
     {
         case kLowCC:
             if (value > param[kHighCC])
-                setParameterAutomated (kHighCC, value);
+            {
+                setParameterAutomated(kHighCC, value);
+            }
             break;
         case kHighCC:
             if (value < param[kLowCC])
-                setParameterAutomated (kLowCC, value);
+            {
+                setParameterAutomated(kLowCC, value);
+            }
             break;
         case kTimeQ: //beatdiv = "how many fit in a beat"
             if (param[index] == 0.0f)
+            {
                 beatdiv = 32.0f; //128th
+            }
             else if (param[index] < 0.05f)
+            {
                 beatdiv = 24.f; //64th triplet
+            }
             else if (param[index] < 0.1f)
+            {
                 beatdiv = 21.33333333f; //dotted 128th
+            }
             else if (param[index] < 0.15f)
+            {
                 beatdiv = 16.f; //64th
+            }
             else if (param[index] < 0.2f)
+            {
                 beatdiv = 12.f; //32nd triplet
+            }
             else if (param[index] < 0.25f)
+            {
                 beatdiv = 10.66666667f; //dotted 64th
+            }
             else if (param[index] < 0.3f)
+            {
                 beatdiv = 8.f; //32nd
+            }
             else if (param[index] < 0.35f)
+            {
                 beatdiv = 6.f; //16th triplet
+            }
             else if (param[index] < 0.4f)
+            {
                 beatdiv = 5.333333333f; //dotted 32nd
+            }
             else if (param[index] < 0.45)
+            {
                 beatdiv = 4.f; //16th
+            }
             else if (param[index] < 0.5f)
+            {
                 beatdiv = 3.f; //8th triplet
+            }
             else if (param[index] < 0.55f)
+            {
                 beatdiv = 2.666666667f; //dotted 16th
+            }
             else if (param[index] < 0.6f)
+            {
                 beatdiv = 2.f; //8th
+            }
             else if (param[index] < 0.65f)
+            {
                 beatdiv = 1.5f; //quarter triplet
+            }
             else if (param[index] < 0.7f)
+            {
                 beatdiv = 1.333333333f; //dotted 8th
+            }
             else if (param[index] < 0.75f)
+            {
                 beatdiv = 1.f; //quarter
+            }
             else if (param[index] < 0.8f)
+            {
                 beatdiv = 0.75f; //half triplet
+            }
             else if (param[index] < 0.85f)
+            {
                 beatdiv = 0.666666667f; //dotted quarter
+            }
             else if (param[index] < 0.9f)
+            {
                 beatdiv = 0.5; //half
+            }
             else if (param[index] < 0.95f)
+            {
                 beatdiv = 0.375f; //whole triplet
+            }
             else if (param[index] < 1.0f)
+            {
                 beatdiv = 0.333333333f; //dotted half
+            }
             else
+            {
                 beatdiv = 0.25f; //whole
+            }
             break;
             //case kBeatOffset:
             //     if (param[kSync]<0.5f)
@@ -163,165 +217,235 @@ void MidiCCStepper::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiCCStepper::getParameter (VstInt32 index)
+float MidiCCStepper::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCStepper::getParameterName (VstInt32 index, char* label)
+void MidiCCStepper::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kValuePower:
-            strcpy (label, "Val Quantize");
+            strcpy(label, "Val Quantize");
             break;
         case kValueQ:
-            strcpy (label, "ValQ Steps");
+            strcpy(label, "ValQ Steps");
             break;
         case kTimePower:
-            strcpy (label, "Time Quantize");
+            strcpy(label, "Time Quantize");
             break;
         case kTimeQ:
-            strcpy (label, "Note Value");
+            strcpy(label, "Note Value");
             break;
         case kSync:
-            strcpy (label, "Host Sync");
+            strcpy(label, "Host Sync");
             break;
         case kBeatOffset:
-            strcpy (label, "Beat Offset");
+            strcpy(label, "Beat Offset");
             break;
         case kLowCC:
-            strcpy (label, "Low CC");
+            strcpy(label, "Low CC");
             break;
         case kHighCC:
-            strcpy (label, "High CC");
+            strcpy(label, "High CC");
             break;
         case kCCOffset:
-            strcpy (label, "CC Shift");
+            strcpy(label, "CC Shift");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         case kThru:
-            strcpy (label, "NotesThru");
+            strcpy(label, "NotesThru");
             break;
         case kSendAfter:
-            strcpy (label, "SendCCAfter");
+            strcpy(label, "SendCCAfter");
             break;
         default:
-            sprintf (label, "param %d", index);
+            sprintf(label, "param %d", index);
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiCCStepper::getParameterDisplay (VstInt32 index, char* text)
+void MidiCCStepper::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kTimeQ:
             if (param[index] == 0.0f)
-                strcpy (text, "128");
+            {
+                strcpy(text, "128");
+            }
             else if (param[index] < 0.05f)
-                strcpy (text, "64 triplet");
+            {
+                strcpy(text, "64 triplet");
+            }
             else if (param[index] < 0.1f)
-                strcpy (text, "dotted 128");
+            {
+                strcpy(text, "dotted 128");
+            }
             else if (param[index] < 0.15f)
-                strcpy (text, "64");
+            {
+                strcpy(text, "64");
+            }
             else if (param[index] < 0.2f)
-                strcpy (text, "32 triplet");
+            {
+                strcpy(text, "32 triplet");
+            }
             else if (param[index] < 0.25f)
-                strcpy (text, "dotted 64");
+            {
+                strcpy(text, "dotted 64");
+            }
             else if (param[index] < 0.3f)
-                strcpy (text, "32");
+            {
+                strcpy(text, "32");
+            }
             else if (param[index] < 0.35f)
-                strcpy (text, "16 triplet");
+            {
+                strcpy(text, "16 triplet");
+            }
             else if (param[index] < 0.4f)
-                strcpy (text, "dotted 32");
+            {
+                strcpy(text, "dotted 32");
+            }
             else if (param[index] < 0.45)
-                strcpy (text, "16");
+            {
+                strcpy(text, "16");
+            }
             else if (param[index] < 0.5f)
-                strcpy (text, "8 triplet");
+            {
+                strcpy(text, "8 triplet");
+            }
             else if (param[index] < 0.55f)
-                strcpy (text, "dotted 16");
+            {
+                strcpy(text, "dotted 16");
+            }
             else if (param[index] < 0.6f)
-                strcpy (text, "8");
+            {
+                strcpy(text, "8");
+            }
             else if (param[index] < 0.65f)
-                strcpy (text, "4 triplet");
+            {
+                strcpy(text, "4 triplet");
+            }
             else if (param[index] < 0.7f)
-                strcpy (text, "dotted 8");
+            {
+                strcpy(text, "dotted 8");
+            }
             else if (param[index] < 0.75f)
-                strcpy (text, "4");
+            {
+                strcpy(text, "4");
+            }
             else if (param[index] < 0.8f)
-                strcpy (text, "2 triplet");
+            {
+                strcpy(text, "2 triplet");
+            }
             else if (param[index] < 0.85f)
-                strcpy (text, "dotted 4");
+            {
+                strcpy(text, "dotted 4");
+            }
             else if (param[index] < 0.9f)
-                strcpy (text, "2");
+            {
+                strcpy(text, "2");
+            }
             else if (param[index] < 0.95f)
-                strcpy (text, "whole triplet");
+            {
+                strcpy(text, "whole triplet");
+            }
             else if (param[index] < 1.0f)
-                strcpy (text, "dotted 2");
+            {
+                strcpy(text, "dotted 2");
+            }
             else
-                strcpy (text, "whole");
+            {
+                strcpy(text, "whole");
+            }
             break;
         case kValueQ:
-            sprintf (text, "%d", roundToInt (param[kValueQ] * 63.f) + 2);
-            if (roundToInt (param[kValueQ] * 63.f) == 63)
-                sprintf (text, "128");
+            sprintf(text, "%d", roundToInt(param[kValueQ] * 63.f) + 2);
+            if (roundToInt(param[kValueQ] * 63.f) == 63)
+            {
+                sprintf(text, "128");
+            }
             break;
         case kLowCC:
-            sprintf (text, "%d", FLOAT_TO_MIDI (param[index]));
+            sprintf(text, "%d", FLOAT_TO_MIDI(param[index]));
             break;
         case kHighCC:
-            sprintf (text, "%d", FLOAT_TO_MIDI (param[index]));
+            sprintf(text, "%d", FLOAT_TO_MIDI(param[index]));
             break;
         case kCCOffset:
-            sprintf (text, "%d", roundToInt (254.f * param[index]) - 127);
+            sprintf(text, "%d", roundToInt(254.f * param[index]) - 127);
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                strcpy (text, "Any");
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
+                strcpy(text, "Any");
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         case kThru:
             if (param[index] < 0.5f)
-                strcpy (text, "Block Notes");
+            {
+                strcpy(text, "Block Notes");
+            }
             else
-                strcpy (text, "Notes Thru");
+            {
+                strcpy(text, "Notes Thru");
+            }
             break;
         case kTimePower:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         case kSendAfter:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         case kValuePower:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         case kSync:
             if (param[index] < 0.5f)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         default:
-            sprintf (text, "%f", param[index]);
+            sprintf(text, "%f", param[index]);
     }
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiCCStepper::init (void)
+bool MidiCCStepper::init(void)
 {
     isplaying       = false;
     wasplaying      = false;
@@ -348,22 +472,30 @@ void MidiCCStepper::preProcess()
 {
     // preparing Process
     VstTimeInfo* timeInfo = NULL;
-    timeInfo              = getTimeInfo (0xffff); //ALL
+    timeInfo              = getTimeInfo(0xffff); //ALL
 
     if (timeInfo)
     {
         if (kVstTempoValid & timeInfo->flags)
+        {
             _bpm = (float) timeInfo->tempo;
+        }
         if (kVstPpqPosValid & timeInfo->flags)
+        {
             _ppq = timeInfo->ppqPos;
+        }
         if (kVstTransportPlaying & timeInfo->flags)
+        {
             isplaying = true;
+        }
         else
+        {
             isplaying = false;
+        }
     }
 
-    samplesPerStep = roundToInt (60.f * sampleRate / (beatdiv * _bpm));
-    samplesPerBeat = roundToInt (60.f * sampleRate / _bpm);
+    samplesPerStep = roundToInt(60.f * sampleRate / (beatdiv * _bpm));
+    samplesPerBeat = roundToInt(60.f * sampleRate / _bpm);
 
     _ppq += param[kBeatOffset] / beatdiv;
     totalSteps = (int) (_ppq * beatdiv);
@@ -371,15 +503,17 @@ void MidiCCStepper::preProcess()
     _cleanMidiOutBuffers();
 }
 
-void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiCCStepper::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int lowcc    = FLOAT_TO_MIDI (param[kLowCC]);
-    const int hicc     = FLOAT_TO_MIDI (param[kHighCC]);
-    const int ccoffset = roundToInt (param[kCCOffset] * 254.f) - 127;
+    const int lowcc    = FLOAT_TO_MIDI(param[kLowCC]);
+    const int hicc     = FLOAT_TO_MIDI(param[kHighCC]);
+    const int ccoffset = roundToInt(param[kCCOffset] * 254.f) - 127;
     bool von           = param[kValuePower] >= 0.5f;
-    if (roundToInt (param[kValueQ] * 63.f))
-        von = false;                                                         //128 steps
-    const float vq       = (float) (roundToInt (param[kValueQ] * 62.f) + 1); //number of steps (2..64)
+    if (roundToInt(param[kValueQ] * 63.f))
+    {
+        von = false; //128 steps
+    }
+    const float vq       = (float) (roundToInt(param[kValueQ] * 62.f) + 1); //number of steps (2..64)
     const float invvq    = 127.f / vq;
     const bool ton       = param[kTimePower] >= 0.5f;
     const bool sync      = param[kSync] >= 0.5f;
@@ -392,7 +526,7 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
     int s = leftOverSamples;
     if (sync)
     {
-        leftOverSamples = roundToInt (((double) totalSteps + 1.0 - _ppq * beatdiv) * (double) samplesPerStep);
+        leftOverSamples = roundToInt(((double) totalSteps + 1.0 - _ppq * beatdiv) * (double) samplesPerStep);
         if (isplaying)
         {
             s = leftOverSamples;
@@ -424,9 +558,11 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
         //reset these for every event
         bool discard = false;
         int outcc    = (data1 + ccoffset) & 0x7f;
-        int ch       = FLOAT_TO_CHANNEL (param[kChannel]);
+        int ch       = FLOAT_TO_CHANNEL(param[kChannel]);
         if (ch == -1)
+        {
             ch = channel; //any channel
+        }
 
         if (channel == ch)
         {
@@ -436,9 +572,11 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                 {
                     if (von)
                     {
-                        tomod.midiData[2] = roundToInt (invvq * roundToInt ((float) data2 * MIDISCALER * vq));
+                        tomod.midiData[2] = roundToInt(invvq * roundToInt((float) data2 * MIDISCALER * vq));
                         if (tomod.midiData[2] == lastcc[data1][ch])
+                        {
                             discard = true;
+                        }
                     }
                     if (ton)
                     {
@@ -455,14 +593,16 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                                     cc.midiData[1] = outcc;
                                     cc.midiData[2] = lastcc[data1][ch];
                                     cc.deltaFrames = leftOverSamples + (samplesPerStep * stepsSent);
-                                    outputs[0].push_back (cc);
+                                    outputs[0].push_back(cc);
                                 }
                                 ++stepsSent;
                                 //then make sure the new value will be sent next time
                                 expectingCC[channel] = true;
                             }
                             if (sendAfter)
+                            {
                                 expectingCC[channel] = true;
+                            }
                             discard           = true;
                             lastcc[data1][ch] = tomod.midiData[2];
                         }
@@ -484,7 +624,9 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         }
                     }
                     else
+                    {
                         lastcc[data1][ch] = tomod.midiData[2];
+                    }
                     tomod.midiData[1] = outcc;
                 }
             }
@@ -494,7 +636,9 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
             }
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     }
 
     if (sync)
@@ -512,14 +656,18 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                         {
                             int sample = leftOverSamples + (samplesPerStep * stepsSent);
                             if (sample >= sampleFrames)
+                            {
                                 sample = sampleFrames - 1;
+                            }
                             VstMidiEvent cc;
                             cc.midiData[0] = MIDI_CONTROLCHANGE | ch;
                             cc.midiData[1] = (n + ccoffset) & 0x7f;
                             cc.midiData[2] = lastcc[n][ch] & 0x7f;
                             cc.deltaFrames = sample;
                             if (sendAfter)
-                                outputs[0].push_back (cc);
+                            {
+                                outputs[0].push_back(cc);
+                            }
                             lastcc[n][ch] = -1;
                         }
                     }
@@ -549,7 +697,7 @@ void MidiCCStepper::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec*
                             cc.deltaFrames = delta;
                             if (sendAfter)
                             {
-                                outputs[0].push_back (cc);
+                                outputs[0].push_back(cc);
                                 lastTime = delta + totalSamples;
                             }
                             lastcc[n][ch] = -1;

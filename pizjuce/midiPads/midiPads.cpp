@@ -1,4 +1,5 @@
 #include "midiPads.h"
+
 #include "midiPadsEditor.h"
 
 using juce::jlimit;
@@ -12,101 +13,101 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 MidiPadsPrograms::MidiPadsPrograms()
-    : values_ ("midiPadsValues")
+    : values_("midiPadsValues")
 {
     //default values
     for (int p = 0; p < numPrograms; p++)
     {
-        juce::ValueTree progv ("ProgValues");
-        progv.setProperty ("progIndex", p, nullptr);
+        juce::ValueTree progv("ProgValues");
+        progv.setProperty("progIndex", p, nullptr);
         for (int i = 0; i < numPads; i++)
         {
             x[p][i] = 0.5f;
             y[p][i] = 0.5f;
-            juce::ValueTree pv ("PadValues");
-            pv.setProperty ("padIndex", i, nullptr);
-            pv.setProperty ("Ydata1", 60, nullptr);     //note
-            pv.setProperty ("Ycc", i, nullptr);         //y cc
-            pv.setProperty ("Ytype", 0, nullptr);       //0==note, 1==cc, 2==program change???
-            pv.setProperty ("Ydata2", 127, nullptr);    //data2
-            pv.setProperty ("Yoff", 0, nullptr);        //y off value
-            pv.setProperty ("trigger", 0, nullptr);     //trigger note
-            pv.setProperty ("Xcc", 1, nullptr);         //x cc
-            pv.setProperty ("Xoff", 64, nullptr);       //x off value
-            pv.setProperty ("UseX", false, nullptr);    // use x-position?
-            pv.setProperty ("UseY", false, nullptr);    // use y-position?
-            pv.setProperty ("UseYCC", false, nullptr);  // (don't) send y-cc with note
-            pv.setProperty ("UseXPB", false, nullptr);  // (don't) use x as pitch bend
-            pv.setProperty ("toggle", false, nullptr);  // toggle mode off
-            pv.setProperty ("SendOff", false, nullptr); // send off value
+            juce::ValueTree pv("PadValues");
+            pv.setProperty("padIndex", i, nullptr);
+            pv.setProperty("Ydata1", 60, nullptr);     //note
+            pv.setProperty("Ycc", i, nullptr);         //y cc
+            pv.setProperty("Ytype", 0, nullptr);       //0==note, 1==cc, 2==program change???
+            pv.setProperty("Ydata2", 127, nullptr);    //data2
+            pv.setProperty("Yoff", 0, nullptr);        //y off value
+            pv.setProperty("trigger", 0, nullptr);     //trigger note
+            pv.setProperty("Xcc", 1, nullptr);         //x cc
+            pv.setProperty("Xoff", 64, nullptr);       //x off value
+            pv.setProperty("UseX", false, nullptr);    // use x-position?
+            pv.setProperty("UseY", false, nullptr);    // use y-position?
+            pv.setProperty("UseYCC", false, nullptr);  // (don't) send y-cc with note
+            pv.setProperty("UseXPB", false, nullptr);  // (don't) use x as pitch bend
+            pv.setProperty("toggle", false, nullptr);  // toggle mode off
+            pv.setProperty("SendOff", false, nullptr); // send off value
 
-            pv.setProperty ("icon", juce::String (i + 1) + ".svg", nullptr); //icon filename
-            pv.setProperty ("text", "Pad " + juce::String (i + 1), nullptr); //pad name
-            pv.setProperty ("padcolor", juce::Colour (0xFF000000).toString(), nullptr);
-            pv.setProperty ("roundness", 0.4f, nullptr);
-            pv.setProperty ("iconsize", 0.5f, nullptr);
-            pv.setProperty ("centeredText", false, nullptr);
+            pv.setProperty("icon", juce::String(i + 1) + ".svg", nullptr); //icon filename
+            pv.setProperty("text", "Pad " + juce::String(i + 1), nullptr); //pad name
+            pv.setProperty("padcolor", juce::Colour(0xFF000000).toString(), nullptr);
+            pv.setProperty("roundness", 0.4f, nullptr);
+            pv.setProperty("iconsize", 0.5f, nullptr);
+            pv.setProperty("centeredText", false, nullptr);
 
-            pv.setProperty ("lastx", 64, nullptr);
-            pv.setProperty ("lasty", 0.0f, nullptr);
-            pv.setProperty ("togglestate", false, nullptr);
-            pv.setProperty ("showdots", true, nullptr);
-            pv.setProperty ("showvalues", true, nullptr);
+            pv.setProperty("lastx", 64, nullptr);
+            pv.setProperty("lasty", 0.0f, nullptr);
+            pv.setProperty("togglestate", false, nullptr);
+            pv.setProperty("showdots", true, nullptr);
+            pv.setProperty("showvalues", true, nullptr);
 
-            progv.addChild (pv, i, nullptr);
+            progv.addChild(pv, i, nullptr);
         }
 
-        juce::ValueTree gv ("GlobalValues");
-        gv.setProperty ("VelOffset", 0.5f, nullptr);     // velocity offset
-        gv.setProperty ("CCOffset", 0.5f, nullptr);      // cc value offset
-        gv.setProperty ("ChIn", 0.0f / 15.0f, nullptr);  // in channel
-        gv.setProperty ("ChOut", 0.0f / 15.0f, nullptr); // out channel
-        gv.setProperty ("UseTrigger", 0.0f, nullptr);    // use triggering?
-        gv.setProperty ("NoteOnTrig", 0.0f, nullptr);    // "piezo trigger mode"
-        gv.setProperty ("UseVel", 1.0f, nullptr);        // use trigger velocity?
-        gv.setProperty ("Thru", 1.f, nullptr);           // midi thru?
-        gv.setProperty ("UseAft", 0.f, nullptr);         // send aftertouch?
-        gv.setProperty ("Mono", 0.f, nullptr);           // mono mode
+        juce::ValueTree gv("GlobalValues");
+        gv.setProperty("VelOffset", 0.5f, nullptr);     // velocity offset
+        gv.setProperty("CCOffset", 0.5f, nullptr);      // cc value offset
+        gv.setProperty("ChIn", 0.0f / 15.0f, nullptr);  // in channel
+        gv.setProperty("ChOut", 0.0f / 15.0f, nullptr); // out channel
+        gv.setProperty("UseTrigger", 0.0f, nullptr);    // use triggering?
+        gv.setProperty("NoteOnTrig", 0.0f, nullptr);    // "piezo trigger mode"
+        gv.setProperty("UseVel", 1.0f, nullptr);        // use trigger velocity?
+        gv.setProperty("Thru", 1.f, nullptr);           // midi thru?
+        gv.setProperty("UseAft", 0.f, nullptr);         // send aftertouch?
+        gv.setProperty("Mono", 0.f, nullptr);           // mono mode
 
         //default GUI size
-        gv.setProperty ("lastUIWidth", 400, nullptr);
-        gv.setProperty ("lastUIHeight", 400, nullptr);
+        gv.setProperty("lastUIWidth", 400, nullptr);
+        gv.setProperty("lastUIHeight", 400, nullptr);
 
         //colors, etc
-        gv.setProperty ("bghue", 0.1f, nullptr);
-        gv.setProperty ("bgsat", 0.1f, nullptr);
-        gv.setProperty ("bgbri", 0.8f, nullptr);
-        gv.setProperty ("contrast", 0.3f, nullptr);
-        gv.setProperty ("squares", 16, nullptr);
-        gv.setProperty ("editmode", true, nullptr);
-        gv.setProperty ("usemouseup", true, nullptr);
-        gv.setProperty ("hex", false, nullptr);
+        gv.setProperty("bghue", 0.1f, nullptr);
+        gv.setProperty("bgsat", 0.1f, nullptr);
+        gv.setProperty("bgbri", 0.8f, nullptr);
+        gv.setProperty("contrast", 0.3f, nullptr);
+        gv.setProperty("squares", 16, nullptr);
+        gv.setProperty("editmode", true, nullptr);
+        gv.setProperty("usemouseup", true, nullptr);
+        gv.setProperty("hex", false, nullptr);
 
         //program name
-        gv.setProperty ("name", "Default", nullptr);
+        gv.setProperty("name", "Default", nullptr);
 
-        progv.addChild (gv, numPads, nullptr);
+        progv.addChild(gv, numPads, nullptr);
 
-        juce::ValueTree layout ("Layout");
+        juce::ValueTree layout("Layout");
         for (int i = 0; i < numPads; i++)
         {
-            juce::ValueTree padpos ("PadPosition");
-            padpos.setProperty ("visible", i < (int) gv.getProperty ("squares"), nullptr);
-            padpos.setProperty ("x", 0.f, nullptr);
-            padpos.setProperty ("y", 0.f, nullptr);
-            padpos.setProperty ("w", 0.1f, nullptr);
-            padpos.setProperty ("h", 0.1f, nullptr);
-            layout.addChild (padpos, i, nullptr);
+            juce::ValueTree padpos("PadPosition");
+            padpos.setProperty("visible", i < (int) gv.getProperty("squares"), nullptr);
+            padpos.setProperty("x", 0.f, nullptr);
+            padpos.setProperty("y", 0.f, nullptr);
+            padpos.setProperty("w", 0.1f, nullptr);
+            padpos.setProperty("h", 0.1f, nullptr);
+            layout.addChild(padpos, i, nullptr);
         }
-        progv.addChild (layout, numPads + 1, nullptr);
+        progv.addChild(layout, numPads + 1, nullptr);
 
-        this->values_.addChild (progv, p, nullptr);
+        this->values_.addChild(progv, p, nullptr);
     }
 }
 
 //==============================================================================
 midiPads::midiPads()
-    : programs (nullptr), layouts (nullptr)
+    : programs(nullptr), layouts(nullptr)
 {
     pluginPath = getCurrentPath() + juce::File::getSeparatorString() + "midiPads";
     layoutPath = pluginPath + juce::File::getSeparatorString() + "midiPadLayouts";
@@ -118,23 +119,25 @@ midiPads::midiPads()
     fillLayouts();
     programs = new MidiPadsPrograms();
 
-    if (! loadXmlBank (juce::File (pluginPath + juce::File::getSeparatorString()
-                                   + juce::File::getSpecialLocation (juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".mpadb")))
+    if (! loadXmlBank(juce::File(pluginPath + juce::File::getSeparatorString()
+                                 + juce::File::getSpecialLocation(juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".mpadb")))
     {
-        if (! loadFxb (juce::File (pluginPath + juce::File::getSeparatorString()
-                                   + juce::File::getSpecialLocation (juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".fxb")))
+        if (! loadFxb(juce::File(pluginPath + juce::File::getSeparatorString()
+                                 + juce::File::getSpecialLocation(juce::File::currentApplicationFile).getFileNameWithoutExtension() + ".fxb")))
         {
             loadDefaultPrograms();
         }
     }
 
     init = true;
-    setCurrentProgram (0);
+    setCurrentProgram(0);
 
     //initialize temporary parameters
     triggervel = 0;
     for (int i = 0; i < 128; i++)
+    {
         isplaying[i] = false;
+    }
     for (int i = 0; i < numPads; i++)
     {
         buttondown[i]   = false;
@@ -142,8 +145,8 @@ midiPads::midiPads()
         triggered[i]    = false;
         send[i]         = 0.0f;
         sendoff[i]      = 0.0f;
-        lastx[i]        = programs->getForPad (curProgram, i, "lastx");
-        lasty[i]        = SendOff[i] ? Yoff[i] : (int) programs->getForPad (curProgram, i, "lasty");
+        lastx[i]        = programs->getForPad(curProgram, i, "lastx");
+        lasty[i]        = SendOff[i] ? Yoff[i] : (int) programs->getForPad(curProgram, i, "lasty");
         lastxccvalue[i] = -1;
         lastyccvalue[i] = -1;
         dotmoved[i]     = false;
@@ -153,20 +156,29 @@ midiPads::midiPads()
 midiPads::~midiPads()
 {
     if (programs)
-        juce::deleteAndZero (programs);
+    {
+        juce::deleteAndZero(programs);
+    }
     if (layouts)
-        juce::deleteAndZero (layouts);
+    {
+        juce::deleteAndZero(layouts);
+    }
 }
 
 //==============================================================================
-float midiPads::getParameter (int index) { return param[index]; }
+float midiPads::getParameter(int index)
+{
+    return param[index];
+}
 
-void midiPads::setParameter (int index, float newValue)
+void midiPads::setParameter(int index, float newValue)
 {
     //if (param[index] != newValue) {
     param[index] = newValue;
     if (index < kNumGlobalParams)
-        programs->set (curProgram, getGlobalParamValueName (index), newValue);
+    {
+        programs->set(curProgram, getGlobalParamValueName(index), newValue);
+    }
     else if (index >= ypos)
     {
         programs->y[curProgram][index - ypos] = newValue;
@@ -183,139 +195,175 @@ void midiPads::setParameter (int index, float newValue)
     //}
 }
 
-const juce::String midiPads::getParameterName (int index)
+const juce::String midiPads::getParameterName(int index)
 {
     for (int i = 0; i < numPads; i++)
     {
         if (index == i + xpos)
-            return "x pos " + juce::String (i + 1);
+        {
+            return "x pos " + juce::String(i + 1);
+        }
         else if (index == i + ypos)
-            return "y pos " + juce::String (i + 1);
+        {
+            return "y pos " + juce::String(i + 1);
+        }
     }
     if (index == kVelOffset)
+    {
         return "velocity";
+    }
     else if (index == kCCOffset)
+    {
         return "ccvalue";
+    }
     else if (index == kChOut)
+    {
         return "out channel";
+    }
     else if (index == kMono)
+    {
         return "mono mode";
+    }
     else if (index == kUseTrigger)
+    {
         return "use trigger";
+    }
     else if (index == kNoteOnTrig)
+    {
         return "ext noteon trig";
+    }
     else if (index == kUseVel)
+    {
         return "use trig vel";
+    }
     else if (index == kChIn)
+    {
         return "in channel";
+    }
     else if (index == kThru)
+    {
         return "midi thru";
+    }
     else if (index == kSendAft)
+    {
         return "send aftertouch";
+    }
     else
+    {
         return juce::String();
+    }
 }
 
-const juce::String midiPads::getParameterText (int index)
+const juce::String midiPads::getParameterText(int index)
 {
     if (index < getNumParameters())
-        return juce::String (param[index], 3);
+    {
+        return juce::String(param[index], 3);
+    }
     return juce::String();
 }
 
-const juce::String midiPads::getInputChannelName (const int channelIndex) const
+const juce::String midiPads::getInputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumInputChannels())
-        return juce::String (JucePlugin_Name) + juce::String (channelIndex + 1);
+    {
+        return juce::String(JucePlugin_Name) + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
-const juce::String midiPads::getOutputChannelName (const int channelIndex) const
+const juce::String midiPads::getOutputChannelName(const int channelIndex) const
 {
     if (channelIndex < getNumOutputChannels())
-        return juce::String (JucePlugin_Name) + juce::String (channelIndex + 1);
+    {
+        return juce::String(JucePlugin_Name) + juce::String(channelIndex + 1);
+    }
     return juce::String();
 }
 
-bool midiPads::isInputChannelStereoPair (int index) const
+bool midiPads::isInputChannelStereoPair(int index) const
 {
     return false;
 }
 
-bool midiPads::isOutputChannelStereoPair (int index) const
+bool midiPads::isOutputChannelStereoPair(int index) const
 {
     return false;
 }
 
 //======================Programs================================================
-void midiPads::setCurrentProgram (int index)
+void midiPads::setCurrentProgram(int index)
 {
     //save non-parameter info to the old program, except the first time
     if (! init)
-        copySettingsToProgram (curProgram);
+    {
+        copySettingsToProgram(curProgram);
+    }
     else
+    {
         init = false;
+    }
 
     //then set the new program
     curProgram = index;
-    programs->values_.setProperty ("lastProgram", index, nullptr);
+    programs->values_.setProperty("lastProgram", index, nullptr);
     for (int i = 0; i < kNumGlobalParams; i++)
     {
-        param[i] = programs->get (index, getGlobalParamValueName (i));
+        param[i] = programs->get(index, getGlobalParamValueName(i));
     }
 
-    squares      = programs->get (index, "squares");
-    lastUIWidth  = programs->get (index, "lastUIWidth");
-    lastUIHeight = programs->get (index, "lastUIHeight");
+    squares      = programs->get(index, "squares");
+    lastUIWidth  = programs->get(index, "lastUIWidth");
+    lastUIHeight = programs->get(index, "lastUIHeight");
     for (int i = 0; i < numPads; i++)
     {
         param[xpos + i] = programs->x[index][i];
         param[ypos + i] = programs->y[index][i];
-        icon[i]         = programs->getForPad (index, i, "icon");
-        text[i]         = programs->getForPad (index, i, "text");
-        padcolor[i]     = juce::Colour::fromString (programs->getForPad (index, i, "padcolor").toString());
-        Ydata1[i]       = programs->getForPad (index, i, "Ydata1");
-        Ycc[i]          = programs->getForPad (index, i, "Ycc");
-        Ytype[i]        = programs->getForPad (index, i, "Ytype");
-        Ydata2[i]       = programs->getForPad (index, i, "Ydata2");
-        Yoff[i]         = programs->getForPad (index, i, "Yoff");
-        Xoff[i]         = programs->getForPad (index, i, "Xoff");
-        trigger[i]      = programs->getForPad (index, i, "trigger");
-        Xcc[i]          = programs->getForPad (index, i, "Xcc");
-        SendOff[i]      = programs->getForPad (index, i, "SendOff");
-        UseX[i]         = programs->getForPad (index, i, "UseX");
-        UseY[i]         = programs->getForPad (index, i, "UseY");
-        UseYCC[i]       = programs->getForPad (index, i, "UseYCC");
-        UseXPB[i]       = programs->getForPad (index, i, "UseXPB");
-        lastx[i]        = programs->getForPad (index, i, "lastx");
-        lasty[i]        = programs->getForPad (index, i, "lasty");
-        toggle[i]       = programs->getForPad (index, i, "toggle");
-        togglestate[i]  = programs->getForPad (index, i, "togglestate");
-        showdots[i]     = programs->getForPad (index, i, "showdots");
-        showvalues[i]   = programs->getForPad (index, i, "showvalues");
-        roundness[i]    = programs->getForPad (index, i, "roundness");
-        iconsize[i]     = programs->getForPad (index, i, "iconsize");
-        centeredText[i] = programs->getForPad (index, i, "centeredText");
+        icon[i]         = programs->getForPad(index, i, "icon");
+        text[i]         = programs->getForPad(index, i, "text");
+        padcolor[i]     = juce::Colour::fromString(programs->getForPad(index, i, "padcolor").toString());
+        Ydata1[i]       = programs->getForPad(index, i, "Ydata1");
+        Ycc[i]          = programs->getForPad(index, i, "Ycc");
+        Ytype[i]        = programs->getForPad(index, i, "Ytype");
+        Ydata2[i]       = programs->getForPad(index, i, "Ydata2");
+        Yoff[i]         = programs->getForPad(index, i, "Yoff");
+        Xoff[i]         = programs->getForPad(index, i, "Xoff");
+        trigger[i]      = programs->getForPad(index, i, "trigger");
+        Xcc[i]          = programs->getForPad(index, i, "Xcc");
+        SendOff[i]      = programs->getForPad(index, i, "SendOff");
+        UseX[i]         = programs->getForPad(index, i, "UseX");
+        UseY[i]         = programs->getForPad(index, i, "UseY");
+        UseYCC[i]       = programs->getForPad(index, i, "UseYCC");
+        UseXPB[i]       = programs->getForPad(index, i, "UseXPB");
+        lastx[i]        = programs->getForPad(index, i, "lastx");
+        lasty[i]        = programs->getForPad(index, i, "lasty");
+        toggle[i]       = programs->getForPad(index, i, "toggle");
+        togglestate[i]  = programs->getForPad(index, i, "togglestate");
+        showdots[i]     = programs->getForPad(index, i, "showdots");
+        showvalues[i]   = programs->getForPad(index, i, "showvalues");
+        roundness[i]    = programs->getForPad(index, i, "roundness");
+        iconsize[i]     = programs->getForPad(index, i, "iconsize");
+        centeredText[i] = programs->getForPad(index, i, "centeredText");
     }
-    bghue      = programs->get (index, "bghue");
-    bgsat      = programs->get (index, "bgsat");
-    bgbri      = programs->get (index, "bgbri");
-    contrast   = programs->get (index, "contrast");
-    editmode   = programs->get (index, "editmode");
-    usemouseup = programs->get (index, "usemouseup");
-    hex        = programs->get (index, "hex");
+    bghue      = programs->get(index, "bghue");
+    bgsat      = programs->get(index, "bgsat");
+    bgbri      = programs->get(index, "bgbri");
+    contrast   = programs->get(index, "contrast");
+    editmode   = programs->get(index, "editmode");
+    usemouseup = programs->get(index, "usemouseup");
+    hex        = programs->get(index, "hex");
 
     sendChangeMessage();
 }
 
-void midiPads::changeProgramName (int index, const juce::String& newName)
+void midiPads::changeProgramName(int index, const juce::String& newName)
 {
-    programs->set (index, "name", newName);
+    programs->set(index, "name", newName);
 }
 
-const juce::String midiPads::getProgramName (int index)
+const juce::String midiPads::getProgramName(int index)
 {
-    return programs->get (index, "name");
+    return programs->get(index, "name");
 }
 
 int midiPads::getCurrentProgram()
@@ -324,7 +372,7 @@ int midiPads::getCurrentProgram()
 }
 
 //==============================================================================
-void midiPads::prepareToPlay (double sampleRate, int samplesPerBlock)
+void midiPads::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     //    OutputDebugString("prepareToPlay");
     // do your pre-playback setup stuff here..
@@ -337,11 +385,11 @@ void midiPads::releaseResources()
     // spare memory, etc.
 }
 
-void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages)
+void midiPads::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     }
 
     juce::MidiBuffer midiout;
@@ -356,11 +404,13 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
         if (midi_message.isProgramChange())
         { // && (midi_message.isForChannel(channel) || channel==0)) {
             if (midi_message.getProgramChangeNumber() < getNumPrograms())
-                setCurrentProgram (midi_message.getProgramChangeNumber());
+            {
+                setCurrentProgram(midi_message.getProgramChangeNumber());
+            }
         }
         for (int i = 0; i < numPads; i++)
         {
-            if (isPadVisible (i))
+            if (isPadVisible(i))
             {
                 //midi learn y
                 if (midilisten[i] == 1.0f)
@@ -443,7 +493,7 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                 else if (param[kUseTrigger] >= 0.5f)
                 {
                     int inch = 1 + (int) (param[kChIn] * 15.1f);
-                    if (midi_message.isNoteOn() && midi_message.isForChannel (inch))
+                    if (midi_message.isNoteOn() && midi_message.isForChannel(inch))
                     {
                         if (param[kNoteOnTrig] >= 0.5f)
                         {
@@ -459,16 +509,20 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                                 // note on
                                 int vel;
                                 if (param[kUseVel] >= 0.5f)
-                                    vel = (int) ((float) ((midi_message.getVelocity()) * (getParameter (kVelOffset) * 2)));
+                                {
+                                    vel = (int) ((float) ((midi_message.getVelocity()) * (getParameter(kVelOffset) * 2)));
+                                }
                                 else
-                                    vel = jlimit (1, 127, (int) (Ydata2[i] * (getParameter (kVelOffset) * 2)));
+                                {
+                                    vel = jlimit(1, 127, (int) (Ydata2[i] * (getParameter(kVelOffset) * 2)));
+                                }
                                 if (toggle[i])
                                 {
                                     if (togglestate[i])
                                     {
                                         if (isplaying[note])
                                         {
-                                            midiout.addEvent (juce::MidiMessage (0x80 | outch, note, Yoff[i], 0), 0); //noteoff
+                                            midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0); //noteoff
                                             isplaying[note] = false;
                                         }
                                         togglestate[i] = false;
@@ -477,7 +531,7 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                                     {
                                         if (! isplaying[note])
                                         {
-                                            midiout.addEvent (juce::MidiMessage (0x90 | outch, note, vel, 0), sample_number);
+                                            midiout.addEvent(juce::MidiMessage(0x90 | outch, note, vel, 0), sample_number);
                                             isplaying[note] = true;
                                         }
                                         togglestate[i] = true;
@@ -487,9 +541,9 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                                 {
                                     if (isplaying[note])
                                     {
-                                        midiout.addEvent (juce::MidiMessage (0x80 | outch, note, Yoff[i], 0), 0); //noteoff
+                                        midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0); //noteoff
                                     }
-                                    midiout.addEvent (juce::MidiMessage (0x90 | outch, note, vel, 0), sample_number);
+                                    midiout.addEvent(juce::MidiMessage(0x90 | outch, note, vel, 0), sample_number);
                                     isplaying[note] = true;
                                     triggered[i]    = true;
                                     trig            = true;
@@ -499,23 +553,23 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                             else
                             {
                                 // cc on
-                                int value = jlimit (0, 127, (int) (Ydata2[i] * (getParameter (kCCOffset) * 2)));
+                                int value = jlimit(0, 127, (int) (Ydata2[i] * (getParameter(kCCOffset) * 2)));
                                 if (toggle[i])
                                 {
                                     if (togglestate[i])
                                     {
-                                        midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], Yoff[i], 0), 0);
+                                        midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), 0);
                                         togglestate[i] = false;
                                     }
                                     else
                                     {
-                                        midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], value, 0), sample_number);
+                                        midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], value, 0), sample_number);
                                         togglestate[i] = true;
                                     }
                                 }
                                 else
                                 {
-                                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], value, 0), sample_number);
+                                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], value, 0), sample_number);
                                     triggered[i] = true;
                                     trig         = true;
                                 }
@@ -524,7 +578,7 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                             sendChangeMessage();
                         }
                     }
-                    else if (midi_message.isNoteOff() && midi_message.isForChannel (inch))
+                    else if (midi_message.isNoteOff() && midi_message.isForChannel(inch))
                     {
                         if (midi_message.getNoteNumber() == trigger[i])
                         {
@@ -536,14 +590,14 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                                     if (Ytype[i] == 0)
                                     {
                                         // note off
-                                        midiout.addEvent (juce::MidiMessage (0x80 | outch, Ydata1[i], Yoff[i], 0), sample_number);
+                                        midiout.addEvent(juce::MidiMessage(0x80 | outch, Ydata1[i], Yoff[i], 0), sample_number);
                                         isplaying[Ydata1[i]] = false;
                                     }
                                     else
                                     {
                                         if (SendOff[i])
                                         { // if sending cc off value
-                                            midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], Yoff[i], 0), sample_number);
+                                            midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), sample_number);
                                         }
                                     }
                                     triggered[i] = false;
@@ -558,7 +612,9 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
         }
         //if thru is on, copy original message
         if (! discard)
-            midiout.addEvent (midi_message, sample_number);
+        {
+            midiout.addEvent(midi_message, sample_number);
+        }
     }
     //midi sending part
     for (int i = 0; i < numPads; i++)
@@ -570,30 +626,30 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
             {
                 if (UseXPB[i])
                 {
-                    int value = jlimit (0, 16383, roundToInt ((param[i + xpos] * 16383.0f) * (getParameter (kCCOffset) * 2)));
-                    midiout.addEvent (juce::MidiMessage (0xE0 | outch, value & 0x007f, (value & 0x3f80) >> 7, 0), 0);
+                    int value = jlimit(0, 16383, roundToInt((param[i + xpos] * 16383.0f) * (getParameter(kCCOffset) * 2)));
+                    midiout.addEvent(juce::MidiMessage(0xE0 | outch, value & 0x007f, (value & 0x3f80) >> 7, 0), 0);
                 }
                 else
                 {
-                    int value = jlimit (0, 127, (int) ((param[i + xpos] * 127.1) * (getParameter (kCCOffset) * 2)));
+                    int value = jlimit(0, 127, (int) ((param[i + xpos] * 127.1) * (getParameter(kCCOffset) * 2)));
                     if (value != lastxccvalue[i])
                     {
                         lastxccvalue[i] = value;
-                        midiout.addEvent (juce::MidiMessage (0xB0 | outch, Xcc[i], value, 0), 0);
+                        midiout.addEvent(juce::MidiMessage(0xB0 | outch, Xcc[i], value, 0), 0);
                     }
                 }
             }
             if (param[kSendAft] >= 0.5f && Ytype[i] == 0)
             {
-                midiout.addEvent (juce::MidiMessage (0xA0 | outch, Ydata1[i], jlimit (0, 127, (int) (param[i + ypos] * 127.1f)), 0), 0);
+                midiout.addEvent(juce::MidiMessage(0xA0 | outch, Ydata1[i], jlimit(0, 127, (int) (param[i + ypos] * 127.1f)), 0), 0);
             }
             if (UseYCC[i] && Ytype[i] == 0)
             {
-                int value = jlimit (0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter (kCCOffset) * 2)));
+                int value = jlimit(0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter(kCCOffset) * 2)));
                 if (value != lastyccvalue[i])
                 {
                     lastyccvalue[i] = value;
-                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], value, 0), 0);
+                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], value, 0), 0);
                 }
             }
         }
@@ -610,7 +666,7 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                     //    midiout.addEvent(aft_message,0);
                     //}
                     //noteoff
-                    midiout.addEvent (juce::MidiMessage (0x80 | outch, note, Yoff[i], 0), 0);
+                    midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0);
                 }
                 if (param[kMono] >= 0.5f)
                 {
@@ -620,35 +676,45 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
                         if (isplaying[n])
                         {
                             //noteoff
-                            midiout.addEvent (juce::MidiMessage (0x80 | outch, n, 0, 0), 0);
+                            midiout.addEvent(juce::MidiMessage(0x80 | outch, n, 0, 0), 0);
                             isplaying[n] = false;
                         }
                     }
                 }
                 int vel;
                 if (param[kNoteOnTrig] >= 0.5f)
-                    vel = jlimit (0, 127, (int) (triggervel * (getParameter (kVelOffset) * 2)));
+                {
+                    vel = jlimit(0, 127, (int) (triggervel * (getParameter(kVelOffset) * 2)));
+                }
                 else if (UseY[i])
-                    vel = jlimit (0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter (kVelOffset) * 2)));
+                {
+                    vel = jlimit(0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter(kVelOffset) * 2)));
+                }
                 else
-                    vel = jlimit (0, 127, (int) (Ydata2[i] * (getParameter (kVelOffset) * 2)));
-                midiout.addEvent (juce::MidiMessage (0x90 | outch, note, vel, 0), 1); //noteon
+                {
+                    vel = jlimit(0, 127, (int) (Ydata2[i] * (getParameter(kVelOffset) * 2)));
+                }
+                midiout.addEvent(juce::MidiMessage(0x90 | outch, note, vel, 0), 1); //noteon
                 isplaying[note] = true;
                 if (param[kSendAft] >= 0.5f)
                 {
-                    midiout.addEvent (juce::MidiMessage (0xA0 | outch, note, jlimit (0, 127, (int) (param[i + ypos] * 127.1f)), 0), 2);
+                    midiout.addEvent(juce::MidiMessage(0xA0 | outch, note, jlimit(0, 127, (int) (param[i + ypos] * 127.1f)), 0), 2);
                 }
                 if (UseYCC[i])
                 {
                     int val;
                     if (UseY[i])
-                        val = jlimit (0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter (kCCOffset) * 2)));
+                    {
+                        val = jlimit(0, 127, (int) ((param[i + ypos] * 127.1) * (getParameter(kCCOffset) * 2)));
+                    }
                     else
-                        val = jlimit (0, 127, (int) ((float) Ydata2[i] * (getParameter (kCCOffset) * 2)));
+                    {
+                        val = jlimit(0, 127, (int) ((float) Ydata2[i] * (getParameter(kCCOffset) * 2)));
+                    }
                     if (val != lastyccvalue[i])
                     {
                         lastyccvalue[i] = val;
-                        midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], val, 0), 2);
+                        midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], val, 0), 2);
                     }
                 }
             }
@@ -656,17 +722,17 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
             { //CC
                 if (UseY[i])
                 {
-                    int value = jlimit (0, 127, (int) ((param[i + ypos] * 127.1f) * (getParameter (kCCOffset) * 2)));
+                    int value = jlimit(0, 127, (int) ((param[i + ypos] * 127.1f) * (getParameter(kCCOffset) * 2)));
                     if (value != lastyccvalue[i])
                     {
                         lastyccvalue[i] = value;
-                        midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], value, 0), 0);
+                        midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], value, 0), 0);
                     }
                 }
                 else if (! UseX[i])
                 {
-                    int value = jlimit (0, 127, (int) (Ydata2[i] * (getParameter (kCCOffset) * 2)));
-                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], value, 0), 0); //on value
+                    int value = jlimit(0, 127, (int) (Ydata2[i] * (getParameter(kCCOffset) * 2)));
+                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], value, 0), 0); //on value
                 }
             }
         }
@@ -677,170 +743,183 @@ void midiPads::processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer& 
             {
                 //x-off value
                 if (UseXPB[i])
-                    midiout.addEvent (juce::MidiMessage (0xE0 | outch, 0, Xoff[i], 0), 0);
+                {
+                    midiout.addEvent(juce::MidiMessage(0xE0 | outch, 0, Xoff[i], 0), 0);
+                }
                 else
-                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Xcc[i], Xoff[i], 0), 0);
+                {
+                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Xcc[i], Xoff[i], 0), 0);
+                }
             }
             if (Ytype[i] == 0)
             {
                 int note = Ydata1[i];
                 if (param[kSendAft] >= 0.5f)
-                    midiout.addEvent (juce::MidiMessage (0xA0 | outch, note, 0, 0), 0);
+                {
+                    midiout.addEvent(juce::MidiMessage(0xA0 | outch, note, 0, 0), 0);
+                }
                 if (UseYCC[i] && SendOff[i])
-                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
-                midiout.addEvent (juce::MidiMessage (0x80 | outch, note, Yoff[i], 0), 0);       //noteoff
+                {
+                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
+                }
+                midiout.addEvent(juce::MidiMessage(0x80 | outch, note, Yoff[i], 0), 0); //noteoff
                 isplaying[note] = false;
             }
             else
             {
                 if ((SendOff[i] || toggle[i]) && ((! UseX[i]) || UseY[i]))
-                    midiout.addEvent (juce::MidiMessage (0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
+                {
+                    midiout.addEvent(juce::MidiMessage(0xB0 | outch, Ycc[i], Yoff[i], 0), 0); //y-off value
+                }
             }
         }
     }
     midiMessages.clear();
     midiMessages = midiout;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* midiPads::createEditor()
 {
-    return new midiPadsEditor (this);
+    return new midiPadsEditor(this);
 }
 
-void midiPads::copySettingsToProgram (int index)
+void midiPads::copySettingsToProgram(int index)
 {
-    programs->set (index, "bghue", bghue);
-    programs->set (index, "bgsat", bgsat);
-    programs->set (index, "bgbri", bgbri);
-    programs->set (index, "contrast", contrast);
-    programs->set (index, "lastUIHeight", lastUIHeight);
-    programs->set (index, "lastUIWidth", lastUIWidth);
-    programs->set (index, "squares", squares);
-    programs->set (index, "editmode", editmode);
-    programs->set (index, "hex", hex);
-    programs->set (index, "usemouseup", usemouseup);
+    programs->set(index, "bghue", bghue);
+    programs->set(index, "bgsat", bgsat);
+    programs->set(index, "bgbri", bgbri);
+    programs->set(index, "contrast", contrast);
+    programs->set(index, "lastUIHeight", lastUIHeight);
+    programs->set(index, "lastUIWidth", lastUIWidth);
+    programs->set(index, "squares", squares);
+    programs->set(index, "editmode", editmode);
+    programs->set(index, "hex", hex);
+    programs->set(index, "usemouseup", usemouseup);
     for (int i = 0; i < numPads; i++)
     {
-        programs->setForPad (index, i, "centeredText", centeredText[i]);
-        programs->setForPad (index, i, "iconsize", iconsize[i]);
-        programs->setForPad (index, i, "roundness", roundness[i]);
-        programs->setForPad (index, i, "showdots", showdots[i]);
-        programs->setForPad (index, i, "showvalues", showvalues[i]);
-        programs->setForPad (index, i, "icon", icon[i]);
-        programs->setForPad (index, i, "text", text[i]);
-        programs->setForPad (index, i, "padcolor", padcolor[i].toString());
-        programs->setForPad (index, i, "Ydata1", Ydata1[i]);
-        programs->setForPad (index, i, "Ycc", Ycc[i]);
-        programs->setForPad (index, i, "Ytype", Ytype[i]);
-        programs->setForPad (index, i, "Ydata2", Ydata2[i]);
-        programs->setForPad (index, i, "Yoff", Yoff[i]);
-        programs->setForPad (index, i, "trigger", trigger[i]);
-        programs->setForPad (index, i, "Xcc", Xcc[i]);
-        programs->setForPad (index, i, "Xoff", Xoff[i]);
-        programs->setForPad (index, i, "SendOff", SendOff[i]);
-        programs->setForPad (index, i, "UseX", UseX[i]);
-        programs->setForPad (index, i, "UseY", UseY[i]);
-        programs->setForPad (index, i, "UseYCC", UseYCC[i]);
-        programs->setForPad (index, i, "UseXPB", UseXPB[i]);
-        programs->setForPad (index, i, "lastx", lastx[i]);
-        programs->setForPad (index, i, "lasty", lasty[i]);
-        programs->setForPad (index, i, "toggle", toggle[i]);
-        programs->setForPad (index, i, "togglestate", togglestate[i]);
+        programs->setForPad(index, i, "centeredText", centeredText[i]);
+        programs->setForPad(index, i, "iconsize", iconsize[i]);
+        programs->setForPad(index, i, "roundness", roundness[i]);
+        programs->setForPad(index, i, "showdots", showdots[i]);
+        programs->setForPad(index, i, "showvalues", showvalues[i]);
+        programs->setForPad(index, i, "icon", icon[i]);
+        programs->setForPad(index, i, "text", text[i]);
+        programs->setForPad(index, i, "padcolor", padcolor[i].toString());
+        programs->setForPad(index, i, "Ydata1", Ydata1[i]);
+        programs->setForPad(index, i, "Ycc", Ycc[i]);
+        programs->setForPad(index, i, "Ytype", Ytype[i]);
+        programs->setForPad(index, i, "Ydata2", Ydata2[i]);
+        programs->setForPad(index, i, "Yoff", Yoff[i]);
+        programs->setForPad(index, i, "trigger", trigger[i]);
+        programs->setForPad(index, i, "Xcc", Xcc[i]);
+        programs->setForPad(index, i, "Xoff", Xoff[i]);
+        programs->setForPad(index, i, "SendOff", SendOff[i]);
+        programs->setForPad(index, i, "UseX", UseX[i]);
+        programs->setForPad(index, i, "UseY", UseY[i]);
+        programs->setForPad(index, i, "UseYCC", UseYCC[i]);
+        programs->setForPad(index, i, "UseXPB", UseXPB[i]);
+        programs->setForPad(index, i, "lastx", lastx[i]);
+        programs->setForPad(index, i, "lasty", lasty[i]);
+        programs->setForPad(index, i, "toggle", toggle[i]);
+        programs->setForPad(index, i, "togglestate", togglestate[i]);
     }
 }
 
 //==============================================================================
-void midiPads::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
+void midiPads::getCurrentProgramStateInformation(juce::MemoryBlock& destData)
 {
-    copySettingsToProgram (curProgram);
-    juce::MemoryOutputStream stream (destData, false);
-    programs->values_.getChild (curProgram).writeToStream (stream);
+    copySettingsToProgram(curProgram);
+    juce::MemoryOutputStream stream(destData, false);
+    programs->values_.getChild(curProgram).writeToStream(stream);
     //programs->values_.getChild(curProgram).writeToStream(MemoryOutputStream(262144,256,&destData));
 }
 
-void midiPads::getStateInformation (juce::MemoryBlock& destData)
+void midiPads::getStateInformation(juce::MemoryBlock& destData)
 {
-    copySettingsToProgram (curProgram);
-    juce::MemoryOutputStream stream (destData, false);
-    programs->values_.writeToStream (stream);
+    copySettingsToProgram(curProgram);
+    juce::MemoryOutputStream stream(destData, false);
+    programs->values_.writeToStream(stream);
     //programs->values_.writeToStream(MemoryOutputStream(262144,256,&destData));
 }
 
-void midiPads::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
+void midiPads::setCurrentProgramStateInformation(const void* data, int sizeInBytes)
 {
     //check for old format
-    auto xmlState (getXmlFromBinary (data, sizeInBytes));
+    auto xmlState(getXmlFromBinary(data, sizeInBytes));
     if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
+            changeProgramName(getCurrentProgram(), xmlState->getStringAttribute("progname", "Default"));
             for (int i = 0; i < kNumGlobalParams; i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute(juce::String(i), param[i]);
             }
-            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
-            lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
-            bghue        = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat        = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri        = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
-            contrast     = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
-            squares      = xmlState->getIntAttribute ("squares", squares);
-            editmode     = xmlState->getBoolAttribute ("editmode", editmode);
-            hex          = xmlState->getBoolAttribute ("hex", hex);
-            usemouseup   = xmlState->getBoolAttribute ("usemouseup", usemouseup);
+            lastUIWidth  = xmlState->getIntAttribute("uiWidth", lastUIWidth);
+            lastUIHeight = xmlState->getIntAttribute("uiHeight", lastUIHeight);
+            bghue        = (float) xmlState->getDoubleAttribute("Hue", bghue);
+            bgsat        = (float) xmlState->getDoubleAttribute("Sat", bgsat);
+            bgbri        = (float) xmlState->getDoubleAttribute("Bri", bgbri);
+            contrast     = (float) xmlState->getDoubleAttribute("Contrast", contrast);
+            squares      = xmlState->getIntAttribute("squares", squares);
+            editmode     = xmlState->getBoolAttribute("editmode", editmode);
+            hex          = xmlState->getBoolAttribute("hex", hex);
+            usemouseup   = xmlState->getBoolAttribute("usemouseup", usemouseup);
             if (hex)
-                setLayout (curProgram, hexagonpads);
+            {
+                setLayout(curProgram, hexagonpads);
+            }
             else
             {
                 switch (squares)
                 {
                     case 1:
-                        setLayout (curProgram, onepad);
+                        setLayout(curProgram, onepad);
                         break;
                     case 4:
-                        setLayout (curProgram, fourpads);
+                        setLayout(curProgram, fourpads);
                         break;
                     case 5:
-                        setLayout (curProgram, foursliders);
+                        setLayout(curProgram, foursliders);
                         break;
                     case 10:
-                        setLayout (curProgram, tenpads);
+                        setLayout(curProgram, tenpads);
                         break;
                     case 14:
-                        setLayout (curProgram, twelvepads);
+                        setLayout(curProgram, twelvepads);
                         break;
                     case 16:
-                        setLayout (curProgram, sixteenpads);
+                        setLayout(curProgram, sixteenpads);
                         break;
                     case 17:
-                        setLayout (curProgram, sixteensliders);
+                        setLayout(curProgram, sixteensliders);
                         break;
                     case 28:
-                        setLayout (curProgram, arrangeit28);
+                        setLayout(curProgram, arrangeit28);
                         break;
                     case 33:
-                        setLayout (curProgram, mixerpads);
+                        setLayout(curProgram, mixerpads);
                         break;
                     case 40:
-                        setLayout (curProgram, hexagonpads);
+                        setLayout(curProgram, hexagonpads);
                         break;
                     case 46:
-                        setLayout (curProgram, arrangeit39);
+                        setLayout(curProgram, arrangeit39);
                         break;
                     case 48:
-                        setLayout (curProgram, arrangeit48);
+                        setLayout(curProgram, arrangeit48);
                         break;
                     case 52:
-                        setLayout (curProgram, arrangeit51);
+                        setLayout(curProgram, arrangeit51);
                         break;
                     case 64:
-                        setLayout (curProgram, sixtyfourpads);
+                        setLayout(curProgram, sixtyfourpads);
                         break;
                     default:
-                        setLayout (curProgram, sixteenpads);
+                        setLayout(curProgram, sixteenpads);
                         break;
                 }
             }
@@ -849,306 +928,316 @@ void midiPads::setCurrentProgramStateInformation (const void* data, int sizeInBy
             {
                 centeredText[i] = false;
                 iconsize[i]     = 0.5f;
-                roundness[i]    = (float) xmlState->getDoubleAttribute ("roundness", roundness[i]);
-                showdots[i]     = xmlState->getBoolAttribute ("showdots", showdots[i]);
-                showdots[i]     = xmlState->getBoolAttribute ("showdots" + juce::String (i), showdots[i]);
-                showvalues[i]   = xmlState->getBoolAttribute ("showvalues" + juce::String (i), showvalues[i]);
-                icon[i]         = xmlState->getStringAttribute ("icon" + juce::String (i), icon[i]);
-                text[i]         = xmlState->getStringAttribute ("text" + juce::String (i), text[i]);
-                padcolor[i]     = juce::Colour (xmlState->getIntAttribute ("padcolor" + juce::String (i), padcolor[i].getARGB()));
-                Ydata1[i]       = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata1" + juce::String (i), Ydata1[i] * midiScaler));
-                Ycc[i]          = (int) (127.1 * xmlState->getDoubleAttribute ("Ycc" + juce::String (i), Ycc[i] * midiScaler));
-                Ytype[i]        = roundToInt (xmlState->getDoubleAttribute ("Ytype" + juce::String (i), Ytype[i]));
-                Ydata2[i]       = (int) (127.1 * xmlState->getDoubleAttribute ("Ydata2" + juce::String (i), Ydata2[i] * midiScaler));
-                Yoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute ("Yoff" + juce::String (i), Yoff[i] * midiScaler));
-                trigger[i]      = (int) (127.1 * xmlState->getDoubleAttribute ("trigger" + juce::String (i), trigger[i] * midiScaler));
-                Xcc[i]          = (int) (127.1 * xmlState->getDoubleAttribute ("Xcc" + juce::String (i), Xcc[i] * midiScaler));
-                Xoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute ("Xoff" + juce::String (i), Xoff[i] * midiScaler));
-                SendOff[i]      = xmlState->getBoolAttribute ("SendOff" + juce::String (i), SendOff[i]);
-                UseX[i]         = xmlState->getDoubleAttribute ("UseX" + juce::String (i), UseX[i]) >= 0.5f;
-                UseY[i]         = xmlState->getDoubleAttribute ("UseY" + juce::String (i), UseY[i]) >= 0.5f;
-                UseYCC[i]       = xmlState->getBoolAttribute ("UseYCC" + juce::String (i), UseYCC[i]);
-                UseXPB[i]       = xmlState->getBoolAttribute ("UseXPB" + juce::String (i), UseXPB[i]);
-                lastx[i]        = xmlState->getIntAttribute ("lastx" + juce::String (i), lastx[i]);
-                lasty[i]        = xmlState->getIntAttribute ("lasty" + juce::String (i), lasty[i]);
-                toggle[i]       = xmlState->getBoolAttribute ("toggle" + juce::String (i), toggle[i]);
-                togglestate[i]  = xmlState->getBoolAttribute ("togglestate" + juce::String (i), togglestate[i]);
+                roundness[i]    = (float) xmlState->getDoubleAttribute("roundness", roundness[i]);
+                showdots[i]     = xmlState->getBoolAttribute("showdots", showdots[i]);
+                showdots[i]     = xmlState->getBoolAttribute("showdots" + juce::String(i), showdots[i]);
+                showvalues[i]   = xmlState->getBoolAttribute("showvalues" + juce::String(i), showvalues[i]);
+                icon[i]         = xmlState->getStringAttribute("icon" + juce::String(i), icon[i]);
+                text[i]         = xmlState->getStringAttribute("text" + juce::String(i), text[i]);
+                padcolor[i]     = juce::Colour(xmlState->getIntAttribute("padcolor" + juce::String(i), padcolor[i].getARGB()));
+                Ydata1[i]       = (int) (127.1 * xmlState->getDoubleAttribute("Ydata1" + juce::String(i), Ydata1[i] * midiScaler));
+                Ycc[i]          = (int) (127.1 * xmlState->getDoubleAttribute("Ycc" + juce::String(i), Ycc[i] * midiScaler));
+                Ytype[i]        = roundToInt(xmlState->getDoubleAttribute("Ytype" + juce::String(i), Ytype[i]));
+                Ydata2[i]       = (int) (127.1 * xmlState->getDoubleAttribute("Ydata2" + juce::String(i), Ydata2[i] * midiScaler));
+                Yoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute("Yoff" + juce::String(i), Yoff[i] * midiScaler));
+                trigger[i]      = (int) (127.1 * xmlState->getDoubleAttribute("trigger" + juce::String(i), trigger[i] * midiScaler));
+                Xcc[i]          = (int) (127.1 * xmlState->getDoubleAttribute("Xcc" + juce::String(i), Xcc[i] * midiScaler));
+                Xoff[i]         = (int) (127.1 * xmlState->getDoubleAttribute("Xoff" + juce::String(i), Xoff[i] * midiScaler));
+                SendOff[i]      = xmlState->getBoolAttribute("SendOff" + juce::String(i), SendOff[i]);
+                UseX[i]         = xmlState->getDoubleAttribute("UseX" + juce::String(i), UseX[i]) >= 0.5f;
+                UseY[i]         = xmlState->getDoubleAttribute("UseY" + juce::String(i), UseY[i]) >= 0.5f;
+                UseYCC[i]       = xmlState->getBoolAttribute("UseYCC" + juce::String(i), UseYCC[i]);
+                UseXPB[i]       = xmlState->getBoolAttribute("UseXPB" + juce::String(i), UseXPB[i]);
+                lastx[i]        = xmlState->getIntAttribute("lastx" + juce::String(i), lastx[i]);
+                lasty[i]        = xmlState->getIntAttribute("lasty" + juce::String(i), lasty[i]);
+                toggle[i]       = xmlState->getBoolAttribute("toggle" + juce::String(i), toggle[i]);
+                togglestate[i]  = xmlState->getBoolAttribute("togglestate" + juce::String(i), togglestate[i]);
             }
             sendChangeMessage();
         }
     }
     else
     {
-        programs->values_.removeChild (programs->values_.getChild (curProgram), nullptr);
-        juce::MemoryInputStream stream (data, sizeInBytes, false);
-        programs->values_.addChild (juce::ValueTree::readFromStream (stream), curProgram, nullptr);
-        programs->values_.getChild (curProgram).setProperty ("progIndex", curProgram, nullptr);
+        programs->values_.removeChild(programs->values_.getChild(curProgram), nullptr);
+        juce::MemoryInputStream stream(data, sizeInBytes, false);
+        programs->values_.addChild(juce::ValueTree::readFromStream(stream), curProgram, nullptr);
+        programs->values_.getChild(curProgram).setProperty("progIndex", curProgram, nullptr);
         init = true;
-        setCurrentProgram (curProgram);
+        setCurrentProgram(curProgram);
     }
 }
 
-void midiPads::setStateInformation (const void* data, int sizeInBytes)
+void midiPads::setStateInformation(const void* data, int sizeInBytes)
 {
     //check for old format
-    auto const xmlState (getXmlFromBinary (data, sizeInBytes));
+    auto const xmlState(getXmlFromBinary(data, sizeInBytes));
     if (xmlState != nullptr)
     {
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
-                juce::String prefix = "P" + juce::String (p) + ".";
+                juce::String prefix = "P" + juce::String(p) + ".";
                 for (int i = 0; i < kNumGlobalParams; i++)
                 {
-                    programs->set (p, getGlobalParamValueName (i), (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs->get (p, getGlobalParamValueName (i))));
+                    programs->set(p, getGlobalParamValueName(i), (float) xmlState->getDoubleAttribute(prefix + juce::String(i), programs->get(p, getGlobalParamValueName(i))));
                 }
-                programs->set (p, "lastUIWidth", xmlState->getIntAttribute (prefix + "uiWidth", programs->get (p, "lastUIWidth")));
-                programs->set (p, "lastUIHeight", xmlState->getIntAttribute (prefix + "uiHeight", programs->get (p, "lastUIHeight")));
-                programs->set (p, "bghue", (float) xmlState->getDoubleAttribute (prefix + "Hue", programs->get (p, "bghue")));
-                programs->set (p, "bgsat", (float) xmlState->getDoubleAttribute (prefix + "Sat", programs->get (p, "bgsat")));
-                programs->set (p, "bgbri", (float) xmlState->getDoubleAttribute (prefix + "Bri", programs->get (p, "bgbri")));
-                programs->set (p, "contrast", (float) xmlState->getDoubleAttribute (prefix + "Contrast", programs->get (p, "contrast")));
-                programs->set (p, "squares", xmlState->getIntAttribute (prefix + "squares", programs->get (p, "squares")));
-                programs->set (p, "editmode", xmlState->getBoolAttribute (prefix + "editmode", programs->get (p, "editmode")));
-                programs->set (p, "hex", xmlState->getBoolAttribute (prefix + "hex", programs->get (p, "hex")));
-                programs->set (p, "usemouseup", xmlState->getBoolAttribute (prefix + "usemouseup", programs->get (p, "usemouseup")));
-                if (programs->get (p, "hex"))
-                    setLayout (p, hexagonpads);
+                programs->set(p, "lastUIWidth", xmlState->getIntAttribute(prefix + "uiWidth", programs->get(p, "lastUIWidth")));
+                programs->set(p, "lastUIHeight", xmlState->getIntAttribute(prefix + "uiHeight", programs->get(p, "lastUIHeight")));
+                programs->set(p, "bghue", (float) xmlState->getDoubleAttribute(prefix + "Hue", programs->get(p, "bghue")));
+                programs->set(p, "bgsat", (float) xmlState->getDoubleAttribute(prefix + "Sat", programs->get(p, "bgsat")));
+                programs->set(p, "bgbri", (float) xmlState->getDoubleAttribute(prefix + "Bri", programs->get(p, "bgbri")));
+                programs->set(p, "contrast", (float) xmlState->getDoubleAttribute(prefix + "Contrast", programs->get(p, "contrast")));
+                programs->set(p, "squares", xmlState->getIntAttribute(prefix + "squares", programs->get(p, "squares")));
+                programs->set(p, "editmode", xmlState->getBoolAttribute(prefix + "editmode", programs->get(p, "editmode")));
+                programs->set(p, "hex", xmlState->getBoolAttribute(prefix + "hex", programs->get(p, "hex")));
+                programs->set(p, "usemouseup", xmlState->getBoolAttribute(prefix + "usemouseup", programs->get(p, "usemouseup")));
+                if (programs->get(p, "hex"))
+                {
+                    setLayout(p, hexagonpads);
+                }
                 else
                 {
-                    switch ((int) programs->get (p, "squares"))
+                    switch ((int) programs->get(p, "squares"))
                     {
                         case 1:
-                            setLayout (p, onepad);
+                            setLayout(p, onepad);
                             break;
                         case 4:
-                            setLayout (p, fourpads);
+                            setLayout(p, fourpads);
                             break;
                         case 5:
-                            setLayout (p, foursliders);
+                            setLayout(p, foursliders);
                             break;
                         case 10:
-                            setLayout (p, tenpads);
+                            setLayout(p, tenpads);
                             break;
                         case 14:
-                            setLayout (p, twelvepads);
+                            setLayout(p, twelvepads);
                             break;
                         case 16:
-                            setLayout (p, sixteenpads);
+                            setLayout(p, sixteenpads);
                             break;
                         case 17:
-                            setLayout (p, sixteensliders);
+                            setLayout(p, sixteensliders);
                             break;
                         case 28:
-                            setLayout (p, arrangeit28);
+                            setLayout(p, arrangeit28);
                             break;
                         case 33:
-                            setLayout (p, mixerpads);
+                            setLayout(p, mixerpads);
                             break;
                         case 40:
-                            setLayout (p, hexagonpads);
+                            setLayout(p, hexagonpads);
                             break;
                         case 46:
-                            setLayout (p, arrangeit39);
+                            setLayout(p, arrangeit39);
                             break;
                         case 48:
-                            setLayout (p, arrangeit48);
+                            setLayout(p, arrangeit48);
                             break;
                         case 52:
-                            setLayout (p, arrangeit51);
+                            setLayout(p, arrangeit51);
                             break;
                         case 64:
-                            setLayout (p, sixtyfourpads);
+                            setLayout(p, sixtyfourpads);
                             break;
                         default:
-                            setLayout (p, sixteenpads);
+                            setLayout(p, sixteenpads);
                             break;
                     }
                 }
-                for (int i = 0; i < (int) (programs->get (p, "squares")); i++)
+                for (int i = 0; i < (int) (programs->get(p, "squares")); i++)
                 {
-                    programs->setForPad (p, i, "showdots", xmlState->getBoolAttribute (prefix + "showdots", programs->getForPad (p, i, "showdots")));
-                    programs->setForPad (p, i, "showdots", xmlState->getBoolAttribute (prefix + "showdots" + juce::String (i), programs->getForPad (p, i, "showdots")));
-                    programs->setForPad (p, i, "showvalues", xmlState->getBoolAttribute (prefix + "showvalues" + juce::String (i), programs->getForPad (p, i, "showvalues")));
-                    programs->setForPad (p, i, "iconsize", 0.5f);
-                    programs->setForPad (p, i, "centeredText", false);
-                    programs->setForPad (p, i, "roundness", (float) xmlState->getDoubleAttribute (prefix + "roundness", programs->getForPad (p, i, "roundness")));
-                    programs->setForPad (p, i, "icon", xmlState->getStringAttribute (prefix + "icon" + juce::String (i), programs->getForPad (p, i, "icon")));
-                    programs->setForPad (p, i, "text", xmlState->getStringAttribute (prefix + "text" + juce::String (i), programs->getForPad (p, i, "text")));
-                    programs->setForPad (p, i, "padcolor", juce::Colour (xmlState->getIntAttribute (prefix + "padcolor" + juce::String (i), juce::Colour::fromString (programs->getForPad (p, i, "padcolor").toString()).getARGB())).toString());
-                    programs->setForPad (p, i, "Ydata1", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Ydata1" + juce::String (i), programs->getForPad (p, i, "Ydata1"))));
-                    programs->setForPad (p, i, "Ycc", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Ycc" + juce::String (i), programs->getForPad (p, i, "Ycc"))));
-                    programs->setForPad (p, i, "Ytype", roundToInt (xmlState->getDoubleAttribute (prefix + "Ytype" + juce::String (i), programs->getForPad (p, i, "Ytype"))));
-                    programs->setForPad (p, i, "Ydata2", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Ydata2" + juce::String (i), programs->getForPad (p, i, "Ydata2"))));
-                    programs->setForPad (p, i, "Yoff", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Yoff" + juce::String (i), programs->getForPad (p, i, "Yoff"))));
-                    programs->setForPad (p, i, "trigger", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "trigger" + juce::String (i), programs->getForPad (p, i, "trigger"))));
-                    programs->setForPad (p, i, "Xcc", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Xcc" + juce::String (i), programs->getForPad (p, i, "Xcc"))));
-                    programs->setForPad (p, i, "Xoff", (int) (127.1 * xmlState->getDoubleAttribute (prefix + "Xoff" + juce::String (i), programs->getForPad (p, i, "Xoff"))));
-                    programs->setForPad (p, i, "SendOff", xmlState->getBoolAttribute (prefix + "SendOff" + juce::String (i), programs->getForPad (p, i, "SendOff")));
-                    programs->setForPad (p, i, "UseX", xmlState->getDoubleAttribute (prefix + "UseX" + juce::String (i), programs->getForPad (p, i, "UseX")) >= 0.5f);
-                    programs->setForPad (p, i, "UseY", xmlState->getDoubleAttribute (prefix + "UseY" + juce::String (i), programs->getForPad (p, i, "UseY")) >= 0.5f);
-                    programs->setForPad (p, i, "UseYCC", xmlState->getBoolAttribute (prefix + "UseYCC" + juce::String (i), programs->getForPad (p, i, "UseYCC")));
-                    programs->setForPad (p, i, "UseXPB", xmlState->getBoolAttribute (prefix + "UseXPB" + juce::String (i), programs->getForPad (p, i, "UseXPB")));
-                    programs->setForPad (p, i, "lastx", xmlState->getIntAttribute (prefix + "lastx" + juce::String (i), programs->getForPad (p, i, "lastx")));
-                    programs->setForPad (p, i, "lasty", xmlState->getIntAttribute (prefix + "lasty" + juce::String (i), programs->getForPad (p, i, "lasty")));
-                    programs->setForPad (p, i, "toggle", xmlState->getBoolAttribute (prefix + "toggle" + juce::String (i), programs->getForPad (p, i, "toggle")));
-                    programs->setForPad (p, i, "togglestate", xmlState->getBoolAttribute (prefix + "togglestate" + juce::String (i), programs->getForPad (p, i, "togglestate")));
+                    programs->setForPad(p, i, "showdots", xmlState->getBoolAttribute(prefix + "showdots", programs->getForPad(p, i, "showdots")));
+                    programs->setForPad(p, i, "showdots", xmlState->getBoolAttribute(prefix + "showdots" + juce::String(i), programs->getForPad(p, i, "showdots")));
+                    programs->setForPad(p, i, "showvalues", xmlState->getBoolAttribute(prefix + "showvalues" + juce::String(i), programs->getForPad(p, i, "showvalues")));
+                    programs->setForPad(p, i, "iconsize", 0.5f);
+                    programs->setForPad(p, i, "centeredText", false);
+                    programs->setForPad(p, i, "roundness", (float) xmlState->getDoubleAttribute(prefix + "roundness", programs->getForPad(p, i, "roundness")));
+                    programs->setForPad(p, i, "icon", xmlState->getStringAttribute(prefix + "icon" + juce::String(i), programs->getForPad(p, i, "icon")));
+                    programs->setForPad(p, i, "text", xmlState->getStringAttribute(prefix + "text" + juce::String(i), programs->getForPad(p, i, "text")));
+                    programs->setForPad(p, i, "padcolor", juce::Colour(xmlState->getIntAttribute(prefix + "padcolor" + juce::String(i), juce::Colour::fromString(programs->getForPad(p, i, "padcolor").toString()).getARGB())).toString());
+                    programs->setForPad(p, i, "Ydata1", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Ydata1" + juce::String(i), programs->getForPad(p, i, "Ydata1"))));
+                    programs->setForPad(p, i, "Ycc", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Ycc" + juce::String(i), programs->getForPad(p, i, "Ycc"))));
+                    programs->setForPad(p, i, "Ytype", roundToInt(xmlState->getDoubleAttribute(prefix + "Ytype" + juce::String(i), programs->getForPad(p, i, "Ytype"))));
+                    programs->setForPad(p, i, "Ydata2", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Ydata2" + juce::String(i), programs->getForPad(p, i, "Ydata2"))));
+                    programs->setForPad(p, i, "Yoff", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Yoff" + juce::String(i), programs->getForPad(p, i, "Yoff"))));
+                    programs->setForPad(p, i, "trigger", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "trigger" + juce::String(i), programs->getForPad(p, i, "trigger"))));
+                    programs->setForPad(p, i, "Xcc", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Xcc" + juce::String(i), programs->getForPad(p, i, "Xcc"))));
+                    programs->setForPad(p, i, "Xoff", (int) (127.1 * xmlState->getDoubleAttribute(prefix + "Xoff" + juce::String(i), programs->getForPad(p, i, "Xoff"))));
+                    programs->setForPad(p, i, "SendOff", xmlState->getBoolAttribute(prefix + "SendOff" + juce::String(i), programs->getForPad(p, i, "SendOff")));
+                    programs->setForPad(p, i, "UseX", xmlState->getDoubleAttribute(prefix + "UseX" + juce::String(i), programs->getForPad(p, i, "UseX")) >= 0.5f);
+                    programs->setForPad(p, i, "UseY", xmlState->getDoubleAttribute(prefix + "UseY" + juce::String(i), programs->getForPad(p, i, "UseY")) >= 0.5f);
+                    programs->setForPad(p, i, "UseYCC", xmlState->getBoolAttribute(prefix + "UseYCC" + juce::String(i), programs->getForPad(p, i, "UseYCC")));
+                    programs->setForPad(p, i, "UseXPB", xmlState->getBoolAttribute(prefix + "UseXPB" + juce::String(i), programs->getForPad(p, i, "UseXPB")));
+                    programs->setForPad(p, i, "lastx", xmlState->getIntAttribute(prefix + "lastx" + juce::String(i), programs->getForPad(p, i, "lastx")));
+                    programs->setForPad(p, i, "lasty", xmlState->getIntAttribute(prefix + "lasty" + juce::String(i), programs->getForPad(p, i, "lasty")));
+                    programs->setForPad(p, i, "toggle", xmlState->getBoolAttribute(prefix + "toggle" + juce::String(i), programs->getForPad(p, i, "toggle")));
+                    programs->setForPad(p, i, "togglestate", xmlState->getBoolAttribute(prefix + "togglestate" + juce::String(i), programs->getForPad(p, i, "togglestate")));
                 }
-                programs->set (p, "name", xmlState->getStringAttribute (prefix + "progname", programs->get (p, "name")));
+                programs->set(p, "name", xmlState->getStringAttribute(prefix + "progname", programs->get(p, "name")));
             }
             init = true;
-            setCurrentProgram (xmlState->getIntAttribute ("program", 0));
+            setCurrentProgram(xmlState->getIntAttribute("program", 0));
         }
     }
     else
     {
-        juce::MemoryInputStream stream (data, sizeInBytes, false);
-        juce::ValueTree vt = juce::ValueTree::readFromStream (stream);
+        juce::MemoryInputStream stream(data, sizeInBytes, false);
+        juce::ValueTree vt = juce::ValueTree::readFromStream(stream);
         if (vt.isValid())
         {
-            programs->values_.removeAllChildren (nullptr);
+            programs->values_.removeAllChildren(nullptr);
             for (int i = 0; i < vt.getNumChildren(); i++)
             {
-                programs->values_.addChild (vt.getChild (i).createCopy(), i, nullptr);
+                programs->values_.addChild(vt.getChild(i).createCopy(), i, nullptr);
             }
         }
         init = true;
-        setCurrentProgram (vt.getProperty ("lastProgram", 0));
+        setCurrentProgram(vt.getProperty("lastProgram", 0));
     }
 }
 
-void midiPads::saveXmlPatch (int index, juce::File file)
+void midiPads::saveXmlPatch(int index, juce::File file)
 {
-    copySettingsToProgram (curProgram);
-    auto xml (programs->values_.getChild (index).createXml());
-    xml->writeTo (file);
+    copySettingsToProgram(curProgram);
+    auto xml(programs->values_.getChild(index).createXml());
+    xml->writeTo(file);
 }
 
-void midiPads::saveXmlBank (juce::File file)
+void midiPads::saveXmlBank(juce::File file)
 {
-    copySettingsToProgram (curProgram);
-    auto xml (programs->values_.createXml());
-    xml->writeTo (file);
+    copySettingsToProgram(curProgram);
+    auto xml(programs->values_.createXml());
+    xml->writeTo(file);
 }
 
-bool midiPads::loadXmlPatch (int index, juce::File file)
+bool midiPads::loadXmlPatch(int index, juce::File file)
 {
     if (! file.exists())
+    {
         return false;
-    juce::XmlDocument xmldoc (file.loadFileAsString());
-    auto xmlState (xmldoc.getDocumentElement());
-    programs->values_.removeChild (programs->values_.getChild (index), nullptr);
-    programs->values_.addChild (juce::ValueTree::fromXml (*xmlState), index, nullptr);
-    programs->values_.getChild (index).setProperty ("progIndex", index, nullptr);
+    }
+    juce::XmlDocument xmldoc(file.loadFileAsString());
+    auto xmlState(xmldoc.getDocumentElement());
+    programs->values_.removeChild(programs->values_.getChild(index), nullptr);
+    programs->values_.addChild(juce::ValueTree::fromXml(*xmlState), index, nullptr);
+    programs->values_.getChild(index).setProperty("progIndex", index, nullptr);
     if (curProgram == index)
     {
         init = true;
-        setCurrentProgram (index);
+        setCurrentProgram(index);
     }
     return true;
 }
 
-bool midiPads::loadXmlBank (juce::File file)
+bool midiPads::loadXmlBank(juce::File file)
 {
     if (! file.exists())
+    {
         return false;
+    }
     juce::String xml = file.loadFileAsString();
-    juce::XmlDocument xmldoc (xml);
-    auto xmlState (xmldoc.getDocumentElement());
-    juce::ValueTree vt = juce::ValueTree::fromXml (*xmlState);
+    juce::XmlDocument xmldoc(xml);
+    auto xmlState(xmldoc.getDocumentElement());
+    juce::ValueTree vt = juce::ValueTree::fromXml(*xmlState);
     if (vt.isValid())
     {
-        programs->values_.removeAllChildren (nullptr);
+        programs->values_.removeAllChildren(nullptr);
         for (int i = 0; i < vt.getNumChildren(); i++)
         {
-            programs->values_.addChild (vt.getChild (i).createCopy(), i, nullptr);
+            programs->values_.addChild(vt.getChild(i).createCopy(), i, nullptr);
         }
     }
     init = true;
-    setCurrentProgram (0);
+    setCurrentProgram(0);
     return true;
 }
 
-bool midiPads::loadFxb (juce::File file)
+bool midiPads::loadFxb(juce::File file)
 {
     if (! file.exists())
-        return false;
-    juce::MemoryBlock bank = juce::MemoryBlock (0, true);
-    file.loadFileAsData (bank);
-    bank.removeSection (0, 16);
-    if (! strncmp ((char*) bank.getData(), "m16p", 4))
     {
-        bank.removeSection (0, 144);
-        setStateInformation (bank.getData(), (int) bank.getSize());
-        setCurrentProgram (0);
+        return false;
+    }
+    juce::MemoryBlock bank = juce::MemoryBlock(0, true);
+    file.loadFileAsData(bank);
+    bank.removeSection(0, 16);
+    if (! strncmp((char*) bank.getData(), "m16p", 4))
+    {
+        bank.removeSection(0, 144);
+        setStateInformation(bank.getData(), (int) bank.getSize());
+        setCurrentProgram(0);
         return true;
     }
     return false;
 }
 
-bool midiPads::loadFxp (juce::File file)
+bool midiPads::loadFxp(juce::File file)
 {
     if (! file.exists())
-        return false;
-    juce::MemoryBlock data = juce::MemoryBlock (0, true);
-    file.loadFileAsData (data);
-    data.removeSection (0, 16);
-    if (! strncmp ((char*) data.getData(), "m16p", 4))
     {
-        data.removeSection (0, 44);
-        setCurrentProgramStateInformation (data.getData(), (int) data.getSize());
+        return false;
+    }
+    juce::MemoryBlock data = juce::MemoryBlock(0, true);
+    file.loadFileAsData(data);
+    data.removeSection(0, 16);
+    if (! strncmp((char*) data.getData(), "m16p", 4))
+    {
+        data.removeSection(0, 44);
+        setCurrentProgramStateInformation(data.getData(), (int) data.getSize());
         return true;
     }
     return false;
 }
 
-void midiPads::saveXmlLayout (juce::File file)
+void midiPads::saveXmlLayout(juce::File file)
 {
-    auto xml (programs->values_.getChild (curProgram).getChildWithName ("Layout").createXml());
-    xml->writeTo (file);
+    auto xml(programs->values_.getChild(curProgram).getChildWithName("Layout").createXml());
+    xml->writeTo(file);
 }
 
-void midiPads::loadXmlLayout (juce::File file)
+void midiPads::loadXmlLayout(juce::File file)
 {
     if (file.exists())
     {
-        juce::XmlDocument xmldoc (file.loadFileAsString());
-        auto xmlState (xmldoc.getDocumentElement());
-        juce::ValueTree program = programs->values_.getChild (curProgram);
-        int index               = program.indexOf (program.getChildWithName ("Layout"));
-        program.removeChild (index, nullptr);
-        program.addChild (juce::ValueTree::fromXml (*xmlState), index, nullptr);
+        juce::XmlDocument xmldoc(file.loadFileAsString());
+        auto xmlState(xmldoc.getDocumentElement());
+        juce::ValueTree program = programs->values_.getChild(curProgram);
+        int index               = program.indexOf(program.getChildWithName("Layout"));
+        program.removeChild(index, nullptr);
+        program.addChild(juce::ValueTree::fromXml(*xmlState), index, nullptr);
     }
 }
 
-juce::Rectangle<int> midiPads::getPadBounds (int index)
+juce::Rectangle<int> midiPads::getPadBounds(int index)
 {
-    juce::Rectangle<float> rect = programs->getPadBounds (curProgram, index);
-    return juce::Rectangle<int> (roundToInt (rect.getX() * lastUIWidth),
-                                 roundToInt (rect.getY() * lastUIHeight),
-                                 roundToInt (rect.getWidth() * lastUIWidth),
-                                 roundToInt (rect.getHeight() * lastUIHeight));
+    juce::Rectangle<float> rect = programs->getPadBounds(curProgram, index);
+    return juce::Rectangle<int>(roundToInt(rect.getX() * lastUIWidth),
+                                roundToInt(rect.getY() * lastUIHeight),
+                                roundToInt(rect.getWidth() * lastUIWidth),
+                                roundToInt(rect.getHeight() * lastUIHeight));
 }
 
-void midiPads::setPadPosition (int index, float x, float y)
+void midiPads::setPadPosition(int index, float x, float y)
 {
-    programs->setPadPosition (curProgram, index, x, y);
+    programs->setPadPosition(curProgram, index, x, y);
 }
 
-void midiPads::setPadSize (int index, float w, float h)
+void midiPads::setPadSize(int index, float w, float h)
 {
-    programs->setPadSize (curProgram, index, w, h);
+    programs->setPadSize(curProgram, index, w, h);
 }
 
-bool midiPads::isPadVisible (int index)
+bool midiPads::isPadVisible(int index)
 {
-    return programs->getPadVisible (curProgram, index);
+    return programs->getPadVisible(curProgram, index);
 }
 
-void midiPads::setPadVisible (int index, bool visibility)
+void midiPads::setPadVisible(int index, bool visibility)
 {
-    programs->setPadVisible (curProgram, index, visibility);
+    programs->setPadVisible(curProgram, index, visibility);
 }
 
 void midiPads::fillLayouts()
@@ -1157,698 +1246,698 @@ void midiPads::fillLayouts()
     {
         if (onepad == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "1 Pad", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "1 Pad", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p == 0, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p == 0, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0151f, 0.0649f, 0.9698f, 0.9243f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0151f, 0.0649f, 0.9698f, 0.9243f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (fourpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "4 Pads", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "4 Pads", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 4, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 4, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.01f, 0.0603f, 0.4799f, 0.4606f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.51f, 0.0603f, 0.4799f, 0.4606f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.01f, 0.5301f, 0.4799f, 0.4606f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.51f, 0.5301f, 0.4799f, 0.4606f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.01f, 0.0603f, 0.4799f, 0.4606f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.51f, 0.0603f, 0.4799f, 0.4606f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.01f, 0.5301f, 0.4799f, 0.4606f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.51f, 0.5301f, 0.4799f, 0.4606f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (foursliders == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "4 Sliders", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "4 Sliders", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 4, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 4, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0192f, 0.0649f, 0.23f, 0.921f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.2636f, 0.0649f, 0.23f, 0.921f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.5064f, 0.0649f, 0.23f, 0.921f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.7508f, 0.0649f, 0.23f, 0.921f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0192f, 0.0649f, 0.23f, 0.921f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.2636f, 0.0649f, 0.23f, 0.921f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.5064f, 0.0649f, 0.23f, 0.921f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.7508f, 0.0649f, 0.23f, 0.921f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (tenpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "10 Pads", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "10 Pads", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 10, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 10, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0187f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.2627f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.5070f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.7512f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.0187f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.2627f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.5070f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.7512f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0187f, 0.5317f, 0.4793f, 0.4637f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.5073f, 0.5317f, 0.4793f, 0.4637f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0187f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.2627f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.5070f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.7512f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.0187f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.2627f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.5070f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.7512f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0187f, 0.5317f, 0.4793f, 0.4637f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.5073f, 0.5317f, 0.4793f, 0.4637f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (twelvepads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "2 Pads, 12 Sliders", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "2 Pads, 12 Sliders", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 14, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 14, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0086f, 0.0618f, 0.4786f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.4940f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.5798f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.6638f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.7479f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.8319f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.9160f, 0.0618f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.0086f, 0.5318f, 0.4786f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.4940f, 0.5318f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.5815f, 0.5318f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.6638f, 0.5318f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.7479f, 0.5318f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.8319f, 0.5318f, 0.0755f, 0.4588f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.9160f, 0.5318f, 0.0755f, 0.4588f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0086f, 0.0618f, 0.4786f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.4940f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.5798f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.6638f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.7479f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.8319f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.9160f, 0.0618f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.0086f, 0.5318f, 0.4786f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.4940f, 0.5318f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.5815f, 0.5318f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.6638f, 0.5318f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.7479f, 0.5318f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.8319f, 0.5318f, 0.0755f, 0.4588f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.9160f, 0.5318f, 0.0755f, 0.4588f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (sixteenpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "16 Pads", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "16 Pads", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 16, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 16, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0187f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.2627f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.5070f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.7512f, 0.0649f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.0187f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.2627f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.5070f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.7512f, 0.2983f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0187f, 0.5317f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.2627f, 0.5317f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.5070f, 0.5317f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.7555f, 0.5317f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.0187f, 0.7650f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.2627f, 0.7650f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.5070f, 0.7650f, 0.2303f, 0.2319f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.7512f, 0.7650f, 0.2303f, 0.2319f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0187f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.2627f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.5070f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.7512f, 0.0649f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.0187f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.2627f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.5070f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.7512f, 0.2983f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0187f, 0.5317f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.2627f, 0.5317f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.5070f, 0.5317f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.7555f, 0.5317f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.0187f, 0.7650f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.2627f, 0.7650f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.5070f, 0.7650f, 0.2303f, 0.2319f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.7512f, 0.7650f, 0.2303f, 0.2319f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (sixteensliders == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "16 Sliders", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "16 Sliders", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 16, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 16, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0058f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.0675f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.1293f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.1911f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.2529f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.3147f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.3764f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.4382f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.5000f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.5618f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.6236f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.6853f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.7471f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.8089f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.8707f, 0.0619f, 0.0603f, 0.9305f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.9325f, 0.0619f, 0.0603f, 0.9305f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0058f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.0675f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.1293f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.1911f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.2529f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.3147f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.3764f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.4382f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.5000f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.5618f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.6236f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.6853f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.7471f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.8089f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.8707f, 0.0619f, 0.0603f, 0.9305f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.9325f, 0.0619f, 0.0603f, 0.9305f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (sixtyfourpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "64 Pads", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "64 Pads", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 64, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 64, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0031f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.1280f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.2516f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.3752f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.5000f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.6266f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.7516f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.8766f, 0.0538f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0031f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.1280f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.2516f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.3752f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.5000f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.6266f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.7516f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.8766f, 0.1728f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.0031f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.1280f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.2516f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.3752f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.5000f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.6266f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.7516f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.8766f, 0.2910f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.0031f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.1280f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.2516f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.3752f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.5000f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.6266f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.7516f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.8766f, 0.4092f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.0031f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.1280f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.2516f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.3752f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.5000f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.6266f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.7516f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.8766f, 0.5288f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (40), 0.0031f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (41), 0.1280f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (42), 0.2516f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (43), 0.3752f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (44), 0.5000f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (45), 0.6266f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (46), 0.7516f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (47), 0.8766f, 0.6455f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (48), 0.0031f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (49), 0.1280f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (50), 0.2516f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (51), 0.3752f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (52), 0.5000f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (53), 0.6266f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (54), 0.7516f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (55), 0.8766f, 0.7637f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (56), 0.0031f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (57), 0.1280f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (58), 0.2516f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (59), 0.3752f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (60), 0.5000f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (61), 0.6266f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (62), 0.7516f, 0.8803f, 0.1203f, 0.1211f);
-            PadLayouts::setPadLayout (layout.getChild (63), 0.8766f, 0.8803f, 0.1203f, 0.1211f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0031f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.1280f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.2516f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.3752f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.5000f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.6266f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.7516f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.8766f, 0.0538f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0031f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.1280f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.2516f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.3752f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.5000f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.6266f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.7516f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.8766f, 0.1728f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.0031f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.1280f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.2516f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.3752f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.5000f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.6266f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.7516f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.8766f, 0.2910f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.0031f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.1280f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.2516f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.3752f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.5000f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.6266f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.7516f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.8766f, 0.4092f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.0031f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.1280f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.2516f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.3752f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.5000f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.6266f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.7516f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.8766f, 0.5288f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(40), 0.0031f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(41), 0.1280f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(42), 0.2516f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(43), 0.3752f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(44), 0.5000f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(45), 0.6266f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(46), 0.7516f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(47), 0.8766f, 0.6455f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(48), 0.0031f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(49), 0.1280f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(50), 0.2516f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(51), 0.3752f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(52), 0.5000f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(53), 0.6266f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(54), 0.7516f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(55), 0.8766f, 0.7637f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(56), 0.0031f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(57), 0.1280f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(58), 0.2516f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(59), 0.3752f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(60), 0.5000f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(61), 0.6266f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(62), 0.7516f, 0.8803f, 0.1203f, 0.1211f);
+            PadLayouts::setPadLayout(layout.getChild(63), 0.8766f, 0.8803f, 0.1203f, 0.1211f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (hexagonpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "Hexagons", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "Hexagons", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 40, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 40, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0370f, 0.1504f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.0370f, 0.3372f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.0370f, 0.5241f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.0370f, 0.7110f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.1358f, 0.2438f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.1358f, 0.4307f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.1358f, 0.6175f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.1358f, 0.8044f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.2346f, 0.1504f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.2346f, 0.3372f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.2346f, 0.5241f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.2346f, 0.7110f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.3333f, 0.2438f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.3333f, 0.4307f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.3333f, 0.6175f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.3333f, 0.8044f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.4321f, 0.1504f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.4321f, 0.3372f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.4321f, 0.5241f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.4321f, 0.7110f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.5309f, 0.2438f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.5309f, 0.4307f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.5309f, 0.6175f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.5309f, 0.8044f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.6296f, 0.1504f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.6296f, 0.3372f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.6296f, 0.5241f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.6296f, 0.7110f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.7284f, 0.2438f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.7284f, 0.4307f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.7284f, 0.6175f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.7284f, 0.8044f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.8272f, 0.1504f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.8272f, 0.3372f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.8272f, 0.5241f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.8272f, 0.7110f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.1358f, 0.0584f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.3333f, 0.0584f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.5309f, 0.0584f, 0.1317f, 0.1869f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.7284f, 0.0584f, 0.1317f, 0.1869f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0370f, 0.1504f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.0370f, 0.3372f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.0370f, 0.5241f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.0370f, 0.7110f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.1358f, 0.2438f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.1358f, 0.4307f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.1358f, 0.6175f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.1358f, 0.8044f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.2346f, 0.1504f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.2346f, 0.3372f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.2346f, 0.5241f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.2346f, 0.7110f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.3333f, 0.2438f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.3333f, 0.4307f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.3333f, 0.6175f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.3333f, 0.8044f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.4321f, 0.1504f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.4321f, 0.3372f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.4321f, 0.5241f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.4321f, 0.7110f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.5309f, 0.2438f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.5309f, 0.4307f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.5309f, 0.6175f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.5309f, 0.8044f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.6296f, 0.1504f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.6296f, 0.3372f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.6296f, 0.5241f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.6296f, 0.7110f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.7284f, 0.2438f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.7284f, 0.4307f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.7284f, 0.6175f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.7284f, 0.8044f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.8272f, 0.1504f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.8272f, 0.3372f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.8272f, 0.5241f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.8272f, 0.7110f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.1358f, 0.0584f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.3333f, 0.0584f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.5309f, 0.0584f, 0.1317f, 0.1869f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.7284f, 0.0584f, 0.1317f, 0.1869f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (mixerpads == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "8 Ch Mixer", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "8 Ch Mixer", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 32, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 32, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0029f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.1273f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.2515f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.3750f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.5000f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.6265f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.7517f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.8765f, 0.0541f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0029f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.1273f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.2515f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.3750f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.5000f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.6265f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.7517f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.8765f, 0.1731f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.0029f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.1273f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.2515f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.3750f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.5000f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.6265f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.7517f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.8765f, 0.2905f, 0.1207f, 0.1206f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.0029f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.1273f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.2515f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.3750f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.5000f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.6265f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.7517f, 0.4100f, 0.1207f, 0.5792f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.8765f, 0.4100f, 0.1207f, 0.5792f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0029f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.1273f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.2515f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.3750f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.5000f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.6265f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.7517f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.8765f, 0.0541f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0029f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.1273f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.2515f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.3750f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.5000f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.6265f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.7517f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.8765f, 0.1731f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.0029f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.1273f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.2515f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.3750f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.5000f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.6265f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.7517f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.8765f, 0.2905f, 0.1207f, 0.1206f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.0029f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.1273f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.2515f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.3750f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.5000f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.6265f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.7517f, 0.4100f, 0.1207f, 0.5792f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.8765f, 0.4100f, 0.1207f, 0.5792f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit28 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "2 XY, 5 Sliders, 21 Buttons", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "2 XY, 5 Sliders, 21 Buttons", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 28, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 28, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0134f, 0.4030f, 0.5854f, 0.5822f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.6276f, 0.0696f, 0.3611f, 0.3126f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.0113f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.0113f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.0134f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.1019f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.1019f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.1049f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.1914f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.1914f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.1924f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.2788f, 0.0652f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.2788f, 0.1778f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.2798f, 0.2904f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.3673f, 0.0667f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.3673f, 0.1793f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.3673f, 0.2919f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.4537f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.4537f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.4547f, 0.2919f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.5411f, 0.0637f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.5411f, 0.1763f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.5422f, 0.2889f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.6317f, 0.4030f, 0.0576f, 0.5822f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.9269f, 0.4030f, 0.0576f, 0.5822f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.7047f, 0.4030f, 0.0576f, 0.5822f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.7788f, 0.4030f, 0.0576f, 0.5822f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.8529f, 0.4030f, 0.0576f, 0.5822f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0134f, 0.4030f, 0.5854f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.6276f, 0.0696f, 0.3611f, 0.3126f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.0113f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.0113f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.0134f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.1019f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.1019f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.1049f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.1914f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.1914f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.1924f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.2788f, 0.0652f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.2788f, 0.1778f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.2798f, 0.2904f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.3673f, 0.0667f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.3673f, 0.1793f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.3673f, 0.2919f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.4537f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.4537f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.4547f, 0.2919f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.5411f, 0.0637f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.5411f, 0.1763f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.5422f, 0.2889f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.6317f, 0.4030f, 0.0576f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.9269f, 0.4030f, 0.0576f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.7047f, 0.4030f, 0.0576f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.7788f, 0.4030f, 0.0576f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.8529f, 0.4030f, 0.0576f, 0.5822f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit39 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "2 XY, 12 Sliders, 25 Buttons", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "2 XY, 12 Sliders, 25 Buttons", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 39, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 39, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.5000f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.4383f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.3776f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.3169f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.2572f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.1975f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.1368f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.0755f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.5607f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.6214f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.0154f, 0.0696f, 0.0494f, 0.2993f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.6811f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.5000f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.4383f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.3776f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.3169f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.2572f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.1975f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.1368f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.0755f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.5607f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.6214f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.0154f, 0.0696f, 0.0494f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.6811f, 0.0696f, 0.0494f, 0.2993f);
 
-            PadLayouts::setPadLayout (layout.getChild (12), 0.0165f, 0.3852f, 0.4979f, 0.6000f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.7479f, 0.0696f, 0.2387f, 0.2993f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.0165f, 0.3852f, 0.4979f, 0.6000f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.7479f, 0.0696f, 0.2387f, 0.2993f);
 
-            PadLayouts::setPadLayout (layout.getChild (14), 0.5566f, 0.4119f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.5566f, 0.5244f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.5576f, 0.6370f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.5576f, 0.7511f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.5576f, 0.8637f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.6492f, 0.4119f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.6492f, 0.5244f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.6492f, 0.6370f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.6492f, 0.7511f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.6492f, 0.8637f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.7376f, 0.4119f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.7376f, 0.5244f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.7376f, 0.6370f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.7376f, 0.7511f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.7376f, 0.8637f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.8251f, 0.4119f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.8251f, 0.5244f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.8251f, 0.6370f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.8251f, 0.7511f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.8251f, 0.8637f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.9125f, 0.4119f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.9125f, 0.5244f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.9125f, 0.6370f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.9125f, 0.7511f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.9125f, 0.8637f, 0.0576f, 0.0948f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.5566f, 0.4119f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.5566f, 0.5244f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.5576f, 0.6370f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.5576f, 0.7511f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.5576f, 0.8637f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.6492f, 0.4119f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.6492f, 0.5244f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.6492f, 0.6370f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.6492f, 0.7511f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.6492f, 0.8637f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.7376f, 0.4119f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.7376f, 0.5244f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.7376f, 0.6370f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.7376f, 0.7511f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.7376f, 0.8637f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.8251f, 0.4119f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.8251f, 0.5244f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.8251f, 0.6370f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.8251f, 0.7511f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.8251f, 0.8637f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.9125f, 0.4119f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.9125f, 0.5244f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.9125f, 0.6370f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.9125f, 0.7511f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.9125f, 0.8637f, 0.0576f, 0.0948f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit51 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "2 XY, 49 Buttons", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "2 XY, 49 Buttons", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 51, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 51, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (22), 0.0216f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.1121f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.2016f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.2891f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.3776f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.4640f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (40), 0.5514f, 0.0681f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (43), 0.6399f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.0216f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.1121f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.2016f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.2891f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.3776f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.4640f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(40), 0.5514f, 0.0681f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(43), 0.6399f, 0.0681f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (1), 0.7243f, 0.0681f, 0.2623f, 0.3126f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.7243f, 0.0681f, 0.2623f, 0.3126f);
 
-            PadLayouts::setPadLayout (layout.getChild (23), 0.0237f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.1152f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.2027f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.2901f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.3776f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.4650f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (41), 0.5525f, 0.1807f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (44), 0.6399f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.0237f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.1152f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.2027f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.2901f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.3776f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.4650f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(41), 0.5525f, 0.1807f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(44), 0.6399f, 0.1807f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (24), 0.0237f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.1152f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.2027f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.2901f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.3776f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.4650f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (42), 0.5525f, 0.2933f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (45), 0.6399f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.0237f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.1152f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.2027f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.2901f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.3776f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.4650f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(42), 0.5525f, 0.2933f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(45), 0.6399f, 0.2933f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0165f, 0.4030f, 0.4979f, 0.5822f);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0165f, 0.4030f, 0.4979f, 0.5822f);
 
-            PadLayouts::setPadLayout (layout.getChild (2), 0.5535f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.6420f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.7294f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.8179f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (46), 0.9033f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.5535f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.6420f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.7294f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.8179f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(46), 0.9033f, 0.4030f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (3), 0.5535f, 0.5156f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.6420f, 0.5156f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.7294f, 0.5156f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.8179f, 0.5156f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (47), 0.9033f, 0.5156f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.5535f, 0.5156f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.6420f, 0.5156f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.7294f, 0.5156f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.8179f, 0.5156f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(47), 0.9033f, 0.5156f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (4), 0.5556f, 0.6281f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.6440f, 0.6281f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.7315f, 0.6281f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.8189f, 0.6281f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (48), 0.9054f, 0.6281f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.5556f, 0.6281f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.6440f, 0.6281f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.7315f, 0.6281f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.8189f, 0.6281f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(48), 0.9054f, 0.6281f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (5), 0.5556f, 0.7452f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.6440f, 0.7452f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.7315f, 0.7422f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.8189f, 0.7422f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (49), 0.9054f, 0.7422f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.5556f, 0.7452f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.6440f, 0.7452f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.7315f, 0.7422f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.8189f, 0.7422f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(49), 0.9054f, 0.7422f, 0.0576f, 0.0948f);
 
-            PadLayouts::setPadLayout (layout.getChild (6), 0.5556f, 0.8548f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.6440f, 0.8548f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.7315f, 0.8548f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.8189f, 0.8548f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (50), 0.9054f, 0.8548f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.5556f, 0.8548f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.6440f, 0.8548f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.7315f, 0.8548f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.8189f, 0.8548f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(50), 0.9054f, 0.8548f, 0.0576f, 0.0948f);
 
-            layouts->values_.addChild (layout, i, nullptr);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit48 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "6 Mixer Blocks", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "6 Mixer Blocks", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 48, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 48, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.2541f, 0.1778f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.0124f, 0.0800f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.0761f, 0.1793f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.0700f, 0.0815f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.1327f, 0.1778f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.1893f, 0.1778f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.2541f, 0.2904f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.2562f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.9280f, 0.1763f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.6862f, 0.0800f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.7500f, 0.1778f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.7449f, 0.0815f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.8066f, 0.1763f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.8632f, 0.1763f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.9280f, 0.2889f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.9300f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.5905f, 0.1778f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.3488f, 0.0800f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.4115f, 0.1793f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.4064f, 0.0815f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.4691f, 0.1778f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.5257f, 0.1778f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.5905f, 0.2904f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.5926f, 0.4030f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.2531f, 0.6578f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.0124f, 0.5615f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.0751f, 0.6593f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.0700f, 0.5630f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.1327f, 0.6578f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.1883f, 0.6578f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.2531f, 0.7704f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.2562f, 0.8830f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.9280f, 0.6563f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.6852f, 0.5615f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.7500f, 0.6578f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.7438f, 0.5630f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.8056f, 0.6563f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.8632f, 0.6563f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.9280f, 0.7689f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.9290f, 0.8830f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (40), 0.5905f, 0.6578f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (41), 0.3477f, 0.5615f, 0.0411f, 0.4178f);
-            PadLayouts::setPadLayout (layout.getChild (42), 0.4115f, 0.6593f, 0.0411f, 0.3185f);
-            PadLayouts::setPadLayout (layout.getChild (43), 0.4053f, 0.5630f, 0.2459f, 0.0593f);
-            PadLayouts::setPadLayout (layout.getChild (44), 0.4681f, 0.6578f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (45), 0.5257f, 0.6578f, 0.0411f, 0.3200f);
-            PadLayouts::setPadLayout (layout.getChild (46), 0.5905f, 0.7704f, 0.0576f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (47), 0.5926f, 0.8830f, 0.0576f, 0.0948f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.2541f, 0.1778f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.0124f, 0.0800f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.0761f, 0.1793f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.0700f, 0.0815f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.1327f, 0.1778f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.1893f, 0.1778f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.2541f, 0.2904f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.2562f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.9280f, 0.1763f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.6862f, 0.0800f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.7500f, 0.1778f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.7449f, 0.0815f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.8066f, 0.1763f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.8632f, 0.1763f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.9280f, 0.2889f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.9300f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.5905f, 0.1778f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.3488f, 0.0800f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.4115f, 0.1793f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.4064f, 0.0815f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.4691f, 0.1778f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.5257f, 0.1778f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.5905f, 0.2904f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.5926f, 0.4030f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.2531f, 0.6578f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.0124f, 0.5615f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.0751f, 0.6593f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.0700f, 0.5630f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.1327f, 0.6578f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.1883f, 0.6578f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.2531f, 0.7704f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.2562f, 0.8830f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.9280f, 0.6563f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.6852f, 0.5615f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.7500f, 0.6578f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.7438f, 0.5630f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.8056f, 0.6563f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.8632f, 0.6563f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.9280f, 0.7689f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.9290f, 0.8830f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(40), 0.5905f, 0.6578f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(41), 0.3477f, 0.5615f, 0.0411f, 0.4178f);
+            PadLayouts::setPadLayout(layout.getChild(42), 0.4115f, 0.6593f, 0.0411f, 0.3185f);
+            PadLayouts::setPadLayout(layout.getChild(43), 0.4053f, 0.5630f, 0.2459f, 0.0593f);
+            PadLayouts::setPadLayout(layout.getChild(44), 0.4681f, 0.6578f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(45), 0.5257f, 0.6578f, 0.0411f, 0.3200f);
+            PadLayouts::setPadLayout(layout.getChild(46), 0.5905f, 0.7704f, 0.0576f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(47), 0.5926f, 0.8830f, 0.0576f, 0.0948f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit64 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "8 Mixer Blocks w/Sends", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "8 Mixer Blocks w/Sends", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 64, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 64, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0155f, 0.1809f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.0113f, 0.0985f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.0835f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.1299f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.1773f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.0825f, 0.2765f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.0825f, 0.3471f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.0825f, 0.4176f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0155f, 0.6794f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.0113f, 0.5971f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.0835f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.1299f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.1773f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.0825f, 0.7750f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.0825f, 0.8456f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.0825f, 0.9162f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.2691f, 0.1809f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.2649f, 0.0985f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.3371f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.3835f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.4309f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.3361f, 0.2765f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.3361f, 0.3471f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.3361f, 0.4176f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.2691f, 0.6794f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.2649f, 0.5971f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.3371f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.3835f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.4309f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.3361f, 0.7750f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.3361f, 0.8456f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.3361f, 0.9162f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.5227f, 0.1809f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.5186f, 0.0985f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.5907f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.6371f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.6845f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.5897f, 0.2765f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.5897f, 0.3471f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.5897f, 0.4176f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (40), 0.5227f, 0.6794f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (41), 0.5186f, 0.5971f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (42), 0.5907f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (43), 0.6371f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (44), 0.6845f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (45), 0.5897f, 0.7750f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (46), 0.5897f, 0.8456f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (47), 0.5897f, 0.9162f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (48), 0.7763f, 0.1809f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (49), 0.7722f, 0.0985f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (50), 0.8443f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (51), 0.8907f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (52), 0.9381f, 0.1941f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (53), 0.8433f, 0.2765f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (54), 0.8433f, 0.3471f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (55), 0.8433f, 0.4176f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (56), 0.7763f, 0.6794f, 0.0495f, 0.3118f);
-            PadLayouts::setPadLayout (layout.getChild (57), 0.7722f, 0.5971f, 0.2186f, 0.0706f);
-            PadLayouts::setPadLayout (layout.getChild (58), 0.8443f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (59), 0.8907f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (60), 0.9381f, 0.6926f, 0.0412f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (61), 0.8433f, 0.7750f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (62), 0.8433f, 0.8456f, 0.1351f, 0.0588f);
-            PadLayouts::setPadLayout (layout.getChild (63), 0.8433f, 0.9162f, 0.1351f, 0.0588f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0155f, 0.1809f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.0113f, 0.0985f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.0835f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.1299f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.1773f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.0825f, 0.2765f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.0825f, 0.3471f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.0825f, 0.4176f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0155f, 0.6794f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.0113f, 0.5971f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.0835f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.1299f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.1773f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.0825f, 0.7750f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.0825f, 0.8456f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.0825f, 0.9162f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.2691f, 0.1809f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.2649f, 0.0985f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.3371f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.3835f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.4309f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.3361f, 0.2765f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.3361f, 0.3471f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.3361f, 0.4176f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.2691f, 0.6794f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.2649f, 0.5971f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.3371f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.3835f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.4309f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.3361f, 0.7750f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.3361f, 0.8456f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.3361f, 0.9162f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.5227f, 0.1809f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.5186f, 0.0985f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.5907f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.6371f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.6845f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.5897f, 0.2765f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.5897f, 0.3471f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.5897f, 0.4176f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(40), 0.5227f, 0.6794f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(41), 0.5186f, 0.5971f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(42), 0.5907f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(43), 0.6371f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(44), 0.6845f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(45), 0.5897f, 0.7750f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(46), 0.5897f, 0.8456f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(47), 0.5897f, 0.9162f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(48), 0.7763f, 0.1809f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(49), 0.7722f, 0.0985f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(50), 0.8443f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(51), 0.8907f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(52), 0.9381f, 0.1941f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(53), 0.8433f, 0.2765f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(54), 0.8433f, 0.3471f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(55), 0.8433f, 0.4176f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(56), 0.7763f, 0.6794f, 0.0495f, 0.3118f);
+            PadLayouts::setPadLayout(layout.getChild(57), 0.7722f, 0.5971f, 0.2186f, 0.0706f);
+            PadLayouts::setPadLayout(layout.getChild(58), 0.8443f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(59), 0.8907f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(60), 0.9381f, 0.6926f, 0.0412f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(61), 0.8433f, 0.7750f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(62), 0.8433f, 0.8456f, 0.1351f, 0.0588f);
+            PadLayouts::setPadLayout(layout.getChild(63), 0.8433f, 0.9162f, 0.1351f, 0.0588f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
         else if (arrangeit55 == i)
         {
-            juce::ValueTree layout ("Layout");
-            layout.setProperty ("name", "1 XY, 6 Sliders, 48 Buttons", nullptr);
+            juce::ValueTree layout("Layout");
+            layout.setProperty("name", "1 XY, 6 Sliders, 48 Buttons", nullptr);
             for (int p = 0; p < numPads; p++)
             {
-                juce::ValueTree padpos ("PadPosition");
-                padpos.setProperty ("visible", p < 55, nullptr);
-                layout.addChild (padpos, p, nullptr);
+                juce::ValueTree padpos("PadPosition");
+                padpos.setProperty("visible", p < 55, nullptr);
+                layout.addChild(padpos, p, nullptr);
             }
-            PadLayouts::setPadLayout (layout.getChild (0), 0.0082f, 0.5215f, 0.4562f, 0.4622f);
-            PadLayouts::setPadLayout (layout.getChild (1), 0.0082f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (2), 0.0082f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (3), 0.0082f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (4), 0.0082f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (5), 0.0896f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (6), 0.0896f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (7), 0.0896f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (8), 0.0896f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (9), 0.1689f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (10), 0.1689f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (11), 0.1689f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (12), 0.1689f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (13), 0.2482f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (14), 0.2482f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (15), 0.2482f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (16), 0.2482f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (17), 0.3265f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (18), 0.3265f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (19), 0.3265f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (20), 0.3265f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (21), 0.4047f, 0.0785f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (22), 0.4047f, 0.1822f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (23), 0.4047f, 0.2859f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (24), 0.4047f, 0.3896f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (25), 0.5345f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (26), 0.5345f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (27), 0.5345f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (28), 0.5345f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (29), 0.6159f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (30), 0.6159f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (31), 0.6159f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (32), 0.6159f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (33), 0.6944f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (34), 0.6944f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (35), 0.6944f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (36), 0.6944f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (37), 0.7737f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (38), 0.7737f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (39), 0.7737f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (40), 0.7737f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (41), 0.8518f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (42), 0.8518f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (43), 0.8518f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (44), 0.8518f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (45), 0.9311f, 0.5778f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (46), 0.9311f, 0.6815f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (47), 0.9311f, 0.7852f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (48), 0.9311f, 0.8889f, 0.0577f, 0.0948f);
-            PadLayouts::setPadLayout (layout.getChild (49), 0.5345f, 0.0756f, 0.0577f, 0.4059f);
-            PadLayouts::setPadLayout (layout.getChild (50), 0.6138f, 0.0756f, 0.0577f, 0.4059f);
-            PadLayouts::setPadLayout (layout.getChild (51), 0.6914f, 0.0756f, 0.0577f, 0.4059f);
-            PadLayouts::setPadLayout (layout.getChild (52), 0.7706f, 0.0756f, 0.0577f, 0.4059f);
-            PadLayouts::setPadLayout (layout.getChild (53), 0.8496f, 0.0756f, 0.0577f, 0.4059f);
-            PadLayouts::setPadLayout (layout.getChild (54), 0.9310f, 0.0756f, 0.0577f, 0.4059f);
-            layouts->values_.addChild (layout, i, nullptr);
+            PadLayouts::setPadLayout(layout.getChild(0), 0.0082f, 0.5215f, 0.4562f, 0.4622f);
+            PadLayouts::setPadLayout(layout.getChild(1), 0.0082f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(2), 0.0082f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(3), 0.0082f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(4), 0.0082f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(5), 0.0896f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(6), 0.0896f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(7), 0.0896f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(8), 0.0896f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(9), 0.1689f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(10), 0.1689f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(11), 0.1689f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(12), 0.1689f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(13), 0.2482f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(14), 0.2482f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(15), 0.2482f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(16), 0.2482f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(17), 0.3265f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(18), 0.3265f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(19), 0.3265f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(20), 0.3265f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(21), 0.4047f, 0.0785f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(22), 0.4047f, 0.1822f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(23), 0.4047f, 0.2859f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(24), 0.4047f, 0.3896f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(25), 0.5345f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(26), 0.5345f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(27), 0.5345f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(28), 0.5345f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(29), 0.6159f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(30), 0.6159f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(31), 0.6159f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(32), 0.6159f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(33), 0.6944f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(34), 0.6944f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(35), 0.6944f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(36), 0.6944f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(37), 0.7737f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(38), 0.7737f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(39), 0.7737f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(40), 0.7737f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(41), 0.8518f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(42), 0.8518f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(43), 0.8518f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(44), 0.8518f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(45), 0.9311f, 0.5778f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(46), 0.9311f, 0.6815f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(47), 0.9311f, 0.7852f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(48), 0.9311f, 0.8889f, 0.0577f, 0.0948f);
+            PadLayouts::setPadLayout(layout.getChild(49), 0.5345f, 0.0756f, 0.0577f, 0.4059f);
+            PadLayouts::setPadLayout(layout.getChild(50), 0.6138f, 0.0756f, 0.0577f, 0.4059f);
+            PadLayouts::setPadLayout(layout.getChild(51), 0.6914f, 0.0756f, 0.0577f, 0.4059f);
+            PadLayouts::setPadLayout(layout.getChild(52), 0.7706f, 0.0756f, 0.0577f, 0.4059f);
+            PadLayouts::setPadLayout(layout.getChild(53), 0.8496f, 0.0756f, 0.0577f, 0.4059f);
+            PadLayouts::setPadLayout(layout.getChild(54), 0.9310f, 0.0756f, 0.0577f, 0.4059f);
+            layouts->values_.addChild(layout, i, nullptr);
         }
 #ifdef _DEBUG
-        auto xml (layouts->values_.getChild (i).createXml());
-        juce::File file (layoutPath + juce::File::getSeparatorString() + "default" + juce::File::getSeparatorString() + layouts->values_.getChild (i).getProperty ("name").toString() + ".mpadl");
-        xml->writeTo (file);
+        auto xml(layouts->values_.getChild(i).createXml());
+        juce::File file(layoutPath + juce::File::getSeparatorString() + "default" + juce::File::getSeparatorString() + layouts->values_.getChild(i).getProperty("name").toString() + ".mpadl");
+        xml->writeTo(file);
 #endif
     }
 }
@@ -1860,280 +1949,288 @@ void midiPads::loadDefaultPrograms()
         switch (i)
         {
             case 0:
-                programs->set (i, "lastUIWidth", 400);
-                programs->set (i, "lastUIHeight", 400);
-                programs->set (i, "squares", 10);
-                programs->set (i, "name", "Pads");
-                programs->setForPad (i, 8, "UseX", true);
-                programs->setForPad (i, 9, "UseX", true);
-                programs->setForPad (i, 8, "UseY", true);
-                programs->setForPad (i, 9, "UseY", true);
-                programs->setForPad (i, 8, "UseYCC", true);
-                programs->setForPad (i, 9, "UseYCC", true);
-                programs->setForPad (i, 8, "SendOff", false);
-                programs->setForPad (i, 9, "SendOff", false);
-                programs->setForPad (i, 8, "roundness", 0.2f);
-                programs->setForPad (i, 9, "roundness", 0.2f);
-                setLayout (i, tenpads);
+                programs->set(i, "lastUIWidth", 400);
+                programs->set(i, "lastUIHeight", 400);
+                programs->set(i, "squares", 10);
+                programs->set(i, "name", "Pads");
+                programs->setForPad(i, 8, "UseX", true);
+                programs->setForPad(i, 9, "UseX", true);
+                programs->setForPad(i, 8, "UseY", true);
+                programs->setForPad(i, 9, "UseY", true);
+                programs->setForPad(i, 8, "UseYCC", true);
+                programs->setForPad(i, 9, "UseYCC", true);
+                programs->setForPad(i, 8, "SendOff", false);
+                programs->setForPad(i, 9, "SendOff", false);
+                programs->setForPad(i, 8, "roundness", 0.2f);
+                programs->setForPad(i, 9, "roundness", 0.2f);
+                setLayout(i, tenpads);
                 break;
             case 1:
-                programs->set (i, "name", "Sliders");
-                programs->set (i, "squares", 17);
-                programs->set (i, "lastUIWidth", 640);
-                programs->set (i, "lastUIHeight", 400);
+                programs->set(i, "name", "Sliders");
+                programs->set(i, "squares", 17);
+                programs->set(i, "lastUIWidth", 640);
+                programs->set(i, "lastUIHeight", 400);
                 for (int pad = 0; pad < 16; pad++)
                 {
-                    programs->setPadVisible (i, pad, true);
-                    programs->setForPad (i, pad, "UseY", true);
-                    programs->setForPad (i, pad, "Ycc", i);   //data1
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setPadVisible(i, pad, true);
+                    programs->setForPad(i, pad, "UseY", true);
+                    programs->setForPad(i, pad, "Ycc", i);   //data1
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                setLayout (i, sixteensliders);
+                setLayout(i, sixteensliders);
                 break;
             case 2:
-                programs->set (i, "name", "X-Y Sliders");
-                programs->set (i, "squares", 5);
-                programs->set (i, "lastUIWidth", 640);
-                programs->set (i, "lastUIHeight", 400);
+                programs->set(i, "name", "X-Y Sliders");
+                programs->set(i, "squares", 5);
+                programs->set(i, "lastUIWidth", 640);
+                programs->set(i, "lastUIHeight", 400);
                 for (int pad = 0; pad < 4; pad++)
                 {
-                    programs->setForPad (i, pad, "Ycc", i);       //data1
-                    programs->setForPad (i, pad, "Ytype", 1);     //type,CC
-                    programs->setForPad (i, pad, "Xcc", 1 + pad); //x cc
-                    programs->setForPad (i, pad, "UseX", true);
-                    programs->setForPad (i, pad, "UseY", true);
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "Ycc", i);       //data1
+                    programs->setForPad(i, pad, "Ytype", 1);     //type,CC
+                    programs->setForPad(i, pad, "Xcc", 1 + pad); //x cc
+                    programs->setForPad(i, pad, "UseX", true);
+                    programs->setForPad(i, pad, "UseY", true);
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                setLayout (i, foursliders);
+                setLayout(i, foursliders);
                 break;
             case 3:
-                programs->set (i, "name", "Big X-Y Pad");
-                programs->set (i, "squares", 1);
-                programs->set (i, "lastUIWidth", 400);
-                programs->set (i, "lastUIHeight", 400);
-                programs->setForPad (i, 0, "UseX", true);
-                programs->setForPad (i, 0, "UseY", true);
-                programs->setForPad (i, 0, "Ycc", 74);  //data1
-                programs->setForPad (i, 0, "Ytype", 1); //type,CC
-                programs->setForPad (i, 0, "Xcc", 1);   //x cc
-                programs->setForPad (i, 0, "icon", juce::String());
-                programs->setForPad (i, 0, "text", juce::String());
-                programs->setForPad (i, 0, "roundness", 0.05f);
-                programs->setForPad (i, 0, "SendOff", false);
-                setLayout (i, onepad);
+                programs->set(i, "name", "Big X-Y Pad");
+                programs->set(i, "squares", 1);
+                programs->set(i, "lastUIWidth", 400);
+                programs->set(i, "lastUIHeight", 400);
+                programs->setForPad(i, 0, "UseX", true);
+                programs->setForPad(i, 0, "UseY", true);
+                programs->setForPad(i, 0, "Ycc", 74);  //data1
+                programs->setForPad(i, 0, "Ytype", 1); //type,CC
+                programs->setForPad(i, 0, "Xcc", 1);   //x cc
+                programs->setForPad(i, 0, "icon", juce::String());
+                programs->setForPad(i, 0, "text", juce::String());
+                programs->setForPad(i, 0, "roundness", 0.05f);
+                programs->setForPad(i, 0, "SendOff", false);
+                setLayout(i, onepad);
                 break;
             case 4:
-                programs->set (i, "lastUIWidth", 400);
-                programs->set (i, "lastUIHeight", 400);
-                programs->set (i, "name", "Mighty Pea");
-                programs->set (i, "contrast", 0.1f);
-                programs->set (i, "bgbri", 0.3f);
-                programs->set (i, "bgsat", 0.0f);
+                programs->set(i, "lastUIWidth", 400);
+                programs->set(i, "lastUIHeight", 400);
+                programs->set(i, "name", "Mighty Pea");
+                programs->set(i, "contrast", 0.1f);
+                programs->set(i, "bgbri", 0.3f);
+                programs->set(i, "bgsat", 0.0f);
                 for (int pad = 0; pad < 16; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.3f);
+                    programs->setForPad(i, pad, "roundness", 0.3f);
                     juce::String padicon = juce::String();
-                    padicon << "Mighty Pea" << juce::File::getSeparatorString() << juce::String (pad + 1) << ".svg";
-                    programs->setForPad (i, pad, "icon", padicon);
-                    programs->setForPad (i, pad, "padcolor", juce::Colour (0xFFFFFFFF).toString());
+                    padicon << "Mighty Pea" << juce::File::getSeparatorString() << juce::String(pad + 1) << ".svg";
+                    programs->setForPad(i, pad, "icon", padicon);
+                    programs->setForPad(i, pad, "padcolor", juce::Colour(0xFFFFFFFF).toString());
                 }
-                programs->setForPad (i, 0, "text", "Kick");
-                programs->setForPad (i, 1, "text", "Snare");
-                programs->setForPad (i, 2, "text", "HiHat C");
-                programs->setForPad (i, 3, "text", "HiHat O");
-                programs->setForPad (i, 4, "text", "Ride");
-                programs->setForPad (i, 5, "text", "Crash");
-                programs->setForPad (i, 6, "text", "Cowbell");
-                programs->setForPad (i, 7, "text", "Bell");
-                programs->setForPad (i, 8, "text", "Tom 3");
-                programs->setForPad (i, 9, "text", "Tom 2");
-                programs->setForPad (i, 10, "text", "Tom 1");
-                programs->setForPad (i, 11, "text", "Clap");
-                programs->setForPad (i, 12, "text", juce::String());
-                programs->setForPad (i, 13, "text", juce::String());
-                programs->setForPad (i, 14, "text", juce::String());
-                programs->setForPad (i, 15, "text", juce::String());
-                setLayout (i, sixteenpads);
+                programs->setForPad(i, 0, "text", "Kick");
+                programs->setForPad(i, 1, "text", "Snare");
+                programs->setForPad(i, 2, "text", "HiHat C");
+                programs->setForPad(i, 3, "text", "HiHat O");
+                programs->setForPad(i, 4, "text", "Ride");
+                programs->setForPad(i, 5, "text", "Crash");
+                programs->setForPad(i, 6, "text", "Cowbell");
+                programs->setForPad(i, 7, "text", "Bell");
+                programs->setForPad(i, 8, "text", "Tom 3");
+                programs->setForPad(i, 9, "text", "Tom 2");
+                programs->setForPad(i, 10, "text", "Tom 1");
+                programs->setForPad(i, 11, "text", "Clap");
+                programs->setForPad(i, 12, "text", juce::String());
+                programs->setForPad(i, 13, "text", juce::String());
+                programs->setForPad(i, 14, "text", juce::String());
+                programs->setForPad(i, 15, "text", juce::String());
+                setLayout(i, sixteenpads);
                 break;
             case 5:
-                programs->set (i, "name", "64 Pads");
-                programs->set (i, "squares", 64);
+                programs->set(i, "name", "64 Pads");
+                programs->set(i, "squares", 64);
                 for (int pad = 0; pad < 64; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.05f);
-                    programs->setForPad (i, pad, "showdots", false);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "roundness", 0.05f);
+                    programs->setForPad(i, pad, "showdots", false);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
                 }
-                setLayout (i, sixtyfourpads);
+                setLayout(i, sixtyfourpads);
                 break;
             case 6:
-                programs->set (i, "name", "hexagons");
-                programs->set (i, "squares", 40);
-                programs->set (i, "hex", true);
+                programs->set(i, "name", "hexagons");
+                programs->set(i, "squares", 40);
+                programs->set(i, "hex", true);
                 for (int pad = 0; pad < 40; pad++)
                 {
-                    programs->setForPad (i, pad, "showdots", false);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "showdots", false);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
                 }
-                setLayout (i, hexagonpads);
+                setLayout(i, hexagonpads);
                 break;
             case 7:
-                programs->set (i, "name", "8 Channel Mixer");
-                programs->set (i, "squares", 33);
-                programs->set (i, "lastUIHeight", 550);
-                programs->set (i, "lastUIWidth", 550);
-                programs->set (i, "bgbri", 0.3f);
+                programs->set(i, "name", "8 Channel Mixer");
+                programs->set(i, "squares", 33);
+                programs->set(i, "lastUIHeight", 550);
+                programs->set(i, "lastUIWidth", 550);
+                programs->set(i, "bgbri", 0.3f);
                 for (int pad = 0; pad < 32; pad++)
                 {
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "Ytype", 1);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "Ytype", 1);
                     if (pad < 8)
                     {
-                        programs->setForPad (i, pad, "toggle", true);
-                        programs->setForPad (i, pad, "SendOff", true);
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFFFF0000).toString());
-                        programs->setForPad (i, pad, "text", "Mute");
+                        programs->setForPad(i, pad, "toggle", true);
+                        programs->setForPad(i, pad, "SendOff", true);
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFFFF0000).toString());
+                        programs->setForPad(i, pad, "text", "Mute");
                     }
                     else if (pad < 16)
                     {
-                        programs->setForPad (i, pad, "toggle", true);
-                        programs->setForPad (i, pad, "SendOff", true);
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFF00FF00).toString());
-                        programs->setForPad (i, pad, "text", "Solo");
+                        programs->setForPad(i, pad, "toggle", true);
+                        programs->setForPad(i, pad, "SendOff", true);
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF00FF00).toString());
+                        programs->setForPad(i, pad, "text", "Solo");
                     }
                     else if (pad < 24)
                     {
-                        programs->setForPad (i, pad, "UseX", true);
-                        programs->setForPad (i, pad, "SendOff", false);
-                        programs->setForPad (i, pad, "Ydata2", 63);
-                        programs->setForPad (i, pad, "Xcc", programs->getForPad (i, pad, "Ycc"));
-                        programs->setForPad (i, pad, "Ycc", 1);
-                        programs->setForPad (i, pad, "text", "Pan");
-                        programs->setForPad (i, pad, "icon", juce::String ("pancenter.svg"));
+                        programs->setForPad(i, pad, "UseX", true);
+                        programs->setForPad(i, pad, "SendOff", false);
+                        programs->setForPad(i, pad, "Ydata2", 63);
+                        programs->setForPad(i, pad, "Xcc", programs->getForPad(i, pad, "Ycc"));
+                        programs->setForPad(i, pad, "Ycc", 1);
+                        programs->setForPad(i, pad, "text", "Pan");
+                        programs->setForPad(i, pad, "icon", juce::String("pancenter.svg"));
                     }
                     else
                     {
-                        programs->setForPad (i, pad, "UseX", false);
-                        programs->setForPad (i, pad, "UseY", true);
-                        programs->setForPad (i, pad, "SendOff", false);
-                        programs->setForPad (i, pad, "text", juce::String (pad - 23));
+                        programs->setForPad(i, pad, "UseX", false);
+                        programs->setForPad(i, pad, "UseY", true);
+                        programs->setForPad(i, pad, "SendOff", false);
+                        programs->setForPad(i, pad, "text", juce::String(pad - 23));
                     }
                 }
-                setLayout (i, mixerpads);
+                setLayout(i, mixerpads);
                 break;
             case 8:
-                programs->set (i, "name", juce::String ("KVR"));
-                programs->set (i, "squares", 16);
-                programs->set (i, "bgsat", 0.0f);
-                programs->set (i, "bgbri", 0.198275864f);
-                programs->set (i, "contrast", 1.0f);
+                programs->set(i, "name", juce::String("KVR"));
+                programs->set(i, "squares", 16);
+                programs->set(i, "bgsat", 0.0f);
+                programs->set(i, "bgbri", 0.198275864f);
+                programs->set(i, "contrast", 1.0f);
                 for (int pad = 0; pad < 16; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "showdots", false);
-                    programs->setForPad (i, pad, "icon", juce::String ("hihi.svg"));
-                    programs->setForPad (i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "showdots", false);
+                    programs->setForPad(i, pad, "icon", juce::String("hihi.svg"));
+                    programs->setForPad(i, pad, "text", juce::String());
                     if (pad < 4)
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFF304050).toString());
+                    {
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304050).toString());
+                    }
                     else if (pad < 8)
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFF304060).toString());
+                    {
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304060).toString());
+                    }
                     else if (pad < 12)
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFF304050).toString());
+                    {
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304050).toString());
+                    }
                     else
-                        programs->setForPad (i, pad, "padcolor", juce::Colour (0xFF304060).toString());
+                    {
+                        programs->setForPad(i, pad, "padcolor", juce::Colour(0xFF304060).toString());
+                    }
                 }
-                setLayout (i, sixteenpads);
+                setLayout(i, sixteenpads);
                 break;
             case 9:
-                programs->set (i, "name", juce::String ("2 Pads, 12 Sliders"));
-                programs->set (i, "squares", 14);
+                programs->set(i, "name", juce::String("2 Pads, 12 Sliders"));
+                programs->set(i, "squares", 14);
                 for (int pad = 0; pad < 14; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "showdots", true);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
-                    programs->setForPad (i, pad, "UseY", true);
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "showdots", true);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "UseY", true);
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                programs->setForPad (i, 0, "UseX", true);
-                programs->setForPad (i, 7, "UseX", true);
-                programs->setForPad (i, 0, "roundness", 0.f);
-                programs->setForPad (i, 7, "roundness", 0.f);
-                setLayout (i, twelvepads);
+                programs->setForPad(i, 0, "UseX", true);
+                programs->setForPad(i, 7, "UseX", true);
+                programs->setForPad(i, 0, "roundness", 0.f);
+                programs->setForPad(i, 7, "roundness", 0.f);
+                setLayout(i, twelvepads);
                 break;
             case 10:
-                programs->set (i, "name", juce::String ("2/5/21"));
-                programs->set (i, "squares", 28);
+                programs->set(i, "name", juce::String("2/5/21"));
+                programs->set(i, "squares", 28);
                 for (int pad = 0; pad < 28; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
-                    programs->setForPad (i, pad, "UseY", pad < 2 || pad > 22);
-                    programs->setForPad (i, pad, "showdots", pad < 2 || pad > 22);
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "UseY", pad < 2 || pad > 22);
+                    programs->setForPad(i, pad, "showdots", pad < 2 || pad > 22);
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                programs->setForPad (i, 0, "UseX", true);
-                programs->setForPad (i, 1, "UseX", true);
-                programs->setForPad (i, 0, "roundness", 0.f);
-                programs->setForPad (i, 1, "roundness", 0.f);
-                setLayout (i, arrangeit28);
+                programs->setForPad(i, 0, "UseX", true);
+                programs->setForPad(i, 1, "UseX", true);
+                programs->setForPad(i, 0, "roundness", 0.f);
+                programs->setForPad(i, 1, "roundness", 0.f);
+                setLayout(i, arrangeit28);
                 break;
             case 11:
-                programs->set (i, "name", juce::String ("2/12/25"));
-                programs->set (i, "squares", 46);
+                programs->set(i, "name", juce::String("2/12/25"));
+                programs->set(i, "squares", 46);
                 for (int pad = 0; pad < 39; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
-                    programs->setForPad (i, pad, "UseY", pad < 14);
-                    programs->setForPad (i, pad, "showdots", pad < 14);
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "UseY", pad < 14);
+                    programs->setForPad(i, pad, "showdots", pad < 14);
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                programs->setForPad (i, 12, "UseX", true);
-                programs->setForPad (i, 13, "UseX", true);
-                programs->setForPad (i, 12, "roundness", 0.f);
-                programs->setForPad (i, 13, "roundness", 0.f);
-                setLayout (i, arrangeit39);
+                programs->setForPad(i, 12, "UseX", true);
+                programs->setForPad(i, 13, "UseX", true);
+                programs->setForPad(i, 12, "roundness", 0.f);
+                programs->setForPad(i, 13, "roundness", 0.f);
+                setLayout(i, arrangeit39);
                 break;
             case 12:
-                programs->set (i, "name", juce::String ("2/49"));
-                programs->set (i, "squares", 52);
+                programs->set(i, "name", juce::String("2/49"));
+                programs->set(i, "squares", 52);
                 for (int pad = 0; pad < 51; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
-                    programs->setForPad (i, pad, "UseY", pad < 2);
-                    programs->setForPad (i, pad, "showdots", pad < 2);
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "UseY", pad < 2);
+                    programs->setForPad(i, pad, "showdots", pad < 2);
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "SendOff", false);
                 }
-                programs->setForPad (i, 0, "UseX", true);
-                programs->setForPad (i, 1, "UseX", true);
-                programs->setForPad (i, 0, "roundness", 0.f);
-                programs->setForPad (i, 1, "roundness", 0.f);
-                setLayout (i, arrangeit51);
+                programs->setForPad(i, 0, "UseX", true);
+                programs->setForPad(i, 1, "UseX", true);
+                programs->setForPad(i, 0, "roundness", 0.f);
+                programs->setForPad(i, 1, "roundness", 0.f);
+                setLayout(i, arrangeit51);
                 break;
             case 13:
-                programs->set (i, "name", juce::String ("6 Mixer Blocks"));
-                programs->set (i, "squares", 48);
+                programs->set(i, "name", juce::String("6 Mixer Blocks"));
+                programs->set(i, "squares", 48);
                 for (int pad = 0; pad < 48; pad++)
                 {
-                    programs->setForPad (i, pad, "roundness", 0.1f);
-                    programs->setForPad (i, pad, "icon", juce::String());
-                    programs->setForPad (i, pad, "text", juce::String());
-                    programs->setForPad (i, pad, "Ytype", 1); //type,CC
-                    programs->setForPad (i, pad, "SendOff", false);
+                    programs->setForPad(i, pad, "roundness", 0.1f);
+                    programs->setForPad(i, pad, "icon", juce::String());
+                    programs->setForPad(i, pad, "text", juce::String());
+                    programs->setForPad(i, pad, "Ytype", 1); //type,CC
+                    programs->setForPad(i, pad, "SendOff", false);
                     switch (pad)
                     {
                         case 0:
@@ -2155,11 +2252,11 @@ void midiPads::loadDefaultPrograms()
                         case 46:
                         case 47:
                             //buttons
-                            programs->setForPad (i, pad, "showdots", false);
-                            programs->setForPad (i, pad, "UseY", false);
-                            programs->setForPad (i, pad, "UseX", false);
-                            programs->setForPad (i, pad, "toggle", true);
-                            programs->setForPad (i, pad, "SendOff", true);
+                            programs->setForPad(i, pad, "showdots", false);
+                            programs->setForPad(i, pad, "UseY", false);
+                            programs->setForPad(i, pad, "UseX", false);
+                            programs->setForPad(i, pad, "toggle", true);
+                            programs->setForPad(i, pad, "SendOff", true);
                             break;
 
                         case 1:
@@ -2187,9 +2284,9 @@ void midiPads::loadDefaultPrograms()
                         case 44:
                         case 45:
                             //vertical sliders
-                            programs->setForPad (i, pad, "showdots", true);
-                            programs->setForPad (i, pad, "UseY", true);
-                            programs->setForPad (i, pad, "UseX", false);
+                            programs->setForPad(i, pad, "showdots", true);
+                            programs->setForPad(i, pad, "UseY", true);
+                            programs->setForPad(i, pad, "UseX", false);
                             break;
 
                         case 3:
@@ -2199,20 +2296,20 @@ void midiPads::loadDefaultPrograms()
                         case 35:
                         case 43:
                             //horizontal sliders
-                            programs->setForPad (i, pad, "showdots", false);
-                            programs->setForPad (i, pad, "UseY", false);
-                            programs->setForPad (i, pad, "UseX", true);
-                            programs->setForPad (i, pad, "Ydata2", 63);
+                            programs->setForPad(i, pad, "showdots", false);
+                            programs->setForPad(i, pad, "UseY", false);
+                            programs->setForPad(i, pad, "UseX", true);
+                            programs->setForPad(i, pad, "Ydata2", 63);
                             break;
 
                         default:
                             break;
                     }
                 }
-                setLayout (i, arrangeit48);
+                setLayout(i, arrangeit48);
                 break;
             default:
-                setLayout (i, sixteenpads);
+                setLayout(i, sixteenpads);
                 break;
         }
 #ifdef _DEBUG
@@ -2222,7 +2319,7 @@ void midiPads::loadDefaultPrograms()
     }
 }
 
-void midiPads::copyPadSettings (int source, int dest)
+void midiPads::copyPadSettings(int source, int dest)
 {
     centeredText[dest] = centeredText[source];
     iconsize[dest]     = iconsize[source];

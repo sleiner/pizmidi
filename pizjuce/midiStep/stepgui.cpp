@@ -25,475 +25,476 @@
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::jlimit;
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
-StepEditor::StepEditor (MidiStep* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+StepEditor::StepEditor(MidiStep* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    activeLoopLabel.reset (new juce::GroupComponent ("new group",
-                                                     TRANS ("16")));
-    addAndMakeVisible (activeLoopLabel.get());
-    activeLoopLabel->setColour (juce::GroupComponent::outlineColourId, juce::Colour (0x66000000));
+    activeLoopLabel.reset(new juce::GroupComponent("new group",
+                                                   TRANS("16")));
+    addAndMakeVisible(activeLoopLabel.get());
+    activeLoopLabel->setColour(juce::GroupComponent::outlineColourId, juce::Colour(0x66000000));
 
-    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
-    addAndMakeVisible (resizer.get());
+    resizer.reset(new juce::ResizableCornerComponent(this, &resizeLimits));
+    addAndMakeVisible(resizer.get());
 
-    viewport.reset (new PianoPort ("new viewport"));
-    addAndMakeVisible (viewport.get());
-    viewport->setScrollBarThickness (18);
-    viewport->setViewedComponent (new PianoRoll (this->getFilter()));
+    viewport.reset(new PianoPort("new viewport"));
+    addAndMakeVisible(viewport.get());
+    viewport->setScrollBarThickness(18);
+    viewport->setViewedComponent(new PianoRoll(this->getFilter()));
 
-    recordButton.reset (new juce::TextButton ("Record Button"));
-    addAndMakeVisible (recordButton.get());
-    recordButton->setButtonText (TRANS ("Record"));
-    recordButton->addListener (this);
-    recordButton->setColour (juce::TextButton::buttonColourId, juce::Colours::brown);
-    recordButton->setColour (juce::TextButton::buttonOnColourId, juce::Colours::red);
-    recordButton->setColour (juce::TextButton::textColourOffId, juce::Colours::white);
+    recordButton.reset(new juce::TextButton("Record Button"));
+    addAndMakeVisible(recordButton.get());
+    recordButton->setButtonText(TRANS("Record"));
+    recordButton->addListener(this);
+    recordButton->setColour(juce::TextButton::buttonColourId, juce::Colours::brown);
+    recordButton->setColour(juce::TextButton::buttonOnColourId, juce::Colours::red);
+    recordButton->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 
-    outChannelSlider.reset (new ChannelSlider ("new slider"));
-    addAndMakeVisible (outChannelSlider.get());
-    outChannelSlider->setRange (0, 16, 1);
-    outChannelSlider->setSliderStyle (juce::Slider::IncDecButtons);
-    outChannelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
-    outChannelSlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    outChannelSlider->addListener (this);
+    outChannelSlider.reset(new ChannelSlider("new slider"));
+    addAndMakeVisible(outChannelSlider.get());
+    outChannelSlider->setRange(0, 16, 1);
+    outChannelSlider->setSliderStyle(juce::Slider::IncDecButtons);
+    outChannelSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 35, 20);
+    outChannelSlider->setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+    outChannelSlider->addListener(this);
 
-    recArmButton1.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton1.get());
-    recArmButton1->setButtonText (TRANS ("1"));
-    recArmButton1->addListener (this);
+    recArmButton1.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton1.get());
+    recArmButton1->setButtonText(TRANS("1"));
+    recArmButton1->addListener(this);
 
-    recArmButton2.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton2.get());
-    recArmButton2->setButtonText (TRANS ("2"));
-    recArmButton2->addListener (this);
+    recArmButton2.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton2.get());
+    recArmButton2->setButtonText(TRANS("2"));
+    recArmButton2->addListener(this);
 
-    recArmButton3.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton3.get());
-    recArmButton3->setButtonText (TRANS ("3"));
-    recArmButton3->addListener (this);
+    recArmButton3.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton3.get());
+    recArmButton3->setButtonText(TRANS("3"));
+    recArmButton3->addListener(this);
 
-    recArmButton4.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton4.get());
-    recArmButton4->setButtonText (TRANS ("4"));
-    recArmButton4->addListener (this);
+    recArmButton4.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton4.get());
+    recArmButton4->setButtonText(TRANS("4"));
+    recArmButton4->addListener(this);
 
-    recArmButton5.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton5.get());
-    recArmButton5->setButtonText (TRANS ("5"));
-    recArmButton5->addListener (this);
+    recArmButton5.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton5.get());
+    recArmButton5->setButtonText(TRANS("5"));
+    recArmButton5->addListener(this);
 
-    recArmButton6.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton6.get());
-    recArmButton6->setButtonText (TRANS ("6"));
-    recArmButton6->addListener (this);
+    recArmButton6.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton6.get());
+    recArmButton6->setButtonText(TRANS("6"));
+    recArmButton6->addListener(this);
 
-    recArmButton7.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton7.get());
-    recArmButton7->setButtonText (TRANS ("7"));
-    recArmButton7->addListener (this);
+    recArmButton7.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton7.get());
+    recArmButton7->setButtonText(TRANS("7"));
+    recArmButton7->addListener(this);
 
-    recArmButton8.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton8.get());
-    recArmButton8->setButtonText (TRANS ("8"));
-    recArmButton8->addListener (this);
+    recArmButton8.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton8.get());
+    recArmButton8->setButtonText(TRANS("8"));
+    recArmButton8->addListener(this);
 
-    keySlider.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (keySlider.get());
-    keySlider->setRange (-1, 127, 1);
-    keySlider->setSliderStyle (juce::Slider::IncDecButtons);
-    keySlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
-    keySlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    keySlider->addListener (this);
+    keySlider.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(keySlider.get());
+    keySlider->setRange(-1, 127, 1);
+    keySlider->setSliderStyle(juce::Slider::IncDecButtons);
+    keySlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 35, 20);
+    keySlider->setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+    keySlider->addListener(this);
 
-    recArmButton9.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton9.get());
-    recArmButton9->setButtonText (TRANS ("9"));
-    recArmButton9->addListener (this);
+    recArmButton9.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton9.get());
+    recArmButton9->setButtonText(TRANS("9"));
+    recArmButton9->addListener(this);
 
-    recArmButton10.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton10.get());
-    recArmButton10->setButtonText (TRANS ("10"));
-    recArmButton10->addListener (this);
+    recArmButton10.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton10.get());
+    recArmButton10->setButtonText(TRANS("10"));
+    recArmButton10->addListener(this);
 
-    recArmButton11.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton11.get());
-    recArmButton11->setButtonText (TRANS ("11"));
-    recArmButton11->addListener (this);
+    recArmButton11.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton11.get());
+    recArmButton11->setButtonText(TRANS("11"));
+    recArmButton11->addListener(this);
 
-    recArmButton12.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton12.get());
-    recArmButton12->setButtonText (TRANS ("12"));
-    recArmButton12->addListener (this);
+    recArmButton12.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton12.get());
+    recArmButton12->setButtonText(TRANS("12"));
+    recArmButton12->addListener(this);
 
-    recArmButton13.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton13.get());
-    recArmButton13->setButtonText (TRANS ("13"));
-    recArmButton13->addListener (this);
+    recArmButton13.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton13.get());
+    recArmButton13->setButtonText(TRANS("13"));
+    recArmButton13->addListener(this);
 
-    recArmButton14.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton14.get());
-    recArmButton14->setButtonText (TRANS ("14"));
-    recArmButton14->addListener (this);
+    recArmButton14.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton14.get());
+    recArmButton14->setButtonText(TRANS("14"));
+    recArmButton14->addListener(this);
 
-    recArmButton15.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton15.get());
-    recArmButton15->setButtonText (TRANS ("15"));
-    recArmButton15->addListener (this);
+    recArmButton15.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton15.get());
+    recArmButton15->setButtonText(TRANS("15"));
+    recArmButton15->addListener(this);
 
-    recArmButton16.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (recArmButton16.get());
-    recArmButton16->setButtonText (TRANS ("16"));
-    recArmButton16->addListener (this);
+    recArmButton16.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(recArmButton16.get());
+    recArmButton16->setButtonText(TRANS("16"));
+    recArmButton16->addListener(this);
 
-    recChannelSlider.reset (new ChannelSlider ("new slider"));
-    addAndMakeVisible (recChannelSlider.get());
-    recChannelSlider->setRange (0, 16, 1);
-    recChannelSlider->setSliderStyle (juce::Slider::IncDecButtons);
-    recChannelSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
-    recChannelSlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    recChannelSlider->addListener (this);
+    recChannelSlider.reset(new ChannelSlider("new slider"));
+    addAndMakeVisible(recChannelSlider.get());
+    recChannelSlider->setRange(0, 16, 1);
+    recChannelSlider->setSliderStyle(juce::Slider::IncDecButtons);
+    recChannelSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 35, 20);
+    recChannelSlider->setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+    recChannelSlider->addListener(this);
 
-    transposeSlider.reset (new juce::Slider ("new slider"));
-    addAndMakeVisible (transposeSlider.get());
-    transposeSlider->setRange (-48, 48, 1);
-    transposeSlider->setSliderStyle (juce::Slider::IncDecButtons);
-    transposeSlider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 35, 20);
-    transposeSlider->setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    transposeSlider->addListener (this);
+    transposeSlider.reset(new juce::Slider("new slider"));
+    addAndMakeVisible(transposeSlider.get());
+    transposeSlider->setRange(-48, 48, 1);
+    transposeSlider->setSliderStyle(juce::Slider::IncDecButtons);
+    transposeSlider->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 35, 20);
+    transposeSlider->setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+    transposeSlider->addListener(this);
 
-    saveButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (saveButton.get());
-    saveButton->setButtonText (TRANS ("Export..."));
-    saveButton->addListener (this);
+    saveButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(saveButton.get());
+    saveButton->setButtonText(TRANS("Export..."));
+    saveButton->addListener(this);
 
-    component.reset (new PizButton());
-    addAndMakeVisible (component.get());
-    component->setBounds (8, 5, 48, 24);
+    component.reset(new PizButton());
+    addAndMakeVisible(component.get());
+    component->setBounds(8, 5, 48, 24);
 
-    toggleButton.reset (new juce::ToggleButton ("new toggle button"));
-    addAndMakeVisible (toggleButton.get());
-    toggleButton->setButtonText (TRANS ("active"));
-    toggleButton->addListener (this);
+    toggleButton.reset(new juce::ToggleButton("new toggle button"));
+    addAndMakeVisible(toggleButton.get());
+    toggleButton->setButtonText(TRANS("active"));
+    toggleButton->addListener(this);
 
-    addBarButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (addBarButton.get());
-    addBarButton->setButtonText (TRANS ("Add Bar"));
-    addBarButton->addListener (this);
+    addBarButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(addBarButton.get());
+    addBarButton->setButtonText(TRANS("Add Bar"));
+    addBarButton->addListener(this);
 
-    addBarButton->setBounds (445, -30, 29, 24);
+    addBarButton->setBounds(445, -30, 29, 24);
 
-    deleteBarButton.reset (new juce::TextButton ("new button"));
-    addAndMakeVisible (deleteBarButton.get());
-    deleteBarButton->setButtonText (TRANS ("Del Bar"));
-    deleteBarButton->addListener (this);
+    deleteBarButton.reset(new juce::TextButton("new button"));
+    addAndMakeVisible(deleteBarButton.get());
+    deleteBarButton->setButtonText(TRANS("Del Bar"));
+    deleteBarButton->addListener(this);
 
-    deleteBarButton->setBounds (413, -30, 29, 24);
+    deleteBarButton->setBounds(413, -30, 29, 24);
 
-    thruButton.reset (new juce::ToggleButton ("thru button"));
-    addAndMakeVisible (thruButton.get());
-    thruButton->setButtonText (TRANS ("thru"));
-    thruButton->addListener (this);
+    thruButton.reset(new juce::ToggleButton("thru button"));
+    addAndMakeVisible(thruButton.get());
+    thruButton->setButtonText(TRANS("thru"));
+    thruButton->addListener(this);
 
-    internalPath1.startNewSubPath (60.0f, 10.0f);
-    internalPath1.lineTo (65.0f, 10.0f);
-    internalPath1.lineTo (65.0f, 23.0f);
-    internalPath1.lineTo (60.0f, 23.0f);
+    internalPath1.startNewSubPath(60.0f, 10.0f);
+    internalPath1.lineTo(65.0f, 10.0f);
+    internalPath1.lineTo(65.0f, 23.0f);
+    internalPath1.lineTo(60.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (68.0f, 12.0f);
-    internalPath1.lineTo (81.0f, 12.0f);
-    internalPath1.lineTo (81.0f, 23.0f);
-    internalPath1.lineTo (76.0f, 23.0f);
-    internalPath1.lineTo (76.0f, 15.0f);
-    internalPath1.lineTo (73.0f, 15.0f);
-    internalPath1.lineTo (73.0f, 23.0f);
-    internalPath1.lineTo (68.0f, 23.0f);
+    internalPath1.startNewSubPath(68.0f, 12.0f);
+    internalPath1.lineTo(81.0f, 12.0f);
+    internalPath1.lineTo(81.0f, 23.0f);
+    internalPath1.lineTo(76.0f, 23.0f);
+    internalPath1.lineTo(76.0f, 15.0f);
+    internalPath1.lineTo(73.0f, 15.0f);
+    internalPath1.lineTo(73.0f, 23.0f);
+    internalPath1.lineTo(68.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (97.0f, 15.0f);
-    internalPath1.lineTo (91.0f, 15.0f);
-    internalPath1.lineTo (91.0f, 18.0f);
-    internalPath1.lineTo (97.0f, 18.0f);
-    internalPath1.lineTo (97.0f, 20.0f);
-    internalPath1.lineTo (94.0f, 20.0f);
-    internalPath1.lineTo (94.0f, 23.0f);
-    internalPath1.lineTo (84.0f, 23.0f);
-    internalPath1.lineTo (84.0f, 20.0f);
-    internalPath1.lineTo (89.0f, 20.0f);
-    internalPath1.lineTo (89.0f, 18.0f);
-    internalPath1.lineTo (84.0f, 18.0f);
-    internalPath1.lineTo (84.0f, 15.0f);
-    internalPath1.lineTo (86.0f, 15.0f);
-    internalPath1.lineTo (86.0f, 12.0f);
-    internalPath1.lineTo (97.0f, 12.0f);
+    internalPath1.startNewSubPath(97.0f, 15.0f);
+    internalPath1.lineTo(91.0f, 15.0f);
+    internalPath1.lineTo(91.0f, 18.0f);
+    internalPath1.lineTo(97.0f, 18.0f);
+    internalPath1.lineTo(97.0f, 20.0f);
+    internalPath1.lineTo(94.0f, 20.0f);
+    internalPath1.lineTo(94.0f, 23.0f);
+    internalPath1.lineTo(84.0f, 23.0f);
+    internalPath1.lineTo(84.0f, 20.0f);
+    internalPath1.lineTo(89.0f, 20.0f);
+    internalPath1.lineTo(89.0f, 18.0f);
+    internalPath1.lineTo(84.0f, 18.0f);
+    internalPath1.lineTo(84.0f, 15.0f);
+    internalPath1.lineTo(86.0f, 15.0f);
+    internalPath1.lineTo(86.0f, 12.0f);
+    internalPath1.lineTo(97.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (99.0f, 23.0f);
-    internalPath1.lineTo (99.0f, 12.0f);
-    internalPath1.lineTo (112.0f, 12.0f);
-    internalPath1.lineTo (112.0f, 18.0f);
-    internalPath1.lineTo (110.0f, 18.0f);
-    internalPath1.lineTo (110.0f, 20.0f);
-    internalPath1.lineTo (112.0f, 20.0f);
-    internalPath1.lineTo (112.0f, 23.0f);
+    internalPath1.startNewSubPath(99.0f, 23.0f);
+    internalPath1.lineTo(99.0f, 12.0f);
+    internalPath1.lineTo(112.0f, 12.0f);
+    internalPath1.lineTo(112.0f, 18.0f);
+    internalPath1.lineTo(110.0f, 18.0f);
+    internalPath1.lineTo(110.0f, 20.0f);
+    internalPath1.lineTo(112.0f, 20.0f);
+    internalPath1.lineTo(112.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (105.0f, 18.0f);
-    internalPath1.lineTo (107.0f, 18.0f);
-    internalPath1.lineTo (107.0f, 15.0f);
-    internalPath1.lineTo (105.0f, 15.0f);
+    internalPath1.startNewSubPath(105.0f, 18.0f);
+    internalPath1.lineTo(107.0f, 18.0f);
+    internalPath1.lineTo(107.0f, 15.0f);
+    internalPath1.lineTo(105.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (126.0f, 12.0f);
-    internalPath1.lineTo (126.0f, 15.0f);
-    internalPath1.lineTo (120.0f, 15.0f);
-    internalPath1.lineTo (120.0f, 23.0f);
-    internalPath1.lineTo (115.0f, 23.0f);
-    internalPath1.lineTo (115.0f, 12.0f);
+    internalPath1.startNewSubPath(126.0f, 12.0f);
+    internalPath1.lineTo(126.0f, 15.0f);
+    internalPath1.lineTo(120.0f, 15.0f);
+    internalPath1.lineTo(120.0f, 23.0f);
+    internalPath1.lineTo(115.0f, 23.0f);
+    internalPath1.lineTo(115.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (139.0f, 12.0f);
-    internalPath1.lineTo (139.0f, 15.0f);
-    internalPath1.lineTo (136.0f, 15.0f);
-    internalPath1.lineTo (136.0f, 23.0f);
-    internalPath1.lineTo (131.0f, 23.0f);
-    internalPath1.lineTo (131.0f, 15.0f);
-    internalPath1.lineTo (128.0f, 15.0f);
-    internalPath1.lineTo (128.0f, 12.0f);
-    internalPath1.lineTo (131.0f, 12.0f);
-    internalPath1.lineTo (131.0f, 10.0f);
-    internalPath1.lineTo (136.0f, 10.0f);
-    internalPath1.lineTo (136.0f, 12.0f);
+    internalPath1.startNewSubPath(139.0f, 12.0f);
+    internalPath1.lineTo(139.0f, 15.0f);
+    internalPath1.lineTo(136.0f, 15.0f);
+    internalPath1.lineTo(136.0f, 23.0f);
+    internalPath1.lineTo(131.0f, 23.0f);
+    internalPath1.lineTo(131.0f, 15.0f);
+    internalPath1.lineTo(128.0f, 15.0f);
+    internalPath1.lineTo(128.0f, 12.0f);
+    internalPath1.lineTo(131.0f, 12.0f);
+    internalPath1.lineTo(131.0f, 10.0f);
+    internalPath1.lineTo(136.0f, 10.0f);
+    internalPath1.lineTo(136.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (162.0f, 10.0f);
-    internalPath1.lineTo (162.0f, 18.0f);
-    internalPath1.lineTo (154.0f, 18.0f);
-    internalPath1.lineTo (154.0f, 23.0f);
-    internalPath1.lineTo (149.0f, 23.0f);
-    internalPath1.lineTo (149.0f, 10.0f);
+    internalPath1.startNewSubPath(162.0f, 10.0f);
+    internalPath1.lineTo(162.0f, 18.0f);
+    internalPath1.lineTo(154.0f, 18.0f);
+    internalPath1.lineTo(154.0f, 23.0f);
+    internalPath1.lineTo(149.0f, 23.0f);
+    internalPath1.lineTo(149.0f, 10.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (154.0f, 15.0f);
-    internalPath1.lineTo (157.0f, 15.0f);
-    internalPath1.lineTo (157.0f, 12.0f);
-    internalPath1.lineTo (154.0f, 12.0f);
+    internalPath1.startNewSubPath(154.0f, 15.0f);
+    internalPath1.lineTo(157.0f, 15.0f);
+    internalPath1.lineTo(157.0f, 12.0f);
+    internalPath1.lineTo(154.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (165.0f, 23.0f);
-    internalPath1.lineTo (165.0f, 15.0f);
-    internalPath1.lineTo (170.0f, 15.0f);
-    internalPath1.lineTo (170.0f, 23.0f);
+    internalPath1.startNewSubPath(165.0f, 23.0f);
+    internalPath1.lineTo(165.0f, 15.0f);
+    internalPath1.lineTo(170.0f, 15.0f);
+    internalPath1.lineTo(170.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (165.0f, 10.0f);
-    internalPath1.lineTo (170.0f, 10.0f);
-    internalPath1.lineTo (170.0f, 12.0f);
-    internalPath1.lineTo (165.0f, 12.0f);
+    internalPath1.startNewSubPath(165.0f, 10.0f);
+    internalPath1.lineTo(170.0f, 10.0f);
+    internalPath1.lineTo(170.0f, 12.0f);
+    internalPath1.lineTo(165.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (178.0f, 18.0f);
-    internalPath1.lineTo (178.0f, 15.0f);
-    internalPath1.lineTo (173.0f, 15.0f);
-    internalPath1.lineTo (173.0f, 12.0f);
-    internalPath1.lineTo (186.0f, 12.0f);
-    internalPath1.lineTo (186.0f, 15.0f);
-    internalPath1.lineTo (183.0f, 15.0f);
-    internalPath1.lineTo (183.0f, 18.0f);
-    internalPath1.lineTo (181.0f, 18.0f);
-    internalPath1.lineTo (181.0f, 20.0f);
-    internalPath1.lineTo (186.0f, 20.0f);
-    internalPath1.lineTo (186.0f, 23.0f);
-    internalPath1.lineTo (173.0f, 23.0f);
-    internalPath1.lineTo (173.0f, 20.0f);
-    internalPath1.lineTo (175.0f, 20.0f);
-    internalPath1.lineTo (175.0f, 18.0f);
+    internalPath1.startNewSubPath(178.0f, 18.0f);
+    internalPath1.lineTo(178.0f, 15.0f);
+    internalPath1.lineTo(173.0f, 15.0f);
+    internalPath1.lineTo(173.0f, 12.0f);
+    internalPath1.lineTo(186.0f, 12.0f);
+    internalPath1.lineTo(186.0f, 15.0f);
+    internalPath1.lineTo(183.0f, 15.0f);
+    internalPath1.lineTo(183.0f, 18.0f);
+    internalPath1.lineTo(181.0f, 18.0f);
+    internalPath1.lineTo(181.0f, 20.0f);
+    internalPath1.lineTo(186.0f, 20.0f);
+    internalPath1.lineTo(186.0f, 23.0f);
+    internalPath1.lineTo(173.0f, 23.0f);
+    internalPath1.lineTo(173.0f, 20.0f);
+    internalPath1.lineTo(175.0f, 20.0f);
+    internalPath1.lineTo(175.0f, 18.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (204.0f, 10.0f);
-    internalPath1.lineTo (209.0f, 10.0f);
-    internalPath1.lineTo (209.0f, 23.0f);
-    internalPath1.lineTo (204.0f, 23.0f);
-    internalPath1.lineTo (204.0f, 18.0f);
-    internalPath1.lineTo (202.0f, 18.0f);
-    internalPath1.lineTo (202.0f, 23.0f);
-    internalPath1.lineTo (196.0f, 23.0f);
-    internalPath1.lineTo (196.0f, 10.0f);
-    internalPath1.lineTo (202.0f, 10.0f);
-    internalPath1.lineTo (202.0f, 15.0f);
-    internalPath1.lineTo (204.0f, 15.0f);
+    internalPath1.startNewSubPath(204.0f, 10.0f);
+    internalPath1.lineTo(209.0f, 10.0f);
+    internalPath1.lineTo(209.0f, 23.0f);
+    internalPath1.lineTo(204.0f, 23.0f);
+    internalPath1.lineTo(204.0f, 18.0f);
+    internalPath1.lineTo(202.0f, 18.0f);
+    internalPath1.lineTo(202.0f, 23.0f);
+    internalPath1.lineTo(196.0f, 23.0f);
+    internalPath1.lineTo(196.0f, 10.0f);
+    internalPath1.lineTo(202.0f, 10.0f);
+    internalPath1.lineTo(202.0f, 15.0f);
+    internalPath1.lineTo(204.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (212.0f, 23.0f);
-    internalPath1.lineTo (212.0f, 12.0f);
-    internalPath1.lineTo (225.0f, 12.0f);
-    internalPath1.lineTo (225.0f, 18.0f);
-    internalPath1.lineTo (222.0f, 18.0f);
-    internalPath1.lineTo (222.0f, 20.0f);
-    internalPath1.lineTo (225.0f, 20.0f);
-    internalPath1.lineTo (225.0f, 23.0f);
+    internalPath1.startNewSubPath(212.0f, 23.0f);
+    internalPath1.lineTo(212.0f, 12.0f);
+    internalPath1.lineTo(225.0f, 12.0f);
+    internalPath1.lineTo(225.0f, 18.0f);
+    internalPath1.lineTo(222.0f, 18.0f);
+    internalPath1.lineTo(222.0f, 20.0f);
+    internalPath1.lineTo(225.0f, 20.0f);
+    internalPath1.lineTo(225.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (217.0f, 18.0f);
-    internalPath1.lineTo (220.0f, 18.0f);
-    internalPath1.lineTo (220.0f, 15.0f);
-    internalPath1.lineTo (217.0f, 15.0f);
+    internalPath1.startNewSubPath(217.0f, 18.0f);
+    internalPath1.lineTo(220.0f, 18.0f);
+    internalPath1.lineTo(220.0f, 15.0f);
+    internalPath1.lineTo(217.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (238.0f, 12.0f);
-    internalPath1.lineTo (238.0f, 15.0f);
-    internalPath1.lineTo (233.0f, 15.0f);
-    internalPath1.lineTo (233.0f, 23.0f);
-    internalPath1.lineTo (228.0f, 23.0f);
-    internalPath1.lineTo (228.0f, 12.0f);
+    internalPath1.startNewSubPath(238.0f, 12.0f);
+    internalPath1.lineTo(238.0f, 15.0f);
+    internalPath1.lineTo(233.0f, 15.0f);
+    internalPath1.lineTo(233.0f, 23.0f);
+    internalPath1.lineTo(228.0f, 23.0f);
+    internalPath1.lineTo(228.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (241.0f, 23.0f);
-    internalPath1.lineTo (241.0f, 12.0f);
-    internalPath1.lineTo (254.0f, 12.0f);
-    internalPath1.lineTo (254.0f, 18.0f);
-    internalPath1.lineTo (251.0f, 18.0f);
-    internalPath1.lineTo (251.0f, 20.0f);
-    internalPath1.lineTo (254.0f, 20.0f);
-    internalPath1.lineTo (254.0f, 23.0f);
+    internalPath1.startNewSubPath(241.0f, 23.0f);
+    internalPath1.lineTo(241.0f, 12.0f);
+    internalPath1.lineTo(254.0f, 12.0f);
+    internalPath1.lineTo(254.0f, 18.0f);
+    internalPath1.lineTo(251.0f, 18.0f);
+    internalPath1.lineTo(251.0f, 20.0f);
+    internalPath1.lineTo(254.0f, 20.0f);
+    internalPath1.lineTo(254.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (246.0f, 18.0f);
-    internalPath1.lineTo (249.0f, 18.0f);
-    internalPath1.lineTo (249.0f, 15.0f);
-    internalPath1.lineTo (246.0f, 15.0f);
+    internalPath1.startNewSubPath(246.0f, 18.0f);
+    internalPath1.lineTo(249.0f, 18.0f);
+    internalPath1.lineTo(249.0f, 15.0f);
+    internalPath1.lineTo(246.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (257.0f, 18.0f);
-    internalPath1.lineTo (257.0f, 15.0f);
-    internalPath1.lineTo (270.0f, 15.0f);
-    internalPath1.lineTo (270.0f, 18.0f);
+    internalPath1.startNewSubPath(257.0f, 18.0f);
+    internalPath1.lineTo(257.0f, 15.0f);
+    internalPath1.lineTo(270.0f, 15.0f);
+    internalPath1.lineTo(270.0f, 18.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (272.0f, 10.0f);
-    internalPath1.lineTo (277.0f, 10.0f);
-    internalPath1.lineTo (277.0f, 12.0f);
-    internalPath1.lineTo (280.0f, 12.0f);
-    internalPath1.lineTo (280.0f, 15.0f);
-    internalPath1.lineTo (283.0f, 15.0f);
-    internalPath1.lineTo (283.0f, 18.0f);
-    internalPath1.lineTo (280.0f, 18.0f);
-    internalPath1.lineTo (280.0f, 20.0f);
-    internalPath1.lineTo (277.0f, 20.0f);
-    internalPath1.lineTo (277.0f, 23.0f);
-    internalPath1.lineTo (272.0f, 23.0f);
-    internalPath1.lineTo (272.0f, 20.0f);
-    internalPath1.lineTo (275.0f, 20.0f);
-    internalPath1.lineTo (275.0f, 18.0f);
-    internalPath1.lineTo (277.0f, 18.0f);
-    internalPath1.lineTo (277.0f, 15.0f);
-    internalPath1.lineTo (275.0f, 15.0f);
-    internalPath1.lineTo (275.0f, 12.0f);
-    internalPath1.lineTo (272.0f, 12.0f);
+    internalPath1.startNewSubPath(272.0f, 10.0f);
+    internalPath1.lineTo(277.0f, 10.0f);
+    internalPath1.lineTo(277.0f, 12.0f);
+    internalPath1.lineTo(280.0f, 12.0f);
+    internalPath1.lineTo(280.0f, 15.0f);
+    internalPath1.lineTo(283.0f, 15.0f);
+    internalPath1.lineTo(283.0f, 18.0f);
+    internalPath1.lineTo(280.0f, 18.0f);
+    internalPath1.lineTo(280.0f, 20.0f);
+    internalPath1.lineTo(277.0f, 20.0f);
+    internalPath1.lineTo(277.0f, 23.0f);
+    internalPath1.lineTo(272.0f, 23.0f);
+    internalPath1.lineTo(272.0f, 20.0f);
+    internalPath1.lineTo(275.0f, 20.0f);
+    internalPath1.lineTo(275.0f, 18.0f);
+    internalPath1.lineTo(277.0f, 18.0f);
+    internalPath1.lineTo(277.0f, 15.0f);
+    internalPath1.lineTo(275.0f, 15.0f);
+    internalPath1.lineTo(275.0f, 12.0f);
+    internalPath1.lineTo(272.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (314.0f, 12.0f);
-    internalPath1.lineTo (314.0f, 23.0f);
-    internalPath1.lineTo (309.0f, 23.0f);
-    internalPath1.lineTo (309.0f, 15.0f);
-    internalPath1.lineTo (306.0f, 15.0f);
-    internalPath1.lineTo (306.0f, 23.0f);
-    internalPath1.lineTo (301.0f, 23.0f);
-    internalPath1.lineTo (301.0f, 15.0f);
-    internalPath1.lineTo (298.0f, 15.0f);
-    internalPath1.lineTo (298.0f, 23.0f);
-    internalPath1.lineTo (293.0f, 23.0f);
-    internalPath1.lineTo (293.0f, 12.0f);
+    internalPath1.startNewSubPath(314.0f, 12.0f);
+    internalPath1.lineTo(314.0f, 23.0f);
+    internalPath1.lineTo(309.0f, 23.0f);
+    internalPath1.lineTo(309.0f, 15.0f);
+    internalPath1.lineTo(306.0f, 15.0f);
+    internalPath1.lineTo(306.0f, 23.0f);
+    internalPath1.lineTo(301.0f, 23.0f);
+    internalPath1.lineTo(301.0f, 15.0f);
+    internalPath1.lineTo(298.0f, 15.0f);
+    internalPath1.lineTo(298.0f, 23.0f);
+    internalPath1.lineTo(293.0f, 23.0f);
+    internalPath1.lineTo(293.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (317.0f, 23.0f);
-    internalPath1.lineTo (317.0f, 15.0f);
-    internalPath1.lineTo (322.0f, 15.0f);
-    internalPath1.lineTo (322.0f, 23.0f);
+    internalPath1.startNewSubPath(317.0f, 23.0f);
+    internalPath1.lineTo(317.0f, 15.0f);
+    internalPath1.lineTo(322.0f, 15.0f);
+    internalPath1.lineTo(322.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (317.0f, 10.0f);
-    internalPath1.lineTo (322.0f, 10.0f);
-    internalPath1.lineTo (322.0f, 12.0f);
-    internalPath1.lineTo (317.0f, 12.0f);
+    internalPath1.startNewSubPath(317.0f, 10.0f);
+    internalPath1.lineTo(322.0f, 10.0f);
+    internalPath1.lineTo(322.0f, 12.0f);
+    internalPath1.lineTo(317.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (325.0f, 23.0f);
-    internalPath1.lineTo (325.0f, 12.0f);
-    internalPath1.lineTo (332.0f, 12.0f);
-    internalPath1.lineTo (332.0f, 10.0f);
-    internalPath1.lineTo (338.0f, 10.0f);
-    internalPath1.lineTo (338.0f, 23.0f);
+    internalPath1.startNewSubPath(325.0f, 23.0f);
+    internalPath1.lineTo(325.0f, 12.0f);
+    internalPath1.lineTo(332.0f, 12.0f);
+    internalPath1.lineTo(332.0f, 10.0f);
+    internalPath1.lineTo(338.0f, 10.0f);
+    internalPath1.lineTo(338.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (330.0f, 15.0f);
-    internalPath1.lineTo (330.0f, 20.0f);
-    internalPath1.lineTo (332.0f, 20.0f);
-    internalPath1.lineTo (332.0f, 15.0f);
+    internalPath1.startNewSubPath(330.0f, 15.0f);
+    internalPath1.lineTo(330.0f, 20.0f);
+    internalPath1.lineTo(332.0f, 20.0f);
+    internalPath1.lineTo(332.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (340.0f, 23.0f);
-    internalPath1.lineTo (340.0f, 15.0f);
-    internalPath1.lineTo (346.0f, 15.0f);
-    internalPath1.lineTo (346.0f, 23.0f);
+    internalPath1.startNewSubPath(340.0f, 23.0f);
+    internalPath1.lineTo(340.0f, 15.0f);
+    internalPath1.lineTo(346.0f, 15.0f);
+    internalPath1.lineTo(346.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (340.0f, 10.0f);
-    internalPath1.lineTo (346.0f, 10.0f);
-    internalPath1.lineTo (346.0f, 12.0f);
-    internalPath1.lineTo (340.0f, 12.0f);
+    internalPath1.startNewSubPath(340.0f, 10.0f);
+    internalPath1.lineTo(346.0f, 10.0f);
+    internalPath1.lineTo(346.0f, 12.0f);
+    internalPath1.lineTo(340.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (361.0f, 12.0f);
-    internalPath1.lineTo (353.0f, 12.0f);
-    internalPath1.lineTo (353.0f, 15.0f);
-    internalPath1.lineTo (361.0f, 15.0f);
-    internalPath1.lineTo (361.0f, 23.0f);
-    internalPath1.lineTo (348.0f, 23.0f);
-    internalPath1.lineTo (348.0f, 20.0f);
-    internalPath1.lineTo (356.0f, 20.0f);
-    internalPath1.lineTo (356.0f, 18.0f);
-    internalPath1.lineTo (348.0f, 18.0f);
-    internalPath1.lineTo (348.0f, 10.0f);
-    internalPath1.lineTo (361.0f, 10.0f);
+    internalPath1.startNewSubPath(361.0f, 12.0f);
+    internalPath1.lineTo(353.0f, 12.0f);
+    internalPath1.lineTo(353.0f, 15.0f);
+    internalPath1.lineTo(361.0f, 15.0f);
+    internalPath1.lineTo(361.0f, 23.0f);
+    internalPath1.lineTo(348.0f, 23.0f);
+    internalPath1.lineTo(348.0f, 20.0f);
+    internalPath1.lineTo(356.0f, 20.0f);
+    internalPath1.lineTo(356.0f, 18.0f);
+    internalPath1.lineTo(348.0f, 18.0f);
+    internalPath1.lineTo(348.0f, 10.0f);
+    internalPath1.lineTo(361.0f, 10.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (374.0f, 12.0f);
-    internalPath1.lineTo (374.0f, 15.0f);
-    internalPath1.lineTo (372.0f, 15.0f);
-    internalPath1.lineTo (372.0f, 23.0f);
-    internalPath1.lineTo (367.0f, 23.0f);
-    internalPath1.lineTo (367.0f, 15.0f);
-    internalPath1.lineTo (364.0f, 15.0f);
-    internalPath1.lineTo (364.0f, 12.0f);
-    internalPath1.lineTo (367.0f, 12.0f);
-    internalPath1.lineTo (367.0f, 10.0f);
-    internalPath1.lineTo (372.0f, 10.0f);
-    internalPath1.lineTo (372.0f, 12.0f);
+    internalPath1.startNewSubPath(374.0f, 12.0f);
+    internalPath1.lineTo(374.0f, 15.0f);
+    internalPath1.lineTo(372.0f, 15.0f);
+    internalPath1.lineTo(372.0f, 23.0f);
+    internalPath1.lineTo(367.0f, 23.0f);
+    internalPath1.lineTo(367.0f, 15.0f);
+    internalPath1.lineTo(364.0f, 15.0f);
+    internalPath1.lineTo(364.0f, 12.0f);
+    internalPath1.lineTo(367.0f, 12.0f);
+    internalPath1.lineTo(367.0f, 10.0f);
+    internalPath1.lineTo(372.0f, 10.0f);
+    internalPath1.lineTo(372.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (377.0f, 23.0f);
-    internalPath1.lineTo (377.0f, 12.0f);
-    internalPath1.lineTo (390.0f, 12.0f);
-    internalPath1.lineTo (390.0f, 18.0f);
-    internalPath1.lineTo (388.0f, 18.0f);
-    internalPath1.lineTo (388.0f, 20.0f);
-    internalPath1.lineTo (390.0f, 20.0f);
-    internalPath1.lineTo (390.0f, 23.0f);
+    internalPath1.startNewSubPath(377.0f, 23.0f);
+    internalPath1.lineTo(377.0f, 12.0f);
+    internalPath1.lineTo(390.0f, 12.0f);
+    internalPath1.lineTo(390.0f, 18.0f);
+    internalPath1.lineTo(388.0f, 18.0f);
+    internalPath1.lineTo(388.0f, 20.0f);
+    internalPath1.lineTo(390.0f, 20.0f);
+    internalPath1.lineTo(390.0f, 23.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (382.0f, 18.0f);
-    internalPath1.lineTo (385.0f, 18.0f);
-    internalPath1.lineTo (385.0f, 15.0f);
-    internalPath1.lineTo (382.0f, 15.0f);
+    internalPath1.startNewSubPath(382.0f, 18.0f);
+    internalPath1.lineTo(385.0f, 18.0f);
+    internalPath1.lineTo(385.0f, 15.0f);
+    internalPath1.lineTo(382.0f, 15.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (406.0f, 12.0f);
-    internalPath1.lineTo (406.0f, 23.0f);
-    internalPath1.lineTo (398.0f, 23.0f);
-    internalPath1.lineTo (398.0f, 28.0f);
-    internalPath1.lineTo (393.0f, 28.0f);
-    internalPath1.lineTo (393.0f, 12.0f);
+    internalPath1.startNewSubPath(406.0f, 12.0f);
+    internalPath1.lineTo(406.0f, 23.0f);
+    internalPath1.lineTo(398.0f, 23.0f);
+    internalPath1.lineTo(398.0f, 28.0f);
+    internalPath1.lineTo(393.0f, 28.0f);
+    internalPath1.lineTo(393.0f, 12.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (401.0f, 20.0f);
-    internalPath1.lineTo (401.0f, 15.0f);
-    internalPath1.lineTo (398.0f, 15.0f);
-    internalPath1.lineTo (398.0f, 20.0f);
+    internalPath1.startNewSubPath(401.0f, 20.0f);
+    internalPath1.lineTo(401.0f, 15.0f);
+    internalPath1.lineTo(398.0f, 15.0f);
+    internalPath1.lineTo(398.0f, 20.0f);
     internalPath1.closeSubPath();
 
     //[UserPreSize]
-    resizeLimits.setSizeLimits (510, 360, 1600, 1600);
+    resizeLimits.setSizeLimits(510, 360, 1600, 1600);
     //[/UserPreSize]
 
-    setSize (610, 360);
+    setSize(610, 360);
 
     //[Constructor] You can add your own custom stuff here..
-    ownerFilter->addChangeListener (this);
+    ownerFilter->addChangeListener(this);
     pianoRoll = (PianoRoll*) viewport->getViewedComponent();
     //pianoRoll->addChangeListener(this);
 
-    pianoRoll->setSize (500, 1200);
-    pianoRoll->setSequence (ownerFilter->getActiveLoop());
+    pianoRoll->setSize(500, 1200);
+    pianoRoll->setSequence(ownerFilter->getActiveLoop());
     lastActiveLoop = ownerFilter->activeLoop;
-    viewport->setViewPosition (0, pianoRoll->getHeight() / 2 - viewport->getHeight() / 2);
+    viewport->setViewPosition(0, pianoRoll->getHeight() / 2 - viewport->getHeight() / 2);
 
-    this->startTimer (1000 / 15);
-    this->updateParameters (true);
+    this->startTimer(1000 / 15);
+    this->updateParameters(true);
     resized();
     //[/Constructor]
 }
@@ -502,7 +503,7 @@ StepEditor::~StepEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     this->stopTimer();
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
     //[/Destructor_pre]
 
     activeLoopLabel  = nullptr;
@@ -541,70 +542,70 @@ StepEditor::~StepEditor()
 }
 
 //==============================================================================
-void StepEditor::paint (juce::Graphics& g)
+void StepEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colour (0xffdddddd));
+    g.fillAll(juce::Colour(0xffdddddd));
 
     {
-        int x = getWidth() - 80, y = 0, width = 80, height = proportionOfHeight (1.0000f);
-        juce::Colour fillColour1 = juce::Colour (0xa65f5f5f), fillColour2 = juce::Colour (0xffa7a7a7);
+        int x = getWidth() - 80, y = 0, width = 80, height = proportionOfHeight(1.0000f);
+        juce::Colour fillColour1 = juce::Colour(0xa65f5f5f), fillColour2 = juce::Colour(0xffa7a7a7);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setGradientFill (juce::ColourGradient (fillColour1,
-                                                 static_cast<float> (getWidth() - 78) - static_cast<float> (getWidth() - 80) + x,
-                                                 0.0f - 0.0f + y,
-                                                 fillColour2,
-                                                 static_cast<float> (getWidth() - 62) - static_cast<float> (getWidth() - 80) + x,
-                                                 0.0f - 0.0f + y,
-                                                 false));
-        g.fillRect (x, y, width, height);
+        g.setGradientFill(juce::ColourGradient(fillColour1,
+                                               static_cast<float>(getWidth() - 78) - static_cast<float>(getWidth() - 80) + x,
+                                               0.0f - 0.0f + y,
+                                               fillColour2,
+                                               static_cast<float>(getWidth() - 62) - static_cast<float>(getWidth() - 80) + x,
+                                               0.0f - 0.0f + y,
+                                               false));
+        g.fillRect(x, y, width, height);
     }
 
     {
         int x = getWidth() - 9 - 63, y = 246, width = 63, height = 16;
-        juce::String text (TRANS ("Transp."));
+        juce::String text(TRANS("Transp."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font("hooge 05_55", 15.00f, juce::Font::plain));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 8 - 63, y = 166, width = 63, height = 16;
-        juce::String text (TRANS ("Rec Ch."));
+        juce::String text(TRANS("Rec Ch."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font("hooge 05_55", 15.00f, juce::Font::plain));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 8 - 63, y = 206, width = 63, height = 16;
-        juce::String text (TRANS ("Trig. Key"));
+        juce::String text(TRANS("Trig. Key"));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font("hooge 05_55", 15.00f, juce::Font::plain));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
         int x = getWidth() - 9 - 63, y = 281, width = 63, height = 16;
-        juce::String text (TRANS ("Out Ch."));
+        juce::String text(TRANS("Out Ch."));
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.setFont (juce::Font ("hooge 05_55", 15.00f, juce::Font::plain));
-        g.drawText (text, x, y, width, height, juce::Justification::centred, true);
+        g.setColour(fillColour);
+        g.setFont(juce::Font("hooge 05_55", 15.00f, juce::Font::plain));
+        g.drawText(text, x, y, width, height, juce::Justification::centred, true);
     }
 
     {
@@ -612,8 +613,8 @@ void StepEditor::paint (juce::Graphics& g)
         juce::Colour fillColour = juce::Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillPath (internalPath1, juce::AffineTransform::translation (x, y));
+        g.setColour(fillColour);
+        g.fillPath(internalPath1, juce::AffineTransform::translation(x, y));
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -625,40 +626,40 @@ void StepEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    activeLoopLabel->setBounds (getWidth() - 2 - 73, 154, 73, 163);
-    resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
-    viewport->setBounds (8, 32, getWidth() - 89, getHeight() - 34);
-    recordButton->setBounds (getWidth() - 6 - 64, 8, 64, 43);
-    outChannelSlider->setBounds (getWidth() - 10 - 57, 295, 57, 16);
-    recArmButton1->setBounds (getWidth() - 55 - 20, 71, 20, 18);
-    recArmButton2->setBounds (getWidth() - 37 - 20, 71, 20, 18);
-    recArmButton3->setBounds (getWidth() - 19 - 20, 71, 20, 18);
-    recArmButton4->setBounds (getWidth() - 21, 71, 20, 18);
-    recArmButton5->setBounds (getWidth() - 55 - 20, 92, 20, 18);
-    recArmButton6->setBounds (getWidth() - 37 - 20, 92, 20, 18);
-    recArmButton7->setBounds (getWidth() - 19 - 20, 92, 20, 18);
-    recArmButton8->setBounds (getWidth() - 21, 92, 20, 18);
-    keySlider->setBounds (getWidth() - 10 - 57, 220, 57, 16);
-    recArmButton9->setBounds (getWidth() - 55 - 20, 113, 20, 18);
-    recArmButton10->setBounds (getWidth() - 37 - 20, 113, 20, 18);
-    recArmButton11->setBounds (getWidth() - 19 - 20, 113, 20, 18);
-    recArmButton12->setBounds (getWidth() - 21, 113, 20, 18);
-    recArmButton13->setBounds (getWidth() - 55 - 20, 134, 20, 18);
-    recArmButton14->setBounds (getWidth() - 37 - 20, 134, 20, 18);
-    recArmButton15->setBounds (getWidth() - 19 - 20, 134, 20, 18);
-    recArmButton16->setBounds (getWidth() - 21, 134, 20, 18);
-    recChannelSlider->setBounds (getWidth() - 10 - 57, 180, 57, 16);
-    transposeSlider->setBounds (getWidth() - 10 - 57, 260, 57, 16);
-    saveButton->setBounds (getWidth() - 14 - 54, 333, 54, 18);
-    toggleButton->setBounds (getWidth() - 6 - 61, 49, 61, 21);
-    thruButton->setBounds (getWidth() - 67, 313, 61, 21);
+    activeLoopLabel->setBounds(getWidth() - 2 - 73, 154, 73, 163);
+    resizer->setBounds(getWidth() - 16, getHeight() - 16, 16, 16);
+    viewport->setBounds(8, 32, getWidth() - 89, getHeight() - 34);
+    recordButton->setBounds(getWidth() - 6 - 64, 8, 64, 43);
+    outChannelSlider->setBounds(getWidth() - 10 - 57, 295, 57, 16);
+    recArmButton1->setBounds(getWidth() - 55 - 20, 71, 20, 18);
+    recArmButton2->setBounds(getWidth() - 37 - 20, 71, 20, 18);
+    recArmButton3->setBounds(getWidth() - 19 - 20, 71, 20, 18);
+    recArmButton4->setBounds(getWidth() - 21, 71, 20, 18);
+    recArmButton5->setBounds(getWidth() - 55 - 20, 92, 20, 18);
+    recArmButton6->setBounds(getWidth() - 37 - 20, 92, 20, 18);
+    recArmButton7->setBounds(getWidth() - 19 - 20, 92, 20, 18);
+    recArmButton8->setBounds(getWidth() - 21, 92, 20, 18);
+    keySlider->setBounds(getWidth() - 10 - 57, 220, 57, 16);
+    recArmButton9->setBounds(getWidth() - 55 - 20, 113, 20, 18);
+    recArmButton10->setBounds(getWidth() - 37 - 20, 113, 20, 18);
+    recArmButton11->setBounds(getWidth() - 19 - 20, 113, 20, 18);
+    recArmButton12->setBounds(getWidth() - 21, 113, 20, 18);
+    recArmButton13->setBounds(getWidth() - 55 - 20, 134, 20, 18);
+    recArmButton14->setBounds(getWidth() - 37 - 20, 134, 20, 18);
+    recArmButton15->setBounds(getWidth() - 19 - 20, 134, 20, 18);
+    recArmButton16->setBounds(getWidth() - 21, 134, 20, 18);
+    recChannelSlider->setBounds(getWidth() - 10 - 57, 180, 57, 16);
+    transposeSlider->setBounds(getWidth() - 10 - 57, 260, 57, 16);
+    saveButton->setBounds(getWidth() - 14 - 54, 333, 54, 18);
+    toggleButton->setBounds(getWidth() - 6 - 61, 49, 61, 21);
+    thruButton->setBounds(getWidth() - 67, 313, 61, 21);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIHeight = getHeight();
     getFilter()->lastUIWidth  = getWidth();
     //[/UserResized]
 }
 
-void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void StepEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -666,134 +667,136 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == recordButton.get())
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kRecord, recordButton->getToggleState() ? 0.f : 1.f);
-        recordButton->setToggleState (! recordButton->getToggleState(), juce::dontSendNotification);
+        getFilter()->setParameterNotifyingHost(kRecord, recordButton->getToggleState() ? 0.f : 1.f);
+        recordButton->setToggleState(! recordButton->getToggleState(), juce::dontSendNotification);
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == recArmButton1.get())
     {
         //[UserButtonCode_recArmButton1] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton1]
     }
     else if (buttonThatWasClicked == recArmButton2.get())
     {
         //[UserButtonCode_recArmButton2] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton2]
     }
     else if (buttonThatWasClicked == recArmButton3.get())
     {
         //[UserButtonCode_recArmButton3] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton3]
     }
     else if (buttonThatWasClicked == recArmButton4.get())
     {
         //[UserButtonCode_recArmButton4] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton4]
     }
     else if (buttonThatWasClicked == recArmButton5.get())
     {
         //[UserButtonCode_recArmButton5] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton5]
     }
     else if (buttonThatWasClicked == recArmButton6.get())
     {
         //[UserButtonCode_recArmButton6] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton6]
     }
     else if (buttonThatWasClicked == recArmButton7.get())
     {
         //[UserButtonCode_recArmButton7] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton7]
     }
     else if (buttonThatWasClicked == recArmButton8.get())
     {
         //[UserButtonCode_recArmButton8] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton8]
     }
     else if (buttonThatWasClicked == recArmButton9.get())
     {
         //[UserButtonCode_recArmButton9] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton9]
     }
     else if (buttonThatWasClicked == recArmButton10.get())
     {
         //[UserButtonCode_recArmButton10] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton10]
     }
     else if (buttonThatWasClicked == recArmButton11.get())
     {
         //[UserButtonCode_recArmButton11] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton11]
     }
     else if (buttonThatWasClicked == recArmButton12.get())
     {
         //[UserButtonCode_recArmButton12] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton12]
     }
     else if (buttonThatWasClicked == recArmButton13.get())
     {
         //[UserButtonCode_recArmButton13] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton13]
     }
     else if (buttonThatWasClicked == recArmButton14.get())
     {
         //[UserButtonCode_recArmButton14] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton14]
     }
     else if (buttonThatWasClicked == recArmButton15.get())
     {
         //[UserButtonCode_recArmButton15] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton15]
     }
     else if (buttonThatWasClicked == recArmButton16.get())
     {
         //[UserButtonCode_recArmButton16] -- add your button handler code here..
-        recArmButtonClicked (buttonThatWasClicked);
+        recArmButtonClicked(buttonThatWasClicked);
         //[/UserButtonCode_recArmButton16]
     }
     else if (buttonThatWasClicked == saveButton.get())
     {
         //[UserButtonCode_saveButton] -- add your button handler code here..
-        juce::FileChooser myChooser ("Export MIDI...",
-                                     juce::File (getFilter()->loopDir + juce::File::getSeparatorString() + "Untitled.mid"),
-                                     "*.mid");
+        juce::FileChooser myChooser("Export MIDI...",
+                                    juce::File(getFilter()->loopDir + juce::File::getSeparatorString() + "Untitled.mid"),
+                                    "*.mid");
 
-        if (myChooser.browseForFileToSave (true))
+        if (myChooser.browseForFileToSave(true))
         {
-            juce::File midiFile (myChooser.getResult());
-            if (! midiFile.hasFileExtension ("mid"))
-                midiFile = midiFile.withFileExtension ("mid");
+            juce::File midiFile(myChooser.getResult());
+            if (! midiFile.hasFileExtension("mid"))
+            {
+                midiFile = midiFile.withFileExtension("mid");
+            }
 
-            getFilter()->writeMidiFile (getFilter()->activeLoop, midiFile);
+            getFilter()->writeMidiFile(getFilter()->activeLoop, midiFile);
         }
         //[/UserButtonCode_saveButton]
     }
     else if (buttonThatWasClicked == toggleButton.get())
     {
         //[UserButtonCode_toggleButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kRecActive, toggleButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kRecActive, toggleButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_toggleButton]
     }
     else if (buttonThatWasClicked == addBarButton.get())
     {
         //[UserButtonCode_addBarButton] -- add your button handler code here..
         pianoRoll->blankLength += 960.0 * 4.0;
-        pianoRoll->setSize (pianoRoll->getWidth() + roundToInt (pianoRoll->ppqToPixels (960.0 * 4.0)), pianoRoll->getHeight());
+        pianoRoll->setSize(pianoRoll->getWidth() + roundToInt(pianoRoll->ppqToPixels(960.0 * 4.0)), pianoRoll->getHeight());
         pianoRoll->sequenceChanged();
         //[/UserButtonCode_addBarButton]
     }
@@ -802,15 +805,17 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
         //[UserButtonCode_deleteBarButton] -- add your button handler code here..
         pianoRoll->blankLength -= 960.0 * 4.0;
         if (pianoRoll->blankLength < 960.0 * 4.0)
+        {
             pianoRoll->blankLength = 960.0 * 4.0;
-        pianoRoll->setSize (roundToInt (pianoRoll->ppqToPixels (pianoRoll->blankLength)), pianoRoll->getHeight());
+        }
+        pianoRoll->setSize(roundToInt(pianoRoll->ppqToPixels(pianoRoll->blankLength)), pianoRoll->getHeight());
         pianoRoll->sequenceChanged();
         //[/UserButtonCode_deleteBarButton]
     }
     else if (buttonThatWasClicked == thruButton.get())
     {
         //[UserButtonCode_thruButton] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kThru, thruButton->getToggleState() ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kThru, thruButton->getToggleState() ? 1.f : 0.f);
         //[/UserButtonCode_thruButton]
     }
 
@@ -818,7 +823,7 @@ void StepEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void StepEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
@@ -826,25 +831,25 @@ void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == outChannelSlider.get())
     {
         //[UserSliderCode_outChannelSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kOutChannel + getFilter()->activeLoop, channelToFloat ((int) outChannelSlider->getValue()));
+        getFilter()->setParameterNotifyingHost(kOutChannel + getFilter()->activeLoop, channelToFloat((int) outChannelSlider->getValue()));
         //[/UserSliderCode_outChannelSlider]
     }
     else if (sliderThatWasMoved == keySlider.get())
     {
         //[UserSliderCode_keySlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kTriggerKey + getFilter()->activeLoop, midiToFloat ((int) keySlider->getValue(), true));
+        getFilter()->setParameterNotifyingHost(kTriggerKey + getFilter()->activeLoop, midiToFloat((int) keySlider->getValue(), true));
         //[/UserSliderCode_keySlider]
     }
     else if (sliderThatWasMoved == recChannelSlider.get())
     {
         //[UserSliderCode_recChannelSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kChannel + getFilter()->activeLoop, channelToFloat ((int) recChannelSlider->getValue()));
+        getFilter()->setParameterNotifyingHost(kChannel + getFilter()->activeLoop, channelToFloat((int) recChannelSlider->getValue()));
         //[/UserSliderCode_recChannelSlider]
     }
     else if (sliderThatWasMoved == transposeSlider.get())
     {
         //[UserSliderCode_transposeSlider] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kTranspose + getFilter()->activeLoop, (float) ((transposeSlider->getValue() + 48.0) / 96.0));
+        getFilter()->setParameterNotifyingHost(kTranspose + getFilter()->activeLoop, (float) ((transposeSlider->getValue() + 48.0) / 96.0));
         //[/UserSliderCode_transposeSlider]
     }
 
@@ -853,7 +858,7 @@ void StepEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 }
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-juce::TextButton* StepEditor::getButtonByIndex (int i)
+juce::TextButton* StepEditor::getButtonByIndex(int i)
 {
     switch (i)
     {
@@ -894,51 +899,61 @@ juce::TextButton* StepEditor::getButtonByIndex (int i)
     }
 }
 
-void StepEditor::recArmButtonClicked (juce::Button* buttonThatWasClicked)
+void StepEditor::recArmButtonClicked(juce::Button* buttonThatWasClicked)
 {
     int index = buttonThatWasClicked->getButtonText().getIntValue() - 1;
     if (juce::ModifierKeys::getCurrentModifiers().isCommandDown())
     {
-        buttonThatWasClicked->setToggleState (! buttonThatWasClicked->getToggleState(), juce::dontSendNotification);
-        getFilter()->setParameterNotifyingHost (kRecArm + index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
+        buttonThatWasClicked->setToggleState(! buttonThatWasClicked->getToggleState(), juce::dontSendNotification);
+        getFilter()->setParameterNotifyingHost(kRecArm + index, buttonThatWasClicked->getToggleState() ? 1.f : 0.f);
     }
     else
     {
-        getFilter()->setParameterNotifyingHost (kActiveLoop, (float) index / (float) (numLoops - 1));
-        pianoRoll->setSequence (getFilter()->getActiveLoop());
-        activeLoopLabel->setText (juce::String (getFilter()->activeLoop + 1));
+        getFilter()->setParameterNotifyingHost(kActiveLoop, (float) index / (float) (numLoops - 1));
+        pianoRoll->setSequence(getFilter()->getActiveLoop());
+        activeLoopLabel->setText(juce::String(getFilter()->activeLoop + 1));
         for (int i = 0; i < numLoops; i++)
         {
-            getButtonByIndex (i)->setToggleState (i == index ? true : false, juce::dontSendNotification);
+            getButtonByIndex(i)->setToggleState(i == index ? true : false, juce::dontSendNotification);
             if (toggleButton->getToggleState())
-                getFilter()->setParameterNotifyingHost (kRecArm + i, i == index ? 1.f : 0.f);
+            {
+                getFilter()->setParameterNotifyingHost(kRecArm + i, i == index ? 1.f : 0.f);
+            }
         }
     }
 }
 
-bool StepEditor::isInterestedInFileDrag (const juce::StringArray& files)
+bool StepEditor::isInterestedInFileDrag(const juce::StringArray& files)
 {
-    juce::File file = juce::File (files[0]);
-    if (file.hasFileExtension ("mid"))
+    juce::File file = juce::File(files[0]);
+    if (file.hasFileExtension("mid"))
+    {
         return true;
+    }
     return false;
 }
 
-void StepEditor::filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY)
+void StepEditor::filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY)
 {
-    juce::File file (filenames[0]);
-    if (getFilter()->readMidiFile (getFilter()->activeLoop, file))
-        updateParameters (true);
+    juce::File file(filenames[0]);
+    if (getFilter()->readMidiFile(getFilter()->activeLoop, file))
+    {
+        updateParameters(true);
+    }
 }
 
-void StepEditor::mouseWheelMove (const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
+void StepEditor::mouseWheelMove(const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
 {
     if (e.eventComponent == viewport.get())
     {
         if (wheelIncrementY > 0.f)
-            zoomIn (e.getEventRelativeTo (pianoRoll).x);
+        {
+            zoomIn(e.getEventRelativeTo(pianoRoll).x);
+        }
         else if (wheelIncrementY < 0.f)
-            zoomOut (e.getEventRelativeTo (pianoRoll).x);
+        {
+            zoomOut(e.getEventRelativeTo(pianoRoll).x);
+        }
     }
 }
 
@@ -946,11 +961,11 @@ void StepEditor::timerCallback()
 {
     if (getFilter()->getActiveLoop()->isRecording)
     {
-        int x = roundToInt (pianoRoll->ppqToPixels (getFilter()->getActiveLoop()->recTime));
+        int x = roundToInt(pianoRoll->ppqToPixels(getFilter()->getActiveLoop()->recTime));
         //if (x < viewport->getWidth()-30) x=0;
         if (x > pianoRoll->getWidth())
         {
-            getFilter()->setParameterNotifyingHost (kRecord, 0.f);
+            getFilter()->setParameterNotifyingHost(kRecord, 0.f);
             //pianoRoll->blankLength+=960.0*4.0;
             //pianoRoll->setSize(pianoRoll->getWidth()+roundToInt(pianoRoll->ppqToPixels(960.0*4.0)),pianoRoll->getHeight());
             //pianoRoll->sequenceChanged();
@@ -961,13 +976,15 @@ void StepEditor::timerCallback()
     }
 }
 
-void StepEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void StepEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
+    {
         updateParameters();
+    }
 }
 
-void StepEditor::updateParameters (bool updateLoop)
+void StepEditor::updateParameters(bool updateLoop)
 {
     MidiStep* const filter = getFilter();
     float param[kNumParams];
@@ -975,7 +992,7 @@ void StepEditor::updateParameters (bool updateLoop)
     filter->getCallbackLock().enter();
     for (int i = 0; i < kNumParams; i++)
     {
-        param[i] = filter->getParameter (i);
+        param[i] = filter->getParameter(i);
     }
     const int activeLoop = filter->activeLoop;
     const int w          = filter->lastUIWidth;
@@ -984,38 +1001,41 @@ void StepEditor::updateParameters (bool updateLoop)
 
     for (int i = 0; i < numLoops; i++)
     {
-        getButtonByIndex (i)->setColour (juce::TextButton::textColourOnId, i == activeLoop ? juce::Colours::red : juce::Colours::black);
-        getButtonByIndex (i)->setToggleState (param[kRecArm + i] >= 0.5f, juce::dontSendNotification);
+        getButtonByIndex(i)->setColour(juce::TextButton::textColourOnId, i == activeLoop ? juce::Colours::red : juce::Colours::black);
+        getButtonByIndex(i)->setToggleState(param[kRecArm + i] >= 0.5f, juce::dontSendNotification);
     }
-    thruButton->setToggleState (param[kThru] >= 0.5f, juce::dontSendNotification);
-    toggleButton->setToggleState (param[kRecActive] >= 0.5f, juce::dontSendNotification);
-    recordButton->setToggleState (param[kRecord] >= 0.5f, juce::dontSendNotification);
-    keySlider->setValue (floatToMidi (param[kTriggerKey + activeLoop], true), juce::dontSendNotification);
-    transposeSlider->setValue (param[kTranspose + activeLoop] * 96.f - 48.f, juce::dontSendNotification);
-    recChannelSlider->setValue (floatToChannel (param[kChannel + activeLoop]), juce::dontSendNotification);
-    outChannelSlider->setValue (floatToChannel (param[kOutChannel + activeLoop]), juce::dontSendNotification);
+    thruButton->setToggleState(param[kThru] >= 0.5f, juce::dontSendNotification);
+    toggleButton->setToggleState(param[kRecActive] >= 0.5f, juce::dontSendNotification);
+    recordButton->setToggleState(param[kRecord] >= 0.5f, juce::dontSendNotification);
+    keySlider->setValue(floatToMidi(param[kTriggerKey + activeLoop], true), juce::dontSendNotification);
+    transposeSlider->setValue(param[kTranspose + activeLoop] * 96.f - 48.f, juce::dontSendNotification);
+    recChannelSlider->setValue(floatToChannel(param[kChannel + activeLoop]), juce::dontSendNotification);
+    outChannelSlider->setValue(floatToChannel(param[kOutChannel + activeLoop]), juce::dontSendNotification);
     if (updateLoop || lastActiveLoop != activeLoop)
     {
         lastActiveLoop = activeLoop;
-        pianoRoll->setSequence (getFilter()->getActiveLoop());
-        activeLoopLabel->setText (juce::String (activeLoop + 1));
+        pianoRoll->setSequence(getFilter()->getActiveLoop());
+        activeLoopLabel->setText(juce::String(activeLoop + 1));
     }
     else
+    {
         repaint();
-    setSize (w, h);
+    }
+    setSize(w, h);
 }
 
-void StepEditor::zoomIn (int centerPixel)
+void StepEditor::zoomIn(int centerPixel)
 {
-    pianoRoll->setSize (roundToInt ((float) pianoRoll->getWidth() * 1.1f), pianoRoll->getHeight());
-    viewport->setViewPosition (jlimit (0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
+    pianoRoll->setSize(roundToInt((float) pianoRoll->getWidth() * 1.1f), pianoRoll->getHeight());
+    viewport->setViewPosition(jlimit(0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
 }
 
-void StepEditor::zoomOut (int centerPixel)
+void StepEditor::zoomOut(int centerPixel)
 {
-    pianoRoll->setSize (roundToInt ((float) pianoRoll->getWidth() * 0.9f), pianoRoll->getHeight());
-    viewport->setViewPosition (jlimit (0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
+    pianoRoll->setSize(roundToInt((float) pianoRoll->getWidth() * 0.9f), pianoRoll->getHeight());
+    viewport->setViewPosition(jlimit(0, pianoRoll->getWidth() - viewport->getViewWidth(), centerPixel - viewport->getViewWidth() / 2), viewport->getViewPositionY());
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

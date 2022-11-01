@@ -1,22 +1,29 @@
 #ifndef MIDIPADSPLUGINEDITOR_H
 #define MIDIPADSPLUGINEDITOR_H
 
+#include "MidiPad.h"
+#include "midiPads.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
 
-#include "MidiPad.h"
-#include "midiPads.h"
-
 class fullScreenContainer : public juce::Component
 {
 public:
-    fullScreenContainer() { bgcolor = juce::Colours::white; }
+    fullScreenContainer()
+    {
+        bgcolor = juce::Colours::white;
+    }
+
     ~fullScreenContainer() override{};
     juce::Colour bgcolor;
 
 private:
-    void paint (juce::Graphics& g) override { g.fillAll (bgcolor); }
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(bgcolor);
+    }
 };
 
 class midiPadsEditor : public juce::AudioProcessorEditor,
@@ -27,25 +34,25 @@ class midiPadsEditor : public juce::AudioProcessorEditor,
                        public juce::FileDragAndDropTarget
 {
 public:
-    midiPadsEditor (midiPads* const ownerFilter);
+    midiPadsEditor(midiPads* const ownerFilter);
     ~midiPadsEditor() override;
 
     //==============================================================================
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void buttonClicked (juce::Button*) override;
-    void buttonStateChanged (juce::Button*) override;
-    void sliderValueChanged (juce::Slider*) override;
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDrag (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
-    void textEditorTextChanged (juce::TextEditor&) override;
-    void textEditorReturnKeyPressed (juce::TextEditor&) override;
-    void textEditorEscapeKeyPressed (juce::TextEditor&) override;
-    void textEditorFocusLost (juce::TextEditor&) override;
-    void filesDropped (const juce::StringArray& files, int x, int y) override;
-    bool isInterestedInFileDrag (const juce::StringArray& files) override;
-    void paint (juce::Graphics&) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void buttonClicked(juce::Button*) override;
+    void buttonStateChanged(juce::Button*) override;
+    void sliderValueChanged(juce::Slider*) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
+    void textEditorTextChanged(juce::TextEditor&) override;
+    void textEditorReturnKeyPressed(juce::TextEditor&) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor&) override;
+    void textEditorFocusLost(juce::TextEditor&) override;
+    void filesDropped(const juce::StringArray& files, int x, int y) override;
+    bool isInterestedInFileDrag(const juce::StringArray& files) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
 
     juce::Colour color, color2;
@@ -86,14 +93,14 @@ private:
 
     void updateParametersFromFilter();
     void padTriggered();
-    void dotMoved (int pad);
+    void dotMoved(int pad);
     int lastx[numPads];
     int lasty[numPads];
     int squares;
     bool showdots[numPads];
     bool showvalues[numPads];
-    void sendMidi (int i, bool shiftclicked = false);
-    void sendMidiOff (int i);
+    void sendMidi(int i, bool shiftclicked = false);
+    void sendMidiOff(int i);
     bool sending[numPads];
     bool dontsend;
     bool fullscreen;
@@ -105,7 +112,10 @@ private:
     int lastTouchedPad;
     int lastPadMenu;
 
-    midiPads* getFilter() const throw() { return (midiPads*) getAudioProcessor(); }
+    midiPads* getFilter() const throw()
+    {
+        return (midiPads*) getAudioProcessor();
+    }
 };
 
 #endif

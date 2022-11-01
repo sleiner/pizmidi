@@ -22,6 +22,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
+
 //[/Headers]
 
 //==============================================================================
@@ -45,10 +46,10 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -95,7 +96,7 @@ private:
     std::unique_ptr<juce::Label> label8;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PadEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PadEditor)
 };
 
 //[EndFile] You can add extra defines here...

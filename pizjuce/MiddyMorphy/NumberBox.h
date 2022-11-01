@@ -5,5 +5,5 @@
 class NumberBox : public juce::TextEditor
 {
 public:
-    bool keyPressed (const juce::KeyPress& key) override;
+    bool keyPressed(const juce::KeyPress& key) override;
 };

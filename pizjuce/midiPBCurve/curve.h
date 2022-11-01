@@ -25,7 +25,10 @@ class JuceProgram
 
 public:
     JuceProgram();
-    ~JuceProgram() {}
+
+    ~JuceProgram()
+    {
+    }
 
 private:
     float param[kNumParams];
@@ -49,19 +52,31 @@ public:
     ~MidiCurve() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    double getTailLengthSeconds() const override { return 0; }
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+
+    bool hasEditor() const override
+    {
+        return true;
+    }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -70,6 +85,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -79,32 +95,39 @@ public:
 #endif
     }
 
-    int getNumParameters() override { return kNumParams; }
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //==============================================================================
 
-    int getNumPrograms() override { return 128; }
+    int getNumPrograms() override
+    {
+        return 128;
+    }
+
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
-    void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getCurrentProgramStateInformation(juce::MemoryBlock& destData) override;
+    void setCurrentProgramStateInformation(const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     //==============================================================================
     // These properties are public so that our editor component can access them
@@ -115,11 +138,11 @@ public:
     // resized.
     int lastUIWidth, lastUIHeight;
     int lastCCOut, lastCCIn;
-    float getPointValue (int n, int y);
-    bool isPointActive (int point);
-    bool isPointControl (int point);
-    int getPrevActivePoint (int currentPoint);
-    int getNextActivePoint (int currentPoint);
+    float getPointValue(int n, int y);
+    bool isPointActive(int point);
+    bool isPointControl(int point);
+    int getPrevActivePoint(int currentPoint);
+    int getNextActivePoint(int currentPoint);
     void resetPoints();
     juce::Path path;
 
@@ -129,18 +152,20 @@ private:
     class midiPoint
     {
     public:
-        midiPoint (float x, float y, bool active, bool control)
+        midiPoint(float x, float y, bool active, bool control)
         {
-            p.setXY (x, y);
+            p.setXY(x, y);
             isControl = control;
             isActive  = active;
         }
+
         midiPoint()
         {
-            p.setXY (0.f, 0.f);
+            p.setXY(0.f, 0.f);
             isControl = false;
             isActive  = true;
         }
+
         ~midiPoint(){};
 
         juce::Point<float> p;
@@ -150,7 +175,10 @@ private:
 
     struct PointComparator
     {
-        int compareElements (midiPoint a, midiPoint b) { return juce::roundToInt (a.p.getX() * 127.f) - juce::roundToInt (b.p.getX() * 127.f); }
+        int compareElements(midiPoint a, midiPoint b)
+        {
+            return juce::roundToInt(a.p.getX() * 127.f) - juce::roundToInt(b.p.getX() * 127.f);
+        }
     } pointComparator;
 
     juce::Array<midiPoint> points;
@@ -161,10 +189,10 @@ private:
 
     bool init;
 
-    float findValue (float input);
-    double linearInterpolate (double x, double y1, double y2, double x1, double x2);
+    float findValue(float input);
+    double linearInterpolate(double x, double y1, double y2, double x1, double x2);
 
-    JUCE_LEAK_DETECTOR (MidiCurve)
+    JUCE_LEAK_DETECTOR(MidiCurve)
 };
 
 #endif

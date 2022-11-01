@@ -10,13 +10,13 @@ class Scene;
 class MorphPane : public ModulePane
 {
 public:
-    MorphPane (ModulePaneModel* model, MidiMorph* core);
+    MorphPane(ModulePaneModel* model, MidiMorph* core);
 
     ~MorphPane() override;
 
     void resized() override;
 
-    void setSelectedScenes (juce::Array<Scene*>* scenes, bool sendChangeMessage);
+    void setSelectedScenes(juce::Array<Scene*>* scenes, bool sendChangeMessage);
 
 private:
     ResizableBorderComponentEx* resizer;

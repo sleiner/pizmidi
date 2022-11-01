@@ -1,42 +1,42 @@
 #include "midiAlias.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiAlias (audioMaster);
+    return new MidiAlias(audioMaster);
 }
 
 MidiAliasProgram::MidiAliasProgram()
 {
     // default Program Values
-    fMirror = MIDI_TO_FLOAT (127);
+    fMirror = MIDI_TO_FLOAT(127);
     fZero   = 0.f;
     fShift  = 0.5f;
     fPower  = 1.0f;
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiAlias::MidiAlias (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams)
+MidiAlias::MidiAlias(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams)
 {
     programs = new MidiAliasProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < kNumPrograms; i++)
                 {
-                    programs[i].fMirror = defaultBank->GetProgParm (i, 0);
-                    programs[i].fZero   = defaultBank->GetProgParm (i, 0);
-                    programs[i].fShift  = defaultBank->GetProgParm (i, 0);
-                    programs[i].fPower  = defaultBank->GetProgParm (i, 1);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    programs[i].fMirror = defaultBank->GetProgParm(i, 0);
+                    programs[i].fZero   = defaultBank->GetProgParm(i, 0);
+                    programs[i].fShift  = defaultBank->GetProgParm(i, 0);
+                    programs[i].fPower  = defaultBank->GetProgParm(i, 1);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -45,15 +45,17 @@ MidiAlias::MidiAlias (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     init();
@@ -63,46 +65,48 @@ MidiAlias::MidiAlias (audioMasterCallback audioMaster)
 MidiAlias::~MidiAlias()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiAlias::setProgram (VstInt32 program)
+void MidiAlias::setProgram(VstInt32 program)
 {
     MidiAliasProgram* ap = &programs[program];
 
     curProgram = program;
-    setParameter (kMirror, ap->fMirror);
-    setParameter (kZero, ap->fZero);
-    setParameter (kShift, ap->fShift);
-    setParameter (kPower, ap->fPower);
+    setParameter(kMirror, ap->fMirror);
+    setParameter(kZero, ap->fZero);
+    setParameter(kShift, ap->fShift);
+    setParameter(kPower, ap->fPower);
 }
 
 //------------------------------------------------------------------------
-void MidiAlias::setProgramName (char* name)
+void MidiAlias::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiAlias::getProgramName (char* name)
+void MidiAlias::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiAlias::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiAlias::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiAlias::setParameter (VstInt32 index, float value)
+void MidiAlias::setParameter(VstInt32 index, float value)
 {
     MidiAliasProgram* ap = &programs[curProgram];
 
@@ -111,12 +115,16 @@ void MidiAlias::setParameter (VstInt32 index, float value)
         case kMirror:
             fMirror = ap->fMirror = value;
             if (fZero > fMirror)
-                setParameterAutomated (kZero, fMirror);
+            {
+                setParameterAutomated(kZero, fMirror);
+            }
             break;
         case kZero:
             fZero = ap->fZero = value;
             if (fZero > fMirror)
-                setParameterAutomated (kMirror, fZero);
+            {
+                setParameterAutomated(kMirror, fZero);
+            }
             break;
         case kShift:
             fShift = ap->fShift = value;
@@ -130,7 +138,7 @@ void MidiAlias::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiAlias::getParameter (VstInt32 index)
+float MidiAlias::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -155,21 +163,21 @@ float MidiAlias::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiAlias::getParameterName (VstInt32 index, char* label)
+void MidiAlias::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kMirror:
-            strcpy (label, "Nyquist Note");
+            strcpy(label, "Nyquist Note");
             break;
         case kZero:
-            strcpy (label, "Zero Note");
+            strcpy(label, "Zero Note");
             break;
         case kShift:
-            strcpy (label, "Pre Shift");
+            strcpy(label, "Pre Shift");
             break;
         case kPower:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         default:
             break;
@@ -177,35 +185,39 @@ void MidiAlias::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiAlias::getParameterDisplay (VstInt32 index, char* text)
+void MidiAlias::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kMirror:
-            sprintf (text, "%d (%s)", FLOAT_TO_MIDI (fMirror), getNoteName (FLOAT_TO_MIDI (fMirror), bottomOctave));
+            sprintf(text, "%d (%s)", FLOAT_TO_MIDI(fMirror), getNoteName(FLOAT_TO_MIDI(fMirror), bottomOctave));
             break;
         case kZero:
-            sprintf (text, "%d (%s)", FLOAT_TO_MIDI (fZero), getNoteName (FLOAT_TO_MIDI (fZero), bottomOctave));
+            sprintf(text, "%d (%s)", FLOAT_TO_MIDI(fZero), getNoteName(FLOAT_TO_MIDI(fZero), bottomOctave));
             break;
         case kShift:
-            sprintf (text, "%s%d", fShift > 0.5f ? "+" : "", roundToInt (fShift * 200.f) - 100);
+            sprintf(text, "%s%d", fShift > 0.5f ? "+" : "", roundToInt(fShift * 200.f) - 100);
             break;
         case kPower:
             if (fPower < 0.5f)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         default:
             break;
     }
 }
 
-void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiAlias::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int nyquist = FLOAT_TO_MIDI (fMirror);
-    const int zero    = FLOAT_TO_MIDI (fZero);
-    const int shift   = roundToInt (fShift * 200.f) - 100;
+    const int nyquist = FLOAT_TO_MIDI(fMirror);
+    const int zero    = FLOAT_TO_MIDI(fZero);
+    const int shift   = roundToInt(fShift * 200.f) - 100;
 
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -217,13 +229,15 @@ void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
         const int data1    = tomod.midiData[1] & 0x7f;
         bool discard       = false;
 
-        if (isNoteOn (tomod) || status == MIDI_POLYKEYPRESSURE)
+        if (isNoteOn(tomod) || status == MIDI_POLYKEYPRESSURE)
         {
             int newnote = data1;
             if (fPower >= 0.5f)
             {
                 if (nyquist == zero)
+                {
                     newnote = zero;
+                }
                 else
                 {
                     newnote += shift;
@@ -232,7 +246,9 @@ void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                     {
                         newnote += 2 * (nyquist - newnote);
                         if (newnote < zero)
+                        {
                             newnote -= 2 * (newnote - zero);
+                        }
                         counter--;
                         if (counter == 0)
                         {
@@ -243,16 +259,20 @@ void MidiAlias::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* out
                 }
                 tomod.midiData[1] = (char) newnote;
             }
-            if (isNoteOn (tomod))
+            if (isNoteOn(tomod))
+            {
                 transposed[data1][channel] = newnote;
+            }
         }
-        else if (isNoteOff (tomod))
+        else if (isNoteOff(tomod))
         {
             // always transpose noteoff by the same amount as the noteon was transposed
             tomod.midiData[1]          = (char) transposed[data1][channel];
             transposed[data1][channel] = data1;
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     }
 }

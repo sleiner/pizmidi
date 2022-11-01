@@ -1,36 +1,36 @@
 #include "midiChannelize.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiChannelize (audioMaster);
+    return new MidiChannelize(audioMaster);
 }
 
 MidiChannelizeProgram::MidiChannelizeProgram()
 {
     // default Program Values
-    fChannel = CHANNEL_TO_FLOAT016 (1);
+    fChannel = CHANNEL_TO_FLOAT016(1);
 
-    vst_strncpy (name, "MIDI Channeliser", kVstMaxProgNameLen);
+    vst_strncpy(name, "MIDI Channeliser", kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------
-MidiChannelize::MidiChannelize (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiChannelize::MidiChannelize(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiChannelizeProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(numPrograms, numParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < numPrograms; i++)
                 {
-                    programs[i].fChannel = defaultBank->GetProgParm (i, 0);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    programs[i].fChannel = defaultBank->GetProgParm(i, 0);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -39,16 +39,18 @@ MidiChannelize::MidiChannelize (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < numPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     for (int c = 0; c < 16; c++)
     {
         for (int i = 0; i < 128; i++)
+        {
             lastChannel[c][i] = c;
+        }
     }
 
     init();
@@ -58,43 +60,45 @@ MidiChannelize::MidiChannelize (audioMasterCallback audioMaster)
 MidiChannelize::~MidiChannelize()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiChannelize::setProgram (VstInt32 program)
+void MidiChannelize::setProgram(VstInt32 program)
 {
     MidiChannelizeProgram* ap = &programs[program];
 
     curProgram = program;
-    setParameter (kChannel, ap->fChannel);
+    setParameter(kChannel, ap->fChannel);
 }
 
 //------------------------------------------------------------------------
-void MidiChannelize::setProgramName (char* name)
+void MidiChannelize::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiChannelize::getProgramName (char* name)
+void MidiChannelize::getProgramName(char* name)
 {
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
+    vst_strncpy(name, programs[curProgram].name, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiChannelize::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiChannelize::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
+        vst_strncpy(text, programs[index].name, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChannelize::setParameter (VstInt32 index, float value)
+void MidiChannelize::setParameter(VstInt32 index, float value)
 {
     MidiChannelizeProgram* ap = &programs[curProgram];
 
@@ -109,7 +113,7 @@ void MidiChannelize::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiChannelize::getParameter (VstInt32 index)
+float MidiChannelize::getParameter(VstInt32 index)
 {
     switch (index)
     {
@@ -121,12 +125,12 @@ float MidiChannelize::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChannelize::getParameterName (VstInt32 index, char* label)
+void MidiChannelize::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kChannel:
-            vst_strncpy (label, "Channel", kVstMaxParamStrLen);
+            vst_strncpy(label, "Channel", kVstMaxParamStrLen);
             break;
         default:
             break;
@@ -134,15 +138,19 @@ void MidiChannelize::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChannelize::getParameterDisplay (VstInt32 index, char* text)
+void MidiChannelize::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kChannel:
-            if (FLOAT_TO_CHANNEL016 (fChannel) < 1)
-                vst_strncpy (text, "No Change", kVstMaxParamStrLen);
+            if (FLOAT_TO_CHANNEL016(fChannel) < 1)
+            {
+                vst_strncpy(text, "No Change", kVstMaxParamStrLen);
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (fChannel));
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChannel));
+            }
             break;
         default:
             break;
@@ -150,9 +158,9 @@ void MidiChannelize::getParameterDisplay (VstInt32 index, char* text)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiChannelize::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiChannelize::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int out_channel = FLOAT_TO_CHANNEL (fChannel);
+    const int out_channel = FLOAT_TO_CHANNEL(fChannel);
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
     {
@@ -164,7 +172,7 @@ void MidiChannelize::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         //const int data2	 = tomod.midiData[2] & 0x7f;
         if (tomod.midiData[0] < 0xF0)
         {
-            if (isNoteOff (tomod))
+            if (isNoteOff(tomod))
             {
                 tomod.midiData[0] = status | lastChannel[in_channel][data1];
             }
@@ -173,9 +181,11 @@ void MidiChannelize::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 tomod.midiData[0] = status | out_channel;
             }
 
-            if (isNoteOn (tomod))
+            if (isNoteOn(tomod))
+            {
                 lastChannel[in_channel][data1] = out_channel;
+            }
         }
-        outputs[0].push_back (tomod);
+        outputs[0].push_back(tomod);
     }
 }

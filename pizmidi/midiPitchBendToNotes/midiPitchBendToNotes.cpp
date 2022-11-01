@@ -1,38 +1,38 @@
 #include "midiPitchBendToNotes.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiPitchBendToNotes (audioMaster);
+    return new MidiPitchBendToNotes(audioMaster);
 }
 
 MidiPitchBendToNotesProgram::MidiPitchBendToNotesProgram()
 {
     // default Program Values
-    fChannel = CHANNEL_TO_FLOAT (0);
+    fChannel = CHANNEL_TO_FLOAT(0);
     fPower   = 1.f;
 
-    vst_strncpy (name, "Pitch Bend To Notes", kVstMaxProgNameLen);
+    vst_strncpy(name, "Pitch Bend To Notes", kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------
-MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiPitchBendToNotes::MidiPitchBendToNotes(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiPitchBendToNotesProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(numPrograms, numParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < numPrograms; i++)
                 {
-                    programs[i].fChannel = defaultBank->GetProgParm (i, 0);
-                    programs[i].fPower   = defaultBank->GetProgParm (i, 1);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    programs[i].fChannel = defaultBank->GetProgParm(i, 0);
+                    programs[i].fPower   = defaultBank->GetProgParm(i, 1);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -41,10 +41,10 @@ MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < numPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     pbrange = 24.f;
@@ -54,7 +54,9 @@ MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
         rpn[ch]       = -999;
         rpncoarse[ch] = -999;
         for (int n = 0; n < 128; n++)
+        {
             lastTranspose[n][ch] = NOT_PLAYING;
+        }
     }
 
     init();
@@ -64,44 +66,46 @@ MidiPitchBendToNotes::MidiPitchBendToNotes (audioMasterCallback audioMaster)
 MidiPitchBendToNotes::~MidiPitchBendToNotes()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiPitchBendToNotes::setProgram (VstInt32 program)
+void MidiPitchBendToNotes::setProgram(VstInt32 program)
 {
     MidiPitchBendToNotesProgram* ap = &programs[program];
 
     curProgram = program;
-    setParameter (kChannel, ap->fChannel);
-    setParameter (kPower, ap->fPower);
+    setParameter(kChannel, ap->fChannel);
+    setParameter(kPower, ap->fPower);
 }
 
 //------------------------------------------------------------------------
-void MidiPitchBendToNotes::setProgramName (char* name)
+void MidiPitchBendToNotes::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiPitchBendToNotes::getProgramName (char* name)
+void MidiPitchBendToNotes::getProgramName(char* name)
 {
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
+    vst_strncpy(name, programs[curProgram].name, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiPitchBendToNotes::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiPitchBendToNotes::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
+        vst_strncpy(text, programs[index].name, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiPitchBendToNotes::setParameter (VstInt32 index, float value)
+void MidiPitchBendToNotes::setParameter(VstInt32 index, float value)
 {
     MidiPitchBendToNotesProgram* ap = &programs[curProgram];
 
@@ -119,7 +123,7 @@ void MidiPitchBendToNotes::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiPitchBendToNotes::getParameter (VstInt32 index)
+float MidiPitchBendToNotes::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -138,15 +142,15 @@ float MidiPitchBendToNotes::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiPitchBendToNotes::getParameterName (VstInt32 index, char* label)
+void MidiPitchBendToNotes::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kChannel:
-            vst_strncpy (label, "Channel", kVstMaxParamStrLen);
+            vst_strncpy(label, "Channel", kVstMaxParamStrLen);
             break;
         case kPower:
-            vst_strncpy (label, "Power", kVstMaxParamStrLen);
+            vst_strncpy(label, "Power", kVstMaxParamStrLen);
             break;
         default:
             break;
@@ -154,28 +158,36 @@ void MidiPitchBendToNotes::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiPitchBendToNotes::getParameterDisplay (VstInt32 index, char* text)
+void MidiPitchBendToNotes::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kChannel:
-            if (FLOAT_TO_CHANNEL (fChannel) == ANY_CHANNEL)
-                vst_strncpy (text, "No Change", kVstMaxParamStrLen);
+            if (FLOAT_TO_CHANNEL(fChannel) == ANY_CHANNEL)
+            {
+                vst_strncpy(text, "No Change", kVstMaxParamStrLen);
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (fChannel) + 1);
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(fChannel) + 1);
+            }
             break;
         case kPower:
             if (fPower < 0.5f)
-                vst_strncpy (text, "Off", kVstMaxParamStrLen);
+            {
+                vst_strncpy(text, "Off", kVstMaxParamStrLen);
+            }
             else
-                vst_strncpy (text, "On", kVstMaxParamStrLen);
+            {
+                vst_strncpy(text, "On", kVstMaxParamStrLen);
+            }
             break;
         default:
             break;
     }
 }
 
-void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiPitchBendToNotes::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     if (fPower >= 0.5f)
     {
@@ -188,21 +200,23 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
             const char in_channel  = tomod.midiData[0] & 0x0f; // isolating channel
             const char data1       = tomod.midiData[1] & 0x7f;
             const char data2       = tomod.midiData[2] & 0x7f;
-            const char out_channel = (char) FLOAT_TO_CHANNEL (fChannel);
+            const char out_channel = (char) FLOAT_TO_CHANNEL(fChannel);
 
             if ((status == MIDI_NOTEON) && (data2 == 0))
+            {
                 status = MIDI_NOTEOFF;
+            }
 
             if (status == MIDI_PITCHBEND)
             {
                 if (in_channel == 0) //"actual" pitch wheel
                 {
                     tomod.midiData[0] = out_channel | MIDI_PITCHBEND;
-                    outputs[0].push_back (tomod);
+                    outputs[0].push_back(tomod);
                 }
                 else
                 {
-                    transpose[in_channel] = roundToInt (pbrange * (float) (CombineBytes (data1, data2) - 8192) / 16383.f);
+                    transpose[in_channel] = roundToInt(pbrange * (float) (CombineBytes(data1, data2) - 8192) / 16383.f);
                 }
                 //for (int i=0;i<128;i++)
                 //{
@@ -229,13 +243,13 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
                 lastTranspose[data1][in_channel] = transpose[in_channel];
                 tomod.midiData[0]                = out_channel | MIDI_NOTEON;
                 tomod.midiData[1]                = (data1 + transpose[in_channel]) & 0x7f;
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
             }
             else if (status == MIDI_NOTEOFF)
             {
                 tomod.midiData[0] = out_channel | MIDI_NOTEOFF;
                 tomod.midiData[1] = (data1 + lastTranspose[data1][in_channel]) & 0x7f;
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
                 lastTranspose[data1][in_channel] = NOT_PLAYING;
             }
             else if (status == MIDI_CONTROLCHANGE)
@@ -243,10 +257,14 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
                 if (data1 == MIDI_ALL_NOTES_OFF)
                 {
                     for (int n = 0; n < 128; n++)
+                    {
                         lastTranspose[n][in_channel] = NOT_PLAYING;
+                    }
                 }
                 else if (data1 == 101)
+                {
                     rpncoarse[in_channel] = data2;
+                }
                 else if (data1 == 100 && rpncoarse[in_channel] >= 0)
                 {
                     rpn[in_channel] = data2 | (rpncoarse[in_channel] << 7);
@@ -259,12 +277,12 @@ void MidiPitchBendToNotes::processMidiEvents (VstMidiEventVec* inputs, VstMidiEv
                     }
                 }
                 tomod.midiData[0] = out_channel | status;
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
             }
             else
             {
                 tomod.midiData[0] = out_channel | status;
-                outputs[0].push_back (tomod);
+                outputs[0].push_back(tomod);
             }
         }
     }

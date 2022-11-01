@@ -20,22 +20,26 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "../_common/ChannelSlider.h"
+#include "PianoRoll.h"
+#include "step.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../_common/ChannelSlider.h"
-#include "PianoRoll.h"
-#include "step.h"
 class PianoPort : public juce::Viewport
 {
 public:
-    PianoPort (juce::String name) : Viewport (name){};
-    void mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override
+    PianoPort(juce::String name)
+        : Viewport(name){};
+
+    void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override
     {
-        this->getParentComponent()->mouseWheelMove (e, d);
+        this->getParentComponent()->mouseWheelMove(e, d);
     }
 };
+
 //[/Headers]
 
 #include "../_common/PizButton.h"
@@ -57,33 +61,37 @@ class StepEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    StepEditor (MidiStep* const ownerFilter);
+    StepEditor(MidiStep* const ownerFilter);
     ~StepEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    bool isInterestedInFileDrag (const juce::StringArray& files) override;
-    void filesDropped (const juce::StringArray& filenames, int mouseX, int mouseY) override;
+    bool isInterestedInFileDrag(const juce::StringArray& files) override;
+    void filesDropped(const juce::StringArray& filenames, int mouseX, int mouseY) override;
     void timerCallback() override;
-    void zoomIn (int centerPixel);
-    void zoomOut (int centerPixel);
-    void mouseWheelMove (const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
+    void zoomIn(int centerPixel);
+    void zoomOut(int centerPixel);
+    void mouseWheelMove(const juce::MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MidiStep* getFilter() const throw() { return (MidiStep*) getAudioProcessor(); }
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void updateParameters (bool updateLoop = false);
+    MidiStep* getFilter() const throw()
+    {
+        return (MidiStep*) getAudioProcessor();
+    }
+
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void updateParameters(bool updateLoop = false);
     juce::ComponentBoundsConstrainer resizeLimits;
     PianoRoll* pianoRoll;
-    juce::TextButton* getButtonByIndex (int i);
-    void recArmButtonClicked (juce::Button* buttonThatWasClicked);
+    juce::TextButton* getButtonByIndex(int i);
+    void recArmButtonClicked(juce::Button* buttonThatWasClicked);
     int lastActiveLoop;
     //[/UserVariables]
 
@@ -121,7 +129,7 @@ private:
     juce::Path internalPath1;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StepEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(StepEditor)
 };
 
 //[EndFile] You can add extra defines here...

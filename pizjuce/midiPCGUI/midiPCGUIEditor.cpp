@@ -18,677 +18,679 @@
 */
 
 //[Headers] You can add your own extra header files here...
-inline int combineBytes (int lsb, int msb)
+inline int combineBytes(int lsb, int msb)
 {
     return ((msb & 0x7f) << 7) | (lsb & 0x7f);
 }
+
 //[/Headers]
 
 #include "midiPCGUIEditor.h"
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 using juce::roundToInt;
+
 //[/MiscUserDefs]
 
 //==============================================================================
-midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+midiPCGUIEditor::midiPCGUIEditor(midiPCGUI* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    groupComponent2.reset (new juce::GroupComponent ("new group",
-                                                     TRANS ("Program")));
-    addAndMakeVisible (groupComponent2.get());
-    groupComponent2->setTextLabelPosition (juce::Justification::centred);
+    groupComponent2.reset(new juce::GroupComponent("new group",
+                                                   TRANS("Program")));
+    addAndMakeVisible(groupComponent2.get());
+    groupComponent2->setTextLabelPosition(juce::Justification::centred);
 
-    groupComponent2->setBounds (5, 7, 158, 225);
+    groupComponent2->setBounds(5, 7, 158, 225);
 
-    groupComponent.reset (new juce::GroupComponent ("new group",
-                                                    TRANS ("Bank")));
-    addAndMakeVisible (groupComponent.get());
-    groupComponent->setTextLabelPosition (juce::Justification::centred);
+    groupComponent.reset(new juce::GroupComponent("new group",
+                                                  TRANS("Bank")));
+    addAndMakeVisible(groupComponent.get());
+    groupComponent->setTextLabelPosition(juce::Justification::centred);
 
-    groupComponent->setBounds (167, 45, 133, 166);
+    groupComponent->setBounds(167, 45, 133, 166);
 
-    s_Program.reset (new VSTSlider ("Program"));
-    addAndMakeVisible (s_Program.get());
-    s_Program->setTooltip (TRANS ("Next Program Change to send"));
-    s_Program->setRange (0, 128, 1);
-    s_Program->setSliderStyle (juce::Slider::LinearHorizontal);
-    s_Program->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
-    s_Program->addListener (this);
+    s_Program.reset(new VSTSlider("Program"));
+    addAndMakeVisible(s_Program.get());
+    s_Program->setTooltip(TRANS("Next Program Change to send"));
+    s_Program->setRange(0, 128, 1);
+    s_Program->setSliderStyle(juce::Slider::LinearHorizontal);
+    s_Program->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 28, 20);
+    s_Program->addListener(this);
 
-    s_Program->setBounds (18, 171, 133, 24);
+    s_Program->setBounds(18, 171, 133, 24);
 
-    s_BankMSB.reset (new VSTSlider ("Bank MSB"));
-    addAndMakeVisible (s_BankMSB.get());
-    s_BankMSB->setTooltip (TRANS ("Next Bank Select to send"));
-    s_BankMSB->setRange (0, 128, 1);
-    s_BankMSB->setSliderStyle (juce::Slider::LinearHorizontal);
-    s_BankMSB->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
-    s_BankMSB->addListener (this);
+    s_BankMSB.reset(new VSTSlider("Bank MSB"));
+    addAndMakeVisible(s_BankMSB.get());
+    s_BankMSB->setTooltip(TRANS("Next Bank Select to send"));
+    s_BankMSB->setRange(0, 128, 1);
+    s_BankMSB->setSliderStyle(juce::Slider::LinearHorizontal);
+    s_BankMSB->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 28, 20);
+    s_BankMSB->addListener(this);
 
-    s_BankMSB->setBounds (202, 120, 94, 24);
+    s_BankMSB->setBounds(202, 120, 94, 24);
 
-    s_BankLSB.reset (new VSTSlider ("Bank LSB"));
-    addAndMakeVisible (s_BankLSB.get());
-    s_BankLSB->setTooltip (TRANS ("Next Bank LSB to send"));
-    s_BankLSB->setRange (0, 128, 1);
-    s_BankLSB->setSliderStyle (juce::Slider::LinearHorizontal);
-    s_BankLSB->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
-    s_BankLSB->addListener (this);
+    s_BankLSB.reset(new VSTSlider("Bank LSB"));
+    addAndMakeVisible(s_BankLSB.get());
+    s_BankLSB->setTooltip(TRANS("Next Bank LSB to send"));
+    s_BankLSB->setRange(0, 128, 1);
+    s_BankLSB->setSliderStyle(juce::Slider::LinearHorizontal);
+    s_BankLSB->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 28, 20);
+    s_BankLSB->addListener(this);
 
-    s_BankLSB->setBounds (202, 143, 94, 24);
+    s_BankLSB->setBounds(202, 143, 94, 24);
 
-    b_BankTrig.reset (new juce::TextButton ("Bank Trig"));
-    addAndMakeVisible (b_BankTrig.get());
-    b_BankTrig->setTooltip (TRANS ("Send selected Bank Select message(s)"));
-    b_BankTrig->setButtonText (TRANS ("Trigger Bank"));
-    b_BankTrig->addListener (this);
-    b_BankTrig->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+    b_BankTrig.reset(new juce::TextButton("Bank Trig"));
+    addAndMakeVisible(b_BankTrig.get());
+    b_BankTrig->setTooltip(TRANS("Send selected Bank Select message(s)"));
+    b_BankTrig->setButtonText(TRANS("Trigger Bank"));
+    b_BankTrig->addListener(this);
+    b_BankTrig->setColour(juce::TextButton::buttonColourId, juce::Colour(0xffbbbbff));
 
-    b_BankTrig->setBounds (179, 177, 109, 24);
+    b_BankTrig->setBounds(179, 177, 109, 24);
 
-    b_PCTrig.reset (new juce::TextButton ("PC Trig"));
-    addAndMakeVisible (b_PCTrig.get());
-    b_PCTrig->setTooltip (TRANS ("Send selected Program Change message"));
-    b_PCTrig->setButtonText (TRANS ("Trigger Program"));
-    b_PCTrig->addListener (this);
-    b_PCTrig->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
+    b_PCTrig.reset(new juce::TextButton("PC Trig"));
+    addAndMakeVisible(b_PCTrig.get());
+    b_PCTrig->setTooltip(TRANS("Send selected Program Change message"));
+    b_PCTrig->setButtonText(TRANS("Trigger Program"));
+    b_PCTrig->addListener(this);
+    b_PCTrig->setColour(juce::TextButton::buttonColourId, juce::Colour(0xffbbbbff));
 
-    b_PCTrig->setBounds (20, 198, 129, 24);
+    b_PCTrig->setBounds(20, 198, 129, 24);
 
-    b_Inc.reset (new juce::TextButton ("Inc"));
-    addAndMakeVisible (b_Inc.get());
-    b_Inc->setButtonText (TRANS ("+"));
-    b_Inc->setConnectedEdges (juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
-    b_Inc->addListener (this);
-    b_Inc->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
-    b_Inc->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
+    b_Inc.reset(new juce::TextButton("Inc"));
+    addAndMakeVisible(b_Inc.get());
+    b_Inc->setButtonText(TRANS("+"));
+    b_Inc->setConnectedEdges(juce::Button::ConnectedOnLeft | juce::Button::ConnectedOnTop);
+    b_Inc->addListener(this);
+    b_Inc->setColour(juce::TextButton::buttonColourId, juce::Colour(0xffbbbbff));
+    b_Inc->setColour(juce::TextButton::textColourOffId, juce::Colours::black);
 
-    b_Inc->setBounds (84, 135, 40, 24);
+    b_Inc->setBounds(84, 135, 40, 24);
 
-    b_Dec.reset (new juce::TextButton ("Dec"));
-    addAndMakeVisible (b_Dec.get());
-    b_Dec->setButtonText (TRANS ("-"));
-    b_Dec->setConnectedEdges (juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
-    b_Dec->addListener (this);
-    b_Dec->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
-    b_Dec->setColour (juce::TextButton::textColourOffId, juce::Colours::black);
+    b_Dec.reset(new juce::TextButton("Dec"));
+    addAndMakeVisible(b_Dec.get());
+    b_Dec->setButtonText(TRANS("-"));
+    b_Dec->setConnectedEdges(juce::Button::ConnectedOnRight | juce::Button::ConnectedOnTop);
+    b_Dec->addListener(this);
+    b_Dec->setColour(juce::TextButton::buttonColourId, juce::Colour(0xffbbbbff));
+    b_Dec->setColour(juce::TextButton::textColourOffId, juce::Colours::black);
 
-    b_Dec->setBounds (44, 135, 40, 24);
+    b_Dec->setBounds(44, 135, 40, 24);
 
-    b_PCListen.reset (new juce::ToggleButton ("PC Listen"));
-    addAndMakeVisible (b_PCListen.get());
-    b_PCListen->setTooltip (TRANS ("Use incoming Program Changes to select VST programs"));
-    b_PCListen->addListener (this);
+    b_PCListen.reset(new juce::ToggleButton("PC Listen"));
+    addAndMakeVisible(b_PCListen.get());
+    b_PCListen->setTooltip(TRANS("Use incoming Program Changes to select VST programs"));
+    b_PCListen->addListener(this);
 
-    b_PCListen->setBounds (117, 253, 81, 24);
+    b_PCListen->setBounds(117, 253, 81, 24);
 
-    s_Channel.reset (new VSTSlider ("Channel"));
-    addAndMakeVisible (s_Channel.get());
-    s_Channel->setTooltip (TRANS ("Input/Output MIDI Channel"));
-    s_Channel->setRange (1, 16, 1);
-    s_Channel->setSliderStyle (juce::Slider::LinearHorizontal);
-    s_Channel->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 28, 20);
-    s_Channel->addListener (this);
+    s_Channel.reset(new VSTSlider("Channel"));
+    addAndMakeVisible(s_Channel.get());
+    s_Channel->setTooltip(TRANS("Input/Output MIDI Channel"));
+    s_Channel->setRange(1, 16, 1);
+    s_Channel->setSliderStyle(juce::Slider::LinearHorizontal);
+    s_Channel->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 28, 20);
+    s_Channel->addListener(this);
 
-    s_Channel->setBounds (190, 227, 94, 24);
+    s_Channel->setBounds(190, 227, 94, 24);
 
-    b_Mode.reset (new juce::TextButton ("Mode"));
-    addAndMakeVisible (b_Mode.get());
-    b_Mode->setTooltip (TRANS ("Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved"));
-    b_Mode->setButtonText (TRANS ("Triggered"));
-    b_Mode->addListener (this);
-    b_Mode->setColour (juce::TextButton::buttonColourId, juce::Colour (0xffbbbbff));
-    b_Mode->setColour (juce::TextButton::buttonOnColourId, juce::Colours::coral);
+    b_Mode.reset(new juce::TextButton("Mode"));
+    addAndMakeVisible(b_Mode.get());
+    b_Mode->setTooltip(TRANS("Triggered: Send messages when button is clicked; Direct: Send messages when sliders are moved"));
+    b_Mode->setButtonText(TRANS("Triggered"));
+    b_Mode->addListener(this);
+    b_Mode->setColour(juce::TextButton::buttonColourId, juce::Colour(0xffbbbbff));
+    b_Mode->setColour(juce::TextButton::buttonOnColourId, juce::Colours::coral);
 
-    b_Mode->setBounds (23, 249, 78, 24);
+    b_Mode->setBounds(23, 249, 78, 24);
 
-    PCDisplay.reset (new juce::Label ("PCDisplay",
-                                      TRANS ("128")));
-    addAndMakeVisible (PCDisplay.get());
-    PCDisplay->setTooltip (TRANS ("Last Program Change sent"));
-    PCDisplay->setFont (juce::Font (63.30f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    PCDisplay->setJustificationType (juce::Justification::centred);
-    PCDisplay->setEditable (false, true, false);
-    PCDisplay->setColour (juce::Label::backgroundColourId, juce::Colour (0xffd0d0d0));
-    PCDisplay->setColour (juce::Label::outlineColourId, juce::Colours::black);
-    PCDisplay->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    PCDisplay->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-    PCDisplay->addListener (this);
+    PCDisplay.reset(new juce::Label("PCDisplay",
+                                    TRANS("128")));
+    addAndMakeVisible(PCDisplay.get());
+    PCDisplay->setTooltip(TRANS("Last Program Change sent"));
+    PCDisplay->setFont(juce::Font(63.30f, juce::Font::plain).withTypefaceStyle("Bold"));
+    PCDisplay->setJustificationType(juce::Justification::centred);
+    PCDisplay->setEditable(false, true, false);
+    PCDisplay->setColour(juce::Label::backgroundColourId, juce::Colour(0xffd0d0d0));
+    PCDisplay->setColour(juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+    PCDisplay->addListener(this);
 
-    PCDisplay->setBounds (18, 45, 132, 62);
+    PCDisplay->setBounds(18, 45, 132, 62);
 
-    label.reset (new juce::Label ("new label",
-                                  TRANS ("Channel")));
-    addAndMakeVisible (label.get());
-    label->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label->setJustificationType (juce::Justification::centredLeft);
-    label->setEditable (false, false, false);
-    label->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label.reset(new juce::Label("new label",
+                                TRANS("Channel")));
+    addAndMakeVisible(label.get());
+    label->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label->setJustificationType(juce::Justification::centredLeft);
+    label->setEditable(false, false, false);
+    label->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label->setBounds (204, 209, 58, 24);
+    label->setBounds(204, 209, 58, 24);
 
-    label2.reset (new juce::Label ("new label",
-                                   TRANS ("Mode")));
-    addAndMakeVisible (label2.get());
-    label2->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label2->setJustificationType (juce::Justification::centredLeft);
-    label2->setEditable (false, false, false);
-    label2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label2.reset(new juce::Label("new label",
+                                 TRANS("Mode")));
+    addAndMakeVisible(label2.get());
+    label2->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label2->setJustificationType(juce::Justification::centredLeft);
+    label2->setEditable(false, false, false);
+    label2->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label2->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label2->setBounds (41, 231, 41, 23);
+    label2->setBounds(41, 231, 41, 23);
 
-    label3.reset (new juce::Label ("new label",
-                                   TRANS ("MSB")));
-    addAndMakeVisible (label3.get());
-    label3->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label3->setJustificationType (juce::Justification::centredLeft);
-    label3->setEditable (false, false, false);
-    label3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label3.reset(new juce::Label("new label",
+                                 TRANS("MSB")));
+    addAndMakeVisible(label3.get());
+    label3->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label3->setJustificationType(juce::Justification::centredLeft);
+    label3->setEditable(false, false, false);
+    label3->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label3->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label3->setBounds (174, 120, 33, 24);
+    label3->setBounds(174, 120, 33, 24);
 
-    label4.reset (new juce::Label ("new label",
-                                   TRANS ("LSB")));
-    addAndMakeVisible (label4.get());
-    label4->setFont (juce::Font (12.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label4->setJustificationType (juce::Justification::centredLeft);
-    label4->setEditable (false, false, false);
-    label4->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label4->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label4.reset(new juce::Label("new label",
+                                 TRANS("LSB")));
+    addAndMakeVisible(label4.get());
+    label4->setFont(juce::Font(12.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label4->setJustificationType(juce::Justification::centredLeft);
+    label4->setEditable(false, false, false);
+    label4->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label4->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label4->setBounds (176, 143, 33, 24);
+    label4->setBounds(176, 143, 33, 24);
 
-    label5.reset (new juce::Label ("new label",
-                                   TRANS ("Current Program")));
-    addAndMakeVisible (label5.get());
-    label5->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label5->setJustificationType (juce::Justification::centred);
-    label5->setEditable (false, false, false);
-    label5->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label5->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label5.reset(new juce::Label("new label",
+                                 TRANS("Current Program")));
+    addAndMakeVisible(label5.get());
+    label5->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label5->setJustificationType(juce::Justification::centred);
+    label5->setEditable(false, false, false);
+    label5->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label5->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label5->setBounds (21, 25, 126, 24);
+    label5->setBounds(21, 25, 126, 24);
 
-    b_Thru.reset (new juce::ToggleButton ("Thru"));
-    addAndMakeVisible (b_Thru.get());
-    b_Thru->addListener (this);
+    b_Thru.reset(new juce::ToggleButton("Thru"));
+    addAndMakeVisible(b_Thru.get());
+    b_Thru->addListener(this);
 
-    b_Thru->setBounds (214, 253, 54, 24);
+    b_Thru->setBounds(214, 253, 54, 24);
 
-    PCDisplay2.reset (new juce::Label ("PCDisplay",
-                                       TRANS ("128")));
-    addAndMakeVisible (PCDisplay2.get());
-    PCDisplay2->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    PCDisplay2->setJustificationType (juce::Justification::centred);
-    PCDisplay2->setEditable (false, true, false);
-    PCDisplay2->setColour (juce::Label::backgroundColourId, juce::Colour (0xffcecece));
-    PCDisplay2->setColour (juce::Label::outlineColourId, juce::Colours::black);
-    PCDisplay2->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    PCDisplay2->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-    PCDisplay2->addListener (this);
+    PCDisplay2.reset(new juce::Label("PCDisplay",
+                                     TRANS("128")));
+    addAndMakeVisible(PCDisplay2.get());
+    PCDisplay2->setFont(juce::Font(18.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    PCDisplay2->setJustificationType(juce::Justification::centred);
+    PCDisplay2->setEditable(false, true, false);
+    PCDisplay2->setColour(juce::Label::backgroundColourId, juce::Colour(0xffcecece));
+    PCDisplay2->setColour(juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay2->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay2->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+    PCDisplay2->addListener(this);
 
-    PCDisplay2->setBounds (193, 83, 42, 22);
+    PCDisplay2->setBounds(193, 83, 42, 22);
 
-    PCDisplay3.reset (new juce::Label ("PCDisplay",
-                                       TRANS ("128")));
-    addAndMakeVisible (PCDisplay3.get());
-    PCDisplay3->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    PCDisplay3->setJustificationType (juce::Justification::centred);
-    PCDisplay3->setEditable (false, true, false);
-    PCDisplay3->setColour (juce::Label::backgroundColourId, juce::Colour (0xffd0d0d0));
-    PCDisplay3->setColour (juce::Label::outlineColourId, juce::Colours::black);
-    PCDisplay3->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    PCDisplay3->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-    PCDisplay3->addListener (this);
+    PCDisplay3.reset(new juce::Label("PCDisplay",
+                                     TRANS("128")));
+    addAndMakeVisible(PCDisplay3.get());
+    PCDisplay3->setFont(juce::Font(18.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    PCDisplay3->setJustificationType(juce::Justification::centred);
+    PCDisplay3->setEditable(false, true, false);
+    PCDisplay3->setColour(juce::Label::backgroundColourId, juce::Colour(0xffd0d0d0));
+    PCDisplay3->setColour(juce::Label::outlineColourId, juce::Colours::black);
+    PCDisplay3->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    PCDisplay3->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
+    PCDisplay3->addListener(this);
 
-    PCDisplay3->setBounds (236, 83, 42, 22);
+    PCDisplay3->setBounds(236, 83, 42, 22);
 
-    label6.reset (new juce::Label ("new label",
-                                   TRANS ("Current Bank")));
-    addAndMakeVisible (label6.get());
-    label6->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label6->setJustificationType (juce::Justification::centred);
-    label6->setEditable (false, false, false);
-    label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label6.reset(new juce::Label("new label",
+                                 TRANS("Current Bank")));
+    addAndMakeVisible(label6.get());
+    label6->setFont(juce::Font(15.00f, juce::Font::plain).withTypefaceStyle("Regular"));
+    label6->setJustificationType(juce::Justification::centred);
+    label6->setEditable(false, false, false);
+    label6->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    label6->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0x00000000));
 
-    label6->setBounds (173, 64, 126, 24);
+    label6->setBounds(173, 64, 126, 24);
 
-    ProgramName.reset (new ClickableLabel ("Program Name",
-                                           TRANS ("Awesome Thing")));
-    addAndMakeVisible (ProgramName.get());
-    ProgramName->setFont (juce::Font (18.00f, juce::Font::plain).withTypefaceStyle ("Bold"));
-    ProgramName->setJustificationType (juce::Justification::centred);
-    ProgramName->setEditable (false, true, false);
-    ProgramName->setColour (juce::Label::backgroundColourId, juce::Colour (0xffcecece));
-    ProgramName->setColour (juce::Label::outlineColourId, juce::Colours::black);
-    ProgramName->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    ProgramName->setColour (juce::TextEditor::backgroundColourId, juce::Colours::white);
-    ProgramName->addListener (this);
+    ProgramName.reset(new ClickableLabel("Program Name",
+                                         TRANS("Awesome Thing")));
+    addAndMakeVisible(ProgramName.get());
+    ProgramName->setFont(juce::Font(18.00f, juce::Font::plain).withTypefaceStyle("Bold"));
+    ProgramName->setJustificationType(juce::Justification::centred);
+    ProgramName->setEditable(false, true, false);
+    ProgramName->setColour(juce::Label::backgroundColourId, juce::Colour(0xffcecece));
+    ProgramName->setColour(juce::Label::outlineColourId, juce::Colours::black);
+    ProgramName->setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    ProgramName->setColour(juce::TextEditor::backgroundColourId, juce::Colours::white);
+    ProgramName->addListener(this);
 
-    ProgramName->setBounds (18, 106, 132, 30);
+    ProgramName->setBounds(18, 106, 132, 30);
 
-    minimize.reset (new juce::TextButton ("Minimize"));
-    addAndMakeVisible (minimize.get());
-    minimize->setButtonText (TRANS ("_"));
-    minimize->addListener (this);
+    minimize.reset(new juce::TextButton("Minimize"));
+    addAndMakeVisible(minimize.get());
+    minimize->setButtonText(TRANS("_"));
+    minimize->addListener(this);
 
-    minimize->setBounds (284, 258, 20, 16);
+    minimize->setBounds(284, 258, 20, 16);
 
-    internalPath1.startNewSubPath (170.0f, 22.0f);
-    internalPath1.lineTo (170.0f, 18.0f);
-    internalPath1.lineTo (173.0f, 18.0f);
-    internalPath1.lineTo (173.0f, 22.0f);
+    internalPath1.startNewSubPath(170.0f, 22.0f);
+    internalPath1.lineTo(170.0f, 18.0f);
+    internalPath1.lineTo(173.0f, 18.0f);
+    internalPath1.lineTo(173.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (170.0f, 14.0f);
-    internalPath1.lineTo (173.0f, 14.0f);
-    internalPath1.lineTo (173.0f, 16.0f);
-    internalPath1.lineTo (170.0f, 16.0f);
+    internalPath1.startNewSubPath(170.0f, 14.0f);
+    internalPath1.lineTo(173.0f, 14.0f);
+    internalPath1.lineTo(173.0f, 16.0f);
+    internalPath1.lineTo(170.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (175.0f, 16.0f);
-    internalPath1.lineTo (182.0f, 16.0f);
-    internalPath1.lineTo (182.0f, 22.0f);
-    internalPath1.lineTo (179.0f, 22.0f);
-    internalPath1.lineTo (179.0f, 18.0f);
-    internalPath1.lineTo (178.0f, 18.0f);
-    internalPath1.lineTo (178.0f, 22.0f);
-    internalPath1.lineTo (175.0f, 22.0f);
+    internalPath1.startNewSubPath(175.0f, 16.0f);
+    internalPath1.lineTo(182.0f, 16.0f);
+    internalPath1.lineTo(182.0f, 22.0f);
+    internalPath1.lineTo(179.0f, 22.0f);
+    internalPath1.lineTo(179.0f, 18.0f);
+    internalPath1.lineTo(178.0f, 18.0f);
+    internalPath1.lineTo(178.0f, 22.0f);
+    internalPath1.lineTo(175.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (191.0f, 18.0f);
-    internalPath1.lineTo (188.0f, 18.0f);
-    internalPath1.lineTo (188.0f, 19.0f);
-    internalPath1.lineTo (191.0f, 19.0f);
-    internalPath1.lineTo (191.0f, 20.0f);
-    internalPath1.lineTo (190.0f, 20.0f);
-    internalPath1.lineTo (190.0f, 22.0f);
-    internalPath1.lineTo (184.0f, 22.0f);
-    internalPath1.lineTo (184.0f, 20.0f);
-    internalPath1.lineTo (187.0f, 20.0f);
-    internalPath1.lineTo (187.0f, 19.0f);
-    internalPath1.lineTo (184.0f, 19.0f);
-    internalPath1.lineTo (184.0f, 18.0f);
-    internalPath1.lineTo (185.0f, 18.0f);
-    internalPath1.lineTo (185.0f, 16.0f);
-    internalPath1.lineTo (191.0f, 16.0f);
+    internalPath1.startNewSubPath(191.0f, 18.0f);
+    internalPath1.lineTo(188.0f, 18.0f);
+    internalPath1.lineTo(188.0f, 19.0f);
+    internalPath1.lineTo(191.0f, 19.0f);
+    internalPath1.lineTo(191.0f, 20.0f);
+    internalPath1.lineTo(190.0f, 20.0f);
+    internalPath1.lineTo(190.0f, 22.0f);
+    internalPath1.lineTo(184.0f, 22.0f);
+    internalPath1.lineTo(184.0f, 20.0f);
+    internalPath1.lineTo(187.0f, 20.0f);
+    internalPath1.lineTo(187.0f, 19.0f);
+    internalPath1.lineTo(184.0f, 19.0f);
+    internalPath1.lineTo(184.0f, 18.0f);
+    internalPath1.lineTo(185.0f, 18.0f);
+    internalPath1.lineTo(185.0f, 16.0f);
+    internalPath1.lineTo(191.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (193.0f, 22.0f);
-    internalPath1.lineTo (193.0f, 16.0f);
-    internalPath1.lineTo (200.0f, 16.0f);
-    internalPath1.lineTo (200.0f, 19.0f);
-    internalPath1.lineTo (199.0f, 19.0f);
-    internalPath1.lineTo (199.0f, 20.0f);
-    internalPath1.lineTo (200.0f, 20.0f);
-    internalPath1.lineTo (200.0f, 22.0f);
+    internalPath1.startNewSubPath(193.0f, 22.0f);
+    internalPath1.lineTo(193.0f, 16.0f);
+    internalPath1.lineTo(200.0f, 16.0f);
+    internalPath1.lineTo(200.0f, 19.0f);
+    internalPath1.lineTo(199.0f, 19.0f);
+    internalPath1.lineTo(199.0f, 20.0f);
+    internalPath1.lineTo(200.0f, 20.0f);
+    internalPath1.lineTo(200.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (196.0f, 19.0f);
-    internalPath1.lineTo (197.0f, 19.0f);
-    internalPath1.lineTo (197.0f, 18.0f);
-    internalPath1.lineTo (196.0f, 18.0f);
+    internalPath1.startNewSubPath(196.0f, 19.0f);
+    internalPath1.lineTo(197.0f, 19.0f);
+    internalPath1.lineTo(197.0f, 18.0f);
+    internalPath1.lineTo(196.0f, 18.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (208.0f, 16.0f);
-    internalPath1.lineTo (208.0f, 18.0f);
-    internalPath1.lineTo (205.0f, 18.0f);
-    internalPath1.lineTo (205.0f, 22.0f);
-    internalPath1.lineTo (202.0f, 22.0f);
-    internalPath1.lineTo (202.0f, 16.0f);
+    internalPath1.startNewSubPath(208.0f, 16.0f);
+    internalPath1.lineTo(208.0f, 18.0f);
+    internalPath1.lineTo(205.0f, 18.0f);
+    internalPath1.lineTo(205.0f, 22.0f);
+    internalPath1.lineTo(202.0f, 22.0f);
+    internalPath1.lineTo(202.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (215.0f, 16.0f);
-    internalPath1.lineTo (215.0f, 18.0f);
-    internalPath1.lineTo (214.0f, 18.0f);
-    internalPath1.lineTo (214.0f, 22.0f);
-    internalPath1.lineTo (211.0f, 22.0f);
-    internalPath1.lineTo (211.0f, 18.0f);
-    internalPath1.lineTo (209.0f, 18.0f);
-    internalPath1.lineTo (209.0f, 16.0f);
-    internalPath1.lineTo (211.0f, 16.0f);
-    internalPath1.lineTo (211.0f, 14.0f);
-    internalPath1.lineTo (214.0f, 14.0f);
-    internalPath1.lineTo (214.0f, 16.0f);
+    internalPath1.startNewSubPath(215.0f, 16.0f);
+    internalPath1.lineTo(215.0f, 18.0f);
+    internalPath1.lineTo(214.0f, 18.0f);
+    internalPath1.lineTo(214.0f, 22.0f);
+    internalPath1.lineTo(211.0f, 22.0f);
+    internalPath1.lineTo(211.0f, 18.0f);
+    internalPath1.lineTo(209.0f, 18.0f);
+    internalPath1.lineTo(209.0f, 16.0f);
+    internalPath1.lineTo(211.0f, 16.0f);
+    internalPath1.lineTo(211.0f, 14.0f);
+    internalPath1.lineTo(214.0f, 14.0f);
+    internalPath1.lineTo(214.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (229.0f, 16.0f);
-    internalPath1.lineTo (229.0f, 22.0f);
-    internalPath1.lineTo (224.0f, 22.0f);
-    internalPath1.lineTo (224.0f, 25.0f);
-    internalPath1.lineTo (221.0f, 25.0f);
-    internalPath1.lineTo (221.0f, 16.0f);
+    internalPath1.startNewSubPath(229.0f, 16.0f);
+    internalPath1.lineTo(229.0f, 22.0f);
+    internalPath1.lineTo(224.0f, 22.0f);
+    internalPath1.lineTo(224.0f, 25.0f);
+    internalPath1.lineTo(221.0f, 25.0f);
+    internalPath1.lineTo(221.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (225.0f, 20.0f);
-    internalPath1.lineTo (225.0f, 18.0f);
-    internalPath1.lineTo (224.0f, 18.0f);
-    internalPath1.lineTo (224.0f, 20.0f);
+    internalPath1.startNewSubPath(225.0f, 20.0f);
+    internalPath1.lineTo(225.0f, 18.0f);
+    internalPath1.lineTo(224.0f, 18.0f);
+    internalPath1.lineTo(224.0f, 20.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (230.0f, 22.0f);
-    internalPath1.lineTo (230.0f, 18.0f);
-    internalPath1.lineTo (233.0f, 18.0f);
-    internalPath1.lineTo (233.0f, 22.0f);
+    internalPath1.startNewSubPath(230.0f, 22.0f);
+    internalPath1.lineTo(230.0f, 18.0f);
+    internalPath1.lineTo(233.0f, 18.0f);
+    internalPath1.lineTo(233.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (230.0f, 14.0f);
-    internalPath1.lineTo (233.0f, 14.0f);
-    internalPath1.lineTo (233.0f, 16.0f);
-    internalPath1.lineTo (230.0f, 16.0f);
+    internalPath1.startNewSubPath(230.0f, 14.0f);
+    internalPath1.lineTo(233.0f, 14.0f);
+    internalPath1.lineTo(233.0f, 16.0f);
+    internalPath1.lineTo(230.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (238.0f, 19.0f);
-    internalPath1.lineTo (238.0f, 18.0f);
-    internalPath1.lineTo (235.0f, 18.0f);
-    internalPath1.lineTo (235.0f, 16.0f);
-    internalPath1.lineTo (242.0f, 16.0f);
-    internalPath1.lineTo (242.0f, 18.0f);
-    internalPath1.lineTo (241.0f, 18.0f);
-    internalPath1.lineTo (241.0f, 19.0f);
-    internalPath1.lineTo (239.0f, 19.0f);
-    internalPath1.lineTo (239.0f, 20.0f);
-    internalPath1.lineTo (242.0f, 20.0f);
-    internalPath1.lineTo (242.0f, 22.0f);
-    internalPath1.lineTo (235.0f, 22.0f);
-    internalPath1.lineTo (235.0f, 20.0f);
-    internalPath1.lineTo (236.0f, 20.0f);
-    internalPath1.lineTo (236.0f, 19.0f);
+    internalPath1.startNewSubPath(238.0f, 19.0f);
+    internalPath1.lineTo(238.0f, 18.0f);
+    internalPath1.lineTo(235.0f, 18.0f);
+    internalPath1.lineTo(235.0f, 16.0f);
+    internalPath1.lineTo(242.0f, 16.0f);
+    internalPath1.lineTo(242.0f, 18.0f);
+    internalPath1.lineTo(241.0f, 18.0f);
+    internalPath1.lineTo(241.0f, 19.0f);
+    internalPath1.lineTo(239.0f, 19.0f);
+    internalPath1.lineTo(239.0f, 20.0f);
+    internalPath1.lineTo(242.0f, 20.0f);
+    internalPath1.lineTo(242.0f, 22.0f);
+    internalPath1.lineTo(235.0f, 22.0f);
+    internalPath1.lineTo(235.0f, 20.0f);
+    internalPath1.lineTo(236.0f, 20.0f);
+    internalPath1.lineTo(236.0f, 19.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (253.0f, 18.0f);
-    internalPath1.lineTo (251.0f, 18.0f);
-    internalPath1.lineTo (251.0f, 22.0f);
-    internalPath1.lineTo (248.0f, 22.0f);
-    internalPath1.lineTo (248.0f, 14.0f);
-    internalPath1.lineTo (251.0f, 14.0f);
-    internalPath1.lineTo (251.0f, 16.0f);
-    internalPath1.lineTo (256.0f, 16.0f);
-    internalPath1.lineTo (256.0f, 22.0f);
-    internalPath1.lineTo (253.0f, 22.0f);
+    internalPath1.startNewSubPath(253.0f, 18.0f);
+    internalPath1.lineTo(251.0f, 18.0f);
+    internalPath1.lineTo(251.0f, 22.0f);
+    internalPath1.lineTo(248.0f, 22.0f);
+    internalPath1.lineTo(248.0f, 14.0f);
+    internalPath1.lineTo(251.0f, 14.0f);
+    internalPath1.lineTo(251.0f, 16.0f);
+    internalPath1.lineTo(256.0f, 16.0f);
+    internalPath1.lineTo(256.0f, 22.0f);
+    internalPath1.lineTo(253.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (257.0f, 22.0f);
-    internalPath1.lineTo (257.0f, 16.0f);
-    internalPath1.lineTo (265.0f, 16.0f);
-    internalPath1.lineTo (265.0f, 19.0f);
-    internalPath1.lineTo (263.0f, 19.0f);
-    internalPath1.lineTo (263.0f, 20.0f);
-    internalPath1.lineTo (265.0f, 20.0f);
-    internalPath1.lineTo (265.0f, 22.0f);
+    internalPath1.startNewSubPath(257.0f, 22.0f);
+    internalPath1.lineTo(257.0f, 16.0f);
+    internalPath1.lineTo(265.0f, 16.0f);
+    internalPath1.lineTo(265.0f, 19.0f);
+    internalPath1.lineTo(263.0f, 19.0f);
+    internalPath1.lineTo(263.0f, 20.0f);
+    internalPath1.lineTo(265.0f, 20.0f);
+    internalPath1.lineTo(265.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (260.0f, 19.0f);
-    internalPath1.lineTo (262.0f, 19.0f);
-    internalPath1.lineTo (262.0f, 18.0f);
-    internalPath1.lineTo (260.0f, 18.0f);
+    internalPath1.startNewSubPath(260.0f, 19.0f);
+    internalPath1.lineTo(262.0f, 19.0f);
+    internalPath1.lineTo(262.0f, 18.0f);
+    internalPath1.lineTo(260.0f, 18.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (272.0f, 16.0f);
-    internalPath1.lineTo (272.0f, 18.0f);
-    internalPath1.lineTo (269.0f, 18.0f);
-    internalPath1.lineTo (269.0f, 22.0f);
-    internalPath1.lineTo (266.0f, 22.0f);
-    internalPath1.lineTo (266.0f, 16.0f);
+    internalPath1.startNewSubPath(272.0f, 16.0f);
+    internalPath1.lineTo(272.0f, 18.0f);
+    internalPath1.lineTo(269.0f, 18.0f);
+    internalPath1.lineTo(269.0f, 22.0f);
+    internalPath1.lineTo(266.0f, 22.0f);
+    internalPath1.lineTo(266.0f, 16.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (274.0f, 22.0f);
-    internalPath1.lineTo (274.0f, 16.0f);
-    internalPath1.lineTo (281.0f, 16.0f);
-    internalPath1.lineTo (281.0f, 19.0f);
-    internalPath1.lineTo (280.0f, 19.0f);
-    internalPath1.lineTo (280.0f, 20.0f);
-    internalPath1.lineTo (281.0f, 20.0f);
-    internalPath1.lineTo (281.0f, 22.0f);
+    internalPath1.startNewSubPath(274.0f, 22.0f);
+    internalPath1.lineTo(274.0f, 16.0f);
+    internalPath1.lineTo(281.0f, 16.0f);
+    internalPath1.lineTo(281.0f, 19.0f);
+    internalPath1.lineTo(280.0f, 19.0f);
+    internalPath1.lineTo(280.0f, 20.0f);
+    internalPath1.lineTo(281.0f, 20.0f);
+    internalPath1.lineTo(281.0f, 22.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (277.0f, 19.0f);
-    internalPath1.lineTo (278.0f, 19.0f);
-    internalPath1.lineTo (278.0f, 18.0f);
-    internalPath1.lineTo (277.0f, 18.0f);
+    internalPath1.startNewSubPath(277.0f, 19.0f);
+    internalPath1.lineTo(278.0f, 19.0f);
+    internalPath1.lineTo(278.0f, 18.0f);
+    internalPath1.lineTo(277.0f, 18.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (283.0f, 19.0f);
-    internalPath1.lineTo (283.0f, 18.0f);
-    internalPath1.lineTo (290.0f, 18.0f);
-    internalPath1.lineTo (290.0f, 19.0f);
+    internalPath1.startNewSubPath(283.0f, 19.0f);
+    internalPath1.lineTo(283.0f, 18.0f);
+    internalPath1.lineTo(290.0f, 18.0f);
+    internalPath1.lineTo(290.0f, 19.0f);
     internalPath1.closeSubPath();
-    internalPath1.startNewSubPath (292.0f, 14.0f);
-    internalPath1.lineTo (295.0f, 14.0f);
-    internalPath1.lineTo (295.0f, 16.0f);
-    internalPath1.lineTo (296.0f, 16.0f);
-    internalPath1.lineTo (296.0f, 18.0f);
-    internalPath1.lineTo (298.0f, 18.0f);
-    internalPath1.lineTo (298.0f, 19.0f);
-    internalPath1.lineTo (296.0f, 19.0f);
-    internalPath1.lineTo (296.0f, 20.0f);
-    internalPath1.lineTo (295.0f, 20.0f);
-    internalPath1.lineTo (295.0f, 22.0f);
-    internalPath1.lineTo (292.0f, 22.0f);
-    internalPath1.lineTo (292.0f, 20.0f);
-    internalPath1.lineTo (293.0f, 20.0f);
-    internalPath1.lineTo (293.0f, 19.0f);
-    internalPath1.lineTo (295.0f, 19.0f);
-    internalPath1.lineTo (295.0f, 18.0f);
-    internalPath1.lineTo (293.0f, 18.0f);
-    internalPath1.lineTo (293.0f, 16.0f);
-    internalPath1.lineTo (292.0f, 16.0f);
+    internalPath1.startNewSubPath(292.0f, 14.0f);
+    internalPath1.lineTo(295.0f, 14.0f);
+    internalPath1.lineTo(295.0f, 16.0f);
+    internalPath1.lineTo(296.0f, 16.0f);
+    internalPath1.lineTo(296.0f, 18.0f);
+    internalPath1.lineTo(298.0f, 18.0f);
+    internalPath1.lineTo(298.0f, 19.0f);
+    internalPath1.lineTo(296.0f, 19.0f);
+    internalPath1.lineTo(296.0f, 20.0f);
+    internalPath1.lineTo(295.0f, 20.0f);
+    internalPath1.lineTo(295.0f, 22.0f);
+    internalPath1.lineTo(292.0f, 22.0f);
+    internalPath1.lineTo(292.0f, 20.0f);
+    internalPath1.lineTo(293.0f, 20.0f);
+    internalPath1.lineTo(293.0f, 19.0f);
+    internalPath1.lineTo(295.0f, 19.0f);
+    internalPath1.lineTo(295.0f, 18.0f);
+    internalPath1.lineTo(293.0f, 18.0f);
+    internalPath1.lineTo(293.0f, 16.0f);
+    internalPath1.lineTo(292.0f, 16.0f);
     internalPath1.closeSubPath();
 
-    internalPath2.startNewSubPath (179.0f, 29.0f);
-    internalPath2.lineTo (179.0f, 34.0f);
-    internalPath2.lineTo (177.0f, 34.0f);
-    internalPath2.lineTo (177.0f, 30.0f);
-    internalPath2.lineTo (176.0f, 30.0f);
-    internalPath2.lineTo (176.0f, 34.0f);
-    internalPath2.lineTo (173.0f, 34.0f);
-    internalPath2.lineTo (173.0f, 30.0f);
-    internalPath2.lineTo (172.0f, 30.0f);
-    internalPath2.lineTo (172.0f, 34.0f);
-    internalPath2.lineTo (169.0f, 34.0f);
-    internalPath2.lineTo (169.0f, 29.0f);
+    internalPath2.startNewSubPath(179.0f, 29.0f);
+    internalPath2.lineTo(179.0f, 34.0f);
+    internalPath2.lineTo(177.0f, 34.0f);
+    internalPath2.lineTo(177.0f, 30.0f);
+    internalPath2.lineTo(176.0f, 30.0f);
+    internalPath2.lineTo(176.0f, 34.0f);
+    internalPath2.lineTo(173.0f, 34.0f);
+    internalPath2.lineTo(173.0f, 30.0f);
+    internalPath2.lineTo(172.0f, 30.0f);
+    internalPath2.lineTo(172.0f, 34.0f);
+    internalPath2.lineTo(169.0f, 34.0f);
+    internalPath2.lineTo(169.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (181.0f, 34.0f);
-    internalPath2.lineTo (181.0f, 30.0f);
-    internalPath2.lineTo (183.0f, 30.0f);
-    internalPath2.lineTo (183.0f, 34.0f);
+    internalPath2.startNewSubPath(181.0f, 34.0f);
+    internalPath2.lineTo(181.0f, 30.0f);
+    internalPath2.lineTo(183.0f, 30.0f);
+    internalPath2.lineTo(183.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (181.0f, 28.0f);
-    internalPath2.lineTo (183.0f, 28.0f);
-    internalPath2.lineTo (183.0f, 29.0f);
-    internalPath2.lineTo (181.0f, 29.0f);
+    internalPath2.startNewSubPath(181.0f, 28.0f);
+    internalPath2.lineTo(183.0f, 28.0f);
+    internalPath2.lineTo(183.0f, 29.0f);
+    internalPath2.lineTo(181.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (185.0f, 34.0f);
-    internalPath2.lineTo (185.0f, 29.0f);
-    internalPath2.lineTo (189.0f, 29.0f);
-    internalPath2.lineTo (189.0f, 28.0f);
-    internalPath2.lineTo (191.0f, 28.0f);
-    internalPath2.lineTo (191.0f, 34.0f);
+    internalPath2.startNewSubPath(185.0f, 34.0f);
+    internalPath2.lineTo(185.0f, 29.0f);
+    internalPath2.lineTo(189.0f, 29.0f);
+    internalPath2.lineTo(189.0f, 28.0f);
+    internalPath2.lineTo(191.0f, 28.0f);
+    internalPath2.lineTo(191.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (187.0f, 30.0f);
-    internalPath2.lineTo (187.0f, 33.0f);
-    internalPath2.lineTo (189.0f, 33.0f);
-    internalPath2.lineTo (189.0f, 30.0f);
+    internalPath2.startNewSubPath(187.0f, 30.0f);
+    internalPath2.lineTo(187.0f, 33.0f);
+    internalPath2.lineTo(189.0f, 33.0f);
+    internalPath2.lineTo(189.0f, 30.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (192.0f, 34.0f);
-    internalPath2.lineTo (192.0f, 30.0f);
-    internalPath2.lineTo (195.0f, 30.0f);
-    internalPath2.lineTo (195.0f, 34.0f);
+    internalPath2.startNewSubPath(192.0f, 34.0f);
+    internalPath2.lineTo(192.0f, 30.0f);
+    internalPath2.lineTo(195.0f, 30.0f);
+    internalPath2.lineTo(195.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (192.0f, 28.0f);
-    internalPath2.lineTo (195.0f, 28.0f);
-    internalPath2.lineTo (195.0f, 29.0f);
-    internalPath2.lineTo (192.0f, 29.0f);
+    internalPath2.startNewSubPath(192.0f, 28.0f);
+    internalPath2.lineTo(195.0f, 28.0f);
+    internalPath2.lineTo(195.0f, 29.0f);
+    internalPath2.lineTo(192.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (203.0f, 28.0f);
-    internalPath2.lineTo (203.0f, 32.0f);
-    internalPath2.lineTo (199.0f, 32.0f);
-    internalPath2.lineTo (199.0f, 34.0f);
-    internalPath2.lineTo (196.0f, 34.0f);
-    internalPath2.lineTo (196.0f, 28.0f);
+    internalPath2.startNewSubPath(203.0f, 28.0f);
+    internalPath2.lineTo(203.0f, 32.0f);
+    internalPath2.lineTo(199.0f, 32.0f);
+    internalPath2.lineTo(199.0f, 34.0f);
+    internalPath2.lineTo(196.0f, 34.0f);
+    internalPath2.lineTo(196.0f, 28.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (199.0f, 30.0f);
-    internalPath2.lineTo (200.0f, 30.0f);
-    internalPath2.lineTo (200.0f, 29.0f);
-    internalPath2.lineTo (199.0f, 29.0f);
+    internalPath2.startNewSubPath(199.0f, 30.0f);
+    internalPath2.lineTo(200.0f, 30.0f);
+    internalPath2.lineTo(200.0f, 29.0f);
+    internalPath2.lineTo(199.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (209.0f, 29.0f);
-    internalPath2.lineTo (209.0f, 30.0f);
-    internalPath2.lineTo (207.0f, 30.0f);
-    internalPath2.lineTo (207.0f, 34.0f);
-    internalPath2.lineTo (204.0f, 34.0f);
-    internalPath2.lineTo (204.0f, 29.0f);
+    internalPath2.startNewSubPath(209.0f, 29.0f);
+    internalPath2.lineTo(209.0f, 30.0f);
+    internalPath2.lineTo(207.0f, 30.0f);
+    internalPath2.lineTo(207.0f, 34.0f);
+    internalPath2.lineTo(204.0f, 34.0f);
+    internalPath2.lineTo(204.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (217.0f, 34.0f);
-    internalPath2.lineTo (211.0f, 34.0f);
-    internalPath2.lineTo (211.0f, 29.0f);
-    internalPath2.lineTo (217.0f, 29.0f);
+    internalPath2.startNewSubPath(217.0f, 34.0f);
+    internalPath2.lineTo(211.0f, 34.0f);
+    internalPath2.lineTo(211.0f, 29.0f);
+    internalPath2.lineTo(217.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (215.0f, 30.0f);
-    internalPath2.lineTo (213.0f, 30.0f);
-    internalPath2.lineTo (213.0f, 33.0f);
-    internalPath2.lineTo (215.0f, 33.0f);
+    internalPath2.startNewSubPath(215.0f, 30.0f);
+    internalPath2.lineTo(213.0f, 30.0f);
+    internalPath2.lineTo(213.0f, 33.0f);
+    internalPath2.lineTo(215.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (218.0f, 34.0f);
-    internalPath2.lineTo (218.0f, 29.0f);
-    internalPath2.lineTo (225.0f, 29.0f);
-    internalPath2.lineTo (225.0f, 37.0f);
-    internalPath2.lineTo (218.0f, 37.0f);
-    internalPath2.lineTo (218.0f, 36.0f);
-    internalPath2.lineTo (222.0f, 36.0f);
-    internalPath2.quadraticTo (222.0f, 36.0f, 222.0f, 34.0f);
+    internalPath2.startNewSubPath(218.0f, 34.0f);
+    internalPath2.lineTo(218.0f, 29.0f);
+    internalPath2.lineTo(225.0f, 29.0f);
+    internalPath2.lineTo(225.0f, 37.0f);
+    internalPath2.lineTo(218.0f, 37.0f);
+    internalPath2.lineTo(218.0f, 36.0f);
+    internalPath2.lineTo(222.0f, 36.0f);
+    internalPath2.quadraticTo(222.0f, 36.0f, 222.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (222.0f, 30.0f);
-    internalPath2.lineTo (221.0f, 30.0f);
-    internalPath2.lineTo (221.0f, 33.0f);
-    internalPath2.lineTo (222.0f, 33.0f);
+    internalPath2.startNewSubPath(222.0f, 30.0f);
+    internalPath2.lineTo(221.0f, 30.0f);
+    internalPath2.lineTo(221.0f, 33.0f);
+    internalPath2.lineTo(222.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (231.0f, 29.0f);
-    internalPath2.lineTo (231.0f, 30.0f);
-    internalPath2.lineTo (229.0f, 30.0f);
-    internalPath2.lineTo (229.0f, 34.0f);
-    internalPath2.lineTo (226.0f, 34.0f);
-    internalPath2.lineTo (226.0f, 29.0f);
+    internalPath2.startNewSubPath(231.0f, 29.0f);
+    internalPath2.lineTo(231.0f, 30.0f);
+    internalPath2.lineTo(229.0f, 30.0f);
+    internalPath2.lineTo(229.0f, 34.0f);
+    internalPath2.lineTo(226.0f, 34.0f);
+    internalPath2.lineTo(226.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (233.0f, 30.0f);
-    internalPath2.lineTo (234.0f, 30.0f);
-    internalPath2.lineTo (234.0f, 29.0f);
-    internalPath2.lineTo (239.0f, 29.0f);
-    internalPath2.lineTo (239.0f, 34.0f);
-    internalPath2.lineTo (233.0f, 34.0f);
+    internalPath2.startNewSubPath(233.0f, 30.0f);
+    internalPath2.lineTo(234.0f, 30.0f);
+    internalPath2.lineTo(234.0f, 29.0f);
+    internalPath2.lineTo(239.0f, 29.0f);
+    internalPath2.lineTo(239.0f, 34.0f);
+    internalPath2.lineTo(233.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (237.0f, 30.0f);
-    internalPath2.lineTo (235.0f, 30.0f);
-    internalPath2.lineTo (235.0f, 33.0f);
-    internalPath2.lineTo (237.0f, 33.0f);
+    internalPath2.startNewSubPath(237.0f, 30.0f);
+    internalPath2.lineTo(235.0f, 30.0f);
+    internalPath2.lineTo(235.0f, 33.0f);
+    internalPath2.lineTo(237.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (251.0f, 29.0f);
-    internalPath2.lineTo (251.0f, 34.0f);
-    internalPath2.lineTo (248.0f, 34.0f);
-    internalPath2.lineTo (248.0f, 30.0f);
-    internalPath2.lineTo (247.0f, 30.0f);
-    internalPath2.lineTo (247.0f, 34.0f);
-    internalPath2.lineTo (244.0f, 34.0f);
-    internalPath2.lineTo (244.0f, 30.0f);
-    internalPath2.lineTo (243.0f, 30.0f);
-    internalPath2.lineTo (243.0f, 34.0f);
-    internalPath2.lineTo (241.0f, 34.0f);
-    internalPath2.lineTo (241.0f, 29.0f);
+    internalPath2.startNewSubPath(251.0f, 29.0f);
+    internalPath2.lineTo(251.0f, 34.0f);
+    internalPath2.lineTo(248.0f, 34.0f);
+    internalPath2.lineTo(248.0f, 30.0f);
+    internalPath2.lineTo(247.0f, 30.0f);
+    internalPath2.lineTo(247.0f, 34.0f);
+    internalPath2.lineTo(244.0f, 34.0f);
+    internalPath2.lineTo(244.0f, 30.0f);
+    internalPath2.lineTo(243.0f, 30.0f);
+    internalPath2.lineTo(243.0f, 34.0f);
+    internalPath2.lineTo(241.0f, 34.0f);
+    internalPath2.lineTo(241.0f, 29.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (259.0f, 33.0f);
-    internalPath2.lineTo (259.0f, 34.0f);
-    internalPath2.lineTo (252.0f, 34.0f);
-    internalPath2.lineTo (252.0f, 28.0f);
-    internalPath2.lineTo (259.0f, 28.0f);
-    internalPath2.lineTo (259.0f, 29.0f);
-    internalPath2.lineTo (255.0f, 29.0f);
-    internalPath2.lineTo (255.0f, 33.0f);
+    internalPath2.startNewSubPath(259.0f, 33.0f);
+    internalPath2.lineTo(259.0f, 34.0f);
+    internalPath2.lineTo(252.0f, 34.0f);
+    internalPath2.lineTo(252.0f, 28.0f);
+    internalPath2.lineTo(259.0f, 28.0f);
+    internalPath2.lineTo(259.0f, 29.0f);
+    internalPath2.lineTo(255.0f, 29.0f);
+    internalPath2.lineTo(255.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (264.0f, 30.0f);
-    internalPath2.lineTo (263.0f, 30.0f);
-    internalPath2.lineTo (263.0f, 34.0f);
-    internalPath2.lineTo (260.0f, 34.0f);
-    internalPath2.lineTo (260.0f, 28.0f);
-    internalPath2.lineTo (263.0f, 28.0f);
-    internalPath2.lineTo (263.0f, 29.0f);
-    internalPath2.lineTo (267.0f, 29.0f);
-    internalPath2.lineTo (267.0f, 34.0f);
-    internalPath2.lineTo (264.0f, 34.0f);
+    internalPath2.startNewSubPath(264.0f, 30.0f);
+    internalPath2.lineTo(263.0f, 30.0f);
+    internalPath2.lineTo(263.0f, 34.0f);
+    internalPath2.lineTo(260.0f, 34.0f);
+    internalPath2.lineTo(260.0f, 28.0f);
+    internalPath2.lineTo(263.0f, 28.0f);
+    internalPath2.lineTo(263.0f, 29.0f);
+    internalPath2.lineTo(267.0f, 29.0f);
+    internalPath2.lineTo(267.0f, 34.0f);
+    internalPath2.lineTo(264.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (268.0f, 30.0f);
-    internalPath2.lineTo (269.0f, 30.0f);
-    internalPath2.lineTo (269.0f, 29.0f);
-    internalPath2.lineTo (274.0f, 29.0f);
-    internalPath2.lineTo (274.0f, 34.0f);
-    internalPath2.lineTo (268.0f, 34.0f);
+    internalPath2.startNewSubPath(268.0f, 30.0f);
+    internalPath2.lineTo(269.0f, 30.0f);
+    internalPath2.lineTo(269.0f, 29.0f);
+    internalPath2.lineTo(274.0f, 29.0f);
+    internalPath2.lineTo(274.0f, 34.0f);
+    internalPath2.lineTo(268.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (272.0f, 30.0f);
-    internalPath2.lineTo (270.0f, 30.0f);
-    internalPath2.lineTo (270.0f, 33.0f);
-    internalPath2.lineTo (272.0f, 33.0f);
+    internalPath2.startNewSubPath(272.0f, 30.0f);
+    internalPath2.lineTo(270.0f, 30.0f);
+    internalPath2.lineTo(270.0f, 33.0f);
+    internalPath2.lineTo(272.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (276.0f, 29.0f);
-    internalPath2.lineTo (282.0f, 29.0f);
-    internalPath2.lineTo (282.0f, 34.0f);
-    internalPath2.lineTo (280.0f, 34.0f);
-    internalPath2.lineTo (280.0f, 30.0f);
-    internalPath2.lineTo (278.0f, 30.0f);
-    internalPath2.lineTo (278.0f, 34.0f);
-    internalPath2.lineTo (276.0f, 34.0f);
+    internalPath2.startNewSubPath(276.0f, 29.0f);
+    internalPath2.lineTo(282.0f, 29.0f);
+    internalPath2.lineTo(282.0f, 34.0f);
+    internalPath2.lineTo(280.0f, 34.0f);
+    internalPath2.lineTo(280.0f, 30.0f);
+    internalPath2.lineTo(278.0f, 30.0f);
+    internalPath2.lineTo(278.0f, 34.0f);
+    internalPath2.lineTo(276.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (283.0f, 34.0f);
-    internalPath2.lineTo (283.0f, 29.0f);
-    internalPath2.lineTo (290.0f, 29.0f);
-    internalPath2.lineTo (290.0f, 37.0f);
-    internalPath2.lineTo (283.0f, 37.0f);
-    internalPath2.lineTo (283.0f, 36.0f);
-    internalPath2.lineTo (287.0f, 36.0f);
-    internalPath2.quadraticTo (287.0f, 36.0f, 287.0f, 34.0f);
+    internalPath2.startNewSubPath(283.0f, 34.0f);
+    internalPath2.lineTo(283.0f, 29.0f);
+    internalPath2.lineTo(290.0f, 29.0f);
+    internalPath2.lineTo(290.0f, 37.0f);
+    internalPath2.lineTo(283.0f, 37.0f);
+    internalPath2.lineTo(283.0f, 36.0f);
+    internalPath2.lineTo(287.0f, 36.0f);
+    internalPath2.quadraticTo(287.0f, 36.0f, 287.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (287.0f, 30.0f);
-    internalPath2.lineTo (286.0f, 30.0f);
-    internalPath2.lineTo (286.0f, 33.0f);
-    internalPath2.lineTo (287.0f, 33.0f);
+    internalPath2.startNewSubPath(287.0f, 30.0f);
+    internalPath2.lineTo(286.0f, 30.0f);
+    internalPath2.lineTo(286.0f, 33.0f);
+    internalPath2.lineTo(287.0f, 33.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (291.0f, 34.0f);
-    internalPath2.lineTo (291.0f, 29.0f);
-    internalPath2.lineTo (298.0f, 29.0f);
-    internalPath2.lineTo (298.0f, 32.0f);
-    internalPath2.lineTo (296.0f, 32.0f);
-    internalPath2.lineTo (296.0f, 33.0f);
-    internalPath2.lineTo (298.0f, 33.0f);
-    internalPath2.lineTo (298.0f, 34.0f);
+    internalPath2.startNewSubPath(291.0f, 34.0f);
+    internalPath2.lineTo(291.0f, 29.0f);
+    internalPath2.lineTo(298.0f, 29.0f);
+    internalPath2.lineTo(298.0f, 32.0f);
+    internalPath2.lineTo(296.0f, 32.0f);
+    internalPath2.lineTo(296.0f, 33.0f);
+    internalPath2.lineTo(298.0f, 33.0f);
+    internalPath2.lineTo(298.0f, 34.0f);
     internalPath2.closeSubPath();
-    internalPath2.startNewSubPath (294.0f, 32.0f);
-    internalPath2.lineTo (295.0f, 32.0f);
-    internalPath2.lineTo (295.0f, 31.0f);
-    internalPath2.lineTo (294.0f, 31.0f);
+    internalPath2.startNewSubPath(294.0f, 32.0f);
+    internalPath2.lineTo(295.0f, 32.0f);
+    internalPath2.lineTo(295.0f, 31.0f);
+    internalPath2.lineTo(294.0f, 31.0f);
     internalPath2.closeSubPath();
 
     //[UserPreSize]
-    ProgramName->setListener (this);
-    s_Program->setOwner (getAudioProcessor(), kProgram);
-    s_BankMSB->setOwner (getAudioProcessor(), kBankMSB);
-    s_BankLSB->setOwner (getAudioProcessor(), kBankLSB);
-    s_Channel->setOwner (getAudioProcessor(), kChannel);
-    s_Program->setSliderSnapsToMousePosition (false);
-    s_BankMSB->setSliderSnapsToMousePosition (false);
-    s_BankLSB->setSliderSnapsToMousePosition (false);
-    s_Channel->setSliderSnapsToMousePosition (true);
+    ProgramName->setListener(this);
+    s_Program->setOwner(getAudioProcessor(), kProgram);
+    s_BankMSB->setOwner(getAudioProcessor(), kBankMSB);
+    s_BankLSB->setOwner(getAudioProcessor(), kBankLSB);
+    s_Channel->setOwner(getAudioProcessor(), kChannel);
+    s_Program->setSliderSnapsToMousePosition(false);
+    s_BankMSB->setSliderSnapsToMousePosition(false);
+    s_BankLSB->setSliderSnapsToMousePosition(false);
+    s_Channel->setSliderSnapsToMousePosition(true);
 
-    this->setMouseClickGrabsKeyboardFocus (false);
-    groupComponent->setMouseClickGrabsKeyboardFocus (false);
-    groupComponent2->setMouseClickGrabsKeyboardFocus (false);
-    b_BankTrig->setMouseClickGrabsKeyboardFocus (false);
-    b_PCTrig->setMouseClickGrabsKeyboardFocus (false);
-    b_Inc->setMouseClickGrabsKeyboardFocus (false);
-    b_Dec->setMouseClickGrabsKeyboardFocus (false);
-    b_PCListen->setMouseClickGrabsKeyboardFocus (false);
-    b_Mode->setMouseClickGrabsKeyboardFocus (false);
-    b_Thru->setMouseClickGrabsKeyboardFocus (false);
-    PCDisplay->setMouseClickGrabsKeyboardFocus (false);
-    label->setMouseClickGrabsKeyboardFocus (false);
-    label2->setMouseClickGrabsKeyboardFocus (false);
-    label3->setMouseClickGrabsKeyboardFocus (false);
-    label4->setMouseClickGrabsKeyboardFocus (false);
-    label5->setMouseClickGrabsKeyboardFocus (false);
+    this->setMouseClickGrabsKeyboardFocus(false);
+    groupComponent->setMouseClickGrabsKeyboardFocus(false);
+    groupComponent2->setMouseClickGrabsKeyboardFocus(false);
+    b_BankTrig->setMouseClickGrabsKeyboardFocus(false);
+    b_PCTrig->setMouseClickGrabsKeyboardFocus(false);
+    b_Inc->setMouseClickGrabsKeyboardFocus(false);
+    b_Dec->setMouseClickGrabsKeyboardFocus(false);
+    b_PCListen->setMouseClickGrabsKeyboardFocus(false);
+    b_Mode->setMouseClickGrabsKeyboardFocus(false);
+    b_Thru->setMouseClickGrabsKeyboardFocus(false);
+    PCDisplay->setMouseClickGrabsKeyboardFocus(false);
+    label->setMouseClickGrabsKeyboardFocus(false);
+    label2->setMouseClickGrabsKeyboardFocus(false);
+    label3->setMouseClickGrabsKeyboardFocus(false);
+    label4->setMouseClickGrabsKeyboardFocus(false);
+    label5->setMouseClickGrabsKeyboardFocus(false);
 
-    minimized = ownerFilter->getParameter (kMinimize) >= 0.5f;
+    minimized = ownerFilter->getParameter(kMinimize) >= 0.5f;
     //[/UserPreSize]
 
-    setSize (310, 280);
+    setSize(310, 280);
 
     //[Constructor] You can add your own custom stuff here..
-    ownerFilter->addChangeListener (this);
+    ownerFilter->addChangeListener(this);
     updateParametersFromFilter();
     //[/Constructor]
 }
@@ -696,7 +698,7 @@ midiPCGUIEditor::midiPCGUIEditor (midiPCGUI* const ownerFilter)
 midiPCGUIEditor::~midiPCGUIEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
     //[/Destructor_pre]
 
     groupComponent2 = nullptr;
@@ -729,77 +731,77 @@ midiPCGUIEditor::~midiPCGUIEditor()
 }
 
 //==============================================================================
-void midiPCGUIEditor::paint (juce::Graphics& g)
+void midiPCGUIEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     if (minimized)
     {
-        g.fillAll (juce::Colour (0xff464646));
+        g.fillAll(juce::Colour(0xff464646));
 
-        g.setColour (juce::Colour (0xffe6e6e6));
-        g.fillRoundedRectangle (4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
+        g.setColour(juce::Colour(0xffe6e6e6));
+        g.fillRoundedRectangle(4.0f, 4.0f, 302.0f, 272.0f, 10.0000f);
 
-        g.setColour (juce::Colour (0xffbababa));
-        g.fillRoundedRectangle (14.0f, 13.0f, 282.0f, 255.0f, 10.0000f);
+        g.setColour(juce::Colour(0xffbababa));
+        g.fillRoundedRectangle(14.0f, 13.0f, 282.0f, 255.0f, 10.0000f);
     }
     else
     {
         //[/UserPrePaint]
 
-        g.fillAll (juce::Colour (0xff464646));
+        g.fillAll(juce::Colour(0xff464646));
 
         {
             float x = 4.0f, y = 4.0f, width = 302.0f, height = 272.0f;
-            juce::Colour fillColour = juce::Colour (0xffe6e6e6);
+            juce::Colour fillColour = juce::Colour(0xffe6e6e6);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillRoundedRectangle (x, y, width, height, 10.000f);
+            g.setColour(fillColour);
+            g.fillRoundedRectangle(x, y, width, height, 10.000f);
         }
 
         {
             float x = 14.0f, y = 26.0f, width = 140.0f, height = 138.0f;
-            juce::Colour fillColour = juce::Colour (0xffbababa);
+            juce::Colour fillColour = juce::Colour(0xffbababa);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillRoundedRectangle (x, y, width, height, 10.000f);
+            g.setColour(fillColour);
+            g.fillRoundedRectangle(x, y, width, height, 10.000f);
         }
 
         {
             float x = 187.0f, y = 66.0f, width = 97.0f, height = 44.0f;
-            juce::Colour fillColour = juce::Colour (0xffbababa);
+            juce::Colour fillColour = juce::Colour(0xffbababa);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillRoundedRectangle (x, y, width, height, 10.000f);
+            g.setColour(fillColour);
+            g.fillRoundedRectangle(x, y, width, height, 10.000f);
         }
 
         {
             float x = 165.0f, y = 10.0f, width = 137.0f, height = 30.0f;
-            juce::Colour fillColour = juce::Colour (0xff464646);
+            juce::Colour fillColour = juce::Colour(0xff464646);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillRoundedRectangle (x, y, width, height, 4.000f);
+            g.setColour(fillColour);
+            g.fillRoundedRectangle(x, y, width, height, 4.000f);
         }
 
         {
             float x = 0, y = 0;
-            juce::Colour fillColour = juce::Colour (0xfffaffa0);
+            juce::Colour fillColour = juce::Colour(0xfffaffa0);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillPath (internalPath1, juce::AffineTransform::translation (x, y));
+            g.setColour(fillColour);
+            g.fillPath(internalPath1, juce::AffineTransform::translation(x, y));
         }
 
         {
             float x = 0, y = 0;
-            juce::Colour fillColour = juce::Colour (0xfffaffa0);
+            juce::Colour fillColour = juce::Colour(0xfffaffa0);
             //[UserPaintCustomArguments] Customize the painting arguments here..
             //[/UserPaintCustomArguments]
-            g.setColour (fillColour);
-            g.fillPath (internalPath2, juce::AffineTransform::translation (x, y));
+            g.setColour(fillColour);
+            g.fillPath(internalPath2, juce::AffineTransform::translation(x, y));
         }
 
         //[UserPaint] Add your own custom painting code here..
@@ -813,46 +815,46 @@ void midiPCGUIEditor::resized()
     //[/UserPreResize]
 
     //[UserResized] Add your own custom resize handling here..
-    groupComponent->setVisible (! minimized);
-    groupComponent2->setVisible (! minimized);
-    s_Program->setVisible (! minimized);
-    s_BankMSB->setVisible (! minimized);
-    s_BankLSB->setVisible (! minimized);
-    b_BankTrig->setVisible (! minimized);
-    b_PCTrig->setVisible (! minimized);
-    b_PCListen->setVisible (! minimized);
-    s_Channel->setVisible (! minimized);
-    b_Mode->setVisible (! minimized);
-    label->setVisible (! minimized);
-    label2->setVisible (! minimized);
-    label3->setVisible (! minimized);
-    label4->setVisible (! minimized);
-    b_Thru->setVisible (! minimized);
-    PCDisplay2->setVisible (! minimized);
-    PCDisplay3->setVisible (! minimized);
-    label6->setVisible (! minimized);
+    groupComponent->setVisible(! minimized);
+    groupComponent2->setVisible(! minimized);
+    s_Program->setVisible(! minimized);
+    s_BankMSB->setVisible(! minimized);
+    s_BankLSB->setVisible(! minimized);
+    b_BankTrig->setVisible(! minimized);
+    b_PCTrig->setVisible(! minimized);
+    b_PCListen->setVisible(! minimized);
+    s_Channel->setVisible(! minimized);
+    b_Mode->setVisible(! minimized);
+    label->setVisible(! minimized);
+    label2->setVisible(! minimized);
+    label3->setVisible(! minimized);
+    label4->setVisible(! minimized);
+    b_Thru->setVisible(! minimized);
+    PCDisplay2->setVisible(! minimized);
+    PCDisplay3->setVisible(! minimized);
+    label6->setVisible(! minimized);
     if (minimized)
     {
-        ProgramName->setFont (juce::Font (32.f, juce::Font::bold));
-        PCDisplay->setFont (juce::Font (128.f, juce::Font::bold));
+        ProgramName->setFont(juce::Font(32.f, juce::Font::bold));
+        PCDisplay->setFont(juce::Font(128.f, juce::Font::bold));
 
-        b_Inc->setBounds (159, 228, 40, 24);
-        b_Dec->setBounds (119, 228, 40, 24);
-        label5->setBounds (92, 11, 126, 24);
-        ProgramName->setBounds (18, 173, 274, 55);
-        minimize->setBounds (284, 258, 20, 16);
-        PCDisplay->setBounds (18, 51, 274, 123);
+        b_Inc->setBounds(159, 228, 40, 24);
+        b_Dec->setBounds(119, 228, 40, 24);
+        label5->setBounds(92, 11, 126, 24);
+        ProgramName->setBounds(18, 173, 274, 55);
+        minimize->setBounds(284, 258, 20, 16);
+        PCDisplay->setBounds(18, 51, 274, 123);
     }
     else
     {
-        ProgramName->setFont (juce::Font (18.f, juce::Font::bold));
-        PCDisplay->setFont (juce::Font (63.3f, juce::Font::bold));
+        ProgramName->setFont(juce::Font(18.f, juce::Font::bold));
+        PCDisplay->setFont(juce::Font(63.3f, juce::Font::bold));
     }
     repaint();
     //[/UserResized]
 }
 
-void midiPCGUIEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
+void midiPCGUIEditor::sliderValueChanged(juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
     VSTSlider* slider = (VSTSlider*) sliderThatWasMoved;
@@ -861,25 +863,25 @@ void midiPCGUIEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == s_Program.get())
     {
         //[UserSliderCode_s_Program] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kProgram, slider->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kProgram, slider->mapToVSTRange());
         //[/UserSliderCode_s_Program]
     }
     else if (sliderThatWasMoved == s_BankMSB.get())
     {
         //[UserSliderCode_s_BankMSB] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kBankMSB, slider->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kBankMSB, slider->mapToVSTRange());
         //[/UserSliderCode_s_BankMSB]
     }
     else if (sliderThatWasMoved == s_BankLSB.get())
     {
         //[UserSliderCode_s_BankLSB] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kBankLSB, slider->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kBankLSB, slider->mapToVSTRange());
         //[/UserSliderCode_s_BankLSB]
     }
     else if (sliderThatWasMoved == s_Channel.get())
     {
         //[UserSliderCode_s_Channel] -- add your slider handling code here..
-        getFilter()->setParameterNotifyingHost (kChannel, slider->mapToVSTRange());
+        getFilter()->setParameterNotifyingHost(kChannel, slider->mapToVSTRange());
         //[/UserSliderCode_s_Channel]
     }
 
@@ -887,7 +889,7 @@ void midiPCGUIEditor::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void midiPCGUIEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void midiPCGUIEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -895,63 +897,63 @@ void midiPCGUIEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == b_BankTrig.get())
     {
         //[UserButtonCode_b_BankTrig] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kBankTrigger, 1.f);
+        getFilter()->setParameterNotifyingHost(kBankTrigger, 1.f);
         //[/UserButtonCode_b_BankTrig]
     }
     else if (buttonThatWasClicked == b_PCTrig.get())
     {
         //[UserButtonCode_b_PCTrig] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kTrigger, 1.f);
+        getFilter()->setParameterNotifyingHost(kTrigger, 1.f);
         //[/UserButtonCode_b_PCTrig]
     }
     else if (buttonThatWasClicked == b_Inc.get())
     {
         //[UserButtonCode_b_Inc] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kInc, 1.f);
+        getFilter()->setParameterNotifyingHost(kInc, 1.f);
         //[/UserButtonCode_b_Inc]
     }
     else if (buttonThatWasClicked == b_Dec.get())
     {
         //[UserButtonCode_b_Dec] -- add your button handler code here..
-        getFilter()->setParameterNotifyingHost (kDec, 1.f);
+        getFilter()->setParameterNotifyingHost(kDec, 1.f);
         //[/UserButtonCode_b_Dec]
     }
     else if (buttonThatWasClicked == b_PCListen.get())
     {
         //[UserButtonCode_b_PCListen] -- add your button handler code here..
-        if (getFilter()->getParameter (kPCListen) >= 0.5f)
+        if (getFilter()->getParameter(kPCListen) >= 0.5f)
         {
-            getFilter()->setParameterNotifyingHost (kPCListen, 0.0f);
+            getFilter()->setParameterNotifyingHost(kPCListen, 0.0f);
         }
         else
         {
-            getFilter()->setParameterNotifyingHost (kPCListen, 1.0f);
+            getFilter()->setParameterNotifyingHost(kPCListen, 1.0f);
         }
         //[/UserButtonCode_b_PCListen]
     }
     else if (buttonThatWasClicked == b_Mode.get())
     {
         //[UserButtonCode_b_Mode] -- add your button handler code here..
-        if (getFilter()->getParameter (kMode) >= 0.5f)
+        if (getFilter()->getParameter(kMode) >= 0.5f)
         {
-            getFilter()->setParameterNotifyingHost (kMode, 0.0f);
+            getFilter()->setParameterNotifyingHost(kMode, 0.0f);
         }
         else
         {
-            getFilter()->setParameterNotifyingHost (kMode, 1.0f);
+            getFilter()->setParameterNotifyingHost(kMode, 1.0f);
         }
         //[/UserButtonCode_b_Mode]
     }
     else if (buttonThatWasClicked == b_Thru.get())
     {
         //[UserButtonCode_b_Thru] -- add your button handler code here..
-        if (getFilter()->getParameter (kThru) >= 0.5f)
+        if (getFilter()->getParameter(kThru) >= 0.5f)
         {
-            getFilter()->setParameterNotifyingHost (kThru, 0.0f);
+            getFilter()->setParameterNotifyingHost(kThru, 0.0f);
         }
         else
         {
-            getFilter()->setParameterNotifyingHost (kThru, 1.0f);
+            getFilter()->setParameterNotifyingHost(kThru, 1.0f);
         }
         //[/UserButtonCode_b_Thru]
     }
@@ -959,7 +961,7 @@ void midiPCGUIEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_minimize] -- add your button handler code here..
         minimized = ! minimized;
-        getFilter()->setParameterNotifyingHost (kMinimize, minimized ? 1.f : 0.f);
+        getFilter()->setParameterNotifyingHost(kMinimize, minimized ? 1.f : 0.f);
         resized();
         //[/UserButtonCode_minimize]
     }
@@ -968,7 +970,7 @@ void midiPCGUIEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     //[/UserbuttonClicked_Post]
 }
 
-void midiPCGUIEditor::labelTextChanged (juce::Label* labelThatHasChanged)
+void midiPCGUIEditor::labelTextChanged(juce::Label* labelThatHasChanged)
 {
     //[UserlabelTextChanged_Pre]
     //[/UserlabelTextChanged_Pre]
@@ -977,42 +979,54 @@ void midiPCGUIEditor::labelTextChanged (juce::Label* labelThatHasChanged)
     {
         //[UserLabelCode_PCDisplay] -- add your label text handling code here..
         int v = PCDisplay->getText().getIntValue();
-        if (PCDisplay->getText().equalsIgnoreCase ("off"))
-            getFilter()->setParameterNotifyingHost (kProgram, 0.f);
+        if (PCDisplay->getText().equalsIgnoreCase("off"))
+        {
+            getFilter()->setParameterNotifyingHost(kProgram, 0.f);
+        }
         else if (v >= 0 && v <= 128)
-            getFilter()->setParameterNotifyingHost (kProgram, (float) v / 128.f);
-        getFilter()->setParameter (kTrigger, 1.f);
+        {
+            getFilter()->setParameterNotifyingHost(kProgram, (float) v / 128.f);
+        }
+        getFilter()->setParameter(kTrigger, 1.f);
         //[/UserLabelCode_PCDisplay]
     }
     else if (labelThatHasChanged == PCDisplay2.get())
     {
         //[UserLabelCode_PCDisplay2] -- add your label text handling code here..
         int v = PCDisplay2->getText().getIntValue();
-        if (PCDisplay2->getText().equalsIgnoreCase ("off"))
-            getFilter()->setParameterNotifyingHost (kBankMSB, 0.f);
+        if (PCDisplay2->getText().equalsIgnoreCase("off"))
+        {
+            getFilter()->setParameterNotifyingHost(kBankMSB, 0.f);
+        }
         else if (v >= 0 && v <= 128)
-            getFilter()->setParameterNotifyingHost (kBankMSB, (float) v / 128.f);
-        getFilter()->setParameter (kBankTrigger, 1.f);
+        {
+            getFilter()->setParameterNotifyingHost(kBankMSB, (float) v / 128.f);
+        }
+        getFilter()->setParameter(kBankTrigger, 1.f);
         //[/UserLabelCode_PCDisplay2]
     }
     else if (labelThatHasChanged == PCDisplay3.get())
     {
         //[UserLabelCode_PCDisplay3] -- add your label text handling code here..
         int v = PCDisplay3->getText().getIntValue();
-        if (PCDisplay3->getText().equalsIgnoreCase ("off"))
-            getFilter()->setParameterNotifyingHost (kBankLSB, 0.f);
+        if (PCDisplay3->getText().equalsIgnoreCase("off"))
+        {
+            getFilter()->setParameterNotifyingHost(kBankLSB, 0.f);
+        }
         else if (v >= 0 && v <= 128)
-            getFilter()->setParameterNotifyingHost (kBankLSB, (float) v / 128.f);
-        getFilter()->setParameter (kBankTrigger, 1.f);
+        {
+            getFilter()->setParameterNotifyingHost(kBankLSB, (float) v / 128.f);
+        }
+        getFilter()->setParameter(kBankTrigger, 1.f);
         //[/UserLabelCode_PCDisplay3]
     }
     else if (labelThatHasChanged == ProgramName.get())
     {
         //[UserLabelCode_ProgramName] -- add your label text handling code here..
-        getFilter()->setMidiProgName ((int) s_Channel->getValue() - 1,
-                                      combineBytes (PCDisplay3->getText().getIntValue() - 1, PCDisplay2->getText().getIntValue() - 1),
-                                      PCDisplay->getText().getIntValue() - 1,
-                                      ProgramName->getText());
+        getFilter()->setMidiProgName((int) s_Channel->getValue() - 1,
+                                     combineBytes(PCDisplay3->getText().getIntValue() - 1, PCDisplay2->getText().getIntValue() - 1),
+                                     PCDisplay->getText().getIntValue() - 1,
+                                     ProgramName->getText());
         //[/UserLabelCode_ProgramName]
     }
 
@@ -1022,7 +1036,7 @@ void midiPCGUIEditor::labelTextChanged (juce::Label* labelThatHasChanged)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
-void midiPCGUIEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void midiPCGUIEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -1044,12 +1058,14 @@ void midiPCGUIEditor::updateParametersFromFilter()
 
     // take a local copy of the info we need while we've got the lock..
     for (int i = 0; i < numParams; i++)
-        param[i] = filter->getParameter (i);
-    const int channel       = roundToInt (param[kChannel] * 15.0f);
+    {
+        param[i] = filter->getParameter(i);
+    }
+    const int channel       = roundToInt(param[kChannel] * 15.0f);
     const int p             = filter->actualProgram[channel];
     const int msb           = filter->actualBankMSB[channel];
     const int lsb           = filter->actualBankLSB[channel];
-    const juce::String name = filter->getMidiProgName (channel, combineBytes (lsb - 1, msb - 1), p - 1);
+    const juce::String name = filter->getMidiProgName(channel, combineBytes(lsb - 1, msb - 1), p - 1);
 
     // release the lock ASAP
     filter->getCallbackLock().exit();
@@ -1057,38 +1073,39 @@ void midiPCGUIEditor::updateParametersFromFilter()
     // ..and after releasing the lock, we're free to do the time-consuming UI stuff..
 
     //prog name
-    ProgramName->setText (name, juce::dontSendNotification);
+    ProgramName->setText(name, juce::dontSendNotification);
     //toggle buttons
-    b_PCListen->setToggleState (param[kPCListen] >= 0.5f, juce::dontSendNotification);
-    b_Thru->setToggleState (param[kThru] >= 0.5f, juce::dontSendNotification);
+    b_PCListen->setToggleState(param[kPCListen] >= 0.5f, juce::dontSendNotification);
+    b_Thru->setToggleState(param[kThru] >= 0.5f, juce::dontSendNotification);
 
     if (param[kMode] < 0.5f)
     {
-        b_Mode->setButtonText ("Direct");
-        b_Mode->setToggleState (true, juce::dontSendNotification);
-        s_Program->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
-        s_BankMSB->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
-        s_BankLSB->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
+        b_Mode->setButtonText("Direct");
+        b_Mode->setToggleState(true, juce::dontSendNotification);
+        s_Program->setColour(juce::Slider::thumbColourId, juce::Colours::coral);
+        s_BankMSB->setColour(juce::Slider::thumbColourId, juce::Colours::coral);
+        s_BankLSB->setColour(juce::Slider::thumbColourId, juce::Colours::coral);
     }
     else
     {
-        b_Mode->setButtonText ("Triggered");
-        b_Mode->setToggleState (false, juce::dontSendNotification);
-        s_Program->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
-        s_BankMSB->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
-        s_BankLSB->setColour (juce::Slider::thumbColourId, juce::Colour (getLookAndFeel().findColour (juce::Slider::thumbColourId)));
+        b_Mode->setButtonText("Triggered");
+        b_Mode->setToggleState(false, juce::dontSendNotification);
+        s_Program->setColour(juce::Slider::thumbColourId, juce::Colour(getLookAndFeel().findColour(juce::Slider::thumbColourId)));
+        s_BankMSB->setColour(juce::Slider::thumbColourId, juce::Colour(getLookAndFeel().findColour(juce::Slider::thumbColourId)));
+        s_BankLSB->setColour(juce::Slider::thumbColourId, juce::Colour(getLookAndFeel().findColour(juce::Slider::thumbColourId)));
     }
 
     //sliders
-    s_Program->setVSTSlider (param[kProgram]);
-    s_BankMSB->setVSTSlider (param[kBankMSB]);
-    s_BankLSB->setVSTSlider (param[kBankLSB]);
-    s_Channel->setVSTSlider (param[kChannel]);
-    PCDisplay->setText (juce::String (p), juce::dontSendNotification);
-    PCDisplay2->setText (juce::String (msb), juce::dontSendNotification);
-    PCDisplay3->setText (juce::String (lsb), juce::dontSendNotification);
+    s_Program->setVSTSlider(param[kProgram]);
+    s_BankMSB->setVSTSlider(param[kBankMSB]);
+    s_BankLSB->setVSTSlider(param[kBankLSB]);
+    s_Channel->setVSTSlider(param[kChannel]);
+    PCDisplay->setText(juce::String(p), juce::dontSendNotification);
+    PCDisplay2->setText(juce::String(msb), juce::dontSendNotification);
+    PCDisplay3->setText(juce::String(lsb), juce::dontSendNotification);
     minimized = param[kMinimize] >= 0.5f;
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

@@ -10,10 +10,10 @@
 #define midiScaler   ((float) 0.007874015748031496062992125984252)
 #define NOT_A_NOTE   (98765)
 
-const juce::String Flat ("b"); //(L"\x266d");
-const juce::String Natural (L"\x266e");
-const juce::String Sharp ("#");      //(L"\x266f");
-const juce::String Diminished ("o"); //(L"\x0080");
+const juce::String Flat("b"); //(L"\x266d");
+const juce::String Natural(L"\x266e");
+const juce::String Sharp("#");      //(L"\x266f");
+const juce::String Diminished("o"); //(L"\x0080");
 
 enum NoteNames
 {
@@ -31,151 +31,261 @@ enum NoteNames
     nB
 };
 
-inline int floatToMidi (float f, bool learnspace = true)
+inline int floatToMidi(float f, bool learnspace = true)
 {
     if (learnspace)
-        return juce::roundToInt (f * 128.f) - 1;
-    return juce::roundToInt (f * 127.f);
+    {
+        return juce::roundToInt(f * 128.f) - 1;
+    }
+    return juce::roundToInt(f * 127.f);
 }
-inline float midiToFloat (int n, bool learnspace = true)
+
+inline float midiToFloat(int n, bool learnspace = true)
 {
     if (learnspace)
+    {
         return (float) (n + 1) * 0.0078125f;
+    }
     return (float) n * (float) 0.007874015748031496062992125984252;
 }
 
-inline int floatToChannel (float f) { return juce::roundToInt (f * 16.0f); }
-inline float channelToFloat (int c) { return (float) c * 0.0625f; }
-
-inline int getNoteValue (juce::String noteName)
+inline int floatToChannel(float f)
 {
-    if (noteName.equalsIgnoreCase ("C") || noteName.equalsIgnoreCase ("B#") || noteName.equalsIgnoreCase ("Dbb"))
+    return juce::roundToInt(f * 16.0f);
+}
+
+inline float channelToFloat(int c)
+{
+    return (float) c * 0.0625f;
+}
+
+inline int getNoteValue(juce::String noteName)
+{
+    if (noteName.equalsIgnoreCase("C") || noteName.equalsIgnoreCase("B#") || noteName.equalsIgnoreCase("Dbb"))
+    {
         return nC;
-    if (noteName.equalsIgnoreCase ("C#") || noteName.equalsIgnoreCase ("Db") || noteName.equalsIgnoreCase ("Bx"))
+    }
+    if (noteName.equalsIgnoreCase("C#") || noteName.equalsIgnoreCase("Db") || noteName.equalsIgnoreCase("Bx"))
+    {
         return nDb;
-    if (noteName.equalsIgnoreCase ("D") || noteName.equalsIgnoreCase ("Ebb") || noteName.equalsIgnoreCase ("Cx"))
+    }
+    if (noteName.equalsIgnoreCase("D") || noteName.equalsIgnoreCase("Ebb") || noteName.equalsIgnoreCase("Cx"))
+    {
         return nD;
-    if (noteName.equalsIgnoreCase ("Eb") || noteName.equalsIgnoreCase ("D#") || noteName.equalsIgnoreCase ("Fbb"))
+    }
+    if (noteName.equalsIgnoreCase("Eb") || noteName.equalsIgnoreCase("D#") || noteName.equalsIgnoreCase("Fbb"))
+    {
         return nEb;
-    if (noteName.equalsIgnoreCase ("E") || noteName.equalsIgnoreCase ("Fb") || noteName.equalsIgnoreCase ("Dx"))
+    }
+    if (noteName.equalsIgnoreCase("E") || noteName.equalsIgnoreCase("Fb") || noteName.equalsIgnoreCase("Dx"))
+    {
         return nE;
-    if (noteName.equalsIgnoreCase ("F") || noteName.equalsIgnoreCase ("E#") || noteName.equalsIgnoreCase ("Gbb"))
+    }
+    if (noteName.equalsIgnoreCase("F") || noteName.equalsIgnoreCase("E#") || noteName.equalsIgnoreCase("Gbb"))
+    {
         return nF;
-    if (noteName.equalsIgnoreCase ("Gb") || noteName.equalsIgnoreCase ("F#") || noteName.equalsIgnoreCase ("Ex"))
+    }
+    if (noteName.equalsIgnoreCase("Gb") || noteName.equalsIgnoreCase("F#") || noteName.equalsIgnoreCase("Ex"))
+    {
         return nGb;
-    if (noteName.equalsIgnoreCase ("G") || noteName.equalsIgnoreCase ("Fx") || noteName.equalsIgnoreCase ("Abb"))
+    }
+    if (noteName.equalsIgnoreCase("G") || noteName.equalsIgnoreCase("Fx") || noteName.equalsIgnoreCase("Abb"))
+    {
         return nG;
-    if (noteName.equalsIgnoreCase ("Ab") || noteName.equalsIgnoreCase ("G#"))
+    }
+    if (noteName.equalsIgnoreCase("Ab") || noteName.equalsIgnoreCase("G#"))
+    {
         return nAb;
-    if (noteName.equalsIgnoreCase ("A") || noteName.equalsIgnoreCase ("Gx") || noteName.equalsIgnoreCase ("Bbb"))
+    }
+    if (noteName.equalsIgnoreCase("A") || noteName.equalsIgnoreCase("Gx") || noteName.equalsIgnoreCase("Bbb"))
+    {
         return nA;
-    if (noteName.equalsIgnoreCase ("Bb") || noteName.equalsIgnoreCase ("A#") || noteName.equalsIgnoreCase ("Cbb"))
+    }
+    if (noteName.equalsIgnoreCase("Bb") || noteName.equalsIgnoreCase("A#") || noteName.equalsIgnoreCase("Cbb"))
+    {
         return nBb;
-    if (noteName.equalsIgnoreCase ("B") || noteName.equalsIgnoreCase ("Cb") || noteName.equalsIgnoreCase ("Ax"))
+    }
+    if (noteName.equalsIgnoreCase("B") || noteName.equalsIgnoreCase("Cb") || noteName.equalsIgnoreCase("Ax"))
+    {
         return nB;
+    }
     return NOT_A_NOTE;
 }
 
-inline int getNoteValue (juce::String noteName, int bottomOctave, bool& hasOctaveNumber)
+inline int getNoteValue(juce::String noteName, int bottomOctave, bool& hasOctaveNumber)
 {
     int octave = 0;
-    if (noteName.containsAnyOf ("-0123456789"))
+    if (noteName.containsAnyOf("-0123456789"))
     {
         octave          = (noteName.getTrailingIntValue() - bottomOctave) * 12;
         hasOctaveNumber = true;
-        noteName        = noteName.removeCharacters ("-0123456789");
+        noteName        = noteName.removeCharacters("-0123456789");
     }
     else
+    {
         hasOctaveNumber = false;
-    if (noteName.equalsIgnoreCase ("C") || noteName.equalsIgnoreCase ("B#") || noteName.equalsIgnoreCase ("Dbb"))
+    }
+    if (noteName.equalsIgnoreCase("C") || noteName.equalsIgnoreCase("B#") || noteName.equalsIgnoreCase("Dbb"))
+    {
         return nC + octave;
-    if (noteName.equalsIgnoreCase ("C#") || noteName.equalsIgnoreCase ("Db") || noteName.equalsIgnoreCase ("Bx"))
+    }
+    if (noteName.equalsIgnoreCase("C#") || noteName.equalsIgnoreCase("Db") || noteName.equalsIgnoreCase("Bx"))
+    {
         return nDb + octave;
-    if (noteName.equalsIgnoreCase ("D") || noteName.equalsIgnoreCase ("Ebb") || noteName.equalsIgnoreCase ("Cx"))
+    }
+    if (noteName.equalsIgnoreCase("D") || noteName.equalsIgnoreCase("Ebb") || noteName.equalsIgnoreCase("Cx"))
+    {
         return nD + octave;
-    if (noteName.equalsIgnoreCase ("Eb") || noteName.equalsIgnoreCase ("D#") || noteName.equalsIgnoreCase ("Fbb"))
+    }
+    if (noteName.equalsIgnoreCase("Eb") || noteName.equalsIgnoreCase("D#") || noteName.equalsIgnoreCase("Fbb"))
+    {
         return nEb + octave;
-    if (noteName.equalsIgnoreCase ("E") || noteName.equalsIgnoreCase ("Fb") || noteName.equalsIgnoreCase ("Dx"))
+    }
+    if (noteName.equalsIgnoreCase("E") || noteName.equalsIgnoreCase("Fb") || noteName.equalsIgnoreCase("Dx"))
+    {
         return nE + octave;
-    if (noteName.equalsIgnoreCase ("F") || noteName.equalsIgnoreCase ("E#") || noteName.equalsIgnoreCase ("Gbb"))
+    }
+    if (noteName.equalsIgnoreCase("F") || noteName.equalsIgnoreCase("E#") || noteName.equalsIgnoreCase("Gbb"))
+    {
         return nF + octave;
-    if (noteName.equalsIgnoreCase ("Gb") || noteName.equalsIgnoreCase ("F#") || noteName.equalsIgnoreCase ("Ex"))
+    }
+    if (noteName.equalsIgnoreCase("Gb") || noteName.equalsIgnoreCase("F#") || noteName.equalsIgnoreCase("Ex"))
+    {
         return nGb + octave;
-    if (noteName.equalsIgnoreCase ("G") || noteName.equalsIgnoreCase ("Fx") || noteName.equalsIgnoreCase ("Abb"))
+    }
+    if (noteName.equalsIgnoreCase("G") || noteName.equalsIgnoreCase("Fx") || noteName.equalsIgnoreCase("Abb"))
+    {
         return nG + octave;
-    if (noteName.equalsIgnoreCase ("Ab") || noteName.equalsIgnoreCase ("G#"))
+    }
+    if (noteName.equalsIgnoreCase("Ab") || noteName.equalsIgnoreCase("G#"))
+    {
         return nAb + octave;
-    if (noteName.equalsIgnoreCase ("A") || noteName.equalsIgnoreCase ("Gx") || noteName.equalsIgnoreCase ("Bbb"))
+    }
+    if (noteName.equalsIgnoreCase("A") || noteName.equalsIgnoreCase("Gx") || noteName.equalsIgnoreCase("Bbb"))
+    {
         return nA + octave;
-    if (noteName.equalsIgnoreCase ("Bb") || noteName.equalsIgnoreCase ("A#") || noteName.equalsIgnoreCase ("Cbb"))
+    }
+    if (noteName.equalsIgnoreCase("Bb") || noteName.equalsIgnoreCase("A#") || noteName.equalsIgnoreCase("Cbb"))
+    {
         return nBb + octave;
-    if (noteName.equalsIgnoreCase ("B") || noteName.equalsIgnoreCase ("Cb") || noteName.equalsIgnoreCase ("Ax"))
+    }
+    if (noteName.equalsIgnoreCase("B") || noteName.equalsIgnoreCase("Cb") || noteName.equalsIgnoreCase("Ax"))
+    {
         return nB + octave;
+    }
     return NOT_A_NOTE;
 }
 
-inline int getIntervalValue (juce::String intervalName)
+inline int getIntervalValue(juce::String intervalName)
 {
     int result    = NOT_A_NOTE;
-    bool inverted = intervalName.startsWith ("-");
+    bool inverted = intervalName.startsWith("-");
     if (inverted)
-        intervalName = intervalName.fromFirstOccurrenceOf ("-", false, true);
+    {
+        intervalName = intervalName.fromFirstOccurrenceOf("-", false, true);
+    }
 
-    if (intervalName.equalsIgnoreCase ("r") || intervalName.equalsIgnoreCase ("root") || intervalName == "1")
+    if (intervalName.equalsIgnoreCase("r") || intervalName.equalsIgnoreCase("root") || intervalName == "1")
+    {
         result = 0;
-    else if (intervalName == "m2" || intervalName.equalsIgnoreCase ("min2") || intervalName == "b2")
+    }
+    else if (intervalName == "m2" || intervalName.equalsIgnoreCase("min2") || intervalName == "b2")
+    {
         result = 1;
-    else if (intervalName == "M2" || intervalName.equalsIgnoreCase ("maj2") || intervalName == "2")
+    }
+    else if (intervalName == "M2" || intervalName.equalsIgnoreCase("maj2") || intervalName == "2")
+    {
         result = 2;
-    else if (intervalName == "m3" || intervalName.equalsIgnoreCase ("min3") || intervalName == "b3")
+    }
+    else if (intervalName == "m3" || intervalName.equalsIgnoreCase("min3") || intervalName == "b3")
+    {
         result = 3;
-    else if (intervalName == "M3" || intervalName.equalsIgnoreCase ("maj3") || intervalName == "3"
-             || intervalName == "b4" || intervalName == "o4" || intervalName.equalsIgnoreCase ("dim4"))
+    }
+    else if (intervalName == "M3" || intervalName.equalsIgnoreCase("maj3") || intervalName == "3"
+             || intervalName == "b4" || intervalName == "o4" || intervalName.equalsIgnoreCase("dim4"))
+    {
         result = 4;
-    else if (intervalName.equalsIgnoreCase ("p4") || intervalName == "4")
+    }
+    else if (intervalName.equalsIgnoreCase("p4") || intervalName == "4")
+    {
         result = 5;
-    else if (intervalName == "b5" || intervalName == "o5" || intervalName.equalsIgnoreCase ("dim5")
-             || intervalName == "+4" || intervalName == "#4" || intervalName == "aug4" || intervalName.equalsIgnoreCase ("tritone"))
+    }
+    else if (intervalName == "b5" || intervalName == "o5" || intervalName.equalsIgnoreCase("dim5")
+             || intervalName == "+4" || intervalName == "#4" || intervalName == "aug4" || intervalName.equalsIgnoreCase("tritone"))
+    {
         result = 6;
-    else if (intervalName.equalsIgnoreCase ("p5") || intervalName == "5")
+    }
+    else if (intervalName.equalsIgnoreCase("p5") || intervalName == "5")
+    {
         result = 7;
-    else if (intervalName == "#5" || intervalName.equalsIgnoreCase ("aug5") || intervalName == "+5"
-             || intervalName == "m6" || intervalName.equalsIgnoreCase ("min6") || intervalName == "b6")
+    }
+    else if (intervalName == "#5" || intervalName.equalsIgnoreCase("aug5") || intervalName == "+5"
+             || intervalName == "m6" || intervalName.equalsIgnoreCase("min6") || intervalName == "b6")
+    {
         result = 8;
-    else if (intervalName.equalsIgnoreCase ("maj6") || intervalName == "M6" || intervalName == "6"
+    }
+    else if (intervalName.equalsIgnoreCase("maj6") || intervalName == "M6" || intervalName == "6"
              || intervalName == "o7" || intervalName == "bb7" || intervalName == "dim7")
+    {
         result = 9;
-    else if (intervalName.equalsIgnoreCase ("min7") || intervalName == "b7" || intervalName == "m7"
-             || intervalName == "+6" || intervalName.equalsIgnoreCase ("aug6"))
+    }
+    else if (intervalName.equalsIgnoreCase("min7") || intervalName == "b7" || intervalName == "m7"
+             || intervalName == "+6" || intervalName.equalsIgnoreCase("aug6"))
+    {
         result = 10;
-    else if (intervalName.equalsIgnoreCase ("maj7") || intervalName == "M7" || intervalName == "7")
+    }
+    else if (intervalName.equalsIgnoreCase("maj7") || intervalName == "M7" || intervalName == "7")
+    {
         result = 11;
-    else if (intervalName.equalsIgnoreCase ("octave") || intervalName.equalsIgnoreCase ("o") || intervalName == "oct" || intervalName == "8")
+    }
+    else if (intervalName.equalsIgnoreCase("octave") || intervalName.equalsIgnoreCase("o") || intervalName == "oct" || intervalName == "8")
+    {
         result = 12;
-    else if (intervalName.equalsIgnoreCase ("min9") || intervalName == "b9" || intervalName == "m9")
+    }
+    else if (intervalName.equalsIgnoreCase("min9") || intervalName == "b9" || intervalName == "m9")
+    {
         result = 13;
-    else if (intervalName.equalsIgnoreCase ("maj9") || intervalName == "9" || intervalName == "M9")
+    }
+    else if (intervalName.equalsIgnoreCase("maj9") || intervalName == "9" || intervalName == "M9")
+    {
         result = 14;
-    else if (intervalName.equalsIgnoreCase ("min10") || intervalName == "#9" || intervalName == "b10" || intervalName == "m10")
+    }
+    else if (intervalName.equalsIgnoreCase("min10") || intervalName == "#9" || intervalName == "b10" || intervalName == "m10")
+    {
         result = 15;
-    else if (intervalName.equalsIgnoreCase ("maj10") || intervalName == "10" || intervalName == "M10" || intervalName == "b11")
+    }
+    else if (intervalName.equalsIgnoreCase("maj10") || intervalName == "10" || intervalName == "M10" || intervalName == "b11")
+    {
         result = 16;
-    else if (intervalName.equalsIgnoreCase ("p11") || intervalName == "11")
+    }
+    else if (intervalName.equalsIgnoreCase("p11") || intervalName == "11")
+    {
         result = 17;
-    else if (intervalName.equalsIgnoreCase ("aug11") || intervalName == "#11" || intervalName == "#11")
+    }
+    else if (intervalName.equalsIgnoreCase("aug11") || intervalName == "#11" || intervalName == "#11")
+    {
         result = 18;
-    else if (intervalName.equalsIgnoreCase ("p12") || intervalName == "12")
+    }
+    else if (intervalName.equalsIgnoreCase("p12") || intervalName == "12")
+    {
         result = 19;
-    else if (intervalName.equalsIgnoreCase ("min13") || intervalName == "b13" || intervalName == "m13")
+    }
+    else if (intervalName.equalsIgnoreCase("min13") || intervalName == "b13" || intervalName == "m13")
+    {
         result = 20;
-    else if (intervalName.equalsIgnoreCase ("maj13") || intervalName == "13" || intervalName == "M13")
+    }
+    else if (intervalName.equalsIgnoreCase("maj13") || intervalName == "13" || intervalName == "M13")
+    {
         result = 21;
+    }
     if (inverted)
+    {
         result = -result;
+    }
     return result;
 }
 
-inline juce::String getNoteName (int noteNumber, int baseOctave /*=-2*/)
+inline juce::String getNoteName(int noteNumber, int baseOctave /*=-2*/)
 {
     juce::String Note{};
     switch (noteNumber % 12)
@@ -219,10 +329,10 @@ inline juce::String getNoteName (int noteNumber, int baseOctave /*=-2*/)
         default:
             break;
     }
-    return Note + juce::String ((noteNumber / 12) + baseOctave);
+    return Note + juce::String((noteNumber / 12) + baseOctave);
 }
 
-inline juce::String getNoteNameWithoutOctave (int noteNumber, bool sharps = true)
+inline juce::String getNoteNameWithoutOctave(int noteNumber, bool sharps = true)
 {
     juce::String Note{};
     if (sharps)
@@ -316,14 +426,14 @@ inline juce::String getNoteNameWithoutOctave (int noteNumber, bool sharps = true
     return Note;
 }
 
-inline int mapToRange (float x, float in1, float in2, float out1, float out2)
+inline int mapToRange(float x, float in1, float in2, float out1, float out2)
 {
     float slope = ((float) (out2 - out1)) / ((float) (in2 - in1));
     float b     = out1 - slope * in1;
-    return juce::roundToInt (slope * x + b);
+    return juce::roundToInt(slope * x + b);
 }
 
-inline int CombineBytes (unsigned char lsb, unsigned char msb)
+inline int CombineBytes(unsigned char lsb, unsigned char msb)
 {
     return (((unsigned int) msb) << 7) | (unsigned int) lsb;
 }

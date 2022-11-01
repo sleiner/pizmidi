@@ -10,16 +10,18 @@
 #include <string>
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiProgramChange (audioMaster);
+    return new MidiProgramChange(audioMaster);
 }
 
 MidiProgramChangeProgram::MidiProgramChangeProgram()
 {
     // default Program Values
     for (int i = 0; i < kNumParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kMode]        = 1.f;
     param[kThru]        = 1.f;
     param[kTrigger]     = 0.4f;
@@ -27,19 +29,19 @@ MidiProgramChangeProgram::MidiProgramChangeProgram()
     param[kInc]         = 0.4f;
     param[kDec]         = 0.4f;
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiProgramChange::MidiProgramChange(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiProgramChangeProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -47,9 +49,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -58,10 +60,10 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
             // built-in programs
             for (int i = 0; i < kNumPrograms; i++)
             {
-                sprintf (programs[i].name, "Program %d", i + 1);
+                sprintf(programs[i].name, "Program %d", i + 1);
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     trigger     = false;
@@ -76,7 +78,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
     senttrig    = false;
     sentbank    = false;
     for (int i = 0; i < kNumParams; i++)
+    {
         automated[i] = false;
+    }
     mode = continuous;
 
     wait         = false;
@@ -85,7 +89,9 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
     triggerdelta = 0;
 
     if (programs)
-        setProgram (0);
+    {
+        setProgram(0);
+    }
 
     init();
 }
@@ -94,65 +100,75 @@ MidiProgramChange::MidiProgramChange (audioMasterCallback audioMaster)
 MidiProgramChange::~MidiProgramChange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::setProgram (VstInt32 prog)
+void MidiProgramChange::setProgram(VstInt32 prog)
 {
     MidiProgramChangeProgram* ap = &programs[prog];
     curProgram                   = prog;
     for (int i = 0; i < kNumParams; i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
     if (program > 0)
+    {
         trigger = true;
+    }
     if (banklsb > 0 || bankmsb > 0)
+    {
         triggerbank = true;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::setProgramName (char* name)
+void MidiProgramChange::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiProgramChange::getProgramName (char* name)
+void MidiProgramChange::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiProgramChange::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiProgramChange::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::setSampleRate (float sampleRateIn)
+void MidiProgramChange::setSampleRate(float sampleRateIn)
 {
-    PizMidi::setSampleRate (sampleRateIn);
+    PizMidi::setSampleRate(sampleRateIn);
     delaytime = (int) (sampleRate * 0.002f);
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::setParameter (VstInt32 index, float value)
+void MidiProgramChange::setParameter(VstInt32 index, float value)
 {
     MidiProgramChangeProgram* ap = &programs[curProgram];
     switch (index)
     {
         case kMode:
             if (value < 0.5f)
+            {
                 mode = continuous;
+            }
             else
+            {
                 mode = triggered;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kPCListen:
@@ -171,7 +187,9 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
                 senttrig = true;
             }
             else if (value < 1.f && senttrig)
+            {
                 senttrig = false;
+            }
             break;
         case kBankTrigger:
             param[index] = value;
@@ -181,7 +199,9 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
                 sentbank    = true;
             }
             else if (value < 1.f && sentbank)
+            {
                 sentbank = false;
+            }
             break;
         case kInc:
             param[index] = value;
@@ -191,7 +211,9 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
                 sentinc = true;
             }
             else if (value < 1.f && sentinc)
+            {
                 sentinc = false;
+            }
             break;
         case kDec:
             param[index] = value;
@@ -201,24 +223,32 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
                 sentdec = true;
             }
             else if (value < 1.f && sentdec)
+            {
                 sentdec = false;
+            }
             break;
         case kProgram:
-            program = FLOAT_TO_MIDI2 (value);
+            program = FLOAT_TO_MIDI2(value);
             if (mode == continuous && ! automated[index])
+            {
                 trigger = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kBankMSB:
-            bankmsb = FLOAT_TO_MIDI2 (value);
+            bankmsb = FLOAT_TO_MIDI2(value);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         case kBankLSB:
-            banklsb = FLOAT_TO_MIDI2 (value);
+            banklsb = FLOAT_TO_MIDI2(value);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = value;
             break;
         default:
@@ -235,132 +265,172 @@ void MidiProgramChange::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiProgramChange::getParameter (VstInt32 index)
+float MidiProgramChange::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::getParameterName (VstInt32 index, char* label)
+void MidiProgramChange::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kProgram:
-            strcpy (label, "Program");
+            strcpy(label, "Program");
             break;
         case kBankMSB:
-            strcpy (label, "Bank MSB");
+            strcpy(label, "Bank MSB");
             break;
         case kBankLSB:
-            strcpy (label, "Bank LSB");
+            strcpy(label, "Bank LSB");
             break;
         case kMode:
-            strcpy (label, "Mode");
+            strcpy(label, "Mode");
             break;
         case kTrigger:
-            strcpy (label, "PC Trig.");
+            strcpy(label, "PC Trig.");
             break;
         case kBankTrigger:
-            strcpy (label, "Bank Trig.");
+            strcpy(label, "Bank Trig.");
             break;
         case kInc:
-            strcpy (label, "PC Incr.");
+            strcpy(label, "PC Incr.");
             break;
         case kDec:
-            strcpy (label, "PC Decr.");
+            strcpy(label, "PC Decr.");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         case kPCListen:
-            strcpy (label, "PC Listen");
+            strcpy(label, "PC Listen");
             break;
         case kThru:
-            strcpy (label, "Thru");
+            strcpy(label, "Thru");
             break;
         default:
-            sprintf (label, "param[%d]", index);
+            sprintf(label, "param[%d]", index);
             break;
     }
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiProgramChange::getParameterDisplay (VstInt32 index, char* text)
+void MidiProgramChange::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kMode:
             if (mode == continuous)
-                strcpy (text, "Direct");
+            {
+                strcpy(text, "Direct");
+            }
             else
-                strcpy (text, "Triggered");
+            {
+                strcpy(text, "Triggered");
+            }
             break;
         case kPCListen:
             if (pclisten)
-                strcpy (text, "Yes");
+            {
+                strcpy(text, "Yes");
+            }
             else
-                strcpy (text, "No");
+            {
+                strcpy(text, "No");
+            }
             break;
         case kThru:
             if (thru)
-                strcpy (text, "Yes");
+            {
+                strcpy(text, "Yes");
+            }
             else
-                strcpy (text, "No");
+            {
+                strcpy(text, "No");
+            }
             break;
         case kProgram:
             if (program == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", program);
+            {
+                sprintf(text, "%d", program);
+            }
             break;
         case kBankMSB:
             if (bankmsb == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", bankmsb);
+            {
+                sprintf(text, "%d", bankmsb);
+            }
             break;
         case kBankLSB:
             if (banklsb == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", banklsb);
+            {
+                sprintf(text, "%d", banklsb);
+            }
             break;
         case kChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[index]) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kTrigger:
             if (param[index] == 1.f)
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             else
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             break;
         case kBankTrigger:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         case kInc:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         case kDec:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         default:
-            sprintf (text, "%d", roundToInt (param[index] * 100.0f));
+            sprintf(text, "%d", roundToInt(param[index] * 100.0f));
             break;
     }
 }
 
-void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
+void MidiProgramChange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 samples)
 {
-    char listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+    char listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
 
     //process incoming events-------------------------------------------------------
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -382,20 +452,24 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             {
                 if (pclisten)
                 {
-                    setProgram (data1);
+                    setProgram(data1);
                     updateDisplay();
                     discard = true;
                 }
             }
         } // if listenchannel==channel
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     } //for() inputs loop
 
     if (triggerbank)
     {
         if (! (trigger && program != 0))
+        {
             triggerbank = false;
+        }
         //create GUI triggered message
         if (bankmsb != 0)
         {
@@ -404,7 +478,7 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             msb.midiData[1] = MIDI_BANK_CHANGE;
             msb.midiData[2] = bankmsb - 1;
             msb.deltaFrames = 0;
-            outputs[0].push_back (msb);
+            outputs[0].push_back(msb);
         }
         if (banklsb != 0)
         {
@@ -413,9 +487,9 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             lsb.midiData[1] = 0x20;
             lsb.midiData[2] = banklsb - 1;
             lsb.deltaFrames = 0;
-            outputs[0].push_back (lsb);
+            outputs[0].push_back(lsb);
         }
-        setParameterAutomated (kBankTrigger, 0.4f);
+        setParameterAutomated(kBankTrigger, 0.4f);
     }
     if (trigger)
     {
@@ -436,8 +510,8 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                     progch.midiData[1] = program - 1;
                     progch.midiData[2] = 0x0;
                     progch.deltaFrames = delaytime;
-                    outputs[0].push_back (progch);
-                    setParameterAutomated (kTrigger, 0.4f);
+                    outputs[0].push_back(progch);
+                    setParameterAutomated(kTrigger, 0.4f);
                 }
             }
             else
@@ -448,8 +522,8 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
                 progch.midiData[1] = program - 1;
                 progch.midiData[2] = 0x0;
                 progch.deltaFrames = triggerdelta;
-                outputs[0].push_back (progch);
-                setParameterAutomated (kTrigger, 0.4f);
+                outputs[0].push_back(progch);
+                setParameterAutomated(kTrigger, 0.4f);
             }
         }
     }
@@ -459,7 +533,9 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
         inc = false;
         ++program;
         if (program > 128)
+        {
             program = 0;
+        }
         if (program != 0)
         {
             VstMidiEvent progch;
@@ -467,10 +543,10 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             progch.midiData[1] = program - 1;
             progch.midiData[2] = 0x0;
             progch.deltaFrames = 0;
-            outputs[0].push_back (progch);
+            outputs[0].push_back(progch);
         }
-        setParameterAutomated (kProgram, MIDI_TO_FLOAT2 (program));
-        setParameterAutomated (kInc, 0.4f);
+        setParameterAutomated(kProgram, MIDI_TO_FLOAT2(program));
+        setParameterAutomated(kInc, 0.4f);
     }
     else if (dec)
     {
@@ -478,7 +554,9 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
         dec = false;
         --program;
         if (program < 0)
+        {
             program = 128;
+        }
         if (program != 0)
         {
             VstMidiEvent progch;
@@ -486,9 +564,9 @@ void MidiProgramChange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEvent
             progch.midiData[1] = program - 1;
             progch.midiData[2] = 0x0;
             progch.deltaFrames = 0;
-            outputs[0].push_back (progch);
+            outputs[0].push_back(progch);
         }
-        setParameterAutomated (kProgram, MIDI_TO_FLOAT2 (program));
-        setParameterAutomated (kDec, 0.4f);
+        setParameterAutomated(kProgram, MIDI_TO_FLOAT2(program));
+        setParameterAutomated(kDec, 0.4f);
     }
 }

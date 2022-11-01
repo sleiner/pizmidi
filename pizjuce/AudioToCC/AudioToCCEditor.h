@@ -20,49 +20,61 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_core/juce_core.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/VSTSlider.h"
 #include "AudioToCC.h"
+
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class DecibelMeter : public juce::Slider
 {
 public:
-    DecibelMeter (const juce::String& name) : Slider (name)
+    DecibelMeter(const juce::String& name)
+        : Slider(name)
     {
-        this->setMouseClickGrabsKeyboardFocus (false);
-        this->setInterceptsMouseClicks (false, false);
+        this->setMouseClickGrabsKeyboardFocus(false);
+        this->setInterceptsMouseClicks(false, false);
     }
-    ~DecibelMeter() override {}
 
-    juce::String getTextFromValue (double value) override
+    ~DecibelMeter() override
     {
-        return value == 0.0 ? " " : juce::String (20.0 * log10 (value), 1) + " dB";
+    }
+
+    juce::String getTextFromValue(double value) override
+    {
+        return value == 0.0 ? " " : juce::String(20.0 * log10(value), 1) + " dB";
     }
 };
 
 class DecibelSlider : public juce::Slider
 {
 public:
-    DecibelSlider (const juce::String& name) : juce::Slider (name)
+    DecibelSlider(const juce::String& name)
+        : juce::Slider(name)
     {
-        this->setMouseClickGrabsKeyboardFocus (false);
+        this->setMouseClickGrabsKeyboardFocus(false);
     }
-    ~DecibelSlider() override {}
 
-    juce::String getTextFromValue (double value) override
+    ~DecibelSlider() override
     {
-        return value == 0.0 ? "-inf" : juce::String (20.0 * log10 (value), 1) + " dB";
     }
-    double getValueFromText (const juce::String& text) override
+
+    juce::String getTextFromValue(double value) override
     {
-        if (text.equalsIgnoreCase ("-inf"))
+        return value == 0.0 ? "-inf" : juce::String(20.0 * log10(value), 1) + " dB";
+    }
+
+    double getValueFromText(const juce::String& text) override
+    {
+        if (text.equalsIgnoreCase("-inf"))
+        {
             return 0.0;
+        }
         double dB = text.getDoubleValue();
-        return pow (10, dB / 20.0);
+        return pow(10, dB / 20.0);
     }
 };
+
 //[/Headers]
 
 //==============================================================================
@@ -82,26 +94,31 @@ class AudioToCCEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    AudioToCCEditor (AudioToCC* const ownerFilter);
+    AudioToCCEditor(AudioToCC* const ownerFilter);
     ~AudioToCCEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void timerCallback() override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     int peakcounter;
     void updateParametersFromFilter();
-    AudioToCC* getFilter() const throw() { return (AudioToCC*) getAudioProcessor(); }
+
+    AudioToCC* getFilter() const throw()
+    {
+        return (AudioToCC*) getAudioProcessor();
+    }
+
     //[/UserVariables]
 
     //==============================================================================
@@ -154,7 +171,7 @@ private:
     std::unique_ptr<DecibelMeter> s_IndicatorLIn;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioToCCEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioToCCEditor)
 };
 
 //[EndFile] You can add extra defines here...

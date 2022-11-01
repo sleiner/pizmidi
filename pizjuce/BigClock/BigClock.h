@@ -1,9 +1,9 @@
 #ifndef BIGCLOCK_PLUGINFILTER_H
 #define BIGCLOCK_PLUGINFILTER_H
 
-#include <juce_events/juce_events.h>
-
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_events/juce_events.h>
 
 enum parameters
 {
@@ -42,14 +42,17 @@ public:
         fr   = 0.0;
         rate = 24.0;
     }
-    smpte (int h, int m, int s, double f, double r = 24.0)
+
+    smpte(int h, int m, int s, double f, double r = 24.0)
     {
         hr = h;
         mn = m;
         sc = s, fr = f;
         rate = r;
     }
+
     ~smpte(){};
+
     long double getTimeInSeconds()
     {
         if (rate == 29.97)
@@ -58,16 +61,18 @@ public:
         }
         return 3600.0 * (long double) hr + 60.0 * (long double) mn + (long double) sc + (long double) (fr / rate);
     }
+
     juce::int64 getCurrentFrame()
     {
         if (rate == 29.97)
         {
-            auto frameNumber = juce::int64 (this->getTimeInSeconds() * rate);
+            auto frameNumber = juce::int64(this->getTimeInSeconds() * rate);
             frameNumber += 18 * (frameNumber / 17982) + 2 * (((frameNumber % 17982) - 2) / 1798);
             return frameNumber;
         }
-        return juce::int64 (this->getTimeInSeconds() * rate);
+        return juce::int64(this->getTimeInSeconds() * rate);
     }
+
     int getSubFrames()
     {
         return (int) ((fr * 100.0)) % 100;
@@ -88,6 +93,7 @@ public:
     double ppq;
     juce::String text;
     bool enabled;
+
     cue()
     {
         time    = 0.0;
@@ -95,22 +101,24 @@ public:
         ppq     = 0.0;
         enabled = true;
     }
-    cue (double t, double p, juce::String s, bool e = true)
+
+    cue(double t, double p, juce::String s, bool e = true)
     {
         time    = t;
         text    = s;
         ppq     = p;
         enabled = e;
     }
+
     ~cue(){};
 };
 
 class compareCues
 {
 public:
-    int compareElements (cue* one, cue* two)
+    int compareElements(cue* one, cue* two)
     {
-        return int ((one->time - two->time) * 100.0);
+        return int((one->time - two->time) * 100.0);
     }
 };
 
@@ -130,19 +138,31 @@ public:
     ~BigClockFilter() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
-    double getTailLengthSeconds() const override { return 0; }
-    bool hasEditor() const override { return true; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
+
+    bool hasEditor() const override
+    {
+        return true;
+    }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -151,6 +171,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -162,27 +183,44 @@ public:
 
     int getNumParameters() override;
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
-
-    //==============================================================================
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram (int index) override {}
-    const juce::String getProgramName (int index) override { return juce::String(); }
-    void changeProgramName (int index, const juce::String& newName) override {}
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    int getNumPrograms() override
+    {
+        return 1;
+    }
+
+    int getCurrentProgram() override
+    {
+        return 0;
+    }
+
+    void setCurrentProgram(int index) override
+    {
+    }
+
+    const juce::String getProgramName(int index) override
+    {
+        return juce::String();
+    }
+
+    void changeProgramName(int index, const juce::String& newName) override
+    {
+    }
+
+    //==============================================================================
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     void timerCallback() override;
 
@@ -209,22 +247,22 @@ public:
     juce::OwnedArray<cue> cues;
     //cue cues[128];
     bool showcues;
-    void addCue (double time, double ppq, juce::String text);
-    juce::String getCue (double ppq, bool barsbeats);
-    void setCueEnabled (int index, bool state);
-    const double secondsToPpq (const double seconds, const double bpm);
-    const juce::String ppqToString (const double sppq,
-                                    const int numerator,
-                                    const int denominator,
-                                    const double bpm,
-                                    const bool mode);
-    void saveCues (juce::File cuefile);
-    void loadCues (juce::File cuefile);
+    void addCue(double time, double ppq, juce::String text);
+    juce::String getCue(double ppq, bool barsbeats);
+    void setCueEnabled(int index, bool state);
+    const double secondsToPpq(const double seconds, const double bpm);
+    const juce::String ppqToString(const double sppq,
+                                   const int numerator,
+                                   const int denominator,
+                                   const double bpm,
+                                   const bool mode);
+    void saveCues(juce::File cuefile);
+    void loadCues(juce::File cuefile);
 
-    double smpteStringToSeconds (juce::String smpte, double fps);
-    juce::String secondsToSmpteString (double seconds, double fps);
-    double barsbeatsStringToPpq (juce::String barsbeats, int n = 4, int d = 4);
-    juce::String ppqToBarsbeatsString (double ppq, int n = 4, int d = 4);
+    double smpteStringToSeconds(juce::String smpte, double fps);
+    juce::String secondsToSmpteString(double seconds, double fps);
+    double barsbeatsStringToPpq(juce::String barsbeats, int n = 4, int d = 4);
+    juce::String ppqToBarsbeatsString(double ppq, int n = 4, int d = 4);
 
 private:
     float barsbeats;
@@ -242,7 +280,7 @@ private:
 
     compareCues c;
 
-    JUCE_LEAK_DETECTOR (BigClockFilter)
+    JUCE_LEAK_DETECTOR(BigClockFilter)
 };
 
 #endif

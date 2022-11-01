@@ -1,9 +1,9 @@
 #include "midiForceToKey.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiForceToKey (audioMaster);
+    return new MidiForceToKey(audioMaster);
 }
 
 MidiForceToKeyProgram::MidiForceToKeyProgram()
@@ -23,50 +23,50 @@ MidiForceToKeyProgram::MidiForceToKeyProgram()
     n11        = 1.0f; // B
     fMode      = (float) nearest / (float) (numModes - 1);
     fTranspose = 0.5f;
-    fChannel   = CHANNEL_TO_FLOAT (-1);
-    fRoot      = MIDI_TO_FLOAT (60);
-    fNChannel  = CHANNEL_TO_FLOAT (-1);
+    fChannel   = CHANNEL_TO_FLOAT(-1);
+    fRoot      = MIDI_TO_FLOAT(60);
+    fNChannel  = CHANNEL_TO_FLOAT(-1);
     fNChMode   = 0.f;
     fUsePC     = 0.f;
 
     // default program name
-    strcpy (name, "Default");
+    strcpy(name, "Default");
 }
 
 //-----------------------------------------------------------------------------
-MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+MidiForceToKey::MidiForceToKey(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     programs = new MidiForceToKeyProgram[numPrograms];
 
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (numPrograms, numParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(numPrograms, numParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
                 for (int i = 0; i < numPrograms; i++)
                 {
-                    n0         = defaultBank->GetProgParm (i, k0);
-                    n1         = defaultBank->GetProgParm (i, k1);
-                    n2         = defaultBank->GetProgParm (i, k2);
-                    n3         = defaultBank->GetProgParm (i, k3);
-                    n4         = defaultBank->GetProgParm (i, k4);
-                    n5         = defaultBank->GetProgParm (i, k5);
-                    n6         = defaultBank->GetProgParm (i, k6);
-                    n7         = defaultBank->GetProgParm (i, k7);
-                    n8         = defaultBank->GetProgParm (i, k8);
-                    n9         = defaultBank->GetProgParm (i, k9);
-                    n10        = defaultBank->GetProgParm (i, k10);
-                    n11        = defaultBank->GetProgParm (i, k11);
-                    fMode      = defaultBank->GetProgParm (i, kMode);
-                    fTranspose = defaultBank->GetProgParm (i, kTranspose);
-                    fChannel   = defaultBank->GetProgParm (i, kChannel);
-                    fRoot      = defaultBank->GetProgParm (i, kRoot);
-                    fNChannel  = defaultBank->GetProgParm (i, kNChannel);
-                    fNChMode   = defaultBank->GetProgParm (i, kNChMode);
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    n0         = defaultBank->GetProgParm(i, k0);
+                    n1         = defaultBank->GetProgParm(i, k1);
+                    n2         = defaultBank->GetProgParm(i, k2);
+                    n3         = defaultBank->GetProgParm(i, k3);
+                    n4         = defaultBank->GetProgParm(i, k4);
+                    n5         = defaultBank->GetProgParm(i, k5);
+                    n6         = defaultBank->GetProgParm(i, k6);
+                    n7         = defaultBank->GetProgParm(i, k7);
+                    n8         = defaultBank->GetProgParm(i, k8);
+                    n9         = defaultBank->GetProgParm(i, k9);
+                    n10        = defaultBank->GetProgParm(i, k10);
+                    n11        = defaultBank->GetProgParm(i, k11);
+                    fMode      = defaultBank->GetProgParm(i, kMode);
+                    fTranspose = defaultBank->GetProgParm(i, kTranspose);
+                    fChannel   = defaultBank->GetProgParm(i, kChannel);
+                    fRoot      = defaultBank->GetProgParm(i, kRoot);
+                    fNChannel  = defaultBank->GetProgParm(i, kNChannel);
+                    fNChMode   = defaultBank->GetProgParm(i, kNChMode);
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -90,7 +90,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "C Major");
+                        sprintf(programs[i].name, "C Major");
                         break;
                     case 1:
                         programs[i].n0  = 1.0f; // C
@@ -105,7 +105,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
-                        sprintf (programs[i].name, "C# Major");
+                        sprintf(programs[i].name, "C# Major");
                         break;
                     case 2:
                         programs[i].n0  = 0.0f; // C
@@ -120,7 +120,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "D Major");
+                        sprintf(programs[i].name, "D Major");
                         break;
                     case 3:
                         programs[i].n0  = 1.0f; // C
@@ -135,7 +135,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
-                        sprintf (programs[i].name, "Eb Major");
+                        sprintf(programs[i].name, "Eb Major");
                         break;
                     case 4:
                         programs[i].n0  = 0.0f; // C
@@ -150,7 +150,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "E Major");
+                        sprintf(programs[i].name, "E Major");
                         break;
                     case 5:
                         programs[i].n0  = 1.0f; // C
@@ -165,7 +165,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
-                        sprintf (programs[i].name, "F Major");
+                        sprintf(programs[i].name, "F Major");
                         break;
                     case 6:
                         programs[i].n0  = 0.0f; // C
@@ -180,7 +180,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "F# Major");
+                        sprintf(programs[i].name, "F# Major");
                         break;
                     case 7:
                         programs[i].n0  = 1.0f; // C
@@ -195,7 +195,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "G Major");
+                        sprintf(programs[i].name, "G Major");
                         break;
                     case 8:
                         programs[i].n0  = 1.0f; // C
@@ -210,7 +210,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
-                        sprintf (programs[i].name, "G# Major");
+                        sprintf(programs[i].name, "G# Major");
                         break;
                     case 9:
                         programs[i].n0  = 0.0f; // C
@@ -225,7 +225,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 0.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "A Major");
+                        sprintf(programs[i].name, "A Major");
                         break;
                     case 10:
                         programs[i].n0  = 1.0f; // C
@@ -240,7 +240,7 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 1.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 0.0f; // B
-                        sprintf (programs[i].name, "Bb Major");
+                        sprintf(programs[i].name, "Bb Major");
                         break;
                     case 11:
                         programs[i].n0  = 0.0f; // C
@@ -255,21 +255,23 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
                         programs[i].n9  = 0.0f; // A
                         programs[i].n10 = 1.0f; // A#
                         programs[i].n11 = 1.0f; // B
-                        sprintf (programs[i].name, "B Major");
+                        sprintf(programs[i].name, "B Major");
                         break;
                     default:
-                        sprintf (programs[i].name, "Program %d", i + 1);
+                        sprintf(programs[i].name, "Program %d", i + 1);
                         break;
                 }
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     settingprog = false;
@@ -280,64 +282,66 @@ MidiForceToKey::MidiForceToKey (audioMasterCallback audioMaster)
 MidiForceToKey::~MidiForceToKey()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void MidiForceToKey::setProgram (VstInt32 program)
+void MidiForceToKey::setProgram(VstInt32 program)
 {
     MidiForceToKeyProgram* ap = &programs[program];
 
     settingprog = true;
     curProgram  = program;
-    setParameter (k0, ap->n0);
-    setParameter (k1, ap->n1);
-    setParameter (k2, ap->n2);
-    setParameter (k3, ap->n3);
-    setParameter (k4, ap->n4);
-    setParameter (k5, ap->n5);
-    setParameter (k6, ap->n6);
-    setParameter (k7, ap->n7);
-    setParameter (k8, ap->n8);
-    setParameter (k9, ap->n9);
-    setParameter (k10, ap->n10);
-    setParameter (k11, ap->n11);
-    setParameter (kMode, ap->fMode);
-    setParameter (kTranspose, ap->fTranspose);
-    setParameter (kChannel, ap->fChannel);
-    setParameter (kRoot, ap->fRoot);
-    setParameter (kNChannel, ap->fNChannel);
-    setParameter (kNChMode, ap->fNChMode);
-    setParameter (kUsePC, ap->fUsePC);
-    setParameter (kProg, (float) program / (float) (kNumPrograms - 1));
+    setParameter(k0, ap->n0);
+    setParameter(k1, ap->n1);
+    setParameter(k2, ap->n2);
+    setParameter(k3, ap->n3);
+    setParameter(k4, ap->n4);
+    setParameter(k5, ap->n5);
+    setParameter(k6, ap->n6);
+    setParameter(k7, ap->n7);
+    setParameter(k8, ap->n8);
+    setParameter(k9, ap->n9);
+    setParameter(k10, ap->n10);
+    setParameter(k11, ap->n11);
+    setParameter(kMode, ap->fMode);
+    setParameter(kTranspose, ap->fTranspose);
+    setParameter(kChannel, ap->fChannel);
+    setParameter(kRoot, ap->fRoot);
+    setParameter(kNChannel, ap->fNChannel);
+    setParameter(kNChMode, ap->fNChMode);
+    setParameter(kUsePC, ap->fUsePC);
+    setParameter(kProg, (float) program / (float) (kNumPrograms - 1));
     settingprog = false;
 }
 
 //------------------------------------------------------------------------
-void MidiForceToKey::setProgramName (char* name)
+void MidiForceToKey::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void MidiForceToKey::getProgramName (char* name)
+void MidiForceToKey::getProgramName(char* name)
 {
-    strcpy (name, programs[curProgram].name);
+    strcpy(name, programs[curProgram].name);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiForceToKey::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiForceToKey::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < kNumPrograms)
     {
-        strcpy (text, programs[index].name);
+        strcpy(text, programs[index].name);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiForceToKey::setParameter (VstInt32 index, float value)
+void MidiForceToKey::setParameter(VstInt32 index, float value)
 {
     MidiForceToKeyProgram* ap = &programs[curProgram];
 
@@ -381,7 +385,7 @@ void MidiForceToKey::setParameter (VstInt32 index, float value)
             break;
         case kMode:
             fMode = ap->fMode = value;
-            mode              = roundToInt (fMode * (float) (numModes - 1));
+            mode              = roundToInt(fMode * (float) (numModes - 1));
             break;
         case kTranspose:
             fTranspose = ap->fTranspose = value;
@@ -401,13 +405,15 @@ void MidiForceToKey::setParameter (VstInt32 index, float value)
         case kUsePC:
             fUsePC = value;
             for (int i = 0; i < kNumPrograms; i++)
+            {
                 programs[i].fUsePC = value;
+            }
             break;
         case kProg:
             fProg = value;
             if (! settingprog)
             {
-                setProgram ((int) (fProg * (kNumPrograms - 1)));
+                setProgram((int) (fProg * (kNumPrograms - 1)));
                 updateDisplay();
             }
             break;
@@ -417,7 +423,7 @@ void MidiForceToKey::setParameter (VstInt32 index, float value)
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiForceToKey::getParameter (VstInt32 index)
+float MidiForceToKey::getParameter(VstInt32 index)
 {
     float v = 0;
 
@@ -490,69 +496,69 @@ float MidiForceToKey::getParameter (VstInt32 index)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiForceToKey::getParameterName (VstInt32 index, char* label)
+void MidiForceToKey::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case k0:
-            strcpy (label, "C");
+            strcpy(label, "C");
             break;
         case k1:
-            strcpy (label, "C#");
+            strcpy(label, "C#");
             break;
         case k2:
-            strcpy (label, "D");
+            strcpy(label, "D");
             break;
         case k3:
-            strcpy (label, "D#");
+            strcpy(label, "D#");
             break;
         case k4:
-            strcpy (label, "E");
+            strcpy(label, "E");
             break;
         case k5:
-            strcpy (label, "F");
+            strcpy(label, "F");
             break;
         case k6:
-            strcpy (label, "F#");
+            strcpy(label, "F#");
             break;
         case k7:
-            strcpy (label, "G");
+            strcpy(label, "G");
             break;
         case k8:
-            strcpy (label, "G#");
+            strcpy(label, "G#");
             break;
         case k9:
-            strcpy (label, "A");
+            strcpy(label, "A");
             break;
         case k10:
-            strcpy (label, "A#");
+            strcpy(label, "A#");
             break;
         case k11:
-            strcpy (label, "B");
+            strcpy(label, "B");
             break;
         case kMode:
-            strcpy (label, "Mode");
+            strcpy(label, "Mode");
             break;
         case kTranspose:
-            strcpy (label, "Transpose");
+            strcpy(label, "Transpose");
             break;
         case kChannel:
-            strcpy (label, "Tr.Channel");
+            strcpy(label, "Tr.Channel");
             break;
         case kRoot:
-            strcpy (label, "Root Note");
+            strcpy(label, "Root Note");
             break;
         case kNChannel:
-            strcpy (label, "N.Channel");
+            strcpy(label, "N.Channel");
             break;
         case kNChMode:
-            strcpy (label, "N.Ch.Mode");
+            strcpy(label, "N.Ch.Mode");
             break;
         case kUsePC:
-            strcpy (label, "PC Listen");
+            strcpy(label, "PC Listen");
             break;
         case kProg:
-            strcpy (label, "Program");
+            strcpy(label, "Program");
             break;
         default:
             break;
@@ -560,137 +566,211 @@ void MidiForceToKey::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiForceToKey::getParameterDisplay (VstInt32 index, char* text)
+void MidiForceToKey::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case k0:
             if (n0 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k1:
             if (n1 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k2:
             if (n2 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k3:
             if (n3 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k4:
             if (n4 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k5:
             if (n5 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k6:
             if (n6 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k7:
             if (n7 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k8:
             if (n8 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k9:
             if (n9 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k10:
             if (n10 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case k11:
             if (n11 >= 0.5f)
-                strcpy (text, "on");
+            {
+                strcpy(text, "on");
+            }
             else
-                strcpy (text, "off");
+            {
+                strcpy(text, "off");
+            }
             break;
         case kMode:
             if (mode == off)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else if (mode == nearest)
-                strcpy (text, "Nearest");
+            {
+                strcpy(text, "Nearest");
+            }
             else if (mode == alwaysup)
-                strcpy (text, "Always Up");
+            {
+                strcpy(text, "Always Up");
+            }
             else if (mode == alwaysdown)
-                strcpy (text, "Always Down");
+            {
+                strcpy(text, "Always Down");
+            }
             else if (mode == block)
-                strcpy (text, "Block");
+            {
+                strcpy(text, "Block");
+            }
             break;
         case kTranspose:
-            sprintf (text, "%d", roundToInt (fTranspose * 100) - 50);
+            sprintf(text, "%d", roundToInt(fTranspose * 100) - 50);
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL016 (fChannel) == 0)
-                strcpy (text, "None");
+            if (FLOAT_TO_CHANNEL016(fChannel) == 0)
+            {
+                strcpy(text, "None");
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (fChannel));
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(fChannel));
+            }
             break;
         case kRoot:
-            strcpy (text, getNoteName (FLOAT_TO_MIDI (fRoot), bottomOctave));
+            strcpy(text, getNoteName(FLOAT_TO_MIDI(fRoot), bottomOctave));
             break;
         case kNChannel:
-            if (FLOAT_TO_CHANNEL016 (fNChannel) == 0)
-                strcpy (text, "None");
+            if (FLOAT_TO_CHANNEL016(fNChannel) == 0)
+            {
+                strcpy(text, "None");
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (fNChannel));
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(fNChannel));
+            }
             break;
         case kNChMode:
             if (fNChMode >= 0.5f)
-                strcpy (text, "Toggle");
+            {
+                strcpy(text, "Toggle");
+            }
             else
-                strcpy (text, "Momentary");
+            {
+                strcpy(text, "Momentary");
+            }
             break;
         case kUsePC:
             if (fUsePC >= 0.5f)
-                strcpy (text, "Yes");
+            {
+                strcpy(text, "Yes");
+            }
             else
-                strcpy (text, "No");
+            {
+                strcpy(text, "No");
+            }
             break;
         case kProg:
-            getProgramNameIndexed (0, roundToInt (fProg * (kNumPrograms - 1)), text);
+            getProgramNameIndexed(0, roundToInt(fProg * (kNumPrograms - 1)), text);
             break;
         default:
             break;
     }
 }
 
-void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiForceToKey::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const int tchannel  = FLOAT_TO_CHANNEL (fChannel);
-    const int nchannel  = FLOAT_TO_CHANNEL (fNChannel);
-    int transposey      = roundToInt (fTranspose * 100.f) - 50;
+    const int tchannel  = FLOAT_TO_CHANNEL(fChannel);
+    const int nchannel  = FLOAT_TO_CHANNEL(fNChannel);
+    int transposey      = roundToInt(fTranspose * 100.f) - 50;
     bool noteswitch[12] = { n0 >= 0.5f, n1 >= 0.5f, n2 >= 0.5f, n3 >= 0.5f, n4 >= 0.5f, n5 >= 0.5f, n6 >= 0.5f, n7 >= 0.5f, n8 >= 0.5f, n9 >= 0.5f, n10 >= 0.5f, n11 >= 0.5f };
 
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -706,7 +786,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         {
             if (data1 < kNumPrograms && fUsePC >= 0.5f)
             {
-                setProgram (data1);
+                setProgram(data1);
                 updateDisplay();
             }
         }
@@ -714,34 +794,34 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
         if (channel == nchannel)
         {
             discard = true;
-            if (isNoteOn (tomod))
+            if (isNoteOn(tomod))
             {
                 int n = data1 % 12;
                 if (fNChMode < 0.5f && ! noteswitch[n])
                 {
                     noteswitch[n] = true;
-                    setParameterAutomated (k0 + n, 1.f);
+                    setParameterAutomated(k0 + n, 1.f);
                 }
                 else
                 {
                     noteswitch[n] = ! noteswitch[n];
-                    setParameterAutomated (k0 + n, noteswitch[n] ? 1.f : 0.f);
+                    setParameterAutomated(k0 + n, noteswitch[n] ? 1.f : 0.f);
                 }
             }
-            else if (isNoteOff (tomod) && fNChMode < 0.5f)
+            else if (isNoteOff(tomod) && fNChMode < 0.5f)
             {
                 int n         = data1 % 12;
                 noteswitch[n] = false;
-                setParameterAutomated (k0 + n, 0.f);
+                setParameterAutomated(k0 + n, 0.f);
             }
         }
         else
         {
-            if (isNoteOn (tomod))
+            if (isNoteOn(tomod))
             {
                 if (! noteswitch[data1 % 12])
                 {
-                    dbg ("wrong note " << data1);
+                    dbg("wrong note " << data1);
                     int transpose = 0;
                     int j         = -1;
                     switch (mode)
@@ -758,9 +838,13 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                                     break;
                                 }
                                 if (j < 0)
+                                {
                                     j = -j;
+                                }
                                 else
+                                {
                                     j = -j - 1;
+                                }
                             }
                             break;
                             //always up
@@ -794,7 +878,7 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                             break;
                             //block wrong notes
                         case block:
-                            dbg ("block note");
+                            dbg("block note");
                             discard                    = true;
                             transposed[data1][channel] = -999;
                             break;
@@ -807,9 +891,9 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                 //transpose based on notes on "transpose channel"
                 if (channel == tchannel)
                 {
-                    dbg ("tchannel");
+                    dbg("tchannel");
                     discard     = true;
-                    int root    = FLOAT_TO_MIDI (fRoot);
+                    int root    = FLOAT_TO_MIDI(fRoot);
                     int m       = 0;
                     int counter = 0;
                     if (tomod.midiData[1] > root)
@@ -818,9 +902,13 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                         {
                             m++;
                             if (noteswitch[(root + m) % 12])
+                            {
                                 counter++;
+                            }
                             if (tomod.midiData[1] - m == root)
+                            {
                                 break;
+                            }
                         }
                     }
                     else if (tomod.midiData[1] < root)
@@ -829,20 +917,24 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                         {
                             m++;
                             if (noteswitch[(root - m) % 12])
+                            {
                                 counter--;
+                            }
                             if (tomod.midiData[1] + m == root)
+                            {
                                 break;
+                            }
                         }
                     }
                     transposey = counter;
-                    setParameterAutomated (kTranspose, ((float) (transposey + 50)) * 0.01f);
+                    setParameterAutomated(kTranspose, ((float) (transposey + 50)) * 0.01f);
                 }
             }
         }
         if (! discard)
         {
-            dbg ("keep event");
-            if (isNoteOn (tomod) || status == MIDI_POLYKEYPRESSURE)
+            dbg("keep event");
+            if (isNoteOn(tomod) || status == MIDI_POLYKEYPRESSURE)
             {
                 if (transposey > 0)
                 {
@@ -853,9 +945,13 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     {
                         m++;
                         if (noteswitch[(tomod.midiData[1] + m) % 12])
+                        {
                             counter++;
+                        }
                         if ((tomod.midiData[1] + m) == 127)
+                        {
                             break;
+                        }
                     }
                     tomod.midiData[1] += m;
                 }
@@ -868,29 +964,43 @@ void MidiForceToKey::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec
                     {
                         m++;
                         if (noteswitch[(tomod.midiData[1] - m) % 12])
+                        {
                             counter--;
+                        }
                         if ((tomod.midiData[1] - m) == 0)
+                        {
                             break;
+                        }
                     }
                     tomod.midiData[1] -= m;
                 }
-                if (isNoteOn (tomod))
+                if (isNoteOn(tomod))
+                {
                     transposed[data1][channel] = tomod.midiData[1];
+                }
             }
-            else if (isNoteOff (tomod))
+            else if (isNoteOff(tomod))
             {
-                dbg ("noteoff " << data1 << " transposed " << transposed[data1][channel]);
+                dbg("noteoff " << data1 << " transposed " << transposed[data1][channel]);
                 if (channel == tchannel)
+                {
                     discard = true;
+                }
                 // always transpose noteoff by the same amount as the noteon was transposed
                 if (transposed[data1][channel] == -999)
+                {
                     discard = true;
+                }
                 else
+                {
                     tomod.midiData[1] = transposed[data1][channel];
+                }
                 transposed[data1][channel] = data1;
             }
             if (! discard)
-                outputs[0].push_back (tomod);
+            {
+                outputs[0].push_back(tomod);
+            }
         }
     }
 }

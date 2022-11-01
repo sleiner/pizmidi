@@ -1,32 +1,33 @@
 #include "midiFingered.hpp"
+
 #include "../common/MIDI.h"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new MidiFingered (audioMaster);
+    return new MidiFingered(audioMaster);
 }
 
 //-----------------------------------------------------------------------------
-MidiFingered::MidiFingered (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, 1, kNumParams)
+MidiFingered::MidiFingered(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, 1, kNumParams)
 {
-    CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-    if (readDefaultBank (PLUG_NAME, defaultBank))
+    CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+    if (readDefaultBank(PLUG_NAME, defaultBank))
     {
         if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
         {
             for (int p = 0; p < kNumParams; p++)
             {
-                param[p] = defaultBank->GetProgParm (0, p);
+                param[p] = defaultBank->GetProgParm(0, p);
             }
-            strcpy (_programName, defaultBank->GetProgramName (0));
+            strcpy(_programName, defaultBank->GetProgramName(0));
         }
     }
     else
     {
         // built-in programs
-        strcpy (_programName, "Fingered Portamento"); // default program name
+        strcpy(_programName, "Fingered Portamento"); // default program name
     }
 
     // default values
@@ -36,7 +37,9 @@ MidiFingered::MidiFingered (audioMasterCallback audioMaster)
     for (int ch = 0; ch < 16; ch++)
     {
         for (int i = 0; i < 128; i++)
+        {
             held_notes[i][ch] = false;
+        }
         voices[ch] = 0;
     }
 
@@ -44,47 +47,49 @@ MidiFingered::MidiFingered (audioMasterCallback audioMaster)
 }
 
 //-----------------------------------------------------------------------------------------
-MidiFingered::~MidiFingered() {}
+MidiFingered::~MidiFingered()
+{
+}
 
 //------------------------------------------------------------------------
-void MidiFingered::getProgramName (char* name)
+void MidiFingered::getProgramName(char* name)
 {
-    vst_strncpy (name, _programName, kVstMaxProgNameLen);
+    vst_strncpy(name, _programName, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool MidiFingered::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool MidiFingered::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        vst_strncpy (text, _programName, kVstMaxProgNameLen);
+        vst_strncpy(text, _programName, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiFingered::setParameter (VstInt32 index, float value)
+void MidiFingered::setParameter(VstInt32 index, float value)
 {
     param[index] = value;
 }
 
 //-----------------------------------------------------------------------------------------
-float MidiFingered::getParameter (VstInt32 index)
+float MidiFingered::getParameter(VstInt32 index)
 {
     return param[index];
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiFingered::getParameterName (VstInt32 index, char* label)
+void MidiFingered::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kPower:
-            strcpy (label, "Power");
+            strcpy(label, "Power");
             break;
         case kChannel:
-            strcpy (label, "Channel");
+            strcpy(label, "Channel");
             break;
         default:
             break;
@@ -92,28 +97,36 @@ void MidiFingered::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void MidiFingered::getParameterDisplay (VstInt32 index, char* text)
+void MidiFingered::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kPower:
             if (param[index] < 0.5)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                strcpy (text, "On");
+            {
+                strcpy(text, "On");
+            }
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL016 (param[index]) == 0)
-                strcpy (text, "All");
+            if (FLOAT_TO_CHANNEL016(param[index]) == 0)
+            {
+                strcpy(text, "All");
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL016 (param[index]));
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL016(param[index]));
+            }
             break;
         default:
             break;
     }
 }
 
-void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void MidiFingered::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -128,16 +141,22 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
 
         //make 0-velocity notes look like "real" noteoffs for simplicity
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
-        short outchannel = FLOAT_TO_CHANNEL016 (param[kChannel]) - 1;
+        short outchannel = FLOAT_TO_CHANNEL016(param[kChannel]) - 1;
         if (outchannel == -1)
+        {
             outchannel = channel;
+        }
         bool discard = false;
 
         bool on = param[kPower] >= 0.5f;
         if (channel != outchannel)
+        {
             on = false;
+        }
 
         if (status == MIDI_NOTEOFF)
         {
@@ -153,7 +172,9 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                 portaOff.midiData[1]  = 65;
                 portaOff.midiData[2]  = 0;
                 if (on)
-                    outputs[0].push_back (portaOff);
+                {
+                    outputs[0].push_back(portaOff);
+                }
             }
         }
         else if (status == MIDI_NOTEON)
@@ -167,7 +188,9 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                 portaOn.midiData[1]  = 65;
                 portaOn.midiData[2]  = 127;
                 if (on)
-                    outputs[0].push_back (portaOn);
+                {
+                    outputs[0].push_back(portaOn);
+                }
             }
         }
 
@@ -188,7 +211,7 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                     portaOff.midiData[0]  = MIDI_CONTROLCHANGE | channel;
                     portaOff.midiData[1]  = 65;
                     portaOff.midiData[2]  = 0;
-                    outputs[0].push_back (portaOff);
+                    outputs[0].push_back(portaOff);
                 }
                 voices[channel] = 0;
             }
@@ -197,14 +220,20 @@ void MidiFingered::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
             {
                 discard = true;
                 if (data2 < 64)
-                    setParameter (kPower, 0.0f);
+                {
+                    setParameter(kPower, 0.0f);
+                }
                 else
-                    setParameter (kPower, 1.0f);
+                {
+                    setParameter(kPower, 1.0f);
+                }
                 updateDisplay();
             }
         }
 
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     }
 }

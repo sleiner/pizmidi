@@ -39,14 +39,15 @@ typedef double ReaSample;
 #ifdef _WIN32
 #include <windows.h>
 
-#define REAPER_PLUGIN_DLL_EXPORT __declspec (dllexport)
+#define REAPER_PLUGIN_DLL_EXPORT __declspec(dllexport)
 #define REAPER_PLUGIN_HINSTANCE  HINSTANCE
 
 #else
 #include "../WDL/swell/swell.h"
+
 #include <pthread.h>
 
-#define REAPER_PLUGIN_DLL_EXPORT __attribute__ ((visibility ("default")))
+#define REAPER_PLUGIN_DLL_EXPORT __attribute__((visibility("default")))
 #define REAPER_PLUGIN_HINSTANCE  void*
 #endif
 
@@ -68,11 +69,13 @@ typedef double ReaSample;
 #if defined(__ppc__)
 
 #define REAPER_BIG_ENDIAN
-static int REAPER_MAKELEINT (int x)
+
+static int REAPER_MAKELEINT(int x)
 {
     return ((((x)) & 0xff) << 24) | ((((x)) & 0xff00) << 8) | ((((x)) & 0xff0000) >> 8) | ((((x)) & 0xff000000) >> 24);
 }
-static void REAPER_MAKELEINTMEM (void* buf)
+
+static void REAPER_MAKELEINTMEM(void* buf)
 {
     char* p  = (char*) buf;
     char tmp = p[0];
@@ -82,7 +85,8 @@ static void REAPER_MAKELEINTMEM (void* buf)
     p[1]     = p[2];
     p[2]     = tmp;
 }
-static void REAPER_MAKELEINTMEM8 (void* buf)
+
+static void REAPER_MAKELEINTMEM8(void* buf)
 {
     char* p  = (char*) buf;
     char tmp = p[0];
@@ -98,6 +102,7 @@ static void REAPER_MAKELEINTMEM8 (void* buf)
     p[3]     = p[4];
     p[4]     = tmp;
 }
+
 #define REAPER_FOURCC(d, c, b, a) (((unsigned int) (d) &0xff) | (((unsigned int) (c) &0xff) << 8) | (((unsigned int) (b) &0xff) << 16) | (((unsigned int) (a) &0xff) << 24))
 
 #else
@@ -112,7 +117,7 @@ static void REAPER_MAKELEINTMEM8 (void* buf)
 #if 1
 #define ADVANCE_TIME_BY_SAMPLES(t, spls, srate) ((t) += (spls) / (double) (srate)) // not completely accurate but still quite accurate.
 #else
-#define ADVANCE_TIME_BY_SAMPLES(t, spls, srate) ((t) = floor ((t) * (srate) + spls + 0.5) / (double) (srate)) // good forever? may have other issues though if srate changes. disabled for now
+#define ADVANCE_TIME_BY_SAMPLES(t, spls, srate) ((t) = floor((t) * (srate) + spls + 0.5) / (double) (srate)) // good forever? may have other issues though if srate changes. disabled for now
 #endif
 
 //  int ReaperPluginEntry(HINSTANCE hInstance, reaper_plugin_info_t *rec);
@@ -136,10 +141,10 @@ typedef struct reaper_plugin_info_t
     // then on plug-in unload (or if you wish to remove it for some reason), you should do:
     // rec->Register("-pcmsink",&myreg);
     // the "-" prefix is supported for most registration types.
-    int (*Register) (const char* name, void* infostruct); // returns 1 if registered successfully
+    int (*Register)(const char* name, void* infostruct); // returns 1 if registered successfully
 
     // get a generic API function, there many of these defined.
-    void* (*GetFunc) (const char* name); // returns 0 if function not found
+    void* (*GetFunc)(const char* name); // returns 0 if function not found
 
 } reaper_plugin_info_t;
 
@@ -149,13 +154,14 @@ typedef struct reaper_plugin_info_t
 
 #ifndef _WDL_PROJECTSTATECONTEXT_DEFINED_
 #define _REAPER_PLUGIN_PROJECTSTATECONTEXT_DEFINED_
+
 class ProjectStateContext // this is also defined in WDL, need to keep these interfaces identical
 {
 public:
     virtual ~ProjectStateContext(){};
 
-    virtual void AddLine (const char* fmt, ...) = 0;
-    virtual int GetLine (char* buf, int buflen) = 0; // returns -1 on eof
+    virtual void AddLine(const char* fmt, ...) = 0;
+    virtual int GetLine(char* buf, int buflen) = 0; // returns -1 on eof
 
     virtual INT64 GetOutputSize() = 0; // output size written so far, only usable on REAPER 3.14+
 };
@@ -175,11 +181,11 @@ typedef struct
 class MIDI_eventlist
 {
 public:
-    virtual void AddItem (MIDI_event_t* evt)    = 0; // puts the item in the correct place
-    virtual MIDI_event_t* EnumItems (int* bpos) = 0;
-    virtual void DeleteItem (int bpos)          = 0;
-    virtual int GetSize()                       = 0; // size of block in bytes
-    virtual void Empty()                        = 0;
+    virtual void AddItem(MIDI_event_t* evt)    = 0; // puts the item in the correct place
+    virtual MIDI_event_t* EnumItems(int* bpos) = 0;
+    virtual void DeleteItem(int bpos)          = 0;
+    virtual int GetSize()                      = 0; // size of block in bytes
+    virtual void Empty()                       = 0;
 };
 
 /***************************************************************************************
@@ -223,6 +229,7 @@ typedef struct
         PEAKTRANSFER_WAVEFORM_MODE = 1,
         PEAKTRANSFER_MIDI_MODE     = 2
     };
+
     int output_mode; // see enum above
 
     double absolute_time_s;
@@ -258,40 +265,73 @@ typedef struct
 class PCM_source
 {
 public:
-    virtual ~PCM_source() {}
+    virtual ~PCM_source()
+    {
+    }
 
     virtual PCM_source* Duplicate() = 0;
 
     virtual bool IsAvailable() = 0;
-    virtual void SetAvailable (bool avail) {} // optional, if called with avail=false, close files/etc, and so on
+
+    virtual void SetAvailable(bool avail)
+    {
+    } // optional, if called with avail=false, close files/etc, and so on
+
     virtual const char* GetType() = 0;
-    virtual const char* GetFileName() { return NULL; }; // return NULL if no filename (not purely a file)
-    virtual bool SetFileName (const char* newfn) = 0;   // return TRUE if supported, this will only be called when offline
 
-    virtual PCM_source* GetSource() { return NULL; }
-    virtual void SetSource (PCM_source* src) {}
-    virtual int GetNumChannels()   = 0;                    // return number of channels
-    virtual double GetSampleRate() = 0;                    // returns preferred sample rate. if < 1.0 then it is assumed to be silent (or MIDI)
-    virtual double GetLength()     = 0;                    // length in seconds
-    virtual double GetLengthBeats() { return -1.0; }       // length in beats if supported
-    virtual int GetBitsPerSample() { return 0; }           // returns bits/sample, if available. only used for metadata purposes, since everything returns as doubles anyway
-    virtual double GetPreferredPosition() { return -1.0; } // not supported returns -1
+    virtual const char* GetFileName()
+    {
+        return NULL;
+    }; // return NULL if no filename (not purely a file)
 
-    virtual int PropertiesWindow (HWND hwndParent) = 0;
+    virtual bool SetFileName(const char* newfn) = 0; // return TRUE if supported, this will only be called when offline
 
-    virtual void GetSamples (PCM_source_transfer_t* block)      = 0;
-    virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0;
+    virtual PCM_source* GetSource()
+    {
+        return NULL;
+    }
 
-    virtual void SaveState (ProjectStateContext* ctx)                 = 0;
-    virtual int LoadState (char* firstline, ProjectStateContext* ctx) = 0; // -1 on error
+    virtual void SetSource(PCM_source* src)
+    {
+    }
+
+    virtual int GetNumChannels()   = 0; // return number of channels
+    virtual double GetSampleRate() = 0; // returns preferred sample rate. if < 1.0 then it is assumed to be silent (or MIDI)
+    virtual double GetLength()     = 0; // length in seconds
+
+    virtual double GetLengthBeats()
+    {
+        return -1.0;
+    } // length in beats if supported
+
+    virtual int GetBitsPerSample()
+    {
+        return 0;
+    } // returns bits/sample, if available. only used for metadata purposes, since everything returns as doubles anyway
+
+    virtual double GetPreferredPosition()
+    {
+        return -1.0;
+    } // not supported returns -1
+
+    virtual int PropertiesWindow(HWND hwndParent) = 0;
+
+    virtual void GetSamples(PCM_source_transfer_t* block)      = 0;
+    virtual void GetPeakInfo(PCM_source_peaktransfer_t* block) = 0;
+
+    virtual void SaveState(ProjectStateContext* ctx)                 = 0;
+    virtual int LoadState(char* firstline, ProjectStateContext* ctx) = 0; // -1 on error
 
     // these are called by the peaks building UI to build peaks for files.
-    virtual void Peaks_Clear (bool deleteFile) = 0;
-    virtual int PeaksBuild_Begin()             = 0; // returns nonzero if building is opened, otherwise it may mean building isn't necessary
-    virtual int PeaksBuild_Run()               = 0; // returns nonzero if building should continue
-    virtual void PeaksBuild_Finish()           = 0; // called when done
+    virtual void Peaks_Clear(bool deleteFile) = 0;
+    virtual int PeaksBuild_Begin()            = 0; // returns nonzero if building is opened, otherwise it may mean building isn't necessary
+    virtual int PeaksBuild_Run()              = 0; // returns nonzero if building should continue
+    virtual void PeaksBuild_Finish()          = 0; // called when done
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
 
 typedef struct
@@ -367,6 +407,7 @@ enum
     RAWMIDI_NOTESONLY  = 1,
     RAWMIDI_UNFILTERED = 2
 };
+
 #define PCM_SOURCE_EXT_GETRAWMIDIEVENTS 0x90009 // parm1 = (PCM_source_transfer_t *), parm2 = RAWMIDI flags
 
 #define PCM_SOURCE_EXT_SETRESAMPLEMODE      0x9000A // parm1= mode to pass to resampler->Extended(RESAMPLE_EXT_SETRSMODE,mode,0,0)
@@ -375,11 +416,11 @@ enum
 // register with Register("pcmsrc",&struct ... and unregister with "-pcmsrc"
 typedef struct
 {
-    PCM_source* (*CreateFromType) (const char* type, int priority);     // priority is 0-7, 0 is highest
-    PCM_source* (*CreateFromFile) (const char* filename, int priority); // if priority is 5-7, and the file isn't found, open it in an offline state anyway, thanks
+    PCM_source* (*CreateFromType)(const char* type, int priority);     // priority is 0-7, 0 is highest
+    PCM_source* (*CreateFromFile)(const char* filename, int priority); // if priority is 5-7, and the file isn't found, open it in an offline state anyway, thanks
 
     // this is used for UI only, not so muc
-    const char* (*EnumFileExtensions) (int i, char** descptr); // call increasing i until returns a string, if descptr's output is NULL, use last description
+    const char* (*EnumFileExtensions)(int i, char** descptr); // call increasing i until returns a string, if descptr's output is NULL, use last description
 } pcmsrc_register_t;
 
 /*
@@ -391,22 +432,24 @@ typedef struct
 class ISimpleMediaDecoder
 {
 public:
-    virtual ~ISimpleMediaDecoder() {}
+    virtual ~ISimpleMediaDecoder()
+    {
+    }
 
     virtual ISimpleMediaDecoder* Duplicate() = 0;
 
     // filename can be NULL to use "last filename"
     // diskread* are suggested values to pass to WDL_FileRead if you use it, otherwise can ignore
-    virtual void Open (const char* filename, int diskreadmode, int diskreadbs, int diskreadnb) = 0;
+    virtual void Open(const char* filename, int diskreadmode, int diskreadbs, int diskreadnb) = 0;
 
     // if fullClose=0, close disk resources, but can leave decoders etc initialized (and subsequently check the file date on re-open)
-    virtual void Close (bool fullClose) = 0;
+    virtual void Close(bool fullClose) = 0;
 
     virtual const char* GetFileName() = 0;
     virtual const char* GetType()     = 0;
 
     // an info string suitable for a dialog, and a title for that dialog
-    virtual void GetInfoString (char* buf, int buflen, char* title, int titlelen) = 0;
+    virtual void GetInfoString(char* buf, int buflen, char* title, int titlelen) = 0;
 
     virtual bool IsOpen()        = 0;
     virtual int GetNumChannels() = 0;
@@ -415,15 +458,18 @@ public:
     virtual double GetSampleRate() = 0;
 
     // positions in sample frames
-    virtual INT64 GetLength()            = 0;
-    virtual INT64 GetPosition()          = 0;
-    virtual void SetPosition (INT64 pos) = 0;
+    virtual INT64 GetLength()           = 0;
+    virtual INT64 GetPosition()         = 0;
+    virtual void SetPosition(INT64 pos) = 0;
 
     // returns sample-frames read. buf will be at least length*GetNumChannels() ReaSamples long.
-    virtual int ReadSamples (ReaSample* buf, int length) = 0;
+    virtual int ReadSamples(ReaSample* buf, int length) = 0;
 
     // these extended messages may include PCM_source messages
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
 
 /***************************************************************************************
@@ -445,25 +491,53 @@ typedef struct
 class PCM_sink
 {
 public:
-    PCM_sink() { m_st = 0.0; }
-    virtual ~PCM_sink() {}
+    PCM_sink()
+    {
+        m_st = 0.0;
+    }
 
-    virtual void GetOutputInfoString (char* buf, int buflen) = 0;
-    virtual double GetStartTime() { return m_st; }
-    virtual void SetStartTime (double st) { m_st = st; }
+    virtual ~PCM_sink()
+    {
+    }
+
+    virtual void GetOutputInfoString(char* buf, int buflen) = 0;
+
+    virtual double GetStartTime()
+    {
+        return m_st;
+    }
+
+    virtual void SetStartTime(double st)
+    {
+        m_st = st;
+    }
+
     virtual const char* GetFileName() = 0; // get filename, if applicable (otherwise "")
     virtual int GetNumChannels()      = 0; // return number of channels
     virtual double GetLength()        = 0; // length in seconds, so far
     virtual INT64 GetFileSize()       = 0;
 
-    virtual void WriteMIDI (MIDI_eventlist* events, int len, double samplerate)                = 0;
-    virtual void WriteDoubles (ReaSample** samples, int len, int nch, int offset, int spacing) = 0;
-    virtual bool WantMIDI() { return 0; }
+    virtual void WriteMIDI(MIDI_eventlist* events, int len, double samplerate)                = 0;
+    virtual void WriteDoubles(ReaSample** samples, int len, int nch, int offset, int spacing) = 0;
 
-    virtual int GetLastSecondPeaks (int sz, ReaSample* buf) { return 0; }
-    virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) {} // allow getting of peaks thus far
+    virtual bool WantMIDI()
+    {
+        return 0;
+    }
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual int GetLastSecondPeaks(int sz, ReaSample* buf)
+    {
+        return 0;
+    }
+
+    virtual void GetPeakInfo(PCM_source_peaktransfer_t* block)
+    {
+    } // allow getting of peaks thus far
+
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 
 private:
     double m_st;
@@ -479,12 +553,12 @@ private:
 
 typedef struct // register using "pcmsink"
 {
-    unsigned int (*GetFmt) (char** desc);
+    unsigned int (*GetFmt)(char** desc);
 
-    const char* (*GetExtension) (const void* cfg, int cfg_l);
-    HWND (*ShowConfig)
+    const char* (*GetExtension)(const void* cfg, int cfg_l);
+    HWND(*ShowConfig)
     (const void* cfg, int cfg_l, HWND parent);
-    PCM_sink* (*CreateSink) (const char* filename, void* cfg, int cfg_l, int nch, int srate, bool buildpeaks);
+    PCM_sink* (*CreateSink)(const char* filename, void* cfg, int cfg_l, int nch, int srate, bool buildpeaks);
 
 } pcmsink_register_t;
 
@@ -493,7 +567,7 @@ typedef struct // register using "pcmsink_ext"
     pcmsink_register_t sink;
 
     // for extended calls that refer to the generic type of sink, rather than a specific instance of a sink
-    int (*Extended) (int call, void* parm1, void* parm2, void* parm3);
+    int (*Extended)(int call, void* parm1, void* parm2, void* parm3);
 
     char expand[256];
 } pcmsink_register_ext_t;
@@ -512,16 +586,23 @@ typedef struct // register using "pcmsink_ext"
 class REAPER_Resample_Interface
 {
 public:
-    virtual ~REAPER_Resample_Interface() {}
-    virtual void SetRates (double rate_in, double rate_out) = 0;
-    virtual void Reset()                                    = 0;
+    virtual ~REAPER_Resample_Interface()
+    {
+    }
 
-    virtual double GetCurrentLatency()                                                   = 0; // latency in seconds buffered -- do not call between resampleprepare and resampleout, undefined if you do...
-    virtual int ResamplePrepare (int out_samples, int nch, ReaSample** inbuffer)         = 0; // sample ratio
-    virtual int ResampleOut (ReaSample* out, int nsamples_in, int nsamples_out, int nch) = 0; // returns output samples
+    virtual void SetRates(double rate_in, double rate_out) = 0;
+    virtual void Reset()                                   = 0;
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual double GetCurrentLatency()                                                  = 0; // latency in seconds buffered -- do not call between resampleprepare and resampleout, undefined if you do...
+    virtual int ResamplePrepare(int out_samples, int nch, ReaSample** inbuffer)         = 0; // sample ratio
+    virtual int ResampleOut(ReaSample* out, int nsamples_in, int nsamples_out, int nch) = 0; // returns output samples
+
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
+
 #define RESAMPLE_EXT_SETRSMODE   0x1000 // parm1 == (int)resamplemode, or -1 for project default
 #define RESAMPLE_EXT_SETFEEDMODE 0x1001 // parm1 = nonzero to set ResamplePrepare's out_samples to refer to request a specific number of input samples
 
@@ -538,23 +619,23 @@ class IReaperPitchShift
 {
 public:
     virtual ~IReaperPitchShift(){};
-    virtual void set_srate (double srate)         = 0;
-    virtual void set_nch (int nch)                = 0;
-    virtual void set_shift (double shift)         = 0;
-    virtual void set_formant_shift (double shift) = 0; // shift can be <0 for "only shift when in formant preserve mode", so that you can use it for effective rate changes etc in that mode
-    virtual void set_tempo (double tempo)         = 0;
+    virtual void set_srate(double srate)         = 0;
+    virtual void set_nch(int nch)                = 0;
+    virtual void set_shift(double shift)         = 0;
+    virtual void set_formant_shift(double shift) = 0; // shift can be <0 for "only shift when in formant preserve mode", so that you can use it for effective rate changes etc in that mode
+    virtual void set_tempo(double tempo)         = 0;
 
-    virtual void Reset()                       = 0; // reset all buffers/latency
-    virtual ReaSample* GetBuffer (int size)    = 0;
-    virtual void BufferDone (int input_filled) = 0;
+    virtual void Reset()                      = 0; // reset all buffers/latency
+    virtual ReaSample* GetBuffer(int size)    = 0;
+    virtual void BufferDone(int input_filled) = 0;
 
     virtual void FlushSamples() = 0; // make sure all output is available
 
     virtual bool IsReset() = 0;
 
-    virtual int GetSamples (int requested_output, ReaSample* buffer) = 0; // returns number of samplepairs returned
+    virtual int GetSamples(int requested_output, ReaSample* buffer) = 0; // returns number of samplepairs returned
 
-    virtual void SetQualityParameter (int parm) = 0; // set to: (mode<<16)+(submode), or -1 for "project default" (default)
+    virtual void SetQualityParameter(int parm) = 0; // set to: (mode<<16)+(submode), or -1 for "project default" (default)
 };
 
 /***************************************************************************************
@@ -569,26 +650,36 @@ public:
 class REAPER_PeakGet_Interface
 {
 public:
-    virtual ~REAPER_PeakGet_Interface() {}
+    virtual ~REAPER_PeakGet_Interface()
+    {
+    }
 
-    virtual double GetMaxPeakRes()                              = 0;
-    virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0;
+    virtual double GetMaxPeakRes()                             = 0;
+    virtual void GetPeakInfo(PCM_source_peaktransfer_t* block) = 0;
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
 
 class REAPER_PeakBuild_Interface
 {
 public:
-    virtual ~REAPER_PeakBuild_Interface() {}
+    virtual ~REAPER_PeakBuild_Interface()
+    {
+    }
 
-    virtual void ProcessSamples (ReaSample** samples, int len, int nch, int offs, int spread) = 0; // in case a sink wants to build its own peaks (make sure it was created with src=NULL)
-    virtual int Run()                                                                         = 0; // or let it do it automatically (created with source!=NULL)
+    virtual void ProcessSamples(ReaSample** samples, int len, int nch, int offs, int spread) = 0; // in case a sink wants to build its own peaks (make sure it was created with src=NULL)
+    virtual int Run()                                                                        = 0; // or let it do it automatically (created with source!=NULL)
 
-    virtual int GetLastSecondPeaks (int sz, ReaSample* buf)     = 0; // returns number of peaks in the last second, sz is maxsize
-    virtual void GetPeakInfo (PCM_source_peaktransfer_t* block) = 0; // allow getting of peaks thus far (won't hit the highest resolution mipmap, just the 10/sec one or so)
+    virtual int GetLastSecondPeaks(int sz, ReaSample* buf)     = 0; // returns number of peaks in the last second, sz is maxsize
+    virtual void GetPeakInfo(PCM_source_peaktransfer_t* block) = 0; // allow getting of peaks thus far (won't hit the highest resolution mipmap, just the 10/sec one or so)
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
 
 // recommended settings for sources switching to peak caches
@@ -608,7 +699,7 @@ typedef struct accelerator_register_t
     // 1 to eat the keystroke,
     // -1 to pass it on to the window,
     // -666 to force it to the main window's accel table (with the exception of ESC)
-    int (*translateAccel) (MSG* msg, accelerator_register_t* ctx);
+    int (*translateAccel)(MSG* msg, accelerator_register_t* ctx);
     bool isLocal; // must be TRUE, now (false is no longer supported, heh)
     void* user;
 } accelerator_register_t;
@@ -681,8 +772,8 @@ because these menus can be customized and item order can change.
 
 typedef struct // register with "editor"
 {
-    int (*editFile) (const char* filename, HWND parent, int trackidx); // return TRUE if handled for this file
-    const char* (*wouldHandle) (const char* filename);                 // return your editor's description string
+    int (*editFile)(const char* filename, HWND parent, int trackidx); // return TRUE if handled for this file
+    const char* (*wouldHandle)(const char* filename);                 // return your editor's description string
 
 } editor_register_t;
 
@@ -693,35 +784,35 @@ typedef struct // register with "editor"
 */
 typedef struct // register with "projectimport"
 {
-    bool (*WantProjectFile) (const char* fn);                           // is this our file?
-    const char* (*EnumFileExtensions) (int i, char** descptr);          // call increasing i until returns NULL. if descptr's output is NULL, use last description
-    int (*LoadProject) (const char* fn, ProjectStateContext* genstate); // return 0=ok, Generate RPP compatible project info in genstate
+    bool (*WantProjectFile)(const char* fn);                           // is this our file?
+    const char* (*EnumFileExtensions)(int i, char** descptr);          // call increasing i until returns NULL. if descptr's output is NULL, use last description
+    int (*LoadProject)(const char* fn, ProjectStateContext* genstate); // return 0=ok, Generate RPP compatible project info in genstate
 } project_import_register_t;
 
 typedef struct project_config_extension_t // register with "projectconfig"
 {
     // plug-ins may or may not want to save their undo states (look at isUndo)
     // undo states will be saved if UNDO_STATE_MISCCFG is set (for adding your own undo points)
-    bool (*ProcessExtensionLine) (const char* line, ProjectStateContext* ctx, bool isUndo, struct project_config_extension_t* reg); // returns BOOL if line (and optionally subsequent lines) processed (return false if not plug-ins line)
-    void (*SaveExtensionConfig) (ProjectStateContext* ctx, bool isUndo, struct project_config_extension_t* reg);
+    bool (*ProcessExtensionLine)(const char* line, ProjectStateContext* ctx, bool isUndo, struct project_config_extension_t* reg); // returns BOOL if line (and optionally subsequent lines) processed (return false if not plug-ins line)
+    void (*SaveExtensionConfig)(ProjectStateContext* ctx, bool isUndo, struct project_config_extension_t* reg);
 
     // optional: called on project load/undo before any (possible) ProcessExtensionLine. NULL is OK too
     // also called on "new project" (wont be followed by ProcessExtensionLine calls in that case)
-    void (*BeginLoadProjectState) (bool isUndo, struct project_config_extension_t* reg);
+    void (*BeginLoadProjectState)(bool isUndo, struct project_config_extension_t* reg);
 
     void* userData;
 } project_config_extension_t;
 
 typedef struct audio_hook_register_t
 {
-    void (*OnAudioBuffer) (bool isPost, int len, double srate, struct audio_hook_register_t* reg); // called twice per frame, isPost being false then true
+    void (*OnAudioBuffer)(bool isPost, int len, double srate, struct audio_hook_register_t* reg); // called twice per frame, isPost being false then true
     void* userdata1;
     void* userdata2;
 
     // plug-in should zero these and they will be set by host
     // only call from OnAudioBuffer, nowhere else!!!
     int input_nch, output_nch;
-    ReaSample* (*GetBuffer) (bool isOutput, int idx);
+    ReaSample* (*GetBuffer)(bool isOutput, int idx);
 
 } audio_hook_register_t;
 
@@ -767,7 +858,7 @@ typedef struct
     int def_keys_cnt;
 
     // hwnd is 0 if MIDI etc. return false if ignoring
-    bool (*onAction) (int cmd, int val, int valhw, int relmode, HWND hwnd);
+    bool (*onAction)(int cmd, int val, int valhw, int relmode, HWND hwnd);
 
     // this is allocated by the host not by the plug-in using it
     // the user can edit the list of actions/macros
@@ -874,7 +965,8 @@ enum
     SCREENSET_ACTION_NOMOVE      = 5, //return 1 if no move desired
     SCREENSET_ACTION_GETHASH     = 6, //return hash string
 };
-typedef LRESULT (*screensetCallbackFunc) (int action, char* id, void* param, int param2);
+
+typedef LRESULT (*screensetCallbackFunc)(int action, char* id, void* param, int param2);
 
 // This are managed using screenset_register() etc
 
@@ -886,31 +978,43 @@ typedef LRESULT (*screensetCallbackFunc) (int action, char* id, void* param, int
 class midi_Output
 {
 public:
-    virtual ~midi_Output() {}
+    virtual ~midi_Output()
+    {
+    }
 
-    virtual void BeginBlock() {} // outputs can implement these if they wish to have timed block sends
-    virtual void EndBlock (int length, double srate, double curtempo) {}
-    virtual void SendMsg (MIDI_event_t* msg, int frame_offset)                                     = 0; // frame_offset can be <0 for "instant" if supported
-    virtual void Send (unsigned char status, unsigned char d1, unsigned char d2, int frame_offset) = 0; // frame_offset can be <0 for "instant" if supported
+    virtual void BeginBlock()
+    {
+    } // outputs can implement these if they wish to have timed block sends
+
+    virtual void EndBlock(int length, double srate, double curtempo)
+    {
+    }
+
+    virtual void SendMsg(MIDI_event_t* msg, int frame_offset)                                     = 0; // frame_offset can be <0 for "instant" if supported
+    virtual void Send(unsigned char status, unsigned char d1, unsigned char d2, int frame_offset) = 0; // frame_offset can be <0 for "instant" if supported
 };
 
 class midi_Input
 {
 public:
-    virtual ~midi_Input() {}
+    virtual ~midi_Input()
+    {
+    }
 
     virtual void start() = 0;
     virtual void stop()  = 0;
 
-    virtual void SwapBufs (unsigned int timestamp) = 0; // DEPRECATED call SwapBufsPrecise() instead  // timestamp=process ms
+    virtual void SwapBufs(unsigned int timestamp) = 0; // DEPRECATED call SwapBufsPrecise() instead  // timestamp=process ms
 
-    virtual void RunPreNoteTracking (int isAccum) {}
+    virtual void RunPreNoteTracking(int isAccum)
+    {
+    }
 
     virtual MIDI_eventlist* GetReadBuf() = 0; // note: the event list here has frame offsets that are in units of 1/1024000 of a second, NOT sample frames
 
-    virtual void SwapBufsPrecise (unsigned int coarsetimestamp, double precisetimestamp) // coarse=process ms, precise=process sec, the target will know internally which to use
+    virtual void SwapBufsPrecise(unsigned int coarsetimestamp, double precisetimestamp) // coarse=process ms, precise=process sec, the target will know internally which to use
     {
-        SwapBufs (coarsetimestamp); // default impl is for backward compatibility
+        SwapBufs(coarsetimestamp); // default impl is for backward compatibility
     }
 };
 
@@ -927,38 +1031,93 @@ class TrackEnvelope;
 class IReaperControlSurface
 {
 public:
-    IReaperControlSurface() {}
-    virtual ~IReaperControlSurface() {}
+    IReaperControlSurface()
+    {
+    }
+
+    virtual ~IReaperControlSurface()
+    {
+    }
 
     virtual const char* GetTypeString()   = 0; // simple unique string with only A-Z, 0-9, no spaces or other chars
     virtual const char* GetDescString()   = 0; // human readable description (can include instance specific info)
     virtual const char* GetConfigString() = 0; // string of configuration data
 
-    virtual void CloseNoReset() {} // close without sending "reset" messages, prevent "reset" being sent on destructor
+    virtual void CloseNoReset()
+    {
+    } // close without sending "reset" messages, prevent "reset" being sent on destructor
 
-    virtual void Run() {} // called 30x/sec or so.
+    virtual void Run()
+    {
+    } // called 30x/sec or so.
 
     // these will be called by the host when states change etc
-    virtual void SetTrackListChange() {}
-    virtual void SetSurfaceVolume (MediaTrack* trackid, double volume) {}
-    virtual void SetSurfacePan (MediaTrack* trackid, double pan) {}
-    virtual void SetSurfaceMute (MediaTrack* trackid, bool mute) {}
-    virtual void SetSurfaceSelected (MediaTrack* trackid, bool selected) {}
-    virtual void SetSurfaceSolo (MediaTrack* trackid, bool solo) {}
-    virtual void SetSurfaceRecArm (MediaTrack* trackid, bool recarm) {}
-    virtual void SetPlayState (bool play, bool pause, bool rec) {}
-    virtual void SetRepeatState (bool rep) {}
-    virtual void SetTrackTitle (MediaTrack* trackid, const char* title) {}
-    virtual bool GetTouchState (MediaTrack* trackid, int isPan) { return false; }
-    virtual void SetAutoMode (int mode) {} // automation mode for current track
+    virtual void SetTrackListChange()
+    {
+    }
 
-    virtual void ResetCachedVolPanStates() {} // good to flush your control states here
+    virtual void SetSurfaceVolume(MediaTrack* trackid, double volume)
+    {
+    }
 
-    virtual void OnTrackSelection (MediaTrack* trackid) {} // track was selected
+    virtual void SetSurfacePan(MediaTrack* trackid, double pan)
+    {
+    }
 
-    virtual bool IsKeyDown (int key) { return false; } // VK_CONTROL, VK_MENU, VK_SHIFT, etc, whatever makes sense for your surface
+    virtual void SetSurfaceMute(MediaTrack* trackid, bool mute)
+    {
+    }
 
-    virtual int Extended (int call, void* parm1, void* parm2, void* parm3) { return 0; } // return 0 if unsupported
+    virtual void SetSurfaceSelected(MediaTrack* trackid, bool selected)
+    {
+    }
+
+    virtual void SetSurfaceSolo(MediaTrack* trackid, bool solo)
+    {
+    }
+
+    virtual void SetSurfaceRecArm(MediaTrack* trackid, bool recarm)
+    {
+    }
+
+    virtual void SetPlayState(bool play, bool pause, bool rec)
+    {
+    }
+
+    virtual void SetRepeatState(bool rep)
+    {
+    }
+
+    virtual void SetTrackTitle(MediaTrack* trackid, const char* title)
+    {
+    }
+
+    virtual bool GetTouchState(MediaTrack* trackid, int isPan)
+    {
+        return false;
+    }
+
+    virtual void SetAutoMode(int mode)
+    {
+    } // automation mode for current track
+
+    virtual void ResetCachedVolPanStates()
+    {
+    } // good to flush your control states here
+
+    virtual void OnTrackSelection(MediaTrack* trackid)
+    {
+    } // track was selected
+
+    virtual bool IsKeyDown(int key)
+    {
+        return false;
+    } // VK_CONTROL, VK_MENU, VK_SHIFT, etc, whatever makes sense for your surface
+
+    virtual int Extended(int call, void* parm1, void* parm2, void* parm3)
+    {
+        return 0;
+    } // return 0 if unsupported
 };
 
 typedef struct
@@ -966,8 +1125,8 @@ typedef struct
     const char* type_string; // simple unique string with only A-Z, 0-9, no spaces or other chars
     const char* desc_string; // human readable description
 
-    IReaperControlSurface* (*create) (const char* type_string, const char* configString, int* errStats); // errstats gets |1 if input error, |2 if output error
-    HWND (*ShowConfig)
+    IReaperControlSurface* (*create)(const char* type_string, const char* configString, int* errStats); // errstats gets |1 if input error, |2 if output error
+    HWND(*ShowConfig)
     (const char* type_string, HWND parent, const char* initConfigString);
 } reaper_csurf_reg_t; // register using "csurf"/"-csurf"
 

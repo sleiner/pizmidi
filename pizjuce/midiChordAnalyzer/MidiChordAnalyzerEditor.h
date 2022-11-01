@@ -20,28 +20,30 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_audio_utils/juce_audio_utils.h>
-
 #include "../_common/ChannelSlider.h"
 #include "../_common/VSTSlider.h"
 #include "MidiChordAnalyzer.h"
 
+#include <juce_audio_utils/juce_audio_utils.h>
+
 class MidiChordAnalyzerEditor;
+
 class ChordAnalyzerKeyboardComponent : public juce::MidiKeyboardComponent
 {
 public:
-    ChordAnalyzerKeyboardComponent (juce::MidiKeyboardState& kbstate, MidiChordAnalyzer* ownerFilter)
-        : MidiKeyboardComponent (kbstate, MidiKeyboardComponent::horizontalKeyboard),
-          owner (nullptr)
+    ChordAnalyzerKeyboardComponent(juce::MidiKeyboardState& kbstate, MidiChordAnalyzer* ownerFilter)
+        : MidiKeyboardComponent(kbstate, MidiKeyboardComponent::horizontalKeyboard),
+          owner(nullptr)
     {
         owner = ownerFilter;
         s     = &kbstate;
-        this->setMidiChannel (1);
-        this->setLowestVisibleKey (36);
+        this->setMidiChannel(1);
+        this->setLowestVisibleKey(36);
     }
+
     ~ChordAnalyzerKeyboardComponent() override{};
 
-    int getNumHeldNotes (int channel)
+    int getNumHeldNotes(int channel)
     {
         int num = 0;
         for (int i = 1; i <= 16; i++)
@@ -50,8 +52,10 @@ public:
             {
                 for (int n = 0; n < 128; n++)
                 {
-                    if (s->isNoteOn (i, n))
+                    if (s->isNoteOn(i, n))
+                    {
                         ++num;
+                    }
                 }
             }
         }
@@ -62,29 +66,30 @@ private:
     MidiChordAnalyzer* owner;
     juce::MidiKeyboardState* s;
 
-    bool mouseDownOnKey (int midiNoteNumber, const juce::MouseEvent& e) override
+    bool mouseDownOnKey(int midiNoteNumber, const juce::MouseEvent& e) override
     {
         MidiChordAnalyzerEditor* editor = ((MidiChordAnalyzerEditor*) (this->getParentComponent()));
         if (e.mods.isPopupMenu())
         {
-            s->allNotesOff (this->getMidiChannel());
+            s->allNotesOff(this->getMidiChannel());
             return false;
         }
         else
         {
-            if (s->isNoteOn (this->getMidiChannel(), midiNoteNumber))
+            if (s->isNoteOn(this->getMidiChannel(), midiNoteNumber))
             {
-                s->noteOff (this->getMidiChannel(), midiNoteNumber, 1.f);
+                s->noteOff(this->getMidiChannel(), midiNoteNumber, 1.f);
             }
             else
             {
-                s->noteOn (this->getMidiChannel(), midiNoteNumber, 1.f);
+                s->noteOn(this->getMidiChannel(), midiNoteNumber, 1.f);
             }
             return false;
         }
         return true;
     }
 };
+
 //[/Headers]
 
 #include "../_common/PizButton.h"
@@ -105,24 +110,24 @@ class MidiChordAnalyzerEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    MidiChordAnalyzerEditor (MidiChordAnalyzer* const ownerFilter);
+    MidiChordAnalyzerEditor(MidiChordAnalyzer* const ownerFilter);
     ~MidiChordAnalyzerEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     friend class ChordAnalyzerKeyboardComponent;
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
-    void mouseUp (const juce::MouseEvent& e) override;
-    juce::String const getCurrentChordName (int channel);
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDoubleClick(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    juce::String const getCurrentChordName(int channel);
     void timerCallback() override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
     // Binary resources:
     static const char* snake_gif;
@@ -134,7 +139,11 @@ private:
     void updateParametersFromFilter();
     int numHeldNotes;
 
-    MidiChordAnalyzer* getFilter() const throw() { return (MidiChordAnalyzer*) getAudioProcessor(); }
+    MidiChordAnalyzer* getFilter() const throw()
+    {
+        return (MidiChordAnalyzer*) getAudioProcessor();
+    }
+
     //[/UserVariables]
 
     //==============================================================================
@@ -150,7 +159,7 @@ private:
     juce::Path internalPath3;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiChordAnalyzerEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiChordAnalyzerEditor)
 };
 
 //[EndFile] You can add extra defines here...

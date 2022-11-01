@@ -32,13 +32,12 @@
 #ifndef AUDIOTOCCPLUGINFILTER_H
 #define AUDIOTOCCPLUGINFILTER_H
 
-#include <memory>
+#include "../_common/PizArray.h"
+#include "../_common/PizAudioProcessor.h"
 
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_core/juce_core.h>
-
-#include "../_common/PizArray.h"
-#include "../_common/PizAudioProcessor.h"
+#include <memory>
 
 #define goodXmlChars "abcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -47,9 +46,9 @@ class EnvelopeFollower
 public:
     EnvelopeFollower();
 
-    void setup (double attackMs, double releaseMs, double sampleRate);
+    void setup(double attackMs, double releaseMs, double sampleRate);
 
-    float process (float v);
+    float process(float v);
 
 protected:
     double envelope;
@@ -99,7 +98,10 @@ class JuceProgram
 
 public:
     JuceProgram();
-    ~JuceProgram() {}
+
+    ~JuceProgram()
+    {
+    }
 
 private:
     float param[numParams];
@@ -117,18 +119,26 @@ public:
     ~AudioToCC() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
-    bool hasEditor() const override { return true; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+
+    bool hasEditor() const override
+    {
+        return true;
+    }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -137,6 +147,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -148,33 +159,46 @@ public:
 
     int getNumParameters() override;
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
-    double getTailLengthSeconds() const override { return 0; }
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
+
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
     //==============================================================================
-    int getNumPrograms() override { return 16; }
+    int getNumPrograms() override
+    {
+        return 16;
+    }
+
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setActiveDevice (juce::String name);
-    void setActiveDevice (juce::MidiDeviceInfo const& device);
-    juce::MidiDeviceInfo getActiveDevice() { return activeDevice; }
-    juce::MidiDeviceInfo getDeviceByName (juce::String name) const;
+    void setActiveDevice(juce::String name);
+    void setActiveDevice(juce::MidiDeviceInfo const& device);
+
+    juce::MidiDeviceInfo getActiveDevice()
+    {
+        return activeDevice;
+    }
+
+    juce::MidiDeviceInfo getDeviceByName(juce::String name) const;
 
     PizArray<juce::MidiDeviceInfo> devices;
     int lastCCL, lastCCR;
@@ -188,7 +212,7 @@ private:
     double continualRMS[numChannels];
     double guiContinualRMS[numChannels];
     unsigned int samp[numChannels];
-    int smooth (int dnew, int old, int older, float inertia);
+    int smooth(int dnew, int old, int older, float inertia);
     int oldenv[numChannels];
     int olderenv[numChannels];
 
@@ -207,7 +231,7 @@ private:
 
     bool resetGateL, resetGateR;
 
-    JUCE_LEAK_DETECTOR (AudioToCC)
+    JUCE_LEAK_DETECTOR(AudioToCC)
 };
 
 #endif

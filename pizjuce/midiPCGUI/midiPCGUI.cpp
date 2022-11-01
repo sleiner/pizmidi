@@ -1,4 +1,5 @@
 #include "midiPCGUI.h"
+
 #include "../_common/MIDI.h"
 #include "midiPCGUIEditor.h"
 
@@ -12,7 +13,9 @@ midiPCGUIProgram::midiPCGUIProgram()
 {
     //default values
     for (int i = 0; i < numParams; i++)
+    {
         param[i] = 0.f;
+    }
     param[kMode]        = 1.f;
     param[kThru]        = 1.f;
     param[kTrigger]     = 0.4f;
@@ -33,12 +36,12 @@ midiPCGUI::midiPCGUI()
     {
         for (int i = 0; i < 128; i++)
         {
-            programs[i].setName ("Program " + juce::String (i + 1));
+            programs[i].setName("Program " + juce::String(i + 1));
         }
     }
 
     init = true;
-    setCurrentProgram (0);
+    setCurrentProgram(0);
 
     trigger     = false;
     triggerbank = false;
@@ -52,7 +55,9 @@ midiPCGUI::midiPCGUI()
     senttrig    = false;
     sentbank    = false;
     for (int i = 0; i < numParams; i++)
+    {
         automated[i] = false;
+    }
     mode = continuous;
 
     wait         = false;
@@ -70,7 +75,9 @@ midiPCGUI::midiPCGUI()
 midiPCGUI::~midiPCGUI()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //==============================================================================
@@ -79,21 +86,25 @@ int midiPCGUI::getNumParameters()
     return numParams;
 }
 
-float midiPCGUI::getParameter (int index)
+float midiPCGUI::getParameter(int index)
 {
     return param[index];
 }
 
-void midiPCGUI::setParameter (int index, float newValue)
+void midiPCGUI::setParameter(int index, float newValue)
 {
     midiPCGUIProgram* ap = &programs[curProgram];
     switch (index)
     {
         case kMode:
             if (newValue < 0.5f)
+            {
                 mode = continuous;
+            }
             else
+            {
                 mode = triggered;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kPCListen:
@@ -112,7 +123,9 @@ void midiPCGUI::setParameter (int index, float newValue)
                 senttrig = true;
             }
             else if (newValue < 1.f && senttrig)
+            {
                 senttrig = false;
+            }
             break;
         case kBankTrigger:
             param[index] = newValue;
@@ -122,7 +135,9 @@ void midiPCGUI::setParameter (int index, float newValue)
                 sentbank    = true;
             }
             else if (newValue < 1.f && sentbank)
+            {
                 sentbank = false;
+            }
             break;
         case kInc:
             param[index] = newValue;
@@ -132,7 +147,9 @@ void midiPCGUI::setParameter (int index, float newValue)
                 sentinc = true;
             }
             else if (newValue < 1.f && sentinc)
+            {
                 sentinc = false;
+            }
             break;
         case kDec:
             param[index] = newValue;
@@ -142,24 +159,32 @@ void midiPCGUI::setParameter (int index, float newValue)
                 sentdec = true;
             }
             else if (newValue < 1.f && sentdec)
+            {
                 sentdec = false;
+            }
             break;
         case kProgram:
-            program = FLOAT_TO_MIDI2 (newValue);
+            program = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous && ! automated[index])
+            {
                 trigger = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kBankMSB:
-            bankmsb = FLOAT_TO_MIDI2 (newValue);
+            bankmsb = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         case kBankLSB:
-            banklsb = FLOAT_TO_MIDI2 (newValue);
+            banklsb = FLOAT_TO_MIDI2(newValue);
             if (mode == continuous)
+            {
                 triggerbank = true;
+            }
             param[index] = ap->param[index] = newValue;
             break;
         default:
@@ -176,7 +201,7 @@ void midiPCGUI::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-const juce::String midiPCGUI::getParameterName (int index)
+const juce::String midiPCGUI::getParameterName(int index)
 {
     switch (index)
     {
@@ -219,7 +244,7 @@ const juce::String midiPCGUI::getParameterName (int index)
     }
 }
 
-const juce::String midiPCGUI::getParameterText (int index)
+const juce::String midiPCGUI::getParameterText(int index)
 {
     char* text;
     text = new char[24];
@@ -227,119 +252,172 @@ const juce::String midiPCGUI::getParameterText (int index)
     {
         case kMode:
             if (mode == continuous)
-                strcpy (text, "Direct");
+            {
+                strcpy(text, "Direct");
+            }
             else
-                strcpy (text, "Triggered");
+            {
+                strcpy(text, "Triggered");
+            }
             break;
         case kPCListen:
             if (pclisten)
-                strcpy (text, "Yes");
+            {
+                strcpy(text, "Yes");
+            }
             else
-                strcpy (text, "No");
+            {
+                strcpy(text, "No");
+            }
             break;
         case kThru:
             if (thru)
-                strcpy (text, "Yes");
+            {
+                strcpy(text, "Yes");
+            }
             else
-                strcpy (text, "No");
+            {
+                strcpy(text, "No");
+            }
             break;
         case kProgram:
             if (program == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", program);
+            {
+                sprintf(text, "%d", program);
+            }
             break;
         case kBankMSB:
             if (bankmsb == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", bankmsb);
+            {
+                sprintf(text, "%d", bankmsb);
+            }
             break;
         case kBankLSB:
             if (banklsb == 0)
-                strcpy (text, "Off");
+            {
+                strcpy(text, "Off");
+            }
             else
-                sprintf (text, "%d", banklsb);
+            {
+                sprintf(text, "%d", banklsb);
+            }
             break;
         case kChannel:
-            sprintf (text, "%d", FLOAT_TO_CHANNEL015 (param[index]) + 1);
+            sprintf(text, "%d", FLOAT_TO_CHANNEL015(param[index]) + 1);
             break;
         case kTrigger:
             if (param[index] == 1.f)
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             else
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             break;
         case kBankTrigger:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         case kInc:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         case kDec:
             if (param[index] < 1.f)
-                strcpy (text, "Trigger-->");
+            {
+                strcpy(text, "Trigger-->");
+            }
             else
-                strcpy (text, "Triggered!");
+            {
+                strcpy(text, "Triggered!");
+            }
             break;
         default:
-            sprintf (text, "%d", roundToInt (param[index] * 100.0f));
+            sprintf(text, "%d", roundToInt(param[index] * 100.0f));
             break;
     }
-    return juce::String (text);
+    return juce::String(text);
 }
 
-const juce::String midiPCGUI::getInputChannelName (const int channelIndex) const
+const juce::String midiPCGUI::getInputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-const juce::String midiPCGUI::getOutputChannelName (const int channelIndex) const
+const juce::String midiPCGUI::getOutputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-bool midiPCGUI::isInputChannelStereoPair (int index) const
+bool midiPCGUI::isInputChannelStereoPair(int index) const
 {
     if (getNumInputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
-bool midiPCGUI::isOutputChannelStereoPair (int index) const
+bool midiPCGUI::isOutputChannelStereoPair(int index) const
 {
     if (getNumOutputChannels() == 2)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
-void midiPCGUI::setCurrentProgram (int index)
+
+void midiPCGUI::setCurrentProgram(int index)
 {
     midiPCGUIProgram* ap = &programs[index];
     curProgram           = index;
     for (int i = 0; i < getNumParameters(); i++)
     {
-        setParameter (i, ap->param[i]);
+        setParameter(i, ap->param[i]);
     }
     if (program > 0)
+    {
         trigger = true;
+    }
     if (banklsb > 0 || bankmsb > 0)
+    {
         triggerbank = true;
+    }
 }
 
-void midiPCGUI::changeProgramName (int index, const juce::String& newName)
+void midiPCGUI::changeProgramName(int index, const juce::String& newName)
 {
     programs[curProgram].name = newName;
 }
 
-const juce::String midiPCGUI::getProgramName (int index)
+const juce::String midiPCGUI::getProgramName(int index)
 {
     return programs[index].name;
 }
@@ -348,13 +426,15 @@ int midiPCGUI::getCurrentProgram()
 {
     return curProgram;
 }
+
 //==============================================================================
 juce::AudioProcessorEditor* midiPCGUI::createEditor()
 {
-    return new midiPCGUIEditor (this);
+    return new midiPCGUIEditor(this);
 }
+
 //==============================================================================
-void midiPCGUI::prepareToPlay (double sampleRate, int samplesPerBlock)
+void midiPCGUI::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // do your pre-playback setup stuff here..
     delaytime = (int) (sampleRate * 0.002f);
@@ -366,15 +446,15 @@ void midiPCGUI::releaseResources()
     // spare memory, etc.
 }
 
-void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
-                              juce::MidiBuffer& midiMessages)
+void midiPCGUI::processBlock(juce::AudioSampleBuffer& buffer,
+                             juce::MidiBuffer& midiMessages)
 {
     for (int i = 0; i < getNumOutputChannels(); ++i)
     {
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    int listenchannel = FLOAT_TO_CHANNEL015 (param[kChannel]);
+    int listenchannel = FLOAT_TO_CHANNEL015(param[kChannel]);
     juce::MidiBuffer output;
 
     for (auto&& msgMetadata : midiMessages)
@@ -395,7 +475,7 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
             {
                 if (pclisten)
                 {
-                    setCurrentProgram (data1);
+                    setCurrentProgram(data1);
                     updateHostDisplay();
                     discard = true;
                 }
@@ -420,27 +500,31 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
             }
         } // if listenchannel==channel
         if (! discard)
-            output.addEvent (midi_message, msgMetadata.samplePosition);
+        {
+            output.addEvent(midi_message, msgMetadata.samplePosition);
+        }
     } //for() inputs loop
 
     if (triggerbank)
     {
         if (! (trigger && program != 0))
+        {
             triggerbank = false;
+        }
         //create GUI triggered message
         if (bankmsb != 0)
         {
-            juce::MidiMessage msb (MIDI_CONTROLCHANGE | listenchannel, MIDI_BANK_CHANGE, bankmsb - 1, 0);
-            output.addEvent (msb, 0);
+            juce::MidiMessage msb(MIDI_CONTROLCHANGE | listenchannel, MIDI_BANK_CHANGE, bankmsb - 1, 0);
+            output.addEvent(msb, 0);
             actualBankMSB[listenchannel] = bankmsb;
         }
         if (banklsb != 0)
         {
-            juce::MidiMessage lsb (MIDI_CONTROLCHANGE | listenchannel, 0x20, banklsb - 1, 0);
-            output.addEvent (lsb, 0);
+            juce::MidiMessage lsb(MIDI_CONTROLCHANGE | listenchannel, 0x20, banklsb - 1, 0);
+            output.addEvent(lsb, 0);
             actualBankLSB[listenchannel] = banklsb;
         }
-        setParameterNotifyingHost (kBankTrigger, 0.4f);
+        setParameterNotifyingHost(kBankTrigger, 0.4f);
     }
     if (trigger)
     {
@@ -457,16 +541,16 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
                 {
                     wait                     = false;
                     counter                  = 0;
-                    juce::MidiMessage progch = juce::MidiMessage::programChange (listenchannel + 1, program - 1);
-                    output.addEvent (progch, delaytime);
-                    setParameterNotifyingHost (kTrigger, 0.4f);
+                    juce::MidiMessage progch = juce::MidiMessage::programChange(listenchannel + 1, program - 1);
+                    output.addEvent(progch, delaytime);
+                    setParameterNotifyingHost(kTrigger, 0.4f);
                 }
             }
             else
             {
                 //create GUI triggered message
-                output.addEvent (juce::MidiMessage::programChange (listenchannel + 1, program - 1), triggerdelta);
-                setParameterNotifyingHost (kTrigger, 0.4f);
+                output.addEvent(juce::MidiMessage::programChange(listenchannel + 1, program - 1), triggerdelta);
+                setParameterNotifyingHost(kTrigger, 0.4f);
             }
         }
     }
@@ -477,14 +561,16 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
         program = actualProgram[listenchannel];
         ++program;
         if (program > 128)
+        {
             program = 1;
+        }
         if (program != 0)
         {
-            output.addEvent (juce::MidiMessage::programChange (listenchannel + 1, program - 1), 0);
+            output.addEvent(juce::MidiMessage::programChange(listenchannel + 1, program - 1), 0);
             actualProgram[listenchannel] = program;
         }
-        setParameterNotifyingHost (kProgram, MIDI_TO_FLOAT2 (program));
-        setParameterNotifyingHost (kInc, 0.4f);
+        setParameterNotifyingHost(kProgram, MIDI_TO_FLOAT2(program));
+        setParameterNotifyingHost(kInc, 0.4f);
     }
     else if (dec)
     {
@@ -493,14 +579,16 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
         program = actualProgram[listenchannel];
         --program;
         if (program < 1)
+        {
             program = 128;
+        }
         if (program != 0)
         {
-            output.addEvent (juce::MidiMessage::programChange (listenchannel + 1, program - 1), 0);
+            output.addEvent(juce::MidiMessage::programChange(listenchannel + 1, program - 1), 0);
             actualProgram[listenchannel] = program;
         }
-        setParameterNotifyingHost (kProgram, MIDI_TO_FLOAT2 (program));
-        setParameterNotifyingHost (kDec, 0.4f);
+        setParameterNotifyingHost(kProgram, MIDI_TO_FLOAT2(program));
+        setParameterNotifyingHost(kDec, 0.4f);
     }
 
     midiMessages.clear();
@@ -508,7 +596,7 @@ void midiPCGUI::processBlock (juce::AudioSampleBuffer& buffer,
 }
 
 //==============================================================================
-void midiPCGUI::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
+void midiPCGUI::getCurrentProgramStateInformation(juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -516,89 +604,91 @@ void midiPCGUI::getCurrentProgramStateInformation (juce::MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    juce::XmlElement xmlState ("MIDIPCGUISETTINGS");
+    juce::XmlElement xmlState("MIDIPCGUISETTINGS");
 
     // add some attributes to it..
-    xmlState.setAttribute ("pluginVersion", 2);
+    xmlState.setAttribute("pluginVersion", 2);
 
-    xmlState.setAttribute ("program", getCurrentProgram());
-    xmlState.setAttribute ("progname", getProgramName (getCurrentProgram()));
+    xmlState.setAttribute("program", getCurrentProgram());
+    xmlState.setAttribute("progname", getProgramName(getCurrentProgram()));
     for (int i = 0; i < getNumParameters(); i++)
-        xmlState.setAttribute (juce::String (i), param[i]);
+    {
+        xmlState.setAttribute(juce::String(i), param[i]);
+    }
 
-    auto* names = new juce::XmlElement ("names");
+    auto* names = new juce::XmlElement("names");
     for (int i = 0; i < progNames.names.size(); i++)
     {
-        auto* name = new juce::XmlElement ("name");
-        name->setAttribute ("c", progNames.names[i].channel);
-        name->setAttribute ("b", progNames.names[i].bank);
-        name->setAttribute ("p", progNames.names[i].program);
-        name->setAttribute ("n", progNames.names[i].name);
-        names->addChildElement (name);
+        auto* name = new juce::XmlElement("name");
+        name->setAttribute("c", progNames.names[i].channel);
+        name->setAttribute("b", progNames.names[i].bank);
+        name->setAttribute("p", progNames.names[i].program);
+        name->setAttribute("n", progNames.names[i].name);
+        names->addChildElement(name);
     }
-    xmlState.addChildElement (names);
+    xmlState.addChildElement(names);
 
     // then use this helper function to stuff it into the binary blob and return it..
-    copyXmlToBinary (xmlState, destData);
+    copyXmlToBinary(xmlState, destData);
 }
 
-void midiPCGUI::getStateInformation (juce::MemoryBlock& destData)
+void midiPCGUI::getStateInformation(juce::MemoryBlock& destData)
 {
     // make sure the non-parameter settings are copied to the current program
 
-    juce::XmlElement xmlState ("MIDIPCGUISETTINGS");
-    xmlState.setAttribute ("pluginVersion", 2);
-    xmlState.setAttribute ("program", getCurrentProgram());
+    juce::XmlElement xmlState("MIDIPCGUISETTINGS");
+    xmlState.setAttribute("pluginVersion", 2);
+    xmlState.setAttribute("program", getCurrentProgram());
     for (int p = 0; p < getNumPrograms(); p++)
     {
-        juce::String prefix = "P" + juce::String (p) + "_";
-        xmlState.setAttribute (prefix + "progname", programs[p].name);
+        juce::String prefix = "P" + juce::String(p) + "_";
+        xmlState.setAttribute(prefix + "progname", programs[p].name);
         for (int i = 0; i < getNumParameters(); i++)
         {
-            xmlState.setAttribute (prefix + juce::String (i), programs[p].param[i]);
+            xmlState.setAttribute(prefix + juce::String(i), programs[p].param[i]);
         }
     }
 
-    auto* names = new juce::XmlElement ("names");
+    auto* names = new juce::XmlElement("names");
     for (int i = 0; i < progNames.names.size(); i++)
     {
-        auto* name = new juce::XmlElement ("name");
-        name->setAttribute ("c", progNames.names[i].channel);
-        name->setAttribute ("b", progNames.names[i].bank);
-        name->setAttribute ("p", progNames.names[i].program);
-        name->setAttribute ("n", progNames.names[i].name);
-        names->addChildElement (name);
+        auto* name = new juce::XmlElement("name");
+        name->setAttribute("c", progNames.names[i].channel);
+        name->setAttribute("b", progNames.names[i].bank);
+        name->setAttribute("p", progNames.names[i].program);
+        name->setAttribute("n", progNames.names[i].name);
+        names->addChildElement(name);
     }
-    xmlState.addChildElement (names);
+    xmlState.addChildElement(names);
 
-    copyXmlToBinary (xmlState, destData);
+    copyXmlToBinary(xmlState, destData);
 }
 
-void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInBytes)
+void midiPCGUI::setCurrentProgramStateInformation(const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    auto xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary(data, sizeInBytes);
 
     if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName ("MIDIPCGUISETTINGS"))
+        if (xmlState->hasTagName("MIDIPCGUISETTINGS"))
         {
             // ok, now pull out our parameters..
-            changeProgramName (getCurrentProgram(), xmlState->getStringAttribute ("progname", "Default"));
+            changeProgramName(getCurrentProgram(), xmlState->getStringAttribute("progname", "Default"));
             for (int i = 0; i < getNumParameters(); i++)
             {
-                param[i] = (float) xmlState->getDoubleAttribute (juce::String (i), param[i]);
+                param[i] = (float) xmlState->getDoubleAttribute(juce::String(i), param[i]);
             }
-            juce::XmlElement* n = xmlState->getChildByName ("names");
+            juce::XmlElement* n = xmlState->getChildByName("names");
             if (n)
             {
                 for (auto* e : xmlState->getChildIterator())
                 {
-                    progNames.setNameFor (e->getIntAttribute ("c"),
-                                          e->getIntAttribute ("b"),
-                                          e->getIntAttribute ("p"),
-                                          e->getStringAttribute ("n"));
+                    progNames.setNameFor(e->getIntAttribute("c"),
+                                         e->getIntAttribute("b"),
+                                         e->getIntAttribute("p"),
+                                         e->getStringAttribute("n"));
                 }
             }
             sendChangeMessage();
@@ -606,40 +696,44 @@ void midiPCGUI::setCurrentProgramStateInformation (const void* data, int sizeInB
     }
 }
 
-void midiPCGUI::setStateInformation (const void* data, int sizeInBytes)
+void midiPCGUI::setStateInformation(const void* data, int sizeInBytes)
 {
-    auto xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary(data, sizeInBytes);
 
     if (xmlState != nullptr)
     {
-        if (xmlState->hasTagName ("MIDIPCGUISETTINGS"))
+        if (xmlState->hasTagName("MIDIPCGUISETTINGS"))
         {
             for (int p = 0; p < getNumPrograms(); p++)
             {
                 juce::String prefix;
-                if (xmlState->getIntAttribute ("pluginVersion") < 2)
-                    prefix = "P" + juce::String (p) + ".";
+                if (xmlState->getIntAttribute("pluginVersion") < 2)
+                {
+                    prefix = "P" + juce::String(p) + ".";
+                }
                 else
-                    prefix = "P" + juce::String (p) + "_";
+                {
+                    prefix = "P" + juce::String(p) + "_";
+                }
                 for (int i = 0; i < getNumParameters(); i++)
                 {
-                    programs[p].param[i] = (float) xmlState->getDoubleAttribute (prefix + juce::String (i), programs[p].param[i]);
+                    programs[p].param[i] = (float) xmlState->getDoubleAttribute(prefix + juce::String(i), programs[p].param[i]);
                 }
-                programs[p].name = xmlState->getStringAttribute (prefix + "progname", programs[p].name);
+                programs[p].name = xmlState->getStringAttribute(prefix + "progname", programs[p].name);
             }
-            juce::XmlElement* n = xmlState->getChildByName ("names");
+            juce::XmlElement* n = xmlState->getChildByName("names");
             if (n)
             {
                 for (auto* e : xmlState->getChildIterator())
                 {
-                    progNames.setNameFor (e->getIntAttribute ("c"),
-                                          e->getIntAttribute ("b"),
-                                          e->getIntAttribute ("p"),
-                                          e->getStringAttribute ("n"));
+                    progNames.setNameFor(e->getIntAttribute("c"),
+                                         e->getIntAttribute("b"),
+                                         e->getIntAttribute("p"),
+                                         e->getStringAttribute("n"));
                 }
             }
             init = true;
-            setCurrentProgram (xmlState->getIntAttribute ("program", 0));
+            setCurrentProgram(xmlState->getIntAttribute("program", 0));
         }
     }
 }

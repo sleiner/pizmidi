@@ -8,16 +8,16 @@
 class VSTSlider : public juce::Slider
 {
 public:
-    VSTSlider (juce::String name);
+    VSTSlider(juce::String name);
     ~VSTSlider() override;
-    juce::String getTextFromValue (double value) override;
-    void setOwner (juce::AudioProcessor*, int);
+    juce::String getTextFromValue(double value) override;
+    void setOwner(juce::AudioProcessor*, int);
     float mapToVSTRange();
-    void setVSTSlider (float x);
+    void setVSTSlider(float x);
 
     void setVSTSlider();
     void setVSTParam();
-    void setIndex (int index);
+    void setIndex(int index);
 
 private:
     juce::AudioProcessor* ownerPlugin;

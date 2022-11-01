@@ -11,7 +11,7 @@ bool PizKeyboard::isCapsLockOn()
 {
     // TODO: WTF?
 #if JUCE_WINDOWS
-    return (GetKeyState (VK_CAPITAL) & 0x0001) != 0;
+    return (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
 #elif JUCE_MAC
     return true;
 #elif JUCE_LINUX
@@ -34,7 +34,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 PizKeyboard::PizKeyboard()
 {
-    DBG ("PizKeyboard()");
+    DBG("PizKeyboard()");
     if (! loadDefaultFxb())
     {
         keyPosition = 48;
@@ -58,17 +58,19 @@ PizKeyboard::PizKeyboard()
     lastProgram    = 0;
     curProgram     = 0;
 
-    ccqwertyState[0] = juce::KeyPress::isKeyCurrentlyDown (juce::KeyPress::tabKey);
-    ccqwertyState[1] = juce::KeyPress::isKeyCurrentlyDown (juce::KeyPress::createFromDescription ("`").getKeyCode());
+    ccqwertyState[0] = juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::tabKey);
+    ccqwertyState[1] = juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::createFromDescription("`").getKeyCode());
     ccState[0]       = false;
     ccState[1]       = false;
     for (int i = keymapLength; --i >= 0;)
-        qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown (keymap[i]);
+    {
+        qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown(keymap[i]);
+    }
 }
 
 PizKeyboard::~PizKeyboard()
 {
-    DBG ("~PizKeyboard()");
+    DBG("~PizKeyboard()");
 }
 
 //==============================================================================
@@ -82,7 +84,7 @@ int PizKeyboard::getNumParameters()
     return numParams;
 }
 
-float PizKeyboard::getParameter (int index)
+float PizKeyboard::getParameter(int index)
 {
     switch (index)
     {
@@ -115,7 +117,7 @@ float PizKeyboard::getParameter (int index)
     }
 }
 
-void PizKeyboard::setParameter (int index, float newValue)
+void PizKeyboard::setParameter(int index, float newValue)
 {
     if (index == kWidth)
     {
@@ -127,7 +129,7 @@ void PizKeyboard::setParameter (int index, float newValue)
     }
     else if (index == kChannel)
     {
-        channel = roundToInt (newValue * 15.f);
+        channel = roundToInt(newValue * 15.f);
         sendChangeMessage();
     }
     else if (index == kVelocity)
@@ -168,12 +170,16 @@ void PizKeyboard::setParameter (int index, float newValue)
     else if (index == kSendHeldNotes)
     {
         if (newValue)
+        {
             sendHeldNotes = true;
+        }
     }
     else if (index == kClearHeldNotes)
     {
         if (newValue)
+        {
             clearHeldNotes = true;
+        }
     }
     else if (index == kShowNumbers)
     {
@@ -182,80 +188,128 @@ void PizKeyboard::setParameter (int index, float newValue)
     }
 }
 
-const juce::String PizKeyboard::getParameterName (int index)
+const juce::String PizKeyboard::getParameterName(int index)
 {
     if (index == kWidth)
+    {
         return "KeyWidth";
+    }
     else if (index == kChannel)
+    {
         return "Channel";
+    }
     if (index == kVelocity)
+    {
         return "Velocity";
+    }
     if (index == kUseY)
+    {
         return "Use Y";
+    }
     if (index == kToggleInput)
+    {
         return "Toggle";
+    }
     if (index == kHidePanel)
+    {
         return "HidePanel";
+    }
     if (index == kQwertyAnywhere)
+    {
         return "QwertyAnywhere";
+    }
     if (index == kCapsLock)
+    {
         return "UseCapsLock";
+    }
     if (index == kUseProgCh)
+    {
         return "UseProgCh";
+    }
     if (index == kSendHeldNotes)
+    {
         return "SendHeldNotes";
+    }
     if (index == kClearHeldNotes)
+    {
         return "Reset";
+    }
     if (index == kShowNumbers)
+    {
         return "ShowNumbers";
+    }
     return juce::String();
 }
 
-const juce::String PizKeyboard::getParameterText (int index)
+const juce::String PizKeyboard::getParameterText(int index)
 {
     if (index == kWidth)
-        return juce::String (width, 2);
+    {
+        return juce::String(width, 2);
+    }
     if (index == kChannel)
-        return juce::String (channel + 1);
+    {
+        return juce::String(channel + 1);
+    }
     if (index == kVelocity)
-        return juce::String (roundToInt (velocity * 127.f));
+    {
+        return juce::String(roundToInt(velocity * 127.f));
+    }
     if (index == kUseY)
+    {
         return useY ? "Yes" : "No";
+    }
     if (index == kToggleInput)
+    {
         return toggle ? "On" : "Off";
+    }
     if (index == kHidePanel)
+    {
         return toggle ? "Hidden" : "Showing";
+    }
     if (index == kQwertyAnywhere)
+    {
         return toggle ? "On" : "Off";
+    }
     if (index == kCapsLock)
+    {
         return capslock ? "On" : "Off";
+    }
     if (index == kUseProgCh)
+    {
         return usepc ? "Yes" : "No";
+    }
     if (index == kSendHeldNotes)
+    {
         return "--->";
+    }
     if (index == kClearHeldNotes)
+    {
         return "--->";
+    }
     if (index == kShowNumbers)
+    {
         return showNumbers ? "Yes" : "No";
+    }
     return juce::String();
 }
 
-const juce::String PizKeyboard::getInputChannelName (const int channelIndex) const
+const juce::String PizKeyboard::getInputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-const juce::String PizKeyboard::getOutputChannelName (const int channelIndex) const
+const juce::String PizKeyboard::getOutputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-bool PizKeyboard::isInputChannelStereoPair (int index) const
+bool PizKeyboard::isInputChannelStereoPair(int index) const
 {
     return true;
 }
 
-bool PizKeyboard::isOutputChannelStereoPair (int index) const
+bool PizKeyboard::isOutputChannelStereoPair(int index) const
 {
     return true;
 }
@@ -271,7 +325,7 @@ bool PizKeyboard::producesMidi() const
 }
 
 //==============================================================================
-void PizKeyboard::prepareToPlay (double sampleRate, int samplesPerBlock)
+void PizKeyboard::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // do your pre-playback setup stuff here..
 }
@@ -282,8 +336,8 @@ void PizKeyboard::releaseResources()
     // spare memory, etc.
 }
 
-void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
-                                juce::MidiBuffer& midiMessages)
+void PizKeyboard::processBlock(juce::AudioSampleBuffer& buffer,
+                               juce::MidiBuffer& midiMessages)
 {
     juce::MidiBuffer output;
     if (lastProgram != curProgram)
@@ -292,9 +346,9 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         {
             for (int n = 0; n < 128; n++)
             {
-                if (progKbState[lastProgram].isNoteOn (ch, n))
+                if (progKbState[lastProgram].isNoteOn(ch, n))
                 {
-                    editorKbState.noteOff (ch, n, 1.f);
+                    editorKbState.noteOff(ch, n, 1.f);
                 }
             }
         }
@@ -302,9 +356,9 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         {
             for (int n = 0; n < 128; n++)
             {
-                if (progKbState[curProgram].isNoteOn (ch, n))
+                if (progKbState[curProgram].isNoteOn(ch, n))
                 {
-                    editorKbState.noteOn (ch, n, velocity);
+                    editorKbState.noteOn(ch, n, velocity);
                 }
             }
         }
@@ -318,8 +372,10 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         {
             for (int n = 0; n < 128; n++)
             {
-                if (progKbState[curProgram].isNoteOn (ch, n))
-                    output.addEvent (juce::MidiMessage::noteOff (ch, n), 0);
+                if (progKbState[curProgram].isNoteOn(ch, n))
+                {
+                    output.addEvent(juce::MidiMessage::noteOff(ch, n), 0);
+                }
             }
         }
         progKbState[curProgram].reset();
@@ -345,26 +401,26 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         //}
         for (int i = keymapLength; --i >= 0;)
         {
-            if (qwertyState[i] != juce::KeyPress::isKeyCurrentlyDown (keymap[i]))
+            if (qwertyState[i] != juce::KeyPress::isKeyCurrentlyDown(keymap[i]))
             {
                 const int note = 12 * octave + i;
-                if (juce::KeyPress::isKeyCurrentlyDown (keymap[i]) != progKbState[curProgram].isNoteOn (channel + 1, note)
+                if (juce::KeyPress::isKeyCurrentlyDown(keymap[i]) != progKbState[curProgram].isNoteOn(channel + 1, note)
                     && ! juce::ModifierKeys::getCurrentModifiers().isAnyModifierKeyDown())
                 {
-                    if (juce::KeyPress::isKeyCurrentlyDown (keymap[i]))
+                    if (juce::KeyPress::isKeyCurrentlyDown(keymap[i]))
                     {
-                        editorKbState.noteOn (channel + 1, note, juce::ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
+                        editorKbState.noteOn(channel + 1, note, juce::ModifierKeys::getCurrentModifiers().isShiftDown() ? 127 : velocity);
                     }
                     else if (! toggle)
                     {
-                        editorKbState.noteOff (channel + 1, note, 1.f);
+                        editorKbState.noteOff(channel + 1, note, 1.f);
                     }
                 }
-                else if (toggle && juce::KeyPress::isKeyCurrentlyDown (keymap[i]) && progKbState[curProgram].isNoteOn (channel + 1, note))
+                else if (toggle && juce::KeyPress::isKeyCurrentlyDown(keymap[i]) && progKbState[curProgram].isNoteOn(channel + 1, note))
                 {
-                    editorKbState.noteOff (channel + 1, note, 1.f);
+                    editorKbState.noteOff(channel + 1, note, 1.f);
                 }
-                qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown (keymap[i]);
+                qwertyState[i] = juce::KeyPress::isKeyCurrentlyDown(keymap[i]);
             }
         }
     }
@@ -375,17 +431,21 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         auto m      = msgMetadata.getMessage();
         auto sample = msgMetadata.samplePosition;
 
-        if (m.isForChannel (channel + 1))
+        if (m.isForChannel(channel + 1))
         {
             if (toggle)
             {
                 if (m.isNoteOn())
                 {
                     skip = true;
-                    if (progKbState[curProgram].isNoteOn (m.getChannel(), m.getNoteNumber()))
-                        output.addEvent (juce::MidiMessage::noteOff (m.getChannel(), m.getNoteNumber()), sample);
+                    if (progKbState[curProgram].isNoteOn(m.getChannel(), m.getNoteNumber()))
+                    {
+                        output.addEvent(juce::MidiMessage::noteOff(m.getChannel(), m.getNoteNumber()), sample);
+                    }
                     else
-                        output.addEvent (m, sample);
+                    {
+                        output.addEvent(m, sample);
+                    }
                 }
                 else if (m.isNoteOff())
                 {
@@ -394,15 +454,17 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
             }
             if (m.isProgramChange() && usepc)
             {
-                setCurrentProgram (m.getProgramChangeNumber());
+                setCurrentProgram(m.getProgramChangeNumber());
                 if (lastProgram != curProgram)
                 {
                     for (int ch = 1; ch <= 16; ch++)
                     {
                         for (int n = 0; n < 128; n++)
                         {
-                            if (progKbState[lastProgram].isNoteOn (ch, n))
-                                output.addEvent (juce::MidiMessage::noteOff (ch, n), sample);
+                            if (progKbState[lastProgram].isNoteOn(ch, n))
+                            {
+                                output.addEvent(juce::MidiMessage::noteOff(ch, n), sample);
+                            }
                         }
                     }
                     editorKbState.reset();
@@ -410,10 +472,10 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
                     {
                         for (int n = 0; n < 128; n++)
                         {
-                            if (progKbState[curProgram].isNoteOn (ch, n))
+                            if (progKbState[curProgram].isNoteOn(ch, n))
                             {
-                                editorKbState.noteOn (ch, n, velocity);
-                                output.addEvent (juce::MidiMessage::noteOn (ch, n, velocity), sample);
+                                editorKbState.noteOn(ch, n, velocity);
+                                output.addEvent(juce::MidiMessage::noteOn(ch, n, velocity), sample);
                             }
                         }
                     }
@@ -423,7 +485,9 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
             }
         }
         if (! skip)
-            output.addEvent (m, sample);
+        {
+            output.addEvent(m, sample);
+        }
     }
     //if (!toggle)
     //	output = midiMessages;
@@ -435,31 +499,33 @@ void PizKeyboard::processBlock (juce::AudioSampleBuffer& buffer,
         {
             for (int n = 0; n < 128; n++)
             {
-                if (progKbState[curProgram].isNoteOn (ch, n))
-                    output.addEvent (juce::MidiMessage::noteOn (ch, n, velocity), 0);
+                if (progKbState[curProgram].isNoteOn(ch, n))
+                {
+                    output.addEvent(juce::MidiMessage::noteOn(ch, n, velocity), 0);
+                }
             }
         }
     }
 
-    editorKbState.processNextMidiBuffer (output, 0, buffer.getNumSamples(), true);
-    progKbState[curProgram].processNextMidiBuffer (output, 0, buffer.getNumSamples(), false);
+    editorKbState.processNextMidiBuffer(output, 0, buffer.getNumSamples(), true);
+    progKbState[curProgram].processNextMidiBuffer(output, 0, buffer.getNumSamples(), false);
     midiMessages.clear();
     midiMessages = output;
 
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     }
 }
 
 //==============================================================================
 juce::AudioProcessorEditor* PizKeyboard::createEditor()
 {
-    return new midiKeyboardEditor (this);
+    return new midiKeyboardEditor(this);
 }
 
 //==============================================================================
-void PizKeyboard::getStateInformation (juce::MemoryBlock& destData)
+void PizKeyboard::getStateInformation(juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -467,57 +533,57 @@ void PizKeyboard::getStateInformation (juce::MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState("MYPLUGINSETTINGS");
 
     // add some attributes to it..
-    xmlState.setAttribute ("pluginVersion", 2);
+    xmlState.setAttribute("pluginVersion", 2);
 
-    xmlState.setAttribute ("keyWidth", width);
-    xmlState.setAttribute ("velocity", velocity);
-    xmlState.setAttribute ("useY", useY);
-    xmlState.setAttribute ("channel", channel);
-    xmlState.setAttribute ("toggle", toggle);
-    xmlState.setAttribute ("hide", hide);
-    xmlState.setAttribute ("usepc", usepc);
-    xmlState.setAttribute ("showNumbers", showNumbers);
+    xmlState.setAttribute("keyWidth", width);
+    xmlState.setAttribute("velocity", velocity);
+    xmlState.setAttribute("useY", useY);
+    xmlState.setAttribute("channel", channel);
+    xmlState.setAttribute("toggle", toggle);
+    xmlState.setAttribute("hide", hide);
+    xmlState.setAttribute("usepc", usepc);
+    xmlState.setAttribute("showNumbers", showNumbers);
 
-    xmlState.setAttribute ("qwerty", qwerty);
-    xmlState.setAttribute ("octave", octave);
-    xmlState.setAttribute ("keyPosition", keyPosition);
-    xmlState.setAttribute ("uiWidth", lastUIWidth);
-    xmlState.setAttribute ("uiHeight", lastUIHeight);
+    xmlState.setAttribute("qwerty", qwerty);
+    xmlState.setAttribute("octave", octave);
+    xmlState.setAttribute("keyPosition", keyPosition);
+    xmlState.setAttribute("uiWidth", lastUIWidth);
+    xmlState.setAttribute("uiHeight", lastUIHeight);
 
     // you could also add as many child elements as you need to here..
 
     // then use this helper function to stuff it into the binary blob and return it..
-    copyXmlToBinary (xmlState, destData);
+    copyXmlToBinary(xmlState, destData);
 }
 
-void PizKeyboard::setStateInformation (const void* data, int sizeInBytes)
+void PizKeyboard::setStateInformation(const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    auto xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto xmlState = getXmlFromBinary(data, sizeInBytes);
 
     if (xmlState != nullptr)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            width        = (float) xmlState->getDoubleAttribute ("gainLevel", width); //old name for compatibility
-            width        = (float) xmlState->getDoubleAttribute ("keyWidth", width);
-            velocity     = (float) xmlState->getDoubleAttribute ("velocity", velocity);
-            channel      = xmlState->getIntAttribute ("channel", channel);
-            useY         = xmlState->getBoolAttribute ("useY", useY);
-            toggle       = xmlState->getBoolAttribute ("toggle", toggle);
-            hide         = xmlState->getBoolAttribute ("hide", hide);
-            usepc        = xmlState->getBoolAttribute ("usepc", usepc);
-            showNumbers  = xmlState->getBoolAttribute ("showNumbers", showNumbers);
-            qwerty       = xmlState->getBoolAttribute ("qwerty", qwerty);
-            keyPosition  = xmlState->getIntAttribute ("keyPosition", keyPosition);
-            octave       = xmlState->getIntAttribute ("octave", octave);
-            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
-            lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
+            width        = (float) xmlState->getDoubleAttribute("gainLevel", width); //old name for compatibility
+            width        = (float) xmlState->getDoubleAttribute("keyWidth", width);
+            velocity     = (float) xmlState->getDoubleAttribute("velocity", velocity);
+            channel      = xmlState->getIntAttribute("channel", channel);
+            useY         = xmlState->getBoolAttribute("useY", useY);
+            toggle       = xmlState->getBoolAttribute("toggle", toggle);
+            hide         = xmlState->getBoolAttribute("hide", hide);
+            usepc        = xmlState->getBoolAttribute("usepc", usepc);
+            showNumbers  = xmlState->getBoolAttribute("showNumbers", showNumbers);
+            qwerty       = xmlState->getBoolAttribute("qwerty", qwerty);
+            keyPosition  = xmlState->getIntAttribute("keyPosition", keyPosition);
+            octave       = xmlState->getIntAttribute("octave", octave);
+            lastUIWidth  = xmlState->getIntAttribute("uiWidth", lastUIWidth);
+            lastUIHeight = xmlState->getIntAttribute("uiHeight", lastUIHeight);
             sendChangeMessage();
             this->dispatchPendingMessages();
         }

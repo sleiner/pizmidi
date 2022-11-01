@@ -1,5 +1,6 @@
 
 #include "MidiMorph.h"
+
 #include "ControllerValue.h"
 #include "Cursor.h"
 
@@ -8,12 +9,12 @@ using juce::roundToInt;
 
 MidiMorph::MidiMorph()
 {
-    cursor        = new Cursor (this);
+    cursor        = new Cursor(this);
     valuesChanged = false;
     refreshRate   = 200;
-    guiBounds.setSize (450, 300);
+    guiBounds.setSize(450, 300);
     guiState = 0;
-    paneSize.setSize (300, 300);
+    paneSize.setSize(300, 300);
     autoKey             = true;
     autoLearn           = true;
     controllerListWidth = 150;
@@ -23,19 +24,19 @@ MidiMorph::~MidiMorph()
 {
     if (guiState != nullptr)
     {
-        deleteAndZero (guiState);
+        deleteAndZero(guiState);
     }
-    deleteAndZero (cursor);
+    deleteAndZero(cursor);
 }
 
-void MidiMorph::setCursorXRatio (float x)
+void MidiMorph::setCursorXRatio(float x)
 {
-    cursor->setXY ((float) roundToInt (x * paneSize.getWidth()) - cursor->size / 2, cursor->getY());
+    cursor->setXY((float) roundToInt(x * paneSize.getWidth()) - cursor->size / 2, cursor->getY());
 }
 
-void MidiMorph::setCursorYRatio (float y)
+void MidiMorph::setCursorYRatio(float y)
 {
-    cursor->setXY (cursor->getX(), (float) roundToInt (y * paneSize.getHeight()) - cursor->size / 2);
+    cursor->setXY(cursor->getX(), (float) roundToInt(y * paneSize.getHeight()) - cursor->size / 2);
 }
 
 float MidiMorph::getCursorXRatio()
@@ -48,7 +49,7 @@ float MidiMorph::getCursorYRatio()
     return (cursor->getY() + cursor->size / 2) / paneSize.getHeight();
 }
 
-void MidiMorph::controllerChanged (const Controller* controllerThatHasChanged)
+void MidiMorph::controllerChanged(const Controller* controllerThatHasChanged)
 {
     this->valueChanged = true;
 }
@@ -60,7 +61,7 @@ void MidiMorph::distancesChanged()
     {
         this->valuesChanged = true;
     }
-    this->sendChangeMessage (cursor);
+    this->sendChangeMessage(cursor);
 }
 
 void MidiMorph::cursorChanged()
@@ -72,37 +73,37 @@ void MidiMorph::cursorChanged()
     }
 }
 
-void MidiMorph::addController (int ccNo, int Channel)
+void MidiMorph::addController(int ccNo, int Channel)
 {
-    auto* nc = new Controller (this);
-    nc->setCcNo (ccNo);
-    nc->setChannel (Channel);
-    nc->setName (juce::MidiMessage::getControllerName (ccNo));
+    auto* nc = new Controller(this);
+    nc->setCcNo(ccNo);
+    nc->setChannel(Channel);
+    nc->setName(juce::MidiMessage::getControllerName(ccNo));
 
-    controllers.add (nc);
-    sendChangeMessage (&controllers);
+    controllers.add(nc);
+    sendChangeMessage(&controllers);
 }
 
 void MidiMorph::addController()
 {
     if (controllers.size() > 0)
     {
-        addController (controllers.getLast()->getCcNo() + 1, controllers.getLast()->getChannel());
+        addController(controllers.getLast()->getCcNo() + 1, controllers.getLast()->getChannel());
     }
     else
     {
-        addController (0, 1);
+        addController(0, 1);
     }
 }
 
-void MidiMorph::addScene (Scene* scene)
+void MidiMorph::addScene(Scene* scene)
 {
     scene->id = scenes.size();
-    scenes.add (scene);
-    sendChangeMessage (&scenes);
+    scenes.add(scene);
+    sendChangeMessage(&scenes);
 
-    juce::Array<Scene*> selScenes (&scene, 1);
-    setSelectedScenes (selScenes);
+    juce::Array<Scene*> selScenes(&scene, 1);
+    setSelectedScenes(selScenes);
 }
 
 int MidiMorph::getNumControllers()
@@ -110,17 +111,17 @@ int MidiMorph::getNumControllers()
     return controllers.size();
 }
 
-int MidiMorph::getControllerCCNo (int index)
+int MidiMorph::getControllerCCNo(int index)
 {
     return controllers[index]->getCcNo();
 }
 
-int MidiMorph::getControllerValue (int index)
+int MidiMorph::getControllerValue(int index)
 {
     return controllers[index]->getInterpolatedValue();
 }
 
-void MidiMorph::onMidiEvent (juce::MidiMessage& events)
+void MidiMorph::onMidiEvent(juce::MidiMessage& events)
 {
     bool controllerIsInList = false;
 
@@ -131,24 +132,24 @@ void MidiMorph::onMidiEvent (juce::MidiMessage& events)
             if (controllers[i]->getCcNo() == events.getControllerNumber()
                 && controllers[i]->getChannel() == events.getChannel())
             {
-                controllers[i]->setValueInSelectedScenes (events.getControllerValue());
+                controllers[i]->setValueInSelectedScenes(events.getControllerValue());
                 controllerIsInList = true;
             }
         }
 
         if (! controllerIsInList && autoLearn)
         {
-            this->addController (events.getControllerNumber(), events.getChannel());
-            onMidiEvent (events);
+            this->addController(events.getControllerNumber(), events.getChannel());
+            onMidiEvent(events);
         }
     }
 }
 
-void MidiMorph::getMidiMessages (int offset, juce::MidiBuffer& buffer)
+void MidiMorph::getMidiMessages(int offset, juce::MidiBuffer& buffer)
 {
     if (auditSelScene && selectedScenes.size() > 0 && hasNewMidi())
     {
-        selectedScenes.getFirst()->getMidiMessages (buffer, offset);
+        selectedScenes.getFirst()->getMidiMessages(buffer, offset);
         valueChanged  = false;
         valuesChanged = false;
     }
@@ -158,11 +159,11 @@ void MidiMorph::getMidiMessages (int offset, juce::MidiBuffer& buffer)
         {
             if (! valueChanged)
             {
-                controllers[i]->getMidiMessage (buffer, offset);
+                controllers[i]->getMidiMessage(buffer, offset);
             }
             else if (controllers[i]->hasNewMidi())
             {
-                controllers[i]->getMidiMessage (buffer, offset);
+                controllers[i]->getMidiMessage(buffer, offset);
             }
         }
         valueChanged  = false;
@@ -184,7 +185,7 @@ float MidiMorph::getSumDistances()
     return sumDistances;
 }
 
-Controller* MidiMorph::getController (int index)
+Controller* MidiMorph::getController(int index)
 {
     return controllers[index];
 }
@@ -194,14 +195,14 @@ int MidiMorph::getNumSelectedScenes()
     return selectedScenes.size();
 }
 
-void MidiMorph::setSelectedScenes (juce::Array<Scene*>& scenes)
+void MidiMorph::setSelectedScenes(juce::Array<Scene*>& scenes)
 {
-    this->selectedScenes.swapWith (scenes);
+    this->selectedScenes.swapWith(scenes);
     if (auditSelScene && selectedScenes.size() == 1)
     {
         valuesChanged = true;
     }
-    sendChangeMessage (&selectedScenes);
+    sendChangeMessage(&selectedScenes);
 }
 
 juce::Array<Scene*>* MidiMorph::getSelectedScenes()
@@ -209,7 +210,7 @@ juce::Array<Scene*>* MidiMorph::getSelectedScenes()
     return &this->selectedScenes;
 }
 
-Scene* MidiMorph::getSelectedScene (int index)
+Scene* MidiMorph::getSelectedScene(int index)
 {
     return selectedScenes[index];
 }
@@ -229,16 +230,16 @@ float MidiMorph::getSumAffectionValues()
     return sum;
 }
 
-void MidiMorph::removeScene (Scene* scene)
+void MidiMorph::removeScene(Scene* scene)
 {
     scenes.getLock().enter();
-    scenes.removeObject (scene);
+    scenes.removeObject(scene);
     for (int i = scenes.size(); --i >= 0;)
     {
         scenes[i]->id = i;
     }
     scenes.getLock().exit();
-    sendChangeMessage (&scenes);
+    sendChangeMessage(&scenes);
 }
 
 juce::OwnedArray<Controller>* MidiMorph::getControllers()
@@ -246,166 +247,166 @@ juce::OwnedArray<Controller>* MidiMorph::getControllers()
     return &controllers;
 }
 
-juce::XmlElement* MidiMorph::getXml (const juce::String tagname)
+juce::XmlElement* MidiMorph::getXml(const juce::String tagname)
 {
-    auto* xml = new juce::XmlElement (tagname);
+    auto* xml = new juce::XmlElement(tagname);
 
-    auto* controllersXml = new juce::XmlElement ("controllers");
+    auto* controllersXml = new juce::XmlElement("controllers");
     juce::XmlElement* controllerXml;
     for (int i = 0; i < this->controllers.size(); i++)
     {
         Controller* controller = controllers[i];
-        controllerXml          = new juce::XmlElement ("controller");
+        controllerXml          = new juce::XmlElement("controller");
         juce::XmlElement* valueXml;
         for (int i = 0; i < controller->getNumValues(); i++)
         {
-            ControllerValue* value = controller->getValue (i);
-            valueXml               = new juce::XmlElement ("value");
-            valueXml->setAttribute ("value", value->getValue());
-            valueXml->setAttribute ("scene", value->getScene()->getId());
-            controllerXml->addChildElement (valueXml);
+            ControllerValue* value = controller->getValue(i);
+            valueXml               = new juce::XmlElement("value");
+            valueXml->setAttribute("value", value->getValue());
+            valueXml->setAttribute("scene", value->getScene()->getId());
+            controllerXml->addChildElement(valueXml);
         }
-        controllerXml->setAttribute ("ccno", controller->getCcNo());
-        controllerXml->setAttribute ("channel", controller->getChannel());
-        controllerXml->setAttribute ("name", controller->getChannel());
-        controllersXml->addChildElement (controllerXml);
+        controllerXml->setAttribute("ccno", controller->getCcNo());
+        controllerXml->setAttribute("channel", controller->getChannel());
+        controllerXml->setAttribute("name", controller->getChannel());
+        controllersXml->addChildElement(controllerXml);
     }
 
-    auto* scenesXml = new juce::XmlElement ("scenes");
+    auto* scenesXml = new juce::XmlElement("scenes");
     juce::XmlElement* sceneXml;
     for (int i = 0; i < this->scenes.size(); i++)
     {
         Scene* scene = scenes[i];
-        sceneXml     = new juce::XmlElement ("scene");
-        sceneXml->setAttribute ("id", i);
-        sceneXml->setAttribute ("name", scene->getName());
-        sceneXml->setAttribute ("colour", scene->getColour().toString());
-        sceneXml->setAttribute ("x", scene->Point::getX());
-        sceneXml->setAttribute ("y", scene->Point::getY());
-        sceneXml->setAttribute ("size", scene->size);
+        sceneXml     = new juce::XmlElement("scene");
+        sceneXml->setAttribute("id", i);
+        sceneXml->setAttribute("name", scene->getName());
+        sceneXml->setAttribute("colour", scene->getColour().toString());
+        sceneXml->setAttribute("x", scene->Point::getX());
+        sceneXml->setAttribute("y", scene->Point::getY());
+        sceneXml->setAttribute("size", scene->size);
 
-        scenesXml->addChildElement (sceneXml);
+        scenesXml->addChildElement(sceneXml);
     }
 
-    auto* gui = new juce::XmlElement ("gui");
-    gui->setAttribute ("width", this->guiBounds.getWidth());
-    gui->setAttribute ("height", this->guiBounds.getHeight());
-    gui->setAttribute ("listwidth", this->controllerListWidth);
+    auto* gui = new juce::XmlElement("gui");
+    gui->setAttribute("width", this->guiBounds.getWidth());
+    gui->setAttribute("height", this->guiBounds.getHeight());
+    gui->setAttribute("listwidth", this->controllerListWidth);
 
-    auto* cursorXml = new juce::XmlElement ("cursor");
-    cursorXml->setAttribute ("x", cursor->Point::getX());
-    cursorXml->setAttribute ("y", cursor->Point::getY());
+    auto* cursorXml = new juce::XmlElement("cursor");
+    cursorXml->setAttribute("x", cursor->Point::getX());
+    cursorXml->setAttribute("y", cursor->Point::getY());
 
-    auto* options = new juce::XmlElement ("options");
-    options->setAttribute ("autokey", this->autoKey);
-    options->setAttribute ("autolearn", this->autoLearn);
-    options->setAttribute ("auditselscene", getAuditSelScene());
-    options->setAttribute ("refreshrate", this->refreshRate);
+    auto* options = new juce::XmlElement("options");
+    options->setAttribute("autokey", this->autoKey);
+    options->setAttribute("autolearn", this->autoLearn);
+    options->setAttribute("auditselscene", getAuditSelScene());
+    options->setAttribute("refreshrate", this->refreshRate);
 
-    xml->addChildElement (controllersXml);
-    xml->addChildElement (scenesXml);
-    xml->addChildElement (gui);
-    xml->addChildElement (guiState);
-    xml->addChildElement (cursorXml);
-    xml->addChildElement (options);
+    xml->addChildElement(controllersXml);
+    xml->addChildElement(scenesXml);
+    xml->addChildElement(gui);
+    xml->addChildElement(guiState);
+    xml->addChildElement(cursorXml);
+    xml->addChildElement(options);
 
     return xml;
 }
 
-void MidiMorph::setFromXml (juce::XmlElement* xmlData)
+void MidiMorph::setFromXml(juce::XmlElement* xmlData)
 {
     scenes.clear();
     controllers.clear();
 
-    juce::XmlElement* scenesXml = xmlData->getChildByName ("scenes");
+    juce::XmlElement* scenesXml = xmlData->getChildByName("scenes");
     for (int i = 0; i < scenesXml->getNumChildElements(); i++)
     {
-        juce::XmlElement* sceneXml = scenesXml->getChildElement (i);
-        auto* scene                = new Scene (this);
-        scene->setXY ((float) sceneXml->getIntAttribute ("x"), (float) sceneXml->getIntAttribute ("y"));
-        scene->setColour (juce::Colour::fromString (sceneXml->getStringAttribute ("colour")));
-        scene->setName (sceneXml->getStringAttribute ("name"));
-        scene->size = sceneXml->getIntAttribute ("size", scene->size);
-        scenes.add (scene);
+        juce::XmlElement* sceneXml = scenesXml->getChildElement(i);
+        auto* scene                = new Scene(this);
+        scene->setXY((float) sceneXml->getIntAttribute("x"), (float) sceneXml->getIntAttribute("y"));
+        scene->setColour(juce::Colour::fromString(sceneXml->getStringAttribute("colour")));
+        scene->setName(sceneXml->getStringAttribute("name"));
+        scene->size = sceneXml->getIntAttribute("size", scene->size);
+        scenes.add(scene);
     }
 
-    juce::XmlElement* controllersXml = xmlData->getChildByName ("controllers");
+    juce::XmlElement* controllersXml = xmlData->getChildByName("controllers");
     for (int i = 0; i < controllersXml->getNumChildElements(); i++)
     {
         Controller* controller;
-        juce::XmlElement* controllerXml = controllersXml->getChildElement (i);
-        controller                      = new Controller (this);
-        controller->setCcNo (controllerXml->getIntAttribute ("ccno"));
-        controller->setChannel (controllerXml->getIntAttribute ("channel"));
+        juce::XmlElement* controllerXml = controllersXml->getChildElement(i);
+        controller                      = new Controller(this);
+        controller->setCcNo(controllerXml->getIntAttribute("ccno"));
+        controller->setChannel(controllerXml->getIntAttribute("channel"));
 
         for (int j = 0; j < controllerXml->getNumChildElements(); j++)
         {
-            juce::XmlElement* valueXml = controllerXml->getChildElement (j);
-            int cValue                 = valueXml->getIntAttribute ("value");
-            int sceneId                = valueXml->getIntAttribute ("scene");
+            juce::XmlElement* valueXml = controllerXml->getChildElement(j);
+            int cValue                 = valueXml->getIntAttribute("value");
+            int sceneId                = valueXml->getIntAttribute("scene");
             Scene* scene               = scenes[sceneId];
-            auto* value                = new ControllerValue (controller, scene);
-            value->setValue (cValue);
-            controller->addValue (value);
-            scene->addValue (value);
+            auto* value                = new ControllerValue(controller, scene);
+            value->setValue(cValue);
+            controller->addValue(value);
+            scene->addValue(value);
         }
 
-        controllers.add (controller);
+        controllers.add(controller);
     }
 
-    juce::XmlElement* cursorXml = xmlData->getChildByName ("cursor");
-    if (xmlData->containsChildElement (cursorXml))
+    juce::XmlElement* cursorXml = xmlData->getChildByName("cursor");
+    if (xmlData->containsChildElement(cursorXml))
     {
-        cursor->setXY ((float) cursorXml->getDoubleAttribute ("x"), (float) cursorXml->getDoubleAttribute ("y"));
+        cursor->setXY((float) cursorXml->getDoubleAttribute("x"), (float) cursorXml->getDoubleAttribute("y"));
     }
 
-    this->guiState = xmlData->getChildByName ("morphpanestate");
+    this->guiState = xmlData->getChildByName("morphpanestate");
 
-    juce::XmlElement* gui = xmlData->getChildByName ("gui");
-    this->guiBounds.setSize (gui->getIntAttribute ("width"), gui->getIntAttribute ("height"));
-    this->controllerListWidth = gui->getIntAttribute ("listwidth", this->controllerListWidth);
+    juce::XmlElement* gui = xmlData->getChildByName("gui");
+    this->guiBounds.setSize(gui->getIntAttribute("width"), gui->getIntAttribute("height"));
+    this->controllerListWidth = gui->getIntAttribute("listwidth", this->controllerListWidth);
 
-    juce::XmlElement* options = xmlData->getChildByName ("options");
-    if (xmlData->containsChildElement (options))
+    juce::XmlElement* options = xmlData->getChildByName("options");
+    if (xmlData->containsChildElement(options))
     {
-        this->autoKey   = options->getBoolAttribute ("autokey", this->autoKey);
-        this->autoLearn = options->getBoolAttribute ("autolearn", this->autoLearn);
-        setAuditSelScene (options->getBoolAttribute ("auditselscene", this->auditSelScene));
-        this->refreshRate = options->getIntAttribute ("refreshrate", this->refreshRate);
+        this->autoKey   = options->getBoolAttribute("autokey", this->autoKey);
+        this->autoLearn = options->getBoolAttribute("autolearn", this->autoLearn);
+        setAuditSelScene(options->getBoolAttribute("auditselscene", this->auditSelScene));
+        this->refreshRate = options->getIntAttribute("refreshrate", this->refreshRate);
     }
 
-    sendChangeMessage (&controllers);
-    sendChangeMessage (&scenes);
+    sendChangeMessage(&controllers);
+    sendChangeMessage(&scenes);
 }
 
-int MidiMorph::getSceneIndex (Scene* scene)
+int MidiMorph::getSceneIndex(Scene* scene)
 {
-    return scenes.indexOf (scene);
+    return scenes.indexOf(scene);
 }
 
-int MidiMorph::getUpdateRateSmpls (int rate)
+int MidiMorph::getUpdateRateSmpls(int rate)
 {
-    return jmax (1, (rate / refreshRate));
+    return jmax(1, (rate / refreshRate));
 }
 
-void MidiMorph::removeController (Controller* controllerToRemove)
+void MidiMorph::removeController(Controller* controllerToRemove)
 {
     controllers.getLock().enter();
     for (int i = scenes.size(); --i >= 0;)
     {
-        scenes[i]->controllerValues.removeAllInstancesOf (controllerToRemove->getValue (scenes[i]));
+        scenes[i]->controllerValues.removeAllInstancesOf(controllerToRemove->getValue(scenes[i]));
     }
-    this->controllers.removeObject (controllerToRemove);
+    this->controllers.removeObject(controllerToRemove);
     controllers.getLock().exit();
 
-    sendChangeMessage (&controllers);
+    sendChangeMessage(&controllers);
 }
 
-void MidiMorph::saveGUIState (juce::XmlElement* state)
+void MidiMorph::saveGUIState(juce::XmlElement* state)
 {
     if (guiState != nullptr)
     {
-        deleteAndZero (guiState);
+        deleteAndZero(guiState);
     }
     this->guiState = state;
 }
@@ -415,7 +416,7 @@ juce::XmlElement* MidiMorph::getSavedGUIState()
     return guiState;
 }
 
-void MidiMorph::setPaneSize (juce::Rectangle<int> size)
+void MidiMorph::setPaneSize(juce::Rectangle<int> size)
 {
     paneSize = size;
 }
@@ -427,9 +428,9 @@ juce::Rectangle<int> MidiMorph::getPaneSize()
 
 void MidiMorph::addSceneAtCursor()
 {
-    auto* scene = new Scene (this);
-    scene->setXY (cursor->getCursorPosition().getX(), cursor->getCursorPosition().getY());
-    addScene (scene);
+    auto* scene = new Scene(this);
+    scene->setXY(cursor->getCursorPosition().getX(), cursor->getCursorPosition().getY());
+    addScene(scene);
 }
 
 int MidiMorph::getRefreshRate()
@@ -447,7 +448,7 @@ juce::OwnedArray<Scene>* MidiMorph::getScenes()
     return &scenes;
 }
 
-void MidiMorph::sendChangeMessage (void* ptr)
+void MidiMorph::sendChangeMessage(void* ptr)
 {
     if (ptr != lastRecipant)
     {
@@ -468,7 +469,7 @@ void MidiMorph::sceneMoved()
     sumDistancesChanged = true;
 }
 
-void MidiMorph::setAuditSelScene (bool shouldAudit)
+void MidiMorph::setAuditSelScene(bool shouldAudit)
 {
     auditSelScene = shouldAudit;
     valuesChanged = true;
@@ -489,7 +490,7 @@ bool MidiMorph::needsOneRefresh()
     return valueChanged;
 }
 
-void MidiMorph::showControllers (bool show)
+void MidiMorph::showControllers(bool show)
 {
     if (show)
     {
@@ -500,5 +501,5 @@ void MidiMorph::showControllers (bool show)
         controllerListWidth = 0;
     }
 
-    sendChangeMessage (this);
+    sendChangeMessage(this);
 }

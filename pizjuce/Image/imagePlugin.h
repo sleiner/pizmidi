@@ -1,10 +1,10 @@
 #ifndef IMAGEPLUGINFILTER_H
 #define IMAGEPLUGINFILTER_H
 
-#include <juce_data_structures/juce_data_structures.h>
-
 #include "../_common/BankStorage.h"
 #include "../_common/PizAudioProcessor.h"
+
+#include <juce_data_structures/juce_data_structures.h>
 
 enum parameters
 {
@@ -36,17 +36,21 @@ public:
     ~imagePluginFilter() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processBlock (juce::AudioSampleBuffer& buffer,
-                       juce::MidiBuffer& midiMessages) override;
+    void processBlock(juce::AudioSampleBuffer& buffer,
+                      juce::MidiBuffer& midiMessages) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
 
     //==============================================================================
-    const juce::String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override
+    {
+        return JucePlugin_Name;
+    }
+
     bool acceptsMidi() const override
     {
 #if JucePlugin_WantsMidiInput
@@ -55,6 +59,7 @@ public:
         return false;
 #endif
     }
+
     bool producesMidi() const override
     {
 #if JucePlugin_ProducesMidiOutput
@@ -63,57 +68,83 @@ public:
         return false;
 #endif
     }
-    bool hasEditor() const override { return true; }
-    double getTailLengthSeconds() const override { return 0; }
 
-    int getNumParameters() override { return kNumParams; }
+    bool hasEditor() const override
+    {
+        return true;
+    }
 
-    float getParameter (int index) override;
-    void setParameter (int index, float newValue) override;
+    double getTailLengthSeconds() const override
+    {
+        return 0;
+    }
 
-    const juce::String getParameterName (int index) override;
-    const juce::String getParameterText (int index) override;
+    int getNumParameters() override
+    {
+        return kNumParams;
+    }
 
-    const juce::String getInputChannelName (int channelIndex) const override;
-    const juce::String getOutputChannelName (int channelIndex) const override;
-    bool isInputChannelStereoPair (int index) const override;
-    bool isOutputChannelStereoPair (int index) const override;
+    float getParameter(int index) override;
+    void setParameter(int index, float newValue) override;
+
+    const juce::String getParameterName(int index) override;
+    const juce::String getParameterText(int index) override;
+
+    const juce::String getInputChannelName(int channelIndex) const override;
+    const juce::String getOutputChannelName(int channelIndex) const override;
+    bool isInputChannelStereoPair(int index) const override;
+    bool isOutputChannelStereoPair(int index) const override;
 
     //==============================================================================
 
-    int getNumPrograms() override { return 128; }
+    int getNumPrograms() override
+    {
+        return 128;
+    }
+
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getCurrentProgramStateInformation (juce::MemoryBlock& destData) override;
-    void setCurrentProgramStateInformation (const void* data, int sizeInBytes) override;
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getCurrentProgramStateInformation(juce::MemoryBlock& destData) override;
+    void setCurrentProgramStateInformation(const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setBankColours (juce::Colour colour, juce::Colour text);
-    void applySizeToBank (int h, int w);
+    void setBankColours(juce::Colour colour, juce::Colour text);
+    void applySizeToBank(int h, int w);
     void clearAllImages();
 
-    void setCurrentBank (int index, int program = -1);
-    int getCurrentBank() { return curBank; }
+    void setCurrentBank(int index, int program = -1);
 
-    void setNoteInput (bool use)
+    int getCurrentBank()
+    {
+        return curBank;
+    }
+
+    void setNoteInput(bool use)
     {
         noteInput = use;
-        programs->setGlobal ("noteInput", use);
+        programs->setGlobal("noteInput", use);
     }
 
-    void setUsePC (bool use)
+    void setUsePC(bool use)
     {
         usePC = use;
-        programs->setGlobal ("usePC", use);
+        programs->setGlobal("usePC", use);
     }
 
-    bool getUsePC() { return usePC; }
-    bool getNoteInput() { return noteInput; }
+    bool getUsePC()
+    {
+        return usePC;
+    }
+
+    bool getNoteInput()
+    {
+        return noteInput;
+    }
 
     //==============================================================================
     // These properties are public so that our editor component can access them
@@ -144,7 +175,7 @@ private:
 
     bool init;
 
-    JUCE_LEAK_DETECTOR (imagePluginFilter)
+    JUCE_LEAK_DETECTOR(imagePluginFilter)
 };
 
 #endif

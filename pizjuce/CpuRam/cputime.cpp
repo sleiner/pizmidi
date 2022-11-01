@@ -17,7 +17,7 @@ float CProcessorUsage::s_cpuProcess[5]       = { 0, 0, 0, 0, 0 };
 
 CProcessorUsage::CProcessorUsage()
 {
-    ::InitializeCriticalSection (&m_cs);
+    ::InitializeCriticalSection(&m_cs);
 
     s_pfnNtQuerySystemInformation = NULL;
     s_pfnGetSystemTimes           = NULL;
@@ -28,20 +28,22 @@ CProcessorUsage::CProcessorUsage()
     interval  = 200;
     firstTime = true;
 
-    HMODULE hModule = ::GetModuleHandle (TEXT ("kernel32.dll"));
+    HMODULE hModule = ::GetModuleHandle(TEXT("kernel32.dll"));
     if (hModule)
-        s_pfnGetSystemTimes = (pfnGetSystemTimes)::GetProcAddress (hModule, "GetSystemTimes");
+    {
+        s_pfnGetSystemTimes = (pfnGetSystemTimes)::GetProcAddress(hModule, "GetSystemTimes");
+    }
 
     if (! s_pfnGetSystemTimes)
     {
-        hModule = ::GetModuleHandle (TEXT ("ntdll.dll"));
+        hModule = ::GetModuleHandle(TEXT("ntdll.dll"));
         if (hModule)
         {
-            s_pfnNtQuerySystemInformation = (pfnNtQuerySystemInformation)::GetProcAddress (hModule, "NtQuerySystemInformation");
+            s_pfnNtQuerySystemInformation = (pfnNtQuerySystemInformation)::GetProcAddress(hModule, "NtQuerySystemInformation");
             if (s_pfnNtQuerySystemInformation)
             {
-                s_pfnNtQuerySystemInformation (8, NULL, 0, &m_uInfoLength);
-                m_pInfo = new PROC_PERF_INFO[m_uInfoLength / sizeof (PROC_PERF_INFO)];
+                s_pfnNtQuerySystemInformation(8, NULL, 0, &m_uInfoLength);
+                m_pInfo = new PROC_PERF_INFO[m_uInfoLength / sizeof(PROC_PERF_INFO)];
             }
         }
     }
@@ -51,25 +53,29 @@ CProcessorUsage::CProcessorUsage()
 CProcessorUsage::~CProcessorUsage()
 {
     if (m_pInfo)
+    {
         delete m_pInfo;
+    }
 
-    ::DeleteCriticalSection (&m_cs);
+    ::DeleteCriticalSection(&m_cs);
 }
 
-void CProcessorUsage::GetSysTimes (__int64& idleTime, __int64& kernelTime, __int64& userTime)
+void CProcessorUsage::GetSysTimes(__int64& idleTime, __int64& kernelTime, __int64& userTime)
 {
     if (s_pfnGetSystemTimes)
-        s_pfnGetSystemTimes ((LPFILETIME) &idleTime, (LPFILETIME) &kernelTime, (LPFILETIME) &userTime);
+    {
+        s_pfnGetSystemTimes((LPFILETIME) &idleTime, (LPFILETIME) &kernelTime, (LPFILETIME) &userTime);
+    }
     else
     {
         idleTime   = 0;
         kernelTime = 0;
         userTime   = 0;
-        if (s_pfnNtQuerySystemInformation && m_uInfoLength && ! s_pfnNtQuerySystemInformation (0x08, m_pInfo, m_uInfoLength, &m_uInfoLength))
+        if (s_pfnNtQuerySystemInformation && m_uInfoLength && ! s_pfnNtQuerySystemInformation(0x08, m_pInfo, m_uInfoLength, &m_uInfoLength))
         {
             // NtQuerySystemInformation returns information for all
             // CPU cores in the system, so we take the average here:
-            int nCores = m_uInfoLength / sizeof (PROC_PERF_INFO);
+            int nCores = m_uInfoLength / sizeof(PROC_PERF_INFO);
             for (int i = 0; i < nCores; i++)
             {
                 idleTime += m_pInfo[i].IdleTime.QuadPart;
@@ -83,12 +89,12 @@ void CProcessorUsage::GetSysTimes (__int64& idleTime, __int64& kernelTime, __int
     }
 }
 
-void CProcessorUsage::setInterval (int newInterval)
+void CProcessorUsage::setInterval(int newInterval)
 {
     //interval = newInterval;
 }
 
-float CProcessorUsage::GetUsage (bool processOnly)
+float CProcessorUsage::GetUsage(bool processOnly)
 {
     __int64 sTime;
     float sLastCpu;
@@ -98,7 +104,9 @@ float CProcessorUsage::GetUsage (bool processOnly)
     sLastCpu = s_lastCpu;
 
     if (((::GetTickCount() - s_TickMark) & 0x7FFFFFFF) <= interval && ! firstTime)
+    {
         return sLastCpu;
+    }
 
     firstTime = false;
     __int64 time;
@@ -108,14 +116,14 @@ float CProcessorUsage::GetUsage (bool processOnly)
     __int64 kernelTimeProcess;
     __int64 userTimeProcess;
 
-    ::GetSystemTimeAsFileTime ((LPFILETIME) &time);
+    ::GetSystemTimeAsFileTime((LPFILETIME) &time);
 
     if (! sTime)
     {
-        GetSysTimes (idleTime, kernelTime, userTime);
+        GetSysTimes(idleTime, kernelTime, userTime);
         FILETIME createTime;
         FILETIME exitTime;
-        ::GetProcessTimes (::GetCurrentProcess(), &createTime, &exitTime, (LPFILETIME) &kernelTimeProcess, (LPFILETIME) &userTimeProcess);
+        ::GetProcessTimes(::GetCurrentProcess(), &createTime, &exitTime, (LPFILETIME) &kernelTimeProcess, (LPFILETIME) &userTimeProcess);
 
         s_time              = time;
         s_idleTime          = idleTime;
@@ -130,11 +138,11 @@ float CProcessorUsage::GetUsage (bool processOnly)
 
     __int64 div = (time - sTime);
 
-    GetSysTimes (idleTime, kernelTime, userTime);
+    GetSysTimes(idleTime, kernelTime, userTime);
 
     FILETIME createTime;
     FILETIME exitTime;
-    ::GetProcessTimes (::GetCurrentProcess(), &createTime, &exitTime, (LPFILETIME) &kernelTimeProcess, (LPFILETIME) &userTimeProcess);
+    ::GetProcessTimes(::GetCurrentProcess(), &createTime, &exitTime, (LPFILETIME) &kernelTimeProcess, (LPFILETIME) &userTimeProcess);
 
     float cpu;
     float cpuProcess;
@@ -145,11 +153,15 @@ float CProcessorUsage::GetUsage (bool processOnly)
     __int64 sys = (usr + ker);
 
     if (sys)
-        cpu = float ((sys - idl) * 100 / sys); // System Idle take 100 % of cpu;
+    {
+        cpu = float((sys - idl) * 100 / sys); // System Idle take 100 % of cpu;
+    }
     else
+    {
         cpu = 0;
+    }
 
-    cpuProcess = float ((((userTimeProcess - s_userTimeProcess) + (kernelTimeProcess - s_kernelTimeProcess)) * 100) / div);
+    cpuProcess = float((((userTimeProcess - s_userTimeProcess) + (kernelTimeProcess - s_kernelTimeProcess)) * 100) / div);
 
     s_time                        = time;
     s_idleTime                    = idleTime;
@@ -162,16 +174,22 @@ float CProcessorUsage::GetUsage (bool processOnly)
     s_count++;
 
     if (s_count > 5)
+    {
         s_count = 5;
+    }
 
     cpu = 0;
     int i;
     for (i = 0; i < s_count; i++)
+    {
         cpu += s_cpu[i];
+    }
 
     cpuProcess = 0;
     for (i = 0; i < s_count; i++)
+    {
         cpuProcess += s_cpuProcess[i];
+    }
 
     cpu /= s_count;
     cpuProcess /= s_count;

@@ -8,7 +8,7 @@ class Scene;
 class ControllerValue
 {
 public:
-    ControllerValue (Controller* controller, Scene* scene);
+    ControllerValue(Controller* controller, Scene* scene);
 
     ~ControllerValue();
 
@@ -17,13 +17,13 @@ public:
     Scene* scene;
 
     int getValue();
-    void setValue (int newValue);
+    void setValue(int newValue);
 
     Scene* getScene();
 
     Controller* getController();
 
-    void getMidiMessage (juce::MidiBuffer& buffer, int pos);
+    void getMidiMessage(juce::MidiBuffer& buffer, int pos);
 
     friend class Controller;
 

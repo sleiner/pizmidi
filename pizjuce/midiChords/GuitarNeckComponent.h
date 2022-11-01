@@ -1,10 +1,10 @@
 #ifndef GUITAR_NECK_COMPONENT_H
 #define GUITAR_NECK_COMPONENT_H
 
+#include "../_common/midistuff.h"
+
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-
-#include "../_common/midistuff.h"
 
 #define maxFrets   (32)
 #define maxStrings (16)
@@ -18,22 +18,37 @@ public:
         fret   = -1;
         string = -1;
     }
-    FrettedNote (int f, int s)
+
+    FrettedNote(int f, int s)
     {
         fret   = f;
         string = s;
     }
-    ~FrettedNote() {}
 
-    bool isValid() const { return fret >= 0 && string >= 0; }
+    ~FrettedNote()
+    {
+    }
+
+    bool isValid() const
+    {
+        return fret >= 0 && string >= 0;
+    }
+
     void invalidate()
     {
         fret   = -1;
         string = -1;
     }
 
-    bool operator!= (FrettedNote const& other) { return other.fret != this->fret || other.string != this->string; }
-    bool operator== (FrettedNote const& other) { return other.fret == this->fret && other.string == this->string; }
+    bool operator!=(FrettedNote const& other)
+    {
+        return other.fret != this->fret || other.string != this->string;
+    }
+
+    bool operator==(FrettedNote const& other)
+    {
+        return other.fret == this->fret && other.string == this->string;
+    }
 
     int fret;
     int string;
@@ -46,40 +61,68 @@ class GuitarNeckComponent : public juce::Component,
                             private juce::AsyncUpdater
 {
 public:
-    GuitarNeckComponent (juce::MidiKeyboardState& state);
+    GuitarNeckComponent(juce::MidiKeyboardState& state);
     ~GuitarNeckComponent() override;
 
-    void setNumStrings (int n);
-    void setNumFrets (int n);
-    void setDotSize (float diameter)
+    void setNumStrings(int n);
+    void setNumFrets(int n);
+
+    void setDotSize(float diameter)
     {
         dotSize = diameter;
         repaint();
     }
-    void setStringNote (int string, int note)
+
+    void setStringNote(int string, int note)
     {
         stringNote[string] = note;
         repaint();
     }
 
-    void setFlats (bool flats) { showFlats = flats; }
-    void setVelocity (float velocity);
-    void setMidiChannel (int midiChannelNumber);
-    int getMidiChannel() const noexcept { return midiChannel; }
-    void setMidiChannelsToDisplay (int midiChannelMask);
-    int getMidiChannelsToDisplay() const noexcept { return midiInChannelMask; }
+    void setFlats(bool flats)
+    {
+        showFlats = flats;
+    }
 
-    void setAvailableRange (int lowestNote,
-                            int highestNote);
-    int getRangeStart() const noexcept { return rangeStart; }
-    int getRangeEnd() const noexcept { return rangeEnd; }
+    void setVelocity(float velocity);
+    void setMidiChannel(int midiChannelNumber);
 
-    void setLowestVisibleFret (int fretNumber);
-    int getLowestVisibleFret() const noexcept { return firstFret; }
+    int getMidiChannel() const noexcept
+    {
+        return midiChannel;
+    }
 
-    void drawNote (int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
+    void setMidiChannelsToDisplay(int midiChannelMask);
 
-    const juce::String getNoteText (const int fret, const int string);
+    int getMidiChannelsToDisplay() const noexcept
+    {
+        return midiInChannelMask;
+    }
+
+    void setAvailableRange(int lowestNote,
+                           int highestNote);
+
+    int getRangeStart() const noexcept
+    {
+        return rangeStart;
+    }
+
+    int getRangeEnd() const noexcept
+    {
+        return rangeEnd;
+    }
+
+    void setLowestVisibleFret(int fretNumber);
+
+    int getLowestVisibleFret() const noexcept
+    {
+        return firstFret;
+    }
+
+    void drawNote(int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
+
+    const juce::String getNoteText(const int fret, const int string);
+
     //==============================================================================
     /** A set of colour IDs to use to change the colour of various aspects of the keyboard.
 
@@ -105,7 +148,7 @@ public:
         Depending on the keyboard's orientation, this may be a horizontal or vertical
         distance, in either direction.
     */
-    int getKeyStartPosition (const int midiNoteNumber) const;
+    int getKeyStartPosition(const int midiNoteNumber) const;
 
     /** This sets the octave number which is shown as the octave number for middle C.
 
@@ -118,41 +161,48 @@ public:
 
         @see getOctaveForMiddleC
     */
-    void setOctaveForMiddleC (int octaveNumForMiddleC);
+    void setOctaveForMiddleC(int octaveNumForMiddleC);
 
     /** This returns the value set by setOctaveForMiddleC().
         @see setOctaveForMiddleC
     */
-    int getOctaveForMiddleC() const noexcept { return octaveNumForMiddleC; }
+    int getOctaveForMiddleC() const noexcept
+    {
+        return octaveNumForMiddleC;
+    }
 
-    int getNote (FrettedNote n) { return stringNote[n.string] + n.fret; }
-    int getStringFret (int string);
+    int getNote(FrettedNote n)
+    {
+        return stringNote[n.string] + n.fret;
+    }
+
+    int getStringFret(int string);
 
     //==============================================================================
     /** @internal */
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     /** @internal */
     void resized() override;
     /** @internal */
-    void mouseMove (const juce::MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
     /** @internal */
-    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
     /** @internal */
-    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
     /** @internal */
-    void mouseUp (const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     /** @internal */
-    void mouseEnter (const juce::MouseEvent& e) override;
+    void mouseEnter(const juce::MouseEvent& e) override;
     /** @internal */
-    void mouseExit (const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
     /** @internal */
     void timerCallback() override;
     /** @internal */
-    void focusLost (FocusChangeType cause) override;
+    void focusLost(FocusChangeType cause) override;
     /** @internal */
-    void handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOn(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     /** @internal */
-    void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff(juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     /** @internal */
     void handleAsyncUpdate() override;
     /** @internal */
@@ -160,10 +210,10 @@ public:
 
 protected:
     //==============================================================================
-    virtual void drawFretString (int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
+    virtual void drawFretString(int fret, int string, juce::Graphics& g, int x, int y, int w, int h, bool isDown, bool isOver, const juce::Colour& lineColour, const juce::Colour& textColour);
 
-    virtual bool mouseDownOnKey (int fret, int string, const juce::MouseEvent& e);
-    virtual void mouseDraggedToKey (int fret, int string, const juce::MouseEvent& e);
+    virtual bool mouseDownOnKey(int fret, int string, const juce::MouseEvent& e);
+    virtual void mouseDraggedToKey(int fret, int string, const juce::MouseEvent& e);
 
 private:
     //==============================================================================
@@ -177,9 +227,9 @@ private:
     int numStrings, numFrets;
     int stringNote[maxStrings];
     int currentlyFrettedFret[maxStrings];
-    void getFretPos (int fret, int& x, int& w) const;
-    int getFretPos (int fret) const;
-    int getFretWidth (int fret) const;
+    void getFretPos(int fret, int& x, int& w) const;
+    int getFretPos(int fret) const;
+    int getFretWidth(int fret) const;
     float dotSize;
 
     int rangeStart, rangeEnd, firstFret;
@@ -188,13 +238,13 @@ private:
     int octaveNumForMiddleC;
 
     FrettedNote noteUnderMouse, mouseDownNote;
-    FrettedNote xyToNote (const juce::Point<int>& pos, float& mousePositionVelocity);
+    FrettedNote xyToNote(const juce::Point<int>& pos, float& mousePositionVelocity);
     void resetAnyKeysInUse();
-    void updateNoteUnderMouse (const juce::Point<int>& pos);
-    void repaintNote (const int fret);
+    void updateNoteUnderMouse(const juce::Point<int>& pos);
+    void repaintNote(const int fret);
     bool showFlats;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GuitarNeckComponent);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GuitarNeckComponent);
 };
 
 #endif

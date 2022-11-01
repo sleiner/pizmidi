@@ -20,11 +20,12 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "MidiMonitor.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "MidiMonitor.h"
 //[/Headers]
 
 //==============================================================================
@@ -43,20 +44,20 @@ class MidiMonitorEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    MidiMonitorEditor (MidiMonitorPlugin* const ownerFilter);
+    MidiMonitorEditor(MidiMonitorPlugin* const ownerFilter);
     ~MidiMonitorEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void mouseDown (const juce::MouseEvent& e) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void mouseDown(const juce::MouseEvent& e) override;
     void timerCallback() override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -71,12 +72,13 @@ private:
     int maxLines;
 
     void updateParametersFromFilter();
+
     MidiMonitorPlugin* getFilter() const throw()
     {
         return (MidiMonitorPlugin*) getAudioProcessor();
     }
 
-    const juce::String ppqToString (const double sppq, const int numerator, const int denominator, const double bpm);
+    const juce::String ppqToString(const double sppq, const int numerator, const int denominator, const double bpm);
     //[/UserVariables]
 
     //==============================================================================
@@ -97,7 +99,7 @@ private:
     std::unique_ptr<juce::TextEditor> aboutBox;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiMonitorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiMonitorEditor)
 };
 
 //[EndFile] You can add extra defines here...

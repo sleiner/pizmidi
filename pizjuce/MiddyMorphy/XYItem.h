@@ -5,9 +5,9 @@
 class XYItem : public juce::Point<float>
 {
 public:
-    float getDistance (juce::Point<float>& otherPoint);
+    float getDistance(juce::Point<float>& otherPoint);
 
     virtual void moved();
 
-    void setXY (float x, float y);
+    void setXY(float x, float y);
 };

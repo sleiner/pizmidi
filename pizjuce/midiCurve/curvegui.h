@@ -20,11 +20,12 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "../_common/ChannelSlider.h"
 #include "curve.h"
 #include "MidiEnvelope.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
+
 //[/Headers]
 
 //==============================================================================
@@ -42,22 +43,26 @@ class CurveEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    CurveEditor (MidiCurve* const ownerFilter);
+    CurveEditor(MidiCurve* const ownerFilter);
     ~CurveEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MidiCurve* getFilter() const throw() { return (MidiCurve*) getAudioProcessor(); }
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    MidiCurve* getFilter() const throw()
+    {
+        return (MidiCurve*) getAudioProcessor();
+    }
+
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
     void updateParameters();
     juce::ComponentBoundsConstrainer resizeLimits;
     //[/UserVariables]
@@ -81,7 +86,7 @@ private:
     std::unique_ptr<juce::Label> label5;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CurveEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CurveEditor)
 };
 
 //[EndFile] You can add extra defines here...

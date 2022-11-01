@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include <utility>
-
 #include <juce_core/juce_core.h>
+#include <utility>
 
 template <typename ElementType,
           typename TypeOfCriticalSectionToUse = juce::DummyCriticalSection,
@@ -17,11 +16,11 @@ public:
     using juce::Array<ElementType, TypeOfCriticalSectionToUse, minimumAllocatedSize>::operator=;
 
     template <class UnaryPredicate>
-    ElementType findIf (UnaryPredicate p) const
+    ElementType findIf(UnaryPredicate p) const
     {
         for (auto&& element : *this)
         {
-            if (p (element))
+            if (p(element))
             {
                 return element;
             }

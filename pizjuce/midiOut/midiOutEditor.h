@@ -20,10 +20,11 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "midiOut.h"
 #include "MidiPad.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
+
 //[/Headers]
 
 //==============================================================================
@@ -41,24 +42,29 @@ class MidiOutEditor : public juce::AudioProcessorEditor,
 {
 public:
     //==============================================================================
-    MidiOutEditor (MidiOutFilter* const ownerFilter);
+    MidiOutEditor(MidiOutFilter* const ownerFilter);
     ~MidiOutEditor() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
-    void buttonStateChanged (juce::Button* buttonThatWasClicked) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void buttonStateChanged(juce::Button* buttonThatWasClicked) override;
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
+    void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     void updateParametersFromFilter();
-    MidiOutFilter* getFilter() const throw() { return (MidiOutFilter*) getAudioProcessor(); }
+
+    MidiOutFilter* getFilter() const throw()
+    {
+        return (MidiOutFilter*) getAudioProcessor();
+    }
+
     //[/UserVariables]
 
     //==============================================================================
@@ -71,7 +77,7 @@ private:
     std::unique_ptr<juce::Label> label;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidiOutEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiOutEditor)
 };
 
 //[EndFile] You can add extra defines here...

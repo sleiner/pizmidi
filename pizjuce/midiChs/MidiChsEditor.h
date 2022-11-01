@@ -1,9 +1,9 @@
 #ifndef MIDICHSPLUGINEDITOR_H
 #define MIDICHSPLUGINEDITOR_H
 
-#include <juce_gui_basics/juce_gui_basics.h>
-
 #include "MidiChsProcessor.h"
+
+#include <juce_gui_basics/juce_gui_basics.h>
 
 //==============================================================================
 /**
@@ -29,7 +29,7 @@ public:
         When created, this will register itself with the filter for changes. It's
         safe to assume that the filter won't be deleted before this object is.
     */
-    MidiChsEditor (MidiChsProcessor* const ownerFilter);
+    MidiChsEditor(MidiChsProcessor* const ownerFilter);
 
     /** Destructor. */
     ~MidiChsEditor() override;
@@ -38,17 +38,17 @@ public:
     /** Our demo filter is a ChangeBroadcaster, and will call us back when one of
         its parameters changes.
     */
-    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
     //==============================================================================
     /** Standard Juce paint callback. */
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
     /** Standard Juce resize callback. */
     void resized() override;
 
-    void buttonClicked (juce::Button*) override;
-    void sliderValueChanged (juce::Slider* sliderThatWasMoved) override;
+    void buttonClicked(juce::Button*) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
 
 private:
     //==============================================================================
@@ -64,7 +64,10 @@ private:
 
     // handy wrapper method to avoid having to cast the filter to a MidiChsProcessor
     // every time we need it..
-    MidiChsProcessor* getFilter() const throw() { return (MidiChsProcessor*) getAudioProcessor(); }
+    MidiChsProcessor* getFilter() const throw()
+    {
+        return (MidiChsProcessor*) getAudioProcessor();
+    }
 };
 
 #endif

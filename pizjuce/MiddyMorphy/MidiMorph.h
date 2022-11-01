@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Controller.h"
+#include "Scene.h"
+
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_core/juce_core.h>
 #include <juce_events/juce_events.h>
-
-#include "Controller.h"
-#include "Scene.h"
 
 class Cursor;
 class ControllerValue;
@@ -25,64 +25,64 @@ public:
     bool autoLearn;
     bool autoKey;
 
-    void setCursorXRatio (float x);
-    void setCursorYRatio (float y);
+    void setCursorXRatio(float x);
+    void setCursorYRatio(float y);
     float getCursorXRatio();
     float getCursorYRatio();
 
-    void controllerChanged (const Controller* controllerThatHasChanged);
+    void controllerChanged(const Controller* controllerThatHasChanged);
 
     void distancesChanged();
 
     void cursorChanged();
 
-    void showControllers (bool show);
-    void addController (int ccNo, int Channel);
+    void showControllers(bool show);
+    void addController(int ccNo, int Channel);
     void addController();
-    void addScene (Scene* scene);
+    void addScene(Scene* scene);
     int getNumControllers();
-    int getControllerCCNo (int index);
-    int getControllerValue (int index);
+    int getControllerCCNo(int index);
+    int getControllerValue(int index);
 
-    void onMidiEvent (juce::MidiMessage& events);
+    void onMidiEvent(juce::MidiMessage& events);
 
-    void getMidiMessages (int offset, juce::MidiBuffer& buffer);
+    void getMidiMessages(int offset, juce::MidiBuffer& buffer);
 
     float getSumDistances();
 
-    Controller* getController (int index);
+    Controller* getController(int index);
 
     int getNumSelectedScenes();
 
-    void setSelectedScenes (juce::Array<Scene*>& scenes);
+    void setSelectedScenes(juce::Array<Scene*>& scenes);
 
     juce::Array<Scene*>* getSelectedScenes();
 
-    Scene* getSelectedScene (int index);
+    Scene* getSelectedScene(int index);
 
     Cursor* getCursor();
 
     float getSumAffectionValues();
 
-    void removeScene (Scene* scene);
+    void removeScene(Scene* scene);
 
     juce::OwnedArray<Controller>* getControllers();
 
-    juce::XmlElement* getXml (juce::String tagname);
+    juce::XmlElement* getXml(juce::String tagname);
 
-    void setFromXml (juce::XmlElement* xmlData);
+    void setFromXml(juce::XmlElement* xmlData);
 
-    int getSceneIndex (Scene* scene);
+    int getSceneIndex(Scene* scene);
 
-    int getUpdateRateSmpls (int rate);
+    int getUpdateRateSmpls(int rate);
 
-    void removeController (Controller* controllerToRemove);
+    void removeController(Controller* controllerToRemove);
 
-    void saveGUIState (juce::XmlElement* state);
+    void saveGUIState(juce::XmlElement* state);
 
     juce::XmlElement* getSavedGUIState();
 
-    void setPaneSize (juce::Rectangle<int> size);
+    void setPaneSize(juce::Rectangle<int> size);
 
     juce::Rectangle<int> getPaneSize();
 
@@ -96,11 +96,11 @@ public:
 
     juce::OwnedArray<Scene>* getScenes();
 
-    void sendChangeMessage (void* ptr);
+    void sendChangeMessage(void* ptr);
 
     void sceneMoved();
 
-    void setAuditSelScene (bool shouldAudit);
+    void setAuditSelScene(bool shouldAudit);
 
     bool getAuditSelScene();
 

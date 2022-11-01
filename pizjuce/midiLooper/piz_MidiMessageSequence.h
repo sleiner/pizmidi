@@ -21,12 +21,12 @@ public:
     PizMidiMessageSequence();
 
     /** Creates a copy of another sequence. */
-    PizMidiMessageSequence (const PizMidiMessageSequence& other);
-    PizMidiMessageSequence (const juce::MidiMessageSequence& other);
+    PizMidiMessageSequence(const PizMidiMessageSequence& other);
+    PizMidiMessageSequence(const juce::MidiMessageSequence& other);
 
     /** Replaces this sequence with another one. */
-    PizMidiMessageSequence& operator= (const PizMidiMessageSequence& other);
-    PizMidiMessageSequence& operator= (const juce::MidiMessageSequence& other);
+    PizMidiMessageSequence& operator=(const PizMidiMessageSequence& other);
+    PizMidiMessageSequence& operator=(const juce::MidiMessageSequence& other);
 
     juce::MidiMessageSequence getAsJuceSequence();
 
@@ -65,9 +65,9 @@ public:
 
     private:
         friend class PizMidiMessageSequence;
-        MidiEventHolder (const juce::MidiMessage& message);
+        MidiEventHolder(const juce::MidiMessage& message);
 
-        JUCE_LEAK_DETECTOR (MidiEventHolder)
+        JUCE_LEAK_DETECTOR(MidiEventHolder)
     };
 
     typedef juce::ReferenceCountedObjectPtr<MidiEventHolder> mehPtr;
@@ -79,7 +79,7 @@ public:
     int getNumEvents() const;
 
     /** Returns a pointer to one of the events. */
-    mehPtr getEventPointer (int index) const;
+    mehPtr getEventPointer(int index) const;
 
     /** Returns the time of the note-up that matches the note-on at this index.
 
@@ -87,7 +87,7 @@ public:
 
         @see PizMidiMessageSequence::MidiEventHolder::noteOffObject
     */
-    double getTimeOfMatchingKeyUp (int index) const;
+    double getTimeOfMatchingKeyUp(int index) const;
 
     /** Returns the index of the note-up that matches the note-on at this index.
 
@@ -95,17 +95,17 @@ public:
 
         @see PizMidiMessageSequence::MidiEventHolder::noteOffObject
     */
-    int getIndexOfMatchingKeyUp (int index) const;
+    int getIndexOfMatchingKeyUp(int index) const;
 
     /** Returns the index of an event. */
-    int getIndexOf (mehPtr event) const;
+    int getIndexOf(mehPtr event) const;
 
     /** Returns the index of the first event on or after the given timestamp.
 
         If the time is beyond the end of the sequence, this will return the
         number of events.
     */
-    int getNextIndexAtTime (double timeStamp) const;
+    int getNextIndexAtTime(double timeStamp) const;
 
     //==============================================================================
     /** Returns the timestamp of the first event in the sequence.
@@ -124,7 +124,7 @@ public:
 
         If the index is out-of-range, this will return 0.0
     */
-    double getEventTime (int index) const;
+    double getEventTime(int index) const;
 
     //==============================================================================
     /** Inserts a midi message into the sequence.
@@ -139,11 +139,11 @@ public:
                                 that will be inserted
         @see updateMatchedPairs
     */
-    void addEvent (const juce::MidiMessage& newMessage, double timeAdjustment = 0);
-    void addNote (const juce::MidiMessage& noteOn, const juce::MidiMessage& noteOff, double timeAdjustment = 0);
+    void addEvent(const juce::MidiMessage& newMessage, double timeAdjustment = 0);
+    void addNote(const juce::MidiMessage& noteOn, const juce::MidiMessage& noteOff, double timeAdjustment = 0);
 
-    void moveEvent (int index, double timeAdjustment, bool moveMatchingNoteUp);
-    void transposeEvent (int index, int semitones);
+    void moveEvent(int index, double timeAdjustment, bool moveMatchingNoteUp);
+    void transposeEvent(int index, int semitones);
 
     /** Deletes one of the events in the sequence.
 
@@ -153,7 +153,7 @@ public:
         @param deleteMatchingNoteUp  whether to also remove the matching note-off
                                      if the event you're removing is a note-on
     */
-    void deleteEvent (int index, bool deleteMatchingNoteUp);
+    void deleteEvent(int index, bool deleteMatchingNoteUp);
 
     /** Merges another sequence into this one.
 
@@ -169,12 +169,12 @@ public:
                                         or greater than this time. (This is after their time has
                                         been adjusted by the timeAdjustmentDelta)
     */
-    void addSequence (const PizMidiMessageSequence& other,
-                      double timeAdjustmentDelta,
-                      double firstAllowableDestTime,
-                      double endOfAllowableDestTimes);
+    void addSequence(const PizMidiMessageSequence& other,
+                     double timeAdjustmentDelta,
+                     double firstAllowableDestTime,
+                     double endOfAllowableDestTimes);
 
-    void addSequence (const PizMidiMessageSequence& other);
+    void addSequence(const PizMidiMessageSequence& other);
 
     //==============================================================================
     /** Makes sure all the note-on and note-off pairs are up-to-date.
@@ -183,7 +183,7 @@ public:
         will scan the list and make sure all the note-offs in the MidiEventHolder
         structures are pointing at the correct ones.
     */
-    void updateMatchedPairs (bool sortEvents = false);
+    void updateMatchedPairs(bool sortEvents = false);
 
     //==============================================================================
     /** Copies all the messages for a particular midi channel to another sequence.
@@ -194,9 +194,9 @@ public:
                                         channel) will also be copied across.
         @see extractSysExMessages
     */
-    void extractMidiChannelMessages (int channelNumberToExtract,
-                                     PizMidiMessageSequence& destSequence,
-                                     bool alsoIncludeMetaEvents) const;
+    void extractMidiChannelMessages(int channelNumberToExtract,
+                                    PizMidiMessageSequence& destSequence,
+                                    bool alsoIncludeMetaEvents) const;
 
     /** Copies all midi sys-ex messages to another sequence.
 
@@ -204,13 +204,13 @@ public:
                                 will be added
         @see extractMidiChannelMessages
     */
-    void extractSysExMessages (PizMidiMessageSequence& destSequence) const;
+    void extractSysExMessages(PizMidiMessageSequence& destSequence) const;
 
     /** Removes any messages in this sequence that have a specific midi channel.
 
         @param channelNumberToRemove    the midi channel to look for, in the range 1 to 16
     */
-    void deleteMidiChannelMessages (int channelNumberToRemove);
+    void deleteMidiChannelMessages(int channelNumberToRemove);
 
     /** Removes any sys-ex messages from this sequence.
     */
@@ -220,7 +220,7 @@ public:
 
         @param deltaTime    the amount to add to each timestamp.
     */
-    void addTimeToMessages (double deltaTime);
+    void addTimeToMessages(double deltaTime);
 
     //==============================================================================
     /** Scans through the sequence to determine the state of any midi controllers at
@@ -242,25 +242,25 @@ public:
                                 will be the minimum number of controller changes to recreate the
                                 state at the required time.
     */
-    void createControllerUpdatesForTime (int channelNumber, double time, juce::OwnedArray<juce::MidiMessage>& resultMessages);
+    void createControllerUpdatesForTime(int channelNumber, double time, juce::OwnedArray<juce::MidiMessage>& resultMessages);
 
     //==============================================================================
     /** Swaps this sequence with another one. */
-    void swapWith (PizMidiMessageSequence& other) throw();
+    void swapWith(PizMidiMessageSequence& other) throw();
 
     void sort();
 
     /** @internal */
     static int
-        compareElements (const mehPtr first,
-                         const mehPtr second) throw();
+        compareElements(const mehPtr first,
+                        const mehPtr second) throw();
 
 private:
     //==============================================================================
     friend class MidiFile;
     juce::ReferenceCountedArray<MidiEventHolder> list;
 
-    JUCE_LEAK_DETECTOR (PizMidiMessageSequence)
+    JUCE_LEAK_DETECTOR(PizMidiMessageSequence)
 };
 
 #endif // __JUCE_MIDIMESSAGESEQUENCE_JUCEHEADER__

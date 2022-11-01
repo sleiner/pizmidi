@@ -21,6 +21,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include <juce_gui_basics/juce_gui_basics.h>
+
 //[/Headers]
 
 //==============================================================================
@@ -42,9 +43,9 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     //[/UserMethods]
 
-    void paint (juce::Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
+    void paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override;
 
     // Binary resources:
     static const char* pirate_png;
@@ -58,7 +59,7 @@ private:
     juce::Image cachedImage_pirate_png_1;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PizButton)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PizButton)
 };
 
 //[EndFile] You can add extra defines here...

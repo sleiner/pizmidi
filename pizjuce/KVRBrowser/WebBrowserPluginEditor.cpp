@@ -24,9 +24,9 @@
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //==============================================================================
-bool MyBrowser::pageAboutToLoad (const juce::String& newURL)
+bool MyBrowser::pageAboutToLoad(const juce::String& newURL)
 {
-    if (! newURL.contains ("googleads"))
+    if (! newURL.contains("googleads"))
     {
         lastURL = newURL;
     }
@@ -42,74 +42,74 @@ juce::String MyBrowser::getCurrentURL()
 //[/MiscUserDefs]
 
 //==============================================================================
-WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFilter)
-    : AudioProcessorEditor (ownerFilter)
+WebBrowserPluginEditor::WebBrowserPluginEditor(WebBrowserFilter* const ownerFilter)
+    : AudioProcessorEditor(ownerFilter)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    reloadButton.reset (new juce::TextButton ("Reload"));
-    addAndMakeVisible (reloadButton.get());
-    reloadButton->addListener (this);
+    reloadButton.reset(new juce::TextButton("Reload"));
+    addAndMakeVisible(reloadButton.get());
+    reloadButton->addListener(this);
 
-    reloadButton->setBounds (128, 0, 60, 22);
+    reloadButton->setBounds(128, 0, 60, 22);
 
-    wb.reset (new MyBrowser());
-    addAndMakeVisible (wb.get());
+    wb.reset(new MyBrowser());
+    addAndMakeVisible(wb.get());
 
-    backButton.reset (new juce::TextButton ("Back"));
-    addAndMakeVisible (backButton.get());
-    backButton->addListener (this);
+    backButton.reset(new juce::TextButton("Back"));
+    addAndMakeVisible(backButton.get());
+    backButton->addListener(this);
 
-    backButton->setBounds (0, 0, 60, 22);
+    backButton->setBounds(0, 0, 60, 22);
 
-    forwardButton.reset (new juce::TextButton ("Forward"));
-    addAndMakeVisible (forwardButton.get());
-    forwardButton->addListener (this);
+    forwardButton.reset(new juce::TextButton("Forward"));
+    addAndMakeVisible(forwardButton.get());
+    forwardButton->addListener(this);
 
-    forwardButton->setBounds (64, 0, 60, 22);
+    forwardButton->setBounds(64, 0, 60, 22);
 
-    homeButton.reset (new juce::TextButton ("Home"));
-    addAndMakeVisible (homeButton.get());
-    homeButton->addListener (this);
+    homeButton.reset(new juce::TextButton("Home"));
+    addAndMakeVisible(homeButton.get());
+    homeButton->addListener(this);
 
-    homeButton->setBounds (256, 0, 60, 22);
+    homeButton->setBounds(256, 0, 60, 22);
 
-    stopButton.reset (new juce::TextButton ("Stop"));
-    addAndMakeVisible (stopButton.get());
-    stopButton->addListener (this);
+    stopButton.reset(new juce::TextButton("Stop"));
+    addAndMakeVisible(stopButton.get());
+    stopButton->addListener(this);
 
-    stopButton->setBounds (192, 0, 60, 22);
+    stopButton->setBounds(192, 0, 60, 22);
 
-    urlBar.reset (new juce::TextEditor ("URL Bar"));
-    addAndMakeVisible (urlBar.get());
-    urlBar->setMultiLine (false);
-    urlBar->setReturnKeyStartsNewLine (false);
-    urlBar->setReadOnly (false);
-    urlBar->setScrollbarsShown (false);
-    urlBar->setCaretVisible (true);
-    urlBar->setPopupMenuEnabled (true);
-    urlBar->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0xffcccccc));
-    urlBar->setText (juce::String());
+    urlBar.reset(new juce::TextEditor("URL Bar"));
+    addAndMakeVisible(urlBar.get());
+    urlBar->setMultiLine(false);
+    urlBar->setReturnKeyStartsNewLine(false);
+    urlBar->setReadOnly(false);
+    urlBar->setScrollbarsShown(false);
+    urlBar->setCaretVisible(true);
+    urlBar->setPopupMenuEnabled(true);
+    urlBar->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xffcccccc));
+    urlBar->setText(juce::String());
 
-    goButton.reset (new juce::TextButton ("Go"));
-    addAndMakeVisible (goButton.get());
-    goButton->addListener (this);
+    goButton.reset(new juce::TextButton("Go"));
+    addAndMakeVisible(goButton.get());
+    goButton->addListener(this);
 
-    resizer.reset (new juce::ResizableCornerComponent (this, &resizeLimits));
-    addAndMakeVisible (resizer.get());
+    resizer.reset(new juce::ResizableCornerComponent(this, &resizeLimits));
+    addAndMakeVisible(resizer.get());
 
     //[UserPreSize]
-    wb->addChangeListener (this);
-    urlBar->addListener (this);
-    resizeLimits.setSizeLimits (150, 150, 1600, 1600);
+    wb->addChangeListener(this);
+    urlBar->addListener(this);
+    resizeLimits.setSizeLimits(150, 150, 1600, 1600);
     //[/UserPreSize]
 
-    setSize (600, 400);
+    setSize(600, 400);
 
     //[Constructor] You can add your own custom stuff here..
-    setSize (ownerFilter->lastUIWidth, ownerFilter->lastUIHeight);
-    ownerFilter->addChangeListener (this);
+    setSize(ownerFilter->lastUIWidth, ownerFilter->lastUIHeight);
+    ownerFilter->addChangeListener(this);
     updateParametersFromFilter();
     //[/Constructor]
 }
@@ -117,9 +117,9 @@ WebBrowserPluginEditor::WebBrowserPluginEditor (WebBrowserFilter* const ownerFil
 WebBrowserPluginEditor::~WebBrowserPluginEditor()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-    getFilter()->setURL (wb->getCurrentURL());
+    getFilter()->setURL(wb->getCurrentURL());
     getFilter()->initialPageLoaded = false;
-    getFilter()->removeChangeListener (this);
+    getFilter()->removeChangeListener(this);
     //[/Destructor_pre]
 
     reloadButton  = nullptr;
@@ -137,12 +137,12 @@ WebBrowserPluginEditor::~WebBrowserPluginEditor()
 }
 
 //==============================================================================
-void WebBrowserPluginEditor::paint (juce::Graphics& g)
+void WebBrowserPluginEditor::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (juce::Colours::black);
+    g.fillAll(juce::Colours::black);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -153,17 +153,17 @@ void WebBrowserPluginEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    wb->setBounds (4, 22, getWidth() - 8, getHeight() - 26);
-    urlBar->setBounds (320, 2, getWidth() - 370, 18);
-    goButton->setBounds (getWidth() - 45, 0, 40, 22);
-    resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
+    wb->setBounds(4, 22, getWidth() - 8, getHeight() - 26);
+    urlBar->setBounds(320, 2, getWidth() - 370, 18);
+    goButton->setBounds(getWidth() - 45, 0, 40, 22);
+    resizer->setBounds(getWidth() - 16, getHeight() - 16, 16, 16);
     //[UserResized] Add your own custom resize handling here..
     getFilter()->lastUIWidth  = getWidth();
     getFilter()->lastUIHeight = getHeight();
     //[/UserResized]
 }
 
-void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
+void WebBrowserPluginEditor::buttonClicked(juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -190,7 +190,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == homeButton.get())
     {
         //[UserButtonCode_homeButton] -- add your button handler code here..
-        wb->goToURL ("http://www.kvraudio.com/");
+        wb->goToURL("http://www.kvraudio.com/");
         //[/UserButtonCode_homeButton]
     }
     else if (buttonThatWasClicked == stopButton.get())
@@ -202,7 +202,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == goButton.get())
     {
         //[UserButtonCode_goButton] -- add your button handler code here..
-        wb->goToURL (urlBar->getText());
+        wb->goToURL(urlBar->getText());
         //[/UserButtonCode_goButton]
     }
 
@@ -212,7 +212,7 @@ void WebBrowserPluginEditor::buttonClicked (juce::Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
-void WebBrowserPluginEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
+void WebBrowserPluginEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
     if (source == getFilter())
     {
@@ -220,15 +220,15 @@ void WebBrowserPluginEditor::changeListenerCallback (juce::ChangeBroadcaster* so
     }
     else if (source == wb.get())
     {
-        getFilter()->setURL (wb->getCurrentURL());
-        urlBar->setText (wb->getCurrentURL());
+        getFilter()->setURL(wb->getCurrentURL());
+        urlBar->setText(wb->getCurrentURL());
         getFilter()->initialPageLoaded = true;
     }
 }
 
-void WebBrowserPluginEditor::textEditorReturnKeyPressed (juce::TextEditor& editor)
+void WebBrowserPluginEditor::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
-    wb->goToURL ((const juce::String) (editor.getText()));
+    wb->goToURL((const juce::String)(editor.getText()));
 }
 
 void WebBrowserPluginEditor::updateParametersFromFilter()
@@ -241,17 +241,20 @@ void WebBrowserPluginEditor::updateParametersFromFilter()
     filter->getCallbackLock().enter();
 
     // take a local copy of the info we need while we've got the lock
-    const float newGain = filter->getParameter (0);
+    const float newGain = filter->getParameter(0);
     juce::String URL    = filter->getURL();
 
     // release the lock ASAP
     filter->getCallbackLock().exit();
 
     if (URL.isNotEmpty())
-        wb->goToURL (URL);
+    {
+        wb->goToURL(URL);
+    }
 
-    setSize (filter->lastUIWidth, filter->lastUIHeight);
+    setSize(filter->lastUIWidth, filter->lastUIHeight);
 }
+
 //[/MiscUserCode]
 
 //==============================================================================

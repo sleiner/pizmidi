@@ -1,4 +1,5 @@
 #include "MidiChsProcessor.h"
+
 #include "MidiChsEditor.h"
 
 //==============================================================================
@@ -55,7 +56,7 @@ int MidiChsProcessor::getNumParameters()
     return 22;
 }
 
-float MidiChsProcessor::getParameter (int index)
+float MidiChsProcessor::getParameter(int index)
 {
     switch (index)
     {
@@ -133,7 +134,7 @@ float MidiChsProcessor::getParameter (int index)
     }
 }
 
-void MidiChsProcessor::setParameter (int index, float newValue)
+void MidiChsProcessor::setParameter(int index, float newValue)
 {
     switch (index)
     {
@@ -210,75 +211,75 @@ void MidiChsProcessor::setParameter (int index, float newValue)
     sendChangeMessage();
 }
 
-const juce::String MidiChsProcessor::getParameterName (int index)
+const juce::String MidiChsProcessor::getParameterName(int index)
 {
     switch (index)
     {
         case 0:
-            return juce::String ("1");
+            return juce::String("1");
             break;
         case 1:
-            return juce::String ("2");
+            return juce::String("2");
             break;
         case 2:
-            return juce::String ("3");
+            return juce::String("3");
             break;
         case 3:
-            return juce::String ("4");
+            return juce::String("4");
             break;
         case 4:
-            return juce::String ("5");
+            return juce::String("5");
             break;
         case 5:
-            return juce::String ("6");
+            return juce::String("6");
             break;
         case 6:
-            return juce::String ("7");
+            return juce::String("7");
             break;
         case 7:
-            return juce::String ("8");
+            return juce::String("8");
             break;
         case 8:
-            return juce::String ("9");
+            return juce::String("9");
             break;
         case 9:
-            return juce::String ("10");
+            return juce::String("10");
             break;
         case 10:
-            return juce::String ("11");
+            return juce::String("11");
             break;
         case 11:
-            return juce::String ("12");
+            return juce::String("12");
             break;
         case 12:
-            return juce::String ("13");
+            return juce::String("13");
             break;
         case 13:
-            return juce::String ("14");
+            return juce::String("14");
             break;
         case 14:
-            return juce::String ("15");
+            return juce::String("15");
             break;
         case 15:
-            return juce::String ("16");
+            return juce::String("16");
             break;
         case 16:
-            return juce::String ("Reset");
+            return juce::String("Reset");
             break;
         case 17:
-            return juce::String ("Clear");
+            return juce::String("Clear");
             break;
         case 18:
-            return juce::String ("Hue");
+            return juce::String("Hue");
             break;
         case 19:
-            return juce::String ("Saturation");
+            return juce::String("Saturation");
             break;
         case 20:
-            return juce::String ("Brightness");
+            return juce::String("Brightness");
             break;
         case 21:
-            return juce::String ("Contrast");
+            return juce::String("Contrast");
             break;
 
         default:
@@ -287,75 +288,75 @@ const juce::String MidiChsProcessor::getParameterName (int index)
     }
 }
 
-const juce::String MidiChsProcessor::getParameterText (int index)
+const juce::String MidiChsProcessor::getParameterText(int index)
 {
     switch (index)
     {
         case 0:
-            return juce::String ((int) (fChannel1 * 16.0));
+            return juce::String((int) (fChannel1 * 16.0));
             break;
         case 1:
-            return juce::String ((int) (fChannel2 * 16.0));
+            return juce::String((int) (fChannel2 * 16.0));
             break;
         case 2:
-            return juce::String ((int) (fChannel3 * 16.0));
+            return juce::String((int) (fChannel3 * 16.0));
             break;
         case 3:
-            return juce::String ((int) (fChannel4 * 16.0));
+            return juce::String((int) (fChannel4 * 16.0));
             break;
         case 4:
-            return juce::String ((int) (fChannel5 * 16.0));
+            return juce::String((int) (fChannel5 * 16.0));
             break;
         case 5:
-            return juce::String ((int) (fChannel6 * 16.0));
+            return juce::String((int) (fChannel6 * 16.0));
             break;
         case 6:
-            return juce::String ((int) (fChannel7 * 16.0));
+            return juce::String((int) (fChannel7 * 16.0));
             break;
         case 7:
-            return juce::String ((int) (fChannel8 * 16.0));
+            return juce::String((int) (fChannel8 * 16.0));
             break;
         case 8:
-            return juce::String ((int) (fChannel9 * 16.0));
+            return juce::String((int) (fChannel9 * 16.0));
             break;
         case 9:
-            return juce::String ((int) (fChannel10 * 16.0));
+            return juce::String((int) (fChannel10 * 16.0));
             break;
         case 10:
-            return juce::String ((int) (fChannel11 * 16.0));
+            return juce::String((int) (fChannel11 * 16.0));
             break;
         case 11:
-            return juce::String ((int) (fChannel12 * 16.0));
+            return juce::String((int) (fChannel12 * 16.0));
             break;
         case 12:
-            return juce::String ((int) (fChannel13 * 16.0));
+            return juce::String((int) (fChannel13 * 16.0));
             break;
         case 13:
-            return juce::String ((int) (fChannel14 * 16.0));
+            return juce::String((int) (fChannel14 * 16.0));
             break;
         case 14:
-            return juce::String ((int) (fChannel15 * 16.0));
+            return juce::String((int) (fChannel15 * 16.0));
             break;
         case 15:
-            return juce::String ((int) (fChannel16 * 16.0));
+            return juce::String((int) (fChannel16 * 16.0));
             break;
         case 16:
-            return juce::String (fReset);
+            return juce::String(fReset);
             break;
         case 17:
-            return juce::String (fClear);
+            return juce::String(fClear);
             break;
         case 18:
-            return juce::String (bghue);
+            return juce::String(bghue);
             break;
         case 19:
-            return juce::String (bgsat);
+            return juce::String(bgsat);
             break;
         case 20:
-            return juce::String (bgbri);
+            return juce::String(bgbri);
             break;
         case 21:
-            return juce::String (contrast);
+            return juce::String(contrast);
             break;
 
         default:
@@ -363,28 +364,29 @@ const juce::String MidiChsProcessor::getParameterText (int index)
             break;
     }
 }
-const juce::String MidiChsProcessor::getInputChannelName (const int channelIndex) const
+
+const juce::String MidiChsProcessor::getInputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-const juce::String MidiChsProcessor::getOutputChannelName (const int channelIndex) const
+const juce::String MidiChsProcessor::getOutputChannelName(const int channelIndex) const
 {
-    return juce::String (channelIndex + 1);
+    return juce::String(channelIndex + 1);
 }
 
-bool MidiChsProcessor::isInputChannelStereoPair (int index) const
+bool MidiChsProcessor::isInputChannelStereoPair(int index) const
 {
     return true;
 }
 
-bool MidiChsProcessor::isOutputChannelStereoPair (int index) const
+bool MidiChsProcessor::isOutputChannelStereoPair(int index) const
 {
     return true;
 }
 
 //==============================================================================
-void MidiChsProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void MidiChsProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // do your pre-playback setup stuff here..
 }
@@ -395,12 +397,12 @@ void MidiChsProcessor::releaseResources()
     // spare memory, etc.
 }
 
-void MidiChsProcessor::processBlock (juce::AudioSampleBuffer& buffer,
-                                     juce::MidiBuffer& midiMessages)
+void MidiChsProcessor::processBlock(juce::AudioSampleBuffer& buffer,
+                                    juce::MidiBuffer& midiMessages)
 {
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
     {
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     }
 
     juce::MidiBuffer midiout;
@@ -433,17 +435,23 @@ void MidiChsProcessor::processBlock (juce::AudioSampleBuffer& buffer,
         {
             for (int i = 0; i < 16; i++)
             {
-                if (midi_message.isForChannel (i + 1))
+                if (midi_message.isForChannel(i + 1))
                 {
                     if (ch[i] > 0)
-                        out_message.setChannel (ch[i]);
+                    {
+                        out_message.setChannel(ch[i]);
+                    }
                     else
+                    {
                         discard = true;
+                    }
                 }
             }
         }
         if (! discard)
-            midiout.addEvent (out_message, sample_number);
+        {
+            midiout.addEvent(out_message, sample_number);
+        }
     }
     midiMessages.clear();
     midiMessages = midiout;
@@ -452,11 +460,11 @@ void MidiChsProcessor::processBlock (juce::AudioSampleBuffer& buffer,
 //==============================================================================
 juce::AudioProcessorEditor* MidiChsProcessor::createEditor()
 {
-    return new MidiChsEditor (this);
+    return new MidiChsEditor(this);
 }
 
 //==============================================================================
-void MidiChsProcessor::getStateInformation (juce::MemoryBlock& destData)
+void MidiChsProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     // you can store your parameters as binary data if you want to or if you've got
     // a load of binary to put in there, but if you're not doing anything too heavy,
@@ -464,73 +472,73 @@ void MidiChsProcessor::getStateInformation (juce::MemoryBlock& destData)
     // params as XML..
 
     // create an outer XML element..
-    juce::XmlElement xmlState ("MYPLUGINSETTINGS");
+    juce::XmlElement xmlState("MYPLUGINSETTINGS");
 
     // add some attributes to it..
-    xmlState.setAttribute ("1", fChannel1);
-    xmlState.setAttribute ("2", fChannel2);
-    xmlState.setAttribute ("3", fChannel3);
-    xmlState.setAttribute ("4", fChannel4);
-    xmlState.setAttribute ("5", fChannel5);
-    xmlState.setAttribute ("6", fChannel6);
-    xmlState.setAttribute ("7", fChannel7);
-    xmlState.setAttribute ("8", fChannel8);
-    xmlState.setAttribute ("9", fChannel9);
-    xmlState.setAttribute ("10", fChannel10);
-    xmlState.setAttribute ("11", fChannel11);
-    xmlState.setAttribute ("12", fChannel12);
-    xmlState.setAttribute ("13", fChannel13);
-    xmlState.setAttribute ("14", fChannel14);
-    xmlState.setAttribute ("15", fChannel15);
-    xmlState.setAttribute ("16", fChannel16);
-    xmlState.setAttribute ("pluginVersion", 1);
-    xmlState.setAttribute ("Hue", bghue);
-    xmlState.setAttribute ("Sat", bgsat);
-    xmlState.setAttribute ("Bri", bgbri);
-    xmlState.setAttribute ("Contrast", contrast);
-    xmlState.setAttribute ("uiWidth", lastUIWidth);
-    xmlState.setAttribute ("uiHeight", lastUIHeight);
+    xmlState.setAttribute("1", fChannel1);
+    xmlState.setAttribute("2", fChannel2);
+    xmlState.setAttribute("3", fChannel3);
+    xmlState.setAttribute("4", fChannel4);
+    xmlState.setAttribute("5", fChannel5);
+    xmlState.setAttribute("6", fChannel6);
+    xmlState.setAttribute("7", fChannel7);
+    xmlState.setAttribute("8", fChannel8);
+    xmlState.setAttribute("9", fChannel9);
+    xmlState.setAttribute("10", fChannel10);
+    xmlState.setAttribute("11", fChannel11);
+    xmlState.setAttribute("12", fChannel12);
+    xmlState.setAttribute("13", fChannel13);
+    xmlState.setAttribute("14", fChannel14);
+    xmlState.setAttribute("15", fChannel15);
+    xmlState.setAttribute("16", fChannel16);
+    xmlState.setAttribute("pluginVersion", 1);
+    xmlState.setAttribute("Hue", bghue);
+    xmlState.setAttribute("Sat", bgsat);
+    xmlState.setAttribute("Bri", bgbri);
+    xmlState.setAttribute("Contrast", contrast);
+    xmlState.setAttribute("uiWidth", lastUIWidth);
+    xmlState.setAttribute("uiHeight", lastUIHeight);
 
     // you could also add as many child elements as you need to here..
 
     // then use this helper function to stuff it into the binary blob and return it..
-    copyXmlToBinary (xmlState, destData);
+    copyXmlToBinary(xmlState, destData);
 }
 
-void MidiChsProcessor::setStateInformation (const void* data, int sizeInBytes)
+void MidiChsProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     // use this helper function to get the XML from this binary blob..
-    auto const xmlState = getXmlFromBinary (data, sizeInBytes);
+    auto const xmlState = getXmlFromBinary(data, sizeInBytes);
 
     if (xmlState != 0)
     {
         // check that it's the right type of xml..
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
         {
             // ok, now pull out our parameters..
-            fChannel1  = (float) xmlState->getDoubleAttribute ("1", fChannel1);
-            fChannel2  = (float) xmlState->getDoubleAttribute ("2", fChannel2);
-            fChannel3  = (float) xmlState->getDoubleAttribute ("3", fChannel3);
-            fChannel4  = (float) xmlState->getDoubleAttribute ("4", fChannel4);
-            fChannel5  = (float) xmlState->getDoubleAttribute ("5", fChannel5);
-            fChannel6  = (float) xmlState->getDoubleAttribute ("6", fChannel6);
-            fChannel7  = (float) xmlState->getDoubleAttribute ("7", fChannel7);
-            fChannel8  = (float) xmlState->getDoubleAttribute ("8", fChannel8);
-            fChannel9  = (float) xmlState->getDoubleAttribute ("9", fChannel9);
-            fChannel10 = (float) xmlState->getDoubleAttribute ("10", fChannel10);
-            fChannel11 = (float) xmlState->getDoubleAttribute ("11", fChannel11);
-            fChannel12 = (float) xmlState->getDoubleAttribute ("12", fChannel12);
-            fChannel13 = (float) xmlState->getDoubleAttribute ("13", fChannel13);
-            fChannel14 = (float) xmlState->getDoubleAttribute ("14", fChannel14);
-            fChannel15 = (float) xmlState->getDoubleAttribute ("15", fChannel15);
-            fChannel16 = (float) xmlState->getDoubleAttribute ("16", fChannel16);
-            bghue      = (float) xmlState->getDoubleAttribute ("Hue", bghue);
-            bgsat      = (float) xmlState->getDoubleAttribute ("Sat", bgsat);
-            bgbri      = (float) xmlState->getDoubleAttribute ("Bri", bgbri);
-            contrast   = (float) xmlState->getDoubleAttribute ("Contrast", contrast);
+            fChannel1  = (float) xmlState->getDoubleAttribute("1", fChannel1);
+            fChannel2  = (float) xmlState->getDoubleAttribute("2", fChannel2);
+            fChannel3  = (float) xmlState->getDoubleAttribute("3", fChannel3);
+            fChannel4  = (float) xmlState->getDoubleAttribute("4", fChannel4);
+            fChannel5  = (float) xmlState->getDoubleAttribute("5", fChannel5);
+            fChannel6  = (float) xmlState->getDoubleAttribute("6", fChannel6);
+            fChannel7  = (float) xmlState->getDoubleAttribute("7", fChannel7);
+            fChannel8  = (float) xmlState->getDoubleAttribute("8", fChannel8);
+            fChannel9  = (float) xmlState->getDoubleAttribute("9", fChannel9);
+            fChannel10 = (float) xmlState->getDoubleAttribute("10", fChannel10);
+            fChannel11 = (float) xmlState->getDoubleAttribute("11", fChannel11);
+            fChannel12 = (float) xmlState->getDoubleAttribute("12", fChannel12);
+            fChannel13 = (float) xmlState->getDoubleAttribute("13", fChannel13);
+            fChannel14 = (float) xmlState->getDoubleAttribute("14", fChannel14);
+            fChannel15 = (float) xmlState->getDoubleAttribute("15", fChannel15);
+            fChannel16 = (float) xmlState->getDoubleAttribute("16", fChannel16);
+            bghue      = (float) xmlState->getDoubleAttribute("Hue", bghue);
+            bgsat      = (float) xmlState->getDoubleAttribute("Sat", bgsat);
+            bgbri      = (float) xmlState->getDoubleAttribute("Bri", bgbri);
+            contrast   = (float) xmlState->getDoubleAttribute("Contrast", contrast);
 
-            lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);
-            lastUIHeight = xmlState->getIntAttribute ("uiHeight", lastUIHeight);
+            lastUIWidth  = xmlState->getIntAttribute("uiWidth", lastUIWidth);
+            lastUIHeight = xmlState->getIntAttribute("uiHeight", lastUIHeight);
 
             sendChangeMessage();
         }

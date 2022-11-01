@@ -1,32 +1,32 @@
 #include "midiForceToRange.hpp"
 
 //-------------------------------------------------------------------------------------------------------
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
+AudioEffect* createEffectInstance(audioMasterCallback audioMaster)
 {
-    return new ForceToRange (audioMaster);
+    return new ForceToRange(audioMaster);
 }
 
 ForceToRangeProgram::ForceToRangeProgram()
 {
     // default program values
-    param[kLowNote]  = MIDI_TO_FLOAT (0);
-    param[kHighNote] = MIDI_TO_FLOAT (127);
-    param[kChannel]  = CHANNEL_TO_FLOAT (ANY_CHANNEL);
+    param[kLowNote]  = MIDI_TO_FLOAT(0);
+    param[kHighNote] = MIDI_TO_FLOAT(127);
+    param[kChannel]  = CHANNEL_TO_FLOAT(ANY_CHANNEL);
 
     // default program name
-    vst_strncpy (name, "default", kVstMaxProgNameLen);
+    vst_strncpy(name, "default", kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------
-ForceToRange::ForceToRange (audioMasterCallback audioMaster)
-    : PizMidi (audioMaster, kNumPrograms, kNumParams), programs (0)
+ForceToRange::ForceToRange(audioMasterCallback audioMaster)
+    : PizMidi(audioMaster, kNumPrograms, kNumParams), programs(0)
 {
     settingProgram = false;
     programs       = new ForceToRangeProgram[numPrograms];
     if (programs)
     {
-        CFxBank* defaultBank = new CFxBank (kNumPrograms, kNumParams);
-        if (readDefaultBank (PLUG_NAME, defaultBank))
+        CFxBank* defaultBank = new CFxBank(kNumPrograms, kNumParams);
+        if (readDefaultBank(PLUG_NAME, defaultBank))
         {
             if ((VstInt32) defaultBank->GetFxID() == PLUG_IDENT)
             {
@@ -34,9 +34,9 @@ ForceToRange::ForceToRange (audioMasterCallback audioMaster)
                 {
                     for (int p = 0; p < kNumParams; p++)
                     {
-                        programs[i].param[p] = defaultBank->GetProgParm (i, p);
+                        programs[i].param[p] = defaultBank->GetProgParm(i, p);
                     }
-                    strcpy (programs[i].name, defaultBank->GetProgramName (i));
+                    strcpy(programs[i].name, defaultBank->GetProgramName(i));
                 }
             }
         }
@@ -48,29 +48,31 @@ ForceToRange::ForceToRange (audioMasterCallback audioMaster)
                 switch (i)
                 {
                     case 0:
-                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT (48);
-                        programs[i].param[kHighNote] = MIDI_TO_FLOAT (60);
-                        sprintf (programs[i].name, "Octave 2");
+                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT(48);
+                        programs[i].param[kHighNote] = MIDI_TO_FLOAT(60);
+                        sprintf(programs[i].name, "Octave 2");
                         break;
                     case 1:
-                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT (60);
-                        programs[i].param[kHighNote] = MIDI_TO_FLOAT (72);
-                        sprintf (programs[i].name, "Octave 3");
+                        programs[i].param[kLowNote]  = MIDI_TO_FLOAT(60);
+                        programs[i].param[kHighNote] = MIDI_TO_FLOAT(72);
+                        sprintf(programs[i].name, "Octave 3");
                         break;
                         //etc
                     default:
-                        sprintf (programs[i].name, "Program %d", i + 1);
+                        sprintf(programs[i].name, "Program %d", i + 1);
                         break;
                 }
             }
         }
-        setProgram (0);
+        setProgram(0);
     }
 
     for (int n = 0; n < 128; n++)
     {
         for (int c = 0; c < 16; c++)
+        {
             transposed[n][c] = n;
+        }
     }
 
     init();
@@ -80,11 +82,13 @@ ForceToRange::ForceToRange (audioMasterCallback audioMaster)
 ForceToRange::~ForceToRange()
 {
     if (programs)
+    {
         delete[] programs;
+    }
 }
 
 //------------------------------------------------------------------------
-void ForceToRange::setProgram (VstInt32 program)
+void ForceToRange::setProgram(VstInt32 program)
 {
     if (program < numPrograms)
     {
@@ -94,37 +98,37 @@ void ForceToRange::setProgram (VstInt32 program)
         curProgram = program;
         for (int i = 0; i < kNumParams; i++)
         {
-            setParameter (i, ap->param[i]);
+            setParameter(i, ap->param[i]);
         }
         settingProgram = false;
     }
 }
 
 //------------------------------------------------------------------------
-void ForceToRange::setProgramName (char* name)
+void ForceToRange::setProgramName(char* name)
 {
-    vst_strncpy (programs[curProgram].name, name, kVstMaxProgNameLen);
+    vst_strncpy(programs[curProgram].name, name, kVstMaxProgNameLen);
 }
 
 //------------------------------------------------------------------------
-void ForceToRange::getProgramName (char* name)
+void ForceToRange::getProgramName(char* name)
 {
-    vst_strncpy (name, programs[curProgram].name, kVstMaxProgNameLen);
+    vst_strncpy(name, programs[curProgram].name, kVstMaxProgNameLen);
 }
 
 //-----------------------------------------------------------------------------------------
-bool ForceToRange::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+bool ForceToRange::getProgramNameIndexed(VstInt32 category, VstInt32 index, char* text)
 {
     if (index < numPrograms)
     {
-        vst_strncpy (text, programs[index].name, kVstMaxProgNameLen);
+        vst_strncpy(text, programs[index].name, kVstMaxProgNameLen);
         return true;
     }
     return false;
 }
 
 //-----------------------------------------------------------------------------------------
-void ForceToRange::setParameter (VstInt32 index, float value)
+void ForceToRange::setParameter(VstInt32 index, float value)
 {
     if (index < numParams)
     {
@@ -133,37 +137,43 @@ void ForceToRange::setParameter (VstInt32 index, float value)
         if (index == kHighNote)
         {
             if (value < param[kLowNote])
-                setParameterAutomated (kLowNote, value);
+            {
+                setParameterAutomated(kLowNote, value);
+            }
         }
         else if (index == kLowNote)
         {
             if (value > param[kHighNote])
-                setParameterAutomated (kHighNote, value);
+            {
+                setParameterAutomated(kHighNote, value);
+            }
         }
     }
 }
 
 //-----------------------------------------------------------------------------------------
-float ForceToRange::getParameter (VstInt32 index)
+float ForceToRange::getParameter(VstInt32 index)
 {
     if (index < numParams)
+    {
         return param[index];
+    }
     return 0.f;
 }
 
 //-----------------------------------------------------------------------------------------
-void ForceToRange::getParameterName (VstInt32 index, char* label)
+void ForceToRange::getParameterName(VstInt32 index, char* label)
 {
     switch (index)
     {
         case kLowNote:
-            vst_strncpy (label, "LowNote", kVstMaxParamStrLen);
+            vst_strncpy(label, "LowNote", kVstMaxParamStrLen);
             break;
         case kHighNote:
-            vst_strncpy (label, "HighNote", kVstMaxParamStrLen);
+            vst_strncpy(label, "HighNote", kVstMaxParamStrLen);
             break;
         case kChannel:
-            vst_strncpy (label, "Channel", kVstMaxParamStrLen);
+            vst_strncpy(label, "Channel", kVstMaxParamStrLen);
             break;
         default:
             break;
@@ -171,30 +181,34 @@ void ForceToRange::getParameterName (VstInt32 index, char* label)
 }
 
 //-----------------------------------------------------------------------------------------
-void ForceToRange::getParameterDisplay (VstInt32 index, char* text)
+void ForceToRange::getParameterDisplay(VstInt32 index, char* text)
 {
     switch (index)
     {
         case kLowNote:
         case kHighNote:
-            sprintf (text, "%s (%d)", getNoteName (FLOAT_TO_MIDI (param[index]), bottomOctave), FLOAT_TO_MIDI (param[index]));
+            sprintf(text, "%s (%d)", getNoteName(FLOAT_TO_MIDI(param[index]), bottomOctave), FLOAT_TO_MIDI(param[index]));
             break;
         case kChannel:
-            if (FLOAT_TO_CHANNEL (param[index]) == -1)
-                vst_strncpy (text, "Any", kVstMaxParamStrLen);
+            if (FLOAT_TO_CHANNEL(param[index]) == -1)
+            {
+                vst_strncpy(text, "Any", kVstMaxParamStrLen);
+            }
             else
-                sprintf (text, "%d", FLOAT_TO_CHANNEL (param[index]) + 1);
+            {
+                sprintf(text, "%d", FLOAT_TO_CHANNEL(param[index]) + 1);
+            }
             break;
         default:
             break;
     }
 }
 
-void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
+void ForceToRange::processMidiEvents(VstMidiEventVec* inputs, VstMidiEventVec* outputs, VstInt32 sampleFrames)
 {
-    const char lowlimit      = FLOAT_TO_MIDI (param[kLowNote]);
-    const char highlimit     = FLOAT_TO_MIDI (param[kHighNote]);
-    const char listenchannel = FLOAT_TO_CHANNEL (param[kChannel]);
+    const char lowlimit      = FLOAT_TO_MIDI(param[kLowNote]);
+    const char highlimit     = FLOAT_TO_MIDI(param[kHighNote]);
+    const char listenchannel = FLOAT_TO_CHANNEL(param[kChannel]);
 
     // process incoming events
     for (unsigned int i = 0; i < inputs[0].size(); i++)
@@ -209,7 +223,9 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
 
         // make zero-velocity noteons look like "real" noteoffs
         if (status == MIDI_NOTEON && data2 == 0)
+        {
             status = MIDI_NOTEOFF;
+        }
 
         bool discard = false;
 
@@ -224,7 +240,9 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         newnote += 12;
                         if (newnote > highlimit)
+                        {
                             discard = true;
+                        }
                     }
                     tomod.midiData[1] = newnote;
                 }
@@ -234,12 +252,16 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
                     {
                         newnote -= 12;
                         if (newnote < lowlimit)
+                        {
                             discard = true;
+                        }
                     }
                     tomod.midiData[1] = newnote;
                 }
                 if (status == MIDI_NOTEON)
+                {
                     transposed[data1][channel] = tomod.midiData[1];
+                }
             }
             else if (status == MIDI_NOTEOFF)
             {
@@ -249,6 +271,8 @@ void ForceToRange::processMidiEvents (VstMidiEventVec* inputs, VstMidiEventVec* 
             }
         }
         if (! discard)
-            outputs[0].push_back (tomod);
+        {
+            outputs[0].push_back(tomod);
+        }
     }
 }

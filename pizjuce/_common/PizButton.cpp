@@ -27,17 +27,17 @@
 
 //==============================================================================
 PizButton::PizButton()
-    : juce::Button (juce::String())
+    : juce::Button(juce::String())
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    cachedImage_pirate_png_1 = juce::ImageCache::getFromMemory (pirate_png, pirate_pngSize);
+    cachedImage_pirate_png_1 = juce::ImageCache::getFromMemory(pirate_png, pirate_pngSize);
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 400);
+    setSize(600, 400);
 
     //[Constructor] You can add your own custom stuff here..
     //[/Constructor]
@@ -53,7 +53,7 @@ PizButton::~PizButton()
 }
 
 //==============================================================================
-void PizButton::paint (juce::Graphics& g)
+void PizButton::paint(juce::Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -71,20 +71,20 @@ void PizButton::resized()
     //[/UserResized]
 }
 
-void PizButton::paintButton (juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
+void PizButton::paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
     {
-        int x = proportionOfWidth (0.0000f), y = proportionOfHeight (0.0000f), width = proportionOfWidth (1.0000f), height = proportionOfHeight (1.0000f);
+        int x = proportionOfWidth(0.0000f), y = proportionOfHeight(0.0000f), width = proportionOfWidth(1.0000f), height = proportionOfHeight(1.0000f);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
-        g.setColour (juce::Colours::black);
-        g.drawImageWithin (cachedImage_pirate_png_1,
-                           x,
-                           y,
-                           width,
-                           height,
-                           juce::RectanglePlacement::centred,
-                           false);
+        g.setColour(juce::Colours::black);
+        g.drawImageWithin(cachedImage_pirate_png_1,
+                          x,
+                          y,
+                          width,
+                          height,
+                          juce::RectanglePlacement::centred,
+                          false);
     }
 }
 
