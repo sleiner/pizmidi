@@ -927,7 +927,7 @@ PizLooperEditor::PizLooperEditor(PizLooper* const ownerFilter)
 
     aboutButton.reset(new juce::ImageButton("new button"));
     addAndMakeVisible(aboutButton.get());
-    aboutButton->setTooltip(TRANS("Insert Piz Here-> midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper"));
+    aboutButton->setTooltip(TRANS("Insert Piz Here-> midiLooper v1.3  https://github.com/sleiner/pizmidi"));
     aboutButton->setButtonText(juce::String());
     aboutButton->addListener(this);
 
@@ -2213,7 +2213,7 @@ PizLooperEditor::PizLooperEditor(PizLooper* const ownerFilter)
 
     //[UserPreSize]
     DBG("PizLooperEditor()");
-    aboutButton->setTooltip(L"Insert Piz Here-> midiLooper v" + juce::String(JucePlugin_VersionString) + " http://thepiz.org/plugins/?p=midiLooper");
+    aboutButton->setTooltip(L"Insert Piz Here-> midiLooper v" + juce::String(JucePlugin_VersionString) + " https://github.com/sleiner/pizmidi");
     viewport->setTimeline(timeline.get());
     viewport->setKeyboard(kbport.get());
     this->setMouseClickGrabsKeyboardFocus(false);
@@ -3284,7 +3284,7 @@ void PizLooperEditor::buttonClicked(juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == aboutButton.get())
     {
         //[UserButtonCode_aboutButton] -- add your button handler code here..
-        juce::URL("http://thepiz.org/plugins/?p=midiLooper").launchInDefaultBrowser();
+        juce::URL("https://github.com/sleiner/pizmidi").launchInDefaultBrowser();
         //[/UserButtonCode_aboutButton]
     }
     else if (buttonThatWasClicked == b_Triplet.get())
@@ -6072,7 +6072,7 @@ BEGIN_JUCER_METADATA
          fontname="Default font" fontsize="12.0" kerning="0.0" bold="0"
          italic="0" justification="34"/>
   <IMAGEBUTTON name="new button" id="5007a7df8a92f35d" memberName="aboutButton"
-               virtualName="" explicitFocusOrder="0" pos="9 1 136 47" tooltip="Insert Piz Here-&gt; midiLooper v1.3  http://thepiz.org/plugins/?p=midiLooper"
+               virtualName="" explicitFocusOrder="0" pos="9 1 136 47" tooltip="Insert Piz Here-&gt; midiLooper v1.3  https://github.com/sleiner/pizmidi"
                buttonText="" connectedEdges="0" needsCallback="1" radioGroupId="0"
                keepProportions="1" resourceNormal="" opacityNormal="1.0" colourNormal="0"
                resourceOver="" opacityOver="1.0" colourOver="0" resourceDown=""

@@ -190,7 +190,7 @@ void WebBrowserPluginEditor::buttonClicked(juce::Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == homeButton.get())
     {
         //[UserButtonCode_homeButton] -- add your button handler code here..
-        wb->goToURL("http://www.kvraudio.com/");
+        wb->goToURL("https://www.kvraudio.com/");
         //[/UserButtonCode_homeButton]
     }
     else if (buttonThatWasClicked == stopButton.get())

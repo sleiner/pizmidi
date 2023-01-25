@@ -1,5 +1,5 @@
 Insert Piz Here-> midiChords
-(See http://thepiz.org/plugins for links to source code and other plugins)
+(See https://github.com/sleiner/pizmidi for links to source code and other plugins)
 
 Allows mapping of every input MIDI note to 0 or more output notes. 
 

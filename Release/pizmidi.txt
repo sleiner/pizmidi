@@ -1,5 +1,5 @@
 piz midi VST plugins
-http://thepiz.org/pizmidi/
+https://github.com/sleiner/pizmidi
 
 Change log
 

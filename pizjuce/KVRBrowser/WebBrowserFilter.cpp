@@ -20,7 +20,7 @@ WebBrowserFilter::WebBrowserFilter()
     gain              = 0.5f;
     lastUIWidth       = 640;
     lastUIHeight      = 480;
-    URL               = "http://www.kvraudio.com/";
+    URL               = "https://www.kvraudio.com/";
     initialPageLoaded = false;
 }
 

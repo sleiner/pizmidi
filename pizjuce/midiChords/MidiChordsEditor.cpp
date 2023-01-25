@@ -696,7 +696,7 @@ MidiChordsEditor::MidiChordsEditor(MidiChords* const ownerFilter)
     tuningSaveEditor->addListener(this);
     tuningSaveEditor->setTextToShowWhenEmpty("Save tuning (type name)", juce::Colours::grey);
     pizButton->addListener(this);
-    pizButton->setTooltip("http://thepiz.org/plugins");
+    pizButton->setTooltip("https://github.com/sleiner/pizmidi");
     previewButton->addMouseListener(this, false);
     velocitySlider->setPopupDisplayEnabled(true, true, this);
     velocitySlider->setDoubleClickReturnValue(true, 100);
@@ -1428,7 +1428,7 @@ void MidiChordsEditor::buttonClicked(juce::Button* buttonThatWasClicked)
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        juce::URL("http://thepiz.org/plugins/?p=midiChords").launchInDefaultBrowser();
+        juce::URL("https://github.com/sleiner/pizmidi").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
