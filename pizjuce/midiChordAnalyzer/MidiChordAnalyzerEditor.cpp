@@ -469,7 +469,7 @@ MidiChordAnalyzerEditor::MidiChordAnalyzerEditor(MidiChordAnalyzer* const ownerF
 
     learnChanSlider->setAllText("All");
     pizButton->addListener(this);
-    pizButton->setTooltip("http://thepiz.org/plugins");
+    pizButton->setTooltip("https://github.com/sleiner/pizmidi");
 
     const int middleC = getFilter()->getBottomOctave() + 5;
     chordKeyboard->setOctaveForMiddleC(middleC);
@@ -653,7 +653,7 @@ void MidiChordAnalyzerEditor::buttonClicked(juce::Button* buttonThatWasClicked)
     //[UserbuttonClicked_Post]
     else if (buttonThatWasClicked == pizButton.get())
     {
-        juce::URL("http://thepiz.org/plugins/?p=midiChordAnalyzer").launchInDefaultBrowser();
+        juce::URL("https://github.com/sleiner/pizmidi").launchInDefaultBrowser();
     }
     //[/UserbuttonClicked_Post]
 }
