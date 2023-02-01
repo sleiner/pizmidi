@@ -4,6 +4,7 @@ on:
         paths:
             - "CMakeLists.txt"
             - "CMakePresets.json"
+            - "cmake/**"
             - "LICENSE.txt"
             - ".github/workflows/build.yml"
             - "packaging/**"
