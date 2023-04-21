@@ -13,7 +13,6 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 JuceProgram::JuceProgram()
 {
-    //first set all to 0, in case i forget any later
     for (int i = 0; i < numGlobalParams + numParamsPerSlot; i++)
     {
         param[i] = 0;
@@ -91,7 +90,7 @@ JuceProgram::~JuceProgram()
 
 //==============================================================================
 PizLooper::PizLooper()
-    : programs(0), slotLimit(numSlots)
+    : programs(nullptr), slotLimit(numSlots)
 {
     DBG("PizLooper()");
     init             = true;
@@ -114,7 +113,7 @@ PizLooper::PizLooper()
     lastUIHeight = 487;
     devices      = juce::MidiOutput::getAvailableDevices();
     recCC = playCC = -1;
-    midiOutput     = NULL;
+    midiOutput     = nullptr;
     info           = new Info();
     loopDir        = ((juce::File::getSpecialLocation(juce::File::currentExecutableFile)).getParentDirectory()).getFullPathName()
             + juce::File::getSeparatorString() + juce::String("midiloops");
@@ -1364,7 +1363,7 @@ void PizLooper::setStateInformation(const void* data, int sizeInBytes)
     }
 
     auto xmlState = getXmlFromBinary(data, sizeInBytes);
-    if (xmlState == 0)
+    if (xmlState == nullptr)
     {
         auto* datab       = (juce::uint8*) data;
         int totalMidiSize = 0;
@@ -1375,7 +1374,7 @@ void PizLooper::setStateInformation(const void* data, int sizeInBytes)
             if (i == 16)
             {
                 xmlState = getXmlFromBinary(datab, sizeInBytes - totalMidiSize);
-                if (xmlState != 0)
+                if (xmlState != nullptr)
                 {
                     oldBank = true;
                 }
@@ -1416,13 +1415,13 @@ void PizLooper::setStateInformation(const void* data, int sizeInBytes)
                 }
             }
         }
-        if (xmlState == 0)
+        if (xmlState == nullptr)
         {
             xmlState = getXmlFromBinary(datab, sizeInBytes - totalMidiSize);
         }
     }
 
-    if (xmlState != 0)
+    if (xmlState != nullptr)
     {
         if (xmlState->hasTagName("midiLooperSettings"))
         {
