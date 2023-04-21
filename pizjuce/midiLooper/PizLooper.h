@@ -4,7 +4,7 @@
 #include "../_common/key.h"
 #include "../_common/PizArray.h"
 #include "../_common/PizAudioProcessor.h"
-#include "MidiLoop.h"
+#include "data/MidiLoop.h"
 
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_data_structures/juce_data_structures.h>
@@ -150,7 +150,7 @@ private:
         set("triplet", false);
         set("stepsize", 0.5f);
         set("width", 500);
-        set("height", 1200);
+        set("height", 1280);
         set("x", 0);
         set("y", 500);
         set("bars", 4);
@@ -201,7 +201,7 @@ public:
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
 
-    bool hasEditor(void) const override
+    bool hasEditor() const override
     {
         return true;
     }
@@ -309,7 +309,7 @@ public:
     const juce::String getParameterName(int index) override;
     const juce::String getParameterText(int index) override;
 
-    const juce::String getCurrentSlotParameterText(int parameter)
+    juce::String getCurrentSlotParameterText(int parameter)
     {
         if (parameter < numGlobalParams)
         {
@@ -493,7 +493,7 @@ public:
         }
     }
 
-    const juce::var getPRSetting(const juce::Identifier& name)
+    juce::var getPRSetting(const juce::Identifier& name)
     {
         return programs[curProgram].PRSettings.get(name);
     }
@@ -953,7 +953,7 @@ private:
 
     double getStretchMultiplier(int slot);
     bool isNoteTriggeringAnySlot(juce::MidiMessage const& message);
-    bool processTriggerNote(const int slot, juce::MidiMessage& message, int root, juce::MidiBuffer& midiout, const int sample, const double ppqOfNextBar, const double ppqPerSample, const double ppqOfLastStep, const double looplengthstep);
+    bool processTriggerNote(int slot, juce::MidiMessage& message, int root, juce::MidiBuffer& midiout, int sample, double ppqOfNextBar, double ppqPerSample, double ppqOfLastStep, double looplengthstep);
     void processNoteOffBuffer(int slot, juce::MidiBuffer& midiout, int numSamples);
     void playLoopEvent(int slot, int instance, int eventindex, int channel, double stretch, int samplepos, double samplesPerPpq, juce::MidiBuffer& midiout);
     double getLoopLengthStep();

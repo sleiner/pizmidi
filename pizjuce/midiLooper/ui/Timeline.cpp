@@ -1,12 +1,15 @@
+#include "Timeline.h"
+
 #include "PianoRoll.h"
 
 using juce::jlimit;
 using juce::jmax;
 
 Timeline::Timeline()
-    : Component(),
-      roll(nullptr),
-      scrollOffset(0)
+    : roll(nullptr),
+      scrollOffset(0),
+      loopStart(0),
+      loopEnd(0)
 {
     setLoop(0, 0);
     setMouseClickGrabsKeyboardFocus(false);

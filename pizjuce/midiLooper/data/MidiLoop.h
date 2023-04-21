@@ -1,7 +1,7 @@
 #ifndef PIZ_MIDI_LOOP_HEADER
 #define PIZ_MIDI_LOOP_HEADER
 
-#include "../_common/midistuff.h"
+#include "midistuff.h"
 #include "piz_MidiMessageSequence.h"
 #define polyphony 4
 
